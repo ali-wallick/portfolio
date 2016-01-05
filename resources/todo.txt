@@ -1,5 +1,5 @@
-- Fix contrib table sizing issue
-- Improved nav buttons
+TO-DO (in order of importance):
+- Overhaul nav buttons
 - Breadcrumbs
 - Finalize Colors
 - Finalize fonts
@@ -8,5 +8,5 @@
 - Remove under construction
 - Add animations
 - Improve Blog
-- Add downloads?
+- Add downloads for projects?
 - Update About

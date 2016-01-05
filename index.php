@@ -4,12 +4,12 @@
 
 <div style="border-style:dashed; border-width:medium; border-color:red;">
     <h3 class="centered" style="color:red; margin-top:15px;">Under Construction:</h3>
-    <p class="centered" style="color:red">I'm currently working on redoing a lot of my site, so please pardon the dust. Content is being added and appearance is being polished. Check back soon :)</p>
+    <p class="centered" style="color:red">I'm currently working on redoing a lot of my site, so please pardon the dust. <a href="/resources/todo.txt" target="_blank">Content is being added and appearance is being polished.</a> Check back soon :)</p>
 </div>
 
 <img class="banner" src="/images/banner.png" />
 
-<p>Hello and welcome! My name is Ali. I'm a gal passionate about developing games. My favorite aspects are programming (especially UI) and all-around design. I currently work as a UI Programmer at <a href="http://www.red5studios.com/">Red 5 Studios</a>, helping to create menus and HUDs for the MMO RPG/FPS <i>Firefall</i>. I also enjoy designing and programming personal games with my friends on the side!</p>
+<p>Hello and welcome! My name is Ali. I'm a gal passionate about developing games. My favorite aspects are programming (especially UI) and all-around design. I currently work as a UI Programmer at <a href="http://www.red5studios.com/" target="_blank">Red 5 Studios</a>, helping to create menus and HUDs for the MMO RPG/FPS <i>Firefall</i>. I also enjoy designing and programming personal games with my friends on the side!</p>
 
 <p>On this site you can find my <a href="/blog">Blog</a> with updates on the projects I'm working on and various other activities.</p>
 
