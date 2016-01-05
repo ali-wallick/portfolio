@@ -1,13 +1,12 @@
+- Fix contrib table sizing issue
+- Change personal image
+- Font for headers
 - Improved nav buttons
 - Breadcrumbs
-- Font for headers
-- Update blog images to match current CSS
-- Improve Blog
 - Finalize Colors
-- Change personal image
-- Add animations
-- Remove under construction
 - Favicon
 - Add detail to Firefall page
-- Fix contrib table sizing issue
+- Remove under construction
+- Add animations
+- Improve Blog
 - Add downloads?

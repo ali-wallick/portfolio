@@ -18,6 +18,10 @@ body {
     background-color: #FFE4C2;
 }
 
+.content ol, ul {
+    list-style-position: inside;
+}
+
 img, iframe {
     border-style: solid;
     border-width: medium;

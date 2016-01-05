@@ -3,8 +3,8 @@ Options +FollowSymLinks -MultiViews
 RewriteEngine On
 RewriteBase /
 
-## don't touch /forum URIs
-RewriteRule ^forums/ - [L,NC]
+## don't touch /blog URIs
+RewriteRule ^blog/ - [L,NC]
 
 ## hide .php extension snippet
 

@@ -11,7 +11,7 @@
 	require('./wp-blog-header.php');
 ?>
 
-<p style="text-align:right; text-size:x-small;"><a href="wp-login.php">Login</a></p>
+<p style="text-align:right; font-size:x-small;"><a href="wp-login.php">Login</a></p>
 
 <h1 class="centered">Blog</h1>
 
