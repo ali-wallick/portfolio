@@ -6,7 +6,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     outline: 0;
     vertical-align: baseline;
     background: transparent;
-    font-family: sans-serif;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
     box-sizing:border-box;
 }
 
@@ -18,8 +18,8 @@ body {
     background-color: #FFE4C2;
 }
 
-.content ol, ul {
-    list-style-position: inside;
+p {
+    font-family: Georgia, serif;
 }
 
 img, iframe {
@@ -168,17 +168,21 @@ nav ul li {
 }
 
 #headerTitle {
+    position:relative;
     width: 100%;
+    height: 100px;
     margin-bottom: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    display: table;
+    display:table;
+   
 }
 
 header .title {
-    display: table-cell; 
+    display:table-cell;
+    width: 50%;
     vertical-align: middle;
     color: white;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 header h1 {

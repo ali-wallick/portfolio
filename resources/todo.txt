@@ -1,9 +1,9 @@
 - Fix contrib table sizing issue
 - Change personal image
-- Font for headers
 - Improved nav buttons
 - Breadcrumbs
 - Finalize Colors
+- Finalize fonts
 - Favicon
 - Add detail to Firefall page
 - Remove under construction
