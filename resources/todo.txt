@@ -1,5 +1,4 @@
 - Fix contrib table sizing issue
-- Change personal image
 - Improved nav buttons
 - Breadcrumbs
 - Finalize Colors
@@ -10,3 +9,4 @@
 - Add animations
 - Improve Blog
 - Add downloads?
+- Update About
