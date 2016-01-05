@@ -1,0 +1,231 @@
+/* Browser Resets */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, caption {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    vertical-align: baseline;
+    background: transparent;
+    font-family: sans-serif;
+    box-sizing:border-box;
+}
+
+html,body {
+    min-height:101%
+}
+
+body {
+    background-color: #FFE4C2;
+}
+
+img, iframe {
+    border-style: solid;
+    border-width: medium;
+    border-color: #1C8E5A;
+}
+
+a:link, a:active {
+    color: #9F2B00;
+}
+
+a:visited {
+   color: #063E66; 
+}
+
+a:hover {
+    color: #4A7696;
+}
+
+section h1 {
+    color: #006E3C;
+}
+
+section h2 {
+    color: #006E3C;
+}
+
+h3 {
+    color: #006E3C;
+}
+
+h4 {
+    color: #006E3C;
+}
+
+section p {
+    margin-bottom:15px;
+    text-align: justify;
+}
+
+section, aside {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    background-color: #99C9B3;
+    color: #3F0871;
+    padding: 5px;
+    box-shadow: -5px 5px 0px #4AA17A;
+}
+
+section {
+    float: left;
+    width: 71%;
+}
+
+aside {
+    float: right;
+    width: 25%;
+}
+
+.content {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    background-color: #FFF6EB;
+    padding: 15px;
+    color: black;
+}
+
+header nav {
+    display: table;
+    width: calc(100% + 20px);
+    border-collapse: separate;
+    border-spacing: 10px;
+    margin-left: -10px;
+}
+
+.navButton {
+    display: table-cell; 
+    width: 20%;
+    background-color: #FFF8F0;
+    vertical-align: middle;
+    text-align: center;
+    border-style: solid;
+    border-width: 5px;
+    border-color: #99C9B3;
+    padding: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-shadow: -3px 3px 0px #4AA17A;
+}
+    
+header nav a {
+    font-weight: bold;
+    text-decoration: none;
+}
+
+footer {
+    margin-top: 3px;
+    display: table;
+    width: 100%; 
+}
+
+footer nav {
+    display: table-cell; 
+    vertical-align: middle;
+}
+
+nav ul li {
+    display: inline;
+    font-size: 14px;
+}
+
+#pageBackground {
+    position: absolute;
+    top: 0;
+    width:100%;
+    z-index: -1;
+}
+
+#pageContainer {
+    width: 100%;
+    min-width: 640px;
+    max-width: 960px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 0 auto;
+}
+
+#headerSeparator {
+    height: 8px;
+    background: #9F2B00 /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#9F2B00, #E98D6B, #9F2B00); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#9F2B00, #E98D6B, #9F2B00); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#9F2B00, #E98D6B, #9F2B00); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#9F2B00, #E98D6B, #9F2B00); /* Standard syntax */
+}
+
+#headerBG {
+    height: 100px;
+    
+    background: #063E66; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#205B84, #063E66); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#205B84, #063E66); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#205B84, #063E66); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#205B84, #063E66); /* Standard syntax */
+}
+
+#headerTitle {
+    width: 100%;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: table;
+}
+
+header .title {
+    display: table-cell; 
+    vertical-align: middle;
+    color: white;
+}
+
+header h1 {
+    font-size: 72px;    
+}
+
+header h2 {
+    font-size: 32px;
+    text-align: right;
+}
+
+.quickInfoContent {
+    display: table;
+    width: 75%;
+    margin: 0 auto;
+    border-spacing: 5px;
+} 
+
+.row {
+    display: table-row;
+}
+
+.quickInfoImage {
+    display: table-row;
+    width: 120px;
+    margin: 0 auto;
+}
+
+.quickInfoText {
+    display: table-row;
+    width: 100%;
+    text-align: center;
+}
+
+.quickInfoIcon {
+    display: table-cell;
+    width: 50%;
+}
+
+.socialMediaImg {
+    border-style: none;
+    border-width: 0;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 2px;
+}
+
+.signature {
+    display: table-cell;
+    color: #006E3C;
+    font-size: 14px;
+    vertical-align: middle;
+    text-align: right;
+}
