@@ -2,11 +2,11 @@
 
 <h1 class="centered">Kaneva</h1>
 
-<img class="banner" src="/images/projects/kaneva/screenshot1.png" />
+<img class="banner" src="/resources/images/projects/kaneva/screenshot1.png" />
 
 <h2>About</h2>
 
-<p><img class="imgRight" style="width:35%" src="/images/projects/kaneva/screenshot2.png" />The World of Kaneva is a social virtual world and game platform. In it, players can do everything from creating an avatar and socializing, to using and creating their user-generated content, to building massive worlds with integrated scripting.</p>
+<p><img class="imgRight" style="width:35%" src="/resources/images/projects/kaneva/screenshot2.png" />The World of Kaneva is a social virtual world and game platform. In it, players can do everything from creating an avatar and socializing, to using and creating their user-generated content, to building massive worlds with integrated scripting.</p>
 
 <p>I began Kaneva as a Technical Support Engineer, and helped players with their scripting, as well as creating game templates for players to utilize. However, I quickly found a niche in UI programming and was moved to work full time with the game's user interface system.</p>
 
@@ -16,7 +16,7 @@
 
 <h2>Contributions</h2>
 <p>During my time at Kaneva, I created menus including:
-    <ul><img class="imgRight" style="width:50%" src="/images/projects/kaneva/screenshot3.png"
+    <ul><img class="imgRight" style="width:50%" src="/resources/images/projects/kaneva/screenshot3.png"
  />
         <li><strong>HUD:</strong> Player HUD and Build/Creator HUD menus</li>
         <li><strong>Inventory:</strong> Player inventory and storage/bank menus</li>

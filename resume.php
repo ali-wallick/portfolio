@@ -8,7 +8,7 @@
 <a href="/resources/WallickAli-Resume.pdf">
     <h4 class="centered">Download as PDF</h3>
     
-    <img class="banner" src="images/resume.png" />
+    <img class="banner" src="/resources/images/resume.png" />
     
     <h4 class="centered">Download as PDF</h3>
 </a>

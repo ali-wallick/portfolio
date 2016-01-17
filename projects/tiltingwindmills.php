@@ -6,7 +6,7 @@
 
 <br />
 <h2>About</h2>
-<p><img src="/images/projects/tiltingwindmills/screenshot.png" class="imgRight" style="width:40%;" />Tilting at Windmills is a fast paced competitive multiplayer game where two players must work together to defeat common enemies while competing with each other for the high score. The land is under attack and Don Quixote must save the kingdom! He and his squire Sancho ride together striking down terrifying foes, but Don is having trouble telling the difference between real monsters and those in his imagination. While Don charges at every monster he thinks sees Sancho must try to save as many windmills as possible.</p>
+<p><img src="/resources/images/projects/tiltingwindmills/screenshot.png" class="imgRight" style="width:40%;" />Tilting at Windmills is a fast paced competitive multiplayer game where two players must work together to defeat common enemies while competing with each other for the high score. The land is under attack and Don Quixote must save the kingdom! He and his squire Sancho ride together striking down terrifying foes, but Don is having trouble telling the difference between real monsters and those in his imagination. While Don charges at every monster he thinks sees Sancho must try to save as many windmills as possible.</p>
 <p>This game was created in 48 hours by my team for Global Game Jam 2014 in the Unity game engine. The theme for the year was "We don't see things as they are, we see them as we are". Our choice of Don Quixote was based on the character's inability to see the true world around him due to his obsession with the ideal. Additionally, it was a key goal going in to attempt multiplayer which we were able to successfully implement! The game has been ported to the iPad and we are currently working on polishing up the prototype.</p>
 
 <br />
@@ -15,10 +15,10 @@
 <div id="contribTable">
     <div class="projectRow">
         <div class="projectCell">
-            <img class="projectTableImage" src="/images/projects/programming_unity.png" />
+            <img class="projectTableImage" src="/resources/images/projects/programming_unity.png" />
         </div>
         <div class="projectCell">
-            <img class="projectTableImage" src="/images/projects/design_whiteboard.jpg" />
+            <img class="projectTableImage" src="/resources/images/projects/design_whiteboard.jpg" />
         </div>
     </div>
     <div class="projectRow">

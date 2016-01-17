@@ -2,7 +2,7 @@
 
 <h1 class="centered">KinoClue</h1>
 
-<img src="/images/projects/kinoclue/KinoClue.png" style="width:100%;" />
+<img src="/resources/images/projects/kinoclue/KinoClue.png" style="width:100%;" />
 
 <h3 class="back"><a href="/projects/">Back</a></h3>
 

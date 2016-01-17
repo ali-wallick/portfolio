@@ -6,8 +6,8 @@
 <br />
 
 <a name="spotlight"><h2 class="centered">Spotlight</h2></a>
-<a href="firefall/"><img src="/images/projects/firefall/banner.png" class="banner" /></a>
-<a href="tiltingwindmills/"><img src="/images/projects/tiltingwindmills/banner.png" class="banner" /></a>
+<a href="firefall/"><img src="/resources/images/projects/firefall/banner.png" class="banner" /></a>
+<a href="tiltingwindmills/"><img src="/resources/images/projects/tiltingwindmills/banner.png" class="banner" /></a>
 
 <br />
 
@@ -15,26 +15,26 @@
 <div id="featuredTable">
     <div class="projectRow">
         <div class="projectCell">
-            <a href="kaneva/"><img class="featuredTableImage" src="/images/projects/kaneva/banner.png" /></a>
+            <a href="kaneva/"><img class="featuredTableImage" src="/resources/images/projects/kaneva/banner.png" /></a>
         </div>
         <div class="projectCell">
-            <a href="gameover/"><img class="featuredTableImage" src="/images/projects/gameover/banner.png" /></a>
-        </div>
-    </div>
-    <div class="projectRow">
-        <div class="projectCell">
-            <a href="corexmachina/"><img class="featuredTableImage" src="/images/projects/corexmachina/banner.png" /></a>
-        </div>
-        <div class="projectCell">
-            <a href="critter/"><img class="featuredTableImage" src="/images/projects/critter/banner.jpeg" /></a>
+            <a href="gameover/"><img class="featuredTableImage" src="/resources/images/projects/gameover/banner.png" /></a>
         </div>
     </div>
     <div class="projectRow">
         <div class="projectCell">
-            <a href="minimages/"><img class="featuredTableImage" src="/images/projects/minimages/banner.png" /></a>
+            <a href="corexmachina/"><img class="featuredTableImage" src="/resources/images/projects/corexmachina/banner.png" /></a>
         </div>
         <div class="projectCell">
-            <a href="secretgarden/"><img class="featuredTableImage" src="/images/projects/secretgarden/banner.png" /></a>
+            <a href="critter/"><img class="featuredTableImage" src="/resources/images/projects/critter/banner.jpeg" /></a>
+        </div>
+    </div>
+    <div class="projectRow">
+        <div class="projectCell">
+            <a href="minimages/"><img class="featuredTableImage" src="/resources/images/projects/minimages/banner.png" /></a>
+        </div>
+        <div class="projectCell">
+            <a href="secretgarden/"><img class="featuredTableImage" src="/resources/images/projects/secretgarden/banner.png" /></a>
         </div>
     </div>
 </div>

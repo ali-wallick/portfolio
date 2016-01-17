@@ -17,10 +17,10 @@
 <div id="contribTable">
     <div class="projectRow">
         <div class="projectCell">
-            <img class="projectTableImage" src="/images/projects/itwillkillyou/design.jpg" />
+            <img class="projectTableImage" src="/resources/images/projects/itwillkillyou/design.jpg" />
         </div>
         <div class="projectCell">
-            <img class="projectTableImage" src="/images/projects/itwillkillyou/level.jpg" />
+            <img class="projectTableImage" src="/resources/images/projects/itwillkillyou/level.jpg" />
         </div>
     </div>
     <div class="projectRow">
@@ -35,10 +35,10 @@
     </div>
     <div class="projectRow">
         <div class="projectCell">
-            <img class="projectTableImage" src="/images/projects/itwillkillyou/character.jpeg" />
+            <img class="projectTableImage" src="/resources/images/projects/itwillkillyou/character.jpeg" />
         </div>
         <div class="projectCell">
-            <img class="projectTableImage" src="/images/projects/itwillkillyou/modeling.jpeg" />
+            <img class="projectTableImage" src="/resources/images/projects/itwillkillyou/modeling.jpeg" />
         </div>
     </div>
     <div class="projectRow">

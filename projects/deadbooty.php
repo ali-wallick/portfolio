@@ -2,7 +2,7 @@
 
 <h1 class="centered">Dead Booty: An Atari 2600 Game</h1>
 
-<img class="banner" style="width:80%" src="/images/projects/deadbooty/DeadBooty.jpg" />
+<img class="banner" style="width:80%" src="/resources/images/projects/deadbooty/DeadBooty.jpg" />
 
 <h2>About</h2>
 
@@ -15,10 +15,10 @@
 <div id="contribTable">
     <div class="projectRow">
         <div class="projectCell">
-            <img class="projectTableImage" src="/images/projects/deadbooty/design.png" />
+            <img class="projectTableImage" src="/resources/images/projects/deadbooty/design.png" />
         </div>
         <div class="projectCell">
-            <img class="projectTableImage" src="/images/projects/deadbooty/art.png" />
+            <img class="projectTableImage" src="/resources/images/projects/deadbooty/art.png" />
         </div>
     </div>
     <div class="projectRow">

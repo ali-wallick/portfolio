@@ -16,10 +16,10 @@
 <div id="contribTable">
     <div class="projectRow">
         <div class="projectCell">
-            <img class="projectTableImage" src="/images/projects/programming_blueprints.png" />
+            <img class="projectTableImage" src="/resources/images/projects/programming_blueprints.png" />
         </div>
         <div class="projectCell">
-            <img class="projectTableImage" src="/images/projects/design_whiteboard.jpg" />
+            <img class="projectTableImage" src="/resources/images/projects/design_whiteboard.jpg" />
         </div>
     </div>
     <div class="projectRow">

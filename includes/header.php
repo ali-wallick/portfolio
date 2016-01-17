@@ -7,8 +7,8 @@
     <title>Ali Wallick's Portfolio</title>
     <meta name="author" content="Ali Wallick">
     
-    <link rel="stylesheet" href="/css/templateStyles.css" type="text/css" />
-    <link rel="stylesheet" href="/css/contentStyles.css" type="text/css" />
+    <link rel="stylesheet" href="/resources/css/templateStyles.css" type="text/css" />
+    <link rel="stylesheet" href="/resources/css/contentStyles.css" type="text/css" />
 
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -32,11 +32,11 @@
                 </div>
             </div>
             <nav>
-                <a href="/" class="navButton" >Home</a>
-                <a href="/blog" class="navButton">Blog</a>
-                <a href="/projects/" class="navButton">Projects</a>
-                <a href="/resume" class="navButton">Resume</a>
-                <a href="/about" class="navButton">About</a>
+                <a id="home" href="/" class="navButton" >Home</a>
+                <a id="blog" href="/blog" class="navButton">Blog</a>
+                <a id="projects" href="/projects/" class="navButton">Projects</a>
+                <a id="resume" href="/resume" class="navButton">Resume</a>
+                <a id="about" href="/about" class="navButton">About</a>
             </nav>
         </header>
 

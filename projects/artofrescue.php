@@ -2,11 +2,11 @@
 
 <h1 class="centered">Art of Rescue</h1>
 
-<img class="banner" src="/images/projects/artofrescue/screenshot.png" />
+<img class="banner" src="/resources/images/projects/artofrescue/screenshot.png" />
 
 <h2>About</h2>
 
-<p><img class="imgRight" style="width:40%;" src="/images/projects/artofrescue/screenshot2.png"/>Art of Rescue is a game built in Flash by Team Femtastic Four, an all-girls game design group. The team consisted of Raschel Mead, Erica Penk, Katie Stokes, and myself. Our goal was to create an educational game prototype aimed at middle and high school art history students. We tried to do this through passive learning - players learn artist's styles by exploring fun levels made up of the artist's various famous elements (ie Monet's lily pads and Dali's melting clocks).</p>
+<p><img class="imgRight" style="width:40%;" src="/resources/images/projects/artofrescue/screenshot2.png"/>Art of Rescue is a game built in Flash by Team Femtastic Four, an all-girls game design group. The team consisted of Raschel Mead, Erica Penk, Katie Stokes, and myself. Our goal was to create an educational game prototype aimed at middle and high school art history students. We tried to do this through passive learning - players learn artist's styles by exploring fun levels made up of the artist's various famous elements (ie Monet's lily pads and Dali's melting clocks).</p>
 
 <p>The game follows Genevieve, an artist who must venture into paintings to rescue artists that have been trapped within by an evil wizard. She uses her magic paintbrush to freeze cursed elements that move throughout the canvas. The frozen enemies become platforms that allow her to continue forward on her rescue mission.</p>
 
@@ -18,10 +18,10 @@
 <div id="contribTable">
     <div class="projectRow">
         <div class="projectCell">
-            <img class="projectTableImage" src="/images/projects/programming_unity.png" />
+            <img class="projectTableImage" src="/resources/images/projects/programming_unity.png" />
         </div>
         <div class="projectCell">
-            <img class="projectTableImage" src="/images/projects/artofrescue/design.jpeg" />
+            <img class="projectTableImage" src="/resources/images/projects/artofrescue/design.jpeg" />
         </div>
     </div>
     <div class="projectRow">

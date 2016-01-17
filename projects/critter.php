@@ -2,11 +2,11 @@
 
 <h1 class="centered">Critter<sup>3</sup></h1>
 
-<img class="banner" src="/images/projects/critter/screenshot.png" />
+<img class="banner" src="/resources/images/projects/critter/screenshot.png" />
 
 <h2>About</h2>
 
-<p><img class="imgRight" style="width:40%;" src="/images/projects/critter/Cards.jpg"/>Critter<sup>3</sup> is a game created in 48 hours for the 2011 Global Game Jam competition. It is a 3D puzzle game based on a cube world. Save the animals from extinction by arranging the resources correctly! The game mechanics resemble a cross between Rubik's Cube and Sudoku.</p>
+<p><img class="imgRight" style="width:40%;" src="/resources/images/projects/critter/Cards.jpg"/>Critter<sup>3</sup> is a game created in 48 hours for the 2011 Global Game Jam competition. It is a 3D puzzle game based on a cube world. Save the animals from extinction by arranging the resources correctly! The game mechanics resemble a cross between Rubik's Cube and Sudoku.</p>
 <p>To play, open the game and choose a difficulty (I recommend 2-element for your first game). When inside the game, hold down the right mouse button and drag to rotate. Click on a cube to change its "resource" (forest, mountain or water).</p>
 <p>Each center cube represents an animal population. You must save them from going extinct by placing resources around them. If a resource is correct, you will notice an animal appear. If it is incorrect, they will disappear. Be careful though, you are timed. Animals will go extinct without resources. You will see this happening by the color of their cube - dark means you're in trouble! A good strategy is to start on one side and move side at a time. The last will be the hardest, but swapping cubes will help you save the animals from extinction!</p>
 		
@@ -16,10 +16,10 @@
 <div id="contribTable">
     <div class="projectRow">
         <div class="projectCell">
-            <img class="projectTableImage" src="/images/projects/programming_unity.png" />
+            <img class="projectTableImage" src="/resources/images/projects/programming_unity.png" />
         </div>
         <div class="projectCell">
-            <img class="projectTableImage" src="/images/projects/critter/design.png" />
+            <img class="projectTableImage" src="/resources/images/projects/critter/design.png" />
         </div>
     </div>
     <div class="projectRow">

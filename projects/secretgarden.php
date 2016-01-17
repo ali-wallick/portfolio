@@ -6,7 +6,7 @@
 
 <h2>About</h2>
 
-<p><img class="imgRight" style="width:40%;" src="/images/projects/secretgarden/screenshot.png" />Augmented Reality is a technology where users use computing devices to view the real world, and information displays based on the location of the said device. Handheld augmented reality games build worlds on top of real-world images for the user to interact with in a novel way.</p>
+<p><img class="imgRight" style="width:40%;" src="/resources/images/projects/secretgarden/screenshot.png" />Augmented Reality is a technology where users use computing devices to view the real world, and information displays based on the location of the said device. Handheld augmented reality games build worlds on top of real-world images for the user to interact with in a novel way.</p>
 <p>Secret Garden is a handheld augmented reality game where players must guide a girl through a hedge maze projected on a paper while avoiding traps and enemies. Players control the game by placing special markers onto the maze that create plants to change the girl's movement. For example, a bamboo marker will block off a path and change the girl's direction. In addition to completing the maze, players may also gather the three loaves of bread scattered throughout each maze to increase their ranking for that level.</p>
 <p>This game was created by <a href="http://rosepeng.daportfolio.com/">Rose Peng</a>, <a href="http://www.robertspessard.com/">Robert Spessard</a>, and myself for Qualcomm's Augmented Reality Game Studio at Georgia Tech. Secret Garden was created in the Unity engine using Qualcomm's augmented reality plugin and runs on Android phones.</p>
 		
@@ -16,10 +16,10 @@
 <div id="contribTable">
     <div class="projectRow">
         <div class="projectCell">
-            <img class="projectTableImage" src="/images/projects/programming_unity.png" />
+            <img class="projectTableImage" src="/resources/images/projects/programming_unity.png" />
         </div>
         <div class="projectCell">
-            <img class="projectTableImage" src="/images/projects/secretgarden/design.png" />
+            <img class="projectTableImage" src="/resources/images/projects/secretgarden/design.png" />
         </div>
     </div>
     <div class="projectRow">
