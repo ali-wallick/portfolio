@@ -1,3 +1,19 @@
+.content h1 {
+    font-size: 2em;  
+}
+
+.content h2 {
+    font-size: 1.5em;
+}
+
+.content h3 {
+    font-size: 1.25em;
+}
+
+.content h4 {
+    font-size: 1.15em;
+}
+
 .banner {
     display: block;
     width: 100%;
@@ -83,5 +99,5 @@
 }
 
 .footnote {
-    font-size: x-small;
+    font-size: .5em;
 }

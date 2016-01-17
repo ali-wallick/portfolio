@@ -1,6 +1,6 @@
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/header.php"); ?>
 
-<h2 class="centered">Welcome to my Portfolio!</h2>
+<h1 class="centered">Welcome to my Portfolio!</h1>
 
 <div style="border-style:dashed; border-width:medium; border-color:red;">
     <h3 class="centered" style="color:red; margin-top:15px;">Under Construction:</h3>
