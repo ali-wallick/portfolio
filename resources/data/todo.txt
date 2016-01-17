@@ -1,12 +1,12 @@
 TO-DO (in order of importance):
-- Overhaul nav buttons
+- Polish/animate nav buttons
 - Breadcrumbs
 - Finalize Colors
 - Finalize fonts
 - Favicon
 - Add detail to Firefall page
 - Remove under construction
-- Add animations
+- Add more animations?
 - Improve Blog
 - Add downloads for projects?
 - Update About
