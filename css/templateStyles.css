@@ -72,7 +72,7 @@ section, aside {
 
 section {
     float: left;
-    width: 71%;
+    width: 73%;
 }
 
 aside {
@@ -182,9 +182,11 @@ header .title {
     color: white;
     overflow: hidden;
     white-space: nowrap;
+    text-decoration: none;
 }
 
 header h1 {
+    text-decoration: none;
     font-size: 72px;    
 }
 

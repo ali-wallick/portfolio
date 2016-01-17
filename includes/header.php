@@ -25,7 +25,7 @@
     <div id="pageContainer">    
         <header>
             <div id="headerTitle">
-                <h1 class="title">Ali Wallick</h1>
+                <a href="/" class="title"><h1>Ali Wallick</h1></a>
                 <div class="title">
                     <h2>Game Developer</h2>
                     <h2>Programmer</h2>
