@@ -9,6 +9,12 @@
     
     <link rel="stylesheet" href="/resources/css/templateStyles.css" type="text/css" />
     <link rel="stylesheet" href="/resources/css/contentStyles.css" type="text/css" />
+    
+    <meta property="og:url" content="http://aliwallick.com" />
+    <meta property="og:title" content="Ali Wallick's Portfolio" />
+    <meta property="og:site_name" content="Ali Wallick's Portfolio" />
+    <meta property="og:description" content="Website and portfolio for Ali Wallick, game developer and programmer." />
+    <meta property="og:image" content="http://aliwallick.com/resources/images/quickImage.jpg" />
 
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
