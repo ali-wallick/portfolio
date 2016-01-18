@@ -38,11 +38,11 @@
                 </div>
             </div>
             <nav>
-                <a id="home" href="/" class="navButton" >Home</a>
                 <a id="blog" href="/blog" class="navButton">Blog</a>
                 <a id="projects" href="/projects/" class="navButton">Projects</a>
                 <a id="resume" href="/resume" class="navButton">Resume</a>
                 <a id="about" href="/about" class="navButton">About</a>
+                <a id="contact" href="/contact" class="navButton">Contact</a>
             </nav>
         </header>
 
