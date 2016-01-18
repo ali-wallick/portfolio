@@ -11,25 +11,30 @@
     </div>
 </div>
 
-<form action="#" id="form" method="post" name="form">
-    <div class="contactRow">
-        <input name="vname" placeholder="Your Name *" type="text" value="">
-    </div>
-    
-    <div class="contactRow">
-        <input name="vemail" placeholder="Your Email *" type="text" value="">
-    </div>
-        
-    <div class="contactRow">
-        <textarea name="msg" placeholder="Message *"></textarea>
-    </div>
-    
-    <h5 class="contactRow"><?php include "includes/mail.php"?></h5>
-        
-    <div class="contactButton">
-        <div class="contactButtonWrapper"><input id="send" name="submit" type="submit" value="Send Email"></div>
-    </div>
-</form>
+<br />
+
+<div id="contactArea">
+    <h3 class="contactRow">Send Email</h3>
+    <form action="#" id="form" method="post" name="form">
+        <div class="contactRow">
+            <input name="vname" placeholder="Your Name *" type="text" value="">
+        </div>
+
+        <div class="contactRow">
+            <input name="vemail" placeholder="Your Email *" type="text" value="">
+        </div>
+
+        <div class="contactRow">
+            <textarea name="msg" placeholder="Message *"></textarea>
+        </div>
+
+        <h5 class="contactRow"><?php include "includes/mail.php"?></h5>
+
+        <div class="contactButton">
+            <div class="contactButtonWrapper"><input id="send" name="submit" type="submit" value="Send"></div>
+        </div>
+    </form>
+</div>
 
 <br />
 

@@ -5,7 +5,7 @@ if(isset($_POST["submit"]))
     // Checking For Blank Fields..
     if($_POST["vname"]==""||$_POST["vemail"]==""||$_POST["msg"]=="")
     {
-        echo "Please fill out all fields.";
+        echo '<span class="error">Please fill out all fields.</span>';
     }
     
     else
@@ -18,12 +18,12 @@ if(isset($_POST["submit"]))
         $email_from= filter_var($email_from, FILTER_VALIDATE_EMAIL);
         if (!$email_from)
         {
-            echo "Invalid Sender's Email";
+            echo '<span class="error">Please enter a valid email address.</span>';
         }
         else
         {
             $email_to = "ali@aliwallick.com";
-            $subject = "Ali Wallick Contact Email";
+            $subject = 'Ali Wallick Contact Email';
             
             $message = $_POST['msg'];
             $message = wordwrap($message, 70);

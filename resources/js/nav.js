@@ -5,8 +5,4 @@ for (var i = 0; i < navButtons.length; i++)
 var navRegex = /\/\/.+?\/(\w+)/;
 var navLoc = navRegex.exec(location.href);
 if (navLoc)
-    navLoc = navLoc[1];
-else
-    navLoc = "home";
-
-document.getElementById(navLoc).className = "navButtonSelected";
+    document.getElementById(navLoc[1]).className = "navButtonSelected";
