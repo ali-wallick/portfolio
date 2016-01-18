@@ -39,7 +39,7 @@
             </div>
             <nav>
                 <a id="blog" href="/blog" class="navButton">Blog</a>
-                <a id="projects" href="/projects/" class="navButton">Projects</a>
+                <a id="projects" href="/projects" class="navButton">Projects</a>
                 <a id="resume" href="/resume" class="navButton">Resume</a>
                 <a id="about" href="/about" class="navButton">About</a>
                 <a id="contact" href="/contact" class="navButton">Contact</a>
@@ -47,8 +47,8 @@
         </header>
 
         <section>
-            <header>
-                <h4><a href="/">Home</a></h4>
+            <header id="breadcrumbs">
+                <a class="breadcrumb" href="/">Home</a>
             </header>
 
             <div class="content">

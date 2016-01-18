@@ -5,7 +5,7 @@
 
 <br />
 
-<a href="/resources/WallickAli-Resume.pdf">
+<a href="/resources/WallickAli-Resume.pdf" target="_blank">
     <h4 class="centered">Download as PDF</h3>
     
     <img class="banner" src="/resources/images/resume.png" />
