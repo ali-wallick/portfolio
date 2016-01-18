@@ -15,7 +15,8 @@ if (locations[1]) {
 
     var breadcrumbs = "";
     for (var i = 1; i < locations.length; i++) {
-        breadcrumbs += createBreadcrumbString(i);
+        if (locations[i].toLowerCase() !== "index")
+            breadcrumbs += createBreadcrumbString(i);
     }
     
     document.getElementById("breadcrumbs").innerHTML += breadcrumbs;

@@ -1,6 +1,5 @@
 TO-DO (in order of importance):
 - Polish/animate nav buttons
-- Breadcrumbs
 - Finalize Colors
 - Finalize fonts
 - Favicon
