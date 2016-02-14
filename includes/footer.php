@@ -19,7 +19,7 @@
             </footer>
         </section>
 
-        <aside>
+        <aside id="quickInfo">
             <h4>Quick Info</h4>
             <div class="content">
                 <div class="quickInfoContent">

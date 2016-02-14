@@ -46,7 +46,7 @@
             </nav>
         </header>
 
-        <section>
+        <section id="MainContent">
             <header id="breadcrumbs">
                 <a class="breadcrumb" href="/">Home</a>
             </header>

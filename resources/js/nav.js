@@ -35,3 +35,20 @@ function createBreadcrumbString(index)
     
     return ' > <a href=' + hrefStr + ' class="breadcrumb">' + location + '</a>';
 }
+
+function onScrolled()
+{
+    var quickInfo = document.getElementById("quickInfo")
+    var contentTop = document.getElementById("MainContent").getBoundingClientRect().top;
+    var threshold = contentTop + window.scrollY;   
+    
+    if (document.body.scrollTop > threshold || document.documentElement.scrollTop > threshold) {
+        quickInfo.className = "scrolled";
+    } else {
+        quickInfo.className = "";
+    }
+    
+    quickInfo.style.top = (-contentTop + 10) + "px";
+}
+
+window.onscroll = onScrolled;
