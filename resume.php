@@ -1,7 +1,7 @@
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/header.php"); ?>
 
 <h1 class="centered">Resume</h1>
-<h3 class="centered">November 2015</h3>
+<h3 class="centered">March 2016</h3>
 
 <br />
 

@@ -25,10 +25,10 @@
                 <div class="quickInfoContent">
                     <img src="/resources/images/quickImage.jpg" class="quickInfoImage"/>
                     <p class="quickInfoText" style="font-weight:bold;">Ali Wallick</p>
-                    <p class="quickInfoText" style="font-weight:bold;">UI Programmer</p>
-                    <p class="quickInfoText">Red 5 Studios</p>
+                    <p class="quickInfoText" style="font-weight:bold;">Software Engineer</p>
+                    <p class="quickInfoText">MobilityWare</p>
                     <a href="mailto:ali@aliwallick.com" class="quickInfoText">ali@aliwallick.com</a>
-                    <div class="quickInfoContent">
+                    <div class="quickInfoIcons">
                         <div class="row">
                             <div class="quickInfoIcon"><a href="https://www.linkedin.com/in/aliwallick" target="_blank"><img src="/resources/images/socialmedia/linkedin-dreamstale45.png" class="socialMediaImg" /></a></div>
                             <div class="quickInfoIcon"><a href="https://twitter.com/aliwallick" target="_blank"><img src="/resources/images/socialmedia/twitter2-dreamstale72.png" class="socialMediaImg" /></a></div>

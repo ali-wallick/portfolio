@@ -10,7 +10,9 @@
 
 <p>After graduation, I was hired at the virtual world company, Kaneva. In my 4 years at there, I became the lead UI engineer, mentoring another engineer, and working on almost all of the game’s core menus including the HUD, inventory, tutorial, and many others. In 2014, I lead a complete overhaul of the game’s HUD from the code design document to release. In addition, I created a menu animation system that has been used by several engineers to create dynamic menus.</p>
     
-<p><img class="imgRight" style="width:40%;" src="/resources/images/me2.jpg" />In June 2015, I accepted a position at Red 5 Studios in Irvine, CA as a UI Programmer. Now working on a larger team and game, I am enjoying the new challenges that come with the territory. So far I've had the opportunity to work on some exciting new updates to the game, and can't wait to see them release to the world!</p>
+<p><img class="imgRight" style="width:40%;" src="/resources/images/me2.jpg" />In June 2015, I accepted a position at Red 5 Studios in Irvine, CA as a UI Programmer. There, I got valuable experience working on a larger team and large-scale game. My work included developing/updating many of the games menus and HUD elements, creating libraries to standardize various widgets, and working to optimize our UI.</p>
+
+<p>Currently I work at MobilityWare, where I am making casual mobile games in the Unity engine. I have loved working in Unity on personal and school projects, and am incredibly excited to get the chance to work in it professionally!</p>
 
 <p>In my spare time I enjoy playing games, reading, camping, rock climbing, cooking, sewing, and spending time with friends. I love to participate in game jams, and work on personal games with my friends. I am a big science fiction and fantasy fan, both in literature and film. When I am not on the computer, I love being outdoors, and doing hands-on, creative activities. Recently I have been trying my hand in costuming, even winning the Best Group Costume award at Dragon*Con for a Kerbal Space Program cosplay (above) with friends!</p>
 

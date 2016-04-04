@@ -9,7 +9,7 @@
 
 <img class="banner" src="/resources/images/banner.png" />
 
-<p>Hello and welcome! My name is Ali. I'm a gal passionate about developing games. My favorite aspects are programming (especially UI) and all-around design. I currently work as a UI Programmer at <a href="http://www.red5studios.com/" target="_blank">Red 5 Studios</a>, helping to create menus and HUDs for the MMO RPG/FPS <i>Firefall</i>. I also enjoy designing and programming personal games with my friends on the side!</p>
+<p>Hello and welcome! My name is Ali. I'm a gal passionate about developing games. My favorite aspects are programming (especially UI) and all-around design. I currently work as a Software Engineer at <a href="http://www.mobilityware.com/" target="_blank">MobilityWare</a>, creating mobile games in Unity 3D. I also enjoy designing and programming personal games with my friends on the side!</p>
 
 <p>On this site you can find my <a href="/blog">Blog</a> with updates on the projects I'm working on and various other activities.</p>
 
