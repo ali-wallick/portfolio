@@ -6,7 +6,7 @@
 
 <h2>About</h2>
 
-<p>Firefall is a massively multiplayer online game with elements from both the shooter and roleplaying genres. Created by Red 5 Studios, it is currently working toward a Chinese launch and global overhaul. As a UI programmer at Red 5, I have been working on various HUD and menu elements throughout the game. I can't wait to show more of my contributions as they are released to the world!</p>
+<p>Firefall is a massively multiplayer online game with elements from both the shooter and roleplaying genres. Created by Red 5 Studios, I participated in its Chinese launch and worldwide overhaul release. As a UI programmer at Red 5, I worked on various HUD and menu elements throughout the game such as the radar, PVP elements, character progression menus, and rewards screens. I also worked to optimize the UI system and create libaries for common elements. My work was done between the Lua/XML UI scripting layer and the core propretary C++ engine.</p>
 		
 <br />
 

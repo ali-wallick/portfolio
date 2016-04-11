@@ -2,11 +2,6 @@
 
 <h1 class="centered">Welcome to my Portfolio!</h1>
 
-<div style="border-style:dashed; border-width:medium; border-color:red;">
-    <h3 class="centered" style="color:red; margin-top:15px;">Under Construction:</h3>
-    <p class="centered" style="color:red">I'm currently working on redoing a lot of my site, so please pardon the dust. <a href="/resources/data/todo.txt" target="_blank">Content is being added and appearance is being polished.</a> Check back soon :)</p>
-</div>
-
 <img class="banner" src="/resources/images/banner.png" />
 
 <p>Hello and welcome! My name is Ali. I'm a gal passionate about developing games. My favorite aspects are programming (especially UI) and all-around design. I currently work as a Software Engineer at <a href="http://www.mobilityware.com/" target="_blank">MobilityWare</a>, creating mobile games in Unity 3D. I also enjoy designing and programming personal games with my friends on the side!</p>

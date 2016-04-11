@@ -1,11 +1,8 @@
-TO-DO (in order of importance):
+TO-DO:
 - Polish/animate nav buttons
 - Finalize Colors
-- Finalize fonts
 - Favicon
-- Add detail to Firefall page
-- Remove under construction
 - Add more animations?
 - Improve Blog
-- Add downloads for projects?
 - Update About
+- Add MobilityWare page
