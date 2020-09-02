@@ -25,8 +25,8 @@
                 <div class="quickInfoContent">
                     <img src="/resources/images/quickImage.jpg" class="quickInfoImage"/>
                     <p class="quickInfoText" style="font-weight:bold;">Ali Wallick</p>
-                    <p class="quickInfoText" style="font-weight:bold;">Software Engineer</p>
-                    <p class="quickInfoText">MobilityWare</p>
+                    <p class="quickInfoText" style="font-weight:bold;">Client Engineer</p>
+                    <p class="quickInfoText">Second Dinner</p>
                     <a href="mailto:ali@aliwallick.com" class="quickInfoText">ali@aliwallick.com</a>
                     <div class="quickInfoIcons">
                         <div class="row">

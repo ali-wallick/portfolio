@@ -6,8 +6,8 @@
 <br />
 
 <a name="spotlight"><h2 class="centered">Spotlight</h2></a>
+<a href="vegasBlvd"><img src="/resources/images/projects/vegasblvd/banner.png" class="banner" /></a>
 <a href="firefall"><img src="/resources/images/projects/firefall/banner.png" class="banner" /></a>
-<a href="tiltingAtWindmills"><img src="/resources/images/projects/tiltingwindmills/banner.png" class="banner" /></a>
 
 <br />
 
@@ -18,7 +18,7 @@
             <a href="kaneva"><img class="featuredTableImage" src="/resources/images/projects/kaneva/banner.png" /></a>
         </div>
         <div class="projectCell">
-            <a href="gameOverEverAfter"><img class="featuredTableImage" src="/resources/images/projects/gameover/banner.png" /></a>
+            <a href="tiltingAtWindmills"><img class="featuredTableImage" src="/resources/images/projects/tiltingwindmills/banner.png" /></a>
         </div>
     </div>
     <div class="projectRow">
@@ -45,9 +45,23 @@
 <div class="projectTable">
     <div class="projectRow">
         <div class="projectCell">
+            <h4 class="centered">2019</h4>
+            <ul class="projectList">
+                <li><a href="vegasBlvd">Vegas Blvd Slots (2017-2019)</a></li>
+            </ul>
+        </div>
+        <div class="projectCell">
+            <h4 class="centered">2018</h4>
+            <ul class="projectList">
+                <li>It Fits I Sits</li>
+            </ul>
+        </div>
+    </div>
+    <div class="projectRow">
+        <div class="projectCell">
             <h4 class="centered">2016</h4>
             <ul class="projectList">
-                <li><a href="firefall">Firefall (2015-Present)</a></li>
+                <li><a href="firefall">Firefall (2015-2016)</a></li>
             </ul>
         </div>
         <div class="projectCell">
