@@ -1,0 +1,16 @@
+# Phase 0 preservation records. These are historical artifacts captured from the
+# live site — reformatting them destroys their value as a faithful snapshot.
+snapshot/
+content/archive/
+
+# Legacy assets awaiting the Phase 3 cleanup pass.
+resources/
+
+# Phase 1 infrastructure record.
+infra/
+
+# Generated
+dist/
+.astro/
+node_modules/
+package-lock.json

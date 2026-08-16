@@ -1,0 +1,38 @@
+---
+import type { Project } from '~/lib/content';
+
+/**
+ * Outbound links for a project.
+ *
+ * Links flagged `dead: true` render as plain text with a note instead of as
+ * anchors. The old site linked firefall.com, kaneva.com and argamestudio.org
+ * for years after all three went dark — the credit is still true, the link
+ * is not, and those are two different facts.
+ */
+interface Props {
+  links: Project['data']['links'];
+}
+
+const { links } = Astro.props;
+const live = links.filter((l) => !l.dead);
+const dead = links.filter((l) => l.dead);
+---
+
+{
+  links.length > 0 && (
+    <>
+      {live.length > 0 && (
+        <ul>
+          {live.map((l) => (
+            <li>
+              <a href={l.url}>{l.label}</a>
+            </li>
+          ))}
+        </ul>
+      )}
+      {dead.length > 0 && (
+        <p class="meta">No longer online: {dead.map((l) => l.label).join(', ')}</p>
+      )}
+    </>
+  )
+}

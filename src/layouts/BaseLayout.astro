@@ -1,0 +1,85 @@
+---
+import { site, nav } from '~/config/site';
+import '~/styles/tokens.css';
+import '~/styles/base.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Omit the site name suffix — used by the homepage. */
+  bareTitle?: boolean;
+}
+
+const { title, description, bareTitle = false } = Astro.props;
+const fullTitle = bareTitle ? title : `${title} — ${site.name}`;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!-- The old site had no viewport meta at all, which is why it rendered
+         zoomed-out on every phone ever made. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonical} />
+    <meta name="author" content={site.name} />
+
+    <!-- TODO(phase-6): favicon, OG image, robots.txt, sitemap. The old site's
+         og:image and og:url were both http://, so link previews broke in every
+         chat app. Fix them with real assets rather than porting the broken ones. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.name} />
+    {description && <meta property="og:description" content={description} />}
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="layout">
+      <header class="site-header">
+        <a href="/"><strong>{site.name}</strong></a>
+        <nav aria-label="Main">
+          <ul>
+            {
+              nav.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    aria-current={Astro.url.pathname.startsWith(item.href) ? 'page' : undefined}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </header>
+
+      <main id="main">
+        <slot />
+      </main>
+
+      <footer class="site-footer">
+        <nav aria-label="Footer">
+          <ul>
+            {
+              nav.map((item) => (
+                <li>
+                  <a href={item.href}>{item.label}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <p>© {year} {site.name}</p>
+      </footer>
+    </div>
+  </body>
+</html>

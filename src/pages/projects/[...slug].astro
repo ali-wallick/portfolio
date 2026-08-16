@@ -1,0 +1,61 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import ProjectMeta from '~/components/ProjectMeta.astro';
+import Media from '~/components/Media.astro';
+import LinkList from '~/components/LinkList.astro';
+import { getAllProjects, type Project } from '~/lib/content';
+
+/**
+ * Every project page, from the collection. There is no per-project template and
+ * no hand-maintained index — adding a project is one Markdown file, which is the
+ * content model's central promise.
+ *
+ * Incidentally this also retires a seven-year-old bug: the old repo had seven
+ * project pages committed twice under two casings (`artOfRescue.php` and
+ * `artofrescue.php`), because a 2016 rename on case-insensitive macOS was
+ * recorded by git as adds rather than renames. The live site only worked on its
+ * case-sensitive host *because* of the stale duplicates. Slugs are derived from
+ * one lowercase filename now, so there is nothing left to diverge.
+ */
+export const getStaticPaths = (async () => {
+  const projects = await getAllProjects();
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}) satisfies GetStaticPaths;
+
+const { project } = Astro.props as { project: Project };
+const { Content } = await render(project);
+const d = project.data;
+---
+
+<BaseLayout title={d.title} description={d.summary}>
+  <p class="meta"><a href="/projects">← Projects</a></p>
+
+  <h1>{d.title}</h1>
+  <ProjectMeta project={project} />
+
+  {d.hero && <Media item={d.hero} />}
+  {d.summary && <p>{d.summary}</p>}
+
+  <Content />
+
+  {
+    d.collaborators.length > 0 && (
+      <>
+        <h2>Team</h2>
+        <p>
+          {d.collaborators
+            .map((c) => c.name)
+            .concat('Ali Wallick')
+            .join(', ')}
+        </p>
+      </>
+    )
+  }
+
+  <LinkList links={d.links} />
+</BaseLayout>

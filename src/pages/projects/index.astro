@@ -1,0 +1,42 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import ProjectMeta from '~/components/ProjectMeta.astro';
+import { getFeaturedProjects, getArchiveProjects } from '~/lib/content';
+
+const featured = await getFeaturedProjects();
+const archive = await getArchiveProjects();
+---
+
+<BaseLayout title="Projects" description="Games and projects by Ali Wallick.">
+  <h1>Projects</h1>
+
+  <h2>Featured</h2>
+  <ul class="project-list">
+    {
+      featured.map((project) => (
+        <li>
+          <a href={`/projects/${project.id}`}>{project.data.title}</a>
+          <ProjectMeta project={project} />
+          {project.data.summary && <p>{project.data.summary}</p>}
+        </li>
+      ))
+    }
+  </ul>
+
+  {
+    /* The archive tier is framed as history, not as a portfolio pitch — the
+      `status` field on each entry keeps a 48-hour jam entry from reading like a
+      shipped commercial title. */
+  }
+  <h2>Archive</h2>
+  <ul class="project-list">
+    {
+      archive.map((project) => (
+        <li>
+          <a href={`/projects/${project.id}`}>{project.data.title}</a>
+          <ProjectMeta project={project} />
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

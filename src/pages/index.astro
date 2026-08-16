@@ -1,0 +1,37 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import ProjectMeta from '~/components/ProjectMeta.astro';
+import { site } from '~/config/site';
+import { getFeaturedProjects } from '~/lib/content';
+
+const featured = await getFeaturedProjects();
+---
+
+<BaseLayout title={`${site.name} — ${site.role}`} bareTitle>
+  <h1>{site.name}</h1>
+  <p class="meta">{site.role}</p>
+
+  {
+    /* TODO(phase-3): the intro paragraph. The old one said "I currently work as a
+      Engineer at Second Dinner, creating mobile games in the Unity engine" and had
+      been true-ish since 2019. */
+  }
+  {
+    /* TODO(phase-7): a "currently" line that is cheap enough to update that the
+      site can be trivially correct rather than expensively correct. */
+  }
+
+  <h2>Featured work</h2>
+  <ul class="project-list">
+    {
+      featured.map((project) => (
+        <li>
+          <a href={`/projects/${project.id}`}>{project.data.title}</a>
+          <ProjectMeta project={project} />
+        </li>
+      ))
+    }
+  </ul>
+
+  <p><a href="/projects">All projects</a></p>
+</BaseLayout>

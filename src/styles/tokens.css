@@ -1,0 +1,93 @@
+/*
+ * PLACEHOLDER DESIGN TOKENS — Phase 2.
+ *
+ * These are deliberately boring. Phase 5 is the design phase, and it is
+ * deliberately last so that directions get judged against real content instead
+ * of lorem ipsum. Nothing here is a design decision; it is a *slot* for one.
+ *
+ * The point of shipping tokens this early is that Phases 3 and 4 build pages
+ * against named variables rather than hard-coded values, so Phase 5 is a
+ * palette swap and a type-scale swap rather than a hunt through every file.
+ *
+ * Rule for Phases 3–4: use these variables. Never write a raw color or a raw
+ * px font-size in a component.
+ */
+
+:root {
+  /* --- Color ------------------------------------------------------------ */
+  --color-bg: #ffffff;
+  --color-surface: #f4f4f5;
+  --color-text: #18181b;
+  --color-text-muted: #52525b;
+  --color-border: #d4d4d8;
+  --color-link: #1d4ed8;
+  --color-link-visited: #6d28d9;
+  --color-focus: #1d4ed8;
+
+  /* --- Type -------------------------------------------------------------
+   * A single system stack, on purpose. Choosing a typeface is the most
+   * identity-defining decision on the site and belongs in Phase 5.
+   */
+  --font-body:
+    system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji';
+  --font-heading: var(--font-body);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Modular scale, ratio 1.25, base 1rem. */
+  --text-xs: 0.8rem;
+  --text-sm: 0.9rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.563rem;
+  --text-2xl: 1.953rem;
+  --text-3xl: 2.441rem;
+
+  --leading-tight: 1.2;
+  --leading-body: 1.6;
+
+  /* --- Space ------------------------------------------------------------ */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* --- Layout ----------------------------------------------------------- */
+  --measure: 68ch;
+  --content-max: 60rem;
+  --radius: 4px;
+
+  /* --- Motion -----------------------------------------------------------
+   * Phase 5 note: resources/js/nav.js has a hand-rolled easing sticky sidebar
+   * built before `position: sticky` existed — the sidebar lags and settles
+   * rather than snapping. It is the only part of the old site with real
+   * personality, and it is worth reinterpreting rather than deleting.
+   */
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --duration-fast: 120ms;
+  --duration: 240ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #101012;
+    --color-surface: #1c1c20;
+    --color-text: #f4f4f5;
+    --color-text-muted: #a1a1aa;
+    --color-border: #3f3f46;
+    --color-link: #93b4ff;
+    --color-link-visited: #c4b5fd;
+    --color-focus: #93b4ff;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration: 0ms;
+  }
+}

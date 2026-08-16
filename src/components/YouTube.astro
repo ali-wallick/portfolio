@@ -1,0 +1,34 @@
+---
+/**
+ * The only place a YouTube URL is constructed anywhere in this codebase.
+ *
+ * The old site embedded five videos over `http://`, plus one using the
+ * long-dead `/v/?fs=1&hl=en_US` Flash player form. Browsers block all of them
+ * as mixed content, so roughly half the project videos on the live site show
+ * nothing at all. Storing bare video IDs in front matter and building the URL
+ * here means there is no protocol for anyone to get wrong again.
+ *
+ * youtube-nocookie.com avoids setting tracking cookies until playback, which
+ * keeps the site out of cookie-banner territory (Phase 6 uses Cloudflare Web
+ * Analytics for the same reason).
+ */
+interface Props {
+  id: string;
+  title: string;
+  start?: number;
+}
+
+const { id, title, start } = Astro.props;
+
+const params = new URLSearchParams({ rel: '0' });
+if (start) params.set('start', String(start));
+const src = `https://www.youtube-nocookie.com/embed/${id}?${params}`;
+---
+
+<iframe
+  class="embed"
+  src={src}
+  title={title}
+  loading="lazy"
+  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen></iframe>

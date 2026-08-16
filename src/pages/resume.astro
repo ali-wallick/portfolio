@@ -1,0 +1,69 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { getJobs, getEducation, formatSpan, currentTitle } from '~/lib/content';
+
+/**
+ * Phase 4 designs this page and writes its copy. Phase 2's job is only to prove
+ * that the data flows: the resume reads the same `jobs` and `education`
+ * collections the site bio reads, so the two cannot drift apart.
+ *
+ * The old site's "resume" was a 1700×2200 PNG — unselectable, unsearchable, and
+ * invisible to screen readers. Whatever this page ends up looking like, it will
+ * be real text.
+ */
+const jobs = await getJobs('resume');
+const education = await getEducation();
+---
+
+<BaseLayout title="Resume" description="Ali Wallick's resume.">
+  <h1>Resume</h1>
+
+  {
+    /* TODO(phase-4): copy, layout, and a print stylesheet for the PDF. Drop the
+      2011 GPA and Dean's List, and do NOT reintroduce the PO Box that the old
+      resume published on a public web page. */
+  }
+
+  <h2>Experience</h2>
+  {
+    jobs.map((job) => (
+      <section>
+        <h3>{currentTitle(job)}</h3>
+        <p class="meta">
+          {job.data.company} · {job.data.location} · {formatSpan(job.data.start, job.data.end)}
+        </p>
+        {job.data.roles.length > 1 && (
+          <p class="meta">
+            Previously:{' '}
+            {job.data.roles
+              .slice(0, -1)
+              .map((r) => r.title)
+              .join(', ')}
+          </p>
+        )}
+        {job.data.highlights.length > 0 && (
+          <ul>
+            {job.data.highlights.map((h) => (
+              <li>{h}</li>
+            ))}
+          </ul>
+        )}
+      </section>
+    ))
+  }
+
+  <h2>Education</h2>
+  {
+    education.map((entry) => (
+      <section>
+        <h3>
+          {entry.data.degree} in {entry.data.field}
+        </h3>
+        <p class="meta">
+          {entry.data.school} · {entry.data.location} ·{' '}
+          {formatSpan(entry.data.start ?? entry.data.end, entry.data.end)}
+        </p>
+      </section>
+    ))
+  }
+</BaseLayout>
