@@ -7,7 +7,16 @@ import { getFeaturedProjects } from '~/lib/content';
 const featured = await getFeaturedProjects();
 ---
 
-<BaseLayout title={`${site.name} — ${site.role}`} bareTitle>
+{
+  /* TODO(phase-3): description carried verbatim from the old site's og:description
+    rather than newly written, since copy is Phase 3's. It is the homepage, so it
+    is the string most likely to appear in a search result or a link preview. */
+}
+<BaseLayout
+  title={`${site.name} — ${site.role}`}
+  description="Website and portfolio for Ali Wallick, game developer and programmer."
+  bareTitle
+>
   <h1>{site.name}</h1>
   <p class="meta">{site.role}</p>
 

@@ -44,7 +44,15 @@ const year = new Date().getFullYear();
     {
       /* TODO(phase-6): favicon, OG image, robots.txt, sitemap. The old site's
          og:image and og:url were both http://, so link previews broke in every
-         chat app. Fix them with real assets rather than porting the broken ones. */
+         chat app. Fix them with real assets rather than porting the broken ones.
+
+         Concretely, from the first green Lighthouse run: `public/` is empty, so
+         every page 404s on /favicon.ico and logs a browser error. That is the
+         sole reason best-practices sits at 0.96 instead of 1.00 site-wide. It
+         clears the 0.95 threshold, so it is not urgent — and a favicon is a
+         visual decision, which is why it waits for Phase 5/6 rather than getting
+         a placeholder here. Shipping any real icon should take best-practices
+         to 1.00. */
     }
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />

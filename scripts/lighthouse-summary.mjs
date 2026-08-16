@@ -20,9 +20,16 @@ if (!existsSync(DIR)) {
   process.exit(0);
 }
 
-const reports = readdirSync(DIR).filter((f) => /^lhr-.*\.json$/.test(f));
+// LHCI uses two different naming schemes depending on which stage wrote the
+// files: `collect` emits `lhr-<timestamp>.json`, while the `filesystem` upload
+// target emits `<host>-<path>-<timestamp>.report.json`. Getting this wrong is
+// how the first version of this script reported "nothing to summarise" next to
+// 31 successfully uploaded files, so match on content rather than filename.
+const reports = readdirSync(DIR).filter(
+  (f) => f.endsWith('.json') && !['manifest.json', 'assertion-results.json'].includes(f),
+);
 if (reports.length === 0) {
-  console.log(`No lhr-*.json in ${DIR} — nothing to summarise.`);
+  console.log(`No Lighthouse report JSON in ${DIR} — nothing to summarise.`);
   process.exit(0);
 }
 
@@ -31,6 +38,7 @@ const byPage = new Map();
 
 for (const file of reports) {
   const lhr = JSON.parse(readFileSync(path.join(DIR, file), 'utf8'));
+  if (!lhr.categories) continue;
   const page = new URL(lhr.finalDisplayedUrl ?? lhr.finalUrl).pathname;
   if (!byPage.has(page)) byPage.set(page, { scores: {}, audits: new Map() });
   const entry = byPage.get(page);

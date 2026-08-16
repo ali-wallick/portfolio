@@ -93,6 +93,25 @@ project-page template goes unmeasured until Phase 3 publishes one — is recorde
 in the workflow, along with the expectation that a third-party embed will cost best-practices points
 when it comes back.
 
+**Getting the numbers out of CI took three tries, and each failure was in the instrumentation.**
+The Lighthouse artifact uploaded successfully while containing nothing, twice — because
+`actions/upload-artifact@v4` defaults to `include-hidden-files: false`, and LHCI's default output
+directory is the hidden `.lighthouseci/`. Moving to a non-hidden `lighthouse-report/` fixed it: 31
+files. Then the summary script printed "nothing to summarise" next to those 31 files, because LHCI's
+`collect` stage writes `lhr-<timestamp>.json` while its `filesystem` upload target writes
+`<host>-<path>-<timestamp>.report.json`, and the script matched only the first. Now it matches on
+content rather than filename.
+
+Worth the persistence: the first readable run immediately explained both remaining gaps. `public/`
+is empty, so every page 404s on `/favicon.ico` and logs a browser error — that single missing file
+is the entire reason best-practices sits at 0.96 rather than 1.00 site-wide. And the homepage had no
+meta description, the one page most likely to show up in a search result or a link preview. Neither
+was failing its threshold, so neither would ever have surfaced on its own.
+
+The general lesson: **a check you cannot read is not a check.** Two of the three problems in this
+phase's CI were in the reporting path, not the thing being reported on, and both failed silently in
+the "looks green" direction.
+
 ### Subagents: used zero, and that was right
 
 The brief flagged "surveying what's left in the old PHP" as a fan-out candidate. It wasn't. The
