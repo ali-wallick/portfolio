@@ -186,11 +186,11 @@ needs the same pattern.
 
 **Address plan:** keep `ali@aliwallick.com` — it's already on file with LinkedIn,
 TriNet, and Guideline, and changing it there is real friction (especially for
-payroll/benefits providers). Mint a **second, clean address** (e.g. `contact@` or
-`hello@aliwallick.com`) to be the one publicly printed on the rebuilt site, so it
-isn't inheriting over a decade of scraper exposure the way `ali@` likely has. iCloud+
-custom domains allow 3 addresses per domain, so this costs nothing. Decide the exact
-second address before 4b; both need to exist as iCloud aliases from the start.
+payroll/benefits providers). **`contact@aliwallick.com`** is the second, clean
+address — the one publicly printed on the rebuilt site, so it isn't inheriting over
+a decade of scraper exposure the way `ali@` likely has. iCloud+ custom domains allow
+3 addresses per domain, so this costs nothing. Both need to exist as iCloud aliases
+from the start of 4b.
 
 ### ~~4a. Copy the mail off DreamHost first~~ — skipped, see decision above
 
@@ -249,7 +249,7 @@ Check **both** addresses, not just `ali@`:
 
 1. ~~How much mail is in the DreamHost mailbox?~~ **Resolved 2026-08-16** — deleted
    outright, no migration needed. See Step 4 decision note.
-2. **Exact second email address** (`contact@`, `hello@`, other?) — needed before 4b.
+2. ~~Exact second email address~~ **Resolved 2026-08-16** — `contact@aliwallick.com`.
 3. **Husband's domain onto the same iCloud+ plan — now or later?** Doesn't block
    anything here, but if it's "now", it's cheapest to do while you're already in the
    Apple dashboard at step 4b.
