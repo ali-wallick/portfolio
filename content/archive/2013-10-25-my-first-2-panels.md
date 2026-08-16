@@ -4,7 +4,7 @@ date: 2013-10-25
 source: "https://www.aliwallick.com/blog/?offset=5"
 ---
 
-[![Speaking on my First Panel](https://aliwallick.com/blog/wp-content/uploads/2013/10/photo1-1024x481.jpg)](https://aliwallick.com/blog/wp-content/uploads/2013/10/photo1.jpg)
+[![Speaking on my First Panel](./images/2013-10-photo1-1024x481.jpg)](./images/2013-10-photo1.jpg)
 
 I was thrilled to be invited to speak on my very first panel at this exhibit in July alongside several very talented local game developers! We covered subjects ranging from issues we face in starting our careers, to our favorite games. The panel really made me step out of my comfort zone and learn to speak to others about my experiences.
 

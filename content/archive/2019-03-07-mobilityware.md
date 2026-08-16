@@ -4,7 +4,7 @@ date: 2019-03-07
 source: "https://www.aliwallick.com/blog/?offset=0"
 ---
 
-[![MobilityWare](https://aliwallick.com/blog/wp-content/uploads/2019/04/15400971_10154772590792973_1178001501015190134_n.jpg)](https://aliwallick.com/blog/wp-content/uploads/2019/04/15400971_10154772590792973_1178001501015190134_n.jpg)
+![MobilityWare](./images/2019-04-mobilityware.jpg)
 
 Wow, it's been 3 years since I started at [MobilityWare](http://www.mobilityware.com)! In March of 2016 I found the lovely gem of a company. I was hired as a Software Engineer to work in Unity on Casino-style mobile games, and have loved it ever since. MobilityWare has the oldest and some of the largest card & jigsaw puzzle games on the mobile market. It's really rewarding to board a plane and almost always see someone playing one of our games!
 

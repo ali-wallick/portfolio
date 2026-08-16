@@ -4,7 +4,7 @@ date: 2011-05-20
 source: "https://www.aliwallick.com/blog/?offset=5"
 ---
 
-[![Critter3 Business Cards](https://aliwallick.com/blog/wp-content/uploads/2011/05/Cards.jpg)](https://aliwallick.com/blog/wp-content/uploads/2011/05/Cards.jpg)
+![Critter3 Business Cards](./images/2011-05-cards.jpg)
 
 This past weekend I got to attend Savannah College of Art and Design's [Game Developers eXchange](http://www.scad.edu/experience/events/gdx/) (GDX). The conference itself was a lot of fun – very small, but several speakers from large companies (Bungie, Rockstar, Value, Firaxis). The speakers were mostly talking about art-related subjects (as SCAD is an art school), but there were many valuable insights into working in the gaming industry.
 

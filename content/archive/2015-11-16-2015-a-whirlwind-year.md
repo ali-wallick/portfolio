@@ -6,7 +6,7 @@ source: "https://www.aliwallick.com/blog/?offset=0"
 
 Woo hoo major life update!
 
-[![New Nametag!](https://aliwallick.com/blog/wp-content/uploads/2015/11/11535820_10204590168689771_1372286147836779912_n.jpg)](https://aliwallick.com/blog/wp-content/uploads/2015/11/11535820_10204590168689771_1372286147836779912_n.jpg)
+![New Nametag!](./images/2015-11-nametag.jpg)
 
 In April 2015 I was contacted by [Red 5 Studios](http://www.red5studios.com/) about a position as a UI Programmer on the game [Firefall](http://www.firefall.com). Finally ready to make my pilgrimage across the country like the rest of my college peers, I gladly accepted. Within a month I was packing up my life, my pets, and my now-fiance (fellow game developer [Robert Spessard](http://www.robertspessard.com/)) to move to my new home in Orange County, California.
 

@@ -4,7 +4,7 @@ date: 2019-04-16
 source: "https://www.aliwallick.com/blog/?offset=0"
 ---
 
-[![Game Jam 2018](https://aliwallick.com/blog/wp-content/uploads/2019/04/29594610_10211674456912549_6752228813610676764_n.jpg)](https://aliwallick.com/blog/wp-content/uploads/2019/04/29594610_10211674456912549_6752228813610676764_n.jpg)
+![Game Jam 2018](./images/2019-04-it-fits-i-sits.jpg)
 
 One of the coolest things MobilityWare does every year is a weeklong game jam. On Friday, people get up to pitch an idea for a game, and then employees team up and get to create it over a week. I've participated before (and went for multiplayer which is always a ridiculous game jam choice), but this year I decided to pitch!
 

@@ -13,4 +13,6 @@ This is rendered output (PHP already processed by the live server), not source �
 
 ## Not included
 
-Images, CSS, and JS are not duplicated here — they're already committed under `resources/` in this repo (for the static site) or covered by the blog image check in the Phase 0 asset inventory (for WordPress-hosted images). This snapshot only captures the rendered page markup.
+Static-site images, CSS, and JS are not duplicated here — they're already committed under `resources/` in this repo. This snapshot only captures the rendered page markup.
+
+Blog post images (hosted on DreamHost under `blog/wp-content/uploads/`) are a separate case: they aren't part of this HTML snapshot at all, but they *are* committed — downloaded into [`content/archive/images/`](../content/archive/images/) and referenced locally from the corresponding Markdown posts, rather than left hotlinking to a host that's being retired.
