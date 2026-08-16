@@ -32,7 +32,7 @@ const { Content } = await render(project);
 const d = project.data;
 ---
 
-<BaseLayout title={d.title} description={d.summary}>
+<BaseLayout title={d.title} description={d.summary} noindex={d.draft}>
   <p class="meta"><a href="/projects">← Projects</a></p>
 
   <h1>{d.title}</h1>

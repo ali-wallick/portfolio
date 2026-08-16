@@ -8,9 +8,15 @@ interface Props {
   description?: string;
   /** Omit the site name suffix — used by the homepage. */
   bareTitle?: boolean;
+  /**
+   * Unfinished work. Draft pages only ever exist on preview deploys, but
+   * `noindex` makes that explicit rather than relying on nobody finding the
+   * URL, and `scripts/check-links.mjs` keys its stricter rules off it.
+   */
+  noindex?: boolean;
 }
 
-const { title, description, bareTitle = false } = Astro.props;
+const { title, description, bareTitle = false, noindex = false } = Astro.props;
 const fullTitle = bareTitle ? title : `${title} — ${site.name}`;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const year = new Date().getFullYear();
@@ -20,17 +26,26 @@ const year = new Date().getFullYear();
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <!-- The old site had no viewport meta at all, which is why it rendered
-         zoomed-out on every phone ever made. -->
+    {
+      /* Use {} comments, not <!-- -->, in this file: HTML comments are emitted
+         into every page, and internal notes are not something to ship. */
+    }
+    {
+      /* The old site had no viewport meta at all, which is why it rendered
+         zoomed-out on every phone ever made. */
+    }
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={canonical} />
     <meta name="author" content={site.name} />
+    {noindex && <meta name="robots" content="noindex" />}
 
-    <!-- TODO(phase-6): favicon, OG image, robots.txt, sitemap. The old site's
+    {
+      /* TODO(phase-6): favicon, OG image, robots.txt, sitemap. The old site's
          og:image and og:url were both http://, so link previews broke in every
-         chat app. Fix them with real assets rather than porting the broken ones. -->
+         chat app. Fix them with real assets rather than porting the broken ones. */
+    }
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:url" content={canonical} />

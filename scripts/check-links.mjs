@@ -78,6 +78,7 @@ const attr = (tag, name) => {
 for (const file of htmlFiles) {
   const rel = path.relative(DIST, file);
   const html = await readFile(file, 'utf8');
+  const isDraft = /<meta[^>]+name=["']robots["'][^>]+noindex/i.test(html);
 
   // --- 4. Structural floor -------------------------------------------------
   if (!/<title>[^<]+<\/title>/i.test(html)) report(rel, 'missing a non-empty <title>');
@@ -109,6 +110,23 @@ for (const file of htmlFiles) {
   for (const [tag] of html.matchAll(/<img\b[^>]*>/gi)) {
     const alt = attr(tag, 'alt');
     if (alt === undefined) report(rel, `<img> with no alt attribute: ${attr(tag, 'src') ?? tag}`);
+  }
+
+  // --- 5. No HTML comments in published markup -----------------------------
+  // Caught for real: a `<!-- TODO(phase-6): ... -->` note in BaseLayout was
+  // being emitted into all 23 pages. In .astro files `<!-- -->` ships and
+  // `{/* */}` does not, which is easy to forget; in Markdown bodies, HTML
+  // comments always render through.
+  //
+  // Draft pages are exempt. Working notes are the whole point of a draft, and
+  // drafts only exist on preview deploys. The exemption disappears the moment
+  // the page is published — same discipline the content schema uses, where
+  // `draft: false` starts enforcing completeness.
+  if (!isDraft) {
+    for (const [comment] of html.matchAll(/<!--[\s\S]*?-->/g)) {
+      const preview = comment.replace(/\s+/g, ' ').slice(0, 60);
+      report(rel, `HTML comment in published output (use {/* */} in .astro): ${preview}…`);
+    }
   }
 }
 
