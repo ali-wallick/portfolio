@@ -73,6 +73,21 @@ deploys will silently hide draft content and the review loop stops working.
 Node version comes from `.nvmrc` (22) — Cloudflare reads it automatically, so don't set
 `NODE_VERSION` by hand.
 
+### Production builds fail until Phase 2 merges
+
+Expected, and not a misconfiguration. The production trigger builds `master`, and until the Phase 2
+branch lands, `master` is still the old PHP site — no `package.json`, so `npm run build:ci` exits
+with `ENOENT` about six seconds in:
+
+```
+Executing user build command: npm run build:ci
+npm error path /opt/buildhome/repo/package.json
+npm error enoent Could not read package.json
+```
+
+Non-production branch builds work fine in the meantime, which is the half that matters for the
+review loop. The production build goes green on the merge commit.
+
 ### Do NOT add a custom domain yet
 
 `aliwallick.com` still serves the old PHP site from DreamHost, and it stays that way until **Phase
