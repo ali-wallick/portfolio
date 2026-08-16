@@ -32,19 +32,19 @@ The full plan lives at `~/.claude/plans/i-first-built-this-glistening-book.md`.
 
 ## Settled — do not relitigate
 
-| Decision                | Choice                                                                                                                                     |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| Stack                   | Astro, Markdown content collections, `output: 'static'`. No framework, no adapter.                                                         |
-| Deploy                  | Cloudflare Pages, git push, one preview URL per branch.                                                                                    |
-| Registrar / DNS / email | Cloudflare + iCloud+. **Closed in Phase 1. Out of scope. Do not touch.**                                                                   |
-| Public address          | `contact@aliwallick.com`                                                                                                                   |
-| Blog                    | Scraped to Markdown, mined for content. **No live blog section.**                                                                          |
-| Projects                | Two tiers — 5 deep write-ups, ~12 in a compact scannable archive.                                                                          |
-| Marvel Snap             | A full public credit. Second Dinner places no restriction on it.                                                                           |
-| Current work            | Described only as "an unannounced mobile title in Godot".                                                                                  |
-| Contact form            | None. A `mailto:` and vetted social links. The old PHP form had no CSRF token, no rate limiting, and silently discarded the sender's name. |
-| Visual design           | Deferred to Phase 5, deliberately last.                                                                                                    |
-| URLs                    | Extensionless (`/about`, `/projects/firefall`), matching the old `.htaccess` rewrites, so Phase 6's redirect map stays small.              |
+| Decision                | Choice                                                                                                                                                                                                                                                        |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Stack                   | Astro, Markdown content collections, `output: 'static'`. No framework, no adapter.                                                                                                                                                                            |
+| Deploy                  | Cloudflare **Workers** static assets, git push, one preview URL per branch. (The plan said Pages; Cloudflare has frozen Pages for new features and routes new Git projects to Workers. Same review loop, plus native `_redirects`. See `docs/CLOUDFLARE.md`.) |
+| Registrar / DNS / email | Cloudflare + iCloud+. **Closed in Phase 1. Out of scope. Do not touch.**                                                                                                                                                                                      |
+| Public address          | `contact@aliwallick.com`                                                                                                                                                                                                                                      |
+| Blog                    | Scraped to Markdown, mined for content. **No live blog section.**                                                                                                                                                                                             |
+| Projects                | Two tiers — 5 deep write-ups, ~12 in a compact scannable archive.                                                                                                                                                                                             |
+| Marvel Snap             | A full public credit. Second Dinner places no restriction on it.                                                                                                                                                                                              |
+| Current work            | Described only as "an unannounced mobile title in Godot".                                                                                                                                                                                                     |
+| Contact form            | None. A `mailto:` and vetted social links. The old PHP form had no CSRF token, no rate limiting, and silently discarded the sender's name.                                                                                                                    |
+| Visual design           | Deferred to Phase 5, deliberately last.                                                                                                                                                                                                                       |
+| URLs                    | Extensionless (`/about`, `/projects/firefall`), matching the old `.htaccess` rewrites, so Phase 6's redirect map stays small.                                                                                                                                 |
 
 ---
 
@@ -198,7 +198,7 @@ thing the old DreamHost setup could not do at all:
 
 So: **work on a branch, always.** Never commit straight to `master`, and don't merge without
 checking in. Push early enough that there's a preview URL to look at while the work is still cheap
-to redirect. Setup and troubleshooting: [`docs/CLOUDFLARE-PAGES.md`](docs/CLOUDFLARE-PAGES.md).
+to redirect. Setup and troubleshooting: [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md).
 
 ### Don't touch
 

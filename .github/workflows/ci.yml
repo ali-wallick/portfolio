@@ -32,8 +32,9 @@ jobs:
         run: npm run check
 
       # Production settings: drafts excluded, exactly as aliwallick.com will be
-      # built. Cloudflare's preview builds set SHOW_DRAFTS=true; CI deliberately
-      # does not, so the production build is what gets gated.
+      # built. Cloudflare's non-production branches build WITH drafts via
+      # scripts/build-ci.mjs; CI deliberately does not, so what gets gated here
+      # is the thing that actually ships.
       - name: Build
         run: npm run build
 

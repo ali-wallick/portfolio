@@ -1,6 +1,6 @@
 # aliwallick.com
 
-Ali Wallick's portfolio — an [Astro](https://astro.build) static site deployed to Cloudflare Pages.
+Ali Wallick's portfolio — an [Astro](https://astro.build) static site deployed to Cloudflare Workers.
 
 Rebuilt in 2026, replacing a hand-written PHP site last touched meaningfully in 2016. If you are
 an agent working in this repo, read [`CLAUDE.md`](CLAUDE.md) first — it is the standing brief and
@@ -13,13 +13,13 @@ npm install
 npm run dev
 ```
 
-| Command                          | What it does                                                     |
-| -------------------------------- | ---------------------------------------------------------------- |
-| `npm run dev`                    | Dev server at `localhost:4321`. Draft content is visible.        |
-| `npm run build`                  | Production build to `dist/`. Drafts excluded.                    |
-| `SHOW_DRAFTS=true npm run build` | Preview build. Drafts included — what Cloudflare previews serve. |
-| `npm run verify`                 | Everything CI runs: format, types, build, link check.            |
-| `npm run links`                  | Post-build link / markup checks against `dist/`.                 |
+| Command            | What it does                                                             |
+| ------------------ | ------------------------------------------------------------------------ |
+| `npm run dev`      | Dev server at `localhost:4321`. Draft content is visible.                |
+| `npm run build`    | Production build to `dist/`. Drafts excluded.                            |
+| `npm run build:ci` | What Cloudflare runs. Drafts included unless `WORKERS_CI_BRANCH=master`. |
+| `npm run verify`   | Everything CI runs: format, types, build, link check.                    |
+| `npm run links`    | Post-build link / markup checks against `dist/`.                         |
 
 ## Layout
 
@@ -31,7 +31,8 @@ npm run dev
 | `src/styles/tokens.css`   | Placeholder design tokens. Phase 5 replaces the values.            |
 | `scripts/check-links.mjs` | Post-build checks, each one a regression guard for a real old bug. |
 | `.claude/skills/`         | Repeatable workflows for this repo.                                |
-| `docs/`                   | Deploy runbook and the running record of the rebuild.              |
+| `docs/CLOUDFLARE.md`      | Deploy runbook and the branch → preview-URL review loop.           |
+| `docs/REBUILD-LOG.md`     | Running record of the rebuild. Phase 7's source material.          |
 
 ### Historical, not live
 

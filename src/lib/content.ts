@@ -10,10 +10,13 @@ export type Education = CollectionEntry<'education'>;
  *
  * This is the review loop the whole project is built around: push a branch,
  * Cloudflare posts a preview URL, open it on a phone, react — all before the
- * work is fit for aliwallick.com. Preview and production run the identical
- * `astro build`, so the only thing that can distinguish them is an environment
- * variable. `SHOW_DRAFTS=true` is set on the Cloudflare **Preview** environment
- * only (see docs/CLOUDFLARE-PAGES.md).
+ * work is fit for aliwallick.com.
+ *
+ * Every branch runs the identical `astro build`, so something has to tell them
+ * apart. `scripts/build-ci.mjs` sets `SHOW_DRAFTS=true` for any branch that
+ * isn't the production one — in committed code rather than in dashboard state,
+ * so the rule is readable from a checkout and behaves the same locally.
+ * See docs/CLOUDFLARE.md.
  */
 export const showDrafts = process.env.SHOW_DRAFTS === 'true' || import.meta.env.DEV;
 
