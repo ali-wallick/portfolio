@@ -1,0 +1,8 @@
+TO-DO:
+- Polish/animate nav buttons
+- Finalize Colors
+- Favicon
+- Add more animations?
+- Improve Blog
+- Update About
+- Add MobilityWare page
