@@ -8,8 +8,7 @@
         "http://localhost/projects.html",
         "http://localhost/about.html",
         "http://localhost/resume.html",
-        "http://localhost/contact.html",
-        "http://localhost/projects/firefall.html"
+        "http://localhost/contact.html"
       ],
       "settings": {
         "preset": "desktop"

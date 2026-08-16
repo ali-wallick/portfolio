@@ -80,6 +80,19 @@ those. Working notes are the point of a draft and the exemption vanishes the ins
 published — the same discipline the schema already uses for `summary`/`role`/`hero`. Negative-tested
 by flipping an entry to `draft: false` and confirming the rule fires.
 
+**CI's first real run failed on Lighthouse, and the check was wrong rather than the site.** The
+Lighthouse job had been pointed at a drafts-visible build so project pages would be non-empty to
+measure. Firefall came back with SEO 0.54 and best-practices 0.93 — the first because draft pages
+emit `robots: noindex`, which Lighthouse's SEO category correctly and heavily penalizes, and the
+second because it is the one page carrying a YouTube iframe.
+
+Neither number says anything about the site that will actually be published. The fix was to gate the
+**production** build, matching the `build` job, rather than to lower a threshold until it went
+green. Tuning a threshold to pass is how a check quietly stops meaning anything. The tradeoff — the
+project-page template goes unmeasured until Phase 3 publishes one — is recorded as a `TODO(phase-3)`
+in the workflow, along with the expectation that a third-party embed will cost best-practices points
+when it comes back.
+
 ### Subagents: used zero, and that was right
 
 The brief flagged "surveying what's left in the old PHP" as a fan-out candidate. It wasn't. The
