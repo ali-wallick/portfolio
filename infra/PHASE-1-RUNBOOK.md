@@ -175,30 +175,38 @@ rather than assume.
 
 ## Step 4 — Move email to iCloud+
 
-Do this **last**, and only after step 3 has settled. This is the step with real data
-loss potential, because it is the only one where the old system stops receiving.
+Do this **last**, and only after step 3 has settled.
 
-### 4a. Copy the mail off DreamHost first — before touching any record
+**2026-08-16 decision:** the DreamHost mailbox was mostly spam from the old site's
+open contact form, on an address rarely used day-to-day. All mail in it was deleted
+outright — **no migration needed, 4a below is skipped.** The plan's original 4a
+("copy mail off DreamHost before cutting MX") assumed something worth preserving;
+it doesn't apply here, but is left in place below in case a future domain migration
+needs the same pattern.
 
-Apple has **no IMAP import tool**. The migration is manual, in a desktop client:
+**Address plan:** keep `ali@aliwallick.com` — it's already on file with LinkedIn,
+TriNet, and Guideline, and changing it there is real friction (especially for
+payroll/benefits providers). Mint a **second, clean address** (e.g. `contact@` or
+`hello@aliwallick.com`) to be the one publicly printed on the rebuilt site, so it
+isn't inheriting over a decade of scraper exposure the way `ali@` likely has. iCloud+
+custom domains allow 3 addresses per domain, so this costs nothing. Decide the exact
+second address before 4b; both need to exist as iCloud aliases from the start.
 
-1. In Apple Mail (or Thunderbird), add the DreamHost account over IMAP
-   (`imap.dreamhost.com`) and let it fully sync — check every folder, including
-   Sent and Archive. Wait for the sync to actually finish; a partial sync that
-   *looks* done is the failure mode here.
-2. Add the iCloud account in the same client.
-3. Create a folder under iCloud (e.g. `DreamHost archive`) and **drag** the messages
-   across. Copies over IMAP, so the DreamHost copy stays put as a fallback.
-4. Spot-check: oldest message, newest message, one with an attachment, one in Sent.
+### ~~4a. Copy the mail off DreamHost first~~ — skipped, see decision above
 
-**Do not delete anything from DreamHost.** It keeps running until your husband is
-migrated anyway, so the old mailbox is a free safety net.
+Apple has **no IMAP import tool** — if a future migration *does* need to preserve
+mail, the pattern is: add the old account over IMAP in a desktop client (Apple Mail
+or Thunderbird), let it fully sync (check every folder, not just Inbox), then drag
+messages into a folder under the new iCloud account. Copies rather than moves, so
+the old copy stays as a fallback until confirmed. Not needed this time.
 
 ### 4b. Set up the custom domain at Apple
 
 iCloud.com → Mail → Settings → **Custom Email Domain** → add `aliwallick.com`
 (iCloud+ allows 5 domains / 3 addresses each, shareable via Family Sharing — which
 is how your husband's domain can ride the same plan at no extra cost).
+
+Add **both** addresses here: `ali@aliwallick.com` and the new public one.
 
 Apple generates the records to add. Typically MX, an SPF TXT, and DKIM.
 
@@ -220,9 +228,11 @@ table open; it is the rollback.
 
 ### 4d. Verify both directions — this is the definition of done
 
-- Send **from** `ali@aliwallick.com` **to** an outside address (Gmail). Confirm it
-  arrives *and* lands in inbox, not spam.
-- Send **from** that outside address **to** `ali@aliwallick.com`. Confirm arrival.
+Check **both** addresses, not just `ali@`:
+
+- Send **from** the address **to** an outside address (Gmail). Confirm it arrives
+  *and* lands in inbox, not spam.
+- Send **from** that outside address **to** the address. Confirm arrival.
 - In the received Gmail message: Show original → confirm **SPF pass** and **DKIM pass**.
 - Re-check after 24h, once caches have turned over.
 
@@ -237,10 +247,11 @@ table open; it is the rollback.
 
 ## Open items needing your input
 
-1. **How much mail is in the DreamHost mailbox?** Drives how long 4a takes. If it's
-   large, start the sync early — it can run in the background during steps 2-3.
-2. **Husband's domain onto the same iCloud+ plan — now or later?** Doesn't block
+1. ~~How much mail is in the DreamHost mailbox?~~ **Resolved 2026-08-16** — deleted
+   outright, no migration needed. See Step 4 decision note.
+2. **Exact second email address** (`contact@`, `hello@`, other?) — needed before 4b.
+3. **Husband's domain onto the same iCloud+ plan — now or later?** Doesn't block
    anything here, but if it's "now", it's cheapest to do while you're already in the
    Apple dashboard at step 4b.
-3. **Is the `google-site-verification` TXT still needed?** Carried over as-is either
+4. **Is the `google-site-verification` TXT still needed?** Carried over as-is either
    way; worth a look at whether that Search Console property is still yours.
