@@ -1,0 +1,32 @@
+; BIND zone file for aliwallick.com
+; Generated from infra/dns-baseline-aliwallick.com.txt (captured 2026-08-16
+; from authoritative ns1.dreamhost.com). Upload this directly at Cloudflare's
+; "Upload a DNS zone file" step instead of trusting the automatic scanner.
+;
+; Intentionally omits SOA and NS records -- Cloudflare generates its own
+; SOA and assigns its own nameservers; those two record types should not be
+; imported from the old zone.
+;
+; After upload: set every A/CNAME record to DNS-only (grey cloud), not
+; proxied. mail/ftp MUST stay grey -- Cloudflare's proxy is HTTP-only and
+; will break them. See infra/PHASE-1-RUNBOOK.md Step 1.
+
+$ORIGIN aliwallick.com.
+$TTL 60
+
+@               IN  A       173.236.243.216
+@               IN  MX  0   mx1.mailchannels.net.
+@               IN  MX  0   mx2.mailchannels.net.
+@               IN  TXT     "v=spf1 mx include:netblocks.dreamhost.com include:relay.mailchannels.net -all"
+@               IN  TXT     "google-site-verification=Q1KMu8zQUG6OMoepiHX41JPZXfu3wCu_y0rSziR3vLY"
+
+www             IN  A       173.236.243.216
+ftp             IN  A       173.236.243.216
+
+mail            IN  A       64.90.62.162
+mail            IN  MX  0   mx1.mailchannels.net.
+mail            IN  MX  0   mx2.mailchannels.net.
+
+autoconfig      IN  CNAME   autoconfig.dreamhost.com.
+
+dreamhost._domainkey  IN  TXT  "v=DKIM1; k=rsa; h=sha256;  p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA9xEpj2hWRW51B/dFEhNkTcam44UzME6CTkYC6z943CBkA/9UHD8e/h8BhPbVT/jOBjYY/sHJJgkAXg5g19ZTt4F8xTxU8EzvOt+H8qREPNuDtkBCXwgQRYcaJvZ1RlOq/uuiLZlPmCqPhwXMHNOLHr3aw2rEA5Ls+0WU2ez5Y+51c9E+eYr4Un" "Jsu89oJkt9ilov3pnJMcep+wHzlIt//HrBWb4wbMJEyCYrekKDzxYhwnZc7z0QOH+DU26cEV6tHrdcLXF64WQmGXyYHWDU8AJ9UTNirFbnfMKr0y1SdnMljjmbHi86aMv1/9jR6yZutwX6/G2vFOavyUL46wEkJwIDAQAB"
