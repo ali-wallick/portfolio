@@ -19,6 +19,7 @@ pnpm-debug.log*
 
 # Lighthouse CI
 .lighthouseci/
+lighthouse-report/
 
 # Cloudflare / Wrangler local state
 .wrangler/

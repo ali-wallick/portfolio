@@ -81,11 +81,19 @@ jobs:
       - name: Lighthouse CI
         run: npx --yes @lhci/cli@0.15.x autorun
 
+      # Scores in the job log, so a red build explains itself without anyone
+      # downloading an artifact. The artifact upload silently produced nothing
+      # from the hidden .lighthouseci directory, which is the wrong thing to
+      # discover at the moment you actually need the numbers.
+      - name: Lighthouse scores
+        if: always()
+        run: node scripts/lighthouse-summary.mjs
+
       - name: Upload Lighthouse reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: lighthouse
-          path: .lighthouseci/**
+          path: lighthouse-report/
           if-no-files-found: warn
           retention-days: 7
