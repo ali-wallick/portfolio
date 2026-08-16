@@ -9,6 +9,18 @@ DreamHost setup could not do at all. Everything below exists to make it work.
 
 ---
 
+## Live as of 2026-08-16
+
+| Thing                  | Value                                                                                         |
+| ---------------------- | --------------------------------------------------------------------------------------------- |
+| Worker                 | `portfolio`                                                                                   |
+| Account                | `9b9fc992bf9682650c7e99ae31dfe590`                                                            |
+| workers.dev subdomain  | `ali-wallick`                                                                                 |
+| Branch preview URL     | `https://<branch>-portfolio.ali-wallick.workers.dev`                                          |
+| Production workers.dev | **deliberately disabled** — nothing serves this site at a stable public address until Phase 6 |
+
+---
+
 ## Workers, not Pages
 
 The plan originally settled on **Cloudflare Pages**. It landed on **Workers static assets** instead,
@@ -116,6 +128,26 @@ get truncated with a hash appended.
 ---
 
 ## Troubleshooting
+
+### Preview URL shows "There is nothing here yet"
+
+That is Cloudflare's placeholder, not this site's 404 page, and it means preview URL serving is
+switched off at the Worker level — even though the build succeeded and the alias exists.
+
+`preview_urls: true` in `wrangler.jsonc` only takes effect on a successful `wrangler deploy`, and
+production deploys fail until Phase 2 merges. So on a freshly dashboard-created Worker the setting
+starts off and nothing in the repo can turn it on yet. Check and fix:
+
+```
+GET  /accounts/{account_id}/workers/scripts/portfolio/subdomain
+POST /accounts/{account_id}/workers/scripts/portfolio/subdomain
+     { "enabled": false, "previews_enabled": true }
+```
+
+Keep `enabled` at `false` — that one is the _production_ workers.dev URL, which must not serve this
+site until Phase 6. `previews_enabled` is the one the review loop needs.
+
+### Everything else
 
 | Symptom                            | Cause                                                                                                   |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------- |

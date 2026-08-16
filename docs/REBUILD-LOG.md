@@ -112,6 +112,34 @@ The general lesson: **a check you cannot read is not a check.** Two of the three
 phase's CI were in the reporting path, not the thing being reported on, and both failed silently in
 the "looks green" direction.
 
+**The deploy landed on Workers, not Pages, and the decision got made at the dashboard.** Cloudflare
+routes new Git-connected projects into the Workers flow now — Pages is frozen for new features. This
+reversed a settled plan decision, so it is recorded in `CLAUDE.md` with the reasoning rather than
+left as a surprise.
+
+It turned out to be a small upgrade. Pages would have put the drafts-on-preview rule in a dashboard
+environment variable: invisible from a checkout, and silently wrong if set on the wrong environment.
+Workers Builds injects `WORKERS_CI_BRANCH`, so `scripts/build-ci.mjs` makes the call in committed
+code that behaves the same locally. Workers also supports `_redirects` natively, which Phase 6 needs.
+
+Two failures on the way, both worth keeping:
+
+1. **First production build failed with `ENOENT: package.json`.** Not a misconfiguration — the
+   production trigger builds `master`, and `master` is still the old PHP site. Every trigger setting
+   was correct. Production goes green on the merge commit.
+2. **Preview URL served Cloudflare's "There is nothing here yet" placeholder** even though the build
+   succeeded, 24 files uploaded, and the branch alias existed on the version. The Worker's own
+   `subdomain` settings had `previews_enabled: false`. `preview_urls: true` in `wrangler.jsonc` only
+   applies on a successful `wrangler deploy` — which, per failure 1, had never happened. So the repo
+   config was correct and simply could not take effect yet. Fixed via the API, and the production
+   `workers.dev` URL was deliberately left disabled: nothing should serve this site at a stable
+   public address until Phase 6.
+
+The second one is the more interesting failure. Everything upstream was green — build succeeded,
+assets uploaded, alias created — and the symptom appeared at the only layer nothing had asserted on.
+Reading the actual `subdomain` object took one API call; guessing from the placeholder page could
+have gone on for a while.
+
 ### Subagents: used zero, and that was right
 
 The brief flagged "surveying what's left in the old PHP" as a fan-out candidate. It wasn't. The
