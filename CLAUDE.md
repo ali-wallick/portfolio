@@ -50,16 +50,16 @@ The full plan lives at `~/.claude/plans/i-first-built-this-glistening-book.md`.
 
 ## Phases
 
-| Phase | What                                               | State                            |
-| ----- | -------------------------------------------------- | -------------------------------- |
-| 0     | Preserve — blog scrape, snapshot, asset inventory  | ✅ merged                        |
-| 1     | Infrastructure — domain, DNS, email                | ✅ merged                        |
-| 2     | Foundation & agentic tooling                       | ← you are probably here or later |
-| 3     | Content: get it true                               | Needs a gate conversation first  |
-| 4     | Resume, one source                                 |                                  |
-| 5     | Design                                             |                                  |
-| 6     | Launch — favicon, OG, a11y, redirects, DNS cutover |                                  |
-| 7     | Keep it alive                                      |                                  |
+| Phase | What                                               | State                             |
+| ----- | -------------------------------------------------- | --------------------------------- |
+| 0     | Preserve — blog scrape, snapshot, asset inventory  | ✅ merged                         |
+| 1     | Infrastructure — domain, DNS, email                | ✅ merged                         |
+| 2     | Foundation & agentic tooling                       | ✅ merged                         |
+| 3     | Content: get it true                               | ← needs a gate conversation first |
+| 4     | Resume, one source                                 |                                   |
+| 5     | Design                                             |                                   |
+| 6     | Launch — favicon, OG, a11y, redirects, DNS cutover |                                   |
+| 7     | Keep it alive                                      |                                   |
 
 **Sequencing principle: structure before skin.** Phases 2–4 produce a complete, correct,
 deliberately unstyled site. Design lands in Phase 5 onto content that already exists, so directions
