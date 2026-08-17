@@ -14,12 +14,15 @@ hero:
   type: image
   src: ../../assets/images/projects/kaneva/screenshot1.png
   alt: Kaneva's virtual-world events menu and object panel
-summary: Grew from technical support into leading UI programming on a social virtual-world platform, building nearly every menu in the game.
+summary: Grew from technical support into leading UI programming on a social virtual-world platform, building many of the game's menus.
 links:
   - label: kaneva.com
     url: http://www.kaneva.com/
     kind: site
     dead: true
+  - label: 'Kaneva — Virtual Worlds Museum'
+    url: https://www.virtualworlds.museum/exhibits/kaneva
+    kind: press
 draft: false
 ---
 
@@ -32,8 +35,8 @@ took me from technical support to leading UI programming for the whole game.
 I started as a Technical Support Engineer, helping players with their scripting and building game
 templates — Treasure Hunt and Adventure among them — that let players assemble their own small games
 by dropping items and defining levels. I found I liked UI work more than support, and moved to work
-on it full time; by the end of four years I was Lead UI Programmer, working on nearly every menu in
-the game end to end, from design collaboration through building the layout off the artists' comps to
+on it full time; by the end of four years I was Lead UI Programmer, working on many of the game's
+menus end to end, from design collaboration through building the layout off the artists' comps to
 programming the functionality, in the studio's in-house Lua-based menu system.
 
 That list ended up being long: the player and build/creator HUDs, inventory and bank menus, the

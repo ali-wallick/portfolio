@@ -37,8 +37,8 @@ draft: true
 Vegas Blvd Slots is a mobile slots game built in Unity — over 50 machines by the time I moved on,
 with daily and weekly rewards, social gifting, leagues, and multiplayer tournaments layered on top
 of the core spinning. I worked on it for most of my three years at MobilityWare, after cutting my
-teeth porting the previous slots title, Hot Streak Slots, from native iOS to Unity, and building out
-an early, unreleased casino app with blackjack, video poker, and keno.
+teeth porting the previous slots title, Hot Streak Slots, from native iOS to Unity, and building
+blackjack, video poker, and keno entirely myself for an early, unreleased casino app.
 
 ## What I built
 

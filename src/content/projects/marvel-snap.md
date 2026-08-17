@@ -52,7 +52,7 @@ draft: true
      recall in one sitting — so this stays draft: true until she's reviewed and
      extended it. Do not flip draft: false without her sign-off. -->
 
-I joined Second Dinner in 2019, roughly its 11th employee, before the studio had shipped anything.
+I joined Second Dinner in 2019, its 11th employee, before the studio had shipped anything.
 Marvel Snap took about three years to reach launch, and I spent that time — and the years after —
 helping build both the game and the studio around it. If you've played Snap, you know the game; this
 is about the systems underneath it.

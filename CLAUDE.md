@@ -151,8 +151,8 @@ outcome recorded below.
 ### Facts worth having on hand
 
 - Second Dinner, 2019–present — the longest tenure by far, and nearly absent from the old site. Ali
-  joined as roughly the **11th employee** (the studio was founded in 2018), so the story is partly
-  about helping build a company, not only a game.
+  joined as the **11th employee** (the studio was founded in 2018, confirmed exact — not an
+  estimate), so the story is partly about helping build a company, not only a game.
 - Marvel Snap shipped **October 2022**. Ali worked on it from 2019 until **2024**, when she moved to
   the studio's next team.
 - Critter³ is a **2011** jam entry. The old projects index filed it under 2013.
