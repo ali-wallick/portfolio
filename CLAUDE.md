@@ -50,16 +50,16 @@ The full plan lives at `~/.claude/plans/i-first-built-this-glistening-book.md`.
 
 ## Phases
 
-| Phase | What                                                                | State                                      |
-| ----- | ------------------------------------------------------------------- | ------------------------------------------ |
-| 0     | Preserve — blog scrape, snapshot, asset inventory                   | ✅ merged                                  |
-| 1     | Infrastructure — domain, DNS, email                                 | ✅ merged                                  |
-| 2     | Foundation & agentic tooling                                        | ✅ merged                                  |
-| 3     | Content: get it true                                                | ← executed on branch, pending review/merge |
-| 4     | Resume, one source                                                  |                                            |
-| 5     | Design                                                              |                                            |
-| 6     | Launch — favicon, OG, a11y, redirects, DNS cutover, wording revisit |                                            |
-| 7     | Keep it alive                                                       |                                            |
+| Phase | What                                                                | State     |
+| ----- | ------------------------------------------------------------------- | --------- |
+| 0     | Preserve — blog scrape, snapshot, asset inventory                   | ✅ merged |
+| 1     | Infrastructure — domain, DNS, email                                 | ✅ merged |
+| 2     | Foundation & agentic tooling                                        | ✅ merged |
+| 3     | Content: get it true                                                | ✅ merged |
+| 4     | Resume, one source                                                  |           |
+| 5     | Design                                                              |           |
+| 6     | Launch — favicon, OG, a11y, redirects, DNS cutover, wording revisit |           |
+| 7     | Keep it alive                                                       |           |
 
 **Sequencing principle: structure before skin.** Phases 2–4 produce a complete, correct,
 deliberately unstyled site. Design lands in Phase 5 onto content that already exists, so directions
@@ -338,10 +338,10 @@ _provisional_ so Ali can react to them rendered in context rather than in the ab
   arc is a _discipline_ change, not a title change, so it lives in the Snap write-up's prose where
   it's about the work rather than about HR. Don't force it into `roles[]`.
 
-### Phase 3 execution outcome (2026-08-16, closed 2026-08-17)
+### Phase 3 execution outcome (2026-08-16, merged 2026-08-17)
 
-Executed and reviewed on branch `phase-3-content` ([PR #7](https://github.com/ali-wallick/Portfolio/pull/7)),
-not yet merged. `npm run verify` and `pre-launch-check`'s sweeps pass clean, with zero
+Executed on branch `phase-3-content`, merged via [PR #7](https://github.com/ali-wallick/Portfolio/pull/7)
+at `5a98f2c`. `npm run verify` and `pre-launch-check`'s sweeps pass clean, with zero
 `TODO(phase-3-revisit)` markers outstanding. **All five featured projects, all 12 archive entries,
 and the career narrative are written and `draft: false`.** Ali reviewed the branch preview and
 signed off on every provisional bit along the way — Marvel Snap's systems list, Vegas Blvd Slots'
