@@ -11,6 +11,10 @@ roles:
   - title: Software Engineer
     start: '2011'
 highlights: []
+summary: >-
+  Grew from an entry-level engineer into the lead UI programmer over four
+  years, leading a full HUD overhaul and building a menu animation system
+  other engineers adopted for their own work.
 tech:
   - Lua
   - C++

@@ -2,6 +2,8 @@
 
 Phase 0 audit, 2026-08-15. Cross-referenced every file under `resources/images/` against every `.php`, `.css`, and `.js` file in the repo (`grep -r` for `resources/images/...` paths, including the leading-slash form used in some project pages). No image is deleted here — this is a keep/drop list for a later cleanup pass.
 
+**Actioned in Phase 3 (2026-08-16).** The 50 keep-listed files, plus `programming_actionscript.png`, moved to `src/assets/images/` (project subdirectories renamed to match the content collection's slugs, e.g. `artofrescue/` → `projects/art-of-rescue/`) so Astro's `image()` can resolve them. The full drop list — 86 unused social icons, the 6 orphaned logo/banner files, and `projects/downloads/nightLight.unity3d` — was deleted. This file stays as the historical record of the audit; nothing under `resources/images/` should exist going forward.
+
 **143 files, 4.7 MB total. 50 referenced, 93 unreferenced (~3.5 MB of dead weight, roughly 75% of the directory's size).**
 
 No broken references were found in the other direction — every image path referenced in code resolves to a file that exists.

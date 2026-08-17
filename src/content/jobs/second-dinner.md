@@ -4,19 +4,23 @@ companyUrl: https://www.seconddinner.com
 location: Irvine, CA
 start: '2019' # TODO(phase-4): month, if LinkedIn has it
 roles:
-  - title: Engineer # TODO(phase-4): current title — site footer said "Client Engineer"
+  # Confirmed current title at marvelsnap.com/credits. Ali started as Software
+  # Engineer II and was promoted to Senior Software Engineer I — TODO(phase-4):
+  # split into two entries once the promotion year is confirmed against
+  # LinkedIn. Single entry for now; `currentTitle()` (the only place this
+  # renders on the site today) shows the most recent title, which is accurate.
+  - title: Senior Software Engineer I
     start: '2019'
 highlights: [] # TODO(phase-4): written in Phase 4 from the Phase 3 narrative
+summary: >-
+  Joined as the studio's 11th employee and spent five years on Marvel Snap,
+  which shipped in October 2022. Moved to Second Dinner's next team in 2024,
+  building the studio's first game in Godot.
 tech:
   - Unity
   - C#
   - Godot
 ---
-
-<!-- TODO(phase-3): ~7 years and counting — the longest tenure by far, and almost
-     entirely missing from the old site. Marvel Snap shipped October 2022; current
-     work is described only as "an unannounced mobile title in Godot" (2025-). How
-     the Marvel Snap credit gets framed is a Phase 3 gate decision. -->
 
 ## Source material (2019 resume, verbatim — not current copy)
 

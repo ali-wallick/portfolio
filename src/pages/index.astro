@@ -8,23 +8,22 @@ const featured = await getFeaturedProjects();
 ---
 
 {
-  /* TODO(phase-3): description carried verbatim from the old site's og:description
-    rather than newly written, since copy is Phase 3's. It is the homepage, so it
-    is the string most likely to appear in a search result or a link preview. */
+  /* TODO(phase-6): rework this description for search/link-preview purposes once
+    the site's visual identity exists to back it up — it's accurate, not tuned. */
 }
 <BaseLayout
   title={`${site.name} — ${site.role}`}
-  description="Website and portfolio for Ali Wallick, game developer and programmer."
+  description="Website and portfolio for Ali Wallick, a game developer working in UI and systems engineering."
   bareTitle
 >
   <h1>{site.name}</h1>
   <p class="meta">{site.role}</p>
 
-  {
-    /* TODO(phase-3): the intro paragraph. The old one said "I currently work as a
-      Engineer at Second Dinner, creating mobile games in the Unity engine" and had
-      been true-ish since 2019. */
-  }
+  <p>
+    I'm a software engineer who's spent fifteen years on game UI and systems, most recently five of
+    them on <a href="/projects/marvel-snap">Marvel Snap</a> at Second Dinner. Since 2024 I've been on
+    the studio's next game, being built in Godot.
+  </p>
   {
     /* TODO(phase-7): a "currently" line that is cheap enough to update that the
       site can be trivially correct rather than expensively correct. */

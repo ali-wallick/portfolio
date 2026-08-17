@@ -7,6 +7,10 @@ roles:
   - title: UI Programmer
     start: '2015-06'
 highlights: []
+summary: >-
+  UI programmer on Firefall, a large-scale PC shooter — my first time working
+  on a team of that size, building and standardizing menu and HUD elements
+  across a much bigger codebase than Kaneva's.
 tech:
   - Lua
   - XML

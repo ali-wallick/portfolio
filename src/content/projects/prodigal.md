@@ -10,10 +10,16 @@ platforms: [Game Boy Advance]
 event: Georgia Tech
 teamSize: 1
 role: Solo — design, programming, and art
-links: []
-draft: true
+summary: >-
+  A solo Game Boy Advance game written in C — a wolf hunts to survive its way
+  home, with music by chiptune artist Sabrepulse.
+hero:
+  type: image
+  src: ../../assets/images/projects/prodigal/screenshot1.png
+  alt: Prodigal's wolf navigating the Game Boy Advance overworld
+links:
+  - label: Music by Sabrepulse
+    url: https://sabrepulse.bandcamp.com/
+    kind: press
+draft: false
 ---
-
-<!-- TODO(phase-3): solo project. Music credited to Sabrepulse, linked on the old
-     page to a MySpace music page that no longer exists — find a live link or
-     credit without one. -->

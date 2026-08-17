@@ -12,14 +12,16 @@ collaborators:
   - name: Henry Dooley
   - name: Matt Lovett
   - name: Robert Spessard
+    url: https://robertspessard.com
+role: Level design, virus character art, and modeling
+summary: >-
+  A two-player head-to-head Georgia Tech class project — one player is a
+  virus-infected human racing for a cure, the other is the virus trying to
+  stop him.
 hero:
   type: youtube
   id: Erk81CCfc5A
   title: It Will Kill You gameplay
 links: []
-draft: true
+draft: false
 ---
-
-<!-- TODO(phase-3): the old embed used the long-dead /v/ Flash player URL form
-     (youtube.com/v/...?fs=1&hl=en_US&hd=1), not /embed/. Stored as a bare ID here,
-     so the component builds a working https embed. -->

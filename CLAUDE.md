@@ -50,16 +50,16 @@ The full plan lives at `~/.claude/plans/i-first-built-this-glistening-book.md`.
 
 ## Phases
 
-| Phase | What                                               | State                           |
-| ----- | -------------------------------------------------- | ------------------------------- |
-| 0     | Preserve — blog scrape, snapshot, asset inventory  | ✅ merged                       |
-| 1     | Infrastructure — domain, DNS, email                | ✅ merged                       |
-| 2     | Foundation & agentic tooling                       | ✅ merged                       |
-| 3     | Content: get it true                               | ← gate closed, ready to execute |
-| 4     | Resume, one source                                 |                                 |
-| 5     | Design                                             |                                 |
-| 6     | Launch — favicon, OG, a11y, redirects, DNS cutover |                                 |
-| 7     | Keep it alive                                      |                                 |
+| Phase | What                                                                | State                                      |
+| ----- | ------------------------------------------------------------------- | ------------------------------------------ |
+| 0     | Preserve — blog scrape, snapshot, asset inventory                   | ✅ merged                                  |
+| 1     | Infrastructure — domain, DNS, email                                 | ✅ merged                                  |
+| 2     | Foundation & agentic tooling                                        | ✅ merged                                  |
+| 3     | Content: get it true                                                | ← executed on branch, pending review/merge |
+| 4     | Resume, one source                                                  |                                            |
+| 5     | Design                                                              |                                            |
+| 6     | Launch — favicon, OG, a11y, redirects, DNS cutover, wording revisit |                                            |
+| 7     | Keep it alive                                                       |                                            |
 
 **Sequencing principle: structure before skin.** Phases 2–4 produce a complete, correct,
 deliberately unstyled site. Design lands in Phase 5 onto content that already exists, so directions
@@ -151,8 +151,8 @@ outcome recorded below.
 ### Facts worth having on hand
 
 - Second Dinner, 2019–present — the longest tenure by far, and nearly absent from the old site. Ali
-  joined as roughly the **11th employee** (the studio was founded in 2018), so the story is partly
-  about helping build a company, not only a game.
+  joined as the **11th employee** (the studio was founded in 2018, confirmed exact — not an
+  estimate), so the story is partly about helping build a company, not only a game.
 - Marvel Snap shipped **October 2022**. Ali worked on it from 2019 until **2024**, when she moved to
   the studio's next team.
 - Critter³ is a **2011** jam entry. The old projects index filed it under 2013.
@@ -337,6 +337,28 @@ _provisional_ so Ali can react to them rendered in context rather than in the ab
   earlier titles need LinkedIn, which is a Phase 4 problem). The client-engineer → feature-engineer
   arc is a _discipline_ change, not a title change, so it lives in the Snap write-up's prose where
   it's about the work rather than about HR. Don't force it into `roles[]`.
+
+### Phase 3 execution outcome (2026-08-16, closed 2026-08-17)
+
+Executed and reviewed on branch `phase-3-content` ([PR #7](https://github.com/ali-wallick/Portfolio/pull/7)),
+not yet merged. `npm run verify` and `pre-launch-check`'s sweeps pass clean, with zero
+`TODO(phase-3-revisit)` markers outstanding. **All five featured projects, all 12 archive entries,
+and the career narrative are written and `draft: false`.** Ali reviewed the branch preview and
+signed off on every provisional bit along the way — Marvel Snap's systems list, Vegas Blvd Slots'
+`role` wording (now "Software Engineer II — live-ops and slot-machine systems"), and It Fits I
+Sits' hero, which was the phase's one hard blocker: Ali supplied the Puzzle Cats key art
+(`puzzle-cats-banner.webp`) to use as the hero image, captioned to make clear she pitched and
+prototyped the concept but didn't work on that shipped release. Lower-quality prototype shots for
+inside the page itself are still a nice-to-have, not a blocker — add them to `gallery` if/when they
+turn up. Phase 3 is content-complete; what's left before merge is Ali's final look at the PR.
+
+**New decision: a wording/tone/verbosity pass is deferred to Phase 6, not done here.** Phase 3's job
+was correctness — every fact true, every page publishable — not final prose polish. Tone and
+verbosity should be judged once Phase 5's design exists to read the copy in context, not while
+chasing accuracy against old PHP pages and a decade of blog posts. See Phase 6's row above and the
+plan file's Phase 6 section. This is not a license to leave rough prose now — the Phase 3 write-ups
+are meant to be genuinely publishable as written — it's an acknowledgment that a dedicated read-through
+pass still happens once, later, with fresh eyes and real styling.
 
 ---
 
