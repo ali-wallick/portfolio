@@ -21,6 +21,46 @@ DreamHost setup could not do at all. Everything below exists to make it work.
 
 ---
 
+## Preview URLs live forever unless you gate or delete them
+
+Surfaced 2026-08-16, mid Phase 3, not tied to any phase's content. Two facts from Cloudflare's own
+docs that are easy to assume away:
+
+1. **Nothing deletes a preview URL when its branch is deleted or merged.** Preview URLs are versions
+   of the Worker, not artifacts of the git branch — Cloudflare's only automatic cleanup is evicting
+   the oldest alias once you pass **1,000** simultaneously live ones. This project will never get
+   near that, so in practice every branch ever pushed stays reachable indefinitely.
+2. **They are public by default**, per Cloudflare's docs: "When enabled, Preview URLs are available
+   publicly." No login wall unless one is added.
+
+What's actually protecting anything today is **obscurity, not access control**: the repo is private,
+so branch names don't leak through GitHub, and the URL pattern
+(`<branch>-portfolio.ali-wallick.workers.dev`) isn't linked from anywhere public. But it's guessable
+and not secret, and the site sets `noindex` only on individual draft _project_ pages — there's no
+site-wide `noindex` for preview builds as a whole.
+
+**The fix is Cloudflare Access on the Worker's preview URLs** — free, one dashboard toggle, gates
+every `*.workers.dev` preview behind a login. It's what Cloudflare's own docs recommend for exactly
+this. Until it's enabled, treat every preview URL as something a determined stranger could eventually
+find, not as something that expires.
+
+**Done, 2026-08-17.** Cloudflare Access is enabled on Preview URLs (Settings → Access, "Previews
+only" scope), with the built-in **Cloudflare account** policy — the dashboard's own description is
+the exact scope wanted: "Only members of this Cloudflare account can reach this Worker." For a
+one-person account that's Ali and no one else. Verified with a bare `curl` against a live preview
+URL: an unauthenticated request now gets a `302` to `<team>.cloudflareaccess.com` before it ever
+reaches the Worker, instead of the `200` it returned before.
+
+One thing worth knowing if this ever needs revisiting: the policy is **account-wide, not
+per-Worker** — Cloudflare's "reusable Access policies" change (Dec 2025) made all preview URLs on
+the account share a single "Cloudflare Workers Preview URLs" policy. Editing it here affects every
+Worker on the account that has previews gated, not just `portfolio`.
+
+Lower-effort, optional habit regardless: delete a branch's Worker version from the Deployments tab
+once its preview has done its job, so old work-in-progress doesn't linger even behind Access.
+
+---
+
 ## Workers, not Pages
 
 The plan originally settled on **Cloudflare Pages**. It landed on **Workers static assets** instead,
