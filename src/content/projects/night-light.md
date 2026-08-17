@@ -10,13 +10,14 @@ teamSize: 3
 collaborators:
   - name: Wes Anderson
   - name: Esther Estroff
+role: Programmer
+summary: >-
+  A HUD-less mood piece for a Georgia Tech film class — comfort a boy afraid
+  of the dark, told entirely through a dimming vignette and a dying flashlight.
+hero:
+  type: image
+  src: ../../assets/images/projects/night-light/screenshot.png
+  alt: Night Light's dark bedroom scene, lit only by the player's flashlight
 links: []
-draft: true
+draft: false
 ---
-
-<!-- TODO(phase-3): the old page embedded projects/downloads/nightLight.unity3d
-     (6.3 MB) through the Unity Web Player NPAPI plugin, which no browser has
-     supported for a decade. The embed and the binary both go. If the game is
-     worth keeping playable, it needs a WebGL rebuild — otherwise screenshots.
-     The binary is still in the repo at projects/downloads/ pending the asset
-     keep/drop check-in (see resources/images/ASSET_INVENTORY.md). -->

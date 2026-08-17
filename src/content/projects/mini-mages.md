@@ -10,17 +10,19 @@ teamSize: 5
 collaborators:
   - name: Wes Anderson
   - name: Joseph Maliksi
+    url: https://josephmaliksi.com
   - name: Rose Peng
   - name: Robert Spessard
+    url: https://robertspessard.com
+role: Programmer and design lead
+summary: >-
+  A Georgia Tech senior capstone for a client — a four-player wizard
+  tournament played on an iPad with up to four Bluetooth-networked iPhones.
 hero:
   type: youtube
   id: qVdAuJmO3oo
   title: Mini Mages demo
   start: 80
 links: []
-draft: true
+draft: false
 ---
-
-<!-- TODO(phase-3): the old page linked collaborator portfolios at
-     josephmaliksi.com, rosepeng.daportfolio.com and robertspessard.com. Check
-     whether any still resolve before re-linking; daportfolio.com shut down. -->

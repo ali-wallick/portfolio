@@ -8,15 +8,19 @@ tech: [Flash, ActionScript]
 platforms: [Web]
 event: Georgia Tech
 teamSize: 4
+collaborators:
+  - name: Raschel Mead
+  - name: Erica Penk
+  - name: Katie Stokes
+role: Lead programmer — movement, collision, and enemy mechanics
+summary: >-
+  A Flash prototype teaching art history through platforming, built by an
+  all-girls team, "Team Femtastic Four" — free trapped artists by exploring
+  levels built from their own famous motifs, Monet's lily pads among them.
+hero:
+  type: image
+  src: ../../assets/images/projects/art-of-rescue/screenshot.png
+  alt: Art of Rescue's Monet-inspired level, lily pads as platforms
 links: []
-draft: true
+draft: false
 ---
-
-<!-- TODO(phase-3): two known content bugs, both deliberately NOT carried over here.
-     1. The old page's "Visit the Global Game Project Page" link pointed at
-        Critter³'s jam page — wrong game entirely. Omitted rather than copied.
-        Find the right link or drop the call to action.
-     2. The old page showed the Unity technology icon for a Flash/ActionScript
-        game. resources/images/projects/programming_actionscript.png is the
-        correct icon and sits unused (see ASSET_INVENTORY.md).
-     Team: Raschel Mead, Erica Penk, Katie Stokes, and Ali — "Team Femtastic Four". -->

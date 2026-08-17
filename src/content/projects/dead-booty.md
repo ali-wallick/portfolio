@@ -11,12 +11,15 @@ teamSize: 3
 collaborators:
   - name: Liz Dietsler
   - name: Harrison Leach
+role: Designer, and sole artist
+summary: >-
+  A treasure-hunt game for the actual Atari 2600 hardware — the constraint was
+  the whole project, communicating as much as possible through as few pixels
+  and colors as the system allowed.
+hero:
+  type: image
+  src: ../../assets/images/projects/dead-booty/DeadBooty.jpg
+  alt: Dead Booty's pixel-art pirate hunting treasure on an Atari 2600 screen
 links: []
-draft: true
+draft: false
 ---
-
-<!-- TODO(phase-3): the old page credits Ali with design and all of the art —
-     "communicate as much information as I could through as few pixels and colors
-     as possible" is the best line on the page and should survive the rewrite.
-     `tech` intentionally left empty: the old page never says what it was written
-     in, and guessing 6502 assembly vs. batari Basic would be inventing a fact. -->

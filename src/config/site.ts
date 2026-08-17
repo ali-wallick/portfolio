@@ -7,7 +7,7 @@
 
 export const site = {
   name: 'Ali Wallick',
-  /** Phase 3 owns the wording. This is the old site's, verbatim, as a placeholder. */
+  /** Confirmed at the Phase 3 gate — still accurate, kept as-is. */
   role: 'Game Developer',
   url: 'https://aliwallick.com',
 
@@ -30,15 +30,16 @@ export type SocialLink = {
 };
 
 /**
- * Carried over from the old site's footer and contact page. Every one is
- * `pending` until the Phase 3 audit: a 2016 Twitter link and a Steam profile
- * are not automatically still the right answer in 2026.
+ * Phase 3 audit, settled at the gate: LinkedIn is the only account that still
+ * represents Ali professionally. The X/Twitter account still exists but she no
+ * longer posts there, Facebook was never a professional presence, and a Steam
+ * profile isn't a professional credit — all three `retired` rather than shown.
  */
 export const socials: SocialLink[] = [
-  { label: 'LinkedIn', url: 'https://www.linkedin.com/in/aliwallick', status: 'pending' },
-  { label: 'Twitter', url: 'https://twitter.com/aliwallick', status: 'pending' },
-  { label: 'Facebook', url: 'https://www.facebook.com/awallick', status: 'pending' },
-  { label: 'Steam', url: 'https://steamcommunity.com/id/beantoes', status: 'pending' },
+  { label: 'LinkedIn', url: 'https://www.linkedin.com/in/aliwallick', status: 'active' },
+  { label: 'Twitter', url: 'https://twitter.com/aliwallick', status: 'retired' },
+  { label: 'Facebook', url: 'https://www.facebook.com/awallick', status: 'retired' },
+  { label: 'Steam', url: 'https://steamcommunity.com/id/beantoes', status: 'retired' },
 ];
 
 export const nav = [

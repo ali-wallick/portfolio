@@ -11,6 +11,12 @@ teamSize: 3
 collaborators:
   - name: Rose Peng
   - name: Robert Spessard
+    url: https://robertspessard.com
+role: Programmer — grid/node system, automatic movement, and the Qualcomm AR plugin integration
+summary: >-
+  A handheld augmented-reality maze game for Qualcomm's AR Game Studio at
+  Georgia Tech — place markers on a printed maze to redirect a girl past
+  traps and enemies.
 hero:
   type: youtube
   id: OHjZMJ68UjI
@@ -20,5 +26,5 @@ links:
     url: http://www.argamestudio.org/2011/05/13/secret-garden/
     kind: press
     dead: true
-draft: true
+draft: false
 ---

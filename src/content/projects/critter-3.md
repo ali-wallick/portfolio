@@ -10,12 +10,17 @@ status: jam
 engine: [Unity]
 platforms: [Web]
 event: Global Game Jam 2011
+role: Programmer — core mechanics and graphics
+summary: >-
+  A cube-world puzzle game from Global Game Jam 2011, part Rubik's Cube, part
+  Sudoku — later a finalist in SCAD's Entelechy game-prototype contest.
+hero:
+  type: image
+  src: ../../assets/images/projects/critter-3/screenshot.png
+  alt: Critter³'s cube-world puzzle grid, mid-game
 links:
   - label: Global Game Jam page
     url: https://archive.globalgamejam.org/2011/critter3
     kind: jam
-draft: true
+draft: false
 ---
-
-<!-- TODO(phase-3): the 2019 resume also records this as a finalist for Game
-     Prototype in SCAD Entelechy — never mentioned on the old site. -->
