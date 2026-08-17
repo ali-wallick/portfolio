@@ -338,18 +338,16 @@ _provisional_ so Ali can react to them rendered in context rather than in the ab
   arc is a _discipline_ change, not a title change, so it lives in the Snap write-up's prose where
   it's about the work rather than about HR. Don't force it into `roles[]`.
 
-### Phase 3 execution outcome (2026-08-16)
+### Phase 3 execution outcome (2026-08-16, updated 2026-08-17)
 
-Executed on branch `phase-3-content`, pushed, not yet merged. `npm run verify` and
-`pre-launch-check`'s sweeps pass clean. Career narrative (About, homepage), Firefall, Kaneva, and all
-12 archive entries are written and `draft: false`. Three pages stay `draft: true`, each blocked on
-something only Ali can resolve:
-
-- **Marvel Snap** — full write-up, but the systems list is provisional and she wants a review pass.
-- **It Fits I Sits** — full write-up, blocked on the prototype/full-game media described above.
-- **Vegas Blvd Slots** — full write-up, but its `role` still carries the `TODO(phase-3-revisit)`
-  placeholder above. Almost shipped with the marker still unresolved; caught by
-  `pre-launch-check`'s sweep and reverted to draft rather than left live with an open question.
+Executed and reviewed on branch `phase-3-content` ([PR #7](https://github.com/ali-wallick/Portfolio/pull/7)),
+not yet merged. `npm run verify` and `pre-launch-check`'s sweeps pass clean. Career narrative (About,
+homepage), Firefall, Kaneva, Marvel Snap, Vegas Blvd Slots, and all 12 archive entries are written
+and `draft: false` — Ali reviewed the branch preview and signed off on flipping Marvel Snap and
+Vegas Blvd Slots live, including their provisional bits (Snap's systems list, Vegas Blvd Slots'
+`role` wording, now "Software Engineer II — live-ops and slot-machine systems"). Only **It Fits I
+Sits** stays `draft: true` — the schema requires a `hero`, and no prototype or full-game capture
+exists yet. Unblocks the moment Ali shares media; nothing else about that page is provisional.
 
 **New decision: a wording/tone/verbosity pass is deferred to Phase 6, not done here.** Phase 3's job
 was correctness — every fact true, every page publishable — not final prose polish. Tone and

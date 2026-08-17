@@ -9,10 +9,7 @@ engine: [Unity]
 tech: [C#, DeltaDNA]
 platforms: [iOS, Android]
 job: mobilityware
-# TODO(phase-3-revisit): first stab from the 2019 resume's job title. The resume
-# bullets describe live-ops architecture work (server-customizable store, DeltaDNA
-# integration, promo carousels) that a bare title undersells — Ali to react.
-role: Software Engineer II
+role: Software Engineer II — live-ops and slot-machine systems
 hero:
   type: youtube
   id: 8gtbz_T4-yY
@@ -29,9 +26,7 @@ links:
     url: https://play.google.com/store/apps/details?id=com.mobilityware.Slots&hl=en_US
     kind: store
     dead: true
-# Draft until the role TODO(phase-3-revisit) above is resolved — pre-launch-check
-# doesn't let Phase 3 close with a deferred-decision marker on a published page.
-draft: true
+draft: false
 ---
 
 Vegas Blvd Slots is a mobile slots game built in Unity — over 50 machines by the time I moved on,

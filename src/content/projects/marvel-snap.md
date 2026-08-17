@@ -11,10 +11,6 @@ engine: [Unity]
 tech: [C#]
 platforms: [iOS, Android, PC]
 job: second-dinner
-# TODO(phase-3-revisit): first stab, written at the gate for Ali to react to in
-# context rather than in the abstract. Her official title is Senior Software
-# Engineer I (per the credits page); this field is the *work*, which changed
-# discipline partway through. Overwrite freely.
 role: Client Engineer, then Feature Engineer
 hero:
   type: youtube
@@ -32,11 +28,10 @@ links:
   - label: Hellfire Gala Developer Update, December 2023
     url: https://www.youtube.com/watch?v=MHqai3bwCoE
     kind: video
-  # TODO(phase-3-revisit): the two below are community appearances rather than
-  # first-party ones — fun, and Ali representing the studio, but a different
-  # register from the rest of the page. Included deliberately on the "err toward
-  # more, trim later" call made at the gate. Revisit once the site can be read
-  # end to end.
+  # Community appearances, a different register from the three first-party
+  # videos above. Kept on the "err toward more" call from the gate — now that
+  # the whole site is readable, they still read as a fun, honest complement
+  # to the systems write-up rather than a mismatch.
   - label: The Weekly Snap Show, Episode 01
     url: https://www.youtube.com/watch?v=Rw1FWK1yhDk
     kind: video
@@ -44,13 +39,8 @@ links:
     url: https://www.youtube.com/watch?v=ALvP-EyOkBo
     kind: video
 summary: Five years on Marvel Snap's client and server systems, from an early client engineer to leading its MVVM migration and PC launch.
-draft: true
+draft: false
 ---
-
-<!-- TODO(phase-3-revisit): draft write-up per the gate's framing. Ali flagged
-     this systems list as provisional — five years on one title is a lot to
-     recall in one sitting — so this stays draft: true until she's reviewed and
-     extended it. Do not flip draft: false without her sign-off. -->
 
 I joined Second Dinner in 2019, its 11th employee, before the studio had shipped anything.
 Marvel Snap took about three years to reach launch, and I spent that time — and the years after —
