@@ -140,6 +140,22 @@ assets uploaded, alias created — and the symptom appeared at the only layer no
 Reading the actual `subdomain` object took one API call; guessing from the placeholder page could
 have gone on for a while.
 
+**Merging the PR then reproduced a variant of the exact same class of bug, from the opposite
+direction.** The production build going green for the first time (`master` finally had a
+`package.json`) ran an actual `wrangler deploy`, and that silently flipped the subdomain's `enabled`
+flag back to `true` — undoing the API fix from twenty minutes earlier and making the production
+`workers.dev` URL briefly publicly reachable, which is exactly the thing that was supposed to stay
+off until Phase 6. Caught immediately by checking the `subdomain` object again rather than assuming
+the earlier fix was durable, and confirmed via wrangler's own build log, which names the cause
+verbatim: `workers_dev` defaults to `true` on every deploy unless the config says otherwise.
+
+Fixed for real this time by putting `"workers_dev": false` in `wrangler.jsonc` — in the repo, not in
+dashboard state — so it can't be silently undone by the next deploy the way an API call or a
+dashboard toggle can. The general lesson repeats: dashboard/API state that isn't also asserted in a
+committed file is not a fix, it's a fact that happens to be true right now. Two occurrences of that
+exact shape in one deploy sequence is enough to call it a pattern worth watching for going forward,
+not a one-off.
+
 ### Subagents: used zero, and that was right
 
 The brief flagged "surveying what's left in the old PHP" as a fan-out candidate. It wasn't. The
