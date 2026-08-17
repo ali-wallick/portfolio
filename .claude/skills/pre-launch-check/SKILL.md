@@ -34,8 +34,28 @@ grep -rniE 'upcoming|currently work|lorem ipsum|TODO|FIXME|coming soon' dist/ ||
 ```
 
 Anything implying the Marvel game is upcoming is a bug — **Marvel Snap shipped in October 2022.**
-"Unannounced" is fine where the Godot title is deliberately described that way, which is why it is
-not in the pattern above.
+
+`unannounced` is deliberately not in the pattern, but the reason changed at the Phase 3 gate: the
+old rule was that "an unannounced mobile title in Godot" was the settled phrasing. It isn't any more
+— Second Dinner went public about the Godot project on 2024-08-07, and the site now says so and
+cites the announcement. So `unannounced` should be **rare**. If it appears, read the sentence rather
+than waving it through.
+
+### Source-level markers the `dist/` grep cannot see
+
+The grep above reads built output, which is right for stale _content_ — but YAML front-matter
+comments never reach `dist/`, so deferred-decision markers are invisible to it. Check the source
+directly:
+
+```bash
+grep -rn 'TODO(phase-3-revisit)' src/ || echo 'no deferred decisions outstanding'
+```
+
+These are decisions parked on purpose so Ali could react to them rendered in context rather than in
+the abstract — placeholder `role` values, borderline links. Each one is a real question awaiting an
+answer, not a note. **Phase 3 cannot close with any outstanding.** The same pattern works for any
+future `TODO(phase-N-revisit)`; the point is that "decide this later" needs a mechanical way to
+come back, or later never arrives.
 
 Then check for drafts that leaked into production. Note the quotes — they match the rendered
 `class="draft-flag"` attribute and not the `.draft-flag{` rule in the inlined stylesheet, which is

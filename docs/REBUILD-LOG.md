@@ -191,3 +191,67 @@ judgment; writing 12 archive one-liners from existing source material does not.
   decision from Phase 0.
 - Job start/end months are year-precision and flagged `TODO(phase-4)` where LinkedIn could sharpen
   them.
+
+---
+
+## Phase 3 gate — conversation, 2026-08-16
+
+Held as a conversation rather than an execution brief, per the plan's own design. It was worth it:
+the gate produced five factual corrections to things the repo already "knew", and four of them would
+have shipped as confident, wrong prose if the phase had started cold.
+
+### The gate's actual value was correcting settled facts, not answering its own questions
+
+The three questions on the agenda (Marvel Snap framing, 2019–2022 describability, media inventory)
+all resolved without much difficulty. What made the gate pay for itself was the incidental
+verification around them:
+
+- The job title in the repo (`Engineer`) and on the old site (`Client Engineer`) were both wrong.
+  Marvel Snap's official credits page says **Senior Software Engineer I** — and, better, it's a
+  public page that can be _linked_ instead of asserted.
+- The plan's claim that the old site calls the Marvel game "upcoming" in four places was wrong; it
+  says it once. The thing repeating four times is a stale-in-context sidebar. A stale-content grep
+  written against the plan's description would have hunted the wrong string.
+- The settled phrase "an unannounced mobile title in Godot" was **more restrictive than reality and
+  factually wrong** — Second Dinner went public on 7 August 2024 about building a Godot game, and
+  never said mobile. A settled decision had quietly gone stale between phases.
+- It Fits I Sits was overclaimed in its own seed metadata (`status: shipped`, a platform Ali never
+  shipped on). She built the jam prototype only. The honest version is a better story.
+- KinoClue, dismissed in a Phase 2 TODO as "a single image and nothing else... or an honest decision
+  to drop it", is undergraduate research. The single image is a research poster containing the full
+  project description, author list included.
+
+**The pattern:** every one of these came from looking at a primary source — the credits page, the
+press release, the poster image, the person — rather than from the repo's own accumulated notes. A
+standing brief is a cache, and caches go stale. The gate's real function is cache invalidation.
+
+### Reading a poster instead of asking for it
+
+The Phase 2 TODO on KinoClue said the page needed "the most sourcing of anything in the archive
+tier." The sourcing was a `Read` on a PNG that had been in the repo since 2011. Multimodal reads
+make image assets searchable content rather than opaque blobs, and the asset inventory — which
+catalogued that file by name and size — had no way to know it contained four paragraphs of text.
+Worth a habit: when a content gap points at an image, look at the image.
+
+### WebFetch loses to a real browser on client-rendered pages
+
+Pulling the YouTube playlist failed twice through `WebFetch` — YouTube renders client-side, so the
+fetch returned the page shell and footer links, and the summarising model correctly reported it had
+nothing. The browser pane loaded the same URL fine.
+
+The efficient move wasn't scraping the rendered DOM either. One `fetch` loop against YouTube's
+**oEmbed endpoint**, run from the page's own origin, returned exact titles and channel names for all
+five videos in a single call — where scraping anchor elements had produced truncated
+`aria-label` strings with durations glued on. **Prefer a data endpoint over the DOM, even when you
+already have the DOM.**
+
+### Cost notes
+
+Opus 5, one session, ~20 tool calls. The gate deliberately ran on the expensive model and stayed
+short — the plan's bet was that judgment-per-token is what this kind of session buys, and the five
+corrections above are the return on it. Execution downshifts to Sonnet 5 in a fresh session, which
+is the cleanest phase boundary in the project so far: the framing is written down in `CLAUDE.md`, so
+the handoff carries no scrollback.
+
+Zero subagents again. Nothing here fanned out — the research was five sequential lookups, each of
+which informed what to look up next.

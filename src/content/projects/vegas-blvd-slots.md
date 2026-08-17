@@ -9,6 +9,10 @@ engine: [Unity]
 tech: [C#, DeltaDNA]
 platforms: [iOS, Android]
 job: mobilityware
+# TODO(phase-3-revisit): first stab from the 2019 resume's job title. The resume
+# bullets describe live-ops architecture work (server-customizable store, DeltaDNA
+# integration, promo carousels) that a bare title undersells — Ali to react.
+role: Software Engineer II
 hero:
   type: youtube
   id: 8gtbz_T4-yY
