@@ -15,21 +15,21 @@ engine: [Unity]
 # them. The prose carries the release story instead.
 platforms: []
 job: mobilityware
-role: Pitch, prototype, and level editor # TODO(phase-3-revisit): Ali to react
+role: Pitch, prototype, and level editor
 summary: Pitched and prototyped a mobile puzzle game about cats fitting in boxes at a company game jam, won People's Choice, and built the level editor that made the demo possible.
+hero:
+  type: image
+  src: ../../assets/images/projects/it-fits-i-sits/puzzle-cats-banner.webp
+  alt: >-
+    Key art for Puzzle Cats, the shipped mobile game that grew out of Ali's
+    jam prototype — she pitched and prototyped the concept but did not work
+    on this release
 links:
   - label: 'Puzzle Cats — the game it eventually became'
     url: https://www.mobilityware.com/puzzle-cats/
     kind: store
-draft: true
+draft: false
 ---
-
-<!-- TODO(phase-3-media): the one hard blocker in Phase 3. No high-quality
-     prototype captures exist. Plan agreed at the gate: use full-game media for
-     the hero, with the lower-quality prototype shots inside the page where the
-     contrast between "week-one jam build" and "shipped product" is the point
-     rather than an embarrassment. Ali is sourcing both; she'll share them here.
-     Page stays draft: true until the hero lands. -->
 
 MobilityWare runs a week-long game jam every year: pitch on Friday, then build with a team for a
 week. I'd jammed there before, but Game Jam V in March 2018 was the first time I pitched. Robert and
