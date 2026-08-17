@@ -50,16 +50,16 @@ The full plan lives at `~/.claude/plans/i-first-built-this-glistening-book.md`.
 
 ## Phases
 
-| Phase | What                                               | State                           |
-| ----- | -------------------------------------------------- | ------------------------------- |
-| 0     | Preserve — blog scrape, snapshot, asset inventory  | ✅ merged                       |
-| 1     | Infrastructure — domain, DNS, email                | ✅ merged                       |
-| 2     | Foundation & agentic tooling                       | ✅ merged                       |
-| 3     | Content: get it true                               | ← gate closed, ready to execute |
-| 4     | Resume, one source                                 |                                 |
-| 5     | Design                                             |                                 |
-| 6     | Launch — favicon, OG, a11y, redirects, DNS cutover |                                 |
-| 7     | Keep it alive                                      |                                 |
+| Phase | What                                                                | State                                      |
+| ----- | ------------------------------------------------------------------- | ------------------------------------------ |
+| 0     | Preserve — blog scrape, snapshot, asset inventory                   | ✅ merged                                  |
+| 1     | Infrastructure — domain, DNS, email                                 | ✅ merged                                  |
+| 2     | Foundation & agentic tooling                                        | ✅ merged                                  |
+| 3     | Content: get it true                                                | ← executed on branch, pending review/merge |
+| 4     | Resume, one source                                                  |                                            |
+| 5     | Design                                                              |                                            |
+| 6     | Launch — favicon, OG, a11y, redirects, DNS cutover, wording revisit |                                            |
+| 7     | Keep it alive                                                       |                                            |
 
 **Sequencing principle: structure before skin.** Phases 2–4 produce a complete, correct,
 deliberately unstyled site. Design lands in Phase 5 onto content that already exists, so directions
@@ -337,6 +337,27 @@ _provisional_ so Ali can react to them rendered in context rather than in the ab
   earlier titles need LinkedIn, which is a Phase 4 problem). The client-engineer → feature-engineer
   arc is a _discipline_ change, not a title change, so it lives in the Snap write-up's prose where
   it's about the work rather than about HR. Don't force it into `roles[]`.
+
+### Phase 3 execution outcome (2026-08-16)
+
+Executed on branch `phase-3-content`, pushed, not yet merged. `npm run verify` and
+`pre-launch-check`'s sweeps pass clean. Career narrative (About, homepage), Firefall, Kaneva, and all
+12 archive entries are written and `draft: false`. Three pages stay `draft: true`, each blocked on
+something only Ali can resolve:
+
+- **Marvel Snap** — full write-up, but the systems list is provisional and she wants a review pass.
+- **It Fits I Sits** — full write-up, blocked on the prototype/full-game media described above.
+- **Vegas Blvd Slots** — full write-up, but its `role` still carries the `TODO(phase-3-revisit)`
+  placeholder above. Almost shipped with the marker still unresolved; caught by
+  `pre-launch-check`'s sweep and reverted to draft rather than left live with an open question.
+
+**New decision: a wording/tone/verbosity pass is deferred to Phase 6, not done here.** Phase 3's job
+was correctness — every fact true, every page publishable — not final prose polish. Tone and
+verbosity should be judged once Phase 5's design exists to read the copy in context, not while
+chasing accuracy against old PHP pages and a decade of blog posts. See Phase 6's row above and the
+plan file's Phase 6 section. This is not a license to leave rough prose now — the Phase 3 write-ups
+are meant to be genuinely publishable as written — it's an acknowledgment that a dedicated read-through
+pass still happens once, later, with fresh eyes and real styling.
 
 ---
 
