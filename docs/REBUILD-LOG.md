@@ -255,3 +255,53 @@ the handoff carries no scrollback.
 
 Zero subagents again. Nothing here fanned out — the research was five sequential lookups, each of
 which informed what to look up next.
+
+## Phase 3 — Content: get it true, 2026-08-16
+
+Executed on branch `phase-3-content`, same day as the gate, in one session working straight down the
+gate's execution brief. Sonnet 5, no subagents — the same reasoning as Phase 2 applies harder here:
+the work is mostly close reading (old page HTML, blog posts, one image) and writing from it, and a
+subagent summarizing a source would have thrown away exactly the specific phrasing worth keeping.
+
+### The image-as-source habit paid off again, immediately
+
+The KinoClue poster read at the gate wasn't a one-off. Building this phase's write-ups meant checking
+every outbound link before shipping it, not just reading the old page copy, and two things turned up
+that a text-only pass would have missed: Vegas Blvd Slots' iOS and Android store links both now
+404 — `curl` against the old iTunes URL redirects to `apps.apple.com` and then 404s, so the game
+appears to have been delisted since 2019 — and Rose Peng's old portfolio domain (`daportfolio.com`,
+linked from Mini Mages) turned out to silently redirect to a generic DeviantArt page rather than
+404, which would have shipped as a working-looking credit link to nothing. Both are marked `dead:
+true` now rather than left as live-looking links. On the other side of the same coin, checking rather
+than assuming also turned up a genuinely live replacement: Prodigal's old MySpace link for its
+composer was long dead, but Sabrepulse turned out to have an active Bandcamp — a five-second search
+that turned a "drop the credit" TODO into a real link.
+
+### One deferred decision, handled by staying consistent rather than by picking
+
+Three featured projects carried `TODO(phase-3-revisit)` markers on `role` — placeholders Ali flagged
+at the gate as "a good accent, not answers." Marvel Snap and It Fits I Sits stayed `draft: true`
+regardless, so the marker was moot for them. Vegas Blvd Slots didn't: it had a real write-up ready
+and got flipped to `draft: false` on the first pass — which meant a page went live carrying an
+unresolved "Ali needs to react to this" note, exactly the kind of thing `pre-launch-check`'s
+`TODO(phase-3-revisit)` sweep exists to catch. Caught it by actually running that sweep before
+calling the phase done, not by re-reading the diff. Reverted to `draft: true`. The rule that mattered
+in the moment: a mechanical check that runs after the writing is worth more than remembering the
+rule while writing.
+
+### A schema constraint became a stale-link bug, mechanically
+
+`getFeaturedProjects()` filters drafts out of production entirely, so linking to
+`/projects/marvel-snap` in the About and homepage prose — a real, true credit — produced a broken
+internal link the moment the page itself stayed a draft. `npm run links` caught it immediately. Fix
+was to link the always-true external credits page instead of the maybe-not-published-yet internal
+one. Worth remembering: a fact being true doesn't mean the page about it exists yet, and the two need
+different links.
+
+### Cost notes
+
+Sonnet 5, one session, content-heavy: ~15 project/job files rewritten or filled in, 2 pages of new
+prose (About, homepage), a ~150-file asset migration, and 5 featured write-ups researched from
+`snapshot/` and `content/archive/`. No subagents. The phase-gate handoff worked as designed — starting
+from `CLAUDE.md`'s already-settled framing meant zero re-litigation of the three gate questions, and
+the session's tool calls went entirely into sourcing and writing rather than rediscovering context.
