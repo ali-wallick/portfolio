@@ -1,0 +1,36 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { getJobs, formatSpan, currentTitle } from '~/lib/content';
+
+/**
+ * The career timeline here is generated from the same `jobs` collection the
+ * resume page reads. The prose around it is Phase 3's.
+ */
+const jobs = await getJobs('site');
+---
+
+<BaseLayout title="About" description="About Ali Wallick.">
+  <h1>About</h1>
+
+  {
+    /* TODO(phase-3): the career narrative. Second Dinner is now the longest
+      tenure by far and the old page barely mentions it; everything before it
+      needs re-tensing to past. Source material: the old about.php text in
+      snapshot/, the 2019 resume, and the 20 posts in content/archive/. */
+  }
+
+  <h2>Where I've worked</h2>
+  <ul class="project-list">
+    {
+      jobs.map((job) => (
+        <li>
+          <strong>{currentTitle(job)}</strong>, {job.data.company}
+          <p class="meta">
+            {job.data.location} · {formatSpan(job.data.start, job.data.end)}
+          </p>
+          {job.data.summary && <p>{job.data.summary}</p>}
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

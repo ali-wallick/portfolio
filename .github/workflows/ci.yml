@@ -1,0 +1,100 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+# A second push to the same branch cancels the first — this repo gets a lot of
+# small preview-driven pushes and there is no value in finishing a stale run.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build & check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Formatting
+        run: npm run format:check
+
+      - name: Types & Astro diagnostics
+        run: npm run check
+
+      # Production settings: drafts excluded, exactly as aliwallick.com will be
+      # built. Cloudflare's non-production branches build WITH drafts via
+      # scripts/build-ci.mjs; CI deliberately does not, so what gets gated here
+      # is the thing that actually ships.
+      - name: Build
+        run: npm run build
+
+      - name: Link & markup checks
+        run: npm run links
+
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 7
+
+  lighthouse:
+    name: Lighthouse
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # Lighthouse gates the PRODUCTION build — what actually ships.
+      #
+      # The first run pointed it at a drafts-visible build so project pages
+      # would be non-empty, and it failed for two reasons that were both
+      # artifacts of measuring unpublished work:
+      #   - SEO 0.54, because draft pages emit `robots: noindex`, which
+      #     Lighthouse's SEO category correctly and heavily penalizes.
+      #   - Best practices 0.93 on the one page carrying a YouTube iframe.
+      # Neither says anything about the site Ali will publish.
+      #
+      # TODO(phase-3): once real project pages are published, add one WITH a
+      # video embed back to the url list in lighthouserc.json. Expect the
+      # third-party iframe to cost a few best-practices points, and decide then
+      # whether to carve out that audit or lower the threshold for those pages.
+      - name: Build
+        run: npm run build
+
+      - name: Lighthouse CI
+        run: npx --yes @lhci/cli@0.15.x autorun
+
+      # Scores in the job log, so a red build explains itself without anyone
+      # downloading an artifact. The artifact upload silently produced nothing
+      # from the hidden .lighthouseci directory, which is the wrong thing to
+      # discover at the moment you actually need the numbers.
+      - name: Lighthouse scores
+        if: always()
+        run: node scripts/lighthouse-summary.mjs
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse
+          path: lighthouse-report/
+          if-no-files-found: warn
+          retention-days: 7

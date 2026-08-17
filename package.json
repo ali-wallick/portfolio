@@ -1,0 +1,32 @@
+{
+  "name": "aliwallick-portfolio",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "build:ci": "node scripts/build-ci.mjs",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "links": "node scripts/check-links.mjs",
+    "verify": "npm run format:check && npm run check && npm run build && npm run links"
+  },
+  "dependencies": {
+    "astro": "^7.2.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@types/node": "^26.2.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-astro": "^0.14.1",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.123.0"
+  }
+}

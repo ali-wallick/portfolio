@@ -1,0 +1,37 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { site, socials } from '~/config/site';
+import { showDrafts } from '~/lib/content';
+
+/**
+ * No form. The old contact page posted to a PHP mail handler with no CSRF token,
+ * no rate limiting, and a bug that silently discarded the sender's name — and a
+ * static site has nowhere to run it anyway. A mailto and a short list of
+ * accounts that actually represent Ali is the whole feature.
+ *
+ * Social links carried over from the old site are `pending` until the Phase 3
+ * audit re-confirms them, so they only render on drafts-visible builds.
+ */
+const shown = socials.filter(
+  (s) => s.status === 'active' || (showDrafts && s.status === 'pending'),
+);
+---
+
+<BaseLayout title="Contact" description="Get in touch with Ali Wallick.">
+  <h1>Contact</h1>
+
+  <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+
+  {
+    shown.length > 0 && (
+      <ul>
+        {shown.map((s) => (
+          <li>
+            <a href={s.url}>{s.label}</a>
+            {s.status === 'pending' && <span class="draft-flag">unverified</span>}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</BaseLayout>

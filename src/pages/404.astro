@@ -1,0 +1,16 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found">
+  <h1>Page not found</h1>
+  <p>
+    That page doesn't exist. Try the <a href="/projects">projects</a> page, or head
+    <a href="/">home</a>.
+  </p>
+  {
+    /* TODO(phase-6): every old URL should redirect rather than land here. The old
+      .htaccess served extensionless routes (/about, /projects/critter) and /blog/*
+      needs somewhere to go. */
+  }
+</BaseLayout>

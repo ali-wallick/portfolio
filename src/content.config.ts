@@ -1,0 +1,279 @@
+import { defineCollection, reference, type SchemaContext } from 'astro:content';
+import { glob } from 'astro/loaders';
+// Astro 7 ships Zod 4 and deprecates the `z` re-export from `astro:content`.
+import { z } from 'astro/zod';
+
+/**
+ * CONTENT MODEL — the contract the whole site is built on.
+ *
+ * Two rules drive every decision in this file:
+ *
+ *  1. Adding a project or a job is *one Markdown file*. Never a layout change,
+ *     never a hand-maintained index, never a second place to update.
+ *  2. Facts live in exactly one place. The resume page (Phase 4), the site bio,
+ *     and the project pages all read from these collections, so they cannot
+ *     drift apart the way the old site did — where four separate pages each
+ *     described the Marvel game as "upcoming" and all four went stale together.
+ *
+ * A third rule falls out of the first two: mistakes the old site made should be
+ * *unrepresentable* here, not merely fixed. Hence YouTube-by-ID (no protocol to
+ * get wrong), `image()`-validated media (no silently broken <img>), and the
+ * draft/published completeness split below.
+ */
+
+// ---------------------------------------------------------------------------
+// Shared pieces
+// ---------------------------------------------------------------------------
+
+/**
+ * `YYYY` or `YYYY-MM`. Never days — nobody puts days on a resume.
+ *
+ * Mixed precision is deliberate: the 2019 resume records employment as bare
+ * years ("2016 – 2019") and that is genuinely all we know for the older roles.
+ * Forcing `YYYY-MM` here would mean inventing months, which is exactly the kind
+ * of quiet fiction a single-source-of-truth model is supposed to prevent.
+ * Upgrade an entry to month precision when a real source confirms the month.
+ *
+ * String ordering still works across precisions ("2015" < "2015-06" < "2016").
+ */
+const datePart = z
+  .string()
+  .regex(/^\d{4}(-(0[1-9]|1[0-2]))?$/, 'Expected YYYY or YYYY-MM (e.g. "2019" or "2019-07")');
+
+/** Earliest plausible year for anything on this site. Catches typo'd years. */
+const EARLIEST_YEAR = 2008;
+const year = z
+  .number()
+  .int()
+  .min(EARLIEST_YEAR)
+  .max(new Date().getFullYear() + 1);
+
+/**
+ * An outbound link. `dead: true` records that we *know* the target is gone —
+ * the old site linked firefall.com, kaneva.com and argamestudio.org for years
+ * after they went dark. Components render dead links as plain text, so the
+ * credit survives without the broken promise.
+ */
+const link = z.object({
+  label: z.string().min(1),
+  url: z.url(),
+  kind: z.enum(['store', 'play', 'video', 'source', 'press', 'jam', 'site']),
+  dead: z.boolean().default(false),
+});
+
+/**
+ * Media. A discriminated union rather than a loose `{ src, type }` bag, so the
+ * renderer always knows exactly which fields it has.
+ *
+ * YouTube is stored as a bare 11-character video ID, never a URL. The old site
+ * had five `http://` YouTube iframes that every modern browser blocks as mixed
+ * content; storing the ID means the embed URL is built by the component and the
+ * whole class of bug cannot come back.
+ *
+ * Images go through Astro's `image()` helper: the path is resolved and
+ * validated at build time, so a renamed or missing file fails CI instead of
+ * shipping a broken <img>. `alt` is required — not optional-with-a-lint-rule.
+ */
+const mediaSchema = (image: SchemaContext['image']) =>
+  z.discriminatedUnion('type', [
+    z.object({
+      type: z.literal('image'),
+      src: image(),
+      alt: z.string().min(1),
+      caption: z.string().optional(),
+    }),
+    z.object({
+      type: z.literal('youtube'),
+      id: z.string().regex(/^[\w-]{11}$/, 'Expected a bare 11-char YouTube video ID, not a URL'),
+      title: z.string().min(1),
+      /** Start offset in seconds, for videos where the relevant bit is buried. */
+      start: z.number().int().nonnegative().optional(),
+    }),
+  ]);
+
+// ---------------------------------------------------------------------------
+// Projects
+// ---------------------------------------------------------------------------
+
+const projects = defineCollection({
+  loader: glob({ base: './src/content/projects', pattern: '**/*.{md,mdx}' }),
+  schema: ({ image }) =>
+    z
+      .object({
+        title: z.string().min(1),
+        /** Used where the full title doesn't fit — cards, nav, breadcrumbs. */
+        shortTitle: z.string().min(1).optional(),
+
+        /**
+         * Two tiers, decided up front (see CLAUDE.md):
+         *  - `featured` — a real write-up. Problem, what was built, what was learned.
+         *  - `archive`  — title, year, engine, one line, one image. Framed as
+         *                 history, not as a portfolio pitch.
+         */
+        tier: z.enum(['featured', 'archive']),
+        /** Manual ordering within the featured tier. Required for featured. */
+        featureOrder: z.number().int().positive().optional(),
+
+        startYear: year,
+        /** Omit for single-year projects. */
+        endYear: year.optional(),
+
+        /**
+         * Honest framing is a stated goal for the archive tier — a 48-hour jam
+         * entry and a shipped commercial title should not look alike.
+         */
+        status: z.enum(['shipped', 'prototype', 'jam', 'coursework', 'unannounced']),
+
+        /** One line, used verbatim on cards and in the archive list. */
+        summary: z.string().min(1).max(220).optional(),
+
+        /** Game engines. May be empty for bare-metal targets (GBA, Atari 2600). */
+        engine: z.array(z.string()).default([]),
+        /** Languages, libraries, notable tools. */
+        tech: z.array(z.string()).default([]),
+        platforms: z.array(z.string()).default([]),
+
+        /** Ali's role, in her words. "Lead UI Programmer", not "Contributor". */
+        role: z.string().min(1).optional(),
+        teamSize: z.number().int().positive().optional(),
+        collaborators: z
+          .array(z.object({ name: z.string().min(1), url: z.url().optional() }))
+          .default([]),
+
+        /**
+         * Professional work points at the job it was done under, rather than
+         * repeating a company name that could drift. Jam and school work uses
+         * `event` instead.
+         */
+        job: reference('jobs').optional(),
+        event: z.string().min(1).optional(),
+
+        links: z.array(link).default([]),
+        hero: mediaSchema(image).optional(),
+        gallery: z.array(mediaSchema(image)).default([]),
+
+        /**
+         * Draft entries render in `astro dev` and on preview deploys, and are
+         * excluded from the production build. Every project seeded in Phase 2
+         * is a draft: the metadata is real, the prose is Phase 3's job.
+         */
+        draft: z.boolean().default(false),
+      })
+      .superRefine((data, ctx) => {
+        if (data.endYear !== undefined && data.endYear < data.startYear) {
+          ctx.addIssue({
+            code: 'custom',
+            path: ['endYear'],
+            message: `endYear (${data.endYear}) is before startYear (${data.startYear})`,
+          });
+        }
+
+        if (data.tier === 'featured' && data.featureOrder === undefined) {
+          ctx.addIssue({
+            code: 'custom',
+            path: ['featureOrder'],
+            message: 'featured projects need a featureOrder to place them on the projects page',
+          });
+        }
+
+        // Completeness is enforced at publish time, not at draft time. This is
+        // what "done" means for a project page, expressed as a build error
+        // rather than as a note in a doc that nobody reads.
+        if (!data.draft) {
+          for (const field of ['summary', 'role'] as const) {
+            if (data[field] === undefined) {
+              ctx.addIssue({
+                code: 'custom',
+                path: [field],
+                message: `published projects require "${field}" (set draft: true while it is unfinished)`,
+              });
+            }
+          }
+          if (!data.hero) {
+            ctx.addIssue({
+              code: 'custom',
+              path: ['hero'],
+              message: 'published projects require a hero image or video',
+            });
+          }
+        }
+      }),
+});
+
+// ---------------------------------------------------------------------------
+// Jobs — the single source for the site bio AND the Phase 4 resume
+// ---------------------------------------------------------------------------
+
+const jobs = defineCollection({
+  loader: glob({ base: './src/content/jobs', pattern: '**/*.md' }),
+  schema: z
+    .object({
+      company: z.string().min(1),
+      companyUrl: z.url().optional(),
+      location: z.string().min(1),
+
+      start: datePart,
+      /** Omit for the current job. Exactly one job may omit it. */
+      end: datePart.optional(),
+
+      /**
+       * Title progression, oldest first. Kaneva went Technical Support Engineer
+       * → Lead UI Programmer over four years; a single `title` field would
+       * throw that away, and it is exactly the kind of thing a resume wants.
+       * The last entry is the title displayed by default.
+       */
+      roles: z
+        .array(z.object({ title: z.string().min(1), start: datePart }))
+        .nonempty('at least one role'),
+
+      /** One line for the site bio. */
+      summary: z.string().min(1).max(280).optional(),
+      /** Resume bullets, strongest first. Phase 4 renders these verbatim. */
+      highlights: z.array(z.string()).default([]),
+      tech: z.array(z.string()).default([]),
+
+      /** Some roles earn a line on the resume but not a paragraph on the site. */
+      onResume: z.boolean().default(true),
+      onSite: z.boolean().default(true),
+    })
+    .superRefine((data, ctx) => {
+      if (data.end !== undefined && data.end < data.start) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['end'],
+          message: `end (${data.end}) is before start (${data.start})`,
+        });
+      }
+      for (const [i, role] of data.roles.entries()) {
+        if (role.start < data.start) {
+          ctx.addIssue({
+            code: 'custom',
+            path: ['roles', i, 'start'],
+            message: `role start (${role.start}) is before the job start (${data.start})`,
+          });
+        }
+      }
+    }),
+});
+
+// ---------------------------------------------------------------------------
+// Education — small, but the resume needs it from the same place
+// ---------------------------------------------------------------------------
+
+const education = defineCollection({
+  loader: glob({ base: './src/content/education', pattern: '**/*.md' }),
+  schema: z.object({
+    school: z.string().min(1),
+    degree: z.string().min(1),
+    field: z.string().min(1),
+    location: z.string().min(1),
+    /** Often unknown and rarely printed — a degree line is usually just its year. */
+    start: datePart.optional(),
+    end: datePart,
+    /** Phase 4 decides what stays. Recording them is not the same as showing them. */
+    honors: z.array(z.string()).default([]),
+    onResume: z.boolean().default(true),
+  }),
+});
+
+export const collections = { projects, jobs, education };

@@ -1,0 +1,28 @@
+---
+import { Image } from 'astro:assets';
+import YouTube from './YouTube.astro';
+import type { Project } from '~/lib/content';
+
+/**
+ * Renders one item of the media discriminated union. Every project surface goes
+ * through here, so image handling and embed handling are decided once.
+ */
+type MediaItem = NonNullable<Project['data']['hero']>;
+
+interface Props {
+  item: MediaItem;
+}
+
+const { item } = Astro.props;
+---
+
+{
+  item.type === 'youtube' ? (
+    <YouTube id={item.id} title={item.title} start={item.start} />
+  ) : (
+    <figure>
+      <Image src={item.src} alt={item.alt} loading="lazy" />
+      {item.caption && <figcaption class="meta">{item.caption}</figcaption>}
+    </figure>
+  )
+}

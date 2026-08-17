@@ -1,0 +1,39 @@
+---
+import { formatYears, STATUS_LABEL, type Project } from '~/lib/content';
+import { getEntry } from 'astro:content';
+
+/**
+ * The one-line metadata strip under a project title. Built from the content
+ * model, never hand-written per page — which is the whole point of the model.
+ *
+ * The company name is read through the `job` reference rather than stored on
+ * the project, so a project and the resume can never disagree about who Ali
+ * worked for.
+ */
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const d = project.data;
+
+const job = d.job ? await getEntry(d.job) : undefined;
+const where = job?.data.company ?? d.event;
+
+// `engine` is empty for bare-metal targets (Atari 2600, GBA), so fall back
+// through tech and then platform rather than printing an empty field.
+const built = d.engine.length ? d.engine : d.tech.length ? d.tech : d.platforms;
+
+const parts = [
+  formatYears(d.startYear, d.endYear),
+  STATUS_LABEL[d.status],
+  built.join(', '),
+  where,
+  d.role,
+].filter(Boolean);
+---
+
+<p class="meta">
+  {parts.join(' · ')}
+  {d.draft && <span class="draft-flag">draft</span>}
+</p>

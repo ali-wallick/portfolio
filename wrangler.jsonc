@@ -1,0 +1,27 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "portfolio",
+  "compatibility_date": "2026-08-16",
+
+  // A static-asset-only Worker: there is no `main`, no server code, and nothing
+  // to keep warm. Astro builds to `dist/` and Cloudflare serves it from the
+  // edge. If this ever grows a `main`, that is a real architectural change and
+  // belongs in a conversation, not a commit.
+  "assets": {
+    "directory": "./dist",
+
+    // astro.config.mjs uses `trailingSlash: 'never'` + `build.format: 'file'`,
+    // so `/about` is served from `about.html`. This redirects `/about/` to
+    // `/about` rather than serving both, which keeps one canonical URL per page
+    // and matches the old .htaccess behaviour Phase 6's redirect map assumes.
+    "html_handling": "drop-trailing-slash",
+
+    // Serve the built 404.html instead of a bare Cloudflare error page.
+    "not_found_handling": "404-page",
+  },
+
+  // Per-branch preview URLs — the whole point of the review loop. Every branch
+  // gets a stable `<branch>-portfolio.<subdomain>.workers.dev` that Cloudflare
+  // comments onto the pull request. See docs/CLOUDFLARE.md.
+  "preview_urls": true,
+}
