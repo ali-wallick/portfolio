@@ -129,6 +129,23 @@ get truncated with a hash appended.
 
 ## Troubleshooting
 
+### `portfolio.<subdomain>.workers.dev` is publicly reachable
+
+It must not be, until Phase 6. If it's serving content:
+
+1. Confirm `wrangler.jsonc` has `"workers_dev": false` at the top level. If it's missing, this is
+   why — `wrangler deploy` defaults `workers_dev` to `true` whenever the config doesn't say
+   otherwise, **every time it runs**, silently re-enabling public access on each `master` deploy even
+   after someone disabled it by hand. Confirmed happening on the very first post-merge production
+   deploy: the dashboard-level disable from the Phase 2 setup was undone within minutes by the next
+   `wrangler deploy`.
+2. If the config already says `workers_dev: false` and it's still on, disable it directly and treat
+   the next `master` deploy as the real fix-verification:
+   ```
+   POST /accounts/{account_id}/workers/scripts/portfolio/subdomain
+        { "enabled": false, "previews_enabled": true }
+   ```
+
 ### Preview URL shows "There is nothing here yet"
 
 That is Cloudflare's placeholder, not this site's 404 page, and it means preview URL serving is

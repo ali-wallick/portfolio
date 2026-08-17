@@ -3,6 +3,19 @@
   "name": "portfolio",
   "compatibility_date": "2026-08-16",
 
+  // The production workers.dev URL must stay OFF until Phase 6 — aliwallick.com
+  // still serves the old PHP site from DreamHost, and nothing here should be
+  // reachable at a stable public address before the real domain cutover.
+  //
+  // This is not decorative. The first `master` deploy after the Phase 2 merge
+  // silently re-enabled it: `wrangler deploy` defaults `workers_dev` to true
+  // whenever it isn't set explicitly, undoing a dashboard-level disable from
+  // minutes earlier. Wrangler's own build log names the fix verbatim ("you can
+  // disable workers.dev by explicitly setting 'workers_dev = false' in your
+  // Wrangler file"). Setting it here makes the setting durable across every
+  // future `master` deploy instead of dashboard state someone has to remember.
+  "workers_dev": false,
+
   // A static-asset-only Worker: there is no `main`, no server code, and nothing
   // to keep warm. Astro builds to `dist/` and Cloudflare serves it from the
   // edge. If this ever grows a `main`, that is a real architectural change and
