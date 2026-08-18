@@ -62,14 +62,27 @@
   --radius: 4px;
 
   /* --- Motion -----------------------------------------------------------
-   * Phase 5 note: resources/js/nav.js has a hand-rolled easing sticky sidebar
-   * built before `position: sticky` existed — the sidebar lags and settles
-   * rather than snapping. It is the only part of the old site with real
-   * personality, and it is worth reinterpreting rather than deleting.
+   * REAL, as of the Phase 5 gate — no longer placeholders. These two values
+   * are the old site's one genuine piece of personality, recovered.
+   *
+   * The Phase 2 note here (and CLAUDE.md, and the plan) said nav.js contained
+   * a hand-rolled easing sticky sidebar. It doesn't: nav.js assigns
+   * `quickInfo.style.top` directly on every scroll event, with no
+   * interpolation at all. The easing was four lines of CSS in
+   * templateStyles.css, and this is the curve and duration from it.
+   *
+   * The effect they produce: JS retargets `top` every scroll event, CSS eases
+   * each retarget over 500ms, scroll events fire faster than that — so the
+   * element never arrives while the page is moving. It chases, then settles.
+   * Note the curve has *zero* ease-in; it launches at full speed and
+   * decelerates hard. That asymmetry is the whole character.
+   *
+   * Every Phase 5 direction inherits this. Where it is most visible is a
+   * per-direction choice. See CLAUDE.md's "Phase 5 gate outcome".
    */
-  --ease: cubic-bezier(0.2, 0, 0, 1);
-  --duration-fast: 120ms;
-  --duration: 240ms;
+  --ease: cubic-bezier(0, 0, 0.25, 1);
+  --duration-fast: 250ms;
+  --duration: 500ms;
 }
 
 @media (prefers-color-scheme: dark) {

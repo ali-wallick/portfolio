@@ -494,23 +494,129 @@ they are deliberately still in place.
 
 ## Design
 
-Phase 5 is open — see the Phase 5 gate conversation starter appended to the plan file
-(`~/.claude/plans/i-first-built-this-glistening-book.md`) for the four gate questions (direction
-count/spread, what "reinterpret `nav.js`" means concretely, type/color as real choices, motion as a
-first-class decision). This section stays the pre-Phase-5 reference until the gate lands a real
-system here.
+### Phase 5 gate outcome (2026-08-17)
 
-Until then:
+Four questions, settled. Do not relitigate. The gate's verification step also corrected two facts
+that both this file and the plan had been asserting since Phase 2 — see "What the gate corrected"
+below, because one of them changes what the phase's signature piece of work actually is.
 
-- `src/styles/tokens.css` holds **placeholder** tokens. They are deliberately boring — a slot for a
-  decision, not a decision.
+#### 1. Three directions — two invented, one revival
+
+The plan's suggested spread was playful/toy-like, dense/craft-forward, and editorial. **Editorial is
+dropped and replaced by a modern reinterpretation of the old site's own palette.** The remaining
+three:
+
+| Direction           | Territory                                                                                   |
+| ------------------- | ------------------------------------------------------------------------------------------- |
+| **Playful / toy**   | Leans into the game-dev identity. Interactive, game-UI-referencing, motion is load-bearing. |
+| **Dense / craft**   | Information-dense and restrained. The work speaks; the frame gets out of the way.           |
+| **Palette revival** | Warm, saturated, serif-bodied, hard offset shadows — Ali's own 2014 palette, reinterpreted. |
+
+Editorial went rather than one of the others because the revival absorbs most of its territory —
+both are type-led, warm, and reading-focused, so keeping both would have spent a branch on near
+-duplicate ground. Playful and dense sit furthest from the revival on both energy and density, which
+is what makes the three-way comparison worth Ali's time.
+
+**Why the revival is not nostalgia.** The brief that governs this phase is _it should be obvious a
+game developer made this and not obvious which template they used._ Every invented direction has to
+argue its way to "not a template." A direction derived from a palette Ali chose herself in 2014 is
+not-a-template **by construction** — there is no template it could be mistaken for, because the
+source is her. See "The old palette is real" below for the actual values and their measured contrast.
+
+#### 2. Type is settled globally; color varies per direction
+
+These are not in tension, and the split is deliberate.
+
+- **Type: a display face for headings, a neutral sans for body, monospace for technical furniture**
+  — engines, years, roles, `tech` lists. That last role is doing real work here: a large share of
+  this site's content _is_ technical metadata, so mono stops being decoration and starts being
+  semantic. The **role assignment is shared across all three directions**; each direction picks its
+  own faces. The revival direction adds a fourth voice, a text serif for prose, continuous with the
+  old site's use of Georgia for paragraphs.
+- **Color is a per-direction variable**, not a decision made up front. It is the axis Ali most wants
+  to react to rather than be presented with, and making it vary is what extracts the most information
+  from three previews.
+
+#### 3. Motion: shared baseline in tokens, per-direction expression
+
+`--ease` and `--duration` carry the old site's real curve and duration (see the correction below) on
+`master`, so **every direction inherits the chase-and-settle character** whether or not it makes a
+feature of it. Where that character is most visible is a per-direction choice. This is what
+"reinterpret `nav.js`, don't delete it" resolves to concretely.
+
+Ruled out: a literal port. A JavaScript scroll handler reimplementing `position: sticky` in 2026 is
+nostalgia, not reinterpretation, and the old implementation's return trip is a bug (below) rather
+than an idea worth carrying.
+
+### What the gate corrected
+
+Both corrections came from reading primary sources rather than this file. Both were load-bearing.
+
+#### `nav.js` contains no easing — the personality is four lines of CSS
+
+This file and the plan both described "a hand-rolled easing sticky sidebar built before
+`position: sticky` existed." That is wrong in a way that matters. `resources/js/nav.js` does no
+interpolation at all — no lerp, no `requestAnimationFrame`. Its `onScrolled()` reads `#MainContent`'s
+bounding rect and assigns `quickInfo.style.top` **directly**, on every scroll event.
+
+The easing is in `resources/css/templateStyles.css`:
+
+```css
+.scrolled {
+  position: relative;
+  transition: top 0.5s;
+  transition-timing-function: cubic-bezier(0, 0, 0.25, 1);
+}
+```
+
+So the real mechanism is: **JS retargets `top` on every scroll event, and CSS eases each retarget over
+500ms.** Scroll events fire far faster than 500ms, so the sidebar never arrives while the page is
+moving — it chases, and settles when scrolling stops. The lag-and-settle is _emergent from a
+transition being continuously retriggered_, not a designed animation.
+
+What follows from that:
+
+- **The character is two token values**, not a component: `cubic-bezier(0,0,0.25,1)` and `500ms`. Both
+  differ sharply from the Phase 2 placeholders they replace — the old `--ease` was
+  `cubic-bezier(0.2,0,0,1)` and `--duration` was `240ms`. The real curve has **zero ease-in**: it
+  launches at full speed and decelerates hard. The real duration is twice as long.
+- **The technique generalizes** to anything with a continuously-updating target, which is what makes
+  the abstract reinterpretation viable rather than a cop-out.
+- **One asymmetry is a bug, not the good idea.** `position: relative` and the transition exist only
+  while `.scrolled` is applied, so scrolling back to the top drops the class and the return snaps.
+  Don't reproduce it.
+- **Nothing else in `nav.js` needs preserving.** The rest is breadcrumbs and nav highlighting, which
+  Astro already does natively — `BaseLayout.astro` sets `aria-current` today.
+
+#### The old palette is real, and Phase 3 filed it as cruft
+
+Phase 3 listed `palette.html` and "the unlinked `colors.css`" under dead ends to kill. Correct as
+_served files_ — but `snapshot/misc/colors.css` is a Paletton export documenting a color system the
+old site genuinely used, and `templateStyles.css` shows it applied throughout:
+
+| Role                   | Value                                             |
+| ---------------------- | ------------------------------------------------- |
+| Body ground            | `#FFE4C2` warm peach                              |
+| Content ground         | `#FFF6EB` cream                                   |
+| Section / aside        | `#99C9B3` mint                                    |
+| Section shadow         | `-5px 5px 0 #4AA17A` — **hard, no blur**          |
+| Headings               | `#006E3C` deep green                              |
+| Link / visited / hover | `#9F2B00` rust / `#063E66` navy / `#4A7696` slate |
+| Type                   | Trebuchet MS chrome, **Georgia body**             |
+
+**Measured, not assumed** — contrast ratios computed at the gate rather than eyeballed. Body text on
+mint is 7.65:1 (AAA) and links on cream are 6.96:1. The only failures are accents: headings on mint
+3.45:1, hover 2.63:1, links on mint 4.03:1. **The hues are sound; the accent lightnesses need
+retuning.** That is a palette to reinterpret, not to discard, and it is why the revival direction
+exists.
+
+### Standing rules (unchanged by the gate)
+
+- `src/styles/tokens.css` still holds **placeholder** color and type tokens. Motion is now real.
 - **Use the variables.** Never write a raw color or a raw `px` font size in a component. Phase 5
   should be a palette-and-type swap, not a hunt through every file.
 - Responsive from the start. The old site had no viewport meta and rendered zoomed out on every
   phone ever made.
-- **Preserve the one good idea from the old site.** `resources/js/nav.js` has a hand-rolled easing
-  sticky sidebar built before `position: sticky` existed — it lags and settles rather than snapping.
-  It's the only part of the old site with real personality. Reinterpret it; don't just delete it.
 
 ---
 

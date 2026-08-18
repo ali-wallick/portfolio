@@ -493,3 +493,74 @@ exactly the clean downshift point the model table describes, arriving as a mid-s
 than a fresh-session handoff this time. Worth noting for the eventual build-in-public page: the
 downshift didn't need a new session or a re-briefing, because `CLAUDE.md` and the plan file had
 already absorbed everything load-bearing from the Opus portion.
+
+---
+
+## Phase 5 gate — conversation, 2026-08-17
+
+### The gate's verification step corrected a fact the project had repeated for three phases
+
+`CLAUDE.md`, the plan file, and a comment block in `tokens.css` all said the same thing: the old
+site's `nav.js` held "a hand-rolled easing sticky sidebar built before `position: sticky` existed."
+It had been copied forward since Phase 2, and Phase 5's whole "preserve the one good idea" mandate
+rested on it.
+
+It is wrong. `nav.js` does no interpolation at all — no lerp, no `requestAnimationFrame`. It reads a
+bounding rect and assigns `style.top` directly on every scroll event. The easing lives in four lines
+of `templateStyles.css`: a `transition: top .5s` with `cubic-bezier(0,0,0.25,1)`, applied only while
+a `.scrolled` class is on. The lag-and-settle everyone remembered is **emergent** — scroll events
+fire faster than the 500ms transition, so the element chases a target it never reaches until
+scrolling stops.
+
+The generalizable bit isn't "check your facts." It's **which** facts a phase gate should check.
+This claim had survived three phases precisely because it was never load-bearing before: nothing in
+Phases 2–4 needed to know how the sidebar worked, only that it was worth keeping. The gate
+verification step earns its keep by re-checking the facts _this_ phase is about to build on, not the
+repo's facts in general — a claim can be inert for a year and become load-bearing the week you act
+on it.
+
+Two things fell out of the correction, and both made the phase cheaper:
+
+- **The reinterpretation is two token values, not a component.** `--ease: cubic-bezier(0,0,0.25,1)`
+  and `--duration: 500ms` land on `master`, and every direction inherits the character for free. The
+  "is the reinterpretation literal or abstract?" question the gate was supposed to argue about
+  mostly dissolved once the mechanism was understood — it stopped being either/or.
+- **One remembered feature turned out to be a bug.** The transition exists only while `.scrolled` is
+  applied, so scrolling back up snaps instead of settling. Worth _not_ reproducing. Nostalgia would
+  have shipped the asymmetry along with the good part.
+
+The Phase 2 placeholders being replaced were also further off than anyone would have guessed:
+`cubic-bezier(0.2,0,0,1)` at 240ms, against a real curve with **zero** ease-in at 500ms. Twice the
+duration and a fundamentally different attack.
+
+### A "dead end" from Phase 3 turned out to be the strongest design lead in the phase
+
+Phase 3 listed `palette.html` and "the unlinked `colors.css`" under dead ends to kill. Correct about
+the _served files_ — and it meant nobody opened them. `snapshot/misc/colors.css` is a Paletton export
+documenting a color system the old site genuinely used throughout: peach ground, cream content, mint
+sections with a hard un-blurred offset shadow, deep green headings, rust links, and Georgia for body
+copy.
+
+Contrast was **measured at the gate rather than assumed**, which changed the conclusion. The instinct
+was to call a 2014 hobbyist palette inaccessible; body text on mint is actually 7.65:1 (AAA) and links
+on cream are 6.96:1. Only the accents fail — headings 3.45:1, hover 2.63:1. So the hues are sound and
+the accent lightnesses need retuning, which is a reinterpretation job, not a rescue.
+
+That produced the phase's one real structural change to the plan: **editorial was dropped as a
+direction and replaced with a palette revival.** The reasoning is worth keeping, because it applies
+past this project. The brief is "not obvious which template they used," and every _invented_
+direction has to argue its way there — it can always be accused of resembling something. A direction
+derived from a palette the site's owner chose herself has no template to be mistaken for. The
+constraint that looked like archaeology was the cheapest available source of genuine distinctiveness.
+
+Editorial went rather than playful or dense because the revival absorbs most of its territory — both
+type-led, warm, reading-focused. Three directions only pay for themselves if they're actually three.
+
+### Cost notes
+
+Opus 5, one session, gate only. Zero subagents, and the call was easy: the entire evidence base was
+two CSS files, one 50-line JS file, and a plan file. Every finding came from reading a primary source
+directly — a subagent's summary of "the old site's stylesheet" would have flattened exactly the
+four-line transition block the whole correction turned on. The single most valuable tool call in the
+session was seven lines of Node computing contrast ratios, which converted a confident assumption
+into a measurement that pointed the opposite way.
