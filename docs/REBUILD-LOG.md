@@ -482,3 +482,14 @@ whole surface was four job files, one schema, one page, and a plan file — read
 gate's five corrections all came from reading primary sources that a subagent's summary would have
 flattened. The measure-then-fix loop on the print layout was the only place the session spent real
 tool calls, and it replaced what would otherwise have been four or five blind build-and-check cycles.
+
+### Merged, with a mid-session model downshift
+
+Merged via [PR #9](https://github.com/ali-wallick/Portfolio/pull/9) at `c2f7811` (squash), same day
+as the gate. The session that opened Phase 4 ran on Opus 5 through the gate, the resume build, and
+the Cloudflare PDF investigation; Ali switched the session to Sonnet 5 partway through, for the
+merge, the two follow-up content edits (GDScript, the Second Dinner role split), and this close-out —
+exactly the clean downshift point the model table describes, arriving as a mid-session switch rather
+than a fresh-session handoff this time. Worth noting for the eventual build-in-public page: the
+downshift didn't need a new session or a re-briefing, because `CLAUDE.md` and the plan file had
+already absorbed everything load-bearing from the Opus portion.
