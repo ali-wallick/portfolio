@@ -564,3 +564,90 @@ directly — a subagent's summary of "the old site's stylesheet" would have flat
 four-line transition block the whole correction turned on. The single most valuable tool call in the
 session was seven lines of Node computing contrast ratios, which converted a confident assumption
 into a measurement that pointed the opposite way.
+
+---
+
+## Phase 5 — two findings that landed on master mid-phase, 2026-08-18
+
+_Found while building direction 02 (dense / craft). Recorded here rather than on that branch because
+they are direction-agnostic and only one of the three directions gets merged — the same reasoning
+that put the fixes themselves on `master` in [#14](https://github.com/ali-wallick/Portfolio/pull/14),
+following the precedent [#11](https://github.com/ali-wallick/Portfolio/pull/11) set._
+
+The generalizable thing about both: **a defect that only exists in the gap between two subsystems is
+invisible to everything that tests either one.** Neither of these is a bug in the design, and neither
+is a bug in the resume pipeline. Both live in the seam.
+
+### `ch` is a font-dependent unit, so a measure written in it is a layout that resizes
+
+CI's Lighthouse gate failed a direction branch at 0.91 performance against a 0.95 threshold. Every
+speed metric scored 1 — FCP, LCP, TBT, Speed Index. The whole loss was **cumulative layout shift at
+0.197**, identical across three runs, so not noise.
+
+The obvious diagnosis was "self-hosted webfonts, of course there is CLS", and it was wrong in a way
+worth keeping. Measuring instead of assuming — rendering the page with the real faces and again with
+the fallback stack forced — showed the prose column itself changing size: **`--measure: 64ch` resolved
+to 682px in the loaded face and 570px in the fallback.** `1ch` is the width of the `0` glyph, so every
+max-width written in `ch` is a box that changes width by a fifth when the font arrives, taking
+everything below it with it. Only the longest prose page failed; the same three fonts on `/contact`
+produced 0.000. The fonts were a participant, not the cause.
+
+`ch` is genuinely seductive for a measure because it means exactly the right thing — characters per
+line, which is what typographic advice is actually about. The trap is that it can only mean that
+_after_ the font has loaded, and before then it means something else by 20%.
+
+The fix is to pin every max-width to the rem value `ch` was already producing: the rendered layout is
+identical and simply stops moving. Verified by diffing block positions across five routes, the
+offending page went from a 50px shift to **0px**, and CI came back with performance 1.00 and **CLS
+0.000 on all five audited pages** — including three that had small non-zero shifts nobody had noticed.
+
+**The token on `master` is deliberately still `68ch`.** The correct rem value depends on which face a
+direction picks, so pinning one would be picking it for them. What landed instead is the warning, on
+the token itself and in `CLAUDE.md`'s Phase 5 standing rules — both places someone would look, rather
+than only in a document.
+
+Two lessons, and the second generalizes furthest:
+
+- **A CI threshold caught a defect that every local signal called clean.** The same page scored a
+  perfect 1.00 locally, because a fast machine loads the font before first paint and the swap never
+  happens at all. The gate was not being pedantic; it was the only thing in the loop running on
+  hardware slow enough to see the bug. Worth remembering the next time a threshold looks annoying.
+- **When a metric fails, measure the mechanism before believing the obvious cause.** "Webfonts cause
+  CLS" would have led to `font-display: optional` — which scores well, costs the first-visit
+  appearance of the direction's entire identity, and would have left the real defect in place for
+  whatever the next long page turned out to be.
+
+### A leak has one wrong value; a race has a new one every time
+
+The print-geometry differ that `CLAUDE.md` books as Phase 6 work was run early, against a direction
+branch. It found the expected class of problem — an unpinned token would have condensed every heading
+in the PDF — and then something that was not a leak at all.
+
+Three resume contact links printed at `rgb(15,16,19)` on one capture and `rgb(16,18,21)` on the next.
+The instability _is_ the diagnostic. The cause: switching to print media **starts** any transition
+whose property the print rules change, and `scripts/build-pdf.mjs` navigates and then prints inside
+that window. A design that puts `transition: color` on `a` therefore does not put a wrong colour in
+the committed PDF — it puts a different one in on every build.
+
+Worth recording because the fix has a different shape from every other rule in that block. Those are
+denylists that a later design walks around by using a property nobody enumerated; `*  { transition:
+none !important; animation: none !important }` cannot be walked around, because animation on paper is
+never correct regardless of the design. **When a guard can be written as a universal truth rather than
+an enumeration, write it that way** — and the reverse is the tell that the block's own comment already
+admits to, that it is a denylist wearing a design system's clothes.
+
+### A diff where every row differs is a broken harness, not a broken build
+
+Methodology note from the same session, learned the expensive way. The differ's first run reported
+that _everything_ differed, including the font family on every element. It was measuring nothing:
+Astro links its CSS by absolute path, so the `file://` pages had rendered with no stylesheet at all.
+
+The tell was `body` sitting at an 8px offset — the browser's default margin, and not a value anywhere
+in this repo. Re-run over a local HTTP server it came back 0 visible elements moved. **When a
+measurement disagrees with everything you know, suspect the instrument before the subject**, which is
+the same shape as the Phase 2 lesson that a check you cannot read is not a check.
+
+Git produced the identical failure later in the phase, in the other direction: rebasing the direction
+branch onto this work, it merged the two copies of the new print rule **cleanly and wrongly** into two
+duplicated blocks, while raising conflicts only in the files that mattered less. The conflicts it
+reports are not the same set as the mistakes it makes.
