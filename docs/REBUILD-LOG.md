@@ -567,16 +567,16 @@ into a measurement that pointed the opposite way.
 
 ---
 
-## Phase 5 — two findings that landed on master mid-phase, 2026-08-18
+## Phase 5 — findings that landed on master mid-phase, 2026-08-18
 
-_Found while building direction 02 (dense / craft). Recorded here rather than on that branch because
-they are direction-agnostic and only one of the three directions gets merged — the same reasoning
+_Two fixes and a methodology note, all found while building direction 02 (dense / craft). Recorded
+here rather than on that branch because they are direction-agnostic and only one of the three directions gets merged — the same reasoning
 that put the fixes themselves on `master` in [#14](https://github.com/ali-wallick/Portfolio/pull/14),
 following the precedent [#11](https://github.com/ali-wallick/Portfolio/pull/11) set._
 
-The generalizable thing about both: **a defect that only exists in the gap between two subsystems is
-invisible to everything that tests either one.** Neither of these is a bug in the design, and neither
-is a bug in the resume pipeline. Both live in the seam.
+The generalizable thing about the two fixes: **a defect that only exists in the gap between two
+subsystems is invisible to everything that tests either one.** Neither is a bug in the design, and
+neither is a bug in the resume pipeline. Both live in the seam.
 
 ### `ch` is a font-dependent unit, so a measure written in it is a layout that resizes
 
