@@ -645,6 +645,25 @@ exists.
 - Responsive from the start. The old site had no viewport meta and rendered zoomed out on every
   phone ever made.
 
+#### If your direction self-hosts a webfont, two things will bite it
+
+Both were found while building a direction, both are direction-agnostic, and both are on `master` so
+that all three directions get them rather than only the one that merges. Same reasoning as PR #11.
+
+- **`ch` is a font-dependent unit, and `--measure` is written in it.** `1ch` is the width of the `0`
+  glyph, so every max-width in `ch` is a box that changes width when the font loads. On the dense
+  direction `64ch` resolved to **682px loaded and 570px in the fallback** — a 20% swing in the prose
+  column that reflowed the page under it, scored **0.197 CLS** on `/about`, and failed CI's
+  Lighthouse gate. It looked perfect locally, because a fast machine has the font before first paint
+  and the swap never happens. **Express every max-width in `rem`**, pinned to the width `ch` was
+  already producing: the rendered layout is identical and simply stops moving. The token is
+  deliberately still `ch` — the right rem value depends on the face you pick. See `tokens.css`.
+- **Print kills transitions now, and you should not undo it.** Switching to print media _starts_ any
+  transition on a property the print block changes, and `build-pdf.mjs` prints inside that window —
+  so a `transition: color` on `a` puts a different colour in the PDF on every build. `resume.css`
+  has a universal `transition: none !important` for paper. It is the one rule in that block that is
+  not a denylist, on purpose.
+
 ---
 
 ## Working here

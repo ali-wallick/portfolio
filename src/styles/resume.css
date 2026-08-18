@@ -165,6 +165,34 @@
     --measure: 68ch;
   }
 
+  /*
+   * Paper is a still frame, so nothing on it may be caught mid-animation.
+   *
+   * Not a theoretical tidy-up. Switching to print media *starts* any transition
+   * whose property the print rules below change — and `scripts/build-pdf.mjs`
+   * navigates and then prints, inside that window. A direction that puts
+   * `transition: color` on `a` therefore does not produce a wrong colour in the
+   * PDF; it produces a *different* colour on each build. Found while building a
+   * Phase 5 direction, where three contact links printed at rgb(15,16,19) on one
+   * capture and rgb(16,18,21) on the next. That instability is the diagnostic:
+   * a leak has one wrong value, a race has a new one every time.
+   *
+   * Deliberately a universal selector rather than a list, and it is the only
+   * rule in this block that is. Every other pin here is a denylist that a later
+   * design can walk around by using a property nobody enumerated — the failure
+   * mode the comment above already admits to. This one cannot be walked around,
+   * because animation on paper is never correct regardless of the design.
+   *
+   * A no-op on master by construction: nothing outside this file sets a
+   * transition or an animation today.
+   */
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+
   /* Not tokens, so they cannot be pinned above — but base.css can still set
      them, and each one moves paper. Weight and tracking on headings, wrap
      strategy on paragraphs, and the metrics of `.meta`, which the resume's

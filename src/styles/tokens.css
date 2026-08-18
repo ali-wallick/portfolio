@@ -56,7 +56,33 @@
   --space-12: 3rem;
   --space-16: 4rem;
 
-  /* --- Layout ----------------------------------------------------------- */
+  /* --- Layout -----------------------------------------------------------
+   *
+   * PHASE 5: `ch` is a font-dependent unit, and this token is a trap because of
+   * it. `1ch` is the width of the font's `0` glyph, so a max-width written in
+   * `ch` is a layout box whose width changes when a webfont finishes loading.
+   * There is no webfont on master — the stack above is all system faces, so
+   * nothing swaps and nothing moves. The moment a direction self-hosts a face,
+   * this token starts resizing every paragraph on the site mid-load.
+   *
+   * Measured, not predicted: on the dense direction `64ch` resolved to 682px in
+   * the loaded face and 570px in the fallback — a 20% swing in the width of the
+   * prose column, reflowing everything below it. It scored 0.197 CLS on /about
+   * and failed the Lighthouse gate, while every speed metric scored 1 and the
+   * page looked perfect locally, because a fast machine loads the font before
+   * first paint and the swap never happens.
+   *
+   * `ch` is seductive here because it means exactly the right thing —
+   * characters per line. The trap is that it only means that *after* the font
+   * arrives. **If your direction adds a webfont, express this and every other
+   * max-width in `rem`.** Pin it to the width `ch` was already producing and
+   * the rendered layout is unchanged; it just stops moving.
+   *
+   * Left as `ch` rather than converted, deliberately: the right rem value
+   * depends on the face a direction picks, so choosing one here would be
+   * choosing it for them. The print block in resume.css pins this separately
+   * and paper is unaffected either way.
+   */
   --measure: 68ch;
   --content-max: 60rem;
   --radius: 4px;
