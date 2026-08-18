@@ -6,7 +6,19 @@ end: '2016'
 roles:
   - title: UI Programmer
     start: '2015-06'
-highlights: []
+highlights:
+  - >-
+    Built UI across Firefall's HUD and menus — radar, PvP HUD, character
+    progression and elite-level screens, reward screens — through its Chinese
+    launch and worldwide relaunch overhaul.
+  - >-
+    Created shared libraries for common menu and HUD elements, and optimized the
+    UI system itself on an already-loaded client.
+highlightsExtended:
+  - >-
+    Worked at the boundary between the Lua/XML UI scripting layer and the
+    studio's C++ engine, on a team and codebase substantially larger than
+    anything I'd worked on before.
 summary: >-
   UI programmer on Firefall, a large-scale PC shooter — my first time working
   on a team of that size, building and standardizing menu and HUD elements

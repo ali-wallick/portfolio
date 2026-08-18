@@ -31,3 +31,22 @@ execFileSync('npx', ['astro', 'build'], {
   stdio: 'inherit',
   env: { ...process.env, ...(isProduction ? {} : { SHOW_DRAFTS: 'true' }) },
 });
+
+/**
+ * The resume PDFs are NOT generated here — they are committed in `public/` and
+ * copied into `dist/` by the Astro build above.
+ *
+ * This was tried the other way first. Cloudflare's build image is Ubuntu 24.04
+ * with a fixed apt package list that has `libgbm1` but not `libatk-1.0.so.0`,
+ * so Chromium downloads successfully and then dies at launch with "error while
+ * loading shared libraries". `playwright install-deps` can't rescue it either:
+ * the builder has no root, and the attempt fails with `su: Authentication
+ * failure`. GitHub Actions builds the same commit fine, because its runners
+ * ship the desktop libs.
+ *
+ * What runs instead is the browserless staleness check, so the guarantee
+ * survives the workaround: if the resume content changed and the PDFs weren't
+ * regenerated, this deploy fails rather than quietly shipping a resume that
+ * disagrees with the page it links from.
+ */
+execFileSync('node', ['scripts/build-pdf.mjs', '--check'], { stdio: 'inherit' });

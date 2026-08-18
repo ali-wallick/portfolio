@@ -1,0 +1,233 @@
+/*
+ * The resume, on screen and on paper.
+ *
+ * Phase 5 owns the rest of the site's design; the print half of this file is
+ * the one place Phase 4 is allowed to make typographic decisions, because a
+ * print stylesheet is the deliverable rather than a style choice. The screen
+ * half still obeys the standing rule: tokens only, no raw colors, no raw px
+ * font sizes.
+ *
+ * The print rules below are in pt on purpose. Screen tokens are relative units
+ * tuned for reflow; paper is a fixed 8.5×11in surface where the actual measure
+ * of a line matters, and "make the print output work" is not a decision Phase 5
+ * should have to re-litigate against a design system.
+ */
+
+/* --- Screen ------------------------------------------------------------- */
+
+.resume-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  align-items: baseline;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.resume-actions p {
+  margin: 0;
+}
+
+.resume-head h1 {
+  margin-top: 0;
+  margin-bottom: var(--space-1);
+}
+
+.resume-role {
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
+}
+
+.resume-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: var(--text-sm);
+  max-width: none;
+}
+
+.resume-section h2 {
+  font-size: var(--text-lg);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-1);
+  margin-bottom: var(--space-4);
+}
+
+.resume-job {
+  margin-bottom: var(--space-6);
+}
+
+/* Title and dates share a line on a wide screen and stack on a narrow one.
+   The old site had no viewport meta at all; every new page gets read on a
+   phone before it gets merged. */
+.resume-job-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0 var(--space-4);
+}
+
+.resume-job-head h3 {
+  font-size: var(--text-base);
+  margin: 0;
+}
+
+.resume-company {
+  font-weight: normal;
+}
+
+.resume-dates,
+.resume-job-meta {
+  margin: 0;
+}
+
+.resume-bullets {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-4);
+  max-width: var(--measure);
+}
+
+.resume-bullets li {
+  margin-bottom: var(--space-2);
+}
+
+.resume-skills {
+  max-width: none;
+}
+
+/* --- Paper --------------------------------------------------------------
+ *
+ * Everything below also drives `scripts/build-pdf.mjs`, which prints these
+ * exact pages with Chromium. What you see in the browser's print preview is
+ * what lands in the committed PDF.
+ */
+
+@page {
+  size: letter;
+  margin: 0.5in 0.6in;
+}
+
+@media print {
+  /* Dark mode is a screen affordance. Force the paper palette explicitly
+     rather than hoping the print pipeline ignores the media query. */
+  :root {
+    --color-bg: #ffffff;
+    --color-surface: #ffffff;
+    --color-text: #000000;
+    --color-text-muted: #333333;
+    --color-border: #999999;
+    --color-link: #000000;
+    --color-link-visited: #000000;
+  }
+
+  /* 9.4pt/1.3 is ordinary resume density, not a squeeze — but it is close
+     enough to the floor that shrinking type further to win space would start
+     to show. Past this point the honest lever is fewer bullets, which is what
+     `maxPages` in scripts/build-pdf.mjs forces the conversation about. */
+  body {
+    background: #ffffff;
+    color: #000000;
+    font-size: 9.4pt;
+    line-height: 1.3;
+  }
+
+  /* Site chrome is navigation. A resume that prints its own nav bar is the
+     exact "printed webpage" tell this stylesheet exists to avoid. */
+  .site-header,
+  .site-footer,
+  .skip-link,
+  .resume-actions {
+    display: none !important;
+  }
+
+  .layout {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Links are useful in a PDF and noisy in print — keep them live and
+     unadorned rather than appending href text after every one. */
+  a,
+  a:visited {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  .resume-head {
+    margin-bottom: 10pt;
+  }
+
+  .resume-head h1 {
+    font-size: 20pt;
+    line-height: 1.1;
+    margin: 0 0 1pt;
+    letter-spacing: -0.01em;
+  }
+
+  .resume-role {
+    font-size: 10.5pt;
+    color: #333333;
+    margin: 0 0 4pt;
+  }
+
+  .resume-contact {
+    font-size: 9pt;
+    gap: 0 12pt;
+    margin: 0;
+  }
+
+  .resume-section {
+    margin-bottom: 9pt;
+  }
+
+  /* A section heading alone at the foot of a page is the classic print bug. */
+  .resume-section h2 {
+    font-size: 9.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    border-bottom: 0.5pt solid #666666;
+    padding-bottom: 2pt;
+    margin: 0 0 7pt;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* Keep a job and its bullets together; splitting one across a page break is
+     what makes printed HTML look accidental. */
+  .resume-job {
+    margin-bottom: 7.5pt;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .resume-job-head h3 {
+    font-size: 10pt;
+  }
+
+  .resume-dates,
+  .resume-job-meta {
+    font-size: 9pt;
+    color: #333333;
+  }
+
+  .resume-bullets {
+    margin: 3pt 0 0;
+    padding-left: 12pt;
+    max-width: none;
+  }
+
+  .resume-bullets li {
+    margin-bottom: 2.5pt;
+  }
+
+  .resume-skills {
+    font-size: 9.5pt;
+    margin: 0;
+  }
+}

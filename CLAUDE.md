@@ -50,16 +50,16 @@ The full plan lives at `~/.claude/plans/i-first-built-this-glistening-book.md`.
 
 ## Phases
 
-| Phase | What                                                                | State     |
-| ----- | ------------------------------------------------------------------- | --------- |
-| 0     | Preserve — blog scrape, snapshot, asset inventory                   | ✅ merged |
-| 1     | Infrastructure — domain, DNS, email                                 | ✅ merged |
-| 2     | Foundation & agentic tooling                                        | ✅ merged |
-| 3     | Content: get it true                                                | ✅ merged |
-| 4     | Resume, one source                                                  |           |
-| 5     | Design                                                              |           |
-| 6     | Launch — favicon, OG, a11y, redirects, DNS cutover, wording revisit |           |
-| 7     | Keep it alive                                                       |           |
+| Phase | What                                                                | State          |
+| ----- | ------------------------------------------------------------------- | -------------- |
+| 0     | Preserve — blog scrape, snapshot, asset inventory                   | ✅ merged      |
+| 1     | Infrastructure — domain, DNS, email                                 | ✅ merged      |
+| 2     | Foundation & agentic tooling                                        | ✅ merged      |
+| 3     | Content: get it true                                                | ✅ merged      |
+| 4     | Resume, one source                                                  | 🚧 in progress |
+| 5     | Design                                                              |                |
+| 6     | Launch — favicon, OG, a11y, redirects, DNS cutover, wording revisit |                |
+| 7     | Keep it alive                                                       |                |
 
 **Sequencing principle: structure before skin.** Phases 2–4 produce a complete, correct,
 deliberately unstyled site. Design lands in Phase 5 onto content that already exists, so directions
@@ -362,6 +362,136 @@ pass still happens once, later, with fresh eyes and real styling.
 
 ---
 
+## Phase 4 gate outcome (2026-08-17)
+
+Four questions, settled. Do not relitigate.
+
+### 1. Single source, with real PDF files
+
+**Single-source, and the PDFs are generated at build time** — not a `window.print()` link, and not a
+separately designed document. `/resume` and `/resume/full` render from the `jobs` and `education`
+collections, and `scripts/build-pdf.mjs` prints those exact pages with Chromium into `dist/resume.pdf`
+and `dist/resume-full.pdf` using the site's own print stylesheet.
+
+The rejected option is worth naming so it doesn't come back: a hand-designed PDF looks sharper right
+up until the first time a job entry changes, and then it is a second copy of every fact on the site.
+That is precisely how the old site ended up calling the Marvel game "upcoming" on several pages at
+once.
+
+**Open follow-up, Ali's call, deliberately deferred:** if the generated PDF's typography disappoints
+in real use, a separately designed document is still on the table as a later swap. Revisit after the
+resume has actually been sent to someone. Nothing about the current setup blocks it.
+
+### 2. Both densities, as a superset — not two documents
+
+Ali wanted a one-page _and_ a two-page resume. The schema models it as one list plus an extension:
+`highlights` is the one-pager, `highlightsExtended` is appended for the long version. **The two-pager
+is a strict superset by construction**, so a bullet can never say one thing on the short version and
+something else on the long one — there is only ever one copy of it.
+
+`src/components/ResumeDocument.astro` is the only place either version renders; `variant` decides how
+much. Don't add a second component, and don't let the two routes accumulate their own copy.
+
+**`scripts/build-pdf.mjs` asserts page counts** (1 and 2) and fails the build if either overflows.
+This is a real guard, not a formality: bullets accrete, and without it the day someone adds a sixth
+Second Dinner highlight is the day the "one page" resume quietly becomes two — discovered by a hiring
+manager rather than by CI. If it fires, move a bullet to `highlightsExtended`; don't shrink the type.
+Print density is already at 9.4pt/1.3, which is normal resume density and close enough to the floor
+that further shrinking would show.
+
+### 3. Weighting and cuts
+
+One page, front-loaded: Second Dinner 5 bullets, MobilityWare 3, Red 5 2, Kaneva 3, one-line
+education, one Tools line. The two-pager adds 2 / 2 / 1 / 2 more.
+
+- **The GPA and Dean's List stay recorded and unrendered.** They are in
+  `src/content/education/georgia-tech.md` and `ResumeDocument` deliberately doesn't print `honors`.
+  Recording a fact is not the same as showing it.
+- **No PO Box, and no home address at all.** There is no sourced current city, so the resume header
+  carries email, site, and LinkedIn and nothing else. (The PO Box was never on the site — it only
+  exists in `resources/WallickAli-Resume.pdf` and the unreferenced `src/assets/images/resume.png`,
+  neither of which is served. See the loose end below.)
+- **The weighting problem is inverted from what you'd expect**, and this is the thing to remember:
+  the "Source material (2019 resume, verbatim)" sections are _richest for the oldest jobs_. Kaneva
+  has two solid bullets; Second Dinner — seven years, the most important entry — has one stale
+  sentence about "an unannounced mobile Marvel game." **Second Dinner's highlights come from the
+  Phase 3 Marvel Snap write-up, not from its 2019 bullet.** Writing bullets straight from source
+  material would have produced a resume weighted backwards.
+
+### 4. LinkedIn is a handoff, not a sync
+
+**No agent logs into the account.** The deliverable is `docs/LINKEDIN.md` — paste-ready blocks for
+Ali. Its role descriptions are the `highlights` + `highlightsExtended` bullets verbatim, i.e. exactly
+`/resume/full`, so LinkedIn stays the same single source rather than becoming a fourth place a fact
+can go stale.
+
+### Still open at the end of the gate
+
+Both need Ali, and neither can be guessed without inventing a fact:
+
+- **Two promotion years — both resolved 2026-08-17. Do not reopen either.**
+  - **Second Dinner: split.** Software Engineer II from 2019, Senior Software Engineer I from
+    **`2021-12`**. Ali supplied December 2021 and noted that if forced to a single year she'd say
+    2022 — a December promotion sits a fortnight from the boundary, so "2021" undersells the senior
+    tenure. Month precision makes the rounding question moot, and it's the only place the date is
+    visible: the resume prints `Previously Software Engineer II (2019 – Dec 2021)`.
+  - **Kaneva: stays a single entry**, Ali's call — the progression is fifteen years old and she's
+    comfortable with the flattening. **No date is needed to keep one entry**; the year was only ever
+    required to _split_ one. `Software Engineer` is sourced (her own 2019 resume flattened it that
+    way), so it isn't invented — but the site says `Lead UI Programmer` on the Kaneva project page
+    while the resume and About say `Software Engineer`. Raised with her; changing it needs no date
+    either, so it's a one-line edit whenever she wants it.
+- **Ali's current toolchain**, for the resume's Tools line. **Partly answered 2026-08-17** — Ali added
+  **GDScript**, so the line now reads `Unity · C# · Godot · GDScript · DeltaDNA · Lua · XML · C++`.
+  It is still derived strictly from each job's `tech` field, which means it remains a
+  languages-and-engines list with no workflow tooling, and DeltaDNA still sits next to Godot with
+  nothing marking the decade between them. The plan mentions Perforce and CI directionally; **a
+  planning note is not a source**, so nothing has been added on its authority. Ask again rather than
+  inferring.
+
+### Phase 4 follow-ups, deferred with Ali's agreement (2026-08-17)
+
+Ali's call: the resume is **factual enough to move on**, and both of these are improvements to
+something already true rather than corrections to something wrong. Neither blocks the merge.
+
+- **Detail the 2024–present Godot work, at a very high level.** Right now those two years exist on
+  the resume only inside Second Dinner's opening bullet ("then its next team from 2024 — the studio's
+  first game in Godot"), which is accurate but thin for what is now a substantial share of her recent
+  career. Every other era has real engineering detail and this one has a clause.
+
+  The constraint is the hard part and is **not negotiable**: `CLAUDE.md`'s Phase 3 gate outcome still
+  governs. The studio's public statement (7 August 2024, via the W4 Games investment) is the ceiling —
+  Godot, next game, nothing else. **No title, platform, or genre**, and nothing about features,
+  monetization, or how the studio operates. So this has to be written as _craft, not product_: the
+  kinds of systems and the kind of engineering, in the register the Marvel Snap write-up uses for its
+  pre-announcement years. Source it from Ali directly; there is no public material to mine, and this
+  is exactly the case where inventing plausible detail would be worst.
+
+  Lands in `highlights` / `highlightsExtended` on `src/content/jobs/second-dinner.md`, and probably
+  as a sentence or two in the Snap-adjacent narrative on About. Watch the one-page budget — the
+  one-pager currently fits with roughly 0.4in of slack, so adding a bullet likely means moving one
+  down to `highlightsExtended`. `npm run build:pdf` will say so rather than letting it silently
+  become two pages.
+
+- **A tone and layout pass on the resume specifically.** Phase 4 optimised for _true_ and _fits_, not
+  for how it reads or looks. This is the resume-scoped sibling of the wording revisit already booked
+  for Phase 6, and it should probably happen alongside it, once Phase 5's design exists to judge
+  against. Two things already known to be worth looking at: the bullets lean hard on em-dash asides
+  (a Phase 3 voice habit that reads denser in resume genre than in prose), and the print stylesheet's
+  9.4pt/1.3 density was tuned to make the one-pager fit rather than chosen for how it looks on paper.
+  Also see the apostrophes note under "Loose end" below.
+
+### Loose end, flagged not acted on
+
+`resources/WallickAli-Resume.pdf` and `src/assets/images/resume.png` (the old 1700×2200 resume image,
+referenced by nothing) both contain the PO Box and predate every fact on the current resume. Neither
+is served — `wrangler.jsonc` serves `dist/` only — and the repo is private, so there is no exposure
+today. It becomes one if this repo ever goes public, which **Phase 7's build-in-public page is the
+most likely reason to do**. Deleting them needs Ali's sign-off under the asset keep/drop rule, so
+they are deliberately still in place.
+
+---
+
 ## Design
 
 Phase 5 owns all of it. Until then:
@@ -383,11 +513,23 @@ Phase 5 owns all of it. Until then:
 ```bash
 npm run dev                        # localhost:4321, drafts visible
 npm run verify                     # everything CI runs
+npm run build:pdf                  # just the resume PDFs, against an existing dist/
 SHOW_DRAFTS=true npm run build     # what a Cloudflare preview serves
 ```
 
 Node is pinned by `.nvmrc` (22). Local dev on a newer Node is fine; CI and Cloudflare both read the
 file.
+
+`npm run build` also regenerates the resume PDFs into `public/`, which needs Chromium — installed by
+a `postinstall` line in `package.json` (~95 MB, headless shell only). `npm run dev` doesn't touch it.
+
+**The PDFs are committed artifacts, and that isn't a shortcut — Cloudflare physically cannot build
+them.** Its build image has no root and lacks Chromium's shared libraries, so the browser dies at
+launch there while GitHub Actions builds the same commit fine. Details in
+[`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md). **If you change resume content or layout, commit the
+regenerated `public/*.pdf` and `scripts/resume-pdf.lock.json` with it** — `npm run check:pdf` hashes
+every input and fails the deploy otherwise, so a stale resume can't ship, but it also can't fix
+itself.
 
 ### The review loop
 
@@ -430,11 +572,14 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 
 **Where things are:**
 
-| Path                      | What                                                                      |
-| ------------------------- | ------------------------------------------------------------------------- |
-| `src/content.config.ts`   | The content model. Start here.                                            |
-| `src/lib/content.ts`      | Collection queries and the only date/year formatting in the codebase.     |
-| `src/config/site.ts`      | Name, email, nav, social links (all `pending` until Phase 3 audits them). |
-| `scripts/check-links.mjs` | Post-build checks. Every rule is a regression guard for a real old bug.   |
-| `docs/REBUILD-LOG.md`     | Running record. Phase 7's source material.                                |
-| `snapshot/`               | The old site as it stood. The reference for "what did the old page say?"  |
+| Path                                  | What                                                                      |
+| ------------------------------------- | ------------------------------------------------------------------------- |
+| `src/content.config.ts`               | The content model. Start here.                                            |
+| `src/lib/content.ts`                  | Collection queries and the only date/year formatting in the codebase.     |
+| `src/config/site.ts`                  | Name, email, nav, social links (all `pending` until Phase 3 audits them). |
+| `scripts/check-links.mjs`             | Post-build checks. Every rule is a regression guard for a real old bug.   |
+| `scripts/build-pdf.mjs`               | Renders the resume routes to PDF and asserts their page counts.           |
+| `src/components/ResumeDocument.astro` | The resume, both densities. `variant` is the only difference.             |
+| `docs/LINKEDIN.md`                    | Paste-ready LinkedIn copy. A handoff for Ali, never an automated sync.    |
+| `docs/REBUILD-LOG.md`                 | Running record. Phase 7's source material.                                |
+| `snapshot/`                           | The old site as it stood. The reference for "what did the old page say?"  |

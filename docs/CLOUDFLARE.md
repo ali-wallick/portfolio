@@ -125,6 +125,32 @@ deploys will silently hide draft content and the review loop stops working.
 Node version comes from `.nvmrc` (22) — Cloudflare reads it automatically, so don't set
 `NODE_VERSION` by hand.
 
+### You cannot run a headless browser in a Cloudflare build
+
+Phase 4 tried to generate the resume PDFs during the build and hit a hard wall. Recording it so
+nobody spends an afternoon rediscovering it:
+
+- The build image is **Ubuntu 24.04 with a fixed apt package list**. It has `libgbm1` but **not**
+  `libatk-1.0.so.0` and the rest of Chromium's desktop dependencies. So `npx playwright install
+chromium` succeeds — the download is fine — and the browser then dies at launch with
+  `error while loading shared libraries: libatk-1.0.so.0`.
+- **`playwright install-deps` cannot rescue it.** It's an apt install, so it needs root, and the
+  builder doesn't grant any: the attempt fails with `Switching to root user to install
+dependencies... Password: su: Authentication failure`.
+- **GitHub Actions builds the identical commit without trouble**, because its runners ship the
+  desktop libs. A green Actions run tells you nothing about whether Cloudflare can do the same
+  thing.
+
+**So the PDFs are committed in `public/`**, which Astro copies into `dist/`, and Cloudflare serves
+them without a browser. `npm run build:pdf` regenerates them (locally or in Actions); `npm run
+check:pdf` verifies the committed ones are current by hashing every input that can change them, and
+runs in `build:ci` — so a deploy carrying a stale resume **fails instead of shipping**.
+
+The build command stays `npm run build:ci`, and `postinstall` still installs the headless shell for
+everywhere that _can_ run it. That placement is the same lesson Phase 2 learned with
+`workers_dev: true` — dashboard or API state that isn't also asserted in a committed file isn't a
+fix, it's a fact that happens to be true right now.
+
 ### Production builds fail until Phase 2 merges
 
 Expected, and not a misconfiguration. The production trigger builds `master`, and until the Phase 2

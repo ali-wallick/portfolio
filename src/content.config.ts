@@ -228,8 +228,23 @@ const jobs = defineCollection({
 
       /** One line for the site bio. */
       summary: z.string().min(1).max(280).optional(),
-      /** Resume bullets, strongest first. Phase 4 renders these verbatim. */
+      /**
+       * Resume bullets for the one-page resume, strongest first. Rendered
+       * verbatim.
+       */
       highlights: z.array(z.string()).default([]),
+      /**
+       * Extra bullets that only the two-page resume shows, appended after
+       * `highlights` rather than replacing them.
+       *
+       * Phase 4 wanted both a one-page and a two-page resume, and the obvious
+       * way to get that — two lists, or two documents — is the same shape that
+       * let the old site call the Marvel game "upcoming" on four pages at once.
+       * A superset cannot disagree with itself: the long version is *literally*
+       * the short one plus these, so trimming for space can never silently
+       * change what a bullet claims. Put a fact in exactly one array.
+       */
+      highlightsExtended: z.array(z.string()).default([]),
       tech: z.array(z.string()).default([]),
 
       /** Some roles earn a line on the resume but not a paragraph on the site. */

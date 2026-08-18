@@ -4,13 +4,42 @@ location: Atlanta, GA
 start: '2011'
 end: '2015'
 roles:
-  # TODO(phase-4): about.php describes starting as a Technical Support Engineer and
-  # becoming Lead UI Programmer. The 2019 resume flattens this to one title. Confirm
-  # the real progression and dates, then split this into the two or three entries it
-  # actually was — that progression is the strongest thing about this job.
+  # Settled 2026-08-17: stays a SINGLE entry. Ali's call — the progression is
+  # fifteen years old and she is comfortable with the flattening, and no date is
+  # needed to keep one entry. Don't reopen this looking for a promotion year;
+  # the year was only ever needed to *split* the entry.
+  #
+  # `Software Engineer` is sourced — it is how her own 2019 resume flattened the
+  # Technical Support Engineer → Lead UI Programmer progression that about.php
+  # describes. So it is not invented, but it is the least specific of the three
+  # titles, and note that the site says `Lead UI Programmer` on the Kaneva
+  # project page while the resume and About say `Software Engineer`. Raised with
+  # Ali; hers to change if she wants, and changing it needs no date either.
   - title: Software Engineer
     start: '2011'
-highlights: []
+# The progression itself lives in `roles[]`, not here — no bullet should
+# duplicate what the title line already says.
+highlights:
+  - >-
+    Architected a menu animation system adopted by both the UI and game teams,
+    after hand-coding every transition became the bottleneck.
+  - >-
+    Built many of Kaneva's core menus end to end in the in-house Lua menu system
+    — player and creator HUDs, inventory and bank, travel, events, and a visual
+    property editor for scripted objects — from artists' comps through layout to
+    functionality.
+  - >-
+    Part of the team that designed and scripted a Lua-based game development
+    environment on top of the virtual world.
+highlightsExtended:
+  - >-
+    Started in technical support, helping players with their in-world scripting
+    and building game templates — Treasure Hunt and Adventure among them — that
+    let players assemble small games of their own.
+  - >-
+    Also built context menus for people and objects, menus for swapping video and
+    Flash content on in-game objects, and the welcome and builder tutorials,
+    working with the engine and web teams whenever a menu touched either.
 summary: >-
   Grew from an entry-level engineer into the lead UI programmer over four
   years, leading a full HUD overhaul and building a menu animation system

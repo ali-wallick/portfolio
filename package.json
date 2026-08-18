@@ -7,8 +7,11 @@
     "node": ">=22.12.0"
   },
   "scripts": {
+    "postinstall": "playwright install --only-shell chromium",
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && npm run build:pdf",
+    "build:pdf": "node scripts/build-pdf.mjs",
+    "check:pdf": "node scripts/build-pdf.mjs --check",
     "build:ci": "node scripts/build-ci.mjs",
     "preview": "astro preview",
     "astro": "astro",
@@ -16,7 +19,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "links": "node scripts/check-links.mjs",
-    "verify": "npm run format:check && npm run check && npm run build && npm run links"
+    "verify": "npm run format:check && npm run check && npm run build && npm run check:pdf && npm run links"
   },
   "dependencies": {
     "astro": "^7.2.2"
@@ -24,6 +27,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@types/node": "^26.2.0",
+    "playwright": "^1.62.1",
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^6.0.3",

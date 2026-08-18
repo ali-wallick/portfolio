@@ -305,3 +305,180 @@ prose (About, homepage), a ~150-file asset migration, and 5 featured write-ups r
 `snapshot/` and `content/archive/`. No subagents. The phase-gate handoff worked as designed — starting
 from `CLAUDE.md`'s already-settled framing meant zero re-litigation of the three gate questions, and
 the session's tool calls went entirely into sourcing and writing rather than rediscovering context.
+
+---
+
+## Phase 4 gate — conversation, 2026-08-17
+
+### The gate's own verification step paid for itself again
+
+The plan added a "check load-bearing facts against primary sources" step to every gate after Phase 3
+earned it. Phase 4's pass produced five corrections in about six tool calls, three of which changed
+what got asked:
+
+1. **`resume.astro` was not a placeholder.** The brief described it that way; it already read
+   `getJobs('resume')` and `getEducation()`, formatted spans, and had working conditional branches
+   for multi-entry `roles[]` and non-empty `highlights[]`. Phase 2's promised data flow was done.
+   Phase 4 added content, layout, and print — not wiring.
+2. **The PO Box wasn't on the site, and never had been.** The only occurrence of the string anywhere
+   in the repo was the warning comment telling us not to reintroduce it. The actual PO Box lives in
+   two committed-but-unserved files. Worth checking before writing a task to "remove" something.
+3. **The schema already accepted year-only dates.** `datePart` takes `YYYY` or `YYYY-MM`, so
+   splitting `roles[]` needs "promoted in 2022" and not a month — which made the blocking gate
+   question materially cheaper to answer than its TODOs implied.
+4. **Kaneva's structured data contradicted its own prose.** `roles[]` held one entry titled
+   `Software Engineer` — matching _neither_ end of the real Technical Support Engineer → Lead UI
+   Programmer progression — while the About page two paragraphs up already claimed the progression in
+   words. The narrative and the data disagreed, and only the narrative was right.
+5. **The weighting problem was inverted.** The "Source material (2019 resume, verbatim)" blocks are
+   richest for the _oldest_ jobs. Second Dinner — seven years, the most important entry — had exactly
+   one stale sentence describing the game as unannounced. Writing bullets straight from the source
+   material, which is what the phase brief literally said to do, would have produced a resume
+   weighted backwards. Second Dinner's highlights came from the Phase 3 Snap write-up instead.
+
+Item 5 is the one worth generalizing: **"write X from the source material" assumes the source
+material is evenly distributed, and it usually isn't.** Check the distribution before trusting the
+instruction.
+
+---
+
+## Phase 4 — Resume, one source, 2026-08-17
+
+### Two densities without two documents
+
+Ali asked for both a one-page and a two-page resume. The obvious implementations — two components,
+or two Markdown files — are the same shape that let the old site describe the Marvel game as
+"upcoming" on four pages simultaneously, because each page owned its own copy of the fact.
+
+What shipped instead: `highlights` is the one-pager, `highlightsExtended` is appended for the long
+version, and one component renders both with a `variant` prop. The long version is a **strict
+superset by construction** rather than by discipline. A bullet cannot disagree with itself across
+versions because there is only ever one copy of it. The same arrays are then pasted verbatim into
+`docs/LINKEDIN.md`, so the off-site profile is the same single source rather than a fourth surface.
+
+### The page-count assertion earned its keep on its first run
+
+`scripts/build-pdf.mjs` renders both routes with Chromium and fails if either exceeds its page limit.
+It fired immediately: the one-pager came out at two pages. That is exactly the failure it exists to
+catch, and it caught it before a human ever opened the PDF.
+
+The fix process is the interesting part, because the first instinct was wrong. Trimming ~40 words
+across the bullets moved the content height by **0.12in** — the section heights came back
+byte-identical to two decimal places, which initially looked like a stale build. It wasn't: the
+trims removed words without removing _wrapped lines_. Cutting words only helps when it drops a line.
+
+Getting a real number required measuring the page, and the first measurement was also wrong —
+`getBoundingClientRect` under `emulateMedia({media:'print'})` still uses the **screen viewport
+width**, so it reported 8.34in against a 9.90in budget and said everything fit. At the true printable
+width (701px ≈ 7.3in) the same content measured 10.12in. **Print-media emulation does not imply
+print geometry**; the viewport has to be set to the page's content box or the measurement flatters
+the layout by about 20%.
+
+### A directory shadowed a page, and only the second route noticed
+
+The PDF script serves `dist/` over HTTP rather than `file://`, because every internal href on this
+site is root-relative and those resolve against the filesystem root under `file://` — you get a PDF
+that looks nearly right and is silently missing its stylesheet.
+
+Adding `/resume/full` created `dist/resume/`, which meant the request for `/resume` matched the
+**directory** before `resume.html`, since the resolver only checked `existsSync`. `readFile` on a
+directory throws `EISDIR`, so `/resume` 500'd while `/resume/full` worked fine. Fixed with
+`statSync().isFile()`. The general shape is worth remembering: adding a nested route can shadow its
+own parent, and the symptom shows up on the route you _didn't_ add.
+
+### Chromium went in as a committed line — and then Cloudflare refused to run it
+
+The resume PDFs need a headless browser, and the Cloudflare build command lives in the dashboard.
+Patching it there would have repeated Phase 2's `workers_dev: true` lesson exactly, so the install
+went in as a `postinstall` script in `package.json` (`playwright install --only-shell chromium`,
+~95 MB rather than the full 180 MB), which `npm ci` picks up everywhere from one line anyone can
+read in a checkout.
+
+**That was the right placement and the wrong plan, and the gap between those took three pushes to
+find.** The install worked perfectly on Cloudflare. The browser then died at launch:
+
+```
+error while loading shared libraries: libatk-1.0.so.0: cannot open shared object file
+```
+
+Cloudflare's build image is Ubuntu 24.04 with a **fixed apt package list** — it carries `libgbm1`
+but none of Chromium's desktop dependencies. The documented escape hatch, `playwright install-deps`,
+is an apt install and needs root, which the builder doesn't grant:
+
+```
+Switching to root user to install dependencies...
+Password: su: Authentication failure
+```
+
+**The most instructive part: GitHub Actions built the identical commit green, twice.** Its runners
+ship the desktop libs, so the entire path — postinstall, browser launch, PDF render, page-count
+assertion — passed CI while the deploy that actually serves the site failed. A green CI run said
+nothing about the environment that matters. Worth generalizing: when two CI systems build the same
+repo, they are not redundant, and the one you're not watching is the one that will surprise you.
+
+The fix inverts the design. The PDFs are committed in `public/`, Astro copies them into `dist/`, and
+Cloudflare serves them with no browser involved. That reintroduces drift risk, which this repo
+doesn't accept on a handshake — so `build-pdf.mjs --check` hashes every input that can change the
+PDFs (job files, education, the resume components, its stylesheets, the site config) and fails if
+the committed files are stale. It needs no browser, so it runs inside `build:ci`: **a deploy
+carrying an out-of-date resume fails instead of shipping.** The check was verified by actually
+breaking it — touching a job file exits 1, restoring it exits 0. A staleness check nobody has seen
+fail is just a comment.
+
+A second reason committing turned out better than regenerating per-deploy, which wasn't the original
+motivation: `--font-body` is `system-ui`, which resolves to a different typeface on macOS than on
+Linux. The committed PDF is the document Ali actually reviewed, not a Linux re-render of it.
+
+### …and then that same fact broke CI, one step after being written down
+
+Worth recording without softening, because it's the most instructive mistake of the phase. The
+freshness guarantee shipped as two checks in one CI step:
+
+```yaml
+run: npm run check:pdf && git diff --exit-code --stat -- public
+```
+
+The first is the input hash — platform-independent, correct. The second asserts the regenerated
+PDFs are byte-identical to the committed ones. CI reported exactly that split:
+
+```
+✓ committed resume PDFs are current.
+ public/resume-full.pdf | Bin 174896 -> 38779 bytes
+ public/resume.pdf      | Bin 167607 -> 33795 bytes
+```
+
+A Linux runner renders these at a fifth of the macOS size, because `system-ui` resolves to a
+different typeface and a different set of embedded font subsets. Byte equality across platforms is
+not a property these files have — **which `build-pdf.mjs`'s own header comment already said, in the
+paragraph explaining why committing beats regenerating.** The belt-and-braces instinct added a
+second check that contradicted the reasoning behind the first one, and the redundancy was the bug.
+
+Two things generalize. **A second check is not free** — it can encode an assumption the first check
+was specifically designed to avoid. And **an artifact's identity is not its bytes**: the useful
+question was "was this built from the current inputs", which the hash answers, not "is this the same
+file", which nothing portable can.
+
+The consolation is that the mistake was cheap and loud, which is the whole argument for mechanical
+checks: it failed in CI in under a minute rather than becoming a stale PDF nobody noticed. Keeping
+the full build in CI is still worth it for a reason that survived the fix — it's the only
+environment that can launch a browser at all, so it exercises generation end to end and re-checks
+both page counts against a second font stack, which is a stricter layout test than macOS alone.
+
+### Two things deliberately not done
+
+- **The apostrophes.** YAML front matter doesn't go through Astro's smartypants, so the resume renders
+  typewriter apostrophes while the Markdown project bodies render curly ones. Fixing only the resume
+  would have created a _third_ state for Phase 6's wording pass to untangle, and straight apostrophes
+  in a resume PDF are unremarkable. Left alone, noted for Phase 6.
+- **Deleting the old resume PNG and PDF.** Both carry the PO Box, neither is served, and the repo is
+  private — so there's no exposure today, only a trap for whenever Phase 7's build-in-public page
+  makes going public attractive. Deleting them falls under the asset keep/drop check-in rule, so it
+  was flagged rather than done.
+
+### Cost notes
+
+Opus 5, one session, gate plus execution. Zero subagents, and the judgment call there was easy: the
+whole surface was four job files, one schema, one page, and a plan file — readable directly, and the
+gate's five corrections all came from reading primary sources that a subagent's summary would have
+flattened. The measure-then-fix loop on the print layout was the only place the session spent real
+tool calls, and it replaced what would otherwise have been four or five blind build-and-check cycles.

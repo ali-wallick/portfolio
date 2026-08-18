@@ -7,7 +7,27 @@ end: '2019'
 roles:
   - title: Software Engineer II
     start: '2016'
-highlights: []
+highlights:
+  - >-
+    Architected Vegas Blvd Slots' live-ops systems — a server-controllable store
+    and a DeltaDNA integration driving in-app messaging, promo carousels, and
+    eventing, with customizable text so marketing could run campaigns without
+    engineering.
+  - >-
+    Engineered new slot machines and their features and bonus games, on a title
+    carrying 50+ machines plus rewards, gifting, leagues, and tournaments.
+  - >-
+    Pitched It Fits I Sits at the studio game jam and built the week-long
+    prototype, focused on a level editor that exported JSON and let us author 61
+    levels for pitch day. Won People's Choice; other teams took it to release,
+    later as Puzzle Cats.
+highlightsExtended:
+  - >-
+    Led cross-cutting work that spanned the whole title, including GDPR support
+    and keeping the game current through several major Unity version upgrades.
+  - >-
+    Ported the previous slots title, Hot Streak Slots, from native iOS to Unity,
+    and built blackjack, video poker, and keno for an early unreleased casino app.
 summary: >-
   Three years building casino mobile games in Unity, most of it on Vegas Blvd
   Slots. Pitched a game jam prototype, It Fits I Sits, that later shipped as

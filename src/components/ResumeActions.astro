@@ -1,0 +1,41 @@
+---
+/**
+ * Screen-only chrome above the resume: switch density, or grab a PDF.
+ *
+ * Deliberately not part of `ResumeDocument` — this is navigation, not resume
+ * content, and `src/styles/resume.css` hides it entirely when printing. If it
+ * lived inside the document it would end up in the PDF, which is precisely the
+ * "printed webpage" look the print stylesheet exists to avoid.
+ */
+interface Props {
+  current: 'concise' | 'full';
+}
+
+const { current } = Astro.props;
+
+const versions = [
+  { key: 'concise', label: 'One page', href: '/resume', pdf: '/resume.pdf' },
+  { key: 'full', label: 'Two pages', href: '/resume/full', pdf: '/resume-full.pdf' },
+] as const;
+
+const active = versions.find((v) => v.key === current)!;
+const other = versions.find((v) => v.key !== current)!;
+---
+
+<div class="resume-actions" role="group" aria-label="Resume versions">
+  <p class="meta">
+    <strong>{active.label}</strong> · <a href={other.href}>Switch to {other.label.toLowerCase()}</a>
+  </p>
+  {
+    /* A real file, generated from this exact page at build time — not a
+       `window.print()` link that makes the reader produce their own.
+
+       Expected: this 404s under `npm run dev`. The PDFs are written into
+       `dist/` by scripts/build-pdf.mjs, which runs after `astro build`, so
+       there is nothing behind this link until the site is built. Not a bug to
+       chase — `npm run links` checks the built output, which is what ships. */
+  }
+  <p class="meta">
+    <a href={active.pdf} download>Download PDF</a>
+  </p>
+</div>

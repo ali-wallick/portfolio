@@ -1,0 +1,141 @@
+---
+import { getJobs, getEducation, formatSpan, currentTitle } from '~/lib/content';
+import { site, socials } from '~/config/site';
+
+/**
+ * The resume, at two densities, from one source.
+ *
+ * Phase 4 wanted both a one-page and a two-page resume. Two components — or
+ * two Markdown documents — would have been faster and would have reintroduced
+ * exactly the failure mode this whole content model exists to prevent: the old
+ * site described the Marvel game as "upcoming" on four pages simultaneously
+ * because four pages each owned their own copy of the fact.
+ *
+ * So there is one component and one collection, and `variant` only decides how
+ * much of it renders. `full` is a strict superset of `concise` — it appends
+ * `highlightsExtended` to `highlights` rather than swapping in a different
+ * list. A bullet cannot say one thing on the short version and another on the
+ * long one, because there is only ever one copy of it.
+ */
+interface Props {
+  variant: 'concise' | 'full';
+}
+
+const { variant } = Astro.props;
+const isFull = variant === 'full';
+
+const jobs = await getJobs('resume');
+const education = await getEducation();
+
+const linkedIn = socials.find((s) => s.label === 'LinkedIn' && s.status === 'active');
+
+/**
+ * Skills, derived from the `tech` already recorded on each job rather than
+ * typed out again here — same one-source rule as everything else. `getJobs`
+ * returns most-recent-first, so dedupe-preserving-order puts current work at
+ * the front for free.
+ *
+ * Ali added GDScript on 2026-08-17. Workflow tooling (version control, CI,
+ * profiling) is still absent and deliberately so: every entry here traces to a
+ * job's `tech`, and the plan's mention of Perforce and CI is a planning note,
+ * not a source. Ask her rather than inferring it from the stack.
+ */
+const skills = [...new Set(jobs.flatMap((job) => job.data.tech))];
+
+/** `2011` from `2011-05`; the year alone is all a degree line needs. */
+const gradYear = (value: string) => value.slice(0, 4);
+---
+
+<article class="resume">
+  {
+    /* The site header carries this on screen, but a printed page has no nav —
+       and a PDF that doesn't say whose resume it is on the page itself is a
+       PDF that gets separated from its filename and lost. */
+  }
+  <header class="resume-head">
+    <h1>{site.name}</h1>
+    <p class="resume-role">{site.role}</p>
+    <ul class="resume-contact">
+      <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+      <li><a href={site.url}>{site.url.replace(/^https?:\/\//, '')}</a></li>
+      {
+        linkedIn && (
+          <li>
+            <a href={linkedIn.url}>{linkedIn.url.replace(/^https?:\/\/(www\.)?/, '')}</a>
+          </li>
+        )
+      }
+    </ul>
+  </header>
+
+  <section class="resume-section" aria-labelledby="experience">
+    <h2 id="experience">Experience</h2>
+    {
+      jobs.map((job) => {
+        const bullets = isFull
+          ? [...job.data.highlights, ...job.data.highlightsExtended]
+          : job.data.highlights;
+        // Oldest first reads as a progression; `roles` is already stored that
+        // way. Each earlier role ran until the next one started, which is the
+        // only place a promotion date is actually visible — recording one
+        // without printing it would make `roles[]` a fact nobody can read.
+        const earlierRoles = job.data.roles
+          .slice(0, -1)
+          .map((r, i) => `${r.title} (${formatSpan(r.start, job.data.roles[i + 1]!.start)})`);
+
+        return (
+          <section class="resume-job">
+            <div class="resume-job-head">
+              <h3>
+                {currentTitle(job)} <span class="resume-company">· {job.data.company}</span>
+              </h3>
+              <p class="meta resume-dates">{formatSpan(job.data.start, job.data.end)}</p>
+            </div>
+            <p class="meta resume-job-meta">
+              {job.data.location}
+              {earlierRoles.length > 0 && <> · Previously {earlierRoles.join(', ')}</>}
+            </p>
+            {bullets.length > 0 && (
+              <ul class="resume-bullets">
+                {bullets.map((h) => (
+                  <li>{h}</li>
+                ))}
+              </ul>
+            )}
+          </section>
+        );
+      })
+    }
+  </section>
+
+  <section class="resume-section" aria-labelledby="education">
+    <h2 id="education">Education</h2>
+    {
+      education.map((entry) => (
+        <section class="resume-job">
+          <div class="resume-job-head">
+            <h3>
+              {entry.data.degree} {entry.data.field}{' '}
+              <span class="resume-company">· {entry.data.school}</span>
+            </h3>
+            <p class="meta resume-dates">{gradYear(entry.data.end)}</p>
+          </div>
+          {/* `honors` is populated in the collection and deliberately not
+               rendered. A 2011 GPA and Dean's List are not load-bearing fifteen
+               years into a career — recording a fact is not the same as
+               showing it. */}
+          <p class="meta resume-job-meta">{entry.data.location}</p>
+        </section>
+      ))
+    }
+  </section>
+
+  {
+    skills.length > 0 && (
+      <section class="resume-section" aria-labelledby="skills">
+        <h2 id="skills">Tools</h2>
+        <p class="resume-skills">{skills.join(' · ')}</p>
+      </section>
+    )
+  }
+</article>

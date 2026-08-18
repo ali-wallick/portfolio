@@ -1,0 +1,22 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import ResumeDocument from '~/components/ResumeDocument.astro';
+import ResumeActions from '~/components/ResumeActions.astro';
+import '~/styles/resume.css';
+
+/**
+ * The two-page resume — the same document as `/resume`, with each job's
+ * `highlightsExtended` bullets appended.
+ *
+ * It is a superset by construction, not by discipline: there is one component
+ * and one set of bullets, and `variant` only decides how many of them render.
+ */
+---
+
+<BaseLayout
+  title="Resume (full)"
+  description="Ali Wallick's full resume — game developer, 15 years in UI and systems engineering."
+>
+  <ResumeActions current="full" />
+  <ResumeDocument variant="full" />
+</BaseLayout>

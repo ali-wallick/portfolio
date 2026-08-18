@@ -23,6 +23,16 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
 
+      # `npm ci` runs `playwright install --only-shell chromium` via postinstall,
+      # because the resume PDFs are generated from the built pages by
+      # scripts/build-pdf.mjs. That is ~95 MB, so cache it on the Playwright
+      # version rather than re-downloading it on every push.
+      - name: Cache Playwright browser
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
       - run: npm ci
 
       - name: Formatting
@@ -37,6 +47,21 @@ jobs:
       # is the thing that actually ships.
       - name: Build
         run: npm run build
+
+      # Hash-based, NOT a byte comparison of the PDFs themselves. The build step
+      # above does regenerate them here, but `--font-body` is `system-ui`, so a
+      # Linux runner renders a different (and much smaller) file than the macOS
+      # machine that produced the committed one — 33 KB against 167 KB. Byte
+      # equality across platforms is not a property these files have, and
+      # asserting it just fails every run.
+      #
+      # What the build step is genuinely worth doing here: it's the only place
+      # PDF *generation* runs at all, since Cloudflare can't launch a browser.
+      # It exercises build-pdf.mjs end to end and re-checks both page counts
+      # against a second font stack, which is a stricter layout test than macOS
+      # alone.
+      - name: Resume PDFs are current
+        run: npm run check:pdf
 
       - name: Link & markup checks
         run: npm run links
