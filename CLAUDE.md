@@ -56,8 +56,8 @@ The full plan lives at `~/.claude/plans/i-first-built-this-glistening-book.md`.
 | 1     | Infrastructure — domain, DNS, email                                 | ✅ merged      |
 | 2     | Foundation & agentic tooling                                        | ✅ merged      |
 | 3     | Content: get it true                                                | ✅ merged      |
-| 4     | Resume, one source                                                  | 🚧 in progress |
-| 5     | Design                                                              |                |
+| 4     | Resume, one source                                                  | ✅ merged      |
+| 5     | Design                                                              | 🚧 in progress |
 | 6     | Launch — favicon, OG, a11y, redirects, DNS cutover, wording revisit |                |
 | 7     | Keep it alive                                                       |                |
 
@@ -494,7 +494,13 @@ they are deliberately still in place.
 
 ## Design
 
-Phase 5 owns all of it. Until then:
+Phase 5 is open — see the Phase 5 gate conversation starter appended to the plan file
+(`~/.claude/plans/i-first-built-this-glistening-book.md`) for the four gate questions (direction
+count/spread, what "reinterpret `nav.js`" means concretely, type/color as real choices, motion as a
+first-class decision). This section stays the pre-Phase-5 reference until the gate lands a real
+system here.
+
+Until then:
 
 - `src/styles/tokens.css` holds **placeholder** tokens. They are deliberately boring — a slot for a
   decision, not a decision.
