@@ -123,6 +123,67 @@
     --color-border: #999999;
     --color-link: #000000;
     --color-link-visited: #000000;
+
+    /* The list above is a denylist pretending to be a design system: it pins
+       the tokens that existed when it was written, and silently lets through
+       any token added later. Phase 5 is about to add several, and this file
+       drives a PDF with a hard page-count assertion in scripts/build-pdf.mjs —
+       so a token that slips through does not fail loudly, it reflows the
+       resume and fails the build one bullet later, or worse, doesn't.
+       Everything below pins a role that base.css can reach. Phase 4's values,
+       verbatim, so this is a no-op today by construction.
+
+       IF YOU ADD A TOKEN, ADD IT HERE. */
+    --color-heading: #000000;
+    --color-plate: #666666;
+    --color-accent-block: #ffffff;
+    --color-on-accent: #000000;
+    --color-on-accent-link: #000000;
+
+    --font-body:
+      system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+      'Apple Color Emoji', 'Segoe UI Emoji';
+    --font-display: var(--font-body);
+    --font-heading: var(--font-body);
+    --font-sans: var(--font-body);
+    /* Deliberately not a mono stack. Paper is set in one face; a design that
+       gives `.meta` a monospace would otherwise embed it in the PDF, because
+       the resume's dates and locations carry that class. */
+    --font-mono: var(--font-body);
+
+    --text-xs: 0.8rem;
+    --text-sm: 0.9rem;
+    --text-base: 1rem;
+    --text-lg: 1.25rem;
+    --text-xl: 1.563rem;
+    --text-2xl: 1.953rem;
+    --text-3xl: 2.441rem;
+    --leading-tight: 1.2;
+    --leading-body: 1.6;
+    --tracking-display: normal;
+    --tracking-label: normal;
+    --measure: 68ch;
+  }
+
+  /* Not tokens, so they cannot be pinned above — but base.css can still set
+     them, and each one moves paper. Weight and tracking on headings, wrap
+     strategy on paragraphs, and the metrics of `.meta`, which the resume's
+     dates and locations use. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: bold;
+    letter-spacing: normal;
+  }
+
+  p {
+    text-wrap: auto;
+  }
+
+  .meta {
+    line-height: inherit;
+    letter-spacing: normal;
   }
 
   /* 9.4pt/1.3 is ordinary resume density, not a squeeze — but it is close

@@ -481,6 +481,33 @@ something already true rather than corrections to something wrong. Neither block
   9.4pt/1.3 density was tuned to make the one-pager fit rather than chosen for how it looks on paper.
   Also see the apostrophes note under "Loose end" below.
 
+  **Do the print-leak guard as part of this pass** (agreed 2026-08-18, during Phase 5's first
+  direction). `src/styles/resume.css`'s `@media print` block pins the paper palette by redefining
+  tokens — and it pins _the tokens that existed when it was written_, silently passing through any
+  added later. That makes it a denylist wearing a design system's clothes, which is exactly the
+  failure mode the content model's guard table exists to rule out. It bit on Phase 5's first
+  direction: green section headings, an embedded Menlo, and 19pt of extra height on a document with
+  a hard 1-page assertion in `scripts/build-pdf.mjs`. It still fit, by luck.
+
+  That was fixed by enumerating exhaustively, which works today and is **not** the real fix — the
+  block is only complete for the properties that exist now. A direction that gives `.meta` a
+  `font-variant-numeric` or a `text-transform` leaks again, and nothing says so. Two real options,
+  and the second is the one that matches how this repo handles everything else:
+
+  1. Scope the screen half of `resume.css` inside `@media screen`, so screen rules cannot reach
+     paper at all.
+  2. **Commit the print-geometry differ as a build guard.** Playwright with
+     `emulateMedia({ media: 'print' })`, dumping position, size, font, weight, family, tracking and
+     colour for every element on both resume routes, diffed against a committed baseline. It names
+     the offending element instead of reporting that a number moved. It was a throwaway script
+     during Phase 5 and it took the leak from 123 differing elements to 0 in three iterations —
+     chasing the same bug by PDF file size got nowhere, because PDF bytes move with font subsetting
+     and say nothing about layout.
+
+  The point of preferring (2): the page-count assertion already catches a leak that costs a whole
+  page, and catches nothing smaller. A 19pt reflow is invisible to it right up until the day it
+  isn't, and then it surfaces as "the resume is two pages now" with no indication why.
+
 ### Loose end, flagged not acted on
 
 `resources/WallickAli-Resume.pdf` and `src/assets/images/resume.png` (the old 1700×2200 resume image,
@@ -642,6 +669,12 @@ launch there while GitHub Actions builds the same commit fine. Details in
 regenerated `public/*.pdf` and `scripts/resume-pdf.lock.json` with it** — `npm run check:pdf` hashes
 every input and fails the deploy otherwise, so a stale resume can't ship, but it also can't fix
 itself.
+
+**And if you add a design token, add it to `resume.css`'s `@media print` block too.** That block
+pins paper to the Phase 4 palette and type scale by redefining tokens, and it only covers the ones
+listed in it — anything new reaches the PDF. The page-count assertion catches a leak big enough to
+cost a page and nothing smaller, which is how Phase 5 shipped 19pt of silent reflow. See the
+print-leak guard note under Phase 4's follow-ups.
 
 ### The review loop
 
