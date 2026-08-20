@@ -50,16 +50,16 @@ The full plan lives at `~/.claude/plans/i-first-built-this-glistening-book.md`.
 
 ## Phases
 
-| Phase | What                                                                | State          |
-| ----- | ------------------------------------------------------------------- | -------------- |
-| 0     | Preserve — blog scrape, snapshot, asset inventory                   | ✅ merged      |
-| 1     | Infrastructure — domain, DNS, email                                 | ✅ merged      |
-| 2     | Foundation & agentic tooling                                        | ✅ merged      |
-| 3     | Content: get it true                                                | ✅ merged      |
-| 4     | Resume, one source                                                  | ✅ merged      |
-| 5     | Design                                                              | 🚧 in progress |
-| 6     | Launch — favicon, OG, a11y, redirects, DNS cutover, wording revisit |                |
-| 7     | Keep it alive                                                       |                |
+| Phase | What                                                                | State     |
+| ----- | ------------------------------------------------------------------- | --------- |
+| 0     | Preserve — blog scrape, snapshot, asset inventory                   | ✅ merged |
+| 1     | Infrastructure — domain, DNS, email                                 | ✅ merged |
+| 2     | Foundation & agentic tooling                                        | ✅ merged |
+| 3     | Content: get it true                                                | ✅ merged |
+| 4     | Resume, one source                                                  | ✅ merged |
+| 5     | Design                                                              | ✅ merged |
+| 6     | Launch — favicon, OG, a11y, redirects, DNS cutover, wording revisit |           |
+| 7     | Keep it alive                                                       |           |
 
 **Sequencing principle: structure before skin.** Phases 2–4 produce a complete, correct,
 deliberately unstyled site. Design lands in Phase 5 onto content that already exists, so directions
@@ -639,7 +639,8 @@ exists.
 
 ### Standing rules (unchanged by the gate)
 
-- `src/styles/tokens.css` still holds **placeholder** color and type tokens. Motion is now real.
+- `src/styles/tokens.css` holds the **shipped** palette and type scale as of Phase 5. Nothing in it
+  is a placeholder any more.
 - **Use the variables.** Never write a raw color or a raw `px` font size in a component. Phase 5
   should be a palette-and-type swap, not a hunt through every file.
 - Responsive from the start. The old site had no viewport meta and rendered zoomed out on every
@@ -663,6 +664,82 @@ that all three directions get them rather than only the one that merges. Same re
   so a `transition: color` on `a` puts a different colour in the PDF on every build. `resume.css`
   has a universal `transition: none !important` for paper. It is the one rule in that block that is
   not a denylist, on purpose.
+
+### Phase 5 execution outcome (2026-08-20)
+
+**Direction 03, playful / toy, in the arcade-dimmed palette.** Merged via
+[PR #19](https://github.com/ali-wallick/Portfolio/pull/19) at `255d582`. Directions 01 (palette
+revival, [#12](https://github.com/ali-wallick/Portfolio/pull/12)), 02 (dense / craft,
+[#13](https://github.com/ali-wallick/Portfolio/pull/13)) and 04 (the hybrid,
+[#18](https://github.com/ali-wallick/Portfolio/pull/18)) are closed. Their branches are kept.
+
+The direction's thesis: **the play is in the interaction layer, not the paint.** A still reads as a
+confident, information-dense portfolio; using it makes it obvious a game developer built it. That
+was a deliberate answer to the risk the brief named — whimsy undercutting a Marvel Snap credit in
+the two seconds a hiring manager spends deciding whether to forward it.
+
+Two devices carry it, each with a rule attached:
+
+- **The reticle.** One element that travels to whatever is pointed at or tabbed to. Rule: it
+  decorates, never informs. The native focus ring stays underneath, so keyboard users lose nothing
+  if the script never runs.
+- **Height.** An unblurred shadow, and **height means pressable**. Nothing decorative gets height,
+  which is what stops the device becoming a texture applied to every box on the page.
+
+**Colour is three layers, each with a job** — magenta marks _where you are_ (reticle, focus, current
+page), blue marks _where you can go_ (links, and only links), and five status hues mark _what a
+thing is_, one per `status` enum value. Adding a status without adding a colour pair falls back to
+the neutral pair, which is legible but says nothing. Add both.
+
+#### Two things that were decided twice, and the second answer is the one that stuck
+
+- **The direction was chosen before its colour was.** Ali picked 03 on behaviour while explicitly
+  disliking the lilac-and-coral it happened to be built in. Rather than guess, four candidate
+  palettes went up behind a live switcher on one preview — because the only comparison that matters
+  is flipping between them on the _same_ page, which separate branches make impossible. Arcade won,
+  then got five riffs of its own on one axis: how dark its light mode should be.
+- **Near-white was the palette at its weakest.** Arcade's identity is saturated accents holding
+  their own against a dark ground, and near-white is where magenta and cyan look cheapest. The
+  shipped ground is off white with a violet cast lifted from the dark theme — the first version
+  where the two themes read as the same site.
+
+#### The print block can be beaten on specificity, not just on omission
+
+**This is a correction to what this file already says**, and it is worth reading before touching
+`resume.css` or `tokens.css`. The Phase 4 note below warns that the print block is a denylist which
+silently passes any token nobody enumerated. True, and incomplete.
+
+Making a palette the default put **28 elements of the résumé PDF in the wrong colour** — a token the
+print block _does_ pin. The block pins on `:root`, specificity (0,1,0); the palette rules were
+`:root[data-palette='…']`, (0,2,0). **Media queries do not affect specificity**, so the palette won
+on paper. The page-count assertion saw nothing, because colour costs no height.
+
+So: pinning a token is not sufficient. Any selector that outranks a bare `:root` beats the print
+block regardless of the media query. The fix used was `@media screen` around the offending rules,
+which is a statement about where they may apply at all — option (1) of the two proposed below, and
+the one to reach for.
+
+#### Phase 5 follow-up, deferred with Ali's agreement (2026-08-20)
+
+**Revisit the design's soft decisions once it has been lived with.** Ali's call, and the framing is
+hers: _"this is good enough to move on for now."_ Nothing here is wrong; these are the choices most
+likely to read differently after a few weeks of looking at the site rather than at a comparison page.
+
+- **The faces.** Gabarito / Figtree / DM Mono were this direction's pick and were never compared the
+  way the palette eventually was. Figtree in particular is a competent geometric sans doing the
+  quietest job on the site, which makes it the least interrogated choice in the whole phase.
+- **The colours, at the edges.** The palette is settled; the calibration inside it is softer than it
+  looks. Three values were tuned by hand at the very end — the ranking numbers at 5.50:1, the light
+  plate at 1.67:1, the dark plate at 1.77:1 — and each was picked to a target rather than derived
+  from a rule.
+- **Tweening.** `--ease` and `--duration` are the old site's recovered curve and duration, adopted
+  as a shared baseline across all directions and never tuned to _this_ one. 500ms with zero ease-in
+  is a strong character to inherit unexamined; the reticle is the only thing that really exercises
+  it, and whether it wants the same curve as a 2014 sidebar is an open question.
+
+This is the design-scoped sibling of the wording pass already booked for Phase 6 and the resume tone
+pass booked in Phase 4. All three want the same thing — fresh eyes on something that is already
+correct — and they should probably happen together.
 
 ---
 

@@ -747,3 +747,113 @@ it as a build guard; three-for-three is the argument.
 - **Deepening the page ground to make cards pop failed a contrast check**, dropping the accent to
   2.91:1 against the 3:1 non-text floor the reticle is held to. The cards got their presence from the
   plate instead — no contrast touched. Worth noting that the constraint picked the better fix.
+
+---
+
+## Phase 5 close — what a four-way design bake-off actually taught, 2026-08-20
+
+Direction 03 merged in the arcade-dimmed palette. Three directions closed. The interesting material
+is not which one won — it is what the process surfaced that a single-direction build would not have.
+
+### Building four palettes found bugs that building one palette hid
+
+This is the generalizable finding of the whole phase, and it is not about colour.
+
+Every latent defect below had existed since the direction was first built, passed CI, and was
+invisible while the palette sat still. **Moving the palette is what made them show themselves** —
+and each one is a case of a value being correct by accident rather than by construction.
+
+- **A border token used as a text colour.** The featured list's ranking numbers took
+  `--color-border`. That reads as a deliberate "very quiet number" right up until a palette whose
+  rules are dark enough to be legible, at which point it is either a contrast failure (1.43:1 as
+  originally shipped) or an accidentally loud number. It now has its own token. The tell: a token
+  whose _name_ describes a different job than the one it is doing.
+- **A shadow that disappeared in dark mode.** The plate — the unblurred shadow that carries "height
+  means pressable" — was darker than an already near-black ground, at 1.06:1. One of the direction's
+  two signature devices simply was not there in dark mode, and nobody had noticed across a full
+  gate, a build and a review. Near black, a shadow has to become a _raised edge_ — lighter than the
+  page — because that is the only direction with anywhere to go.
+- **A CLS pass that was luck.** The direction cleared the layout-shift gate without font preloads,
+  because its sans and the system fallback happen to break lines in similar places. A sibling
+  direction's serif proved how thin that was: same rem-pinned `--measure`, 0.199 CLS, because the
+  prose reflowed by whole lines rather than the column resizing. Two different mechanisms, nearly
+  identical scores — and the guard for one does nothing for the other.
+
+The lesson worth carrying: **a value that only works for the current inputs is not a decision, it is
+a coincidence with good manners.** Varying an input you did not intend to ship is a cheap way to
+find out which is which.
+
+### The print block can be beaten on specificity, not only on omission
+
+`CLAUDE.md` has warned since Phase 4 that `resume.css`'s `@media print` block is "a denylist wearing
+a design system's clothes" — it pins the tokens that existed when it was written and silently passes
+anything added later. That was right, and it was not the whole risk.
+
+Making a palette the _default_ rather than an option put **28 elements of the résumé PDF in the wrong
+colour** — a token the print block explicitly pins. The block pins on `:root`, specificity (0,1,0).
+The palette rules were `:root[data-palette='…']`, (0,2,0). **Media queries do not affect
+specificity.** So the more specific screen rule won on paper, and the page-count assertion caught
+nothing, because colour costs no height.
+
+Two things generalize:
+
+- **Pinning is a claim about values, not about precedence.** A guard that redefines a variable only
+  holds while nothing outranks it. `@media screen` around the screen half is a claim about _where
+  rules may apply at all_, which is the stronger shape and cannot be walked around by adding a
+  selector.
+- **The differ earned its keep for the fourth time.** It has now caught an unpinned token, a
+  transition race, a font-condensation leak, and a specificity override — four distinct failure
+  modes, none of which the page-count assertion could see. It is still a throwaway script. It should
+  be a build guard; that is booked in `CLAUDE.md` and is now overdue rather than speculative.
+
+### Findings worth keeping from the directions that lost
+
+Recorded here because the branches close unmerged and this material is direction-agnostic.
+
+**From 01, the palette revival — the archaeology kept paying after the gate closed.** The Phase 5
+gate had already corrected one wrong belief about the old stylesheet. Reading it _again_ to build
+the direction turned up a third idea nobody had mentioned in five phases: `.navButtonSelected` sets
+`position: relative; top: 7px`, so the selected nav tab physically drops. State expressed as
+displacement rather than as colour — arguably more useful than the chase-and-settle curve everyone
+remembered, because it generalizes to anything with a selected state. **Two of that direction's
+three devices came out of a file the project had already read twice for other reasons.** The
+"we've been through that file" instinct nearly cost both.
+
+**From 01 — a distinctiveness risk that is checkable rather than a matter of taste.** A hard
+unblurred offset shadow in 2026 reads as neo-brutalism unless something makes it read otherwise. The
+difference turned out to be specific: neo-brutalism offsets down-**right**, in black, behind a heavy
+keyline; the 2014 CSS offset down-**left**, in a darker tint of the block's own hue, with no keyline
+at all. Keeping the left fall and the tonal colour yields a different reading entirely — offset-litho
+misregistration — and that reading then settled every open question by itself. **When "does this look
+borrowed?" can be reduced to three checkable properties, it stops being an argument.**
+
+**From 01 — the strongest choice was a negative one.** Warm cream plus rust is simultaneously that
+direction's whole claim to authenticity _and_ the most over-produced look in current AI-assisted
+design. The single decision doing the most work to keep it distinct was refusing a high-contrast
+display serif in favour of a screen-reading one — a constraint about what _not_ to pick, which is
+exactly the kind of decision that is easy to skip when choosing faces.
+
+**From 04, the hybrid — a probe is a legitimate thing to build.** It was never expected to win. Ali
+had settled on 03's behaviour but still felt a pull toward 01 that neither of us could name, so 04
+put 01's surface on 03's structure to find out what the pull was. Answer: **the palette, not the
+structure** — which is what turned the palette exploration from a guess into the obvious next step.
+Both bugs CI caught on that branch were real defects in 03 too and were carried forward. The one
+thing that died with it, deliberately: the register-on-press gesture, which only works on a plate
+that falls diagonally and does not transplant to one that falls straight down.
+
+### Cost notes
+
+The switcher was the highest-leverage tool of the phase. Four palettes on one preview with a live
+toggle cost roughly what one extra branch would have, and it is the only setup that permits the
+comparison anyone actually wants to make — the same page, two palettes, back to back, on a phone.
+Four deploy URLs would have produced four opinions about four pages.
+
+Generating the palettes rather than hand-writing them mattered for the same reason the contrast
+script mattered at the gate: 4 palettes x 2 themes x ~28 tokens is over 200 values, and the status
+chips each have two constraints at once. That is past the point where eyeballing degrades quietly
+rather than loudly.
+
+**Verifying the model is not verifying the page.** The generator asserted every pair it knew about;
+a real-DOM sweep across 50 renders was what confirmed no pair it _didn't_ know about had appeared.
+Both passed, which is the point — the second check is cheap and the day it disagrees is the day it
+pays for itself.
