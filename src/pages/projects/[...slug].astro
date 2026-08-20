@@ -33,13 +33,15 @@ const d = project.data;
 ---
 
 <BaseLayout title={d.title} description={d.summary} noindex={d.draft}>
-  <p class="meta"><a href="/projects">← Projects</a></p>
+  <a class="backlink" href="/projects">← Projects</a>
 
-  <h1>{d.title}</h1>
-  <ProjectMeta project={project} />
+  <div class="page-head">
+    <h1>{d.title}</h1>
+    <ProjectMeta project={project} />
+  </div>
 
   {d.hero && <Media item={d.hero} />}
-  {d.summary && <p>{d.summary}</p>}
+  {d.summary && <p class="lede">{d.summary}</p>}
 
   <Content />
 

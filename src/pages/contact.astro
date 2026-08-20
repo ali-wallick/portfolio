@@ -18,17 +18,31 @@ const shown = socials.filter(
 ---
 
 <BaseLayout title="Contact" description="Get in touch with Ali Wallick.">
-  <h1>Contact</h1>
+  <div class="page-head">
+    <h1>Contact</h1>
+  </div>
 
-  <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+  {
+    /* Phase 5 makes these controls rather than a list of links, and the reason
+      is the same rule the rest of the direction follows: a contact page is a
+      surface you *act on*, not one you read, so it is where the pressable
+      treatment belongs. No content changes — the address and the accounts are
+      Phase 3's, unchanged. */
+  }
+  <a class="card contact-card" href={`mailto:${site.email}`}>
+    <span class="eyebrow">Email</span>
+    <span class="contact-address">{site.email}</span>
+  </a>
 
   {
     shown.length > 0 && (
-      <ul>
+      <ul class="button-row">
         {shown.map((s) => (
           <li>
-            <a href={s.url}>{s.label}</a>
-            {s.status === 'pending' && <span class="draft-flag">unverified</span>}
+            <a class="button" href={s.url}>
+              {s.label}
+              {s.status === 'pending' && <span class="draft-flag">unverified</span>}
+            </a>
           </li>
         ))}
       </ul>

@@ -1,5 +1,31 @@
 ---
 import { site, nav } from '~/config/site';
+
+/* Self-hosted, latin subsets, weight axis only — no third-party requests, so
+   the site stays out of cookie-banner and third-party-latency territory. The
+   three faces are the gate's three type *roles*, which are settled globally;
+   the faces themselves are this direction's pick. Gabarito carries the display
+   voice, Figtree the reading voice, DM Mono every year, engine and role — and
+   on this site that last one is a large share of the words on the page, which
+   is what makes mono semantic here rather than decorative. */
+import '@fontsource-variable/gabarito/wght.css';
+import '@fontsource-variable/figtree/wght.css';
+import '@fontsource/dm-mono/latin-400.css';
+import '@fontsource/dm-mono/latin-500.css';
+
+/* Preloaded. This direction passes the CLS gate without it, but by luck rather
+   than design: Figtree and the system sans fallback happen to break lines in
+   similar places. The hybrid direction used a serif whose fallback did not, and
+   /about scored 0.199 CLS with an identically rem-pinned `--measure` — the
+   column never resized, the prose just reflowed by whole lines. That failure
+   mode is invisible until the face changes, which makes preloading the cheap
+   insurance rather than an optimisation. */
+import gabaritoWoff2 from '@fontsource-variable/gabarito/files/gabarito-latin-wght-normal.woff2?url';
+import figtreeWoff2 from '@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2?url';
+import dmMonoWoff2 from '@fontsource/dm-mono/files/dm-mono-latin-400-normal.woff2?url';
+
+const preloadFonts = [gabaritoWoff2, figtreeWoff2, dmMonoWoff2];
+
 import '~/styles/tokens.css';
 import '~/styles/base.css';
 
@@ -35,6 +61,11 @@ const year = new Date().getFullYear();
          zoomed-out on every phone ever made. */
     }
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {
+      preloadFonts.map((href) => (
+        <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
+      ))
+    }
     <title>{fullTitle}</title>
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={canonical} />
@@ -65,14 +96,20 @@ const year = new Date().getFullYear();
     <a class="skip-link" href="#main">Skip to content</a>
 
     <div class="layout">
+      {
+        /* Sticky, and that is a design decision rather than a convenience: the
+           reticle's resting target is the current page's nav pill, so the nav
+           has to stay on screen or the brackets chase it off the top. */
+      }
       <header class="site-header">
-        <a href="/"><strong>{site.name}</strong></a>
+        <a class="brand" href="/">{site.name}</a>
         <nav aria-label="Main">
           <ul>
             {
               nav.map((item) => (
                 <li>
                   <a
+                    class="nav-link"
                     href={item.href}
                     aria-current={Astro.url.pathname.startsWith(item.href) ? 'page' : undefined}
                   >
@@ -95,7 +132,9 @@ const year = new Date().getFullYear();
             {
               nav.map((item) => (
                 <li>
-                  <a href={item.href}>{item.label}</a>
+                  <a class="nav-link" href={item.href}>
+                    {item.label}
+                  </a>
                 </li>
               ))
             }
@@ -104,5 +143,15 @@ const year = new Date().getFullYear();
         <p>© {year} {site.name}</p>
       </footer>
     </div>
+
+    {
+      /* Progressive enhancement, strictly. The reticle builds its own element,
+         so a page whose script never runs has no empty artifact in it — and the
+         real focus outline in base.css is what makes the site navigable either
+         way. */
+    }
+    <script>
+      import '~/scripts/reticle';
+    </script>
   </body>
 </html>

@@ -158,11 +158,57 @@
     --text-xl: 1.563rem;
     --text-2xl: 1.953rem;
     --text-3xl: 2.441rem;
+    --text-4xl: 3.052rem;
     --leading-tight: 1.2;
     --leading-body: 1.6;
     --tracking-display: normal;
     --tracking-label: normal;
     --measure: 68ch;
+    --content-max: 60rem;
+
+    /* Added by Phase 5's playful direction. Colour first: the interaction
+       layer (coral) and the content layer (status chips) are both screen
+       ideas — a reticle cannot exist on paper and a printed resume states its
+       own dates, so neither has anything to say here. Flattened to the Phase 4
+       palette rather than dropped, so that a resume rule which *does* pick one
+       up later prints black instead of printing a surprise. */
+    --color-accent: #000000;
+    --color-accent-ink: #000000;
+    --color-accent-soft: #ffffff;
+    --color-focus: #000000;
+
+    /* Nothing on either resume route uses `--color-index` today — it is the
+       featured list's ranking number and the resume has no featured list. It is
+       pinned anyway, per the rule at the top of tokens.css, because "no rule
+       reaches it yet" is a fact about this week rather than a property of the
+       stylesheet. */
+    --color-index: #333333;
+
+    --chip-ink: #333333;
+    --chip-tint: #ffffff;
+    --chip-shipped-ink: #333333;
+    --chip-shipped-tint: #ffffff;
+    --chip-prototype-ink: #333333;
+    --chip-prototype-tint: #ffffff;
+    --chip-jam-ink: #333333;
+    --chip-jam-tint: #ffffff;
+    --chip-coursework-ink: #333333;
+    --chip-coursework-tint: #ffffff;
+    --chip-unannounced-ink: #333333;
+    --chip-unannounced-tint: #ffffff;
+
+    /* Then geometry. `--lift` and its three shadows are the direction's
+       "height means pressable" device; paper presses nothing, and an unblurred
+       4px shadow under a heading rule is exactly the sort of thing that costs
+       a few points of height per section and shows up as a page-count failure
+       several bullets later. Zeroed rather than enumerated away. */
+    --radius: 0;
+    --radius-lg: 0;
+    --radius-pill: 0;
+    --lift: 0px;
+    --shadow-rest: none;
+    --shadow-high: none;
+    --shadow-flat: none;
   }
 
   /*
@@ -223,6 +269,28 @@
     color: #000000;
     font-size: 9.4pt;
     line-height: 1.3;
+
+    /*
+     * Pinned because it is inherited, and because it already leaked once.
+     *
+     * Phase 5's playful direction set `font-variant-numeric: tabular-nums` on
+     * `body` — a reasonable screen choice on a site full of years — and it
+     * reached paper, where it widened every element containing a digit. The
+     * resume's dates grew by up to 7pt and two job titles with a digit in the
+     * company name grew with them.
+     *
+     * It cost nothing that day: the dates are right-aligned in a
+     * space-between row, so the extra width ate slack rather than moving
+     * anything, and every y position was byte-identical. That is precisely
+     * what makes it worth pinning. `maxPages` in scripts/build-pdf.mjs cannot
+     * see a leak this size, and the next one lands on a paragraph that wraps.
+     *
+     * Found with a print-geometry differ, not by eye and not from the PDF's
+     * file size — the file shrank by 84 bytes, which says nothing. That is the
+     * tool CLAUDE.md's Phase 4 follow-up argues for committing as a build
+     * guard; this is one more data point that it should be.
+     */
+    font-variant-numeric: normal;
   }
 
   /* Site chrome is navigation. A resume that prints its own nav bar is the

@@ -3,12 +3,20 @@ import { formatYears, STATUS_LABEL, type Project } from '~/lib/content';
 import { getEntry } from 'astro:content';
 
 /**
- * The one-line metadata strip under a project title. Built from the content
- * model, never hand-written per page — which is the whole point of the model.
+ * The metadata strip under a project title. Built from the content model,
+ * never hand-written per page — which is the whole point of the model.
  *
  * The company name is read through the `job` reference rather than stored on
  * the project, so a project and the resume can never disagree about who Ali
  * worked for.
+ *
+ * Phase 5 splits `status` out of the joined string and gives it a coloured
+ * chip. That is not decoration: honest framing in the archive tier is a stated
+ * content rule — a 48-hour jam entry must not read like a shipped commercial
+ * title — and a chip states it at a glance across a twelve-entry grid, where a
+ * word in the middle of a run-on metadata line does not. The remaining fields
+ * stay a plain sequence in mono, which is the type role the gate settled for
+ * technical metadata across every direction.
  */
 interface Props {
   project: Project;
@@ -24,16 +32,13 @@ const where = job?.data.company ?? d.event;
 // through tech and then platform rather than printing an empty field.
 const built = d.engine.length ? d.engine : d.tech.length ? d.tech : d.platforms;
 
-const parts = [
-  formatYears(d.startYear, d.endYear),
-  STATUS_LABEL[d.status],
-  built.join(', '),
-  where,
-  d.role,
-].filter(Boolean);
+const fields = [formatYears(d.startYear, d.endYear), built.join(', '), where, d.role].filter(
+  Boolean,
+);
 ---
 
-<p class="meta">
-  {parts.join(' · ')}
+<p class="meta-strip">
+  <span class="chip" data-status={d.status}>{STATUS_LABEL[d.status]}</span>
+  {fields.map((field) => <span class="meta-field">{field}</span>)}
   {d.draft && <span class="draft-flag">draft</span>}
 </p>

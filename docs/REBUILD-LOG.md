@@ -651,3 +651,99 @@ Git produced the identical failure later in the phase, in the other direction: r
 branch onto this work, it merged the two copies of the new print rule **cleanly and wrongly** into two
 duplicated blocks, while raising conflicts only in the files that mattered less. The conflicts it
 reports are not the same set as the mistakes it makes.
+
+---
+
+## Phase 5, direction 3 — playful / toy
+
+The direction whose brief was carried by _behaviour_: "obvious a game developer made this" expressed
+as how the site responds rather than as what colour it is.
+
+### Putting the play in the interaction layer is what makes it forwardable
+
+The named risk was whimsy undercutting credibility on a portfolio with a Marvel Snap credit on it. The
+resolution turned out not to be "less playful" but **a different place to put the playfulness**.
+
+A hiring manager decides whether to forward a link from a _still_ — a two-second scan of a page they
+did not interact with. Interaction is only ever discovered by someone already engaged. So the two
+audiences never see the same artefact, and the direction can be restrained in the one they judge and
+maximal in the one they explore. Concretely: the colour split puts coral almost entirely in the
+interaction layer (reticle, focus, current-page pill), leaves navigation to violet, and gives the
+content layer five status hues; a screenshot reads as an information-dense portfolio, and using it
+does not.
+
+**The generalisation worth keeping: when a design has two audiences who consume it through different
+channels, "how much personality" stops being one dial.** It was being argued as one until the split
+became obvious.
+
+The corollary is a restraint budget with a _rule_ behind it rather than a taste judgement. Height
+means pressable — anything on a plate can be pressed and presses flat, and nothing decorative gets
+height. Reading surfaces (About, write-up bodies, the resume) get the palette and the type and
+nothing else. Both are checkable by someone who is not the author, which is the property a taste
+judgement lacks.
+
+### The recovered motion character generalises better than expected
+
+The gate established that `nav.js` did no interpolation — it assigned `top` directly on every scroll
+event, and CSS eased each assignment, so the sidebar chased and settled. This direction built a
+selection reticle on exactly that mechanism: the script assigns a target and does no animation at all,
+and one CSS transition eases every assignment.
+
+It paid off in a way that was not obvious up front. **The character comes free on any target that
+moves for a reason of its own**, because "retarget faster than the transition can finish" is a
+property of the mechanism rather than of scrolling. Measured, following a focused card through a
+500px scroll jump — gap in px between reticle and target, sampled every 90ms:
+
+```
+353 → 186 → 96 → 40 → 8 → 0
+```
+
+That is the zero-ease-in curve doing what it does, with no animation code anywhere. The old
+implementation's _bug_ — dropping the transition along with the `.scrolled` class, so the return trip
+snapped — is not reproduced, because nothing here is conditional.
+
+Two smaller findings from building it, both about the difference between a device and an affordance:
+
+- **It decorates, never informs.** The real `:focus-visible` outline stays underneath, so a blocked or
+  failed script costs nothing. Verified with JS disabled: zero reticle elements in the DOM (it builds
+  its own), every card still present and navigable.
+- **Reduced motion is not a disabled state.** Zeroing the two duration tokens leaves the reticle
+  _cutting_ to each target instead of travelling — the device survives, only the travel goes. Nothing
+  on the site sets a raw duration, which is what makes that a two-line guarantee rather than an audit.
+
+### The second thing the print-geometry differ caught, and it was not a token
+
+`CLAUDE.md` says to add every new token to `resume.css`'s print block. Doing that faithfully was not
+enough.
+
+`font-variant-numeric: tabular-nums` on `body` — an ordinary screen choice on a site full of years —
+reached paper and widened every element containing a digit. The resume's dates grew by up to 7pt, and
+two job titles grew with them because their company names contain a digit.
+
+It cost nothing that day. The dates are right-aligned in a `space-between` row, so the extra width ate
+slack; every `y` was byte-identical and the page count never moved. **That is exactly what makes it
+worth finding** — `maxPages` cannot see a leak this size, and the next one lands on a paragraph that
+wraps.
+
+The detection method is the part to keep. The PDF _shrank by 84 bytes_, which says nothing at all —
+PDF bytes move with font subsetting. The differ named seven elements and their exact widths. Fixed at
+both ends: scoped to the two Phase-5-only classes that wanted it, and pinned `normal` on `body` in the
+print block.
+
+**This is the third distinct bug that differ has caught across two directions** (an unpinned token, a
+transition race, and now a non-token inherited property). The Phase 4 follow-up argues for committing
+it as a build guard; three-for-three is the argument.
+
+### Small ones
+
+- **A hover effect on the target breaks a measurement taken at `pointerover`.** The reticle parked 3px
+  low on cards, because the card lifts 3px on hover and `pointerover` fires before it has. Fixed by
+  re-measuring on the target's own `transitionend` rather than by subtracting `--lift`, which would
+  have gone stale the moment the token changed.
+- **A test can fail for the right reason.** "Scroll while hovering" reported the reticle abandoning its
+  card — correct behaviour, since after a 500px scroll the pointer is genuinely over different content.
+  The assertion was wrong, not the code. Isolating the case with _focus_ (which survives scrolling)
+  measured what was actually intended.
+- **Deepening the page ground to make cards pop failed a contrast check**, dropping the accent to
+  2.91:1 against the 3:1 non-text floor the reticle is held to. The cards got their presence from the
+  plate instead — no contrast touched. Worth noting that the constraint picked the better fix.

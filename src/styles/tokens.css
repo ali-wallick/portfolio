@@ -1,38 +1,153 @@
 /*
- * PLACEHOLDER DESIGN TOKENS — Phase 2.
+ * DESIGN TOKENS — Phase 5, direction 3: playful / toy.
  *
- * These are deliberately boring. Phase 5 is the design phase, and it is
- * deliberately last so that directions get judged against real content instead
- * of lorem ipsum. Nothing here is a design decision; it is a *slot* for one.
+ * The gate settled type *roles* globally (display / sans / mono-for-technical-
+ * metadata) and left colour to vary per direction. It also made motion real:
+ * `--ease` and `--duration` below are the old site's recovered curve and
+ * duration, and they are a shared baseline no direction redefines.
  *
- * The point of shipping tokens this early is that Phases 3 and 4 build pages
- * against named variables rather than hard-coded values, so Phase 5 is a
- * palette swap and a type-scale swap rather than a hunt through every file.
+ * ## What this direction is
  *
- * Rule for Phases 3–4: use these variables. Never write a raw color or a raw
- * px font-size in a component.
+ * The brief is "obvious a game developer made this." This direction carries
+ * that in *behaviour* rather than in paint — the signature is a selection
+ * reticle that travels between whatever you're pointing at or tabbed to, which
+ * is the one piece of game-UI grammar a website essentially never has.
+ *
+ * That decides the colour system, and it is the whole reason the palette looks
+ * the way it does — three layers, each with a job:
+ *
+ *   - **Magenta is the interaction layer.** The reticle, the focus ring, the
+ *     current-page pill. It marks *where you are*, never what something is.
+ *   - **Blue is the navigation layer.** Links, and only links. It marks
+ *     *where you can go*.
+ *   - **The status hues are the content layer.** Five, one per `status` enum
+ *     value, so a jam entry and a shipped title are told apart by colour and
+ *     not only by wording — which is the archive tier's honest-framing rule
+ *     rendered rather than written.
+ *
+ * ## Why the ground is not white
+ *
+ * The palette is arcade — saturated accents against a near-black dark theme —
+ * and the light theme was originally near-white. That was the palette at its
+ * weakest: near-white is where magenta and cyan look cheapest, and it made the
+ * two themes look like different sites. The ground here is off white with a
+ * violet cast lifted from the dark theme. Chosen from a five-way comparison
+ * built behind a live switcher; see the Phase 5 log for the ones that lost.
+ *
+ * ## Measured, not eyeballed
+ *
+ * Every text colour clears 4.5:1 on every ground it can land on. The one
+ * deliberate exception is `--color-accent` itself: it is a **non-text** colour
+ * — reticle stroke, focus ring, rules — where WCAG's bar is 3:1. Anywhere the
+ * accent has to carry text it is `--color-accent-ink` instead, which is why
+ * both exist. Don't set type in `--color-accent`.
+ *
+ * `--color-plate` is exempt from both bars: it is a decorative depth cue, and
+ * the card is legible without it. It is held instead to being *visible* —
+ * 1.6:1 against the ground, because the original dark plate measured 1.06 and
+ * the height device disappeared entirely in dark mode.
+ *
+ * Rule, unchanged since Phase 2: use these variables. Never write a raw colour
+ * or a raw px font size in a component.
+ *
+ * IF YOU ADD A TOKEN HERE, ADD IT TO `resume.css`'s `@media print` BLOCK TOO.
+ * That block pins paper to Phase 4's palette by redefining tokens, and it only
+ * covers the ones named in it — anything new reaches the PDF, which carries a
+ * hard page-count assertion in `scripts/build-pdf.mjs`.
  */
 
 :root {
-  /* --- Color ------------------------------------------------------------ */
-  --color-bg: #ffffff;
-  --color-surface: #f4f4f5;
-  --color-text: #18181b;
-  --color-text-muted: #52525b;
-  --color-border: #d4d4d8;
-  --color-link: #1d4ed8;
-  --color-link-visited: #6d28d9;
-  --color-focus: #1d4ed8;
+  /* --- Colour: ground and ink -------------------------------------------
+   * Arcade, dimmed. The saturated accents are the direction's energy; the
+   * ground exists to let them hold their own, which near-white does not — it
+   * is where magenta and cyan look cheapest. So the light ground is off white
+   * and carries a violet cast borrowed from the dark theme, which is also what
+   * finally makes the two themes read as the same site.
+   */
+  --color-bg: #e4e1f0;
+  --color-surface: #f4f2fb;
+  --color-text: #12101c;
+  --color-text-muted: #4a4560;
+  --color-heading: #12101c;
+  --color-border: #c9c4de;
 
-  /* --- Type -------------------------------------------------------------
-   * A single system stack, on purpose. Choosing a typeface is the most
-   * identity-defining decision on the site and belongs in Phase 5.
+  /* The colour under anything with height. See `--lift`.
+     Tuned to 1.67:1 against the ground — deliberately matched to the weight
+     the shadow had in this direction's original palette (1.68), because the
+     deeper ground would otherwise have made the plate read heavier than it
+     ever did. The shadow's presence is a design decision; it should not drift
+     as a side effect of changing the ground under it. */
+  --color-plate: #b4acd1;
+
+  /* --- Colour: the interaction layer (magenta) ---------------------------
+   * Where you *are*: the reticle, the focus ring, the current-page pill.
+   * `--color-accent` is the stroke and is non-text; `--color-accent-ink` is
+   * the same hue at a weight that can carry type. Don't set type in
+   * `--color-accent`.
+   */
+  --color-accent: #c4005f;
+  --color-accent-ink: #a80052;
+  --color-accent-soft: #fbdcec;
+  --color-accent-block: #a80052;
+  --color-on-accent: #ffffff;
+  --color-on-accent-link: #ffffff;
+
+  /* --- Colour: the navigation layer (blue) ------------------------------
+   * Where you can *go*: links, and only links.
+   */
+  --color-link: #0049b8;
+  --color-link-visited: #6a17b5;
+  --color-focus: #c4005f;
+
+  /* The featured list's ranking numbers, and the only thing that uses it.
+     A dedicated token rather than `--color-text-muted` because the number
+     wants to sit quieter than body copy, and rather than `--color-border`
+     because a border colour is not a text colour — that was the original
+     construct here and it measured 1.43:1, which is a contrast failure
+     wearing the costume of a design choice. 5.50:1: quiet, and legible. */
+  --color-index: #645f77;
+
+  /* --- Colour: the content layer (status) --------------------------------
+   * One pair per `status` value in src/content.config.ts. Adding a status to
+   * the enum without adding a pair here falls back to the neutral pair, which
+   * is legible but tells the reader nothing — so add both.
+   *
+   * Every tint is derived rather than picked: walked from the surface toward
+   * its own ink until the pair clears 4.5:1 while staying separated from the
+   * surface it sits on. See the generator note in the Phase 5 log.
+   */
+  --chip-ink: #4a4560;
+  --chip-tint: #dedbe8;
+  --chip-shipped-ink: #005a4e;
+  --chip-shipped-tint: #d3e5e2;
+  --chip-prototype-ink: #0049b8;
+  --chip-prototype-tint: #d7e0f2;
+  --chip-jam-ink: #a80052;
+  --chip-jam-tint: #f2dbe6;
+  --chip-coursework-ink: #6a17b5;
+  --chip-coursework-tint: #e2d9ef;
+  --chip-unannounced-ink: #4a4560;
+  --chip-unannounced-tint: #dedbe8;
+
+  /* --- Type --------------------------------------------------------------
+   * The gate's three roles, with this direction's faces. All self-hosted via
+   * @fontsource (see BaseLayout) — no third-party requests, latin subsets.
+   *
+   *   Gabarito — display. Energetic and a little flared; it reads as chosen.
+   *   Figtree  — body. Geometric-humanist, friendly, holds up small.
+   *   DM Mono  — technical metadata. Narrow enough to survive the metadata
+   *              strip, which on this site can run to six fields.
+   *
+   * `--font-heading` and `--font-sans` are aliases kept so that `base.css` and
+   * the print block can each name the role they mean.
    */
   --font-body:
-    system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
-    'Segoe UI Emoji';
-  --font-heading: var(--font-body);
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    'Figtree Variable', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji';
+  --font-sans: var(--font-body);
+  --font-display: 'Gabarito Variable', 'Trebuchet MS', system-ui, sans-serif;
+  --font-heading: var(--font-display);
+  --font-mono: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Modular scale, ratio 1.25, base 1rem. */
   --text-xs: 0.8rem;
@@ -42,9 +157,13 @@
   --text-xl: 1.563rem;
   --text-2xl: 1.953rem;
   --text-3xl: 2.441rem;
+  --text-4xl: 3.052rem;
 
-  --leading-tight: 1.2;
+  --leading-tight: 1.05;
   --leading-body: 1.6;
+
+  --tracking-display: -0.02em;
+  --tracking-label: 0.06em;
 
   /* --- Space ------------------------------------------------------------ */
   --space-1: 0.25rem;
@@ -58,53 +177,63 @@
 
   /* --- Layout -----------------------------------------------------------
    *
-   * PHASE 5: `ch` is a font-dependent unit, and this token is a trap because of
-   * it. `1ch` is the width of the font's `0` glyph, so a max-width written in
-   * `ch` is a layout box whose width changes when a webfont finishes loading.
-   * There is no webfont on master — the stack above is all system faces, so
-   * nothing swaps and nothing moves. The moment a direction self-hosts a face,
-   * this token starts resizing every paragraph on the site mid-load.
+   * `--measure` is in `rem`, not `ch`, and that is load-bearing rather than a
+   * style preference. `1ch` is the width of the font's `0` glyph, so a
+   * max-width written in `ch` is a box whose width *changes when the webfont
+   * finishes loading*. Master left this as `68ch` with a note explaining why,
+   * because the right rem value depends on the face a direction picks — this
+   * direction picks Figtree, so here is the value.
    *
-   * Measured, not predicted: on the dense direction `64ch` resolved to 682px in
-   * the loaded face and 570px in the fallback — a 20% swing in the width of the
-   * prose column, reflowing everything below it. It scored 0.197 CLS on /about
-   * and failed the Lighthouse gate, while every speed metric scored 1 and the
-   * page looked perfect locally, because a fast machine loads the font before
-   * first paint and the swap never happens.
+   * Measured, not estimated: `68ch` in Figtree Variable resolves to 40.4rem.
+   * Pinning it there renders identically and simply stops moving, which is the
+   * difference between 0 CLS and the 0.197 the dense direction scored on
+   * /about before it was caught by CI's Lighthouse gate.
    *
-   * `ch` is seductive here because it means exactly the right thing —
-   * characters per line. The trap is that it only means that *after* the font
-   * arrives. **If your direction adds a webfont, express this and every other
-   * max-width in `rem`.** Pin it to the width `ch` was already producing and
-   * the rendered layout is unchanged; it just stops moving.
-   *
-   * Left as `ch` rather than converted, deliberately: the right rem value
-   * depends on the face a direction picks, so choosing one here would be
-   * choosing it for them. The print block in resume.css pins this separately
-   * and paper is unaffected either way.
+   * The print block pins `--measure` separately, in `ch`, against the system
+   * stack Phase 4's PDFs were generated with. Paper is unaffected either way.
    */
-  --measure: 68ch;
-  --content-max: 60rem;
-  --radius: 4px;
+  --measure: 40.4rem;
+  --content-max: 64rem;
+
+  --radius: 6px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  /* --- Height -----------------------------------------------------------
+   * This direction's one structural device, and it has a rule attached:
+   * **height means pressable.** Anything sitting on a plate can be pressed,
+   * and pressing it drives the plate to zero. Nothing decorative gets height.
+   *
+   * The shadow is hard, unblurred, and falls straight *down* — an object
+   * resting on a surface. (Direction 01's plate falls down-left and is a
+   * printing-registration idea; these are different metaphors on purpose.)
+   */
+  --lift: 5px;
+  --shadow-rest: 0 var(--lift) 0 var(--color-plate);
+  --shadow-high: 0 calc(var(--lift) + 3px) 0 var(--color-plate);
+  --shadow-flat: 0 0 0 var(--color-plate);
 
   /* --- Motion -----------------------------------------------------------
-   * REAL, as of the Phase 5 gate — no longer placeholders. These two values
-   * are the old site's one genuine piece of personality, recovered.
+   * REAL, as of the Phase 5 gate — no longer placeholders, and the shared
+   * baseline every direction inherits. Not redefined here.
    *
-   * The Phase 2 note here (and CLAUDE.md, and the plan) said nav.js contained
-   * a hand-rolled easing sticky sidebar. It doesn't: nav.js assigns
-   * `quickInfo.style.top` directly on every scroll event, with no
-   * interpolation at all. The easing was four lines of CSS in
-   * templateStyles.css, and this is the curve and duration from it.
+   * These two values are the old site's one genuine piece of personality.
+   * nav.js assigned `quickInfo.style.top` directly on every scroll event with
+   * no interpolation at all; the easing was four lines of CSS in
+   * templateStyles.css, and this is that curve and duration.
    *
-   * The effect they produce: JS retargets `top` every scroll event, CSS eases
-   * each retarget over 500ms, scroll events fire faster than that — so the
-   * element never arrives while the page is moving. It chases, then settles.
-   * Note the curve has *zero* ease-in; it launches at full speed and
-   * decelerates hard. That asymmetry is the whole character.
+   * The effect: JS retargets on every scroll event, CSS eases each retarget
+   * over 500ms, scroll events fire faster than that — so the element never
+   * arrives while the page is moving. It chases, then settles. The curve has
+   * *zero* ease-in; it launches at full speed and decelerates hard.
    *
-   * Every Phase 5 direction inherits this. Where it is most visible is a
-   * per-direction choice. See CLAUDE.md's "Phase 5 gate outcome".
+   * This is the direction that makes a feature of it. `.reticle` in base.css
+   * is the same mechanism, honestly reproduced: JS assigns a target on every
+   * scroll event and CSS eases each assignment. The one thing not reproduced
+   * is the old implementation's bug — it dropped the `.scrolled` class at the
+   * top of the page, which took the transition with it and made the return
+   * trip snap. The reticle's transition is never conditional, so it settles in
+   * both directions.
    */
   --ease: cubic-bezier(0, 0, 0.25, 1);
   --duration-fast: 250ms;
@@ -113,17 +242,56 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #101012;
-    --color-surface: #1c1c20;
-    --color-text: #f4f4f5;
-    --color-text-muted: #a1a1aa;
-    --color-border: #3f3f46;
-    --color-link: #93b4ff;
-    --color-link-visited: #c4b5fd;
-    --color-focus: #93b4ff;
+    --color-bg: #0a0a12;
+    --color-surface: #151524;
+    --color-text: #f0eefc;
+    --color-text-muted: #a09ac0;
+    --color-heading: #ffffff;
+    --color-border: #2b2a45;
+
+    /* A raised edge, not a cast shadow — and that inversion is the point.
+       The original dark plate was DARKER than an already near-black ground and
+       measured 1.06:1, so the height device, which is one of this direction's
+       two signatures, simply vanished in dark mode. Near black there is only
+       one direction with anywhere to go. 1.77:1. */
+    --color-plate: #3a3568;
+
+    --color-accent: #ff2d95;
+    --color-accent-ink: #ff6fb5;
+    --color-accent-soft: #2e0a20;
+    --color-accent-block: #ff2d95;
+    --color-on-accent: #0a0a12;
+    --color-on-accent-link: #0a0a12;
+
+    --color-link: #22d3ee;
+    --color-link-visited: #c084fc;
+    --color-focus: #ff2d95;
+
+    --color-index: #8b86a9;
+
+    --chip-ink: #a09ac0;
+    --chip-tint: #23222f;
+    --chip-shipped-ink: #34e5b0;
+    --chip-shipped-tint: #17241f;
+    --chip-prototype-ink: #22d3ee;
+    --chip-prototype-tint: #142229;
+    --chip-jam-ink: #ff6fb5;
+    --chip-jam-tint: #241522;
+    --chip-coursework-ink: #c084fc;
+    --chip-coursework-tint: #1f1728;
+    --chip-unannounced-ink: #a09ac0;
+    --chip-unannounced-tint: #23222f;
   }
 }
 
+/*
+ * Motion off is not this direction without an identity — it is this direction
+ * with the reticle *cutting* to each target instead of travelling to it. The
+ * palette, the type, the chips, the plates and the press states all remain,
+ * and the press states remain legible because they are position changes rather
+ * than animations. Zeroing the two duration tokens is enough to reach every
+ * transition on the site, because nothing sets a raw duration anywhere.
+ */
 @media (prefers-reduced-motion: reduce) {
   :root {
     --duration-fast: 0ms;

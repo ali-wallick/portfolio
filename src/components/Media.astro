@@ -17,12 +17,19 @@ const { item } = Astro.props;
 ---
 
 {
-  item.type === 'youtube' ? (
-    <YouTube id={item.id} title={item.title} start={item.start} />
-  ) : (
-    <figure>
-      <Image src={item.src} alt={item.alt} loading="lazy" />
-      {item.caption && <figcaption class="meta">{item.caption}</figcaption>}
-    </figure>
-  )
+  /* The frame is deliberately a frame and not a plate. This direction's
+    unblurred drop shadow means one thing only — "this can be pressed" — and a
+    hero image cannot, so it gets a border and a matching radius instead. */
 }
+<div class="media">
+  {
+    item.type === 'youtube' ? (
+      <YouTube id={item.id} title={item.title} start={item.start} />
+    ) : (
+      <figure>
+        <Image src={item.src} alt={item.alt} loading="lazy" />
+        {item.caption && <figcaption class="meta">{item.caption}</figcaption>}
+      </figure>
+    )
+  }
+</div>

@@ -16,30 +16,44 @@ const featured = await getFeaturedProjects();
   description="Website and portfolio for Ali Wallick, a game developer working in UI and systems engineering."
   bareTitle
 >
-  <h1>{site.name}</h1>
-  <p class="meta">{site.role}</p>
+  <div class="hero">
+    <p class="eyebrow">{site.role}</p>
+    <h1>{site.name}</h1>
 
-  <p>
-    I'm a software engineer who's spent fifteen years on game UI and systems, most recently five of
-    them on <a href="/projects/marvel-snap">Marvel Snap</a> at Second Dinner. Since 2024 I've been on
-    the studio's next game, being built in Godot.
-  </p>
+    <p class="lede">
+      I'm a software engineer who's spent fifteen years on game UI and systems, most recently five
+      of them on <a href="/projects/marvel-snap">Marvel Snap</a> at Second Dinner. Since 2024 I've been
+      on the studio's next game, being built in Godot.
+    </p>
+  </div>
   {
     /* TODO(phase-7): a "currently" line that is cheap enough to update that the
       site can be trivially correct rather than expensively correct. */
   }
 
   <h2>Featured work</h2>
-  <ul class="project-list">
+  {
+    /* Full-width cards rather than a grid. Five entries, each a deep write-up —
+      the archive's twelve get the compact treatment on /projects, so the two
+      tiers differ structurally and not only in what they are called. */
+  }
+  <ul class="card-grid">
     {
-      featured.map((project) => (
+      featured.map((project, i) => (
         <li>
-          <a href={`/projects/${project.id}`}>{project.data.title}</a>
-          <ProjectMeta project={project} />
+          <a class="card" href={`/projects/${project.id}`}>
+            <span class="card-index" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <div class="card-body">
+              <h3 class="card-title">{project.data.title}</h3>
+              <ProjectMeta project={project} />
+            </div>
+          </a>
         </li>
       ))
     }
   </ul>
 
-  <p><a href="/projects">All projects</a></p>
+  <p><a class="button button-accent" href="/projects">All projects</a></p>
 </BaseLayout>

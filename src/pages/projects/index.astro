@@ -5,19 +5,34 @@ import { getFeaturedProjects, getArchiveProjects } from '~/lib/content';
 
 const featured = await getFeaturedProjects();
 const archive = await getArchiveProjects();
+
+/* Counted, never typed. "Adding a project is one Markdown file" is the content
+   model's central promise, and a hand-written total is exactly the second place
+   to update that the model exists to rule out. */
+const total = featured.length + archive.length;
 ---
 
 <BaseLayout title="Projects" description="Games and projects by Ali Wallick.">
-  <h1>Projects</h1>
+  <div class="page-head">
+    <p class="eyebrow">{total} entries</p>
+    <h1>Projects</h1>
+  </div>
 
   <h2>Featured</h2>
-  <ul class="project-list">
+  <ul class="card-grid">
     {
-      featured.map((project) => (
+      featured.map((project, i) => (
         <li>
-          <a href={`/projects/${project.id}`}>{project.data.title}</a>
-          <ProjectMeta project={project} />
-          {project.data.summary && <p>{project.data.summary}</p>}
+          <a class="card" href={`/projects/${project.id}`}>
+            <span class="card-index" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <div class="card-body">
+              <h3 class="card-title">{project.data.title}</h3>
+              <ProjectMeta project={project} />
+              {project.data.summary && <p>{project.data.summary}</p>}
+            </div>
+          </a>
         </li>
       ))
     }
@@ -26,15 +41,22 @@ const archive = await getArchiveProjects();
   {
     /* The archive tier is framed as history, not as a portfolio pitch — the
       `status` field on each entry keeps a 48-hour jam entry from reading like a
-      shipped commercial title. */
+      shipped commercial title.
+
+      Phase 5 renders that rather than only wording it: twelve compact tiles
+      with a coloured status chip apiece, which reads as a collection screen and
+      lets the tier be browsable at a glance without competing with the five
+      featured write-ups above it. */
   }
   <h2>Archive</h2>
-  <ul class="project-list">
+  <ul class="tile-grid">
     {
       archive.map((project) => (
         <li>
-          <a href={`/projects/${project.id}`}>{project.data.title}</a>
-          <ProjectMeta project={project} />
+          <a class="tile" href={`/projects/${project.id}`}>
+            <h3 class="tile-title">{project.data.title}</h3>
+            <ProjectMeta project={project} />
+          </a>
         </li>
       ))
     }
