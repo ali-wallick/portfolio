@@ -18,7 +18,7 @@ Almost everything needed already exists in this repo. Look, in this order:
 | `snapshot/`                 | The old live page for this project, as it stood. Often the only description that exists. |
 | `content/archive/`          | 20 blog posts, 2010–2019. **First-person detail the project pages never had.**           |
 | `src/content/jobs/<job>.md` | The 2019 resume bullets, preserved verbatim under "Source material".                     |
-| `resources/images/`         | Screenshots and banners, with a keep/drop audit in `ASSET_INVENTORY.md`.                 |
+| `src/assets/images/`        | Screenshots and banners, migrated from the old site in Phase 3.                          |
 | The user                    | Anything from after 2019, and anything the old site got wrong.                           |
 
 The blog archive is the highest-value and most-overlooked source. The GGJ 2013, GDC 2013, "My First

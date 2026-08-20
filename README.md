@@ -28,11 +28,11 @@ npm run dev
 | `src/content.config.ts`   | **The content model.** Read this before adding anything.           |
 | `src/content/`            | Projects, jobs, education — one Markdown file each.                |
 | `src/pages/`              | Routes. Project pages are generated from the collection.           |
-| `src/styles/tokens.css`   | Placeholder design tokens. Phase 5 replaces the values.            |
+| `src/styles/tokens.css`   | The shipped palette, type scale, and motion. Use the variables.    |
 | `scripts/check-links.mjs` | Post-build checks, each one a regression guard for a real old bug. |
 | `.claude/skills/`         | Repeatable workflows for this repo.                                |
 | `docs/CLOUDFLARE.md`      | Deploy runbook and the branch → preview-URL review loop.           |
-| `docs/REBUILD-LOG.md`     | Running record of the rebuild. Phase 7's source material.          |
+| `docs/REBUILD-LOG.md`     | How it was run, per phase, and what it cost. Phase 7's material.   |
 
 ### Historical, not live
 
@@ -42,7 +42,14 @@ These directories are preserved records, not part of the site build. Don't edit 
 | ------------------ | -------------------------------------------------------------------- |
 | `content/archive/` | 20 WordPress blog posts (2010–2019), scraped in Phase 0 with images. |
 | `snapshot/`        | Full crawl of the live PHP site as it stood in August 2026.          |
-| `infra/`           | Phase 1 DNS migration record: baseline, zone file, runbook.          |
-| `resources/`       | Legacy assets. See `resources/images/ASSET_INVENTORY.md`.            |
+| `infra/`           | The live DNS zone, its verify tooling, and Phase 1's record.         |
+| `resources/`       | The old site's stylesheet and scroll handler — the only copy.        |
 
 The tag `v1-legacy` marks the last commit of the original PHP site.
+
+## What's left
+
+Tracked as [GitHub issues](https://github.com/ali-wallick/Portfolio/issues), milestoned per phase —
+[Phase 6 — Launch](https://github.com/ali-wallick/Portfolio/milestone/1) and
+[Phase 7 — Keep it alive](https://github.com/ali-wallick/Portfolio/milestone/2). Not in any document:
+a doc that tracks status goes stale silently, and this repo has been bitten by that twice.

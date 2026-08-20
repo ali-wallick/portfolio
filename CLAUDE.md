@@ -26,7 +26,39 @@ portfolio project. The tooling is half the point, not overhead around the real w
 eventual build-in-public page accumulate in [`docs/REBUILD-LOG.md`](docs/REBUILD-LOG.md) — add to it
 as you go rather than reconstructing at the end.
 
-The full plan lives at `~/.claude/plans/i-first-built-this-glistening-book.md`.
+How the project was actually run — the phase gates, the model allocation, what drove cost — and a
+per-phase record including what the plan got wrong, live in
+[`docs/REBUILD-LOG.md`](docs/REBUILD-LOG.md). There is no separate plan file: it moved into the repo
+on 2026-08-20, was narrowed to a record, and was folded into the log the same day once it became
+clear it was a second, thinner source for the same build-in-public page the log already feeds.
+
+**Nothing outside this file restates a decision made in it.** When two documents described the same
+decision they drifted — the plan's decisions table still listed Second Dinner's current work under a
+phrasing retired below. That is the failure mode the guard table further down exists to rule out.
+
+**Remaining work is tracked as GitHub issues, not in a document.** The list lives in the
+[`Phase 6 — Launch`](https://github.com/ali-wallick/Portfolio/milestone/1) and
+[`Phase 7 — Keep it alive`](https://github.com/ali-wallick/Portfolio/milestone/2) milestones. Each
+issue carries its source, why it was deferred, and what unblocks it, so a cold session can pick one
+up without reading scrollback.
+
+Two labels do real work. **`decision`** marks the four things that block work rather than being work
+— they need a call from Ali, not a commit, and several issues are explicitly blocked on them.
+**`needs-ali`** marks everything an agent cannot do because Ali is the only source: the 2024–present
+Godot detail, the resume's tooling line, the Kaneva title, the DreamHost handoff.
+
+**If you find a follow-up, open an issue.** Don't append it to a doc and don't leave it only
+in a `TODO(phase-N):` comment — the comments mark _where in the code_ a later phase lands, the issues
+are what actually gets worked. **Every `TODO(phase-N)` cites its issue number**; keep it that way, so
+a marker in the source is never a dead end.
+
+**And keep status out of this file.** The rule, which is why the phase sections below carry
+conventions and constraints but no worklists: _if a sentence here would need editing when an issue
+closes, it belongs in the issue._ This file says what was **decided**; issues say what is **left**.
+Decisions don't go stale, status does — and this is the one document every session reads before
+doing anything, which makes it the worst possible place for a sentence that quietly becomes false.
+It had five such sections on 2026-08-20, describing work that was already tracked as #32, #33, #35,
+#37, #39, #40 and #46.
 
 ---
 
@@ -50,16 +82,16 @@ The full plan lives at `~/.claude/plans/i-first-built-this-glistening-book.md`.
 
 ## Phases
 
-| Phase | What                                                                | State     |
-| ----- | ------------------------------------------------------------------- | --------- |
-| 0     | Preserve — blog scrape, snapshot, asset inventory                   | ✅ merged |
-| 1     | Infrastructure — domain, DNS, email                                 | ✅ merged |
-| 2     | Foundation & agentic tooling                                        | ✅ merged |
-| 3     | Content: get it true                                                | ✅ merged |
-| 4     | Resume, one source                                                  | ✅ merged |
-| 5     | Design                                                              | ✅ merged |
-| 6     | Launch — favicon, OG, a11y, redirects, DNS cutover, wording revisit |           |
-| 7     | Keep it alive                                                       |           |
+| Phase | What                                                                | State                                                              |
+| ----- | ------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| 0     | Preserve — blog scrape, snapshot, asset inventory                   | ✅ merged                                                          |
+| 1     | Infrastructure — domain, DNS, email                                 | ✅ merged                                                          |
+| 2     | Foundation & agentic tooling                                        | ✅ merged                                                          |
+| 3     | Content: get it true                                                | ✅ merged                                                          |
+| 4     | Resume, one source                                                  | ✅ merged                                                          |
+| 5     | Design                                                              | ✅ merged                                                          |
+| 6     | Launch — favicon, OG, a11y, redirects, DNS cutover, wording revisit | 🚧 [tracked](https://github.com/ali-wallick/Portfolio/milestone/1) |
+| 7     | Keep it alive                                                       | [tracked](https://github.com/ali-wallick/Portfolio/milestone/2)    |
 
 **Sequencing principle: structure before skin.** Phases 2–4 produce a complete, correct,
 deliberately unstyled site. Design lands in Phase 5 onto content that already exists, so directions
@@ -308,35 +340,21 @@ exists but Ali no longer posts there, and a Steam profile is not a professional 
 now an empty state — if nothing else is added, LinkedIn is the only social link on the site, which is
 the correct answer for this portfolio.
 
-### Still open at the end of the gate
+### Two schema conventions the gate settled
 
-**The one hard blocker: It Fits I Sits media.** No high-quality captures of the jam prototype exist.
-Plan agreed at the gate: **full-game media for the hero, lower-quality prototype shots inside the
-page** — where the gap between a week-one jam build and a shipped product is the point of the
-comparison rather than a weakness. Ali is sourcing both and will share them in the execution session.
-The page stays `draft: true` until the hero lands.
+Both are permanent, and both are the kind of thing that gets re-derived wrongly:
 
-**Decided, but marked `TODO(phase-3-revisit)` in the content files** — both were settled as
-_provisional_ so Ali can react to them rendered in context rather than in the abstract. Sweep every
-`TODO(phase-3-revisit)` before the phase closes:
+- **`endYear` tracks Ali's involvement, not the product's lifespan.** Marvel Snap is `endYear: 2024`
+  — the game is still live, she isn't on it. That is the convention for every project here.
+- **The Second Dinner progression is two different axes, and the schema models only one.** `roles[]`
+  carries official titles. The client-engineer → feature-engineer arc is a _discipline_ change, not
+  a title change, so it lives in the Snap write-up's prose where it is about the work rather than
+  about HR. **Don't force it into `roles[]`.**
 
-- **`role` on the three featured projects that lacked one.** First stabs are written in: Marvel Snap
-  "Client Engineer, then Feature Engineer", Vegas Blvd Slots "Software Engineer II", It Fits I Sits
-  "Pitch, prototype, and level editor". The schema wants Ali's own words, so these are placeholders
-  with a good accent, not answers.
-- **The two community video links on Marvel Snap** (The Weekly Snap Show, Pictionary). Included on
-  an explicit "err toward more, trim later" call. They're a different register from the first-party
-  three, and the right time to judge that is with the whole site readable.
-
-**Also settled, and already applied:**
-
-- **Marvel Snap `endYear: 2024`.** `endYear` tracks _Ali's involvement_, not the product's lifespan
-  — the game is still live, she isn't on it. That's the convention for every project here.
-- **The Second Dinner progression is two different axes**, and the schema deliberately models only
-  one. `roles[]` carries official titles (the credits page confirms **Senior Software Engineer I**;
-  earlier titles need LinkedIn, which is a Phase 4 problem). The client-engineer → feature-engineer
-  arc is a _discipline_ change, not a title change, so it lives in the Snap write-up's prose where
-  it's about the work rather than about HR. Don't force it into `roles[]`.
+_Everything else this gate left open was closed during Phase 3 execution — the provisional `role`
+fields, the `TODO(phase-3-revisit)` sweep, and the It Fits I Sits hero. The one remainder, prototype
+shots for the gallery, is [#46](https://github.com/ali-wallick/Portfolio/issues/46), which carries the framing that makes rough captures
+acceptable there and nowhere else on the site._
 
 ### Phase 3 execution outcome (2026-08-16, merged 2026-08-17)
 
@@ -425,97 +443,55 @@ Ali. Its role descriptions are the `highlights` + `highlightsExtended` bullets v
 `/resume/full`, so LinkedIn stays the same single source rather than becoming a fourth place a fact
 can go stale.
 
-### Still open at the end of the gate
+### Promotion years — settled 2026-08-17, do not reopen
 
-Both need Ali, and neither can be guessed without inventing a fact:
+- **Second Dinner splits.** Software Engineer II from 2019, Senior Software Engineer I from
+  **`2021-12`**. Ali supplied December 2021 and noted that if forced to a single year she'd say 2022
+  — a December promotion sits a fortnight from the boundary, so "2021" undersells the senior tenure.
+  Month precision makes the rounding moot, and it is the only place the date is visible: the resume
+  prints `Previously Software Engineer II (2019 – Dec 2021)`.
+- **Kaneva stays a single entry**, Ali's call — the progression is fifteen years old and she is
+  comfortable with the flattening. **No date is needed to keep one entry**; a year was only ever
+  required to _split_ one.
 
-- **Two promotion years — both resolved 2026-08-17. Do not reopen either.**
-  - **Second Dinner: split.** Software Engineer II from 2019, Senior Software Engineer I from
-    **`2021-12`**. Ali supplied December 2021 and noted that if forced to a single year she'd say
-    2022 — a December promotion sits a fortnight from the boundary, so "2021" undersells the senior
-    tenure. Month precision makes the rounding question moot, and it's the only place the date is
-    visible: the resume prints `Previously Software Engineer II (2019 – Dec 2021)`.
-  - **Kaneva: stays a single entry**, Ali's call — the progression is fifteen years old and she's
-    comfortable with the flattening. **No date is needed to keep one entry**; the year was only ever
-    required to _split_ one. `Software Engineer` is sourced (her own 2019 resume flattened it that
-    way), so it isn't invented — but the site says `Lead UI Programmer` on the Kaneva project page
-    while the resume and About say `Software Engineer`. Raised with her; changing it needs no date
-    either, so it's a one-line edit whenever she wants it.
-- **Ali's current toolchain**, for the resume's Tools line. **Partly answered 2026-08-17** — Ali added
-  **GDScript**, so the line now reads `Unity · C# · Godot · GDScript · DeltaDNA · Lua · XML · C++`.
-  It is still derived strictly from each job's `tech` field, which means it remains a
-  languages-and-engines list with no workflow tooling, and DeltaDNA still sits next to Godot with
-  nothing marking the decade between them. The plan mentions Perforce and CI directionally; **a
-  planning note is not a source**, so nothing has been added on its authority. Ask again rather than
-  inferring.
+Two things came out of that conversation and are tracked rather than recorded here: the Kaneva
+project page says `Lead UI Programmer` while the resume and About say `Software Engineer`
+([#38](https://github.com/ali-wallick/Portfolio/issues/38)), and the resume's Tools line is still derived strictly from `tech` fields
+([#39](https://github.com/ali-wallick/Portfolio/issues/39)).
 
-### Phase 4 follow-ups, deferred with Ali's agreement (2026-08-17)
+**The principle from the Tools line is worth keeping loose from its issue:** the plan mentions
+Perforce and CI directionally, and **a planning note is not a source.** Nothing has been added on
+its authority. Ask rather than infer.
 
-Ali's call: the resume is **factual enough to move on**, and both of these are improvements to
-something already true rather than corrections to something wrong. Neither blocks the merge.
+### Phase 4 closed with the resume factual enough to move on
 
-- **Detail the 2024–present Godot work, at a very high level.** Right now those two years exist on
-  the resume only inside Second Dinner's opening bullet ("then its next team from 2024 — the studio's
-  first game in Godot"), which is accurate but thin for what is now a substantial share of her recent
-  career. Every other era has real engineering detail and this one has a clause.
+Ali's call. Three things were deferred as improvements to something already true, not corrections to
+something wrong, and all three are tracked rather than described here:
 
-  The constraint is the hard part and is **not negotiable**: `CLAUDE.md`'s Phase 3 gate outcome still
-  governs. The studio's public statement (7 August 2024, via the W4 Games investment) is the ceiling —
-  Godot, next game, nothing else. **No title, platform, or genre**, and nothing about features,
-  monetization, or how the studio operates. So this has to be written as _craft, not product_: the
-  kinds of systems and the kind of engineering, in the register the Marvel Snap write-up uses for its
-  pre-announcement years. Source it from Ali directly; there is no public material to mine, and this
-  is exactly the case where inventing plausible detail would be worst.
+- **[#37](https://github.com/ali-wallick/Portfolio/issues/37)** — detail the 2024–present Godot work, which exists on the resume today as a
+  single clause while every other era has real engineering detail. The Phase 3 ceiling above governs
+  it absolutely: **craft, not product.**
+- **[#32](https://github.com/ali-wallick/Portfolio/issues/32)** — a tone and layout pass. Phase 4 optimised for _true_ and _fits_, never for how
+  it reads on paper.
+- **[#35](https://github.com/ali-wallick/Portfolio/issues/35)** — commit the print-geometry differ as a build guard, agreed 2026-08-18 to happen
+  as part of that pass.
 
-  Lands in `highlights` / `highlightsExtended` on `src/content/jobs/second-dinner.md`, and probably
-  as a sentence or two in the Snap-adjacent narrative on About. Watch the one-page budget — the
-  one-pager currently fits with roughly 0.4in of slack, so adding a bullet likely means moving one
-  down to `highlightsExtended`. `npm run build:pdf` will say so rather than letting it silently
-  become two pages.
+**The hazard behind #35 is not a task and belongs here.** `src/styles/resume.css`'s `@media print`
+block pins paper by redefining tokens, and it pins only the tokens that existed when it was written
+— **a denylist wearing a design system's clothes**, which is the exact failure mode the content
+model's guard table exists to rule out. It has bitten twice: 19pt of silent reflow on a document
+with a hard 1-page assertion, and 28 elements in the wrong colour via a specificity beat. See the
+correction under Phase 5 below, and the token warning under "Working here".
 
-- **A tone and layout pass on the resume specifically.** Phase 4 optimised for _true_ and _fits_, not
-  for how it reads or looks. This is the resume-scoped sibling of the wording revisit already booked
-  for Phase 6, and it should probably happen alongside it, once Phase 5's design exists to judge
-  against. Two things already known to be worth looking at: the bullets lean hard on em-dash asides
-  (a Phase 3 voice habit that reads denser in resume genre than in prose), and the print stylesheet's
-  9.4pt/1.3 density was tuned to make the one-pager fit rather than chosen for how it looks on paper.
-  Also see the apostrophes note under "Loose end" below.
+### Two files carry a PO Box
 
-  **Do the print-leak guard as part of this pass** (agreed 2026-08-18, during Phase 5's first
-  direction). `src/styles/resume.css`'s `@media print` block pins the paper palette by redefining
-  tokens — and it pins _the tokens that existed when it was written_, silently passing through any
-  added later. That makes it a denylist wearing a design system's clothes, which is exactly the
-  failure mode the content model's guard table exists to rule out. It bit on Phase 5's first
-  direction: green section headings, an embedded Menlo, and 19pt of extra height on a document with
-  a hard 1-page assertion in `scripts/build-pdf.mjs`. It still fit, by luck.
+`resources/WallickAli-Resume.pdf` and `src/assets/images/resume.png` both contain a PO Box and
+predate every fact on the current resume, which deliberately carries no address at all. Neither is
+served, and the repo is private — **the exposure only exists if this repo goes public**, which the
+build-in-public page ([#48](https://github.com/ali-wallick/Portfolio/issues/48)) is the most likely reason to do.
 
-  That was fixed by enumerating exhaustively, which works today and is **not** the real fix — the
-  block is only complete for the properties that exist now. A direction that gives `.meta` a
-  `font-variant-numeric` or a `text-transform` leaks again, and nothing says so. Two real options,
-  and the second is the one that matches how this repo handles everything else:
-
-  1. Scope the screen half of `resume.css` inside `@media screen`, so screen rules cannot reach
-     paper at all.
-  2. **Commit the print-geometry differ as a build guard.** Playwright with
-     `emulateMedia({ media: 'print' })`, dumping position, size, font, weight, family, tracking and
-     colour for every element on both resume routes, diffed against a committed baseline. It names
-     the offending element instead of reporting that a number moved. It was a throwaway script
-     during Phase 5 and it took the leak from 123 differing elements to 0 in three iterations —
-     chasing the same bug by PDF file size got nowhere, because PDF bytes move with font subsetting
-     and say nothing about layout.
-
-  The point of preferring (2): the page-count assertion already catches a leak that costs a whole
-  page, and catches nothing smaller. A 19pt reflow is invisible to it right up until the day it
-  isn't, and then it surfaces as "the resume is two pages now" with no indication why.
-
-### Loose end, flagged not acted on
-
-`resources/WallickAli-Resume.pdf` and `src/assets/images/resume.png` (the old 1700×2200 resume image,
-referenced by nothing) both contain the PO Box and predate every fact on the current resume. Neither
-is served — `wrangler.jsonc` serves `dist/` only — and the repo is private, so there is no exposure
-today. It becomes one if this repo ever goes public, which **Phase 7's build-in-public page is the
-most likely reason to do**. Deleting them needs Ali's sign-off under the asset keep/drop rule, so
-they are deliberately still in place.
+Tracked as [#40](https://github.com/ali-wallick/Portfolio/issues/40), including the part that makes it worth deciding early: `git rm` would not
+remove them from history.
 
 ---
 
@@ -716,30 +692,24 @@ on paper. The page-count assertion saw nothing, because colour costs no height.
 
 So: pinning a token is not sufficient. Any selector that outranks a bare `:root` beats the print
 block regardless of the media query. The fix used was `@media screen` around the offending rules,
-which is a statement about where they may apply at all — option (1) of the two proposed below, and
-the one to reach for.
+which is a statement about where they may apply at all — scoping the screen half of `resume.css`
+inside `@media screen` so screen rules cannot reach paper. **That is the fix to reach for**, and it
+is one half of [#35](https://github.com/ali-wallick/Portfolio/issues/35); the other half is a differ that names the offending element rather
+than reporting that a number moved.
 
-#### Phase 5 follow-up, deferred with Ali's agreement (2026-08-20)
+#### Three soft decisions, deliberately left soft
 
-**Revisit the design's soft decisions once it has been lived with.** Ali's call, and the framing is
-hers: _"this is good enough to move on for now."_ Nothing here is wrong; these are the choices most
-likely to read differently after a few weeks of looking at the site rather than at a comparison page.
+Ali's framing at the close: _"this is good enough to move on for now."_ **Nothing about them is
+wrong** — they are the choices most likely to read differently after living with the site rather
+than looking at a comparison page: the faces, the colour calibration at the edges, and the tweening.
 
-- **The faces.** Gabarito / Figtree / DM Mono were this direction's pick and were never compared the
-  way the palette eventually was. Figtree in particular is a competent geometric sans doing the
-  quietest job on the site, which makes it the least interrogated choice in the whole phase.
-- **The colours, at the edges.** The palette is settled; the calibration inside it is softer than it
-  looks. Three values were tuned by hand at the very end — the ranking numbers at 5.50:1, the light
-  plate at 1.67:1, the dark plate at 1.77:1 — and each was picked to a target rather than derived
-  from a rule.
-- **Tweening.** `--ease` and `--duration` are the old site's recovered curve and duration, adopted
-  as a shared baseline across all directions and never tuned to _this_ one. 500ms with zero ease-in
-  is a strong character to inherit unexamined; the reticle is the only thing that really exercises
-  it, and whether it wants the same curve as a 2014 sidebar is an open question.
+Tracked as [#33](https://github.com/ali-wallick/Portfolio/issues/33), which carries why each one is on the list. It is the design-scoped sibling
+of the wording pass ([#31](https://github.com/ali-wallick/Portfolio/issues/31)) and the resume tone pass ([#32](https://github.com/ali-wallick/Portfolio/issues/32)); sequencing the three is
+[#23](https://github.com/ali-wallick/Portfolio/issues/23).
 
-This is the design-scoped sibling of the wording pass already booked for Phase 6 and the resume tone
-pass booked in Phase 4. All three want the same thing — fresh eyes on something that is already
-correct — and they should probably happen together.
+**What generalises, and belongs here rather than in the issue:** `--ease` and `--duration` are the
+_old site's_ recovered curve and duration, adopted as a shared baseline across all four directions
+and never tuned to this one. Inheriting a character is not the same as choosing it.
 
 ---
 
@@ -769,8 +739,10 @@ itself.
 **And if you add a design token, add it to `resume.css`'s `@media print` block too.** That block
 pins paper to the Phase 4 palette and type scale by redefining tokens, and it only covers the ones
 listed in it — anything new reaches the PDF. The page-count assertion catches a leak big enough to
-cost a page and nothing smaller, which is how Phase 5 shipped 19pt of silent reflow. See the
-print-leak guard note under Phase 4's follow-ups.
+cost a page and nothing smaller, which is how Phase 5 shipped 19pt of silent reflow. **And pinning
+a token is not sufficient either** — any selector outranking a bare `:root` beats the print block
+regardless of the media query. Both failure modes, and the fix, are under Phase 5 below and in
+[#35](https://github.com/ali-wallick/Portfolio/issues/35).
 
 ### The review loop
 
@@ -789,9 +761,17 @@ to redirect. Setup and troubleshooting: [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.m
 - **`content/archive/`, `snapshot/`, `infra/`.** Preservation records from Phases 0–1. Their value is
   being faithful, so reformatting or "improving" them destroys the point. A `PreToolUse` hook blocks
   writes to the first two.
-- **Anything on the Phase 0 asset keep/drop list** (`resources/images/ASSET_INVENTORY.md`) without
-  checking in first. The inventory exists; it hasn't been acted on. `projects/downloads/nightLight.unity3d`
-  (6.3 MB, unplayable) is the obvious candidate and is still deliberately in place.
+- **`resources/css/` and `resources/js/`** — the old site's stylesheet and scroll handler. Mined in
+  Phase 5 and **the only copy**; `snapshot/` has `colors.css` and nothing else. The findings are
+  recorded under "What the gate corrected", but the sources are what a re-examination of the recovered
+  curve ([#33](https://github.com/ali-wallick/Portfolio/issues/33)) would want.
+- **`resources/WallickAli-Resume.pdf`** — carries a PO Box, pending [#40](https://github.com/ali-wallick/Portfolio/issues/40).
+
+_The Phase 0 asset keep/drop list was **acted on in Phase 3**: the 50 keep-listed files moved to
+`src/assets/images/`, and the drop list — 86 unused social icons, 6 orphaned logos, and the 6.3 MB
+unplayable `nightLight.unity3d` — was deleted at `ce4533e`. **Nothing under `resources/images/`
+should ever exist again.** The audit's conclusions are preserved in [#45](https://github.com/ali-wallick/Portfolio/issues/45); the full text is
+`git show ce4533e~1:resources/images/ASSET_INVENTORY.md`._
 
 ---
 
@@ -823,4 +803,6 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 | `src/components/ResumeDocument.astro` | The resume, both densities. `variant` is the only difference.             |
 | `docs/LINKEDIN.md`                    | Paste-ready LinkedIn copy. A handoff for Ali, never an automated sync.    |
 | `docs/REBUILD-LOG.md`                 | Running record. Phase 7's source material.                                |
+| `infra/README.md`                     | The live zone, the DNS tooling, and Phase 1's record.                     |
+| GitHub issues                         | What's actually left. Milestones per phase; `decision` and `needs-ali`.   |
 | `snapshot/`                           | The old site as it stood. The reference for "what did the old page say?"  |

@@ -7,6 +7,150 @@ interesting are exactly the ones that evaporate a week later.
 
 Append as you go. Newest phase last.
 
+**Phases 0 and 1, the process layer, and the verification record were folded in from `docs/PLAN.md`
+on 2026-08-20**, when that file was retired — it had become a second, thinner source for the same
+page this one feeds, and two sources for one deliverable is the duplication this project keeps
+removing. Those four sections read as summary rather than as running notes, because that is what
+they were.
+
+## How this was run
+
+The process layer, folded in from `docs/PLAN.md` when that file was retired on 2026-08-20. It was a
+deliverable in its own right rather than overhead around the real work, and it is the part of this
+project that transfers back to a day job.
+
+### Phase gates
+
+**Work stopped for a conversation before each phase began.** Every gate covered the same five
+questions, and they held for all six:
+
+1. **Scope** — what's actually in this phase, and what got deferred.
+2. **Verification** — _added after the Phase 3 gate, which earned it._ Before trusting the brief, check this phase's load-bearing facts against **primary sources** rather than against the repo's own notes. `CLAUDE.md` and the plan are a cache, and caches go stale between phases. The Phase 3 gate produced five factual corrections this way — a wrong job title in two places, a settled phrasing that had been overtaken by a public announcement, an overclaimed credit, a "needs sourcing" TODO answered by an image already in the repo, and a schema constraint nobody had noticed applied more broadly than assumed. Four of the five would otherwise have shipped as confident, wrong prose. Budget a few tool calls for this at every gate; it is the cheapest verification in the project.
+3. **Handoff** — fresh session or continue? Most phases started clean, with the plan and `CLAUDE.md` carrying context forward instead of a long scrollback. That's cheaper _and_ produces better work — a session carrying 80 turns of unrelated history reasons worse than one that starts with a tight brief.
+4. **Model** — which model does the bulk of this phase (see below).
+5. **Cost** — rough expectation going in, and a look at actual spend coming out.
+
+**A corollary for the gate itself:** a gate is where the expensive model earns its keep, so keep gates short and run them on the good model rather than economising. The judgment-per-token is the whole product of the session.
+
+### Model allocation
+
+Current lineup and list pricing, per million tokens:
+
+| Model         | Input / Output | Use for                                                                                               |
+| ------------- | -------------- | ----------------------------------------------------------------------------------------------------- |
+| **Haiku 4.5** | $1 / $5        | Mechanical bulk — scraping WordPress to Markdown, asset inventory, link checking, bulk find/replace   |
+| **Sonnet 5**  | $3 / $15       | Most implementation — building components, writing content from source material, wiring the build     |
+| **Opus 5**    | $5 / $25       | Architecture and judgment — content model design, design exploration, `CLAUDE.md`, anything ambiguous |
+
+If you're on a Claude Code subscription rather than API billing, you aren't paying per token — but the same ratios govern how fast you burn plan limits, so the allocation still matters. _(Sonnet 5 was on introductory pricing at $2/$10 through 2026-08-31 for most of this project.)_
+
+### What actually drove cost
+
+Worth internalizing early, since it's the part enterprise access hides:
+
+- **Context length dominates everything.** Every turn re-sends the whole conversation. One 100-turn session costs far more than five focused sessions doing the same work — the last turn of a long session can cost 20× the first. This is the single biggest lever, and it's why the phase-gate handoff question matters.
+- **Subagents multiply spend.** Each one starts cold and builds its own context. Genuinely parallel fan-out (surveying an unknown codebase) earns it; a task you could do inline doesn't.
+- **Prompt caching works within a session, not across.** Cached context reads at ~10% of input price. This cuts both ways: don't `/clear` mid-phase for no reason, but don't drag a finished phase's context into the next one either.
+- **Design iteration is the expensive phase** — lots of visual back-and-forth, large outputs. Budget for it; it's also the highest-value work.
+
+Run `/usage` any time to see where a session went, and there's an `explain-usage` skill that breaks it down in more detail. Worth doing after the first couple of phases while the intuition is still forming.
+
+---
+
+---
+
+## Phase 0 — Preserve ✅ Complete (2026-08-15/16)
+
+_Nothing is reversible until the old content is out of the old system._ Runs first, blocks nothing once complete. Mostly mechanical — planned as Haiku work. **In practice it ran on Sonnet 5**, and the HTML-to-Markdown judgment calls (a malformed `<s>` tag, an undated post, mojibake in a quoted excerpt) were worth the difference over Haiku.
+
+Landed via [PR #1](https://github.com/ali-wallick/Portfolio/pull/1), merged to `master` at `d2de27f`.
+
+- **Scrape the WordPress blog to Markdown.** Done — 20 posts (top of the ~15-20 estimate), 2010-2019, walked `?offset=0,5,10,15` until "Older" stopped appearing. One file per post in `content/archive/` with title/date/source front matter. One post ("Website Live!") had no published date on the live site — flagged in front matter with a `2010-xx-xx` filename rather than a guessed date.
+  - **Follow-up fix:** the first pass only verified the posts' images currently resolved on DreamHost — it didn't commit the binaries, so they were still hotlinking to `aliwallick.com/blog/wp-content/uploads/`. Caught in review before merge. All 14 images across the 6 affected posts are now downloaded into `content/archive/images/` (2.8 MB) and referenced locally. Worth remembering for any future scrape-style task: "verify it resolves" is not the same as "preserved."
+- **Snapshot the live site** (full crawl) — done, in `snapshot/`. Every top-level page, all 15 project pages at their live (mixed-case) URLs, the blog's 4 pagination pages, and stray public files still live at time of capture (`todo.txt`, `palette.html`, `colors.css`, `wp-login.html`).
+- **Tag the current repo** (`v1-legacy`) — done, pushed to origin.
+- **Inventory assets.** Done — confirmed exactly as scoped: 86 of 90 social icons unused, 6 orphaned project logos, plus one more (`programming_actionscript.png`) tied to the known Art of Rescue icon bug. `resources/images/ASSET_INVENTORY.md` has the full keep/drop list. Nothing deleted — that's a Phase 3 cleanup action, not a Phase 0 one.
+- **Pull source material** for the content rewrite (LinkedIn history, current resume PDF, Marvel Snap press/YouTube appearances) — **not done, and not agent-doable.** This is your material to gather, not DreamHost-only content at risk of disappearing, so it didn't block the Phase 0 merge. Still needed before the Phase 3 gate.
+
+**Exit:** every piece of content that exists only on DreamHost is in git. ✅ Met.
+
+---
+
+---
+
+## Phase 1 — Infrastructure ✅ Complete (2026-08-16)
+
+_The only phase in this project with a deadline._ Domain, DNS, and registrar all landed on
+Cloudflare and email went live on iCloud+ — verified send **and** receive in both directions on both
+`ali@` and `contact@aliwallick.com` — **the same day it started**, roughly six weeks ahead of the
+October 1 GoDaddy renewal. Merged via [PR #2](https://github.com/ali-wallick/Portfolio/pull/2).
+
+**What the deadline actually was, since the reasoning outlived it.** A registrar transfer _adds_ a
+year to the existing expiry rather than resetting it, so transferring before the renewal date lost
+nothing — but letting it auto-renew first would have meant paying GoDaddy's renewal rate for a year
+the domain was going to move anyway. The working target was ~September 20: transfers take 5–7 days
+after approval, and Cloudflare requires the domain to be on Cloudflare DNS _before_ it will accept
+the registration.
+
+**The rule that mattered, and would again: do not turn off auto-renew as a cost-saving move.** If a
+transfer slips for any reason, a lapsed domain is far worse than a duplicated renewal. Leave it on;
+a completed transfer makes it moot.
+
+### What it replaced
+
+- **Domain** `aliwallick.com` at **GoDaddy** — registration only, nothing else on the account.
+- **Site and email** on **DreamHost** — `ali@aliwallick.com` lived there.
+- **A second household domain** registered **free as part of the DreamHost annual subscription**,
+  with a site hosted there too.
+
+**DreamHost retires when both are migrated off**, and temporary double-paying was accepted up front.
+That is what removed the coupling as a blocker — it became a sequencing note rather than a
+negotiation, and it is now [#52](https://github.com/ali-wallick/Portfolio/issues/52).
+
+### The zone, the tooling, and the rest of Phase 1 are in `infra/README.md`
+
+**Not summarised here, on purpose.** That file documents the zone as it currently stands, the three
+things a summary can't ship — `capture-dns-baseline.sh`, the captured pre-migration zone, and
+`verify-dns.sh`, which answers _"did we lose a record?"_ mechanically rather than by reading — and
+the DKIM trap that explains why the verify script asserts a magic substring.
+
+The step-by-step that actually ran is in git history (`git show 0eec28f:infra/PHASE-1-RUNBOOK.md`, the version that was actually used).
+It was retired on 2026-08-20: a registrar transfer happens once, and 143 lines of imperative
+instructions for a completed migration is a document that can only mislead — it still read _"target
+completion ~2026-09-20"_ five days after the work was done.
+
+**The Phase 1 follow-ups are GitHub issues**, not a list in either file —
+[#41](https://github.com/ali-wallick/Portfolio/issues/41) DMARC, [#42](https://github.com/ali-wallick/Portfolio/issues/42) SPF hardfail, [#43](https://github.com/ali-wallick/Portfolio/issues/43) stale SPF includes,
+[#44](https://github.com/ali-wallick/Portfolio/issues/44) `google-site-verification`, [#45](https://github.com/ali-wallick/Portfolio/issues/45) repo cleanup, [#52](https://github.com/ali-wallick/Portfolio/issues/52) the DreamHost
+handoff, and [#55](https://github.com/ali-wallick/Portfolio/issues/55), which came out of actually running the verify script during that cleanup.
+
+**One of them resolved during the phase and is worth keeping in the record**, because it is the kind
+of thing that would otherwise be quietly rediscovered: the first test send landed at Gmail with
+`spf=pass` but `dkim=permerror (no key for signature)`. The `sig1._domainkey` CNAME was correctly in
+place and pointing at Apple's key host — Apple simply hadn't finished publishing the key on their
+end yet. **A correct DNS record and a working DNS record are not the same thing when a third party
+owns what it points at.** A retest an hour later came back `dkim=pass` on both addresses.
+
+---
+
+---
+
+## What verification meant, per phase
+
+Folded in from `docs/PLAN.md`. Worth keeping because it is what retroactively justifies trusting
+anything else in this log — a record is only worth as much as the checking behind it. Per-phase, not
+just at the end:
+
+- **Phase 0:** post count in `content/archive/` matches the live blog's pagination; spot-check bodies and dates against the live site.
+- **Phase 1:** after each migration step, verify independently — DNS records resolve identically, mail sends _and_ receives, the site still loads. Never stack two unverified steps.
+- **Every phase after 2:** each branch gets a Cloudflare preview URL. Review on desktop _and_ phone before merge — the old site's core failure was never being looked at on a phone.
+- **CI on every PR:** build succeeds, internal link check passes, no `http://` subresources, Lighthouse thresholds for performance and accessibility.
+- **Phase 3:** read the full site top to bottom against the resume and LinkedIn; every claim true as of 2026. Explicitly re-verify nothing says "unannounced Marvel game."
+- **Phase 6, pre-cutover:** crawl the old site's URL list against the new one and confirm every path resolves or redirects. Test OG previews by pasting links into Slack/Discord/iMessage.
+- **Final:** load on a real phone over cellular, with an actual stranger's eyes if possible.
+
+---
+
 ---
 
 ## Phase 2 — Foundation & agentic tooling
@@ -857,3 +1001,131 @@ rather than loudly.
 a real-DOM sweep across 50 renders was what confirmed no pair it _didn't_ know about had appeared.
 Both passed, which is the point — the second check is cheap and the day it disagrees is the day it
 pays for itself.
+
+---
+
+## Between Phase 5 and Phase 6 — moving the backlog out of prose, 2026-08-20
+
+### The plan file had quietly become two documents
+
+`~/.claude/plans/i-first-built-this-glistening-book.md` was 910 lines doing two incompatible jobs: a
+**closed historical record** of Phases 0–5, and a **live list of what's left**. Those want opposite
+things. The record wants to be immutable and complete; the list wants to be edited constantly and
+kept short. Keeping both in one file meant the interesting part — twelve or so deferred follow-ups —
+was distributed as prose across five phase sections, three "still open at the end of the gate"
+subsections, and a plan appendix.
+
+Nothing was lost, which is the point worth recording: **every one of the ~30 outstanding items was
+written down somewhere**, because the habit of recording deferrals at the moment of deferring held
+for five phases. The problem was purely retrieval. Answering _"what's actually left?"_ took reading
+910 lines of plan plus 56KB of `CLAUDE.md` and grepping for `TODO(phase-`.
+
+### Prose is the wrong shape for a backlog, and the tell is the blocking relationships
+
+The thing prose genuinely cannot express is **what blocks what**. Scattered through the plan were
+dependencies that only existed in a reader's head:
+
+- The thumbnail work can't start until the media route is decided, because three of five featured
+  projects have no usable image.
+- The wording pass shouldn't run while the design revisit is still moving.
+- The stale SPF includes can't be trimmed until DreamHost stops being able to send anything, which
+  depends on a migration involving another person.
+- The two files carrying a PO Box only matter if the repo goes public, which is most likely to
+  happen _because of_ the build-in-public page.
+
+That last one is a four-hop chain across three phases, and it existed only as a sentence in a
+"flagged not acted on" subsection. As issues it's one link.
+
+### 353 lines were deletable, and identifying which took one pass
+
+The kickoff-brief appendices for Phases 0–5 were **single-use session starters** — paste-this-in
+blocks for sessions that have since happened and merged. Every outcome they produced is recorded in
+the phase sections above them, in `CLAUDE.md`, or here. The Phase 6 one survives because it hasn't
+been used.
+
+The generalizable version: **a document that accretes one section per phase needs a rule for what
+leaves it, not just what enters it.** Without one it's monotonic, and a monotonic document gets read
+less each time it grows — which is the failure mode the plan was written to prevent in the first
+place.
+
+### Writing the issues surfaced a thing the prose had lost
+
+Three of the four genuinely-unsettled questions were _already written down_, in the Phase 6 gate
+conversation starter — a section nobody would open until starting Phase 6. So the questions that
+determine whether Phase 6 can start were stored inside the artifact you read once Phase 6 has
+started. Splitting them out as `decision`-labelled issues is a small change that fixes a real
+ordering problem.
+
+The fourth wasn't written anywhere: **whether the DNS cutover belongs in Phase 6 or is its own
+moment.** It's implied by the gate starter's warning that it's the one step with a blast radius
+outside the repo, but never asked. Ali slowing down before launch is exactly the condition that
+makes it matter — a Phase 6 that ends in an unshipped cutover is a phase that never closes.
+
+### Cost notes
+
+Cheap, and cheap for a specific reason: **this session read primary sources once and wrote 32
+issues from them**, rather than iterating. No subagents — the work was a single reader holding one
+plan file, `CLAUDE.md`, and a grep of `TODO(phase-` in their head at once, which is precisely the
+shape that does _not_ fan out. Delegating it would have meant each agent rebuilding the same context
+to write three issues.
+
+The one avoidable cost was self-inflicted: issue bodies were written before their numbers existed,
+so ten of them needed a follow-up edit pass to fix cross-references. Creating placeholder issues
+first and filling bodies second would have avoided it.
+
+### The narrowing pass found the drift it was hypothesising about
+
+Splitting the backlog out left the plan as a record — and the obvious next question was whether a
+574-line record earns its place next to a 56KB `CLAUDE.md`. Checking rather than assuming turned up
+something better than a size argument.
+
+**The plan's summary tables had drifted from `CLAUDE.md`, on the most sensitive fact in the
+project.** Its "Decisions already made" row for Second Dinner still read _"current work only as 'an
+unannounced mobile title in Godot'"_ — a phrasing `CLAUDE.md` **explicitly retired** at the Phase 3
+gate for being vaguer than the studio's own public statement _and_ wrong about "mobile". The plan's
+Context paragraph asserted the same thing in prose, dated 2025 rather than 2024. Two more rows in
+the same table were stale: Deploy carried an inline correction instead of being corrected, and
+Visual design said "2-3 directions" when the plan's own Phase 5 section, 350 lines further down,
+opens by saying it took four.
+
+So a fresh session following the standing instruction to _"read the plan for full context"_ would
+have read a retired phrasing about an unannounced project, presented as settled. **That is the old
+site's bug** — the Marvel game described as "upcoming" on four pages at once — reproduced in the
+documentation layer of the project built to prevent it.
+
+The fix was not to resync the tables. **It was to delete them**, on the same principle the content
+model runs on: every fact lives in exactly one place. The narrowed file now asserts nothing
+`CLAUDE.md` also asserts, which means it cannot drift, because there is nothing to drift from.
+
+### "It's the only copy" is a claim to verify, not to assert
+
+The first pass at this concluded the plan's 111-line Phase 1 section was the sole record of the
+infrastructure migration. **It wasn't.** `infra/PHASE-1-RUNBOOK.md` (since restructured into `infra/README.md`) had been sitting in the repo
+since Phase 1 with 257 lines covering the same ground more thoroughly — the executed steps with
+their verification gates, a DKIM-trap section, and its own open-items list.
+
+Worth noticing _how_ that error happened: the conclusion came from comparing the plan against
+`CLAUDE.md`, and `CLAUDE.md` says almost nothing about Phase 1 because Phase 1 is closed and
+out of scope. Absence from the file you happen to be diffing against is not absence from the repo.
+A three-command grep across all four documents corrected it.
+
+That changed the outcome materially. Instead of extracting a new document, the plan's genuinely
+unique remainder — the architecture table, the cost comparison, the iCloud+ constraints — **moved
+into the runbook**, and the plan's Phase 1 section became a pointer. Same principle again: the
+record with the working scripts next to it is the one that should hold the reasoning.
+
+### What a record keeps that a tracker doesn't
+
+The narrowing kept three things and it is worth being explicit about why, since the default instinct
+was to keep the phase-by-phase narrative and drop the process notes:
+
+- **How the project was run** — the five gate questions, the model allocation, the cost mechanics.
+  This is goal #2's actual content, and nothing else holds it.
+- **What the plan got wrong**, per phase. More useful than what it got right, and it only exists
+  because each phase wrote its corrections down at the time.
+- **Per-phase verification.** What "verified" meant at each step, which is the thing that
+  retroactively justifies trusting the record at all.
+
+Everything else — settled decisions, open questions, the phase-6/7 task shape — had a better home
+already. **353 lines of plan became 346 lines of record**, with 60 of them folded into the runbook
+rather than deleted.

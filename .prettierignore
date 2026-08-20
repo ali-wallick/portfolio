@@ -6,8 +6,10 @@ content/archive/
 # Legacy assets awaiting the Phase 3 cleanup pass.
 resources/
 
-# Phase 1 infrastructure record.
-infra/
+# Phase 1 infrastructure record. The captured zone is a faithful artifact;
+# infra/README.md is a live document and is formatted with everything else.
+infra/dns-baseline-aliwallick.com.txt
+infra/aliwallick.com.zone
 
 # Generated
 dist/
