@@ -229,6 +229,14 @@ const jobs = defineCollection({
       /** One line for the site bio. */
       summary: z.string().min(1).max(280).optional(),
       /**
+       * The "currently" line — required when `end` is omitted (the current
+       * job). Read by the homepage lede and the About intro via
+       * `getCurrentNote()`, so there is exactly one place to edit this fact.
+       * Self-dating by construction ("Since 2024, ...") rather than a
+       * separate "as of" field.
+       */
+      currentNote: z.string().min(1).max(280).optional(),
+      /**
        * Resume bullets for the one-page resume, strongest first. Rendered
        * verbatim.
        */
@@ -267,6 +275,14 @@ const jobs = defineCollection({
             message: `role start (${role.start}) is before the job start (${data.start})`,
           });
         }
+      }
+      if (data.end === undefined && data.currentNote === undefined) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['currentNote'],
+          message:
+            'the current job (no `end`) requires `currentNote` for the homepage/About "currently" line',
+        });
       }
     }),
 });

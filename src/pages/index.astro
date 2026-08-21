@@ -2,9 +2,10 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import ProjectMeta from '~/components/ProjectMeta.astro';
 import { site } from '~/config/site';
-import { getFeaturedProjects } from '~/lib/content';
+import { getFeaturedProjects, getCurrentNote } from '~/lib/content';
 
 const featured = await getFeaturedProjects();
+const currentNote = await getCurrentNote();
 ---
 
 {
@@ -22,14 +23,14 @@ const featured = await getFeaturedProjects();
 
     <p class="lede">
       I'm a software engineer who's spent fifteen years on game UI and systems, most recently five
-      of them on <a href="/projects/marvel-snap">Marvel Snap</a> at Second Dinner. Since 2024 I've been
-      on the studio's next game, being built in Godot.
+      of them on <a href="/projects/marvel-snap">Marvel Snap</a> at Second Dinner.
     </p>
   </div>
-  {
-    /* TODO(phase-7): #50 — a "currently" line that is cheap enough to update that the
-      site can be trivially correct rather than expensively correct. */
-  }
+
+  <div class="currently">
+    <p class="eyebrow">Currently</p>
+    <p>{currentNote}</p>
+  </div>
 
   <h2>Featured work</h2>
   {

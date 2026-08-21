@@ -87,6 +87,16 @@ export function currentTitle(job: Job): string {
   return job.data.roles[job.data.roles.length - 1]!.title;
 }
 
+/**
+ * The "currently" line for the current job (the one with no `end`) — the
+ * single source for the homepage lede and the About intro paragraph.
+ */
+export async function getCurrentNote(): Promise<string> {
+  const jobs = await getJobs('site');
+  const current = jobs.find((j) => j.data.end === undefined)!;
+  return current.data.currentNote!;
+}
+
 /** Human label for the honest-framing status field. */
 export const STATUS_LABEL: Record<Project['data']['status'], string> = {
   shipped: 'Shipped',

@@ -640,6 +640,32 @@ hr {
   line-height: 1.5;
 }
 
+/* The "currently" module — its own block rather than the tail of the lede,
+   because what Ali is working on *now* is the most perishable fact on the site
+   and the one a reader wants soonest.
+
+   A frame, not a plate: it is not pressable, and the height rule only means one
+   thing. Its accent at rest comes from the `.eyebrow` marker it already
+   contains, which stays the single at-rest appearance of the interaction
+   colour.
+
+   The text is `currentNote` on the current job, so this block and the About
+   intro read the same field and cannot drift apart. */
+.currently {
+  max-width: var(--measure);
+  margin: var(--space-6) 0 var(--space-12);
+  padding: var(--space-6);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.currently > p:last-child {
+  margin: 0;
+  font-size: var(--text-lg);
+  line-height: 1.5;
+}
+
 .page-head {
   margin-bottom: var(--space-8);
 }

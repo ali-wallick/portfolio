@@ -53,6 +53,9 @@ summary: >-
   Joined as the studio's 11th employee and spent five years on Marvel Snap,
   which shipped in October 2022. Moved to Second Dinner's next team in 2024,
   building the studio's first game in Godot.
+currentNote: >-
+  Since 2024, I've been on Second Dinner's next team, building the studio's
+  first game in Godot.
 tech:
   - Unity
   - C#
