@@ -12,6 +12,8 @@
     "build": "astro build && npm run build:pdf",
     "build:pdf": "node scripts/build-pdf.mjs",
     "check:pdf": "node scripts/build-pdf.mjs --check",
+    "check:resume-print": "node scripts/check-resume-print.mjs",
+    "update:resume-print": "node scripts/check-resume-print.mjs --update",
     "build:ci": "node scripts/build-ci.mjs",
     "preview": "astro preview",
     "astro": "astro",
@@ -19,7 +21,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "links": "node scripts/check-links.mjs",
-    "verify": "npm run format:check && npm run check && npm run build && npm run check:pdf && npm run links"
+    "verify": "npm run format:check && npm run check && npm run build && npm run check:pdf && npm run check:resume-print && npm run links"
   },
   "dependencies": {
     "@fontsource-variable/figtree": "^5.3.0",

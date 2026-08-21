@@ -13,91 +13,101 @@
  * should have to re-litigate against a design system.
  */
 
-/* --- Screen ------------------------------------------------------------- */
+/* --- Screen -------------------------------------------------------------
+ *
+ * Scoped inside @media screen so nothing here can ever reach paper on
+ * specificity, regardless of what selector it's written with. That's what
+ * actually fixed the Phase 5 leak (a :root[data-palette='…'] rule beating the
+ * print block's bare :root) — it's a statement about where these rules may
+ * apply, not a list of what to override. See CLAUDE.md, "The print block can
+ * be beaten on specificity, not just on omission."
+ */
 
-.resume-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-6);
-  align-items: baseline;
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: var(--space-3);
-  margin-bottom: var(--space-6);
-}
+@media screen {
+  .resume-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
+    align-items: baseline;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
 
-.resume-actions p {
-  margin: 0;
-}
+  .resume-actions p {
+    margin: 0;
+  }
 
-.resume-head h1 {
-  margin-top: 0;
-  margin-bottom: var(--space-1);
-}
+  .resume-head h1 {
+    margin-top: 0;
+    margin-bottom: var(--space-1);
+  }
 
-.resume-role {
-  color: var(--color-text-muted);
-  margin-bottom: var(--space-2);
-}
+  .resume-role {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-2);
+  }
 
-.resume-contact {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-4);
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  font-size: var(--text-sm);
-  max-width: none;
-}
+  .resume-contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: var(--text-sm);
+    max-width: none;
+  }
 
-.resume-section h2 {
-  font-size: var(--text-lg);
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: var(--space-1);
-  margin-bottom: var(--space-4);
-}
+  .resume-section h2 {
+    font-size: var(--text-lg);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-1);
+    margin-bottom: var(--space-4);
+  }
 
-.resume-job {
-  margin-bottom: var(--space-6);
-}
+  .resume-job {
+    margin-bottom: var(--space-6);
+  }
 
-/* Title and dates share a line on a wide screen and stack on a narrow one.
-   The old site had no viewport meta at all; every new page gets read on a
-   phone before it gets merged. */
-.resume-job-head {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 0 var(--space-4);
-}
+  /* Title and dates share a line on a wide screen and stack on a narrow one.
+     The old site had no viewport meta at all; every new page gets read on a
+     phone before it gets merged. */
+  .resume-job-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0 var(--space-4);
+  }
 
-.resume-job-head h3 {
-  font-size: var(--text-base);
-  margin: 0;
-}
+  .resume-job-head h3 {
+    font-size: var(--text-base);
+    margin: 0;
+  }
 
-.resume-company {
-  font-weight: normal;
-}
+  .resume-company {
+    font-weight: normal;
+  }
 
-.resume-dates,
-.resume-job-meta {
-  margin: 0;
-}
+  .resume-dates,
+  .resume-job-meta {
+    margin: 0;
+  }
 
-.resume-bullets {
-  margin: var(--space-2) 0 0;
-  padding-left: var(--space-4);
-  max-width: var(--measure);
-}
+  .resume-bullets {
+    margin: var(--space-2) 0 0;
+    padding-left: var(--space-4);
+    max-width: var(--measure);
+  }
 
-.resume-bullets li {
-  margin-bottom: var(--space-2);
-}
+  .resume-bullets li {
+    margin-bottom: var(--space-2);
+  }
 
-.resume-skills {
-  max-width: none;
+  .resume-skills {
+    max-width: none;
+  }
 }
 
 /* --- Paper --------------------------------------------------------------
@@ -333,7 +343,15 @@
     margin: 0 0 4pt;
   }
 
+  /* Scoping the screen half inside @media screen (see the top of this file)
+     stopped this layout — flex row, no bullets, no list padding — from
+     reaching paper by cascade. Paper needs its own copy rather than an
+     implicit inherit; that's the whole point of the scoping. */
   .resume-contact {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
     font-size: 9pt;
     gap: 0 12pt;
     margin: 0;
@@ -363,14 +381,35 @@
     page-break-inside: avoid;
   }
 
+  /* Same reason as .resume-contact above: title-left/dates-right was a
+     screen-only flex rule until now, and h1,h2,h3,h4's global margin in
+     base.css (var(--space-12) top) is not something paper wants on a job
+     title — it was only ever zeroed by the screen rule cascading through. */
+  .resume-job-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0 12pt;
+  }
+
   .resume-job-head h3 {
     font-size: 10pt;
+    margin: 0;
+  }
+
+  /* Otherwise inherits font-weight: bold from the h1,h2,h3,h4 print rule
+     above, since it's a child of .resume-job-head h3 — the "· Company"
+     suffix is meant to stay de-emphasized next to the bolded title. */
+  .resume-company {
+    font-weight: normal;
   }
 
   .resume-dates,
   .resume-job-meta {
     font-size: 9pt;
     color: #333333;
+    margin: 0;
   }
 
   .resume-bullets {
@@ -386,5 +425,6 @@
   .resume-skills {
     font-size: 9.5pt;
     margin: 0;
+    max-width: none;
   }
 }
