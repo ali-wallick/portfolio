@@ -16,6 +16,16 @@ export const site = {
    * but `contact@` is the address that goes on the public site.
    */
   email: 'contact@aliwallick.com',
+
+  /**
+   * Cloudflare Web Analytics site token (issue #30). Not a secret — it's
+   * designed to sit in public page markup, the same as the token in
+   * Cloudflare's own snippet. What actually needs gating is *whether* the
+   * beacon renders, not the token's visibility: `BaseLayout.astro` only emits
+   * it when `!showDrafts`, so preview deploys and `astro dev` never report
+   * pageviews and only `master` builds do.
+   */
+  analyticsToken: 'bd2daf82080746f2bc1529235444ac67',
 } as const;
 
 export type SocialLink = {

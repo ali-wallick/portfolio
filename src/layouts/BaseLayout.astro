@@ -1,5 +1,6 @@
 ---
 import { site, nav } from '~/config/site';
+import { showDrafts } from '~/lib/content';
 
 /* Self-hosted, latin subsets, weight axis only — no third-party requests, so
    the site stays out of cookie-banner and third-party-latency territory. The
@@ -91,6 +92,22 @@ const year = new Date().getFullYear();
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={site.name} />
     {description && <meta property="og:description" content={description} />}
+    {
+      /* Cloudflare Web Analytics (#30). Gated on `!showDrafts` rather than a
+         separate flag — that's already the exact production/preview split
+         `build-ci.mjs` establishes, so previews and `astro dev` never report
+         pageviews and only `master` builds do. No cookie banner needed: this
+         beacon is cookieless by design. */
+    }
+    {
+      !showDrafts && (
+        <script
+          type="module"
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={JSON.stringify({ token: site.analyticsToken })}
+        />
+      )
+    }
   </head>
 
   <body>
