@@ -987,6 +987,16 @@ hr {
 .portrait img {
   display: block;
   width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  /* A higher X% shows more of the source's right side, which pushes the
+     subject left within the crop — the inverse of what it sounds like.
+     (Got this backwards once already: 35% was tried first and visibly
+     pushed the face further right, confirmed against a live preview.) 60%
+     is this specific photo, picked from a labelled comparison strip rather
+     than by eye alone; the next photo dropped into this slot will likely
+     want its own value. */
+  object-position: 60% 50%;
   border-radius: 50%;
   border: 1px solid var(--color-border);
 }

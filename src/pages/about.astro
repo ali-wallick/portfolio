@@ -13,19 +13,16 @@ const jobs = await getJobs('site');
 const currentNote = await getCurrentNote();
 ---
 
-<BaseLayout title="About" description="About Ali Wallick." image="/og/home.png">
+<BaseLayout title="About" description="About Ali Wallick." image="/og/home.jpg">
   <h1>About</h1>
 
   {
-    /* The one page on the site where a face is the obvious content, and it had
-      no image at all — three paragraphs of prose and nothing to look at.
-
-      ⚠️ THIS IS THE WEAK LINK IN THE COMPARISON, and it should be judged as a
-      slot rather than as this picture. `me.jpg` is the only actual photograph
-      of Ali in the repo and it is a full-body hiking shot taken at distance —
-      inside a 12rem circle her face is a few dozen pixels. It is standing in to
-      show what the page looks like *with* a portrait; a real headshot is a
-      needs-ali follow-up.
+    /* The one page on the site where a face is the obvious content. `me.jpg`
+      is a real headshot as of #64/#70 — replaced the full-body hiking shot
+      that used to stand in this slot, whose face was a few dozen pixels
+      inside a 12rem circle. `.portrait img` crops to square with
+      `object-fit: cover` so whatever gets dropped in here next doesn't have
+      to be pre-cropped.
 
       Real alt text, unlike the project thumbnails: this is not duplicating
       adjacent link text, so the model's guard applies normally. */

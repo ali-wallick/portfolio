@@ -43,6 +43,7 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 const CONTENT = path.join(ROOT, 'src/content/projects');
 const ASSETS = path.join(ROOT, 'src/assets/images/projects');
 const OUT = path.join(ROOT, 'public/og');
+const HEADSHOT = path.join(ROOT, 'src/assets/images/me.jpg');
 
 const CARD_W = 1200;
 const CARD_H = 630;
@@ -95,6 +96,11 @@ function reticleFrame(width, height, { inset = 48, arm = 100, stroke = 9 } = {})
   return `<path d="${d}" fill="none" stroke="${MAGENTA}" stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round" />`;
 }
 
+/** `reticleFrame()`, wrapped as a standalone SVG so it can be used as a composite layer. */
+function reticleFrameSvg(width, height) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">${reticleFrame(width, height)}</svg>`;
+}
+
 /**
  * A project card: its resolved image, cover-cropped to the OG aspect ratio,
  * with the reticle frame overlaid for brand consistency. No baked-in text —
@@ -104,41 +110,78 @@ function reticleFrame(width, height, { inset = 48, arm = 100, stroke = 9 } = {})
  *
  * JPEG, not PNG: these are photos, and PNG's lossless compression on a
  * photograph runs 1-2MB a card for zero visible benefit over a quality-88
- * JPEG at a tenth of that. The brand cards below stay PNG because they're
- * mostly flat colour and sharp text edges, which is what PNG is actually for.
+ * JPEG at a tenth of that. `buildBrandCard()` below is half photo now too
+ * (the headshot) and gets the same treatment for the same reason, checked
+ * directly: its flat half — solid ground, bold display type — showed no
+ * visible compression artifacts at this quality either, so there was no
+ * reason to keep it on PNG once the photo half decided the format anyway.
+ * `buildFlatCard()` has no photo at all but ships JPEG too, for the same
+ * measured reason rather than by default.
  */
 async function buildProjectCard(sourcePath, outPath) {
   const photo = await sharp(sourcePath).resize(CARD_W, CARD_H, { fit: 'cover' }).toBuffer();
-  const frame =
-    Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_W}" height="${CARD_H}">
-    ${reticleFrame(CARD_W, CARD_H)}
-  </svg>`);
   await sharp(photo)
-    .composite([{ input: frame }])
+    .composite([{ input: Buffer.from(reticleFrameSvg(CARD_W, CARD_H)) }])
     .jpeg({ quality: 88 })
     .toFile(outPath);
 }
 
 /**
- * A personal/brand card: dark ground, the reticle frame, an eyebrow label
- * (mirrors `.eyebrow` in base.css — mono, tracked, a magenta marker) and the
- * name in Gabarito. Used for every page that isn't about one specific project.
+ * A personal/brand card: the headshot on the left, dark ground on the right
+ * with an eyebrow label (mirrors `.eyebrow` in base.css — mono, tracked, a
+ * magenta marker) and the name in Gabarito, the reticle frame around the
+ * whole thing. Used for every page that isn't about one specific project.
  *
- * Text-only rather than a headshot because there isn't a usable one yet — see
- * #70, which is where this swaps to a photo composite once Ali has one.
+ * Split panel rather than a full-bleed photo with text over it (the way
+ * project cards work): a photo behind text needs a scrim to stay legible,
+ * and this direction doesn't reach for blur or gradients anywhere else — the
+ * plate shadow is deliberately hard-edged (see tokens.css). A hard vertical
+ * split keeps that vocabulary and needs no scrim at all.
+ *
+ * #70 tracked this as a follow-up for when a usable headshot existed; it
+ * does now (src/assets/images/me.jpg, replaced from the old hiking-shot
+ * placeholder), so this is that follow-up rather than the deferral.
  */
-async function buildBrandCard(subtitle, outPath, format = 'png') {
-  const labelX = 120;
+async function buildBrandCard(subtitle, outPath) {
+  const photoW = 470;
+  const textX = photoW + 60;
+
+  const photo = await sharp(HEADSHOT).resize(photoW, CARD_H, { fit: 'cover' }).toBuffer();
+
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_W}" height="${CARD_H}">
     <style>${FONT_FACES}</style>
     <rect width="${CARD_W}" height="${CARD_H}" fill="${SURFACE}" />
-    ${reticleFrame(CARD_W, CARD_H)}
-    <rect x="${labelX}" y="266" width="20" height="20" rx="4" fill="${MAGENTA}" />
-    <text x="${labelX + 34}" y="284" font-family="DM Mono" font-size="34" letter-spacing="2.5" fill="${MUTED}">${subtitle.toUpperCase()}</text>
-    <text x="${labelX}" y="410" font-family="Gabarito" font-weight="800" font-size="128" fill="${INK}">Ali Wallick</text>
+    <rect x="${textX - 10}" y="266" width="20" height="20" rx="4" fill="${MAGENTA}" />
+    <text x="${textX + 24}" y="284" font-family="DM Mono" font-size="34" letter-spacing="2.5" fill="${MUTED}">${subtitle.toUpperCase()}</text>
+    <text x="${textX - 10}" y="410" font-family="Gabarito" font-weight="800" font-size="104" fill="${INK}">Ali Wallick</text>
   </svg>`;
-  const image = sharp(Buffer.from(svg));
-  await (format === 'jpeg' ? image.jpeg({ quality: 90 }) : image.png()).toFile(outPath);
+
+  await sharp(Buffer.from(svg))
+    .composite([
+      { input: photo, left: 0, top: 0 },
+      { input: Buffer.from(reticleFrameSvg(CARD_W, CARD_H)) },
+    ])
+    .jpeg({ quality: 90 })
+    .toFile(outPath);
+}
+
+/**
+ * A flat card with just a title on dark ground plus the reticle frame — no
+ * photo. Only used when a project has neither an image hero nor a poster
+ * frame to fall back to. Deliberately not `buildBrandCard()`: that one is
+ * Ali's headshot now, and captioning her photo with an unrelated project's
+ * title would misrepresent both.
+ */
+async function buildFlatCard(title, outPath) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_W}" height="${CARD_H}">
+    <style>${FONT_FACES}</style>
+    <rect width="${CARD_W}" height="${CARD_H}" fill="${SURFACE}" />
+    <text x="120" y="330" font-family="Gabarito" font-weight="800" font-size="88" fill="${INK}">${title}</text>
+  </svg>`;
+  await sharp(Buffer.from(svg))
+    .composite([{ input: Buffer.from(reticleFrameSvg(CARD_W, CARD_H)) }])
+    .jpeg({ quality: 90 })
+    .toFile(outPath);
 }
 
 /** thumb override -> image hero -> poster.jpg, mirroring projectThumb() in src/lib/content.ts. */
@@ -152,10 +195,10 @@ function resolveProjectImage(slug, data, contentDir) {
 async function main() {
   await mkdir(path.join(OUT, 'projects'), { recursive: true });
 
-  await buildBrandCard('Game Developer', path.join(OUT, 'home.png'));
-  await buildBrandCard('Resume', path.join(OUT, 'resume.png'));
-  await buildBrandCard('Contact', path.join(OUT, 'contact.png'));
-  await buildBrandCard('Projects', path.join(OUT, 'projects.png'));
+  await buildBrandCard('Game Developer', path.join(OUT, 'home.jpg'));
+  await buildBrandCard('Resume', path.join(OUT, 'resume.jpg'));
+  await buildBrandCard('Contact', path.join(OUT, 'contact.jpg'));
+  await buildBrandCard('Projects', path.join(OUT, 'projects.jpg'));
 
   const files = (await readdir(CONTENT)).filter((f) => f.endsWith('.md'));
   let ok = 0;
@@ -170,12 +213,12 @@ async function main() {
       ok++;
     } else {
       // No image to source from (a draft with neither an image hero nor a
-      // poster yet) — fall back to the brand card rather than fail the build.
-      // Still .jpg: every project card lives at the same extension regardless
-      // of which branch built it, so the page that links to it never has to
-      // know which one happened.
-      await buildBrandCard(data.title ?? slug, path.join(OUT, 'projects', `${slug}.jpg`), 'jpeg');
-      console.log(`  ${slug}: no image found, used the brand card as a fallback`);
+      // poster yet) — fall back to a flat title card rather than fail the
+      // build. Still .jpg: every project card lives at the same extension
+      // regardless of which branch built it, so the page that links to it
+      // never has to know which one happened.
+      await buildFlatCard(data.title ?? slug, path.join(OUT, 'projects', `${slug}.jpg`));
+      console.log(`  ${slug}: no image found, used a flat title card as a fallback`);
     }
   }
 
