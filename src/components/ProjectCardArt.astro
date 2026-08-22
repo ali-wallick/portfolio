@@ -1,0 +1,54 @@
+---
+import { formatYears, type Project } from '~/lib/content';
+
+/**
+ * A generated, typographic stand-in for a project thumbnail — no photography.
+ *
+ * ## What it is for
+ *
+ * Treatment B in the imagery comparison. Three of the five featured projects
+ * have no still of the work, so any photographic route is either uneven or
+ * waits on Ali sourcing captures. This route sidesteps the media problem
+ * entirely: it is built from data the content model already holds — `title`,
+ * `status`, `startYear`, `engine` — so the set is consistent **by
+ * construction** and a new project gets one for free.
+ *
+ * ## Built in CSS, deliberately, for now
+ *
+ * The eventual version of this idea is a build-time image generator, because
+ * the same artwork answers #27's OG cards and half of #24. That is real work
+ * and it is gated on a decision that has not been made.
+ *
+ * So this is the cheap honest version: it exists to be *looked at* next to the
+ * photographic treatments, which is all the comparison needs. If B wins, this
+ * becomes a generator that emits real files; if it loses, nothing was spent on
+ * a font-embedding pipeline for artwork nobody picked.
+ *
+ * ## Colour comes from `status`, and that is the point
+ *
+ * The five status hues are the content layer of this direction's colour system
+ * — they mark *what a thing is*. Keying the art to them means a jam entry and a
+ * shipped title are told apart at a glance across seventeen entries, which is
+ * the archive tier's honest-framing rule rendered rather than written. A status
+ * with no colour pair falls back to the neutral pair, exactly as the chips do.
+ */
+interface Props {
+  project: Project;
+  size?: 'card' | 'tile';
+}
+
+const { project, size = 'card' } = Astro.props;
+const d = project.data;
+
+// Same fallback chain the metadata strip uses, so the two never disagree about
+// what a project was built in.
+const built = d.engine.length ? d.engine : d.tech.length ? d.tech : d.platforms;
+---
+
+<div class="card-art" data-status={d.status} data-size={size} aria-hidden="true">
+  <span class="card-art-title">{d.shortTitle ?? d.title}</span>
+  <span class="card-art-meta">
+    <span>{formatYears(d.startYear, d.endYear)}</span>
+    {built[0] && <span>{built[0]}</span>}
+  </span>
+</div>

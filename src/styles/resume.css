@@ -174,6 +174,12 @@
     --tracking-display: normal;
     --tracking-label: normal;
     --measure: 68ch;
+    /* Pinned per the rule at the top of tokens.css, not because paper reaches
+       it — nothing on either resume route uses `--measure-wide` today; it is a
+       homepage block width. "No rule reaches it yet" is a fact about this week
+       rather than a property of the stylesheet, and this block's whole history
+       is tokens nobody thought would reach it. */
+    --measure-wide: 68ch;
     --content-max: 60rem;
 
     /* Added by Phase 5's playful direction. Colour first: the interaction

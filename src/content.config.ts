@@ -153,6 +153,25 @@ const projects = defineCollection({
         gallery: z.array(mediaSchema(image)).default([]),
 
         /**
+         * An explicit override for the card/tile thumbnail. **Optional on
+         * purpose, and usually absent** — `projectThumb()` in src/lib/content.ts
+         * derives a thumbnail with no front matter at all: an image `hero` is
+         * its own thumbnail, and a YouTube `hero` uses the poster frame
+         * committed alongside it by scripts/fetch-posters.mjs.
+         *
+         * So this field exists for exactly one job: swapping in a better
+         * picture later without touching the hero or the layout. A YouTube
+         * poster frame is whatever the uploader chose; when a real capture
+         * turns up, it lands here and nothing else changes.
+         *
+         * No `alt` beside it, which is deliberate rather than an oversight —
+         * see the note on `projectThumb()`. A thumbnail inside a card whose
+         * link text is already the project title is decorative, and giving it
+         * alt text makes a screen reader announce the title twice.
+         */
+        thumb: image().optional(),
+
+        /**
          * Draft entries render in `astro dev` and on preview deploys, and are
          * excluded from the production build. Every project seeded in Phase 2
          * is a draft: the metadata is real, the prose is Phase 3's job.

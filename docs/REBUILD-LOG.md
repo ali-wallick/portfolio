@@ -1129,3 +1129,180 @@ was to keep the phase-by-phase narrative and drop the process notes:
 Everything else — settled decisions, open questions, the phase-6/7 task shape — had a better home
 already. **353 lines of plan became 346 lines of record**, with 60 of them folded into the runbook
 rather than deleted.
+
+---
+
+## Phase 6 — building an instrument instead of an answer, 2026-08-21
+
+Ali asked for a plan for [#36](https://github.com/ali-wallick/Portfolio/issues/36) (thumbnails on
+featured work) and added the thing that actually mattered: _"I think at the core I worry that the
+site, especially the main pages, are too text heavy."_
+
+#36 was blocked on [#22](https://github.com/ali-wallick/Portfolio/issues/22), a `decision` issue.
+The useful move was not to pick a route but to **build the thing that lets the route be picked** —
+so the deliverable is a preview with a live switcher
+([PR #63](https://github.com/ali-wallick/Portfolio/pull/63)), not a merged treatment.
+
+### Measuring the complaint changed its scope
+
+The stated problem was about featured cards. One query answered whether that was the real problem:
+
+| Page        | `<img>` |
+| ----------- | ------- |
+| `/`         | 0       |
+| `/projects` | 0       |
+| `/about`    | 0       |
+| `/resume`   | 0       |
+| `/contact`  | 0       |
+
+**Zero images on every page a visitor lands on.** The only imagery on the site was on project detail
+pages. #36's scope would have added thumbnails to two surfaces and left `/about` — the longest prose
+page on the site — exactly as it was. Ali picked the wider scope once the number was in front of
+her, which is the argument for measuring a complaint before designing against it: the fix she asked
+for and the fix she wanted were different sizes.
+
+### Reusing the Phase 5 switcher precedent, deliberately
+
+`CLAUDE.md` already records why four palettes went behind one live switcher rather than four
+branches: _"the only comparison that matters is flipping between them on the same page."_ The same
+reasoning applied unchanged, so this reused the pattern rather than re-deriving it. The switcher
+itself did not survive in git — no `data-palette` toggle exists on any branch or commit — so it was
+rebuilt, which took about twenty lines. **Worth noting for next time: the pattern is more reusable
+than the code, and the code was not kept.**
+
+### No subagents, and that was the right call
+
+Per the standing note on using them honestly: this was a single connected thread — measure, inventory
+the media, build, verify — where every step depended on the previous one's output. Nothing fanned
+out. A subagent would have started cold and rebuilt the same context.
+
+The one place delegation would have paid was the poster-frame sweep across nine videos, and that
+turned out to be a nine-line script rather than a research task.
+
+### Two bugs the work walked into
+
+Both were found by doing something adjacent, not by looking for them.
+
+**Three archive projects embed a YouTube video that no longer exists**
+([#61](https://github.com/ali-wallick/Portfolio/issues/61)). Found because the poster-frame script
+got 404s. oEmbed returns 403 for all three; a live ID returns 200 from the same check. Those pages
+serve a dead player today.
+
+The interesting part is _why the content model missed it_. The guard table's whole thesis is making
+the old site's mistakes unrepresentable, and `links[].dead` exists precisely because dead links
+outlived their credits for years. **But `dead` only exists on `links[]` — `hero` and `gallery` have
+no equivalent.** Storing YouTube as a bare ID removed the protocol bug and created the impression
+the media problem was solved. A video ID is still a promise about a remote resource.
+
+**The resume print block wins the cascade by load order, and the bundler decides load order**
+([#62](https://github.com/ali-wallick/Portfolio/issues/62)). Adding a single component import to
+`BaseLayout.astro` — a preview-only component with no styles — took `resume.pdf` from 1 page to 2
+and `resume-full.pdf` from 2 to 3, with no CSS edited and no token added.
+
+`resume.css` is small enough that Astro inlines it into a `<style>` tag; the bundle carrying
+`tokens.css` and `base.css` is not, so it ships as a `<link>`. The two therefore reach `<head>` by
+different mechanisms and their **relative order is a property of the module graph**. The print block
+redefines tokens on `:root` and restyles `body` — same specificity as the screen rules it must beat
+— so it wins only by coming last. Flip the order and the entire paper palette, type scale and 9.4pt
+density stop applying at once.
+
+This is the **third** distinct way that block has been beaten, and `CLAUDE.md` already documents the
+other two (a denylist that misses new tokens; a selector that outranks a bare `:root`). The pattern
+across all three is the same: _the print block is a pile of overrides that must win a fight it does
+not control the terms of._
+
+Two fixes were tried and rejected rather than shipped, which is worth recording because both look
+right:
+
+- **`:root:root`** fixes the tokens and does nothing for the plain `body`, `.layout` and `a` rules.
+  A half-fix that leaves a comment claiming the hazard is handled is worse than none.
+- **`inlineStylesheets: 'never'`** makes both files `<link>`s, but Astro then emits `resume.css`
+  _first_ — converting an accidental correct order into a reliable incorrect one.
+
+What shipped instead is a workaround with the cost stated plainly: the switcher is inline markup
+plus gated inline strings, kept out of the module graph entirely. **That is a constraint no future
+contributor would guess**, which is the argument for fixing it properly rather than living with it.
+
+### The guard that worked
+
+`npm run check:resume-print` — the print-geometry differ committed for
+[#35](https://github.com/ali-wallick/Portfolio/issues/35) — diagnosed this in one run and named the
+offending elements and values. It was the difference between "the PDF grew a page" and "the print
+stylesheet is not applying at all."
+
+Its limitation is that it only runs when someone runs it. The page-count assertion is what fires
+automatically, and it only fires when the damage costs a **whole page**; the same failure at smaller
+scale is the 19pt of silent reflow already recorded from Phase 5.
+
+### A guard that was wrong, and only showed up when the site got its first decorative image
+
+Thumbnails sit inside cards whose link text is already the project title, which makes them
+decorative — `alt=""` is the correct markup, and alt text there would announce the name twice.
+
+`scripts/check-links.mjs` rejected all of them. Its rule matched `alt="…"`, and the build minifier
+collapses an empty alt to a valueless `alt`, which HTML5 defines as identical. So **every
+correctly-marked decorative image failed a check written to catch missing alt text.** The rule now
+distinguishes an explicitly empty alt from an absent one, which is the distinction it always meant
+to draw — it had simply never been tested against an image that should not be described, because
+until now the site had no images on those surfaces at all.
+
+### Outcome: hybrid, and the site got a third width
+
+Ali picked the hybrid on the preview — a photograph where one exists, generated
+typographic art where none does. Recorded on
+[#22](https://github.com/ali-wallick/Portfolio/issues/22), which unblocked
+[#36](https://github.com/ali-wallick/Portfolio/issues/36).
+
+**The comparison changed the answer rather than confirming it.** #22 had framed
+the choice as _"a consistent set of five beats two real screenshots and three
+compromises"_ — an argument for the all-generated route. Building it moved the
+facts: poster frames covered all five featured projects, so the featured tier
+stopped being where the media problem lived. **The archive tier is where the
+decision actually bit**, and it was only visible by flipping — nine of twelve
+tiles with a photo and three without reads as a broken grid, and the generated
+fallback earns its place there and nowhere else.
+
+That is the specific value a switcher has over a document: the argument on paper
+was about the featured tier, and the answer was in the archive.
+
+### The feedback that found a missing token
+
+Ali, on the same preview: _"I wonder if we should reduce the max width of the
+featured projects and increase the width of the 'current' box. It's kind of
+strange they are different sizes."_
+
+The cause was structural. The site had **two widths where it needed three**:
+`--measure` is a _reading_ width, `--content-max` is the page, and a bordered
+note or a card with a thumbnail in it is neither. Each had picked one, so they
+sat 24rem apart with their right edges stacked. `--measure-wide: 52rem` is the
+missing one, chosen against the content rather than as a midpoint.
+
+Worth recording that **the first attempt fixed the homepage and broke
+`/projects`** — narrowing the featured cards while leaving the archive grid at
+full width reproduced the identical ragged edge one page across. The fix only
+worked once every content block shared it. Narrowing the archive grid to three
+columns also made each tile, and each thumbnail, bigger, which is the rare case
+where the coherent answer is also the better-looking one.
+
+### Deleting the instrument is part of the method
+
+The scaffolding came out in one commit: **-341 lines**, and `BaseLayout.astro`
+ended byte-identical to `master`. That equality is the point — it is the check
+that proves preview-only machinery left no residue, and it is worth doing
+deliberately rather than trusting a grep.
+
+Two things the collapse had to get _right_ rather than merely delete, both of
+which would have shipped silently:
+
+- **The reticle script sat between the two switcher blocks** and came out with
+  the first cut. Nothing would have failed; the site's signature interaction
+  would simply have stopped existing.
+- **`display: flex` lived on the rule that _showed_ the generated art**, not on
+  the art itself, so removing the switcher collapsed its layout into a block
+  stack. Caught by checking a computed style rather than by reading the diff.
+
+The general lesson: **scaffolding that decides visibility tends to accumulate
+layout declarations that belong to the thing being shown.** Deleting the
+scaffold silently deletes those too. Both were found by verifying rendered
+output after the removal, which is a step it is very tempting to skip when the
+change is "just deleting the thing we already decided about."

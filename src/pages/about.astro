@@ -1,6 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import { getJobs, formatSpan, currentTitle, getCurrentNote } from '~/lib/content';
+import portrait from '~/assets/images/me.jpg';
+import cosplay from '~/assets/images/me2.jpg';
 
 /**
  * The career timeline here is generated from the same `jobs` collection the
@@ -12,6 +15,24 @@ const currentNote = await getCurrentNote();
 
 <BaseLayout title="About" description="About Ali Wallick.">
   <h1>About</h1>
+
+  {
+    /* The one page on the site where a face is the obvious content, and it had
+      no image at all — three paragraphs of prose and nothing to look at.
+
+      ⚠️ THIS IS THE WEAK LINK IN THE COMPARISON, and it should be judged as a
+      slot rather than as this picture. `me.jpg` is the only actual photograph
+      of Ali in the repo and it is a full-body hiking shot taken at distance —
+      inside a 12rem circle her face is a few dozen pixels. It is standing in to
+      show what the page looks like *with* a portrait; a real headshot is a
+      needs-ali follow-up.
+
+      Real alt text, unlike the project thumbnails: this is not duplicating
+      adjacent link text, so the model's guard applies normally. */
+  }
+  <figure class="portrait">
+    <Image src={portrait} alt="Ali Wallick" widths={[180, 360]} sizes="12rem" loading="eager" />
+  </figure>
 
   <p>
     Born and raised in Miami, I got interested in games young — young enough that I burned through
@@ -55,6 +76,25 @@ const currentNote = await getCurrentNote();
   </ul>
 
   <h2>Off the clock</h2>
+
+  {
+    /* `me2.jpg`, also unused since the Phase 3 migration, and the strongest
+      image argument on this page — it is the Kerbal Space Program cosplay whose
+      Dragon Con win the paragraph below already describes. An image that
+      illustrates a sentence already on the page earns its place in a way a
+      decorative one never does, which is why this slot is more convincing than
+      the portrait above it despite being the smaller file. */
+  }
+  <figure class="aside-figure">
+    <Image
+      src={cosplay}
+      alt="Kerbal Space Program cosplay — oversized green kerbal heads in white space helmets"
+      widths={[300, 600]}
+      sizes="14rem"
+      loading="lazy"
+    />
+  </figure>
+
   <p>
     Most of my free time goes to my family — including my young daughter and our pets — plus games,
     reading, camping, cooking, baking, and crafting, usually some combination of those with friends

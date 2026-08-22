@@ -107,9 +107,20 @@ for (const file of htmlFiles) {
   }
 
   // --- 3. Images have alt text --------------------------------------------
+  //
+  // The bug this guards is *missing* alt, which the old site had on every image
+  // it ever served. An explicitly EMPTY alt is the opposite of that bug: it is
+  // the correct markup for a decorative image, and it tells a screen reader to
+  // skip an image that would otherwise be announced redundantly.
+  //
+  // Both spellings count as present. `alt=""` survives as written, but the
+  // build minifier collapses it to a valueless `alt` — which HTML5 defines as
+  // identical and which `attr()` cannot see, since it only matches `name="…"`.
+  // Without the second test every decorative image on the site fails this
+  // check for being correct.
   for (const [tag] of html.matchAll(/<img\b[^>]*>/gi)) {
-    const alt = attr(tag, 'alt');
-    if (alt === undefined) report(rel, `<img> with no alt attribute: ${attr(tag, 'src') ?? tag}`);
+    const hasAlt = attr(tag, 'alt') !== undefined || /\balt(?=[\s/>=])/i.test(tag);
+    if (!hasAlt) report(rel, `<img> with no alt attribute: ${attr(tag, 'src') ?? tag}`);
   }
 
   // --- 5. No HTML comments in published markup -----------------------------

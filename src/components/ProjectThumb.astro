@@ -1,0 +1,60 @@
+---
+import { Image } from 'astro:assets';
+import { projectThumb, type Project } from '~/lib/content';
+
+/**
+ * The photographic thumbnail for a project card or tile.
+ *
+ * Goes through `astro:assets` rather than a raw `<img>`, which is the content
+ * model's guard rather than a preference: the path is resolved at build time,
+ * intrinsic dimensions are emitted, and the file is optimised on output. A
+ * renamed asset fails CI instead of shipping a broken image.
+ *
+ * ## `alt=""` is the correct answer here, not a shortcut
+ *
+ * This always renders inside a card or tile whose link text is already the
+ * project title, which makes the image decorative by construction — see the
+ * long note on `projectThumb()` in src/lib/content.ts. `alt="Marvel Snap key
+ * art"` inside a link named "Marvel Snap" makes a screen reader say the name
+ * twice. An empty alt is alt text, and the check in check-links.mjs is right to
+ * accept it.
+ *
+ * ## No height
+ *
+ * This direction's unblurred shadow means exactly one thing — *this can be
+ * pressed*. The card around this already has it. A thumbnail that grew its own
+ * plate would be claiming to be separately pressable, and would turn the height
+ * device into a texture applied to every box on the page, which is the failure
+ * mode the rule exists to prevent. So: a border and a matching radius, the same
+ * answer `Media.astro` reaches for a hero.
+ */
+interface Props {
+  project: Project;
+  /** Tiles are small enough to want a different crop and a smaller request. */
+  size?: 'card' | 'tile';
+}
+
+const { project, size = 'card' } = Astro.props;
+const src = projectThumb(project);
+
+// Widths are the rendered box at 2x, not the source size — the point of going
+// through `image()` is not shipping a 1280px file into a 200px slot.
+const widths = size === 'card' ? [320, 640] : [240, 480];
+---
+
+{
+  src && (
+    <div class="thumb" data-size={size}>
+      <Image
+        src={src}
+        alt=""
+        widths={widths}
+        sizes={
+          size === 'card' ? '(max-width: 40rem) 100vw, 16rem' : '(max-width: 40rem) 50vw, 12rem'
+        }
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  )
+}

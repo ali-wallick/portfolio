@@ -193,6 +193,27 @@
    * stack Phase 4's PDFs were generated with. Paper is unaffected either way.
    */
   --measure: 40.4rem;
+
+  /* The third width, and it exists because two were not enough.
+   *
+   * `--measure` is a *reading* width — how long a line of prose may get before
+   * it is tiring. `--content-max` is the page. Blocks that are neither — a
+   * bordered note, a row of cards with a thumbnail in it — had to pick one, and
+   * picking either was visibly wrong: the "currently" box at `--measure` and
+   * the featured cards at `--content-max` sat one above the other with a 24rem
+   * difference in right edge, which reads as a mistake rather than a hierarchy.
+   *
+   * 52rem is chosen against the content, not as a midpoint. It is wide enough
+   * that a featured card holds a 16rem thumbnail and still gives the metadata
+   * strip room to run without wrapping, and narrow enough that the "currently"
+   * note does not become a wide band with two lines floating in it.
+   *
+   * Prose inside one of these blocks still wraps at `--measure` — box width and
+   * line length are different questions, and the global `p` rule keeps
+   * answering the second one.
+   */
+  --measure-wide: 52rem;
+
   --content-max: 64rem;
 
   --radius: 6px;

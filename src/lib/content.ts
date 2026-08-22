@@ -97,6 +97,71 @@ export async function getCurrentNote(): Promise<string> {
   return current.data.currentNote!;
 }
 
+// ---------------------------------------------------------------------------
+// Thumbnails
+// ---------------------------------------------------------------------------
+
+/**
+ * Poster frames pulled from YouTube heroes by scripts/fetch-posters.mjs, keyed
+ * by project slug.
+ *
+ * Globbed rather than declared in front matter, and that is the content model's
+ * own rule being kept rather than bent: *"adding a project is one Markdown
+ * file."* If a poster had to be named in front matter, every future project
+ * with a video hero would need a second edit in a second place to get a
+ * thumbnail — which is the shape this model exists to rule out. Drop a
+ * `poster.jpg` next to the project's other assets and it is picked up.
+ *
+ * `eager` because these are used during render, and Vite hands back real
+ * `ImageMetadata` — width and height included, which is what keeps `<Image>`
+ * emitting intrinsic dimensions and the layout from shifting.
+ */
+const POSTERS = Object.fromEntries(
+  Object.entries(
+    import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/projects/*/poster.jpg', {
+      eager: true,
+    }),
+  ).map(([path, module]) => [path.split('/').at(-2)!, module.default]),
+);
+
+/**
+ * The image to show for a project on a card or tile, or `undefined` when there
+ * isn't one.
+ *
+ * Three sources, in order of how much they were chosen for this job:
+ *
+ *   1. `thumb` in front matter — an explicit override, normally absent.
+ *   2. An image `hero` — already a still of the work, so it is its own thumbnail.
+ *   3. A poster frame — for the nine projects whose hero is a video.
+ *
+ * ## Why there is no `alt` here
+ *
+ * Every caller renders this inside a card or tile whose link text is already
+ * the project title. An image there is **decorative by construction**: it adds
+ * nothing a screen reader user isn't already told, and `alt="Marvel Snap key
+ * art"` inside a link named "Marvel Snap" makes the name announce twice.
+ *
+ * That is a real exception to the model's `alt`-is-required guard, so it is
+ * worth being precise about what the guard is for. The guard exists because the
+ * old site had **no alt text anywhere**, including on images that carried
+ * meaning — heroes and gallery shots, which still require it via `mediaSchema`.
+ * It does not exist to force alt text onto an image that duplicates its own
+ * link.
+ *
+ * `ProjectThumb.astro` sets `alt=""`. That needed a matching change in
+ * scripts/check-links.mjs, which rejected it: the rule tested for `alt="..."`
+ * and the build minifier collapses an empty alt to a valueless `alt`, so every
+ * decorative image failed the check for being correct. It now accepts an
+ * explicitly empty alt and still rejects a missing one, which is the
+ * distinction the guard was always meant to draw.
+ */
+export function projectThumb(project: Project): ImageMetadata | undefined {
+  const { thumb, hero } = project.data;
+  if (thumb) return thumb;
+  if (hero?.type === 'image') return hero.src;
+  return POSTERS[project.id];
+}
+
 /** Human label for the honest-framing status field. */
 export const STATUS_LABEL: Record<Project['data']['status'], string> = {
   shipped: 'Shipped',

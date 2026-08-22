@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import ProjectMeta from '~/components/ProjectMeta.astro';
+import ProjectVisual from '~/components/ProjectVisual.astro';
 import { site } from '~/config/site';
 import { getFeaturedProjects, getCurrentNote } from '~/lib/content';
 
@@ -46,6 +47,7 @@ const currentNote = await getCurrentNote();
             <span class="card-index" aria-hidden="true">
               {String(i + 1).padStart(2, '0')}
             </span>
+            <ProjectVisual project={project} />
             <div class="card-body">
               <h3 class="card-title">{project.data.title}</h3>
               <ProjectMeta project={project} />

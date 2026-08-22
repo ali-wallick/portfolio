@@ -1,0 +1,41 @@
+---
+import ProjectThumb from './ProjectThumb.astro';
+import ProjectCardArt from './ProjectCardArt.astro';
+import { projectThumb, type Project } from '~/lib/content';
+
+/**
+ * The visual slot on a project card or tile.
+ *
+ * **A photograph where one exists, generated art where none does** — the route
+ * #22 chose after the four candidates went up behind a live switcher. The
+ * comparison and the treatments that lost are gone; this is what survived.
+ *
+ * Why the fallback earns its place: fourteen of seventeen projects have a
+ * usable still, either committed or pulled from their YouTube hero. The other
+ * three are archive entries whose hero videos no longer exist (#61). Without a
+ * fallback the archive grid goes ragged exactly where the tiles are smallest,
+ * which is what flipping between treatments made obvious. Adding a project with
+ * no media gets the same treatment automatically rather than a hole.
+ *
+ * Better captures are #64. Swapping one in changes nothing here: `thumb` in
+ * front matter wins over everything, so a photo replaces generated art without
+ * touching a component.
+ */
+interface Props {
+  project: Project;
+  size?: 'card' | 'tile';
+}
+
+const { project, size = 'card' } = Astro.props;
+const src = projectThumb(project);
+---
+
+<div class="visual" data-size={size}>
+  {
+    src ? (
+      <ProjectThumb project={project} size={size} />
+    ) : (
+      <ProjectCardArt project={project} size={size} />
+    )
+  }
+</div>

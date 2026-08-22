@@ -398,6 +398,12 @@ hr {
 }
 
 .card-body {
+  /* `flex: 1` alongside `min-width: 0` so this shrinks to share its row rather
+     than claiming its content width and wrapping. Without it, a narrow card
+     with a thumbnail pushes the body to its own line and strands the ranking
+     number above the title on a line by itself. No effect on a card without a
+     thumbnail: there is nothing beside it to share the row with. */
+  flex: 1;
   min-width: 0;
 }
 
@@ -471,13 +477,23 @@ hr {
  * entries without competing with the five that matter most.
  */
 
+/* Both grids take the block width, so every content block on the site shares a
+   right edge. The header and footer still span the full `--content-max`, which
+   reads as chrome framing content rather than as misalignment.
+
+   The archive grid was briefly left at full width on the theory that a
+   collection screen wants every column it can get. Looking at it settled the
+   question the other way twice over: it reproduced, one page across, exactly
+   the ragged-right-edge problem this change exists to fix, and dropping from
+   four columns to three makes each tile — and therefore each thumbnail —
+   meaningfully bigger. Twelve entries lay out as 3x4 just as happily as 4x3. */
 .card-grid {
   display: grid;
   gap: var(--space-4);
   list-style: none;
   padding: 0;
   margin: 0 0 var(--space-8);
-  max-width: none;
+  max-width: var(--measure-wide);
 }
 
 .tile-grid {
@@ -487,7 +503,7 @@ hr {
   list-style: none;
   padding: 0;
   margin: 0 0 var(--space-8);
-  max-width: none;
+  max-width: var(--measure-wide);
 }
 
 .tile {
@@ -652,7 +668,11 @@ hr {
    The text is `currentNote` on the current job, so this block and the About
    intro read the same field and cannot drift apart. */
 .currently {
-  max-width: var(--measure);
+  /* Matches the featured cards below it rather than the lede above it. The two
+     bordered blocks on this page now share a right edge; the lede stays at the
+     reading measure, which reads as typography rather than as misalignment
+     because it has no frame to align. */
+  max-width: var(--measure-wide);
   margin: var(--space-6) 0 var(--space-12);
   padding: var(--space-6);
   background: var(--color-surface);
@@ -758,6 +778,201 @@ hr {
   }
 }
 
+/* --- Project thumbnails (#36) ---------------------------------------------
+ *
+ * A photograph where one exists, generated art where none does — the route #22
+ * chose. `ProjectVisual.astro` decides which, so nothing here has to: only one
+ * of the two is ever in the DOM.
+ *
+ * That is a deliberate simplification over what this looked like during the
+ * comparison, when every card rendered both candidates and CSS picked between
+ * them from an attribute on <html>. Instant flipping was worth the duplication
+ * while there was a decision to make; now it would only mean shipping hidden
+ * images.
+ */
+
+/* Where generated art is showing, IT is the title treatment, so the card's own
+   title is hidden from sight and kept for assistive tech. Otherwise the name
+   renders twice, six centimetres apart.
+
+   Visually hidden rather than `display: none`, because the link's accessible
+   name comes from this text and `.card-art` is `aria-hidden`. Remove both and
+   the card becomes a link that announces only its metadata. */
+.card:has(.card-art) .card-title,
+.tile:has(.card-art) .tile-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Baseline alignment is right for a row of type and wrong the moment there is a
+   picture in it. Every featured card has one. */
+.card {
+  align-items: center;
+}
+
+/* A frame, not a plate. The card around this already carries the height that
+   means "pressable"; a thumbnail with its own shadow would claim to be
+   separately pressable and would turn the device into a texture on every box,
+   which is the failure mode the rule exists to prevent. */
+.thumb img,
+.card-art {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-bg);
+}
+
+.thumb img {
+  display: block;
+}
+
+.visual[data-size='card'] {
+  flex: none;
+  width: 16rem;
+}
+
+/* In a tile the visual leads, so it spans the full width and sits above the
+   title with the tile's own padding around it. */
+.visual[data-size='tile'] {
+  margin-bottom: var(--space-3);
+}
+
+/* --- The generated treatment --------------------------------------------
+ *
+ * Built from data the content model already holds, so a new project gets one
+ * for free and the set cannot drift. Colour is keyed to `status`, exactly as
+ * the chips are: the five status hues are this direction's content layer, and
+ * using them here means a jam entry and a shipped title are told apart at a
+ * glance across seventeen entries.
+ *
+ * If this treatment wins, it stops being CSS and becomes a build-time image
+ * generator — the same artwork answers #27's OG cards, which is half of #24.
+ */
+.card-art {
+  position: relative;
+  /* The comparison put `display: flex` on the rule that *showed* this, so
+     removing the switcher took it with it and the title and spec line collapsed
+     into a block stack. Belongs here, where the layout is described. */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--space-4);
+  overflow: hidden;
+  background: var(--chip-tint);
+  color: var(--chip-ink);
+}
+
+/* One pair per `status`, the same pairs the chips use, so the two can never
+   disagree about what colour a jam entry is. A status with no pair falls back
+   to the neutral pair above — legible, but saying nothing, which is the same
+   bargain the chips make. */
+.card-art[data-status='shipped'] {
+  background: var(--chip-shipped-tint);
+  color: var(--chip-shipped-ink);
+}
+.card-art[data-status='prototype'] {
+  background: var(--chip-prototype-tint);
+  color: var(--chip-prototype-ink);
+}
+.card-art[data-status='jam'] {
+  background: var(--chip-jam-tint);
+  color: var(--chip-jam-ink);
+}
+.card-art[data-status='coursework'] {
+  background: var(--chip-coursework-tint);
+  color: var(--chip-coursework-ink);
+}
+.card-art[data-status='unannounced'] {
+  background: var(--chip-unannounced-tint);
+  color: var(--chip-unannounced-ink);
+}
+
+/* The texture is a faint diagonal rule, not a pattern with an opinion. It is
+   there so the field reads as a made surface rather than a swatch, and it is
+   kept under the threshold where it would compete with the title. */
+.card-art::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(-45deg, currentColor 0 1px, transparent 1px 10px);
+  opacity: 0.07;
+  pointer-events: none;
+}
+
+.card-art-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-display);
+  /* Two lines, then ellipsis. A long title must not push the metadata out of
+     the box — "Dead Booty: An Atari 2600 Game" is 31 characters. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-art-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.visual[data-size='tile'] .card-art-title {
+  font-size: var(--text-base);
+}
+
+/* --- The About portrait --------------------------------------------------
+ *
+ * /about was the longest prose page on the site with no image on it at all.
+ * Floated rather than stacked so the opening paragraph wraps around it: a
+ * full-width photo above the text pushes every word below the fold, which
+ * trades one problem for another.
+ */
+.portrait {
+  float: right;
+  width: 12rem;
+  margin: 0 0 var(--space-4) var(--space-6);
+  shape-outside: circle();
+}
+
+.portrait img {
+  display: block;
+  width: 100%;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+}
+
+/* The second slot, beside "Off the clock". Square rather than circular: it is a
+   picture of a *thing* — the Kerbal cosplay the paragraph describes — and a
+   circular mask is a portrait convention that would crop the helmets. */
+.aside-figure {
+  float: right;
+  width: 14rem;
+  margin: 0 0 var(--space-4) var(--space-6);
+}
+
+.aside-figure img {
+  display: block;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
 /* --- Narrow ---------------------------------------------------------------
  *
  * Two things stop working below roughly 640px, and both are answered here
@@ -799,5 +1014,32 @@ hr {
 
   .hero h1 {
     font-size: var(--text-3xl);
+  }
+
+  /* A 16rem thumbnail beside a stacked metadata block leaves the title about
+     nine characters of room. The card becomes a column instead, which is the
+     same shape the tiles already use — picture, then title, then spec. */
+  .card {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .visual[data-size='card'] {
+    order: -1;
+    width: 100%;
+  }
+
+  /* The ranking number keeps its row with the title rather than sitting alone
+     above a full-width picture, which would read as a caption for it. */
+  .card-index {
+    order: 0;
+  }
+
+  /* Floating a 12rem portrait inside a ~20rem column leaves a gutter too narrow
+     to set type in. It centres and takes its own row. */
+  .portrait,
+  .aside-figure {
+    float: none;
+    margin: 0 auto var(--space-6);
   }
 }
