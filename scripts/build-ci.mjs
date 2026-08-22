@@ -16,10 +16,18 @@
 
 import { execFileSync } from 'node:child_process';
 
-const PRODUCTION_BRANCH = 'master';
+/**
+ * `release` is the branch Cloudflare Workers Builds actually deploys to
+ * production from. `master` isn't a production deploy at all any more — it's
+ * a normal branch that happens to get its own always-open preview URL
+ * (`master-portfolio...`) for sharing what's merged, and it needs the same
+ * "no drafts" treatment as a real production build for that to be worth
+ * sharing.
+ */
+const NO_DRAFT_BRANCHES = new Set(['master', 'release']);
 
 const branch = process.env.WORKERS_CI_BRANCH ?? '';
-const isProduction = branch === PRODUCTION_BRANCH;
+const isProduction = NO_DRAFT_BRANCHES.has(branch);
 
 console.log(
   isProduction
