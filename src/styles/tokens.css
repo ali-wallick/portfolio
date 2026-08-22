@@ -135,8 +135,23 @@
    *
    *   Gabarito — display. Energetic and a little flared; it reads as chosen.
    *   Figtree  — body. Geometric-humanist, friendly, holds up small.
-   *   DM Mono  — technical metadata. Narrow enough to survive the metadata
-   *              strip, which on this site can run to six fields.
+   *   DM Mono  — technical metadata, in a stacked strip that can run to six
+   *              fields. NOT chosen for width — #66 measured every credible
+   *              mono at exactly 0.600em per character, DM Mono included, so
+   *              width discriminates between none of them. What differs is
+   *              apparent size: DM Mono sets the smallest lowercase of the
+   *              set, which is what keeps a six-field strip from feeling
+   *              heavy. (The claim this replaced was checked and was wrong.)
+   *
+   * CONFIRMED, NOT REVISITED: #66 (2026-08-22) put eleven alternatives behind
+   * a live switcher against these three, chosen by measuring 19 candidates
+   * rather than picking from the catalogue — the axis that actually
+   * discriminates differs per role (width for body and display, x-height for
+   * mono; see the note above). None of the alternatives displaced the
+   * incumbents. They were also checked against Inter, Space Grotesk and Geist
+   * — the three fonts most named as "this was AI-generated" tells in 2026 —
+   * and none of these three are on that list. See the Phase 6 entry in
+   * `docs/REBUILD-LOG.md` for the full measurement and the sourcing.
    *
    * `--font-heading` and `--font-sans` are aliases kept so that `base.css` and
    * the print block can each name the role they mean.

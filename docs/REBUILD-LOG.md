@@ -1539,3 +1539,167 @@ true, which throttles `requestAnimationFrame` to nothing. Every placement in thi
 `schedule()`, so a synthetic-event harness reads as though _no_ mode does anything — all four return
 identical transforms. That is the harness, not the code. Real pointer events and screenshots force
 frames; synthetic `dispatchEvent` does not.
+
+---
+
+## Phase 6 — the faces, and what measuring them first changed, 2026-08-22
+
+[#66](https://github.com/ali-wallick/Portfolio/issues/66), the first of #33's two survivors. This
+entry covers building the instrument; the decision it exists to support has not been made yet.
+
+### Choosing the option set by measurement ruled out a third of the catalogue picks
+
+The issue carried a rule from the tweening pass — _"a set of options is an instrument, and an
+instrument with two identical marks on it is worse than one with fewer marks"_ — and the cheapest way
+to honour it turned out to be doing the measuring **before** writing any of the switcher.
+
+Nineteen faces were loaded headless at a 100px em and measured for x-height, cap height, descender
+depth and advance width. Seven were then dropped for landing on a mark another candidate already
+occupied. Two of those were faces that would certainly have shipped on a catalogue pick:
+
+- **Atkinson Hyperlegible Next** was on the list as the maximum-aperture end of the axis. It measures
+  64.8 wide / 49.6 x-height against Figtree's 64.1 / 50.0 — the same mark to within a percent. Its
+  differences are real but they are not on the axis a body face is judged on at 16px.
+- **Familjen Grotesk** (56.7 / 0.769 x-cap) sits on top of Archivo (57.3 / 0.767). Indistinguishable
+  as an option, so one of them is just a longer list.
+
+**The measurement also refuted the reason `tokens.css` gives for the incumbent mono.** DM Mono is
+justified there as "narrow enough to survive the metadata strip, which on this site can run to six
+fields." Every credible mono measured is **exactly 0.600em per character** — DM Mono, IBM Plex Mono,
+JetBrains Mono, Geist Mono and Roboto Mono are identical to two decimal places. The stated reason
+does not discriminate between any of them, and picking on width would have been picking on nothing.
+What does differ is apparent size: JetBrains sets an 11% taller lowercase than DM Mono at the same
+nominal size, and Geist's descenders are a third shallower, which is very visible on a stacked
+six-field strip. So the mono role's axis is x-height, and the instrument is graduated in x-height.
+
+That is the generalisable part: **the axis you would name from the catalogue is not always the axis
+the faces actually differ on**, and the only way to find out is to measure before choosing.
+
+### `--measure` does not appear to be 68ch of Figtree
+
+Not acted on, because the value was signed off visually and this branch is not the place to move it —
+but it should be resolved when the face is picked, since the winner needs a correct number anyway.
+
+`tokens.css` says, in a comment written to be load-bearing: _"Measured, not estimated: `68ch` in
+Figtree Variable resolves to 40.4rem."_ Two independent methods disagree. Figtree's `0` advance is
+0.6408em, so 68ch is 697px is **43.58rem**; a `width: 68ch` probe in the live page returns 43.58rem
+as well. 40.4rem is about **63ch**, and it is not the fallback stack's number either — system-ui
+measures 42.83rem in the same probe.
+
+The rendered column is whatever was approved and nothing is visibly wrong. What is wrong is the
+comment's claim about where the number came from, which is the kind of thing the guard table exists
+to prevent, so it is written down rather than left to be re-derived.
+
+### The panel is inline for a new reason as well as the old one
+
+Two constraints carried straight over from #33's switcher and needed no rethinking: no new imports in
+`BaseLayout.astro` ([#62](https://github.com/ali-wallick/Portfolio/issues/62)), and the bootstrap
+inline in `<head>` so the first paint is not the previous selection reflowing into the new one.
+
+A third is new. #33 put its panel's stylesheet in `base.css`, which meant every commit in that
+comparison also regenerated `public/*.pdf` and `scripts/resume-pdf.lock.json`, because the lock hashes
+`base.css`. Harmless there; wrong here. **This is a comparison of type, and `base.css` is where type
+is applied** — a diff that touches it is a diff nobody can skim, exactly when skimming the diff is how
+you check the comparison is fair. The panel's CSS is a gated inline `<style>` instead, and
+`base.css`, `tokens.css` and `resume.css` are byte-identical to master for the whole exercise.
+
+### Twelve font files cannot be imported, so they are generated
+
+`import '@fontsource-variable/inter/wght.css'` is the obvious way to get a candidate onto the page and
+it fails twice: imports are unconditional, so `showDrafts` cannot stop nine candidate faces shipping
+in production CSS on all 24 pages, and any new import in `BaseLayout.astro` perturbs the module graph
+that #62 is about.
+
+So `scripts/preview-fonts.mjs` copies the latin `woff2`s out of `node_modules` into a gitignored
+`public/preview-fonts/` and lifts each `@font-face` block out of the `@fontsource` package's own CSS,
+rewriting only the `url()`. Lifting rather than hand-writing is deliberate: a hand-written block has
+to restate the variable weight range, and getting that wrong produces a synthesized weight that then
+gets judged as the face's fault.
+
+`BaseLayout` reaches it through a literal `<link>` string, which the bundler cannot see. The controls
+are built at runtime from a generated `faces.json`, so the candidate list, its labels and its measured
+notes live in one file — and the panel cannot render a face whose file was not copied.
+
+**Candidates are deliberately not preloaded**, unlike the three shipped faces. Twelve preloads would
+fetch every candidate on every page to render one of them, and the loading behaviour worth measuring
+is the winner's, which gets its own preload when it ships.
+
+### Catching the reticle at the panel's edge beats teaching the reticle about the panel
+
+`FOCUS_SELECTOR` in `reticle.ts` matches `input` and `summary`, so without a guard every click on a
+radio parks the brackets on the instrument — while comparing the exact thing the instrument exists to
+compare. #33 solved this by adding a `match()` guard inside `reticle.ts` and deleting it afterwards.
+
+Stopping `pointerover` and `focusin` in the capture phase at the panel's own root is better on two
+counts. `reticle.ts` stays byte-identical to master, so no production code changes for a preview-only
+problem. And the brackets **hold** whatever they were last on instead of being cleared, which is what
+`fade` should do while you fiddle with a knob — the guard produces the right behaviour rather than
+merely suppressing the wrong one.
+
+Verified rather than assumed: a document-level listener saw `pointerover` from the nav link and saw
+nothing at all from a click on a radio, while the radio's selection still applied.
+
+### Three bugs, all in the difference between "unlikely" and "impossible"
+
+1. **The instrument measured the fallback, not the candidate.** Because candidates load lazily, the
+   _first_ selection of any face computed `68ch` before that face arrived — reporting 42.83rem for IBM
+   Plex Sans, whose real answer is 40.80. This is the CLS hazard `tokens.css` warns about, appearing
+   inside the tool built to judge it. Fixed by re-measuring on `document.fonts` `loadingdone`;
+   `ready` only ever covers the first paint.
+2. **Deleting the source directory broke the running preview.** The first cut had a production build
+   delete `public/preview-fonts/`. But `verify` runs `build`, and `astro dev` serves `public/` from
+   disk per request — so a verify run mid-comparison silently pulled the candidate faces out from
+   under the dev server. Pruning the _output_ (`dist/preview-fonts/`) leaves the running preview alone
+   and still makes the leak impossible.
+3. **A preview branch pruned its own fonts.** `build-ci.mjs` passed `SHOW_DRAFTS=true` in the child
+   env for `astro build` only, so the prune step read it off its own process, found it unset, and
+   deleted the 16 files it had just generated. The build looked completely healthy: 24 pages, switcher
+   markup present, stylesheet linked, and a panel that would have removed itself on a 404. Fixed by
+   hoisting one `env` object that every child gets.
+
+The third is the one worth remembering. **A flag applied per-child-process is a flag that can be
+applied to one step and missed by the next**, and the failure was invisible to every existing guard
+because nothing it checks was wrong.
+
+### Verification
+
+`npm run verify` clean. Production build (`WORKERS_CI_BRANCH=master npm run build:ci`): zero
+occurrences of `face-switcher` in `dist/about.html` and no `dist/preview-fonts/`. Preview build
+(`WORKERS_CI_BRANCH=phase-6-faces`): switcher present, 16 font files served. `public/` intact after
+both, so the dev server running the comparison survives a build.
+
+All twelve faces were driven in the browser and confirmed to reach `--font-body`, `--font-display` and
+`--font-mono`; selections persist across navigation; "fit column to face" reproduces the offline
+measurements exactly (43.58 / 42.90 / 40.80 / 33.80rem) and "reset to shipped" leaves no inline style
+behind. Print geometry matches the committed baseline and the PDFs are untouched — the design system
+files were never edited, which was the point.
+
+### Outcome: no change, and that is a real answer
+
+Gabarito, Figtree and DM Mono held against all eleven alternatives. Nothing about the shipped type
+changed — the switcher, `scripts/preview-fonts.mjs`, and the eleven candidate `@fontsource` packages
+were deleted, and `BaseLayout.astro`, `tokens.css`'s declarations, `base.css` and `resume.css` are all
+byte-identical to master again. `tokens.css`'s Type comment was corrected in place (DM Mono's
+rationale was wrong — see above — and now says why the incumbents were confirmed) and now points here
+rather than restating the measurement.
+
+Asked separately, and worth recording because it was a real check rather than a formality: whether
+any of the three read as a default an AI coding assistant would reach for unprompted, which is exactly
+the "obvious a game developer made this, not obvious which template they used" brief Phase 5 opened
+with, applied to type instead of layout. 2026's discussion of AI-generated-site tells names Inter,
+Space Grotesk and Geist specifically and repeatedly — Inter as shadcn/ui's default and the most common
+face in the training data itself, Space Grotesk as "the model's idea of edgy," Geist for its
+saturation in Vercel/v0 output. None of the three shipped faces appear on any such list. Two of the
+named offenders — Space Grotesk and Geist Mono — were in fact among the eleven the switcher compared
+them against and rejected, which is a coincidence worth noting rather than a validation: the
+comparison wasn't run to check for this, and would have kept whichever face won regardless.
+
+One finding surfaced by the measurement was **not** acted on, on purpose: `tokens.css` claims `68ch`
+of Figtree "measures" 40.4rem, and it measures 43.58rem by two independent methods (a headless glyph
+measurement and a live `68ch` probe on `/about`). The rendered column is unaffected — 40.4rem was
+signed off visually in Phase 5, not derived from that claim — so correcting it would mean touching
+`--measure`, a layout decision this issue was never scoped to make. Filed as
+[#68](https://github.com/ali-wallick/Portfolio/issues/68) rather than fixed quietly, per the standing
+rule: a follow-up found mid-task is an issue, not a comment or a doc edit.
+
+Closes #66.

@@ -717,11 +717,11 @@ All three were booked as one issue and that was a mistake worth naming: they sha
 they were deferred in the same conversation, not because they were one activity. The tweening turned
 out to be a state-machine change driven by a usability complaint, the faces are a comparison with a
 CLS hazard attached, and the calibration is three hand-fitted contrast values. Nothing about doing
-one informs doing another. Split on 2026-08-21 — **the tweening is settled and closed** (see below),
-the faces are [#66](https://github.com/ali-wallick/Portfolio/issues/66) and the colour calibration is
-[#67](https://github.com/ali-wallick/Portfolio/issues/67). They are the design-scoped siblings of the
-wording pass ([#31](https://github.com/ali-wallick/Portfolio/issues/31)) and the resume tone pass
-([#32](https://github.com/ali-wallick/Portfolio/issues/32)); sequencing them is
+one informs doing another. Split on 2026-08-21 — **the tweening and the faces are both settled and
+closed** (see below); the colour calibration is
+[#67](https://github.com/ali-wallick/Portfolio/issues/67), still open. They are the design-scoped
+siblings of the wording pass ([#31](https://github.com/ali-wallick/Portfolio/issues/31)) and the
+resume tone pass ([#32](https://github.com/ali-wallick/Portfolio/issues/32)); sequencing them is
 [#23](https://github.com/ali-wallick/Portfolio/issues/23).
 
 **What generalises, and belongs here rather than in the issue:** `--ease` and `--duration` were the
@@ -732,8 +732,9 @@ what the section below is the resolution of.
 ### The motion values are tuned now, not recovered (2026-08-21)
 
 Settled on a live switcher, closing [#33](https://github.com/ali-wallick/Portfolio/issues/33), which
-was rescoped to just this. The faces ([#66](https://github.com/ali-wallick/Portfolio/issues/66)) and
-the colour calibration ([#67](https://github.com/ali-wallick/Portfolio/issues/67)) are separate now.
+was rescoped to just this. The faces ([#66](https://github.com/ali-wallick/Portfolio/issues/66),
+closed below) and the colour calibration ([#67](https://github.com/ali-wallick/Portfolio/issues/67),
+still open) are separate now.
 
 | Token / value             | Was                        | Is                                   | Why                                                                                                                                   |
 | ------------------------- | -------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
@@ -746,6 +747,41 @@ the colour calibration ([#67](https://github.com/ali-wallick/Portfolio/issues/67
 **`1.28` is a control-point ordinate, not a peak.** The actual overshoot is 2.6%, measured — which is
 what makes the curve safe on the clamped colour transitions in `base.css` (3–6 RGB units for a few
 milliseconds). It was _not_ safe on opacity, which is why the reticle's fade has its own curve.
+
+### The faces are confirmed, not changed (2026-08-22)
+
+Closes [#66](https://github.com/ali-wallick/Portfolio/issues/66). Unlike the motion values above,
+this is a **no-change decision** — Gabarito, Figtree and DM Mono all held against eleven alternatives
+on a live switcher, the same review-loop pattern as the motion and colour switchers before it.
+
+**The option set itself was chosen by measurement, not the catalogue**, per the rule the tweening
+pass established — an instrument with two identical marks on it is worse than one with fewer marks.
+Nineteen faces were measured headless before any of them went on the switcher; seven were dropped for
+landing on a mark another candidate already occupied. That measurement also overturned the stated
+reason for DM Mono — `tokens.css` said "narrow enough to survive the metadata strip," but every
+credible mono measured is exactly 0.600em per character, DM Mono included. Width discriminates
+between none of them; x-height does, and `tokens.css`'s comment is corrected to say so.
+
+**Also checked, at Ali's request: whether any of these read as an AI-generated-site default.** Inter,
+Space Grotesk and Geist are the three fonts most commonly named in 2026 discussion of what makes a
+site look AI-built — Inter because it's the most-used interface face in the training data and
+shadcn/ui's own default, Space Grotesk as "the model's idea of edgy," Geist for its saturation in
+v0/Vercel-generated output. None of Gabarito, Figtree or DM Mono turned up on any such list; Space
+Grotesk and Geist Mono were in fact two of the eleven alternatives compared and rejected. The
+incumbents are unchosen in the sense of "not reconsidered since Phase 5," not in the sense the slop
+critique means.
+
+**One finding did not get acted on and is tracked separately, deliberately.** `tokens.css` claimed
+`68ch` of Figtree "measures" 40.4rem; it actually measures 43.58rem by two independent methods. The
+rendered column is unaffected — the value was signed off visually, not derived from that claim — but
+the claim itself is wrong in a comment the file's own header calls load-bearing. Fixing it would have
+meant touching `--measure`, which is a layout decision outside what #66 was for, so it is
+[#68](https://github.com/ali-wallick/Portfolio/issues/68) instead of a silent edit here.
+
+The switcher — `scripts/preview-fonts.mjs`, the panel in `BaseLayout.astro`, twelve candidate
+`@fontsource` packages — was scaffolding for the comparison and is gone; `BaseLayout.astro` is
+byte-identical to master again. See the Phase 6 log entry for how it was built and the three bugs
+caught while building it.
 
 ---
 
