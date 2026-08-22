@@ -441,7 +441,9 @@ education, one Tools line. The two-pager adds 2 / 2 / 1 / 2 more.
 **No agent logs into the account.** The deliverable is `docs/LINKEDIN.md` — paste-ready blocks for
 Ali. Its role descriptions are the `highlights` + `highlightsExtended` bullets verbatim, i.e. exactly
 `/resume/full`, so LinkedIn stays the same single source rather than becoming a fourth place a fact
-can go stale.
+can go stale. **Generated, not hand-maintained, since [#54](https://github.com/ali-wallick/Portfolio/issues/54):**
+`scripts/build-linkedin.mjs` renders it from the `jobs` and `education` collections; the file itself
+says not to edit it directly.
 
 ### Promotion years — settled 2026-08-17, do not reopen
 
@@ -873,7 +875,8 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 | `scripts/check-links.mjs`             | Post-build checks. Every rule is a regression guard for a real old bug.   |
 | `scripts/build-pdf.mjs`               | Renders the resume routes to PDF and asserts their page counts.           |
 | `src/components/ResumeDocument.astro` | The resume, both densities. `variant` is the only difference.             |
-| `docs/LINKEDIN.md`                    | Paste-ready LinkedIn copy. A handoff for Ali, never an automated sync.    |
+| `scripts/build-linkedin.mjs`          | Generates `docs/LINKEDIN.md` from the `jobs`/`education` collections.     |
+| `docs/LINKEDIN.md`                    | Paste-ready LinkedIn copy. Generated — a handoff for Ali, never a sync.   |
 | `docs/REBUILD-LOG.md`                 | Running record. Phase 7's source material.                                |
 | `infra/README.md`                     | The live zone, the DNS tooling, and Phase 1's record.                     |
 | GitHub issues                         | What's actually left. Milestones per phase; `decision` and `needs-ali`.   |
