@@ -1,0 +1,61 @@
+# Redirect map for the old DreamHost PHP site (see snapshot/), so every inbound
+# link and search result lands somewhere real instead of a 404. See #25.
+#
+# Cloudflare's _redirects matching is case-sensitive; the old Apache setup
+# effectively wasn't — seven project pages were committed twice, once per
+# casing (see 560f920's diff), so both the linked casing and the plain-
+# lowercase casing actually resolved on the live site. Both are covered below
+# for those seven; the other eight project URLs already matched their old
+# casing exactly, or (gameOverEverAfter) have no destination to send to.
+#
+# Top-level pages (/, /about, /contact, /resume, /projects) are identity
+# matches already — same extensionless URLs, confirmed by crawl, no rule
+# needed. /projects/firefall, /projects/kaneva, /projects/kinoclue, and
+# /projects/prodigal are also identity matches: same single-word lowercase
+# slug on both sites.
+
+# --- Project pages: old mixed-case slug -> new hyphenated slug -------------
+/projects/artOfRescue        /projects/art-of-rescue        301
+/projects/artofrescue        /projects/art-of-rescue        301
+/projects/corExMachina       /projects/cor-ex-machina       301
+/projects/corexmachina       /projects/cor-ex-machina       301
+/projects/critter            /projects/critter-3            301
+/projects/deadBooty          /projects/dead-booty           301
+/projects/deadbooty          /projects/dead-booty           301
+/projects/itWillKillYou      /projects/it-will-kill-you     301
+/projects/itwillkillyou      /projects/it-will-kill-you     301
+/projects/miniMages          /projects/mini-mages           301
+/projects/minimages          /projects/mini-mages           301
+/projects/nightLight         /projects/night-light          301
+/projects/nightlight         /projects/night-light          301
+/projects/secretGarden       /projects/secret-garden        301
+/projects/secretgarden       /projects/secret-garden        301
+/projects/tiltingAtWindmills /projects/tilting-at-windmills 301
+/projects/vegasBlvd          /projects/vegas-blvd-slots     301
+
+# Game Over Ever After was pulled from the site entirely at 906efc9 — no
+# local art existed to replace its dead YouTube hero (#61). There's nothing
+# to redirect to; send it to the archive listing rather than a bare 404.
+/projects/gameOverEverAfter  /projects                      301
+
+# --- Blog: no live blog section by decision (see CLAUDE.md) ----------------
+# The 20 posts were scraped to content/archive/ as source material, mined
+# into the About narrative and project pages, and never republished as their
+# own URLs — there were no per-post permalinks on the old site to begin with,
+# only this pagination shell (/blog/, /blog/?offset=N, per .htaccess's
+# `RewriteRule ^blog/ - [L,NC]`). _redirects doesn't match query strings, so
+# one rule per path form covers every offset. Both the trailing-slash and
+# bare forms are listed: unlike /projects/, nothing under /blog/ is a real
+# asset, so Cloudflare's drop-trailing-slash asset handling never kicks in to
+# normalize one into the other.
+/blog                         /about                         301
+/blog/                        /about                         301
+
+# --- Stray public files: deliberate 404, not a redirect --------------------
+# todo.txt, palette.html, colors.css, and wp-login.php were live at capture
+# time but have no honest destination on the new site — todo.txt and
+# wp-login.php never had one, and palette.html/colors.css's actual content
+# (the old Paletton palette) is discussed in CLAUDE.md's Phase 5 section
+# rather than served as a page. Left unlisted on purpose: Cloudflare's
+# `not_found_handling: 404-page` already serves the real 404 page for any
+# path with no rule and no matching asset, which is the deliberate answer.
