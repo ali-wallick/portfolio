@@ -112,6 +112,10 @@ root.setAttribute('aria-hidden', 'true');
 for (let i = 0; i < 4; i += 1) root.appendChild(document.createElement('i'));
 document.body.appendChild(root);
 
+/** The sticky header occludes whatever scrolls under it; the reticle should
+    too, except when its own target lives inside the header. See `place()`. */
+const header = document.querySelector<HTMLElement>('.site-header');
+
 /**
  * Where the reticle rests when nothing is hovered or focused: the current
  * page's nav pill, or the wordmark on the homepage, which has no nav entry.
@@ -160,6 +164,15 @@ function place(): void {
   root.style.width = `${box.width + PAD * 2}px`;
   root.style.height = `${box.height + PAD * 2}px`;
   root.style.transform = `translate(${box.left - PAD}px, ${box.top - PAD}px)`;
+
+  /* Clip whatever's covered by the header, in the header's own local frame,
+     so the brackets slide under it as the target scrolls rather than
+     floating on top of its opaque background. Skipped for header-internal
+     targets (the resting nav pill) so they stay fully visible. */
+  const inHeader = header?.contains(el) ?? false;
+  const headerBottom = inHeader ? 0 : (header?.getBoundingClientRect().bottom ?? 0);
+  const covered = headerBottom - (box.top - PAD);
+  root.style.clipPath = covered > 0 ? `inset(${covered}px 0 0 0)` : '';
 }
 
 /**
