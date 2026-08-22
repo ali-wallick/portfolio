@@ -32,7 +32,12 @@ const { Content } = await render(project);
 const d = project.data;
 ---
 
-<BaseLayout title={d.title} description={d.summary} noindex={d.draft}>
+<BaseLayout
+  title={d.title}
+  description={d.summary}
+  image={`/og/projects/${project.id}.jpg`}
+  noindex={d.draft}
+>
   <a class="backlink" href="/projects">← Projects</a>
 
   <div class="page-head">

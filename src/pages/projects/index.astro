@@ -13,7 +13,11 @@ const archive = await getArchiveProjects();
 const total = featured.length + archive.length;
 ---
 
-<BaseLayout title="Projects" description="Games and projects by Ali Wallick.">
+<BaseLayout
+  title="Projects"
+  description="Games and projects by Ali Wallick."
+  image="/og/projects.png"
+>
   <div class="page-head">
     <p class="eyebrow">{total} entries</p>
     <h1>Projects</h1>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!--
+    The site's reticle, reduced to favicon scale: four corner brackets,
+    the one piece of game UI grammar a website essentially never has.
+    Decided in #24 (reticle based, provisional per Ali; can be replaced
+    wholesale later without touching the markup that references it).
+
+    Colour follows prefers color scheme rather than a fixed value, same
+    split as the accent token in src/styles/tokens.css: the light theme
+    magenta reads muddy on a dark tab strip and vice versa.
+  -->
+  <style>
+    path {
+      stroke: #c4005f;
+    }
+    @media (prefers-color-scheme: dark) {
+      path {
+        stroke: #ff2d95;
+      }
+    }
+  </style>
+  <path
+    d="M3 11V3h8M21 3h8v8M29 21v8h-8M11 29H3v-8"
+    fill="none"
+    stroke-width="3.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>

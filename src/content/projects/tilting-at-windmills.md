@@ -12,9 +12,9 @@ summary: >-
   together, one seeing giants, the other trying to stop him from hitting
   actual windmills. My first successful multiplayer jam prototype.
 hero:
-  type: youtube
-  id: I4FHmsjQyGI
-  title: Tilting at Windmills jam video
+  type: image
+  src: ../../assets/images/projects/tilting-at-windmills/screenshot.png
+  alt: Sancho standing before windmills at sunset, a pause menu showing player scores
 links:
   - label: Global Game Jam page
     url: https://globalgamejam.org/2014/games/tilting-windmills

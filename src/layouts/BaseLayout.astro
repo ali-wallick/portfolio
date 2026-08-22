@@ -41,11 +41,19 @@ interface Props {
    * URL, and `scripts/check-links.mjs` keys its stricter rules off it.
    */
   noindex?: boolean;
+  /**
+   * Root-relative path to this page's OG/Twitter card, e.g. `/og/home.png`.
+   * Built by scripts/generate-og-images.mjs (#27) — every caller of this
+   * layout passes one. No default: a missing card should be a build-time
+   * mistake to notice, not a silent fallback to a generic image.
+   */
+  image: string;
 }
 
-const { title, description, bareTitle = false, noindex = false } = Astro.props;
+const { title, description, bareTitle = false, noindex = false, image } = Astro.props;
 const fullTitle = bareTitle ? title : `${title} — ${site.name}`;
 const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogImage = new URL(image, site.url).href;
 const year = new Date().getFullYear();
 ---
 
@@ -74,24 +82,44 @@ const year = new Date().getFullYear();
     {noindex && <meta name="robots" content="noindex" />}
 
     {
-      /* TODO(phase-6): favicon (#26), OG images (#27), robots.txt + sitemap (#28).
-         The old site's
-         og:image and og:url were both http://, so link previews broke in every
-         chat app. Fix them with real assets rather than porting the broken ones.
+      /* Favicon (#26): the reticle, reduced to favicon scale — see the SVG's
+         own header comment. SVG is primary and carries prefers-color-scheme
+         so it reads on a light or dark tab strip; the ICO is a static
+         fallback for browsers/contexts that don't take an SVG favicon, fixed
+         to the light-theme accent since that's this file's default. Provisional
+         per #24 — a reticle mark was Ali's call for now, and every reference to
+         it lives here, so replacing the three files in public/ is the whole job
+         if that changes later. */
+    }
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-         Concretely, from the first green Lighthouse run: `public/` is empty, so
-         every page 404s on /favicon.ico and logs a browser error. That is the
-         sole reason best-practices sits at 0.96 instead of 1.00 site-wide. It
-         clears the 0.95 threshold, so it is not urgent — and a favicon is a
-         visual decision, which is why it waits for Phase 5/6 rather than getting
-         a placeholder here. Shipping any real icon should take best-practices
-         to 1.00. */
+    {/* TODO(phase-6): robots.txt + sitemap (#28). */}
+    {
+      /* OG/Twitter cards (#27). The old site's og:image and og:url were both
+         http://, so link previews broke in every chat app — every URL here is
+         absolute https:// for the same reason `canonical` already is.
+
+         `image` is required (see the Props comment), built by
+         scripts/generate-og-images.mjs: the site's own reticle-and-name brand
+         card for pages that aren't about one specific project, or a
+         project's own hero/poster image framed the same way, for project
+         pages. 1200x630 is the size every major surface (Slack, Discord,
+         iMessage, X) wants. */
     }
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={site.name} />
     {description && <meta property="og:description" content={description} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    {description && <meta name="twitter:description" content={description} />}
+    <meta name="twitter:image" content={ogImage} />
     {
       /* Cloudflare Web Analytics (#30). Gated on `!showDrafts` rather than a
          separate flag — that's already the exact production/preview split

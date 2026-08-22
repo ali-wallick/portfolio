@@ -12,9 +12,9 @@ summary: >-
   A herding game inside a robot's heart, built for the 2013 Global Game Jam —
   placed second at Atlanta, the largest GGJ site in the US that year.
 hero:
-  type: youtube
-  id: MAN8Luc5emM
-  title: Cor Ex Machina jam video
+  type: image
+  src: ../../assets/images/projects/cor-ex-machina/screenshot.jpg
+  alt: A glowing mechanical heart of gears, viewed from inside the robot's chest cavity
 links:
   - label: Global Game Jam page
     url: https://globalgamejam.org/2013/cor-ex-machina

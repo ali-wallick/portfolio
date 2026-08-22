@@ -27,6 +27,14 @@ console.log(
     : `Branch "${branch || '(unknown)'}" is not production — building WITH drafts.`,
 );
 
+/**
+ * OG/Twitter card images. Unlike the resume PDFs below, these only need
+ * `sharp` — the same library `astro:assets` already runs on every deploy to
+ * optimise every other image on the site — so there's no Chromium-shaped wall
+ * here and no reason to commit the output. See scripts/generate-og-images.mjs.
+ */
+execFileSync('node', ['scripts/generate-og-images.mjs'], { stdio: 'inherit' });
+
 execFileSync('npx', ['astro', 'build'], {
   stdio: 'inherit',
   env: { ...process.env, ...(isProduction ? {} : { SHOW_DRAFTS: 'true' }) },
