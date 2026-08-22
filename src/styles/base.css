@@ -146,6 +146,15 @@ a {
   border-radius: var(--radius);
 }
 
+/* `#main` only carries `tabindex="-1"` so the skip link has something real to
+   focus (see BaseLayout.astro) — it isn't a control, so drawing the ring
+   around the entire page's content on landing serves nobody. The confirmation
+   a keyboard user actually wants is the ring on the first real control they
+   land on next, which the rule above already gives them. */
+#main:focus-visible {
+  outline: none;
+}
+
 img,
 video,
 iframe {
@@ -351,6 +360,19 @@ hr {
    `arm()` uses. */
 .reticle.is-cutting {
   transition: opacity 500ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* The opacity fade above is written in at a fixed 500ms rather than
+   `var(--duration)` (see the comment above), which means it doesn't inherit
+   tokens.css's reduced-motion zeroing for free — reduced motion would cut
+   the geometry instantly but still visibly fade the brackets in and out over
+   half a second. Motion is load-bearing in this direction, so that's a
+   correctness gap, not a nuance: kill both durations explicitly. */
+@media screen and (prefers-reduced-motion: reduce) {
+  .reticle,
+  .reticle.is-cutting {
+    transition-duration: 0ms;
+  }
 }
 
 .reticle i {

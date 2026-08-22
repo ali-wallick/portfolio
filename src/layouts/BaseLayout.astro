@@ -178,7 +178,16 @@ const year = new Date().getFullYear();
         </nav>
       </header>
 
-      <main id="main">
+      {
+        /* `tabindex="-1"`: without it the skip link scrolls here but never
+           actually moves keyboard focus, because `<main>` isn't natively
+           focusable. Chromium papers over that by relocating the sequential
+           focus navigation starting point on its own; that's not guaranteed
+           behaviour, so a keyboard user on a browser that doesn't do the same
+           trick lands back at the top of the header on their next Tab —
+           silently defeating the one thing a skip link exists to do. */
+      }
+      <main id="main" tabindex="-1">
         <slot />
       </main>
 
