@@ -61,6 +61,41 @@ once its preview has done its job, so old work-in-progress doesn't linger even b
 
 ---
 
+## `release` is production; `master` gets its own open preview (2026-08-22)
+
+Ali wanted to send friends a link to what's actually merged, without opening every branch preview to
+them. The obvious-looking fix — flip on the account-only-gated `master-portfolio...` preview — doesn't
+work: `master` was Workers Builds' configured **production** branch, so pushes to it went through the
+`production_settings` deploy path (`wrangler deploy`, straight to production) rather than the
+`previews_base_config` path (`wrangler versions upload`) that actually creates a branch alias.
+`master-portfolio.ali-wallick.workers.dev` never existed — confirmed by curling it and getting
+Cloudflare's own `x-preview-user-error` placeholder, not the site's real 404.
+
+**Fix: swap which branch Workers Builds treats as production.**
+
+- `git_repository.branch` is now `release`, not `master` — changed via
+  `PATCH /accounts/{account_id}/builds/workers/{script_tag}`, same effect as the dashboard's Settings
+  → Build → Branch control. Nothing is publicly routable either way yet — `workers_dev` stays `false`
+  until Phase 6 — this only changes which deploy path a branch's push takes.
+- `master` is now an ordinary branch as far as Workers Builds is concerned, so it gets its own
+  `master-portfolio.ali-wallick.workers.dev` preview alias like every other branch, updating on every
+  merge. `release` sits empty until Phase 6 — nothing has been pushed to it beyond the one commit that
+  created it.
+- A second Access Application, `portfolio — master preview (open)`, carries a single `public`-type
+  destination for exactly `master-portfolio.ali-wallick.workers.dev` with a `bypass` policy — no
+  login, open to anyone with the link. Cloudflare evaluates `public` destinations ahead of the
+  account-wide `preview_worker` one, so this overrides the gate for that one hostname without loosening
+  it for anything else, `release` included once it has a preview of its own.
+- `scripts/build-ci.mjs`'s draft check had to move with it: `PRODUCTION_BRANCH === 'master'` became a
+  `NO_DRAFT_BRANCHES` set containing both `master` and `release`. Master's preview is now something
+  people actually look at, so it needs the same "no drafts" treatment a real production build gets —
+  otherwise the day someone adds a sixth draft project, friends see it before Ali does.
+
+**At Phase 6 launch:** merge `master` → `release`. That push is the one Workers Builds actually
+deploys to production. Nothing else about the launch checklist changes.
+
+---
+
 ## Workers, not Pages
 
 The plan originally settled on **Cloudflare Pages**. It landed on **Workers static assets** instead,
@@ -109,14 +144,14 @@ npx wrangler deploy --dry-run                   # validates wrangler.jsonc, uplo
 
 Workers & Pages → **Create** → **Import a repository** → `ali-wallick/Portfolio`.
 
-| Setting                              | Value                                        |
-| ------------------------------------ | -------------------------------------------- |
-| Project name                         | `portfolio`                                  |
-| Build command                        | `npm run build:ci`                           |
-| Deploy command                       | `npx wrangler deploy`                        |
-| Non-production branch deploy command | `npx wrangler versions upload` (the default) |
-| Builds for non-production branches   | **enabled**                                  |
-| Production branch                    | `master`                                     |
+| Setting                              | Value                                                |
+| ------------------------------------ | ---------------------------------------------------- |
+| Project name                         | `portfolio`                                          |
+| Build command                        | `npm run build:ci`                                   |
+| Deploy command                       | `npx wrangler deploy`                                |
+| Non-production branch deploy command | `npx wrangler versions upload` (the default)         |
+| Builds for non-production branches   | **enabled**                                          |
+| Production branch                    | ~~`master`~~ → `release` since 2026-08-22, see below |
 
 **The build command is the one that is easy to miss** — it is marked Optional and defaults to empty,
 which would deploy an unbuilt `dist/`. It must be `npm run build:ci`, not `npm run build`, or preview
@@ -232,12 +267,12 @@ site until Phase 6. `previews_enabled` is the one the review loop needs.
 
 ### Everything else
 
-| Symptom                            | Cause                                                                                                   |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| Deploy succeeds, site is empty     | Build command is blank. It must be `npm run build:ci`.                                                  |
-| Preview shows only 6 pages         | Build command is `npm run build` instead of `npm run build:ci`, so the branch check never runs.         |
-| Production shows draft content     | `PRODUCTION_BRANCH` in `scripts/build-ci.mjs` doesn't match the production branch set in the dashboard. |
-| No preview URL on a PR             | "Builds for non-production branches" is disabled in **Settings → Build → Branch control**.              |
-| Build fails, works locally         | Node version drift. Cloudflare reads `.nvmrc`; confirm it's committed.                                  |
-| `npm ci` fails                     | `package-lock.json` out of sync. Run `npm install` and commit the lockfile.                             |
-| `/about/` and `/about` both render | `html_handling` in `wrangler.jsonc` changed away from `drop-trailing-slash`.                            |
+| Symptom                            | Cause                                                                                                                 |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Deploy succeeds, site is empty     | Build command is blank. It must be `npm run build:ci`.                                                                |
+| Preview shows only 6 pages         | Build command is `npm run build` instead of `npm run build:ci`, so the branch check never runs.                       |
+| Production shows draft content     | `NO_DRAFT_BRANCHES` in `scripts/build-ci.mjs` doesn't include the production branch set in the dashboard (`release`). |
+| No preview URL on a PR             | "Builds for non-production branches" is disabled in **Settings → Build → Branch control**.                            |
+| Build fails, works locally         | Node version drift. Cloudflare reads `.nvmrc`; confirm it's committed.                                                |
+| `npm ci` fails                     | `package-lock.json` out of sync. Run `npm install` and commit the lockfile.                                           |
+| `/about/` and `/about` both render | `html_handling` in `wrangler.jsonc` changed away from `drop-trailing-slash`.                                          |
