@@ -719,9 +719,8 @@ All three were booked as one issue and that was a mistake worth naming: they sha
 they were deferred in the same conversation, not because they were one activity. The tweening turned
 out to be a state-machine change driven by a usability complaint, the faces are a comparison with a
 CLS hazard attached, and the calibration is three hand-fitted contrast values. Nothing about doing
-one informs doing another. Split on 2026-08-21 — **the tweening and the faces are both settled and
-closed** (see below); the colour calibration is
-[#67](https://github.com/ali-wallick/Portfolio/issues/67), still open. They are the design-scoped
+one informs doing another. Split on 2026-08-21 — **the tweening, the faces, and the colour
+calibration are all settled and closed** (see below). They are the design-scoped
 siblings of the wording pass ([#31](https://github.com/ali-wallick/Portfolio/issues/31)) and the
 resume tone pass ([#32](https://github.com/ali-wallick/Portfolio/issues/32)); sequencing them is
 [#23](https://github.com/ali-wallick/Portfolio/issues/23).
@@ -734,9 +733,7 @@ what the section below is the resolution of.
 ### The motion values are tuned now, not recovered (2026-08-21)
 
 Settled on a live switcher, closing [#33](https://github.com/ali-wallick/Portfolio/issues/33), which
-was rescoped to just this. The faces ([#66](https://github.com/ali-wallick/Portfolio/issues/66),
-closed below) and the colour calibration ([#67](https://github.com/ali-wallick/Portfolio/issues/67),
-still open) are separate now.
+was rescoped to just this. The faces and the colour calibration are separate now, both closed below.
 
 | Token / value             | Was                        | Is                                   | Why                                                                                                                                   |
 | ------------------------- | -------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
@@ -784,6 +781,52 @@ The switcher — `scripts/preview-fonts.mjs`, the panel in `BaseLayout.astro`, t
 `@fontsource` packages — was scaffolding for the comparison and is gone; `BaseLayout.astro` is
 byte-identical to master again. See the Phase 6 log entry for how it was built and the three bugs
 caught while building it.
+
+### The colour calibration is settled (2026-08-22)
+
+Closes [#67](https://github.com/ali-wallick/Portfolio/issues/67). Same review-loop pattern as the
+motion values and the faces — a live switcher on one preview, candidates chosen by computing the
+axis that actually differs rather than by eye.
+
+Part of #67 had already shipped directly, outside the switcher loop, in a prior look-polish pass:
+`--color-plate` went from a 1.67:1/1.77:1 split (fitted to one ground, nearly invisible on another)
+to a flat 2.2:1 in both themes. That value went back on the switcher anyway, against four other
+ratios (1.8/2.6/3.0/3.4) spanning faint to heavy — **confirmed, not just retuned**, the same
+no-change-decision shape as the faces above. 2.2:1 held.
+
+`--color-index` — the `01`/`02` ranking numbers — was the item actually still open: shipped at 5.50:1
+through Phase 5, a value hand-fitted to hit a target at the end of that phase rather than derived
+from a rule, the same concern the plate had. Compared against 4.5/5.0/6.25/7.0 on the same switcher.
+**4.5:1 won** — as quiet as the number can go while still clearing the AA floor for text this file's
+own rule holds every other text colour to.
+
+| Token                   | Was                | Is                                            |
+| ----------------------- | ------------------ | --------------------------------------------- |
+| `--color-index` (light) | `#645f77` (5.50:1) | **`#716c87`** (4.512:1)                       |
+| `--color-index` (dark)  | `#8b86a9` (5.22:1) | **`#807ba1`** (4.521:1)                       |
+| `--color-plate` (light) | `#9e93c3` (2.2:1)  | **unchanged** — confirmed against four others |
+| `--color-plate` (dark)  | `#484180` (2.2:1)  | **unchanged** — confirmed against four others |
+
+**4.512:1, not 4.5:1 exactly.** A target-ratio search lands slightly under-target more often than on
+it — the first pass at these candidates computed `#726c87`/`#807aa1` at 4.499:1/4.479:1, both just
+_under_ the AA floor the "quiet (AA floor)" label on the switcher promised. Caught before shipping by
+requiring the search to find the darkest/lightest value that clears the target rather than the
+closest one to it; ratios "close to 4.5" and "at least 4.5" are different questions; the switcher
+needed the second one.
+
+The switcher's own scaffolding — the panel in `BaseLayout.astro`, `src/scripts/calibration-data.ts`,
+`src/scripts/calibration-panel.ts` — is gone; `BaseLayout.astro` is byte-identical to master again.
+
+**One implementation note worth keeping, since it'll bite the next switcher too.**
+prettier-plugin-astro cannot parse a `<script>` with its own multi-statement body when nested
+directly inside a `{condition && (…)}` JSX expression — reproduced in isolation across `is:inline`,
+`define:vars`, a plain function declaration, and an IIFE, all failing the same way: "Unexpected
+token" at the first statement past the opening brace. Neither of the two prior switchers hit it,
+probably by accident of how their scripts happened to be shaped. The fix: anything that must run
+synchronously and can't be a bare `import` has to be built as a string and injected via
+`<Fragment set:html={...}>` rather than written as a literal nested `<script>`; anything that can be
+a deferred module stays a single-line `<script>import '...';</script>`, which parses fine because it
+has no block body of its own.
 
 ---
 

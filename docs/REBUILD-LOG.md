@@ -1703,3 +1703,78 @@ signed off visually in Phase 5, not derived from that claim — so correcting it
 rule: a follow-up found mid-task is an issue, not a comment or a doc edit.
 
 Closes #66.
+
+## Phase 6 — the colour calibration, 2026-08-22
+
+The last of the three items #33 split into. Ali asked to look at it directly by name — "let's explore
+the site with some different versions" — rather than it surfacing from a punch-list sweep, which
+turned out to matter for scoping: half of #67 had already shipped outside the switcher loop entirely.
+
+### Part of the issue was already closed before the switcher existed
+
+`--color-plate`'s retune from a 1.67:1/1.77:1 split to a flat 2.2:1 shipped directly in a prior
+look-polish commit, not through a live comparison. That's not wrong — the fix was correct — but it
+meant #67 as filed no longer matched the state of the repo, and building a switcher for "three
+hand-fitted values" without checking which of the three still needed fitting would have compared the
+wrong things. Asked first, via `AskUserQuestion`: scope to just `--color-index` (the genuinely open
+item), or put the plate back on the switcher too for the scrutiny it skipped. Ali chose both — put the
+plate back on, not to change it, but so the "confirmed on a live switcher" bar every other calibration
+decision cleared also applied here.
+
+### The switcher hit a real prettier bug neither prior one did
+
+`prettier-plugin-astro` cannot parse a `<script>` with a braced statement body when it's nested
+directly inside a `{condition && (…)}` JSX expression. Reproduced in isolation, methodically, because
+the first four shapes tried all failed identically and that pattern was worth confirming before
+working around it: `is:inline`, `define:vars`, a plain `function` declaration, and a true IIFE all hit
+"Unexpected token" at the exact same place — the first real statement past the opening `{` of the
+function body. A single-line script with no braced body of its own (`<script>import '...';</script>`)
+parsed fine in the same nested position, which is what pinned the actual trigger down to "a block
+body of its own," not "any content" or "any nesting."
+
+Neither #65's tweening switcher nor #66's font switcher hit this, most likely by accident of how their
+inline scripts happened to be shaped rather than because the bug doesn't apply to them. Worth a note
+for whoever builds the next one: don't assume a nested `<script>` with real logic in it will format
+cleanly just because the last two did.
+
+The fix that stuck: the bootstrap script, which has to run synchronously in `<head>` before first
+paint and so can't be a deferred `import`, is built as a template-literal string in the frontmatter
+(with the candidate data embedded via `JSON.stringify`) and injected with `<Fragment
+set:html={calBootstrapScript} />` — a JSX attribute expression, not a nested script tag, so prettier
+never tries to re-parse its contents as JS-in-JSX at all. The panel's wiring script doesn't need to
+run before paint, so it stayed a normal external module (`src/scripts/calibration-panel.ts`) referenced
+by a single-line `<script>import ...;</script>` — the shape that was already safe.
+
+### A ratio search landing under its own target, caught before shipping
+
+The first pass of candidates for `--color-index` computed the darkest/lightest hex whose contrast was
+_closest_ to each target ratio. For 4.5:1 that produced `#726c87` (light, actual 4.499:1) and
+`#807aa1` (dark, actual 4.479:1) — both labelled "quiet (AA floor)" on the switcher and both, measured
+precisely, just under it. Binary-searching for "closest to target" instead of "at least target"
+is the kind of rounding error that reads as correct at a glance and isn't: 4.499 displays as 4.5 in
+anything that rounds to one decimal, including a switcher label written by the same script that
+computed it.
+
+Fixed by changing the search itself — find the value closest to the ground that still clears the
+target, not the value closest to the target ratio — and rerunning before anything shipped. The
+corrected values, `#716c87` (4.512:1) and `#807ba1` (4.521:1), are the ones in `tokens.css` now. This
+is the same category of bug the Phase 5 gate's contrast audit exists to catch — a number that looks
+like a design choice and is actually a measurement error — just caught a step earlier this time,
+before the candidate reached the switcher rather than after a decision was made from it.
+
+### Outcome
+
+`--color-index`: 4.5:1 (measured 4.512:1 light / 4.521:1 dark), down from the Phase 5 hand-fit of
+5.5:1 — as quiet as the ranking numbers can go while still clearing the AA floor for text every other
+text colour on the site is held to. `--color-plate`: confirmed at 2.2:1 in both themes, unchanged, but
+now backed by the same live-comparison bar as everything else in this section rather than a
+look-polish commit's say-so.
+
+The switcher's scaffolding — the panel and bootstrap in `BaseLayout.astro`,
+`src/scripts/calibration-data.ts`, `src/scripts/calibration-panel.ts` — is gone; `BaseLayout.astro` is
+byte-identical to master again. `tokens.css`'s comments carry the decision and the corrected
+40.4rem-style provenance note this time, rather than pointing back here for it — the three-values
+list Ali flagged as "may read differently after living with the site" started right here, so the
+answer belongs where the next person editing a contrast value will actually look.
+
+Closes #67, and with it the last of the three things #33 split into on 2026-08-21.

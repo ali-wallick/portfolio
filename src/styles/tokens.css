@@ -44,8 +44,9 @@
  *
  * `--color-plate` is exempt from both bars: it is a decorative depth cue, and
  * the card is legible without it. It is held instead to being *visible* —
- * 1.6:1 against the ground, because the original dark plate measured 1.06 and
- * the height device disappeared entirely in dark mode.
+ * 2.2:1 against the ground (retuned up from an initial 1.67/1.77 split that
+ * was fitted to one ground and nearly vanished on another; confirmed on a
+ * live switcher against four other ratios, #67).
  *
  * Rule, unchanged since Phase 2: use these variables. Never write a raw colour
  * or a raw px font size in a component.
@@ -84,11 +85,13 @@
     /* The colour under anything with height. See `--lift`.
      Was tuned to 1.67:1 against the ground to match the weight the shadow had
      in this direction's original palette — but 1.67:1 turned out to be a
-     value that only worked for that one ground (#67): close enough to
-     invisible that a slightly different ground would swallow the "height
-     means pressable" device entirely. Retuned to 2.2:1, same hue, holding
-     the same "visible but exempt from the 3:1 UI-component bar" rule the
-     header above states — just with less margin for the ground to eat. */
+     value that only worked for that one ground: close enough to invisible
+     that a slightly different ground would swallow the "height means
+     pressable" device entirely. Retuned to 2.2:1, same hue, holding the same
+     "visible but exempt from the 3:1 UI-component bar" rule the header above
+     states — just with less margin for the ground to eat. CONFIRMED, not
+     just retuned: #67 put this back on a live switcher against four other
+     ratios (1.8/2.6/3.0/3.4) and 2.2:1 held. */
     --color-plate: #9e93c3;
 
     /* --- Colour: the interaction layer (magenta) ---------------------------
@@ -116,8 +119,18 @@
      wants to sit quieter than body copy, and rather than `--color-border`
      because a border colour is not a text colour — that was the original
      construct here and it measured 1.43:1, which is a contrast failure
-     wearing the costume of a design choice. 5.50:1: quiet, and legible. */
-    --color-index: #645f77;
+     wearing the costume of a design choice.
+
+     Shipped at 5.50:1 through Phase 5; #67 put it back on a live switcher
+     against four other ratios (4.5/5.0/6.25/7.0) because 5.50:1 was a value
+     hand-fitted to hit a target at the end of that phase, the same "fitted
+     to the day's content, not derived from a rule" concern the plate above
+     had. 4.5:1 won — as quiet as the number can go while still clearing the
+     AA floor for text this header's own rule holds every other text colour
+     to. 4.512:1 measured, not 4.5 exactly: the ratio search lands slightly
+     under-target more often than on it, and rounding down here would have
+     shipped a number that reads as compliant and isn't. */
+    --color-index: #716c87;
 
     /* --- Colour: the content layer (status) --------------------------------
    * One pair per `status` value in src/content.config.ts. Adding a status to
@@ -327,8 +340,9 @@
        measured 1.06:1, so the height device, which is one of this direction's
        two signatures, simply vanished in dark mode. Near black there is only
        one direction with anywhere to go. 1.77:1 was the first fix and was
-       still fragile for the same reason the light plate was (#67); retuned to
-       2.2:1, same hue, to match. */
+       still fragile for the same reason the light plate was; retuned to
+       2.2:1, same hue, to match, and confirmed on the same #67 switcher as
+       the light value. */
     --color-plate: #484180;
 
     --color-accent: #ff2d95;
@@ -342,7 +356,9 @@
     --color-link-visited: #c084fc;
     --color-focus: #ff2d95;
 
-    --color-index: #8b86a9;
+    /* 4.512:1 in light became 4.521:1 here, not the same hex re-lightened —
+       see the light block's comment for the #67 decision this token shares. */
+    --color-index: #807ba1;
 
     --chip-ink: #a09ac0;
     --chip-tint: #23222f;
