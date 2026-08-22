@@ -51,6 +51,16 @@ interface Props {
 }
 
 const { title, description, bareTitle = false, noindex = false, image } = Astro.props;
+
+/**
+ * Every build today — every branch preview, including master's — is
+ * pre-launch: aliwallick.com still serves the old PHP site. This kills
+ * indexing sitewide regardless of the per-page `noindex` prop above, so a
+ * leaked or shared preview URL can't end up in search results before the
+ * real domain cutover. TODO(phase-6): flip to `true` at the DNS cutover (#74).
+ */
+const SITE_LIVE = false;
+
 const fullTitle = bareTitle ? title : `${title} — ${site.name}`;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const ogImage = new URL(image, site.url).href;
@@ -79,7 +89,7 @@ const year = new Date().getFullYear();
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={canonical} />
     <meta name="author" content={site.name} />
-    {noindex && <meta name="robots" content="noindex" />}
+    {(!SITE_LIVE || noindex) && <meta name="robots" content="noindex" />}
 
     {
       /* Favicon (#26): the reticle, reduced to favicon scale — see the SVG's
