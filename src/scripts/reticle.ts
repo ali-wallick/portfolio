@@ -41,9 +41,61 @@
  * 3. **Reduced motion is not a disabled state.** `--duration` is already zeroed
  *    under `prefers-reduced-motion`, so the brackets cut to each target instead
  *    of travelling to it. The device survives; only the travel goes.
+ *
+ * ## Idle behaviour is a state, and the state was chosen (#33)
+ *
+ * The one thing Phase 5 never examined. When nothing was hovered or focused the
+ * brackets went straight home to the nav pill — which meant sweeping a pointer
+ * across a page of cards sent them on a full-width traverse back to the
+ * top-left between every single one. Correct as written, busy in use, and the
+ * busyness was the *return trip*, not the acquisitions.
+ *
+ * Four candidates went up behind a live switcher on 2026-08-21 and `fade` won:
+ * hold the last target, fade out after a beat, and **cut** to the next target
+ * rather than flying to it. The long diagonal between distant targets is gone
+ * entirely, which was the actual complaint. The other three, and the switcher,
+ * are in this branch's history if the decision ever wants reopening.
  */
 
+/** How far outside the target's box the brackets sit. */
 const PAD = 6;
+
+/**
+ * What the brackets do once nothing is hovered or focused.
+ *
+ * - `home`   travel back to the resting target immediately. Phase 5's shipped
+ *            behaviour, and the one being questioned.
+ * - `stay`   hold the last target indefinitely. The reticle reads as a *cursor
+ *            that was put down* rather than one that springs back.
+ * - `linger` hold, then travel home after `HOLD`. `home` with hysteresis: a
+ *            sweep across cards never triggers a return trip, but leaving the
+ *            page alone still resets it to pointing at where you are.
+ * - `fade`   hold in place, then fade out after `HOLD`, and *cut* to the next
+ *            target rather than travelling to it. Kills the long diagonal
+ *            traverse entirely — the brackets acquire rather than fly.
+ */
+type Mode = 'home' | 'stay' | 'linger' | 'fade';
+
+/** Settled 2026-08-21, from four candidates compared on a preview. */
+const MODE: Mode = 'fade';
+
+/**
+ * How long the brackets hold the last target before fading, in ms. Long enough
+ * that moving between two controls never triggers a fade, short enough that a
+ * genuinely abandoned reticle does not sit there. 0.6s read as twitchy and 5s
+ * as forgotten; 1.6s is where it stopped being either.
+ */
+const HOLD = 1600;
+
+/**
+ * Dwell before a *new* target is acquired, in ms — the second source of chatter,
+ * and a subtler one than the return trip. At 0 the brackets retarget on the
+ * first `pointerover`, so a pointer travelling somewhere else drags them through
+ * every control it crosses on the way. 25ms is below the threshold where the
+ * reticle feels laggy on a deliberate move, and above the one where a
+ * pass-through registers as an aim.
+ */
+const SETTLE = 25;
 
 /** Controls. Pointing at one is an act of aiming; pointing at prose isn't. */
 const HOVER_SELECTOR = '.nav-link, .card, .tile, .button, .backlink, .brand';
@@ -69,6 +121,9 @@ document.body.appendChild(root);
  * are, before you touch anything. It is also the reason the header is sticky:
  * a resting target that scrolls away would leave the brackets chasing it off
  * the top of the page.
+ *
+ * Every mode still *starts* here. They differ only in whether, and how fast,
+ * they come back.
  */
 const home =
   document.querySelector<HTMLElement>('.nav-link[aria-current="page"]') ??
@@ -76,12 +131,23 @@ const home =
 
 let hovered: HTMLElement | null = null;
 let focused: HTMLElement | null = null;
+
+/** What the brackets are actually on — which is not `focused ?? hovered` any
+    more, because in three of the four modes they outlive their target. */
+let current: HTMLElement | null = home;
+
+/** Faded out by `fade` mode. Held separately from the on-screen test in
+    `place()`, which is about geometry rather than about idling. */
+let dormant = false;
+
 let frame = 0;
+let idle = 0;
+let settling = 0;
 
 function place(): void {
   frame = 0;
-  const el = focused ?? hovered ?? home;
-  if (!el || !el.isConnected) {
+  const el = current;
+  if (!el || !el.isConnected || dormant) {
     root.style.opacity = '0';
     return;
   }
@@ -106,6 +172,76 @@ function schedule(): void {
   if (!frame) frame = requestAnimationFrame(place);
 }
 
+/**
+ * Move without travelling.
+ *
+ * `fade` mode's whole argument is that the long diagonal is the noisy part, so
+ * reappearing has to be a cut. `is-cutting` suppresses the geometry transition
+ * for exactly one committed frame while leaving opacity eased, so the brackets
+ * snap to the new box and fade up on it — an acquisition rather than a flight.
+ * Same two-frame dance as `arm()`, and for the same reason.
+ */
+function cut(): void {
+  root.classList.add('is-cutting');
+  place();
+  requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('is-cutting')));
+}
+
+/**
+ * Decide what the brackets should be on. Called by input events only — never by
+ * scroll or resize, which re-measure the *existing* target and must not restart
+ * an idle timer that is counting down a return trip.
+ */
+function retarget(): void {
+  const active = focused ?? hovered;
+  clearTimeout(idle);
+
+  if (active) {
+    current = active;
+    if (dormant) {
+      dormant = false;
+      cut();
+      return;
+    }
+    schedule();
+    return;
+  }
+
+  if (MODE === 'home') {
+    current = home;
+    schedule();
+    return;
+  }
+
+  /* `stay` holds forever; the other two hold, then do something. Either way
+     `current` is left alone — that is what "where it last landed" means. */
+  if (MODE === 'linger') {
+    idle = window.setTimeout(() => {
+      current = home;
+      schedule();
+    }, HOLD);
+  } else if (MODE === 'fade') {
+    idle = window.setTimeout(() => {
+      dormant = true;
+      schedule();
+    }, HOLD);
+  }
+}
+
+/**
+ * Acquisition dwell. A new target has to hold the pointer for `SETTLE` before
+ * the brackets commit to it — losing a target still takes effect immediately,
+ * because delaying *that* would defeat the idle behaviour entirely.
+ */
+function commit(immediate: boolean): void {
+  clearTimeout(settling);
+  if (immediate || !SETTLE) {
+    retarget();
+    return;
+  }
+  settling = window.setTimeout(retarget, SETTLE);
+}
+
 function match(event: Event, selector: string): HTMLElement | null {
   const node = event.target;
   return node instanceof Element ? node.closest<HTMLElement>(selector) : null;
@@ -113,23 +249,25 @@ function match(event: Event, selector: string): HTMLElement | null {
 
 document.addEventListener('pointerover', (event) => {
   if (!fine.matches) return;
-  hovered = match(event, HOVER_SELECTOR);
-  schedule();
+  const next = match(event, HOVER_SELECTOR);
+  if (next === hovered) return;
+  hovered = next;
+  commit(!next);
 });
 
 document.addEventListener('pointerleave', () => {
   hovered = null;
-  schedule();
+  commit(true);
 });
 
 document.addEventListener('focusin', (event) => {
   focused = match(event, FOCUS_SELECTOR);
-  schedule();
+  commit(true);
 });
 
 document.addEventListener('focusout', () => {
   focused = null;
-  schedule();
+  commit(true);
 });
 
 window.addEventListener('scroll', schedule, { passive: true });
@@ -147,9 +285,13 @@ window.addEventListener('resize', schedule);
  * it exactly, rather than by subtracting a hard-coded `--lift` that would go
  * stale the moment the token changes. It also stays in character: the
  * correction eases like every other retarget instead of snapping.
+ *
+ * Keyed off `current` rather than `focused ?? hovered` now that they diverge:
+ * in the holding modes the element still under the brackets is the one whose
+ * movement matters, and it may well be one the pointer has already left.
  */
 document.addEventListener('transitionend', (event) => {
-  if (event.target === (focused ?? hovered)) schedule();
+  if (event.target === current) schedule();
 });
 
 /**

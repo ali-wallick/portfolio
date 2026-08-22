@@ -1306,3 +1306,236 @@ layout declarations that belong to the thing being shown.** Deleting the
 scaffold silently deletes those too. Both were found by verifying rendered
 output after the removal, which is a step it is very tempting to skip when the
 change is "just deleting the thing we already decided about."
+
+---
+
+## Phase 6 — the reticle's idle behaviour, 2026-08-21
+
+#33 lists three soft design decisions, and tweening is the one that turned out to have a concrete
+complaint attached rather than a vague unease. Ali's, verbatim: _"if you're navigating around the
+screen it immediately starts reverting to the upper left and it gets really busy."_
+
+### The busy part was the return trip, not the acquisitions
+
+Worth separating, because the obvious fix — slow the reticle down, or damp it — would have been the
+wrong one.
+
+`reticle.ts` targeted `focused ?? hovered ?? home`, with no fourth state. So the brackets had exactly
+two conditions: on something, or going home. Moving a pointer from one card to the next crosses a few
+pixels of page background between them, and every one of those crossings was a full-width traverse
+back to the nav pill and out again. **The motion nobody asked for outnumbered the motion that meant
+something, roughly two to one, on any page with more than a couple of controls.**
+
+The acquisitions themselves — the travel onto a thing you actually pointed at — were never the
+problem. That is the device working.
+
+### Idle is a state, so it gets a state machine and four candidate answers
+
+The fix is structural rather than numeric: `current` (what the brackets are on) is now separate from
+`focused ?? hovered` (what the pointer is on), and they are allowed to diverge. Everything else
+follows from that one split.
+
+| Mode     | On losing a target                                          |
+| -------- | ----------------------------------------------------------- |
+| `home`   | travel back immediately — Phase 5's behaviour, the baseline |
+| `stay`   | hold the last target indefinitely                           |
+| `linger` | hold, then travel home after a delay                        |
+| `fade`   | hold, then fade out in place — and _cut_ to the next target |
+
+Ali asked for the first three. `fade` is the one worth arguing for: if the long diagonal is what
+reads as busy, then the honest fix is to stop travelling between distant targets at all rather than
+to make the traverse gentler. It reuses `arm()`'s two-frame dance under a new `is-cutting` class that
+suppresses the geometry transition while leaving opacity eased — so the brackets snap onto the new
+box and fade up on it. An acquisition rather than a flight, which is also what a reticle in a game
+actually does.
+
+Two knobs came out of building it rather than out of the brief:
+
+- **Settle** — a dwell before a _new_ target is acquired. The complaint is about the return trip, but
+  there is a second source of chatter: a pointer travelling somewhere else drags the brackets through
+  every control it crosses on the way. A 60–120ms threshold makes the reticle follow where you
+  stopped rather than where you passed. Losing a target still takes effect immediately — delaying
+  that would defeat the idle modes.
+- **Travel** and **Curve**, which are #33's original tweening bullet: 500ms with zero ease-in is the
+  old site's recovered character, adopted across all four Phase 5 directions and never once tuned to
+  the one that shipped.
+
+### Three things the switcher had to learn from #22
+
+Same instrument, same three constraints, and none of them was obvious the first time:
+
+1. **No new imports in `BaseLayout.astro`.** The bootstrap and the switcher are string constants, not
+   components and not modules, because one component import reorders Astro's CSS bundles and takes
+   `resume.css`'s print block out of the cascade — which silently turns a 1-page resume into 2 (#62).
+2. **Bootstrap inline, in `<head>`.** `--duration` and `--ease` are read by every transition on the
+   page. Applying them after first paint means the first hover of every navigation runs at the wrong
+   speed, which is exactly the thing being judged.
+3. **Gated on `showDrafts` at the markup _and_ the script.** A module imported from the bundled
+   `<script>` ships to all 24 production pages whether or not the markup renders.
+
+One constraint is new, and it is the kind of thing only building it surfaces: **the instrument must
+not be a thing the reticle chases.** `FOCUS_SELECTOR` matches `input`, so without a guard every click
+on a radio parks the brackets on the panel — in `stay` mode, the one where it is most distracting,
+and while comparing the exact behaviour the panel exists to compare. One `closest()` call in
+`match()`, deleted with the rest of the scaffolding.
+
+### First pass on the preview narrowed four of the six groups
+
+Ali's reactions, same session: 5s hold too long and 0.6s too short; 120ms settle definitely too long
+and probably shorter than 60ms if anything; travel definitely not `Cut`, and 500ms too long. So the
+option sets moved to sample the live region densely instead of spanning the whole plausible range —
+hold 1.2–2.5s, settle 25–60ms, travel 200–400ms with the recovered 500ms kept only as the labelled
+baseline to compare against.
+
+She also asked for a knob the first pass didn't have: **the fade-out duration for mode D**, which had
+been silently borrowing `--duration-fast`. Reasonable — how _long_ the brackets take to leave is a
+different question from how long they wait before starting, and D is the mode where it's load-bearing.
+
+That knob is a `var(--reticle-fade, var(--duration-fast))` **fallback rather than a token defined on
+`:root`**, and the distinction is the one CLAUDE.md's standing rule is about: a real token has to be
+added to `resume.css`'s `@media print` block too, because that block is a denylist and anything
+nobody enumerated reaches the PDF. A name with no `:root` definition is not a token — there is
+nothing to pin, and the reticle is `display: none` on paper regardless.
+
+### A curve that overshoots is right for position and wrong for opacity
+
+Second pass. Ali settled on D / 1.6s hold / 500ms fade / 25ms settle / 320ms travel / Overshoot, then
+asked to test the fade-out duration against some fade-out **curves** — and the request turned out to
+be pointing at a real defect rather than at a missing preference.
+
+The fade was borrowing `--ease`, which at that moment was the overshoot curve. **Opacity is clamped
+and position is not.** An overshoot sends a position past its target and back, which is the entire
+appeal; sent through opacity it goes past fully transparent, clamps, and spends the overshoot sitting
+at zero. Identical curve, and it reads as a bounce on one property and as a dead interval on the
+other.
+
+So `--reticle-fade-ease` is now separate from `--ease`, with four options that describe the _feel_
+rather than the maths — Site curve, Linear, Hold-then-drop, Drop-then-trail. Worth keeping the
+general form of it: **a shared motion token is shared across properties, not just across components,
+and clamping is a property-level fact the token cannot know.**
+
+Ali's answer to that group was ease-out, with a request for a couple of ease-outs to compare — so the
+group became five of them and stopped offering anything else. The interesting part was **picking**
+the five. Named curves (`easeOutCubic`, `easeOutQuint`, `easeOutExpo`) are a naming convention, not a
+scale, and two of them can be perceptually identical at a given duration while two others are miles
+apart. Computing the axis that actually differs — _how long the brackets stay readable_ — showed
+`easeOutQuint` and `easeOutExpo` land 22ms apart at a 500ms fade, while `ease-out` and `easeOutExpo`
+land 205ms apart:
+
+| Curve                               | 90% faded by | Opacity at the halfway point |
+| ----------------------------------- | ------------ | ---------------------------- |
+| `ease-out` `(0, 0, 0.58, 1)`        | 370ms        | 31.5%                        |
+| recovered `(0, 0, 0.25, 1)`         | 308ms        | 17.7%                        |
+| `easeOutCubic` `(0.33, 1, 0.68, 1)` | 270ms        | 12.8%                        |
+| `easeOutQuart` `(0.25, 1, 0.5, 1)`  | 220ms        | 6.6%                         |
+| `easeOutExpo` `(0.16, 1, 0.3, 1)`   | 165ms        | 2.8%                         |
+
+Quint was dropped for sitting on top of Quart and Expo; the five that shipped are evenly spaced on
+the perceptual axis rather than evenly spaced in the easing catalogue. **A set of options is an
+instrument, and an instrument with two identical marks on it is worse than one with fewer marks.**
+
+The same measurement makes the labels honest: each option's tooltip says when it is 90% gone, which
+is a fact about the fade rather than a bezier nobody can read.
+
+**Settled the same day: `easeOutQuart`, written into `base.css` rather than left as a switcher
+pick.** Locking a decision in means deleting its knob — the Fade curve group is gone and the value is
+literal in the stylesheet with the measurement that chose it in a comment beside it. The general form
+went into `CLAUDE.md`'s design standing rules, because "a shared easing token is shared across
+_properties_, and clamping is a property-level fact the token cannot know" is exactly the sort of
+thing a future session re-derives wrongly.
+
+Worth noting what made this one lockable early, while the mode itself is still open: the fade curve
+governs the scroll-off fade in **every** mode, not just D. A decision whose blast radius doesn't
+depend on an undecided question can be closed out of order.
+
+### Narrowing an option set strands whoever already picked a removed value
+
+The bug this would have shipped is small and exactly the wrong kind. Ali's `localStorage` held
+`hold: 600` and `settle: 120` — both removed. The panel would have rendered those groups with
+**nothing checked while the old value stayed in effect**, so the instrument for judging behaviour
+would have been quietly reporting the wrong behaviour, on precisely the settings she had just ruled
+out.
+
+The switcher now reconciles on load: a group whose stored value matches none of its options snaps to
+its first option and writes that through. What is checked is always what is running.
+
+Worth generalising, because it is the same shape as the `--reticle-fade` decision above and as
+Phase 5's `:root[data-palette]` beat: **state that lives in two places needs one of them to be
+authoritative, and the code has to say which.** Here the options are authoritative and storage is a
+cache; the print block's failure was assuming `:root` was authoritative when a more specific selector
+existed.
+
+### Everything else settled the same day, and the scaffolding is gone
+
+Ali took the rest of the panel in one pass: **D · linger-then-fade, 1.6s hold, 500ms fade, 25ms
+settle, 320ms travel, overshoot curve.** All of it is written into `reticle.ts`, `tokens.css` and
+`base.css`; the bootstrap, the panel, its script and its stylesheet are deleted, along with the
+`match()` guard that existed only to stop the reticle chasing its own instrument. Net −18k characters
+against the peak of the branch.
+
+**The motion tokens are no longer the recovered values, and that is the headline.** `--ease` and
+`--duration` had been `cubic-bezier(0, 0, 0.25, 1)` at 500ms — the old site's own curve and duration,
+carried through all four Phase 5 directions untouched. They are now
+`cubic-bezier(0.34, 1.28, 0.64, 1)` at 320ms. The family is unchanged: still zero real ease-in, still
+launching at full speed and decelerating hard. 500ms was the part that read as sluggish rather than
+characterful once the reticle put it in front of you on every hover.
+
+Two measurements decided things that would otherwise have been assumptions:
+
+- **`1.28` is a control-point ordinate, not a peak.** The curve's actual overshoot is **2.6%**.
+  That matters because `--ease` also drives `color`, `background-color` and `border-color`, all of
+  which clamp per channel — an overshoot distorting hue mid-transition would have been a real bug.
+  At 2.6% the real colour pairs clamp by 3–6 RGB units for a few milliseconds. Imperceptible. The
+  worry was worth having and the answer was worth measuring rather than guessing either way.
+- **`--duration-fast` stayed at 250ms deliberately.** It used to be half of `--duration` and is now
+  most of it, which nearly collapses the distinction between "fast" and "normal". Left alone because
+  it was never in the comparison: the site was judged and approved with this exact pairing, and
+  quietly changing it would have altered something already signed off. Recorded in `tokens.css` as
+  something to revisit on purpose rather than as a side effect.
+
+### What ships either way
+
+The split that made the branch safe at every point: the modes ship, the panel does not. `MODE` was a
+constant in `reticle.ts` defaulting to `home` while the comparison ran, so production behaviour was
+unchanged until a mode was picked — the panel was scaffolding, the state machine was the feature.
+The branch was mergeable before the decision as well as after it, which is a useful property for
+anything gated on someone else's judgment.
+
+### One issue was three issues, and the tell was that finishing one taught nothing about the others
+
+#33 was booked as "the faces, colour calibration, tweening" — three things deferred in the same
+conversation at the close of Phase 5, which is why they shared a number. Working one of them showed
+that shared origin was the _only_ thing they shared.
+
+The tweening turned out to be a state-machine change driven by a concrete usability complaint. The
+faces are a comparison with a CLS hazard attached, because `--measure` is written in `ch` and `ch` is
+font-dependent. The calibration is three hand-fitted contrast values plus a duration ratio. **Nothing
+learned doing the first transfers to the other two**, which is the working definition of separate
+work — and a single issue hid that by presenting them as a list.
+
+So #33 was rescoped to the tweening, closed, and reissued as #66 (faces) and #67 (colour
+calibration), each carrying its own constraints written in rather than referenced. #23, which
+sequences the deferred revisit passes, went from three to four.
+
+**The heuristic worth keeping:** an issue listing several things is fine when they will be worked in
+one sitting and share a decision. When the list is really "things deferred at the same moment", it
+will not survive contact with the first one, and splitting it _after_ doing that one is cheap —
+splitting it before is guesswork.
+
+### Verification
+
+`npm run verify` clean. The switcher is absent from a production build (0 occurrences in
+`dist/index.html`) and present on a `SHOW_DRAFTS=true` one. Print geometry matches the committed
+baseline and both PDFs are still 1/1 and 2/2 — the regenerated `public/*.pdf` and lock file in this
+branch are the base.css hash changing, not the document moving.
+
+All four modes were driven with a real pointer in the browser rather than asserted: `linger` holds on
+a card with the pointer parked elsewhere and then travels home; `stay` was still on card 03 three
+seconds after the pointer left it; `fade` reaches `opacity: 0` after its hold and comes back with
+`is-cutting` set.
+
+**One thing to know if you verify this the same way:** the browser pane reports `document.hidden` as
+true, which throttles `requestAnimationFrame` to nothing. Every placement in this file goes through
+`schedule()`, so a synthetic-event harness reads as though _no_ mode does anything — all four return
+identical transforms. That is the harness, not the code. Real pointer events and screenshots force
+frames; synthetic `dispatchEvent` does not.

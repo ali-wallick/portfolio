@@ -542,9 +542,11 @@ These are not in tension, and the split is deliberate.
 
 #### 3. Motion: shared baseline in tokens, per-direction expression
 
-`--ease` and `--duration` carry the old site's real curve and duration (see the correction below) on
-`master`, so **every direction inherits the chase-and-settle character** whether or not it makes a
-feature of it. Where that character is most visible is a per-direction choice. This is what
+`--ease` and `--duration` carried the old site's real curve and duration (see the correction below)
+on `master` through Phase 5, so **every direction inherited the chase-and-settle character** whether
+or not it made a feature of it. (Phase 6 tuned them to the direction that shipped — see "The motion
+values are tuned now, not recovered" below. The character is the same family; the numbers are not
+the recovered ones any more.) Where that character is most visible is a per-direction choice. This is what
 "reinterpret `nav.js`, don't delete it" resolves to concretely.
 
 Ruled out: a literal port. A JavaScript scroll handler reimplementing `position: sticky` in 2026 is
@@ -579,8 +581,9 @@ transition being continuously retriggered_, not a designed animation.
 
 What follows from that:
 
-- **The character is two token values**, not a component: `cubic-bezier(0,0,0.25,1)` and `500ms`. Both
-  differ sharply from the Phase 2 placeholders they replace — the old `--ease` was
+- **The character is two token values**, not a component: `cubic-bezier(0,0,0.25,1)` and `500ms` — the
+  _recovered_ pair, which is what shipped through Phase 5 and what Phase 6 tuned away from. Both
+  differ sharply from the Phase 2 placeholders they replaced — the old `--ease` was
   `cubic-bezier(0.2,0,0,1)` and `--duration` was `240ms`. The real curve has **zero ease-in**: it
   launches at full speed and decelerates hard. The real duration is twice as long.
 - **The technique generalizes** to anything with a continuously-updating target, which is what makes
@@ -621,6 +624,13 @@ exists.
   should be a palette-and-type swap, not a hunt through every file.
 - Responsive from the start. The old site had no viewport meta and rendered zoomed out on every
   phone ever made.
+- **`--ease` is shared across _properties_, not only across components, and clamping is a
+  property-level fact the token cannot know.** A curve that overshoots sends a position past its
+  target and back, which is the whole appeal of one; sent through `opacity` it goes past fully
+  transparent, clamps, and spends the overshoot sitting at zero — a bounce on one property and a
+  dead interval on the other. The reticle's fade therefore carries its own written-in curve
+  (`easeOutQuart`, settled 2026-08-21) rather than `var(--ease)`. Reach for a separate curve whenever
+  a token meets a clamped property; don't assume a shared one transfers.
 
 #### If your direction self-hosts a webfont, two things will bite it
 
@@ -703,13 +713,39 @@ Ali's framing at the close: _"this is good enough to move on for now."_ **Nothin
 wrong** — they are the choices most likely to read differently after living with the site rather
 than looking at a comparison page: the faces, the colour calibration at the edges, and the tweening.
 
-Tracked as [#33](https://github.com/ali-wallick/Portfolio/issues/33), which carries why each one is on the list. It is the design-scoped sibling
-of the wording pass ([#31](https://github.com/ali-wallick/Portfolio/issues/31)) and the resume tone pass ([#32](https://github.com/ali-wallick/Portfolio/issues/32)); sequencing the three is
+All three were booked as one issue and that was a mistake worth naming: they shared a number because
+they were deferred in the same conversation, not because they were one activity. The tweening turned
+out to be a state-machine change driven by a usability complaint, the faces are a comparison with a
+CLS hazard attached, and the calibration is three hand-fitted contrast values. Nothing about doing
+one informs doing another. Split on 2026-08-21 — **the tweening is settled and closed** (see below),
+the faces are [#66](https://github.com/ali-wallick/Portfolio/issues/66) and the colour calibration is
+[#67](https://github.com/ali-wallick/Portfolio/issues/67). They are the design-scoped siblings of the
+wording pass ([#31](https://github.com/ali-wallick/Portfolio/issues/31)) and the resume tone pass
+([#32](https://github.com/ali-wallick/Portfolio/issues/32)); sequencing them is
 [#23](https://github.com/ali-wallick/Portfolio/issues/23).
 
-**What generalises, and belongs here rather than in the issue:** `--ease` and `--duration` are the
+**What generalises, and belongs here rather than in the issue:** `--ease` and `--duration` were the
 _old site's_ recovered curve and duration, adopted as a shared baseline across all four directions
-and never tuned to this one. Inheriting a character is not the same as choosing it.
+and never tuned to this one. **Inheriting a character is not the same as choosing it** — which is
+what the section below is the resolution of.
+
+### The motion values are tuned now, not recovered (2026-08-21)
+
+Settled on a live switcher, closing [#33](https://github.com/ali-wallick/Portfolio/issues/33), which
+was rescoped to just this. The faces ([#66](https://github.com/ali-wallick/Portfolio/issues/66)) and
+the colour calibration ([#67](https://github.com/ali-wallick/Portfolio/issues/67)) are separate now.
+
+| Token / value             | Was                        | Is                                   | Why                                                                                                                                   |
+| ------------------------- | -------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `--duration`              | `500ms` (recovered)        | **`320ms`**                          | 500ms read as sluggish rather than characterful once the reticle made it visible on every hover.                                      |
+| `--ease`                  | `cubic-bezier(0,0,0.25,1)` | **`cubic-bezier(0.34,1.28,0.64,1)`** | Same family — launches at full speed, decelerates hard — plus 2.6% overshoot. A descendant of the recovered curve, not a replacement. |
+| `--duration-fast`         | `250ms`                    | **unchanged**                        | It was never in the comparison. It used to be half of `--duration` and is now most of it; revisit deliberately, not as a side effect. |
+| Reticle idle behaviour    | return home immediately    | **hold 1.6s, then fade, and cut**    | The busyness was the _return trip_, not the acquisitions. See `src/scripts/reticle.ts`.                                               |
+| Reticle acquisition dwell | none                       | **25ms**                             | Stops a pointer travelling somewhere else from dragging the brackets through every control it crosses.                                |
+
+**`1.28` is a control-point ordinate, not a peak.** The actual overshoot is 2.6%, measured — which is
+what makes the curve safe on the clamped colour transitions in `base.css` (3–6 RGB units for a few
+milliseconds). It was _not_ safe on opacity, which is why the reticle's fade has its own curve.
 
 ---
 
@@ -763,8 +799,8 @@ to redirect. Setup and troubleshooting: [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.m
   writes to the first two.
 - **`resources/css/` and `resources/js/`** — the old site's stylesheet and scroll handler. Mined in
   Phase 5 and **the only copy**; `snapshot/` has `colors.css` and nothing else. The findings are
-  recorded under "What the gate corrected", but the sources are what a re-examination of the recovered
-  curve ([#33](https://github.com/ali-wallick/Portfolio/issues/33)) would want.
+  recorded under "What the gate corrected", and the recovered curve was re-examined and retuned in
+  Phase 6 — but these are still the only primary sources if anyone reopens that.
 - **`resources/WallickAli-Resume.pdf`** — carries a PO Box, pending [#40](https://github.com/ali-wallick/Portfolio/issues/40).
 
 _The Phase 0 asset keep/drop list was **acted on in Phase 3**: the 50 keep-listed files moved to

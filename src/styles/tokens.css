@@ -235,30 +235,46 @@
   --shadow-flat: 0 0 0 var(--color-plate);
 
   /* --- Motion -----------------------------------------------------------
-   * REAL, as of the Phase 5 gate — no longer placeholders, and the shared
-   * baseline every direction inherits. Not redefined here.
+   * TUNED, 2026-08-21, and no longer the recovered values themselves. The
+   * distinction matters, so here is the whole provenance in one place.
    *
-   * These two values are the old site's one genuine piece of personality.
-   * nav.js assigned `quickInfo.style.top` directly on every scroll event with
-   * no interpolation at all; the easing was four lines of CSS in
-   * templateStyles.css, and this is that curve and duration.
+   * The old site's one genuine piece of personality was `cubic-bezier(0, 0,
+   * 0.25, 1)` at 500ms. nav.js assigned `quickInfo.style.top` directly on every
+   * scroll event with no interpolation at all; the easing was four lines of CSS
+   * in templateStyles.css. JS retargets faster than 500ms, so the element never
+   * arrived while the page was moving — it chased, then settled. The curve had
+   * *zero* ease-in: full speed immediately, decelerating hard.
    *
-   * The effect: JS retargets on every scroll event, CSS eases each retarget
-   * over 500ms, scroll events fire faster than that — so the element never
-   * arrives while the page is moving. It chases, then settles. The curve has
-   * *zero* ease-in; it launches at full speed and decelerates hard.
+   * Those exact values shipped through Phase 5 as a shared baseline that all
+   * four directions inherited and none of them tuned, which #33 flagged:
+   * inheriting a character is not the same as choosing one. The reticle is the
+   * only thing that really exercises them, so they were tuned against it on a
+   * live switcher and settled at 320ms with a slight overshoot.
    *
-   * This is the direction that makes a feature of it. `.reticle` in base.css
-   * is the same mechanism, honestly reproduced: JS assigns a target on every
-   * scroll event and CSS eases each assignment. The one thing not reproduced
-   * is the old implementation's bug — it dropped the `.scrolled` class at the
-   * top of the page, which took the transition with it and made the return
-   * trip snap. The reticle's transition is never conditional, so it settles in
-   * both directions.
+   * The family is unchanged and that is the point — this curve still launches
+   * at full speed and still decelerates hard, it just carries 2.6% past the
+   * target and settles back. A descendant of the recovered curve rather than a
+   * replacement for it. 500ms turned out to be the part that read as sluggish
+   * rather than characterful once the reticle made it visible on every hover.
+   *
+   * Two notes for anyone changing these:
+   *
+   * - **The overshoot is 2.6%, not 28%.** `1.28` is a control-point ordinate,
+   *   not a peak. Measured, because it decides whether the curve is safe on
+   *   clamped properties: at 2.6% the colour transitions on `.nav-link` and
+   *   `.card-index` clamp by 3-6 RGB units for a few milliseconds, which is
+   *   imperceptible. `opacity` is the one place it was NOT acceptable, and the
+   *   reticle's fade carries its own curve because of it — see base.css.
+   * - **`--duration-fast` is deliberately still 250ms.** It used to be half of
+   *   `--duration` and is now most of it, which nearly collapses the
+   *   distinction between "fast" and "normal". It stayed because it was never
+   *   in the comparison: the site was judged and approved with this pairing,
+   *   and changing it now would alter something already signed off. Worth
+   *   revisiting deliberately rather than as a side effect.
    */
-  --ease: cubic-bezier(0, 0, 0.25, 1);
+  --ease: cubic-bezier(0.34, 1.28, 0.64, 1);
   --duration-fast: 250ms;
-  --duration: 500ms;
+  --duration: 320ms;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -265,7 +265,7 @@ hr {
     transform var(--duration) var(--ease),
     width var(--duration) var(--ease),
     height var(--duration) var(--ease),
-    opacity var(--duration-fast) var(--ease);
+    opacity 500ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 /* Placed at its resting target before the transition is allowed to apply, so
@@ -273,6 +273,40 @@ hr {
    See `arm()` in src/scripts/reticle.ts. */
 .reticle:not(.is-armed) {
   transition: none;
+}
+
+/* The fade has its own curve, written in rather than taken from `--ease`, and the
+   reason is a property-level fact rather than a preference: OPACITY IS CLAMPED
+   AND POSITION IS NOT. A curve that overshoots sends a position past its target
+   and back, which is the whole appeal of one; sent through opacity it goes past
+   fully transparent, clamps, and spends the overshoot sitting at zero. Identical
+   curve, a bounce on one property and a dead interval on the other.
+
+   `cubic-bezier(0.25, 1, 0.5, 1)` is easeOutQuart, chosen 2026-08-21 from five
+   ease-outs compared on the preview. They were picked by measurement rather than
+   from the easing catalogue, on the axis that actually differs — how long the
+   brackets stay readable. At a 500ms fade this one is 90% gone by 220ms with
+   under 7% left at the halfway point, a third of the way from the site's own
+   curve toward easeOutExpo. `easeOutQuint` was dropped from the comparison for
+   landing 33ms from this one and 22ms from Expo: a duplicate mark on the
+   instrument rather than an option. (#33)
+
+   The 500ms is written in rather than tokenised for the same reason: CLAUDE.md's
+   standing rule is that a new design token has to be added to `resume.css`'s
+   `@media print` block too, because that block is a denylist and anything nobody
+   enumerated reaches the PDF. Neither of these two values is used anywhere else,
+   and the reticle is `display: none` on paper regardless, so a token would be a
+   liability with no reuse to justify it. */
+
+/* A move with no travel, for the `fade` idle mode (#33): geometry snaps, opacity
+   still eases. That split is the mode's entire argument — what reads as busy is
+   the long diagonal between targets, not the acquisition, so the brackets
+   reappear *on* the new box and fade up rather than flying to it.
+
+   Held for exactly one committed frame by `cut()`, the same two-frame dance
+   `arm()` uses. */
+.reticle.is-cutting {
+  transition: opacity 500ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .reticle i {
