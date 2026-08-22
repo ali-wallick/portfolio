@@ -28,6 +28,21 @@ export const site = {
   analyticsToken: 'bd2daf82080746f2bc1529235444ac67',
 } as const;
 
+/**
+ * Whether aliwallick.com is the live production domain yet.
+ *
+ * `false` for every build until the Phase 6 DNS cutover — every branch
+ * preview, including `master`'s and `release`'s, is pre-launch, because
+ * aliwallick.com still serves the old PHP site. `BaseLayout.astro`'s sitewide
+ * `<meta name="robots" content="noindex">` and `robots.txt`'s Allow/Disallow
+ * both derive from this one flag rather than each tracking it separately, so
+ * they can't drift out of sync with each other.
+ *
+ * TODO(phase-6): flip to `true` in the same PR as the DNS cutover (#74) — not
+ * before, since the whole point is staying noindexed until that moment.
+ */
+export const live = false;
+
 export type SocialLink = {
   label: string;
   url: string;

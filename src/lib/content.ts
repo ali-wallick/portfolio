@@ -48,6 +48,19 @@ export async function getAllProjects(): Promise<Project[]> {
   return [...(await getFeaturedProjects()), ...(await getArchiveProjects())];
 }
 
+/**
+ * Every project that exists in production, regardless of `showDrafts`.
+ *
+ * Deliberately the one query in this file that does *not* honor `showDrafts`.
+ * Cloudflare previews build with `SHOW_DRAFTS=true` so the review loop can see
+ * draft pages, but `sitemap.xml` has to be the production route list on every
+ * build — a sitemap that followed `showDrafts` would advertise draft project
+ * URLs that 404 once the same commit deploys to production.
+ */
+export async function getIndexableProjects(): Promise<Project[]> {
+  return getCollection('projects', (project) => !project.data.draft);
+}
+
 /** Jobs, most recent first. A missing `end` means "current", which sorts top. */
 export async function getJobs(surface: 'site' | 'resume'): Promise<Job[]> {
   const all = await getCollection('jobs');

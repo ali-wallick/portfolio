@@ -1,5 +1,5 @@
 ---
-import { site, nav } from '~/config/site';
+import { site, nav, live } from '~/config/site';
 import { showDrafts } from '~/lib/content';
 
 /* Self-hosted, latin subsets, weight axis only — no third-party requests, so
@@ -52,15 +52,6 @@ interface Props {
 
 const { title, description, bareTitle = false, noindex = false, image } = Astro.props;
 
-/**
- * Every build today — every branch preview, including master's — is
- * pre-launch: aliwallick.com still serves the old PHP site. This kills
- * indexing sitewide regardless of the per-page `noindex` prop above, so a
- * leaked or shared preview URL can't end up in search results before the
- * real domain cutover. TODO(phase-6): flip to `true` at the DNS cutover (#74).
- */
-const SITE_LIVE = false;
-
 const fullTitle = bareTitle ? title : `${title} — ${site.name}`;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const ogImage = new URL(image, site.url).href;
@@ -89,7 +80,12 @@ const year = new Date().getFullYear();
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={canonical} />
     <meta name="author" content={site.name} />
-    {(!SITE_LIVE || noindex) && <meta name="robots" content="noindex" />}
+    {
+      /* `live` is the same flag robots.txt derives its Allow/Disallow from
+         (src/config/site.ts) — kept in one place so the meta tag and the
+         crawl directive can't disagree about whether the site is launched. */
+    }
+    {(!live || noindex) && <meta name="robots" content="noindex" />}
 
     {
       /* Favicon (#26): the reticle, reduced to favicon scale — see the SVG's
@@ -105,7 +101,6 @@ const year = new Date().getFullYear();
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    {/* TODO(phase-6): robots.txt + sitemap (#28). */}
     {
       /* OG/Twitter cards (#27). The old site's og:image and og:url were both
          http://, so link previews broke in every chat app — every URL here is
