@@ -54,24 +54,34 @@
  * That block pins paper to Phase 4's palette by redefining tokens, and it only
  * covers the ones named in it — anything new reaches the PDF, which carries a
  * hard page-count assertion in `scripts/build-pdf.mjs`.
+ *
+ * The whole `:root` block below is scoped inside `@media screen` (#62). Before
+ * this, it and `resume.css`'s `@media print :root` block both matched `:root`
+ * at identical specificity, so whichever one the bundler happened to emit last
+ * in the `<head>` won — a tie broken by Astro's `inlineStylesheets` heuristic
+ * rather than by anything either file says. `@media screen` and `@media print`
+ * can never both match the same render, so there is no tie left to break:
+ * order stops being able to matter. See CLAUDE.md, "The resume print block
+ * wins the cascade by load order."
  */
 
-:root {
-  /* --- Colour: ground and ink -------------------------------------------
+@media screen {
+  :root {
+    /* --- Colour: ground and ink -------------------------------------------
    * Arcade, dimmed. The saturated accents are the direction's energy; the
    * ground exists to let them hold their own, which near-white does not — it
    * is where magenta and cyan look cheapest. So the light ground is off white
    * and carries a violet cast borrowed from the dark theme, which is also what
    * finally makes the two themes read as the same site.
    */
-  --color-bg: #e4e1f0;
-  --color-surface: #f4f2fb;
-  --color-text: #12101c;
-  --color-text-muted: #4a4560;
-  --color-heading: #12101c;
-  --color-border: #c9c4de;
+    --color-bg: #e4e1f0;
+    --color-surface: #f4f2fb;
+    --color-text: #12101c;
+    --color-text-muted: #4a4560;
+    --color-heading: #12101c;
+    --color-border: #c9c4de;
 
-  /* The colour under anything with height. See `--lift`.
+    /* The colour under anything with height. See `--lift`.
      Was tuned to 1.67:1 against the ground to match the weight the shadow had
      in this direction's original palette — but 1.67:1 turned out to be a
      value that only worked for that one ground (#67): close enough to
@@ -79,37 +89,37 @@
      means pressable" device entirely. Retuned to 2.2:1, same hue, holding
      the same "visible but exempt from the 3:1 UI-component bar" rule the
      header above states — just with less margin for the ground to eat. */
-  --color-plate: #9e93c3;
+    --color-plate: #9e93c3;
 
-  /* --- Colour: the interaction layer (magenta) ---------------------------
+    /* --- Colour: the interaction layer (magenta) ---------------------------
    * Where you *are*: the reticle, the focus ring, the current-page pill.
    * `--color-accent` is the stroke and is non-text; `--color-accent-ink` is
    * the same hue at a weight that can carry type. Don't set type in
    * `--color-accent`.
    */
-  --color-accent: #c4005f;
-  --color-accent-ink: #a80052;
-  --color-accent-soft: #fbdcec;
-  --color-accent-block: #a80052;
-  --color-on-accent: #ffffff;
-  --color-on-accent-link: #ffffff;
+    --color-accent: #c4005f;
+    --color-accent-ink: #a80052;
+    --color-accent-soft: #fbdcec;
+    --color-accent-block: #a80052;
+    --color-on-accent: #ffffff;
+    --color-on-accent-link: #ffffff;
 
-  /* --- Colour: the navigation layer (blue) ------------------------------
+    /* --- Colour: the navigation layer (blue) ------------------------------
    * Where you can *go*: links, and only links.
    */
-  --color-link: #0049b8;
-  --color-link-visited: #6a17b5;
-  --color-focus: #c4005f;
+    --color-link: #0049b8;
+    --color-link-visited: #6a17b5;
+    --color-focus: #c4005f;
 
-  /* The featured list's ranking numbers, and the only thing that uses it.
+    /* The featured list's ranking numbers, and the only thing that uses it.
      A dedicated token rather than `--color-text-muted` because the number
      wants to sit quieter than body copy, and rather than `--color-border`
      because a border colour is not a text colour — that was the original
      construct here and it measured 1.43:1, which is a contrast failure
      wearing the costume of a design choice. 5.50:1: quiet, and legible. */
-  --color-index: #645f77;
+    --color-index: #645f77;
 
-  /* --- Colour: the content layer (status) --------------------------------
+    /* --- Colour: the content layer (status) --------------------------------
    * One pair per `status` value in src/content.config.ts. Adding a status to
    * the enum without adding a pair here falls back to the neutral pair, which
    * is legible but tells the reader nothing — so add both.
@@ -118,20 +128,20 @@
    * its own ink until the pair clears 4.5:1 while staying separated from the
    * surface it sits on. See the generator note in the Phase 5 log.
    */
-  --chip-ink: #4a4560;
-  --chip-tint: #dedbe8;
-  --chip-shipped-ink: #005a4e;
-  --chip-shipped-tint: #d3e5e2;
-  --chip-prototype-ink: #0049b8;
-  --chip-prototype-tint: #d7e0f2;
-  --chip-jam-ink: #a80052;
-  --chip-jam-tint: #f2dbe6;
-  --chip-coursework-ink: #6a17b5;
-  --chip-coursework-tint: #e2d9ef;
-  --chip-unannounced-ink: #4a4560;
-  --chip-unannounced-tint: #dedbe8;
+    --chip-ink: #4a4560;
+    --chip-tint: #dedbe8;
+    --chip-shipped-ink: #005a4e;
+    --chip-shipped-tint: #d3e5e2;
+    --chip-prototype-ink: #0049b8;
+    --chip-prototype-tint: #d7e0f2;
+    --chip-jam-ink: #a80052;
+    --chip-jam-tint: #f2dbe6;
+    --chip-coursework-ink: #6a17b5;
+    --chip-coursework-tint: #e2d9ef;
+    --chip-unannounced-ink: #4a4560;
+    --chip-unannounced-tint: #dedbe8;
 
-  /* --- Type --------------------------------------------------------------
+    /* --- Type --------------------------------------------------------------
    * The gate's three roles, with this direction's faces. All self-hosted via
    * @fontsource (see BaseLayout) — no third-party requests, latin subsets.
    *
@@ -158,41 +168,41 @@
    * `--font-heading` and `--font-sans` are aliases kept so that `base.css` and
    * the print block can each name the role they mean.
    */
-  --font-body:
-    'Figtree Variable', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji';
-  --font-sans: var(--font-body);
-  --font-display: 'Gabarito Variable', 'Trebuchet MS', system-ui, sans-serif;
-  --font-heading: var(--font-display);
-  --font-mono: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --font-body:
+      'Figtree Variable', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
+      sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+    --font-sans: var(--font-body);
+    --font-display: 'Gabarito Variable', 'Trebuchet MS', system-ui, sans-serif;
+    --font-heading: var(--font-display);
+    --font-mono: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* Modular scale, ratio 1.25, base 1rem. */
-  --text-xs: 0.8rem;
-  --text-sm: 0.9rem;
-  --text-base: 1rem;
-  --text-lg: 1.25rem;
-  --text-xl: 1.563rem;
-  --text-2xl: 1.953rem;
-  --text-3xl: 2.441rem;
-  --text-4xl: 3.052rem;
+    /* Modular scale, ratio 1.25, base 1rem. */
+    --text-xs: 0.8rem;
+    --text-sm: 0.9rem;
+    --text-base: 1rem;
+    --text-lg: 1.25rem;
+    --text-xl: 1.563rem;
+    --text-2xl: 1.953rem;
+    --text-3xl: 2.441rem;
+    --text-4xl: 3.052rem;
 
-  --leading-tight: 1.05;
-  --leading-body: 1.6;
+    --leading-tight: 1.05;
+    --leading-body: 1.6;
 
-  --tracking-display: -0.02em;
-  --tracking-label: 0.06em;
+    --tracking-display: -0.02em;
+    --tracking-label: 0.06em;
 
-  /* --- Space ------------------------------------------------------------ */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-  --space-12: 3rem;
-  --space-16: 4rem;
+    /* --- Space ------------------------------------------------------------ */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
 
-  /* --- Layout -----------------------------------------------------------
+    /* --- Layout -----------------------------------------------------------
    *
    * `--measure` is in `rem`, not `ch`, and that is load-bearing rather than a
    * style preference. `1ch` is the width of the font's `0` glyph, so a
@@ -213,9 +223,9 @@
    * The print block pins `--measure` separately, in `ch`, against the system
    * stack Phase 4's PDFs were generated with. Paper is unaffected either way.
    */
-  --measure: 40.4rem;
+    --measure: 40.4rem;
 
-  /* The third width, and it exists because two were not enough.
+    /* The third width, and it exists because two were not enough.
    *
    * `--measure` is a *reading* width — how long a line of prose may get before
    * it is tiring. `--content-max` is the page. Blocks that are neither — a
@@ -233,15 +243,15 @@
    * line length are different questions, and the global `p` rule keeps
    * answering the second one.
    */
-  --measure-wide: 52rem;
+    --measure-wide: 52rem;
 
-  --content-max: 64rem;
+    --content-max: 64rem;
 
-  --radius: 6px;
-  --radius-lg: 14px;
-  --radius-pill: 999px;
+    --radius: 6px;
+    --radius-lg: 14px;
+    --radius-pill: 999px;
 
-  /* --- Height -----------------------------------------------------------
+    /* --- Height -----------------------------------------------------------
    * This direction's one structural device, and it has a rule attached:
    * **height means pressable.** Anything sitting on a plate can be pressed,
    * and pressing it drives the plate to zero. Nothing decorative gets height.
@@ -250,12 +260,12 @@
    * resting on a surface. (Direction 01's plate falls down-left and is a
    * printing-registration idea; these are different metaphors on purpose.)
    */
-  --lift: 5px;
-  --shadow-rest: 0 var(--lift) 0 var(--color-plate);
-  --shadow-high: 0 calc(var(--lift) + 3px) 0 var(--color-plate);
-  --shadow-flat: 0 0 0 var(--color-plate);
+    --lift: 5px;
+    --shadow-rest: 0 var(--lift) 0 var(--color-plate);
+    --shadow-high: 0 calc(var(--lift) + 3px) 0 var(--color-plate);
+    --shadow-flat: 0 0 0 var(--color-plate);
 
-  /* --- Motion -----------------------------------------------------------
+    /* --- Motion -----------------------------------------------------------
    * TUNED, 2026-08-21, and no longer the recovered values themselves. The
    * distinction matters, so here is the whole provenance in one place.
    *
@@ -293,12 +303,17 @@
    *   320ms. Halving it again keeps the press state reading as an
    *   accelerated version of the same motion rather than a separate speed.
    */
-  --ease: cubic-bezier(0.34, 1.28, 0.64, 1);
-  --duration-fast: 160ms;
-  --duration: 320ms;
+    --ease: cubic-bezier(0.34, 1.28, 0.64, 1);
+    --duration-fast: 160ms;
+    --duration: 320ms;
+  }
 }
 
-@media (prefers-color-scheme: dark) {
+/* `screen and (...)` rather than a bare `(...)` for the same reason as the
+   block above: without it, this `:root` would tie with resume.css's print
+   `:root` too, just for a narrower set of tokens (whichever dark-mode ones a
+   Chromium print happens to prefer-color-scheme into). */
+@media screen and (prefers-color-scheme: dark) {
   :root {
     --color-bg: #0a0a12;
     --color-surface: #151524;
@@ -351,8 +366,13 @@
  * and the press states remain legible because they are position changes rather
  * than animations. Zeroing the two duration tokens is enough to reach every
  * transition on the site, because nothing sets a raw duration anywhere.
+ *
+ * `screen and (...)`, consistent with the two blocks above, even though
+ * resume.css's print block doesn't touch `--duration`/`--duration-fast` today
+ * — paper already kills all transitions outright, and there's no reason for
+ * this file to be the one `:root` block that isn't screen-scoped.
  */
-@media (prefers-reduced-motion: reduce) {
+@media screen and (prefers-reduced-motion: reduce) {
   :root {
     --duration-fast: 0ms;
     --duration: 0ms;

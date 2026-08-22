@@ -46,28 +46,57 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Only `margin` and `font-family` here — the rest of `body`'s screen
+   declarations live in the `@media screen` block below. resume.css's
+   `@media print` block never sets either of these on `body`, so there is
+   nothing for them to tie with: they resolve the same way in print (reading
+   `--font-body`, which the print `:root` pins to a system stack) with no
+   dependence on load order to begin with. */
 body {
   margin: 0;
-  background: var(--color-bg);
-  color: var(--color-text);
   font-family: var(--font-body);
-  font-size: var(--text-base);
-  line-height: var(--leading-body);
 }
-
-/* --- Type ---------------------------------------------------------------- */
 
 h1,
 h2,
 h3,
 h4 {
   font-family: var(--font-heading);
-  font-weight: 700;
   line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-display);
   color: var(--color-heading);
   margin: var(--space-12) 0 var(--space-4);
   text-wrap: balance;
+}
+
+/* Everything here ties with a `resume.css` `@media print` rule of the same
+   selector at identical specificity — `body`'s background/color/font-size/
+   line-height, and `h1,h2,h3,h4`'s font-weight/letter-spacing. Before #62,
+   which one won a tie depended on whether Astro inlined resume.css before or
+   after this bundle — an emergent property of the module graph, not of
+   anything either file says. `@media screen`/`@media print` are mutually
+   exclusive, so there's no tie left for load order to break. See CLAUDE.md,
+   "The resume print block wins the cascade by load order."
+
+   Deliberately narrow: `margin`/`font-family` above and `font-family`/
+   `line-height`/`color`/`margin`/`text-wrap` on headings stay unscoped,
+   because resume.css's print block never redeclares them — scoping properties
+   nothing competes for would only delete them from paper, the same mistake
+   in miniature. */
+@media screen {
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-size: var(--text-base);
+    line-height: var(--leading-body);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 700;
+    letter-spacing: var(--tracking-display);
+  }
 }
 
 h1 {
@@ -91,12 +120,21 @@ ol {
 }
 
 a {
-  color: var(--color-link);
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.16em;
 }
-a:visited {
-  color: var(--color-link-visited);
+
+/* `color` only (#62) — it ties with resume.css's `@media print` rule for the
+   same selector at identical specificity; the two properties above don't
+   compete with anything print sets and stay unscoped for the same reason as
+   the note above `body`. */
+@media screen {
+  a {
+    color: var(--color-link);
+  }
+  a:visited {
+    color: var(--color-link-visited);
+  }
 }
 
 /* The reticle is decoration; this is the indicator. Kept deliberately, and
@@ -133,10 +171,16 @@ hr {
 
 /* --- Layout -------------------------------------------------------------- */
 
-.layout {
-  max-width: var(--content-max);
-  margin: 0 auto;
-  padding: 0 var(--space-4) var(--space-16);
+/* Scoped inside `@media screen` (#62): `.layout` here is the exact same
+   selector resume.css's `@media print` block uses to reset the page for
+   paper, so every property tied at identical specificity and load order broke
+   the tie. See the note above `body`. */
+@media screen {
+  .layout {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--space-4) var(--space-16);
+  }
 }
 
 .skip-link {
