@@ -62,6 +62,7 @@ export type SocialLink = {
  */
 export const socials: SocialLink[] = [
   { label: 'LinkedIn', url: 'https://www.linkedin.com/in/aliwallick', status: 'active' },
+  { label: 'GitHub', url: 'https://github.com/ali-wallick', status: 'active' },
   { label: 'Twitter', url: 'https://twitter.com/aliwallick', status: 'retired' },
   { label: 'Facebook', url: 'https://www.facebook.com/awallick', status: 'retired' },
   { label: 'Steam', url: 'https://steamcommunity.com/id/beantoes', status: 'retired' },
