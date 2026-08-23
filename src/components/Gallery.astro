@@ -1,0 +1,25 @@
+---
+import Media from './Media.astro';
+import type { Project } from '~/lib/content';
+
+/**
+ * A project's `gallery` array, rendered as a grid. Each item goes through
+ * `Media`, so image handling and embed handling stay decided in one place —
+ * this component only adds the grid layout around it.
+ */
+interface Props {
+  items: Project['data']['gallery'];
+}
+
+const { items } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <div class="gallery">
+      {items.map((item) => (
+        <Media item={item} />
+      ))}
+    </div>
+  )
+}

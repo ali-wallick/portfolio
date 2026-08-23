@@ -833,6 +833,19 @@ hr {
   margin-top: var(--space-2);
 }
 
+/* Same frame convention as `.media` — a gallery shot isn't pressable either
+   — laid out as a grid instead of a single wide column. */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: var(--space-6);
+  margin: var(--space-6) 0;
+}
+.gallery .media {
+  max-width: none;
+  margin: 0;
+}
+
 .embed {
   aspect-ratio: 16 / 9;
   width: 100%;

@@ -4,6 +4,7 @@ import { render } from 'astro:content';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import ProjectMeta from '~/components/ProjectMeta.astro';
 import Media from '~/components/Media.astro';
+import Gallery from '~/components/Gallery.astro';
 import LinkList from '~/components/LinkList.astro';
 import { getAllProjects, type Project } from '~/lib/content';
 
@@ -49,6 +50,8 @@ const d = project.data;
   {d.summary && <p class="lede">{d.summary}</p>}
 
   <Content />
+
+  <Gallery items={d.gallery} />
 
   {
     d.collaborators.length > 0 && (

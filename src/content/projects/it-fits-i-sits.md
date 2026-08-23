@@ -24,6 +24,41 @@ hero:
     Key art for Puzzle Cats, the shipped mobile game that grew out of Ali's
     jam prototype — she pitched and prototyped the concept but did not work
     on this release
+# Phone/monitor photos and a couple of screen-recording stills from the jam
+# itself — genuinely low quality, and that's the point (#46): the gap between
+# a week-one jam build and a shipped product is what these are illustrating,
+# not a weakness to hide. Nowhere else on the site gets this pass.
+gallery:
+  - type: image
+    src: ../../assets/images/projects/it-fits-i-sits/gallery-paper-prototype.webp
+    alt: >-
+      Paper cutouts of a cat, cut apart into tangram-style pieces on blue
+      construction paper, laid out on a desk
+    caption: Where it started — paper cutouts, before there was a game to open.
+  - type: image
+    src: ../../assets/images/projects/it-fits-i-sits/gallery-level-editor.webp
+    alt: >-
+      The custom level editor running in the Unity Editor, showing one
+      level's puzzle grid laid out in a "Current Level" window
+    caption: The level editor I built for the jam — every level came out of this window.
+  - type: image
+    src: ../../assets/images/projects/it-fits-i-sits/gallery-level2-play.webp
+    alt: >-
+      The prototype's Level 2 screen: an empty puzzle grid shaped like a
+      boot, with two cat pieces waiting to be placed
+    caption: Level 2 on the jam build — pick a cat, fit it in the shape.
+  - type: image
+    src: ../../assets/images/projects/it-fits-i-sits/gallery-level43.webp
+    alt: >-
+      The prototype's Level 43 screen, a more complex puzzle grid with five
+      cat pieces and four identical bonus cats to place
+    caption: Level 43 — one of the 61 levels the editor let us build in a week.
+  - type: image
+    src: ../../assets/images/projects/it-fits-i-sits/gallery-award.webp
+    alt: >-
+      The People's Choice Award certificate from MobilityWare's Game Jam V,
+      dated March 23, 2018
+    caption: What pitch day got us — the reason the game kept going after the jam ended.
 links:
   - label: 'Puzzle Cats — the game it eventually became'
     url: https://www.mobilityware.com/puzzle-cats/
