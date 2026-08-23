@@ -34,5 +34,19 @@ lighthouse-report/
 .idea/
 *.swp
 
+# Raw video is never a servable asset — the media schema (src/content.config.ts)
+# only renders `image` (through Astro's image()) or `youtube`; there is no
+# self-hosted-video type. So a .mp4/.mov under src/ can only be undigested
+# source footage, never a real asset.
+*.mp4
+*.mov
+
+# It Fits I Sits (#46): raw jam-era photos kept on disk for a later content
+# pass — comparison shots, maybe a video — but never committed. Only the
+# processed gallery-*.webp files in this folder are real assets.
+src/assets/images/projects/it-fits-i-sits/paper-prototype.jpg
+src/assets/images/projects/it-fits-i-sits/level-43-screen.jpg
+src/assets/images/projects/it-fits-i-sits/peoples-choice-award.jpg
+
 # Claude Code local overrides (project settings.json IS committed on purpose)
 .claude/settings.local.json
