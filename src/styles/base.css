@@ -249,6 +249,13 @@ hr {
   max-width: none;
 }
 
+/* Cancels the first link's own left padding so "Projects" still starts flush
+   with the copyright line below, without giving `.nav-link` itself asymmetric
+   padding — see the note on `.site-footer .nav-link` for why that mattered. */
+.site-footer nav ul {
+  margin-left: calc(-1 * var(--space-3));
+}
+
 .nav-link {
   display: block;
   font-family: var(--font-display);
@@ -841,10 +848,12 @@ hr {
   color: var(--color-text-muted);
   font-size: var(--text-sm);
 }
+/* Padding stays symmetric with the header's — `.nav-link`'s box is what the
+   reticle wraps (`getBoundingClientRect()` plus a uniform pad on every side),
+   so uneven left/right padding here read as the brackets sitting off-center
+   on every footer link. The `<ul>` cancels the visual indent instead. */
 .site-footer .nav-link {
   font-size: var(--text-sm);
-  padding-left: 0;
-  padding-right: var(--space-3);
 }
 .site-footer .nav-link:hover {
   background: none;
