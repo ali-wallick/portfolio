@@ -96,7 +96,7 @@ Something I keep relearning: the most valuable thing I can build is often not th
 • Also built context menus for people and objects, menus for swapping video and Flash content on in-game objects, and the welcome and builder tutorials, working with the engine and web teams whenever a menu touched either.
 ```
 
-**One entry, by Ali's decision** — the progression from Technical Support Engineer to Lead UI Programmer is old enough that she's comfortable flattening it to a single title on the resume, and it needs no promotion date to stay one entry. The Kaneva project page still says `Lead UI Programmer`; this title says `Software Engineer`. Either is defensible on LinkedIn — see [#38](https://github.com/ali-wallick/Portfolio/issues/38).
+**One entry, by Ali's decision** — the progression from Technical Support Engineer to Lead UI Programmer is old enough that she's comfortable flattening it to a single title on the resume, and it needs no promotion date to stay one entry.
 
 ---
 

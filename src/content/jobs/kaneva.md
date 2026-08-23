@@ -11,10 +11,9 @@ roles:
   #
   # `Software Engineer` is sourced — it is how her own 2019 resume flattened the
   # Technical Support Engineer → Lead UI Programmer progression that about.php
-  # describes. So it is not invented, but it is the least specific of the three
-  # titles, and note that the site says `Lead UI Programmer` on the Kaneva
-  # project page while the resume and About say `Software Engineer`. Raised with
-  # Ali; hers to change if she wants, and changing it needs no date either.
+  # describes. Settled 2026-08-23 (closes #38): `Software Engineer` everywhere,
+  # including the Kaneva project page's `role` field, which used to say
+  # `Lead UI Programmer` and disagreed with this entry.
   - title: Software Engineer
     start: '2011'
 # The progression itself lives in `roles[]`, not here — no bullet should

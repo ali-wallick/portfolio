@@ -9,7 +9,7 @@ engine: [Kaneva proprietary engine]
 tech: [Lua]
 platforms: [PC]
 job: kaneva
-role: Lead UI Programmer
+role: Software Engineer
 hero:
   type: image
   src: ../../assets/images/projects/kaneva/screenshot1.png

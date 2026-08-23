@@ -154,9 +154,7 @@ const JOB_NOTES = {
     after:
       "**One entry, by Ali's decision** — the progression from Technical Support Engineer to " +
       "Lead UI Programmer is old enough that she's comfortable flattening it to a single title on " +
-      'the resume, and it needs no promotion date to stay one entry. The Kaneva project page still ' +
-      'says `Lead UI Programmer`; this title says `Software Engineer`. Either is defensible on ' +
-      'LinkedIn — see [#38](https://github.com/ali-wallick/Portfolio/issues/38).',
+      'the resume, and it needs no promotion date to stay one entry.',
   },
   mobilityware: {
     after:
