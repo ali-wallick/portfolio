@@ -10,6 +10,12 @@ updates:
         patterns:
           - '*'
     open-pull-requests-limit: 5
+    ignore:
+      # @astrojs/check@0.9.10's peer dep is typescript ^5.0.0 || ^6.0.0, so a
+      # major bump breaks npm ci. Recurred twice (#116, #122) before this was
+      # added. Remove once @astrojs/check supports typescript@^7 — see #117.
+      - dependency-name: 'typescript'
+        versions: ['>=7.0.0']
 
   # GitHub Actions used in .github/workflows/
   - package-ecosystem: github-actions
