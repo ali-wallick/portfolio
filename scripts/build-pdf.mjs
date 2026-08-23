@@ -47,8 +47,24 @@
  *      this repo's checks exist to catch. Degrading quietly would trade a
  *      visible build failure for an invisible site failure.
  *
+ * ## Regeneration is skipped when nothing changed
+ *
+ * Chromium's PDF output isn't byte-deterministic — it stamps `/CreationDate`,
+ * `/ModDate`, and a random `/ID` into every render — so re-running this
+ * script against an *unchanged* resume used to still rewrite `public/*.pdf`
+ * with new bytes every time. That turned `npm run build` (which `verify` and
+ * a normal local workflow both call) into a guaranteed dirty diff on two
+ * binary files, commit after commit, with no actual content change behind
+ * it. So before launching a browser, this script compares the current input
+ * hash against the one recorded in the lock file and exits early if they
+ * match — the same hash `--check` already computes, reused here as a cache
+ * gate instead of only a CI assertion. Pass `--force` to regenerate anyway
+ * (e.g. after touching an input the hash doesn't cover, or to refresh the
+ * committed files' internal timestamps on purpose).
+ *
  * Usage:
- *   node scripts/build-pdf.mjs            # regenerate (needs Chromium)
+ *   node scripts/build-pdf.mjs            # regenerate if inputs changed (needs Chromium)
+ *   node scripts/build-pdf.mjs --force    # regenerate unconditionally
  *   node scripts/build-pdf.mjs --check    # verify the committed PDFs are current
  */
 
@@ -123,6 +139,18 @@ if (CHECK_ONLY) {
 if (!existsSync(DIST)) {
   console.error(`✗ ${DIST} does not exist — run \`astro build\` first.`);
   process.exit(1);
+}
+
+const FORCE = process.argv.includes('--force');
+const pdfsExist = ['resume.pdf', 'resume-full.pdf'].every((f) => existsSync(path.join(PUBLIC, f)));
+
+if (!FORCE && pdfsExist && existsSync(LOCK)) {
+  const recorded = JSON.parse(await readFile(LOCK, 'utf8')).inputHash;
+  if (recorded === (await inputHash())) {
+    console.log('✓ resume PDFs already current — nothing changed, skipping regeneration.');
+    console.log('  (pass --force to regenerate anyway)');
+    process.exit(0);
+  }
 }
 
 /**
