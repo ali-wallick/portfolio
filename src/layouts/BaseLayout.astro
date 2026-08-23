@@ -53,7 +53,17 @@ interface Props {
 const { title, description, bareTitle = false, noindex = false, image } = Astro.props;
 
 const fullTitle = bareTitle ? title : `${title} — ${site.name}`;
-const canonical = new URL(Astro.url.pathname, site.url).href;
+
+/* `Astro.url.pathname` reflects the build's file path (`/about.html`,
+   `/index.html`) under `astro.config.mjs`'s `build.format: 'file'`, not the
+   clean extensionless route the site actually serves — `wrangler.jsonc`'s
+   `html_handling: 'drop-trailing-slash'` strips `.html` and redirects to it.
+   Reading Astro.url straight into canonical/og:url would point crawlers at a
+   URL that immediately redirects rather than the one they land on, which is
+   the same class of bug #27 exists to fix (http:// og tags on the old site
+   breaking previews) — so the clean route is derived here instead. */
+const cleanPath = Astro.url.pathname.replace(/(^|\/)index\.html$/, '$1').replace(/\.html$/, '');
+const canonical = new URL(cleanPath, site.url).href;
 const ogImage = new URL(image, site.url).href;
 const year = new Date().getFullYear();
 ---
