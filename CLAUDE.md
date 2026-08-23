@@ -515,6 +515,55 @@ unserved. **If #48 (build-in-public) ever means making this repo public, this fi
 look before that happens** — either strip the PO Box from a copy, or exclude it, or rewrite history.
 That's the implication for #48 this decision was supposed to record.
 
+### The Skills section — settled 2026-08-23, closes #39
+
+**Labelled "Skills" and leads the resume, above Experience** — Ali's follow-up call after the PR
+shipped it as a "Tools" section at the bottom. Same settled list, same mechanism, same id
+(`#skills`) throughout; only the visible heading text and the section's position in the page moved.
+The principle below still says "the Tools line" because that's the exact wording it was settled
+with — read it as "this section," not as a claim about the current heading text.
+
+**The Tools line is a depth claim, not an exposure claim.** Anything Ali would rather not be
+interviewed on doesn't go there; if it's true and interesting it goes in a dated bullet where it
+carries scope. Corollary, which did equal work: **the section holds nameable things, not
+capabilities.** A skills section that mixes "Godot" with "Localization" is the mush every resume
+has — capabilities live in bullets, where they come with evidence. This one rule resolved seven
+items identically when the list was cut; see the full record on the
+[#39 decision comment](https://github.com/ali-wallick/Portfolio/issues/39#issuecomment-5387852763),
+including why C++, DeltaDNA, XML, Perforce, and several tool/store names came off.
+
+Final, settled, do not reopen or re-derive:
+
+|                     |                                            |
+| ------------------- | ------------------------------------------ |
+| **Engines & Tools** | Unity · Godot · Git · Cursor · Claude Code |
+| **Languages**       | C# · GDScript · Lua                        |
+| **Platforms**       | iOS · Android · PC                         |
+
+**Mechanism: `src/config/resume.ts`, not a derivation of jobs' `tech`.** Before this decision the
+Tools section was `[...new Set(jobs.flatMap(j => j.data.tech))]` — every job's `tech` array, deduped.
+That stopped being able to produce the right answer the moment the list was curated by hand rather
+than derived: items needed to be dropped (DeltaDNA, C++, XML, ...) and others (Cursor, Claude Code)
+trace to no job at all. So **jobs' `tech` field is removed from the content model**, not repurposed —
+it had exactly one consumer, this line, and once the section stopped deriving from it, keeping an
+unread field around is exactly the kind of dead data this content model's guard table exists to rule
+out. `resumeTools` in `src/config/resume.ts` is a `Record<ResumeToolCategory, string[]>`: a tool is
+written down _inside_ one of the three category keys, so there is no way to add one without
+classifying it, and TypeScript's excess-property checking on that literal rejects a category that
+isn't one of the three declared — `npm run check` fails to compile rather than silently dropping the
+entry. Same shape as `STATUS_LABEL` in `src/lib/content.ts`: a status without a colour pair is a
+compile error there, not a silent fallback, and this is that rule applied to tools instead of
+statuses.
+
+**Three labelled rows cost real print height.** `ResumeDocument.astro` renders `RESUME_TOOL_CATEGORIES`
+as a `<dl>` of `dt`/`dd` pairs instead of one joined line; `resume.css` grew matching rules in both
+the screen and print halves. No new design tokens were needed — the new selectors are structural, not
+color or type — so `resume.css`'s `@media print` pin block didn't need a new entry. The one-pager still
+passes `build:pdf`'s page-count assertion at 1 page, with the committed baseline in
+`scripts/resume-print-baseline.json` updated to match (`check-resume-print.mjs --update`) — the geometry
+differ this file's Phase 5 section describes caught the shape change exactly as designed and it was
+reviewed as intentional, not a leak.
+
 ---
 
 ## Design
@@ -977,17 +1026,18 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 
 **Where things are:**
 
-| Path                                  | What                                                                      |
-| ------------------------------------- | ------------------------------------------------------------------------- |
-| `src/content.config.ts`               | The content model. Start here.                                            |
-| `src/lib/content.ts`                  | Collection queries and the only date/year formatting in the codebase.     |
-| `src/config/site.ts`                  | Name, email, nav, social links (all `pending` until Phase 3 audits them). |
-| `scripts/check-links.mjs`             | Post-build checks. Every rule is a regression guard for a real old bug.   |
-| `scripts/build-pdf.mjs`               | Renders the resume routes to PDF and asserts their page counts.           |
-| `src/components/ResumeDocument.astro` | The resume, both densities. `variant` is the only difference.             |
-| `scripts/build-linkedin.mjs`          | Generates `docs/LINKEDIN.md` from the `jobs`/`education` collections.     |
-| `docs/LINKEDIN.md`                    | Paste-ready LinkedIn copy. Generated — a handoff for Ali, never a sync.   |
-| `docs/REBUILD-LOG.md`                 | Running record. Phase 7's source material.                                |
-| `infra/README.md`                     | The live zone, the DNS tooling, and Phase 1's record.                     |
-| GitHub issues                         | What's actually left. Milestones per phase; `decision` and `needs-ali`.   |
-| `snapshot/`                           | The old site as it stood. The reference for "what did the old page say?"  |
+| Path                                  | What                                                                          |
+| ------------------------------------- | ----------------------------------------------------------------------------- |
+| `src/content.config.ts`               | The content model. Start here.                                                |
+| `src/lib/content.ts`                  | Collection queries and the only date/year formatting in the codebase.         |
+| `src/config/site.ts`                  | Name, email, nav, social links (all `pending` until Phase 3 audits them).     |
+| `src/config/resume.ts`                | The resume's Skills section — settled, hand-curated, not derived from `tech`. |
+| `scripts/check-links.mjs`             | Post-build checks. Every rule is a regression guard for a real old bug.       |
+| `scripts/build-pdf.mjs`               | Renders the resume routes to PDF and asserts their page counts.               |
+| `src/components/ResumeDocument.astro` | The resume, both densities. `variant` is the only difference.                 |
+| `scripts/build-linkedin.mjs`          | Generates `docs/LINKEDIN.md` from the `jobs`/`education` collections.         |
+| `docs/LINKEDIN.md`                    | Paste-ready LinkedIn copy. Generated — a handoff for Ali, never a sync.       |
+| `docs/REBUILD-LOG.md`                 | Running record. Phase 7's source material.                                    |
+| `infra/README.md`                     | The live zone, the DNS tooling, and Phase 1's record.                         |
+| GitHub issues                         | What's actually left. Milestones per phase; `decision` and `needs-ali`.       |
+| `snapshot/`                           | The old site as it stood. The reference for "what did the old page say?"      |

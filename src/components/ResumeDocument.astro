@@ -1,6 +1,7 @@
 ---
 import { getJobs, getEducation, formatSpan, currentTitle } from '~/lib/content';
 import { site, socials } from '~/config/site';
+import { RESUME_TOOL_CATEGORIES, resumeTools } from '~/config/resume';
 import { externalLinkProps } from '~/lib/links';
 
 /**
@@ -30,19 +31,6 @@ const education = await getEducation();
 
 const linkedIn = socials.find((s) => s.label === 'LinkedIn' && s.status === 'active');
 
-/**
- * Skills, derived from the `tech` already recorded on each job rather than
- * typed out again here — same one-source rule as everything else. `getJobs`
- * returns most-recent-first, so dedupe-preserving-order puts current work at
- * the front for free.
- *
- * Ali added GDScript on 2026-08-17. Workflow tooling (version control, CI,
- * profiling) is still absent and deliberately so: every entry here traces to a
- * job's `tech`, and the plan's mention of Perforce and CI is a planning note,
- * not a source. Ask her rather than inferring it from the stack.
- */
-const skills = [...new Set(jobs.flatMap((job) => job.data.tech))];
-
 /** `2011` from `2011-05`; the year alone is all a degree line needs. */
 const gradYear = (value: string) => value.slice(0, 4);
 ---
@@ -70,6 +58,20 @@ const gradYear = (value: string) => value.slice(0, 4);
       }
     </ul>
   </header>
+
+  <section class="resume-section" aria-labelledby="skills">
+    <h2 id="skills">Skills</h2>
+    <dl class="resume-skills">
+      {
+        RESUME_TOOL_CATEGORIES.map((category) => (
+          <div class="resume-skills-row">
+            <dt>{category}</dt>
+            <dd>{resumeTools[category].join(' · ')}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
 
   <section class="resume-section" aria-labelledby="experience">
     <h2 id="experience">Experience</h2>
@@ -132,13 +134,4 @@ const gradYear = (value: string) => value.slice(0, 4);
       ))
     }
   </section>
-
-  {
-    skills.length > 0 && (
-      <section class="resume-section" aria-labelledby="skills">
-        <h2 id="skills">Tools</h2>
-        <p class="resume-skills">{skills.join(' · ')}</p>
-      </section>
-    )
-  }
 </article>

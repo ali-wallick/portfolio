@@ -56,11 +56,6 @@ summary: >-
 currentNote: >-
   Since 2024, I've been on Second Dinner's next team, building the studio's
   first game in Godot.
-tech:
-  - Unity
-  - C#
-  - Godot
-  - GDScript
 ---
 
 ## Source material (2019 resume, verbatim — not current copy)

@@ -105,8 +105,31 @@
     margin-bottom: var(--space-2);
   }
 
+  /* Three labelled rows (Engines & Tools / Languages / Platforms), not a
+     single joined line — see CLAUDE.md and issue #39's decision comment for
+     why the category grouping exists. */
   .resume-skills {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin: 0;
     max-width: none;
+  }
+
+  .resume-skills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-2);
+  }
+
+  .resume-skills-row dt {
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .resume-skills-row dd {
+    margin: 0;
+    color: var(--color-text-muted);
   }
 }
 
@@ -429,8 +452,27 @@
   }
 
   .resume-skills {
-    font-size: 9.5pt;
+    display: flex;
+    flex-direction: column;
+    gap: 2pt;
     margin: 0;
     max-width: none;
+  }
+
+  .resume-skills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 6pt;
+    font-size: 9.5pt;
+  }
+
+  .resume-skills-row dt {
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .resume-skills-row dd {
+    margin: 0;
+    color: #333333;
   }
 }

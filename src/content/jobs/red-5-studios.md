@@ -23,10 +23,6 @@ summary: >-
   UI programmer on Firefall, a large-scale PC shooter — my first time working
   on a team of that size, building and standardizing menu and HUD elements
   across a much bigger codebase than Kaneva's.
-tech:
-  - Lua
-  - XML
-  - C++
 ---
 
 ## Source material (2019 resume, verbatim — not current copy)

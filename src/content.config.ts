@@ -272,7 +272,6 @@ const jobs = defineCollection({
        * change what a bullet claims. Put a fact in exactly one array.
        */
       highlightsExtended: z.array(z.string()).default([]),
-      tech: z.array(z.string()).default([]),
 
       /** Some roles earn a line on the resume but not a paragraph on the site. */
       onResume: z.boolean().default(true),

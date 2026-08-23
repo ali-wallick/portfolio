@@ -32,10 +32,6 @@ summary: >-
   Three years building casino mobile games in Unity, most of it on Vegas Blvd
   Slots. Pitched a game jam prototype, It Fits I Sits, that later shipped as
   Puzzle Cats after I'd moved on to other work.
-tech:
-  - Unity
-  - C#
-  - DeltaDNA
 ---
 
 ## Source material (2019 resume, verbatim — not current copy)
