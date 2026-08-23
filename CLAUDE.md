@@ -36,11 +36,12 @@ clear it was a second, thinner source for the same build-in-public page the log 
 decision they drifted — the plan's decisions table still listed Second Dinner's current work under a
 phrasing retired below. That is the failure mode the guard table further down exists to rule out.
 
-**Remaining work is tracked as GitHub issues, not in a document.** The list lives in the
-[`Phase 6 — Launch`](https://github.com/ali-wallick/Portfolio/milestone/1) and
-[`Phase 7 — Keep it alive`](https://github.com/ali-wallick/Portfolio/milestone/2) milestones. Each
-issue carries its source, why it was deferred, and what unblocks it, so a cold session can pick one
-up without reading scrollback.
+**Remaining work is tracked as GitHub issues, not in a document.** The list lives in three
+milestones — [`Pre-launch`](https://github.com/ali-wallick/Portfolio/milestone/1),
+[`Launch`](https://github.com/ali-wallick/Portfolio/milestone/3), and
+[`Post-launch`](https://github.com/ali-wallick/Portfolio/milestone/2). Each issue carries its
+source, why it was deferred, and what unblocks it, so a cold session can pick one up without
+reading scrollback.
 
 Two labels do real work. **`decision`** marks the four things that block work rather than being work
 — they need a call from Ali, not a commit, and several issues are explicitly blocked on them.
@@ -48,9 +49,11 @@ Two labels do real work. **`decision`** marks the four things that block work ra
 Godot detail, the resume's tooling line, the Kaneva title, the DreamHost handoff.
 
 **If you find a follow-up, open an issue.** Don't append it to a doc and don't leave it only
-in a `TODO(phase-N):` comment — the comments mark _where in the code_ a later phase lands, the issues
-are what actually gets worked. **Every `TODO(phase-N)` cites its issue number**; keep it that way, so
-a marker in the source is never a dead end.
+in a `TODO(...)` comment — the comments mark _where in the code_ later work lands, the issues are
+what actually gets worked. **Every `TODO(...)` cites its issue number**; keep it that way, so a
+marker in the source is never a dead end. Historical markers stay numbered (`TODO(phase-3-revisit)`);
+current ones use the stage name (`TODO(launch)`, `TODO(pre-launch)`) since phases stopped being
+numbered after Phase 5 — see "Phases" below.
 
 **And keep status out of this file.** The rule, which is why the phase sections below carry
 conventions and constraints but no worklists: _if a sentence here would need editing when an issue
@@ -76,40 +79,50 @@ It had five such sections on 2026-08-20, describing work that was already tracke
 | Current work            | **"Second Dinner's next game, built in Godot."** Not "an unannounced mobile title" — the studio went public in Aug 2024 and the old phrasing was vaguer than reality _and_ wrong about "mobile". See the Phase 3 gate outcome below.                          |
 | Contact form            | None. A `mailto:` and vetted social links. The old PHP form had no CSRF token, no rate limiting, and silently discarded the sender's name.                                                                                                                    |
 | Visual design           | Deferred to Phase 5, deliberately last.                                                                                                                                                                                                                       |
-| URLs                    | Extensionless (`/about`, `/projects/firefall`), matching the old `.htaccess` rewrites, so Phase 6's redirect map stays small.                                                                                                                                 |
+| URLs                    | Extensionless (`/about`, `/projects/firefall`), matching the old `.htaccess` rewrites, so the pre-launch redirect map stays small.                                                                                                                            |
 
 ---
 
 ## Phases
 
-| Phase | What                                                                | State                                                              |
-| ----- | ------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| 0     | Preserve — blog scrape, snapshot, asset inventory                   | ✅ merged                                                          |
-| 1     | Infrastructure — domain, DNS, email                                 | ✅ merged                                                          |
-| 2     | Foundation & agentic tooling                                        | ✅ merged                                                          |
-| 3     | Content: get it true                                                | ✅ merged                                                          |
-| 4     | Resume, one source                                                  | ✅ merged                                                          |
-| 5     | Design                                                              | ✅ merged                                                          |
-| 6     | Launch — favicon, OG, a11y, redirects, DNS cutover, wording revisit | 🚧 [tracked](https://github.com/ali-wallick/Portfolio/milestone/1) |
-| 7     | Keep it alive                                                       | [tracked](https://github.com/ali-wallick/Portfolio/milestone/2)    |
+Phases 0–5 are the build: they're closed, and the table below is a historical record — don't
+relitigate anything in it, and don't rename it. Phase 6's own gate (2026-08-23, below) decided that
+what comes after the build isn't more numbered phases — it's three stages named for where they sit
+relative to the domain moving, which is the one event with a blast radius outside the repo. Use
+**pre-launch / launch / post-launch** for everything from here on; "Phase 6" and "Phase 7" are
+retired as names for current work, even though the historical prose below still uses them to
+describe what happened during that time.
+
+| Phase       | What                                                                                                                                 | State                                                              |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
+| 0           | Preserve — blog scrape, snapshot, asset inventory                                                                                    | ✅ merged                                                          |
+| 1           | Infrastructure — domain, DNS, email                                                                                                  | ✅ merged                                                          |
+| 2           | Foundation & agentic tooling                                                                                                         | ✅ merged                                                          |
+| 3           | Content: get it true                                                                                                                 | ✅ merged                                                          |
+| 4           | Resume, one source                                                                                                                   | ✅ merged                                                          |
+| 5           | Design                                                                                                                               | ✅ merged                                                          |
+| Pre-launch  | Favicon, OG, a11y, redirects, remaining content/resume calls, wording revisit — everything that must be true before the domain moves | 🚧 [tracked](https://github.com/ali-wallick/Portfolio/milestone/1) |
+| Launch      | The DNS cutover itself — its own moment, not gated on Pre-launch closing (#21)                                                       | [tracked](https://github.com/ali-wallick/Portfolio/milestone/3)    |
+| Post-launch | Keep it alive                                                                                                                        | [tracked](https://github.com/ali-wallick/Portfolio/milestone/2)    |
 
 **Sequencing principle: structure before skin.** Phases 2–4 produce a complete, correct,
 deliberately unstyled site. Design lands in Phase 5 onto content that already exists, so directions
 get judged against real material instead of lorem ipsum.
 
 **Phase gates are real.** Stop and talk before starting a phase. Don't roll forward into the next
-one because the current one finished early.
+one because the current one finished early. Pre-launch → Launch is a gate too — see the Phase 6 gate
+outcome below for why launch doesn't happen just because Pre-launch's milestone is empty.
 
 ### Staying in your phase
 
 The most useful thing this file does is stop work leaking across phase boundaries. If you notice
-something that belongs to a later phase, **leave a `TODO(phase-N):` comment and move on**. There are
-a lot of them in the codebase already; that is the system working, not debt.
+something that belongs to a later stage, **leave a `TODO(...)` comment and move on**. There are a
+lot of them in the codebase already; that is the system working, not debt.
 
 - Writing prose for a project page or the bio → Phase 3.
 - Resume copy, the printable PDF → Phase 4.
 - Picking colors, type, or layout → Phase 5.
-- Favicon, OG images, redirects, analytics → Phase 6.
+- Favicon, OG images, redirects, analytics → Pre-launch.
 
 ---
 
@@ -427,8 +440,7 @@ education, one Tools line. The two-pager adds 2 / 2 / 1 / 2 more.
   Recording a fact is not the same as showing it.
 - **No PO Box, and no home address at all.** There is no sourced current city, so the resume header
   carries email, site, and LinkedIn and nothing else. (The PO Box was never on the site — it only
-  exists in `resources/WallickAli-Resume.pdf` and the unreferenced `src/assets/images/resume.png`,
-  neither of which is served. See the loose end below.)
+  exists in `resources/WallickAli-Resume.pdf`, which is not served. See the loose end below.)
 - **The weighting problem is inverted from what you'd expect**, and this is the thing to remember:
   the "Source material (2019 resume, verbatim)" sections are _richest for the oldest jobs_. Kaneva
   has two solid bullets; Second Dinner — seven years, the most important entry — has one stale
@@ -485,15 +497,23 @@ model's guard table exists to rule out. It has bitten twice: 19pt of silent refl
 with a hard 1-page assertion, and 28 elements in the wrong colour via a specificity beat. See the
 correction under Phase 5 below, and the token warning under "Working here".
 
-### Two files carry a PO Box
+### The PO Box files — settled 2026-08-23, closes #40
 
-`resources/WallickAli-Resume.pdf` and `src/assets/images/resume.png` both contain a PO Box and
-predate every fact on the current resume, which deliberately carries no address at all. Neither is
-served, and the repo is private — **the exposure only exists if this repo goes public**, which the
-build-in-public page ([#48](https://github.com/ali-wallick/Portfolio/issues/48)) is the most likely reason to do.
+Two legacy files carried a PO Box and predated every fact on the current resume, which deliberately
+carries no address at all: `resources/WallickAli-Resume.pdf` and `src/assets/images/resume.png`.
+Neither was served, and the repo is private — the exposure only existed if this repo goes public,
+which the build-in-public page ([#48](https://github.com/ali-wallick/Portfolio/issues/48)) is the
+most likely reason to do.
 
-Tracked as [#40](https://github.com/ali-wallick/Portfolio/issues/40), including the part that makes it worth deciding early: `git rm` would not
-remove them from history.
+**Ali's call: keep the PDF, delete the PNG.** The PDF is a historical artifact worth keeping around;
+the PNG was unreferenced by anything and had no argument for existing at all. The PNG is deleted from
+the working tree as of this decision.
+
+**The PDF staying means the exposure is still live, not resolved.** `git rm` doesn't remove history
+either way, but the PDF is also still present in the current tree, still carrying a PO Box, still
+unserved. **If #48 (build-in-public) ever means making this repo public, this file needs a second
+look before that happens** — either strip the PO Box from a copy, or exclude it, or rewrite history.
+That's the implication for #48 this decision was supposed to record.
 
 ---
 
@@ -830,6 +850,51 @@ has no block body of its own.
 
 ---
 
+## Phase 6 gate outcome (2026-08-23)
+
+Two questions, settled together. The second is the reason the "Phases" table above no longer counts
+past 5.
+
+### The DNS cutover is its own moment, not the end of a phase
+
+Closes [#21](https://github.com/ali-wallick/Portfolio/issues/21). **Ali's call.** The domain cutover
+is a separate, short, deliberate session — favicon, OG, a11y, redirects, the wording pass, and
+everything else that used to be "Phase 6" land as they finish, and the cutover happens afterward,
+with mail verified on both `ali@` and `contact@aliwallick.com` before and after, per the plan's
+standing instruction on [#34](https://github.com/ali-wallick/Portfolio/issues/34).
+
+The reasoning that won: Ali intends to slow down and keep improving the site before actually
+launching it. A phase that doesn't close until the domain moves is a phase that never closes under
+that plan — better to let the launch basics merge as they finish and treat the cutover as its own
+event whenever she's ready for it. [#55](https://github.com/ali-wallick/Portfolio/issues/55)
+(re-baseline `verify-dns.sh`) and [#34](https://github.com/ali-wallick/Portfolio/issues/34) can run
+whenever Ali decides to launch, independent of whether everything else still open is closed first.
+
+### "Phase 6" and "Phase 7" are retired as names for current work
+
+Ali's motivation, plainly: numbered phases stopped being legible once the build (0–5) was done —
+there was no way to tell from "Phase 6" or "Phase 7" what was actually in them without reading this
+file. Combined with #21 splitting the cutover out on its own, the natural replacement is a name for
+each stage relative to the one event that matters — **pre-launch, launch, post-launch**:
+
+- **Pre-launch** — everything that must be true before the domain moves. What "Phase 6" tracked,
+  minus the cutover itself. GitHub milestone `Pre-launch` (was `Phase 6 — Launch`), issue label
+  `pre-launch` (was `phase-6`).
+- **Launch** — the cutover session itself: #34, #55, and [#74](https://github.com/ali-wallick/Portfolio/issues/74)
+  (flip `live` to `true` in the same PR as the cutover). New GitHub milestone `Launch`, new label
+  `launch`.
+- **Post-launch** — everything after. What "Phase 7" tracked. GitHub milestone `Post-launch` (was
+  `Phase 7 — Keep it alive`), issue label `post-launch` (was `phase-7`).
+
+**Phases 0–5 keep their numbers.** They're a closed historical record — each has a dated gate
+outcome and an execution outcome below, and renaming them buys nothing while breaking every
+cross-reference to "Phase 3", "Phase 4", "Phase 5" in this file and in old issues. Only the _current_
+and _future_ work gets the new vocabulary. Historical prose that describes what happened during the
+old "Phase 6" or "Phase 7" window (the motion-values tuning, the faces switcher, REBUILD-LOG.md's
+own phase entries) is untouched — it's describing the past, not naming ongoing work.
+
+---
+
 ## Working here
 
 ```bash
@@ -882,7 +947,9 @@ to redirect. Setup and troubleshooting: [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.m
   Phase 5 and **the only copy**; `snapshot/` has `colors.css` and nothing else. The findings are
   recorded under "What the gate corrected", and the recovered curve was re-examined and retuned in
   Phase 6 — but these are still the only primary sources if anyone reopens that.
-- **`resources/WallickAli-Resume.pdf`** — carries a PO Box, pending [#40](https://github.com/ali-wallick/Portfolio/issues/40).
+- **`resources/WallickAli-Resume.pdf`** — carries a PO Box. Kept deliberately (settled
+  [#40](https://github.com/ali-wallick/Portfolio/issues/40)); a real exposure only if the repo ever
+  goes public, so re-check before that happens.
 
 _The Phase 0 asset keep/drop list was **acted on in Phase 3**: the 50 keep-listed files moved to
 `src/assets/images/`, and the drop list — 86 unused social icons, 6 orphaned logos, and the 6.3 MB
