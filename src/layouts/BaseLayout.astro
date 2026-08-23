@@ -139,7 +139,7 @@ const year = new Date().getFullYear();
       /* Cloudflare Web Analytics (#30). Gated on `!showDrafts` rather than a
          separate flag — that's already the exact production/preview split
          `build-ci.mjs` establishes, so previews and `astro dev` never report
-         pageviews and only `master` builds do. No cookie banner needed: this
+         pageviews and only `main` builds do. No cookie banner needed: this
          beacon is cookieless by design. */
     }
     {

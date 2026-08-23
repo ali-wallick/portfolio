@@ -933,7 +933,7 @@ thing the old DreamHost setup could not do at all:
 
 **branch → push → Cloudflare posts a preview URL → look at it on a phone → react.**
 
-So: **work on a branch, always.** Never commit straight to `master`, and don't merge without
+So: **work on a branch, always.** Never commit straight to `main`, and don't merge without
 checking in. Push early enough that there's a preview URL to look at while the work is still cheap
 to redirect. Setup and troubleshooting: [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md).
 

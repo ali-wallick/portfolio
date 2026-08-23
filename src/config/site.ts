@@ -23,7 +23,7 @@ export const site = {
    * Cloudflare's own snippet. What actually needs gating is *whether* the
    * beacon renders, not the token's visibility: `BaseLayout.astro` only emits
    * it when `!showDrafts`, so preview deploys and `astro dev` never report
-   * pageviews and only `master` builds do.
+   * pageviews and only `main` builds do.
    */
   analyticsToken: 'bd2daf82080746f2bc1529235444ac67',
 } as const;
@@ -32,7 +32,7 @@ export const site = {
  * Whether aliwallick.com is the live production domain yet.
  *
  * `false` for every build until the DNS cutover — every branch preview,
- * including `master`'s and `release`'s, is pre-launch, because aliwallick.com
+ * including `main`'s and `release`'s, is pre-launch, because aliwallick.com
  * still serves the old PHP site. `BaseLayout.astro`'s sitewide
  * `<meta name="robots" content="noindex">` and `robots.txt`'s Allow/Disallow
  * both derive from this one flag rather than each tracking it separately, so

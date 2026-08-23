@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { site, live } from '~/config/site';
 
 /**
- * Every build — every branch preview, plus `master`/`release` before the DNS
+ * Every build — every branch preview, plus `main`/`release` before the DNS
  * cutover — must tell crawlers to stay out entirely, not just the individual
  * draft pages `noindex` already covers. `live` is the same flag
  * `BaseLayout.astro` uses for its sitewide `<meta name="robots">`, so this

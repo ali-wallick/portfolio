@@ -61,7 +61,14 @@ once its preview has done its job, so old work-in-progress doesn't linger even b
 
 ---
 
-## `release` is production; `master` gets its own open preview (2026-08-22)
+## `release` is production; `master`/`main` gets its own open preview (2026-08-22, branch renamed 2026-08-23)
+
+The default branch was renamed `master` → `main` on 2026-08-23, for no reason beyond muscle memory
+on Ali's daily-work repo. Everything below that describes the Aug 22 fix is written as it happened,
+against `master` — the mechanism is unchanged, only the branch name is. The Access Application's
+hostname (`main-portfolio.ali-wallick.workers.dev` now) had to be updated by hand in the dashboard,
+since Workers Builds' branch-to-alias mapping is automatic but the Access Application's destination
+hostname is not.
 
 Ali wanted to send friends a link to what's actually merged, without opening every branch preview to
 them. The obvious-looking fix — flip on the account-only-gated `master-portfolio...` preview — doesn't
@@ -133,7 +140,7 @@ that behaves identically when run locally.
 Verify the split locally, without deploying anything:
 
 ```bash
-WORKERS_CI_BRANCH=master     npm run build:ci   # 6 pages
+WORKERS_CI_BRANCH=main       npm run build:ci   # 6 pages
 WORKERS_CI_BRANCH=some-branch npm run build:ci  # 24 pages
 npx wrangler deploy --dry-run                   # validates wrangler.jsonc, uploads nothing
 ```
