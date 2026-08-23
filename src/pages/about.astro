@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import { getJobs, formatSpan, currentTitle, getCurrentNote } from '~/lib/content';
+import { externalLinkProps } from '~/lib/links';
 import portrait from '~/assets/images/me.jpg';
 import cosplay from '~/assets/images/me2.jpg';
 
@@ -11,6 +12,9 @@ import cosplay from '~/assets/images/me2.jpg';
  */
 const jobs = await getJobs('site');
 const currentNote = await getCurrentNote();
+
+const w4GamesAnnouncement =
+  'https://www.w4games.com/blog/w4-games-news-1/second-dinner-studios-becomes-a-strategic-investor-in-w4-games-and-plans-to-build-the-largest-game-in-godot-yet-37';
 ---
 
 <BaseLayout title="About" description="About Ali Wallick." image="/og/home.jpg">
@@ -50,11 +54,8 @@ const currentNote = await getCurrentNote();
       ' '
     }
     Second Dinner has said as much{' '}
-    <a
-      href="https://www.w4games.com/blog/w4-games-news-1/second-dinner-studios-becomes-a-strategic-investor-in-w4-games-and-plans-to-build-the-largest-game-in-godot-yet-37"
-    >
-      publicly
-    </a>; beyond that, it's not mine to talk about yet.
+    <a href={w4GamesAnnouncement} {...externalLinkProps(w4GamesAnnouncement)}>publicly</a>; beyond
+    that, it's not mine to talk about yet.
   </p>
 
   <h2>Where I've worked</h2>

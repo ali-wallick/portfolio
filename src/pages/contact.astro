@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import { site, socials } from '~/config/site';
 import { showDrafts } from '~/lib/content';
+import { externalLinkProps } from '~/lib/links';
 
 /**
  * No form. The old contact page posted to a PHP mail handler with no CSRF token,
@@ -39,7 +40,7 @@ const shown = socials.filter(
       <ul class="button-row">
         {shown.map((s) => (
           <li>
-            <a class="button" href={s.url}>
+            <a class="button" href={s.url} {...externalLinkProps(s.url)}>
               {s.label}
               {s.status === 'pending' && <span class="draft-flag">unverified</span>}
             </a>

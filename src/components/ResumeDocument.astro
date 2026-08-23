@@ -1,6 +1,7 @@
 ---
 import { getJobs, getEducation, formatSpan, currentTitle } from '~/lib/content';
 import { site, socials } from '~/config/site';
+import { externalLinkProps } from '~/lib/links';
 
 /**
  * The resume, at two densities, from one source.
@@ -61,7 +62,9 @@ const gradYear = (value: string) => value.slice(0, 4);
       {
         linkedIn && (
           <li>
-            <a href={linkedIn.url}>{linkedIn.url.replace(/^https?:\/\/(www\.)?/, '')}</a>
+            <a href={linkedIn.url} {...externalLinkProps(linkedIn.url)}>
+              {linkedIn.url.replace(/^https?:\/\/(www\.)?/, '')}
+            </a>
           </li>
         )
       }

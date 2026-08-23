@@ -1,5 +1,6 @@
 ---
 import type { Project } from '~/lib/content';
+import { externalLinkProps } from '~/lib/links';
 
 /**
  * Outbound links for a project.
@@ -25,7 +26,9 @@ const dead = links.filter((l) => l.dead);
         <ul>
           {live.map((l) => (
             <li>
-              <a href={l.url}>{l.label}</a>
+              <a href={l.url} {...externalLinkProps(l.url)}>
+                {l.label}
+              </a>
             </li>
           ))}
         </ul>
