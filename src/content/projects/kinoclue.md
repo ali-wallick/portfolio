@@ -15,9 +15,9 @@ collaborators:
   - name: Ali Mazalek
 role: Research and development
 summary: >-
-  A tangible tabletop murder-mystery prototype built on Clue. Physical game
-  pieces attract and repel each other to reveal connections between suspects,
-  rooms, and weapons.
+  A tangible tabletop murder-mystery prototype based on the board game Clue.
+  Physical game pieces attract and repel each other to reveal connections
+  between suspects, rooms, and weapons.
 hero:
   type: image
   src: ../../assets/images/projects/kinoclue/KinoClue.png
