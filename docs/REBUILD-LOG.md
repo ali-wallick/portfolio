@@ -1778,3 +1778,168 @@ list Ali flagged as "may read differently after living with the site" started ri
 answer belongs where the next person editing a contrast value will actually look.
 
 Closes #67, and with it the last of the three things #33 split into on 2026-08-21.
+
+---
+
+## A voice skill, built from measurement rather than adjectives (2026-08-24)
+
+Ali's ask before starting the wording pass (#31): a skill for writing copy, with enough direction to
+dodge the obvious AI tells without writing strangled prose to avoid them. Her own framing of the
+nuance was the useful part — _"groups of 3 is fine as long as it's not excessive and constant."_
+
+### Describing a voice doesn't work; measuring one does
+
+`CLAUDE.md` already had voice conventions, and they're good ones — first person, past tense, specific
+over impressive. But every one of them is a quality an agent can believe it is satisfying while
+producing something that reads nothing like Ali. "Specific over impressive" doesn't tell you her
+sentences are 17 words long.
+
+So the skill was built the same way the colour, font and motion decisions were: measure first, then
+decide. Two corpora already in the repo turned out to be enough — `content/archive/` (20 blog posts,
+2010–2019, ~5,100 words of unedited first-person Ali) and `snapshot/` (the old site's About and
+project pages, more considered but still hers). The 2019 resume bullets preserved in
+`src/content/jobs/*.md` are a third, in a different register.
+
+Two gaps came out of it, both larger than expected:
+
+|                        | Ali's blog           | Site copy, 2026-08-24 |
+| ---------------------- | -------------------- | --------------------- |
+| Mean sentence length   | **17 words**         | 32                    |
+| Em dashes per 1k words | **0.2** (one, total) | 15                    |
+| Exclamation points     | 117 in 5.1k words    | 2 in 5.7k             |
+
+**The em dash was the tell everyone already suspected** — #31 flagged it from reading, Phase 4 had
+noticed it in resume genre. The measurement is what makes it undeniable: one em dash in 5,404 words
+of her own writing against 91 in the site's. She reaches for a spaced en dash 45 times instead
+(_"check it out – I even got an interview"_) and for parentheses constantly.
+
+**The sentence length was not suspected, and it's the bigger one.** The site's copy is not
+occasionally long-winded; it is uniformly double her natural length. That's the kind of thing you
+cannot see by reading a page you wrote, and it outranks any word-choice rule — a page can avoid every
+banned phrase and still not sound like her if every sentence carries three clauses. The two are
+related: splitting a 32-word em-dash sentence into two 16-word sentences fixes both at once.
+
+**The exclamation gap is real and deliberately not being closed.** 117 to 2 is a genre difference, not
+an error — a blog post about winning a game jam is not a portfolio page a hiring manager skims. What
+it does establish is direction: her natural register is warmer than the site currently is, and
+"warmer than this" is actionable where "add exclamations" would be a disaster.
+
+### The trope guidance is dosage, not a denylist
+
+A banned-word list produces prose that reads as strangled, which is its own tell. Running the trope
+checker against Ali's own blog settled the design: she trips "not just X but Y", "journey", and a
+hedging stack once each, and reads perfectly human. So the skill splits tells into two lists — things
+bad only in bulk (triads, antithesis, punchy fragments, bolded lead-ins, all of which she uses) and
+things not hers at any dosage (em dashes, _leverage_/_robust_/_seamless_, "passionate about", inflated
+adjectives on real numbers). **One is a sentence, four is a signature.**
+
+### The checker is advisory on purpose
+
+`.claude/skills/write-copy/scripts/copy-stats.mjs` reports tell counts and drift from the measured
+baseline, and `--baseline` re-derives Ali's numbers from `content/archive/` so the comparison can't go
+stale silently. It is deliberately **not** wired into `npm run verify`, which is a departure from this
+repo's usual instinct to turn every finding into a build guard. Tone isn't gateable: every number in
+it has a legitimate reason to be exceeded, and a CI job that fails on em-dash density would be
+optimising the one metric instead of the writing. The point is that exceeding a number happens on
+purpose rather than by accident.
+
+Two bugs while building it, both the same shape as ones this log has recorded before: a `rather \w+`
+hedging pattern that fired on every "rather than", and an "off baseline" flag that scolded text for
+using **fewer** em dashes than the baseline. Both are the failure mode of a measurement whose
+direction was never stated — the same category as the contrast search that found the value _closest
+to_ 4.5:1 instead of the one that _clears_ it.
+
+### Still thin
+
+The corpus is real but it is mostly 2010–2015 Ali, and there are exactly two posts after 2015. Nothing
+in it is her writing at Second Dinner, and nothing is her writing about senior engineering work. Ali
+offered to look through Google Docs for more; anything from the last five years would sharpen the
+baseline considerably, and the checker's numbers are cheap to re-derive when it turns up.
+
+### The second corpus confirmed the finding and corrected the reasoning (2026-08-24)
+
+The section above was written from the blog alone, and flagged its own weakness: mostly 2010–2015
+Ali, two posts after 2015, nothing about senior engineering work. Ali then supplied five documents —
+two cover letters (2016, 2019), a client email, a warranty escalation letter, and a volunteer
+synthesis doc, 2016 to 2024. About 4,200 words of adult writing, most of it persuasive.
+
+**It confirmed the sentence-length finding in the strongest possible way.** Blog: 17.0 words. Documents:
+17.2. Fifteen years apart, different genres, different decades of her life, and they agree to within
+two tenths of a word. That moves "17 words" from an observation about a blog to a fact about how Ali
+writes, which is a much better thing to hand an agent. The em dash held up too — zero across 4,200
+words, so the combined figure is one em dash in 9,331 words of hers against 91 in the site's 5,743.
+
+**It corrected two things.**
+
+The reference file had claimed Ali never used "utilize" or "passionate about." She uses both — in the
+cover letters. The interesting part is _where_: the cover letters are, by a distance, the least
+her-sounding writing in either corpus. No specifics, no parentheticals, no stated motive, no evident
+interest in anything. So the guidance survived with a better reason attached. Those words aren't
+banned because she dislikes them; they're a symptom of writing to a form instead of about a thing,
+and hitting one is a prompt to check whether the whole paragraph has gone generic. That's a more
+useful rule than a denylist entry, and it could only come from a corpus that contained her writing
+badly.
+
+The other correction: contractions and exclamations are **genre-dependent, not voice traits**. 17
+contractions per 1k words in the blog, 0.7 in the formal documents. The first version of the skill
+carried a single sitewide contraction baseline, which would have pushed résumé bullets toward blog
+register. Both metrics are now reported for context and explicitly marked as not-to-tune.
+
+**And it added three devices the blog didn't show.** The documents are structured in a way the blog
+isn't: she concedes the other side's point in full and then declines to drop hers (_"This is pretty
+clearly a problem caused by Dometic and not HC. […] However, I did several hours of free research."_),
+she presses with rhetorical questions in bursts, and she organises long arguments as a bolded label,
+a colon, and plain explanation. That last one is independent confirmation that the Marvel Snap page's
+bolded lead-ins — written months earlier, from instinct — are genuinely her shape.
+
+**The documents are not in the repo, and that was a real trade.** They carry phone numbers,
+third-party names, and personal matters with nothing to do with the portfolio, and #48 may make this
+repo public. So their measurements are recorded in the reference rather than being re-derivable, and
+`--baseline` on the checker still only re-derives the blog numbers. Recording a number you can't
+recompute is exactly the kind of thing this repo's content model exists to prevent, so it's worth
+being explicit that it was chosen rather than overlooked: Ali has the files, and the alternative was
+committing someone's phone number to a repo that may go public.
+
+### A fourth corpus, and a number that had been wrong the whole time (2026-08-24)
+
+The section above closed by naming the gap: nothing in the corpus was Ali writing about technical
+work for someone else to read. A web search for her name surfaced exactly that — MobilityWare's 2017
+"Meet Ali Wallick" Q&A — and then couldn't retrieve it. Tumblr is outside this environment's egress
+allowlist, and the only version available was a search-engine summary.
+
+**That summary was deliberately not used, and the reasoning is worth keeping.** A search summary is
+the engine's sentences about her answers, not her answers. Folding it into a voice reference would
+have contaminated the instrument with precisely the smoothed-out generic register the reference
+exists to detect — and nothing downstream would ever have flagged it, because it would have been
+sitting in the file labelled as evidence. Ali pasted the real text instead.
+
+**Four corpora now agree.** Blog 16.9, documents 17.2, interview 14.6, chat 17.5. Sixteen years, five
+genres, careful writing and unedited writing. The sharpest single statement of it: **the longest
+sentence in the entire 2017 interview is 27 words, which is shorter than the site's average of 32.**
+
+**And the em dash count was wrong.** Every prior version of this log, the skill, and `CLAUDE.md` said
+"one em dash in Ali's writing." Computing the total across all four corpora with consistent stripping
+found zero, and located the phantom: it is in a `note:` field in `content/archive/`'s front matter,
+written by a previous agent explaining a missing publication date. An agent's own prose, counted as
+Ali's, inside the file that documents what Ali sounds like.
+
+The error was harmless in its conclusion — one and zero point the same way — but it is a clean
+example of the thing this repo keeps rediscovering: **a measurement is only as good as its extraction
+step, and the extraction step is where the bug lives.** Same family as the contrast search that found
+the value closest to 4.5:1 instead of the one clearing it, and the `ch`-unit measure that was
+correct in every way except which font was loaded. The fix was to compute all corpora through one
+stripping function and print the total, rather than accumulating per-corpus figures across three
+commits and adding them up.
+
+**One finding from the interview isn't about voice at all.** Ali describes her draw to front-end work
+as combining "the logic of programming and creativity of design." The old `about.html` independently
+says the Computational Media major "provided the perfect blend of creativity and logic." Same claim,
+unprompted, years apart, in two sources neither of which was written with the other in view. That is
+her own thesis about her work, and it is a better answer to "why UI engineering" than a wording pass
+would invent. Recorded in the reference so #31 uses the line she already has rather than writing a
+new one.
+
+The interview also supplied two positive markers the earlier corpora had underweighted: she leads
+with an enthusiasm verb constantly (five "I love"s in 320 words, against a site that records what she
+did and almost never that she enjoyed it), and she names specific things rather than categories —
+Blendoku, Carcassone, Castles of the Mad King Ludwig, not "board games."

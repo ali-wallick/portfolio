@@ -37,6 +37,11 @@ order:
 one (Second Dinner).** Writing bullets straight from it produces a resume weighted backwards. Prefer
 first-person interview material or an existing write-up over the stale verbatim bullet.
 
+**For how a bullet should _read_ — the résumé register, and what to avoid — use the `write-copy`
+skill.** This skill covers where bullets live, how they're sourced, and what to regenerate; that one
+covers the words. Résumé register is verb-first, subject dropped, no contractions, no exclamations,
+and it is deliberately different from the site's prose voice.
+
 **Craft, not product, for anything from the 2024–present Second Dinner era.** Godot, "the studio's
 next team", and nothing else — no title, platform, genre, feature, or monetization detail. Read
 CLAUDE.md's Phase 3 gate outcome if this ceiling is unfamiliar.

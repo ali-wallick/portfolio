@@ -165,6 +165,8 @@ Use the skills — they encode the schema, the conventions, and the verification
 
 - `.claude/skills/add-project/` — add or update a project entry.
 - `.claude/skills/write-project-page/` — write a project write-up from source material.
+- `.claude/skills/write-copy/` — write or edit any prose on the site in Ali's voice.
+- `.claude/skills/update-resume/` — add, update, or rebalance resume content.
 - `.claude/skills/pre-launch-check/` — the full pre-merge / pre-launch sweep.
 
 Note: the skill list loads at session start, so a skill added mid-session isn't invocable until the
@@ -190,8 +192,43 @@ Settled now:
 - **Tone target:** modern, a bit irreverent. It should be obvious a game developer made this and not
   obvious which template they used.
 
-Not settled: the actual prose. That's Phase 3 execution. The gate conversation itself is **closed** —
-outcome recorded below.
+**The voice is documented from primary sources, not described in the abstract** (2026-08-24). The
+`write-copy` skill carries quoted evidence and measurements in
+`.claude/skills/write-copy/references/ali-voice.md`, derived from four independent corpora:
+`content/archive/` plus `snapshot/` and the 2019 resume bullets; a 4,200-word set of adult documents
+Ali supplied (cover letters, a client email, a warranty escalation letter, a volunteer synthesis
+doc, 2016–2024); MobilityWare's 2017 "Meet Ali Wallick" Q&A; and her own chat messages from 2026.
+
+**Only the first is committed.** The documents carry phone numbers, third-party names, and personal
+matters unrelated to the portfolio, and this repo may go public
+([#48](https://github.com/ali-wallick/Portfolio/issues/48)). Their measurements are recorded in the
+reference rather than being re-derivable. That is a real cost and the right trade; Ali has the files.
+
+Two measured gaps govern the wording pass ([#31](https://github.com/ali-wallick/Portfolio/issues/31))
+and are worth knowing before writing anything.
+
+**Her mean sentence is 17 words against the site's 32.** Every corpus lands between 14.6 and 17.5 —
+sixteen years, five genres, careful writing and unedited writing alike. That makes it a fact about
+how Ali writes rather than an artifact of any one source. The sharpest version: the longest sentence
+in her whole 2017 interview is 27 words, which is shorter than the site's average.
+
+**She has used zero em dashes in 9,937 words**, against the site's 91 in 5,743. She reaches for
+parentheses, a spaced hyphen, or a full stop. (An earlier version of this note said "one em dash" —
+that instance was in a `note:` field a previous agent wrote in a blog post's front matter, not Ali's
+writing.)
+
+The sentence-length gap is the higher-leverage of the two: a page can avoid every AI tell and still
+not sound like her if every sentence has three clauses.
+
+Contractions and exclamation rates are **genre-dependent and should not be tuned sitewide** — 17
+contractions per 1k words in the blog against 0.7 in her formal writing. The site's current rate is
+fine.
+
+**One content finding from the interview, not a voice one.** Ali describes her own draw to front-end
+work as combining _"the logic of programming and creativity of design"_ (2017), and the old
+`about.html` independently says the Computational Media major _"provided the perfect blend of
+creativity and logic."_ Same claim, unprompted, years apart. That is her own thesis about her work
+and shouldn't be reinvented — see the reference for both quotes.
 
 ### Facts worth having on hand
 
@@ -446,8 +483,9 @@ material would have produced a resume weighted backwards.
   `src/content/education/georgia-tech.md` and `ResumeDocument` deliberately doesn't print `honors`.
   Recording a fact is not the same as showing it.
 - **No PO Box, and no home address at all.** There is no sourced current city, so the resume header
-  carries email, site, and LinkedIn and nothing else. (The PO Box was never on the site — it only
-  exists in `resources/WallickAli-Resume.pdf`, which is not served. See "The PO Box files" below.)
+  carries email, site, and LinkedIn and nothing else. (The PO Box was never on the _new_ site. It is
+  in `resources/WallickAli-Resume.pdf`, which the old live site still serves and Google has indexed —
+  see "The PO Box files" below and [#132](https://github.com/ali-wallick/Portfolio/issues/132).)
 
 ### Weighting revisited — recency-weighted, per-job minimums (2026-08-23, closes #37)
 
@@ -525,6 +563,13 @@ most likely reason to do.
 **Ali's call: keep the PDF, delete the PNG.** The PDF is a historical artifact worth keeping around;
 the PNG was unreferenced by anything and had no argument for existing at all. The PNG is deleted from
 the working tree as of this decision.
+
+**Correction, 2026-08-24 ([#132](https://github.com/ali-wallick/Portfolio/issues/132)): "neither was
+served" was true of the Astro build and false of the old live site.** `aliwallick.com` serves that
+PDF today and Google has indexed it, returning it under a title generated from its own first line —
+name, email, and PO Box. The address is public right now, not conditionally public if this repo ever
+is. The decision to keep the file stands; what changes is that the remedy is a pre-launch redirect-map
+question (#132) rather than a re-check deferred to #48.
 
 **The PDF staying means the exposure is still live, not resolved.** `git rm` doesn't remove history
 either way, but the PDF is also still present in the current tree, still carrying a PO Box, still
