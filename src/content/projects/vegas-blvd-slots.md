@@ -9,7 +9,7 @@ engine: [Unity]
 tech: [C#, DeltaDNA]
 platforms: [iOS, Android]
 job: mobilityware
-role: Software Engineer II — live-ops and slot-machine systems
+role: Software Engineer II
 # Card/tile thumbnail override — the app icon, not the video poster frame.
 # Sourced via an APKPure mirror since the listing is delisted from both
 # stores (see the dead store links below). See #64.
@@ -37,27 +37,26 @@ links:
 draft: false
 ---
 
-Vegas Blvd Slots is a mobile slots game built in Unity — over 50 machines by the time I moved on,
-with daily and weekly rewards, social gifting, leagues, and multiplayer tournaments layered on top
-of the core spinning. I worked on it for most of my three years at MobilityWare, after cutting my
-teeth porting the previous slots title, Hot Streak Slots, from native iOS to Unity, and building
-blackjack, video poker, and keno entirely myself for an early, unreleased casino app.
+Vegas Blvd Slots was a mobile slots game built in Unity. By the time I moved on it carried over 50
+machines, plus daily and weekly rewards, social gifting, leagues, and multiplayer tournaments. I
+worked on it for most of my three years at MobilityWare. Before that I cut my teeth porting the
+previous slots title, Hot Streak Slots, from native iOS to Unity. I also built blackjack, video
+poker, and keno entirely myself for an early, unreleased casino app.
 
 ## What I built
 
 Most of my time was client-side: engineering support for new machines, and the features and bonus
 games that went with each one. But the more interesting work was underneath the machines. I
-architected the live-ops systems that let the game change without a client update — a
-server-controllable store, and a DeltaDNA integration that drove in-app messaging, promo carousels,
-and eventing, all with customizable text so marketing could run campaigns without engineering in the
-loop. I also led a handful of cross-cutting projects that don't fit neatly into "features" —
-GDPR support, in particular, and keeping the game current through several major Unity version
-upgrades.
+architected the live-ops systems that let the game change without a client update. That was a
+server-controllable store, plus a DeltaDNA integration driving in-app messaging, promo carousels,
+and eventing. All of it had customizable text, so marketing could run campaigns without engineering
+in the loop. I also led a few cross-cutting projects that don't fit neatly into "features". GDPR
+support was one, and keeping the game current through several major Unity version upgrades was
+another.
 
 ## What I learned
 
-I went in knowing nothing about slot machines and came out with genuine respect for how much depth
-is packed into what looks, from the outside, like a very simple loop. There's a whole discipline to
-how a machine's features and bonus games are put together, and building the live-ops systems that
-let the team iterate on that without shipping a new client turned out to be some of the most
-satisfying work I did there.
+I went in knowing nothing about slot machines. I came out with real respect for how much depth is
+packed into what looks, from the outside, like a very simple loop. There's a whole discipline to how
+a machine's features and bonus games are put together. Building the live-ops systems that let the
+team iterate on that was some of the most satisfying work I did there.

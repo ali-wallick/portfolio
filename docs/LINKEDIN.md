@@ -45,16 +45,16 @@ Something I keep relearning: the most valuable thing I can build is often not th
 **2 positions under one company.** Software Engineer II (2019 – Dec 2021), then Senior Software Engineer I, Dec 2021 – Present. LinkedIn models this natively: add a further position under the same Second Dinner entry rather than editing the title in place, so the promotion shows on your profile. Put the bullets below on the current role.
 
 ```text
-• Joined as the studio's 11th employee, before it had shipped anything. Five years on Marvel Snap, which launched in October 2022, then its next team from 2024 — the studio's first game in Godot.
+• Joined as the studio's 11th employee, before it had shipped anything. Five years on Marvel Snap, which launched in October 2022, then its next team from 2024, on the studio's first game in Godot.
 • Championed and helped lead a migration to MVVM architecture on a live product, alongside the push to ship the PC client.
-• Shipped Snap on PC in two stages: a direct mobile port for Steam Early Access at the October 2022 launch, then reworked much of the UI to be landscape- and mouse-and-keyboard-native for the Early Access exit in August 2023.
-• Owned localization end to end — Unity's Localization package, the import/export pipeline, font handling, and the workflow the team localized UI text through.
+• Shipped Snap on PC in two stages. Stage one was a direct mobile port for Steam Early Access at the October 2022 launch. Stage two reworked much of the UI to be landscape- and mouse-and-keyboard-native for the Early Access exit in August 2023.
+• Owned localization end to end: Unity's Localization package, the import/export pipeline, font handling, and the workflow the team localized UI text through.
 • Built the Braze integration that let live-ops and marketing ship content without an app update: main-screen carousel, news page, and modal pop-ups.
-• On the studio's next team, built a UI framework other engineers build reusable UI on top of, to keep the team moving quickly in Godot.
-• Built a GitHub Action that turns a Jira or Sentry issue into an automated repro: it hands the ticket to a model harness (Cursor cloud agents) and outputs screenshots and a command script that reproduces the bug in the game — part of adopting Cursor as a multi-model harness for the team and authoring its agentic commands and skills.
+• On the studio's next team, built a UI framework for other engineers to build reusable UI on top of, keeping the team moving quickly in Godot.
+• Built a GitHub Action that turns a Jira or Sentry issue into an automated repro. It hands the ticket to a model harness (Cursor cloud agents) and outputs screenshots plus a command script that reproduces the bug in the game. Part of adopting Cursor as a multi-model harness for the team, and authoring its agentic commands and skills.
 • Early client engineering in Unity: push notifications, deep linking, the first pass of localization, and integrating live-ops tooling into the client.
 • Later feature engineering: meta gameplay systems spanning client and server code plus the UI for them, card and deck cosmetics, and the deckbuilding UI.
-• General client and platform work on the studio's Godot project: engine updates, reporting and fixing engine bugs with partners at W4 Games, integrating native mobile plugins, and standing up unit testing in Godot.
+• General client and platform work on the studio's Godot project: engine updates, reporting and fixing engine bugs with partners at W4 Games, integrating native mobile plugins, and standing up unit testing.
 ```
 
 ---
@@ -64,9 +64,9 @@ Something I keep relearning: the most valuable thing I can build is often not th
 **Title:** Software Engineer II · **Irvine, CA** · 2016 – 2019
 
 ```text
-• Architected Vegas Blvd Slots' live-ops systems — a server-controllable store and a DeltaDNA integration driving in-app messaging, promo carousels, and eventing, with customizable text so marketing could run campaigns without engineering.
+• Architected Vegas Blvd Slots' live-ops systems: a server-controllable store, and a DeltaDNA integration driving in-app messaging, promo carousels, and eventing. Customizable text let marketing run campaigns without engineering.
 • Engineered new slot machines and their features and bonus games, on a title carrying 50+ machines plus rewards, gifting, leagues, and tournaments.
-• Pitched It Fits I Sits at the studio game jam and built the week-long prototype, focused on a level editor that exported JSON and let us author 61 levels for pitch day. Won People's Choice; other teams took it to release, later as Puzzle Cats.
+• Pitched It Fits I Sits at the studio game jam and built the week-long prototype. Focused on a level editor that exported JSON and let us author 61 levels for pitch day. Won People's Choice; other teams took it to release, later as Puzzle Cats.
 • Led cross-cutting work that spanned the whole title, including GDPR support and keeping the game current through several major Unity version upgrades.
 • Ported the previous slots title, Hot Streak Slots, from native iOS to Unity, and built blackjack, video poker, and keno for an early unreleased casino app.
 ```
@@ -80,9 +80,9 @@ Something I keep relearning: the most valuable thing I can build is often not th
 **Title:** UI Programmer · **Irvine, CA** · Jun 2015 – 2016
 
 ```text
-• Built UI across Firefall's HUD and menus — radar, PvP HUD, character progression and elite-level screens, reward screens — through its Chinese launch and worldwide relaunch overhaul.
+• Built UI across Firefall's HUD and menus through its Chinese launch and worldwide relaunch overhaul: radar, PvP HUD, character progression and elite-level screens, and reward screens.
 • Created shared libraries for common menu and HUD elements, and optimized the UI system itself on an already-loaded client.
-• Worked at the boundary between the Lua/XML UI scripting layer and the studio's C++ engine, on a team and codebase substantially larger than anything I'd worked on before.
+• Worked at the boundary between the Lua/XML UI scripting layer and the studio's C++ engine, on a team and codebase substantially larger than any before it.
 ```
 
 ---
@@ -93,10 +93,10 @@ Something I keep relearning: the most valuable thing I can build is often not th
 
 ```text
 • Architected a menu animation system adopted by both the UI and game teams, after hand-coding every transition became the bottleneck.
-• Built many of Kaneva's core menus end to end in the in-house Lua menu system — player and creator HUDs, inventory and bank, travel, events, and a visual property editor for scripted objects — from artists' comps through layout to functionality.
-• Part of the team that designed and scripted a Lua-based game development environment on top of the virtual world.
-• Started in technical support, helping players with their in-world scripting and building game templates — Treasure Hunt and Adventure among them — that let players assemble small games of their own.
-• Also built context menus for people and objects, menus for swapping video and Flash content on in-game objects, and the welcome and builder tutorials, working with the engine and web teams whenever a menu touched either.
+• Built many of Kaneva's core menus end to end in the in-house Lua menu system, from artists' comps through layout to functionality. Covered the player and creator HUDs, inventory and bank, travel, events, and a visual property editor for scripted objects.
+• Helped design and script a Lua-based game development environment built on top of the virtual world.
+• Started in technical support, helping players with their in-world scripting and building game templates (Treasure Hunt and Adventure among them) that let players assemble small games of their own.
+• Also built context menus for people and objects, menus for swapping video and Flash content on in-game objects, and the welcome and builder tutorials. Worked with the engine and web teams whenever a menu touched either.
 ```
 
 **One entry, by Ali's decision** — the progression from Technical Support Engineer to Lead UI Programmer is old enough that she's comfortable flattening it to a single title on the resume, and it needs no promotion date to stay one entry.

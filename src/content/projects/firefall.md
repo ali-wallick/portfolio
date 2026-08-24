@@ -32,23 +32,23 @@ links:
 draft: false
 ---
 
-Firefall was Red 5 Studios' massively multiplayer shooter — part shooter, part RPG, built on the
-studio's own C++ engine with a Lua/XML scripting layer on top for UI. I joined as a UI programmer for
-its Chinese launch and the worldwide relaunch overhaul that followed, my first time working on a team
-and a codebase this much bigger than what I'd worked on at Kaneva.
+Firefall was Red 5 Studios' massively multiplayer shooter, part shooter and part RPG. It ran on the
+studio's own C++ engine, with a Lua/XML scripting layer on top for UI. I joined as a UI programmer
+for its Chinese launch and the worldwide relaunch overhaul that followed. It was my first time on a
+team and a codebase this much bigger than Kaneva's.
 
 ## What I built
 
 I worked across most of the game's HUD and menus: the radar, PvP elements, character progression and
-elite-level screens, and reward screens. A good chunk of that work was less about any one screen and
-more about the layer underneath them — building libraries for common menu and HUD elements so new UI
-didn't mean starting from scratch, and optimizing the UI system itself, which mattered on a game
-already asking a lot of the client.
+elite-level screens, and reward screens. A good chunk of that was less about any one screen than the
+layer underneath. I built libraries for common menu and HUD elements so new UI didn't start from
+scratch. I also optimized the UI system itself, which mattered on a game already asking a lot of the
+client.
 
 ## What I learned
 
-Working at the boundary between the Lua/XML scripting layer and the core engine was the real
-education here — it's a different kind of problem than owning a UI system end to end the way I had at
-Kaneva, and it's where I learned to think about UI performance as a systems problem, not just a
-screen-by-screen one. Firefall shut down in 2017; the credit is worth keeping even though the game
-isn't playable anymore.
+The real education was working at the boundary between the Lua/XML scripting layer and the core
+engine. That's a different problem from owning a UI system end to end, the way I had at Kaneva. It's
+where I learned to think about UI performance as a systems problem rather than a screen-by-screen
+one. Firefall shut down in 2017. The credit is worth keeping even though the game isn't playable
+anymore.

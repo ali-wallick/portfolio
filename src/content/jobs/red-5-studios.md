@@ -12,21 +12,21 @@ roles:
 # See CLAUDE.md's Phase 4 weighting section for the general rule.
 highlights:
   - >-
-    Built UI across Firefall's HUD and menus — radar, PvP HUD, character
-    progression and elite-level screens, reward screens — through its Chinese
-    launch and worldwide relaunch overhaul.
+    Built UI across Firefall's HUD and menus through its Chinese launch and
+    worldwide relaunch overhaul: radar, PvP HUD, character progression and
+    elite-level screens, and reward screens.
 highlightsExtended:
   - >-
     Created shared libraries for common menu and HUD elements, and optimized the
     UI system itself on an already-loaded client.
   - >-
     Worked at the boundary between the Lua/XML UI scripting layer and the
-    studio's C++ engine, on a team and codebase substantially larger than
-    anything I'd worked on before.
+    studio's C++ engine, on a team and codebase substantially larger than any
+    before it.
 summary: >-
-  UI programmer on Firefall, a large-scale PC shooter — my first time working
-  on a team of that size, building and standardizing menu and HUD elements
-  across a much bigger codebase than Kaneva's.
+  UI programmer on Firefall, a large-scale PC shooter, and my first time on a
+  team that size. Built and standardized menu and HUD elements across a much
+  bigger codebase than Kaneva's.
 ---
 
 ## Source material (2019 resume, verbatim — not current copy)

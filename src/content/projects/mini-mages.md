@@ -16,7 +16,7 @@ collaborators:
     url: https://robertspessard.com
 role: Programmer and design lead
 summary: >-
-  A Georgia Tech senior capstone for a client — a four-player wizard
+  A Georgia Tech senior capstone built for a client. A four-player wizard
   tournament played on an iPad with up to four Bluetooth-networked iPhones.
 hero:
   type: youtube

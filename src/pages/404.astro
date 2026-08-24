@@ -4,8 +4,16 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
 
 <BaseLayout title="Page not found" image="/og/home.jpg">
   <h1>Page not found</h1>
+  {
+    /* The space before the `home` link is written inline, not as a line break.
+      Astro strips the whitespace between a text node and a following element
+      when a newline separates them, so wrapping `or head` onto its own line
+      renders `or head<a>home</a>` with no space at all — the bug this page
+      shipped with on main until 2026-08-24. If this line ever needs to wrap,
+      use `{' '}` (as about.astro does) rather than a bare line break. */
+  }
   <p>
-    That page doesn't exist. Try the <a href="/projects">projects</a> page, or head
-    <a href="/">home</a>.
+    That page doesn't exist. If you got here from an old link, it probably moved when I rebuilt this
+    site. Try the <a href="/projects">projects</a> page, or head <a href="/">home</a>.
   </p>
 </BaseLayout>

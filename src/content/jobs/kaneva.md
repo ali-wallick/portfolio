@@ -29,25 +29,25 @@ highlights:
     after hand-coding every transition became the bottleneck.
 highlightsExtended:
   - >-
-    Built many of Kaneva's core menus end to end in the in-house Lua menu system
-    — player and creator HUDs, inventory and bank, travel, events, and a visual
-    property editor for scripted objects — from artists' comps through layout to
-    functionality.
+    Built many of Kaneva's core menus end to end in the in-house Lua menu system,
+    from artists' comps through layout to functionality. Covered the player and
+    creator HUDs, inventory and bank, travel, events, and a visual property
+    editor for scripted objects.
   - >-
-    Part of the team that designed and scripted a Lua-based game development
-    environment on top of the virtual world.
+    Helped design and script a Lua-based game development environment built on
+    top of the virtual world.
   - >-
     Started in technical support, helping players with their in-world scripting
-    and building game templates — Treasure Hunt and Adventure among them — that
-    let players assemble small games of their own.
+    and building game templates (Treasure Hunt and Adventure among them) that let
+    players assemble small games of their own.
   - >-
     Also built context menus for people and objects, menus for swapping video and
-    Flash content on in-game objects, and the welcome and builder tutorials,
-    working with the engine and web teams whenever a menu touched either.
+    Flash content on in-game objects, and the welcome and builder tutorials.
+    Worked with the engine and web teams whenever a menu touched either.
 summary: >-
-  Grew from an entry-level engineer into the lead UI programmer over four
-  years, leading a full HUD overhaul and building a menu animation system
-  other engineers adopted for their own work.
+  Grew from an entry-level engineer into the lead UI programmer over four years.
+  Led a full HUD overhaul, and built a menu animation system other engineers
+  adopted for their own work.
 ---
 
 ## Source material (2019 resume, verbatim — not current copy)

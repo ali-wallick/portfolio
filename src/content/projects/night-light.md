@@ -12,8 +12,8 @@ collaborators:
   - name: Esther Estroff
 role: Programmer
 summary: >-
-  A HUD-less mood piece for a Georgia Tech film class — comfort a boy afraid
-  of the dark, told entirely through a dimming vignette and a dying flashlight.
+  A HUD-less mood piece for a Georgia Tech film class. Comfort a boy afraid of
+  the dark, told entirely through a dimming vignette and a dying flashlight.
 hero:
   type: image
   src: ../../assets/images/projects/night-light/screenshot.png

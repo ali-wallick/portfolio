@@ -15,8 +15,8 @@ collaborators:
 role: Programmer — grid/node system, automatic movement, and the Qualcomm AR plugin integration
 summary: >-
   A handheld augmented-reality maze game for Qualcomm's AR Game Studio at
-  Georgia Tech — place markers on a printed maze to redirect a girl past
-  traps and enemies.
+  Georgia Tech. Place markers on a printed maze to redirect a girl past traps
+  and enemies.
 hero:
   type: youtube
   id: OHjZMJ68UjI

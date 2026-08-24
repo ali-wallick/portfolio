@@ -42,29 +42,29 @@ links:
 draft: false
 ---
 
-The World of Kaneva was a social virtual world and game platform — avatars, user-generated content,
-and full worlds built with integrated scripting. My first job out of college, and four years there
-took me from technical support to leading UI programming for the whole game.
+The World of Kaneva was a social virtual world and game platform: avatars, user-generated content,
+and full worlds built with integrated scripting. It was my first job out of college. Four years
+there took me from technical support to leading UI programming for the whole game.
 
 ## What I built
 
-I started as a Technical Support Engineer, helping players with their scripting and building game
-templates — Treasure Hunt and Adventure among them — that let players assemble their own small games
-by dropping items and defining levels. I found I liked UI work more than support, and moved to work
-on it full time; by the end of four years I was Lead UI Programmer, working on many of the game's
-menus end to end, from design collaboration through building the layout off the artists' comps to
-programming the functionality, in the studio's in-house Lua-based menu system.
+I started as a Technical Support Engineer, helping players with their scripting. I also built game
+templates (Treasure Hunt and Adventure among them) that let players assemble small games of their
+own by dropping items and defining levels. I liked UI work more than support, so I moved to it full
+time. By the end of four years I was Lead UI Programmer. I worked on many of the game's menus end to
+end in the studio's in-house Lua menu system. That ran from design collaboration, through laying
+them out off the artists' comps, to programming the functionality.
 
-That list ended up being long: the player and build/creator HUDs, inventory and bank menus, the
-travel menu for browsing user-created worlds, the events menu for finding and joining player-run
-events, a visual property editor for scripted objects, menus for swapping video and Flash content on
-in-game objects, context menus for right-clicking people and objects, and the welcome and builder
-tutorials. I worked closely with the game engine and web teams whenever a menu touched either.
+That list ended up being long. The player and build/creator HUDs, inventory and bank menus, the
+travel menu for browsing user-created worlds, and the events menu for finding and joining player-run
+events. Also a visual property editor for scripted objects, menus for swapping video and Flash
+content on in-game objects, context menus for right-clicking people and objects, and the welcome and
+builder tutorials. I worked closely with the engine and web teams whenever a menu touched either.
 
 ## What I learned
 
-The project I'm proudest of from this job isn't on that list, because it isn't a menu — it's a menu
-**animation** system I built after getting fed up with hand-coding every transition by hand. It ended
-up being adopted by both the UI and game teams, which taught me something that's stuck: the most
-valuable thing I can build is sometimes not the feature itself, but the tool that makes the next ten
-features cheaper.
+The project I'm proudest of from this job isn't on that list, because it isn't a menu. It's a menu
+**animation** system I built after getting fed up with hand-coding every transition. It ended up
+being adopted by both the UI and game teams. That taught me something that's stuck. The most
+valuable thing I build is sometimes not the feature, but the tool that makes the next ten features
+cheaper.

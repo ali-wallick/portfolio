@@ -11,7 +11,7 @@ event: Georgia Tech
 teamSize: 1
 role: Solo — design, programming, and art
 summary: >-
-  A solo Game Boy Advance game written in C — a wolf hunts to survive its way
+  A solo Game Boy Advance game written in C. A wolf hunts to survive its way
   home, with music by chiptune artist Sabrepulse.
 hero:
   type: image

@@ -413,7 +413,8 @@ at `5a98f2c`. `npm run verify` and `pre-launch-check`'s sweeps pass clean, with 
 `TODO(phase-3-revisit)` markers outstanding. **All five featured projects, all 12 archive entries,
 and the career narrative are written and `draft: false`.** Ali reviewed the branch preview and
 signed off on every provisional bit along the way — Marvel Snap's systems list, Vegas Blvd Slots'
-`role` wording (now "Software Engineer II — live-ops and slot-machine systems"), and It Fits I
+`role` wording (then "Software Engineer II — live-ops and slot-machine systems"; **superseded
+2026-08-24, see the wording pass below**), and It Fits I
 Sits' hero, which was the phase's one hard blocker: Ali supplied the Puzzle Cats key art
 (`puzzle-cats-banner.webp`) to use as the hero image, captioned to make clear she pitched and
 prototyped the concept but didn't work on that shipped release. Lower-quality prototype shots for
@@ -997,6 +998,46 @@ cross-reference to "Phase 3", "Phase 4", "Phase 5" in this file and in old issue
 and _future_ work gets the new vocabulary. Historical prose that describes what happened during the
 old "Phase 6" or "Phase 7" window (the motion-values tuning, the faces switcher, REBUILD-LOG.md's
 own phase entries) is untouched — it's describing the past, not naming ongoing work.
+
+---
+
+## The wording pass (2026-08-24)
+
+The sitewide tone and voice pass ([#31](https://github.com/ali-wallick/Portfolio/issues/31),
+[#32](https://github.com/ali-wallick/Portfolio/issues/32)), run against the measured voice reference
+in the `write-copy` skill. **The pass itself is an edit pass and left every fact alone**, so most of
+it needs no record here. Four things do, because a future session would otherwise re-derive them
+wrongly or reinstate them.
+
+**Ali's mean sentence is 17 words and the site's was 32. That gap is now closed** — the six prose
+surfaces in #31's scope measure 16.4. The number is not a target to hit again on every future edit;
+it is the reason the copy reads the way it does, so **don't "improve" a page by re-consolidating
+short sentences into long ones.** Same for the em dash: zero in visible page prose now, and that is
+deliberate rather than incidental.
+
+**`role` fields carry the title only, not a scope.** Vegas Blvd Slots' `role` was
+`Software Engineer II — live-ops and slot-machine systems`, signed off at the Phase 3 gate and
+**superseded by Ali on 2026-08-24**: it is now just `Software Engineer II`. The scope was doing the
+prose's job in a metadata slot, and it was the last em dash in visible copy. This supersedes the
+Phase 3 execution note above.
+
+**The Kaneva eleven-menu list stays.** The voice reference calls out "undirected list-dumping" as a
+habit not to carry forward, which made the list look like a cut. **Ali's call: keep it.** It is the
+only concrete evidence of that job's scope. The wording pass split the 70-word sentence into three
+and changed nothing else about it. Don't propose cutting it again.
+
+**The 404's missing space was an Astro whitespace bug, and it was real.** `main` rendered
+`or head<a href="/">home</a>` with no space at all. **Astro strips the whitespace between a text
+node and a following element when a newline separates them**, so `or head` sitting at the end of a
+line and `<a href="/">home</a>` starting the next produced one word. This is why `about.astro` is
+full of `{' '}` — a previous session already knew, and nothing wrote it down. A scan of every
+`.astro` file on 2026-08-24 found no other instance, in either direction. **When a line has to wrap
+between text and an inline element, use `{' '}`, never a bare line break.**
+
+**"Fifteen years" is the homepage's number, not every page's.** It stays in the homepage lede and
+meta description. `/about` gives the start year (2011) instead, because four occurrences of one
+number across the site read as a tic. Ali also flagged that she expects to **cull the About page's
+job list** eventually, since it duplicates the resume's job — tracked separately, not done here.
 
 ---
 

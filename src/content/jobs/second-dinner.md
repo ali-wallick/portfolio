@@ -33,29 +33,30 @@ highlights:
   - >-
     Joined as the studio's 11th employee, before it had shipped anything. Five
     years on Marvel Snap, which launched in October 2022, then its next team from
-    2024 — the studio's first game in Godot.
+    2024, on the studio's first game in Godot.
   - >-
     Championed and helped lead a migration to MVVM architecture on a live
     product, alongside the push to ship the PC client.
   - >-
-    Shipped Snap on PC in two stages: a direct mobile port for Steam Early Access
-    at the October 2022 launch, then reworked much of the UI to be landscape- and
-    mouse-and-keyboard-native for the Early Access exit in August 2023.
+    Shipped Snap on PC in two stages. Stage one was a direct mobile port for Steam
+    Early Access at the October 2022 launch. Stage two reworked much of the UI to
+    be landscape- and mouse-and-keyboard-native for the Early Access exit in
+    August 2023.
   - >-
-    Owned localization end to end — Unity's Localization package, the
+    Owned localization end to end: Unity's Localization package, the
     import/export pipeline, font handling, and the workflow the team localized UI
     text through.
   - >-
     Built the Braze integration that let live-ops and marketing ship content
     without an app update: main-screen carousel, news page, and modal pop-ups.
   - >-
-    On the studio's next team, built a UI framework other engineers build
-    reusable UI on top of, to keep the team moving quickly in Godot.
+    On the studio's next team, built a UI framework for other engineers to build
+    reusable UI on top of, keeping the team moving quickly in Godot.
   - >-
     Built a GitHub Action that turns a Jira or Sentry issue into an automated
-    repro: it hands the ticket to a model harness (Cursor cloud agents) and
-    outputs screenshots and a command script that reproduces the bug in the
-    game — part of adopting Cursor as a multi-model harness for the team and
+    repro. It hands the ticket to a model harness (Cursor cloud agents) and
+    outputs screenshots plus a command script that reproduces the bug in the
+    game. Part of adopting Cursor as a multi-model harness for the team, and
     authoring its agentic commands and skills.
 highlightsExtended:
   - >-
@@ -67,7 +68,7 @@ highlightsExtended:
   - >-
     General client and platform work on the studio's Godot project: engine
     updates, reporting and fixing engine bugs with partners at W4 Games,
-    integrating native mobile plugins, and standing up unit testing in Godot.
+    integrating native mobile plugins, and standing up unit testing.
 summary: >-
   Joined as the studio's 11th employee and spent five years on Marvel Snap,
   which shipped in October 2022. Moved to Second Dinner's next team in 2024,

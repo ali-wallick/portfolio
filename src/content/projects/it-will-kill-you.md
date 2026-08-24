@@ -15,8 +15,8 @@ collaborators:
     url: https://robertspessard.com
 role: Level design, virus character art, and modeling
 summary: >-
-  A two-player head-to-head Georgia Tech class project — one player is a
-  virus-infected human racing for a cure, the other is the virus trying to
+  A two-player head-to-head Georgia Tech class project. One player is a
+  virus-infected human racing for a cure. The other is the virus trying to
   stop him.
 hero:
   type: youtube

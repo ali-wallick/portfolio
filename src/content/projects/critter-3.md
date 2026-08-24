@@ -12,8 +12,9 @@ platforms: [Web]
 event: Global Game Jam 2011
 role: Programmer — core mechanics and graphics
 summary: >-
-  A cube-world puzzle game from Global Game Jam 2011, part Rubik's Cube, part
-  Sudoku — later a finalist in SCAD's Entelechy game-prototype contest.
+  A cube-world puzzle game from Global Game Jam 2011, part Rubik's Cube and
+  part Sudoku. It went on to be a finalist in SCAD's Entelechy game-prototype
+  contest.
 hero:
   type: image
   src: ../../assets/images/projects/critter-3/screenshot.png
