@@ -448,6 +448,24 @@ education, one Tools line. The two-pager adds 2 / 2 / 1 / 2 more.
   Phase 3 Marvel Snap write-up, not from its 2019 bullet.** Writing bullets straight from source
   material would have produced a resume weighted backwards.
 
+### Weighting revisited — recency-weighted, per-job minimums (2026-08-23, closes #37)
+
+The Phase 4 weighting above was a one-time allocation, not a rule — it said what each job got, not
+why an older job should get less as newer ones accrete detail. Detailing the 2024–present Second
+Dinner era (issue #37) is what forced the question, because that era's new bullets needed room. Ali's
+call, and the general rule from here on:
+
+**A job carries a 1-bullet floor in `highlights` (one-pager) and a 2-bullet floor across
+`highlights` + `highlightsExtended` combined (two-pager), and space beyond the floor is weighted
+toward recency** — a more recent job earns more detail before an older one does. This is why Kaneva
+and Red 5 — the two oldest entries — were trimmed to a single one-pager bullet each (their other
+bullets moved to `highlightsExtended`, so the two-pager still carries the fuller record) to make room
+for Second Dinner's two new 2024–present bullets, rather than demoting an existing Second Dinner
+bullet. Current one-pager shape: Second Dinner 7, MobilityWare 3, Red 5 1, Kaneva 1.
+
+**Not a one-time cut — apply this whenever the budget gets tight again.** The oldest job with bullets
+still above its floor is where the next trim comes from, not whichever job happens to be already open.
+
 ### 4. LinkedIn is a handoff, not a sync
 
 **No agent logs into the account.** The deliverable is `docs/LINKEDIN.md` — paste-ready blocks for

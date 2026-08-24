@@ -18,10 +18,16 @@ roles:
     start: '2011'
 # The progression itself lives in `roles[]`, not here — no bullet should
 # duplicate what the title line already says.
+#
+# Trimmed to a single one-pager bullet 2026-08-23 (issue #37): Ali's rule is a
+# 1-bullet floor per job on the one-pager (2 on the two-pager), weighted
+# toward recency, so the oldest job on the resume carries the least space.
+# See CLAUDE.md's Phase 4 weighting section for the general rule.
 highlights:
   - >-
     Architected a menu animation system adopted by both the UI and game teams,
     after hand-coding every transition became the bottleneck.
+highlightsExtended:
   - >-
     Built many of Kaneva's core menus end to end in the in-house Lua menu system
     — player and creator HUDs, inventory and bank, travel, events, and a visual
@@ -30,7 +36,6 @@ highlights:
   - >-
     Part of the team that designed and scripted a Lua-based game development
     environment on top of the virtual world.
-highlightsExtended:
   - >-
     Started in technical support, helping players with their in-world scripting
     and building game templates — Treasure Hunt and Adventure among them — that

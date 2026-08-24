@@ -23,6 +23,12 @@ roles:
 # Written in Phase 4. Source is the Phase 3 Marvel Snap write-up and the systems
 # account in CLAUDE.md — NOT the 2019 bullet below, which predates everything
 # that matters here and describes the game as unannounced.
+#
+# The final two `highlights` bullets and the third `highlightsExtended` bullet
+# (2024–present, the Godot team) are sourced directly from Ali on issue #37,
+# 2026-08-23 — the CLAUDE.md Phase 3 ceiling applies to them exactly as it
+# does to the rest of this era: craft, not product. No title, platform,
+# genre, feature, or monetization detail.
 highlights:
   - >-
     Joined as the studio's 11th employee, before it had shipped anything. Five
@@ -42,6 +48,15 @@ highlights:
   - >-
     Built the Braze integration that let live-ops and marketing ship content
     without an app update: main-screen carousel, news page, and modal pop-ups.
+  - >-
+    On the studio's next team, built a UI framework other engineers build
+    reusable UI on top of, to keep the team moving quickly in Godot.
+  - >-
+    Built a GitHub Action that turns a Jira or Sentry issue into an automated
+    repro: it hands the ticket to a model harness (Cursor cloud agents) and
+    outputs screenshots and a command script that reproduces the bug in the
+    game — part of adopting Cursor as a multi-model harness for the team and
+    authoring its agentic commands and skills.
 highlightsExtended:
   - >-
     Early client engineering in Unity: push notifications, deep linking, the
@@ -49,6 +64,10 @@ highlightsExtended:
   - >-
     Later feature engineering: meta gameplay systems spanning client and server
     code plus the UI for them, card and deck cosmetics, and the deckbuilding UI.
+  - >-
+    General client and platform work on the studio's Godot project: engine
+    updates, reporting and fixing engine bugs with partners at W4 Games,
+    integrating native mobile plugins, and standing up unit testing in Godot.
 summary: >-
   Joined as the studio's 11th employee and spent five years on Marvel Snap,
   which shipped in October 2022. Moved to Second Dinner's next team in 2024,

@@ -50,8 +50,11 @@ Something I keep relearning: the most valuable thing I can build is often not th
 • Shipped Snap on PC in two stages: a direct mobile port for Steam Early Access at the October 2022 launch, then reworked much of the UI to be landscape- and mouse-and-keyboard-native for the Early Access exit in August 2023.
 • Owned localization end to end — Unity's Localization package, the import/export pipeline, font handling, and the workflow the team localized UI text through.
 • Built the Braze integration that let live-ops and marketing ship content without an app update: main-screen carousel, news page, and modal pop-ups.
+• On the studio's next team, built a UI framework other engineers build reusable UI on top of, to keep the team moving quickly in Godot.
+• Built a GitHub Action that turns a Jira or Sentry issue into an automated repro: it hands the ticket to a model harness (Cursor cloud agents) and outputs screenshots and a command script that reproduces the bug in the game — part of adopting Cursor as a multi-model harness for the team and authoring its agentic commands and skills.
 • Early client engineering in Unity: push notifications, deep linking, the first pass of localization, and integrating live-ops tooling into the client.
 • Later feature engineering: meta gameplay systems spanning client and server code plus the UI for them, card and deck cosmetics, and the deckbuilding UI.
+• General client and platform work on the studio's Godot project: engine updates, reporting and fixing engine bugs with partners at W4 Games, integrating native mobile plugins, and standing up unit testing in Godot.
 ```
 
 ---
