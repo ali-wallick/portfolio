@@ -107,8 +107,17 @@ const projects = defineCollection({
         /**
          * Two tiers, decided up front (see CLAUDE.md):
          *  - `featured` — a real write-up. Problem, what was built, what was learned.
-         *  - `archive`  — title, year, engine, one line, one image. Framed as
-         *                 history, not as a portfolio pitch.
+         *  - `archive`  — title, year, engine, one line, and at most a short
+         *                 body. Framed as history, not as a portfolio pitch.
+         *
+         * The archive tier was summary-only through Phase 3, which made every
+         * one of its detail pages a card with a bigger image on it. Settled
+         * 2026-08-24 (#97): an archive entry may carry a short body and a
+         * `gallery` where there is material worth having. This is a guideline
+         * calibrated to what most archive entries are — early student and jam
+         * work that doesn't need much — not a hard cap. See CLAUDE.md: a
+         * richer entry demoted into this tier later (Kaneva, eventually)
+         * isn't meant to be trimmed to fit it.
          */
         tier: z.enum(['featured', 'archive']),
         /** Manual ordering within the featured tier. Required for featured. */

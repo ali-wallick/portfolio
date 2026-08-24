@@ -1018,8 +1018,17 @@ deliberate rather than incidental.
 **`role` fields carry the title only, not a scope.** Vegas Blvd Slots' `role` was
 `Software Engineer II — live-ops and slot-machine systems`, signed off at the Phase 3 gate and
 **superseded by Ali on 2026-08-24**: it is now just `Software Engineer II`. The scope was doing the
-prose's job in a metadata slot, and it was the last em dash in visible copy. This supersedes the
-Phase 3 execution note above.
+prose's job in a metadata slot. This supersedes the Phase 3 execution note above.
+
+**Correction, 2026-08-24 (#97): that change was not "the last em dash in visible copy," as this file
+claimed until now.** Five `role` fields carried the same em-dash-plus-scope shape, all of them
+rendered in the meta strip on `/projects` and on each project page. Prodigal's was trimmed with #97
+(`Solo — design, programming, and art` → `Solo developer`). Four remain, each recorded on its own
+page's content-pass issue rather than a new one: art-of-rescue (#89), critter-3 (#91),
+secret-garden (#98), tilting-at-windmills (#99). The sitewide claim was checked by walking the
+rendered DOM, not by reading the source — **the `<title>`/`og:title` template
+(`{title} — Ali Wallick`) also carries one on all 23 routes, and it stays**: it is a structural
+separator, not prose.
 
 **The Kaneva eleven-menu list stays.** The voice reference calls out "undirected list-dumping" as a
 habit not to carry forward, which made the list look like a cut. **Ali's call: keep it.** It is the
@@ -1038,6 +1047,58 @@ between text and an inline element, use `{' '}`, never a bare line break.**
 meta description. `/about` gives the start year (2011) instead, because four occurrences of one
 number across the site read as a tic. Ali also flagged that she expects to **cull the About page's
 job list** eventually, since it duplicates the resume's job — tracked separately, not done here.
+
+### Archive pages may carry a short body (2026-08-24, from #97)
+
+**Ali's call, and it sets the pattern for all 11 archive entries, not just the one it came up on.**
+
+Through Phase 3 every archive entry was summary-only: no Markdown body at all, so a detail page was
+its index card with a bigger hero on it. That followed from reading "compact scannable archive" as a
+statement about the tier rather than about the index, which was a reasonable reading under Phase 3's
+actual job (17 projects, correctness first) and stopped being the right answer once there was a
+design to read the pages in.
+
+**An archive entry may now carry a short body and a `gallery` where there is material worth having.**
+This is a general guideline, not a hard structural rule, and it's aimed at what the entries actually
+are right now: **mostly early student and jam work that doesn't need much detail.** A few short
+paragraphs is the common shape — Prodigal's actual body (below) is the reference for what "short"
+looks like — but there's no enforced cap and no blanket ban on the featured tier's
+`## What I built` / `## What I learned` headings. `src/content.config.ts`'s tier comment carries the
+same guideline, since it is the contract.
+
+**The case that keeps this from being a hard rule: Ali expects to eventually move Kaneva into the
+archive tier, and doesn't want that to mean losing much of its existing detail** (2026-08-24). A
+fifteen-year-old job is squarely "older," but Kaneva's write-up is a real one, not a compressed
+summary, and demoting it shouldn't force cutting it down to match what a 2009 class project needs.
+**Deliberately not solved now** — Ali's call is to revisit the actual shape when that move happens,
+not to pre-design a migration policy for one entry years ahead of it. What this file records today is
+narrower: the guideline is calibrated to small/early projects, not a ceiling on richer ones.
+
+**This is permission, not a quota.** An entry with nothing more to say stays summary-only, and that
+is a correct outcome rather than an unfinished one. Prodigal earned a body because the old page had
+three things the summary had dropped: the biblical parable the game is named for, the two-mode
+design (side-scrolling travel, top-down hunt), and Ali's own note that the opening and closing
+pictures aren't hers. The last of those was the load-bearing one — `role: Solo — design, programming,
+and art` was, on its own, a slightly _broader_ claim than what she wrote herself in 2009.
+
+**Two of Prodigal's three screenshots were already in `src/assets/` and referenced by nothing.**
+Worth checking for on any archive page before concluding it has no material: the Phase 3 asset
+migration moved the whole keep-list, and only the heroes ever got wired up.
+
+**Revised same day, on Ali's review: the page's own facts were incomplete, not just its tone.**
+Prodigal was her project for Georgia Tech's **CS 2261, Media Device Architecture**, built for the
+Game Boy Advance in **C and assembly** — a fact absent from every version of this page, old site
+included, and a stronger hook than the parable framing that was leading it. The body now opens with
+the course and the language instead of the story. `tech` gained `Assembly`; `event` gained the course
+number and name, matching the descriptive style Mini Mages already uses (`Georgia Tech senior
+capstone`) rather than a bare `Georgia Tech`. **Only the language name is stated — not an instruction
+set** (ARM, Thumb, or otherwise). CLAUDE.md's own rule elsewhere is not to guess "6502 assembly" for
+the Atari entry because the game is old, and the same restraint applies here: Ali named the language,
+not the ISA, so that is what's recorded.
+
+**Worth a look at Dead Booty** (same year, also real embedded hardware, `event: Georgia Tech` with no
+course given) **for the same course connection — not done here.** Ali's call: this is the first page
+worked, so let the pattern settle before sweeping siblings for it.
 
 ---
 
