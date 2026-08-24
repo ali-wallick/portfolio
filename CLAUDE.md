@@ -166,8 +166,16 @@ Use the skills — they encode the schema, the conventions, and the verification
 - `.claude/skills/add-project/` — add or update a project entry.
 - `.claude/skills/write-project-page/` — write a project write-up from source material.
 - `.claude/skills/write-copy/` — write or edit any prose on the site in Ali's voice.
+- `.claude/skills/content-pass/` — run one page of the #31 content revisit pass.
 - `.claude/skills/update-resume/` — add, update, or rebalance resume content.
 - `.claude/skills/pre-launch-check/` — the full pre-merge / pre-launch sweep.
+
+`content-pass` is the method and `write-copy` is the voice; a content-pass session uses both. The
+one thing it exists to enforce: **read the old page in `snapshot/` before deciding the current one
+is fine.** #31 calls itself an edit pass and not a re-reporting pass, which is right about facts and
+misleading about coverage — Phase 3 wrote every page by compressing an old one, and a pass that only
+reads the current page inherits every compression silently. That is how #97's page came to be clean,
+in voice, and missing the reason the game has its name.
 
 Note: the skill list loads at session start, so a skill added mid-session isn't invocable until the
 next one. Read its `SKILL.md` and follow it directly in that case.
