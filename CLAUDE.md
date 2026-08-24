@@ -395,14 +395,18 @@ pass still happens once, later, with fresh eyes and real styling.
 
 ## Phase 4 gate outcome (2026-08-17)
 
-Four questions, settled. Do not relitigate.
+Four questions, settled. Do not relitigate. **This section is the decision record — the rationale for
+why the resume works the way it does.** For the mechanics of actually adding or updating resume
+content (which files to touch, what to regenerate, what to commit together, the gotchas), use the
+`update-resume` skill (`.claude/skills/update-resume/SKILL.md`) instead of re-deriving it here.
+Keeping the how-to out of this file is deliberate: a second copy of the mechanism is exactly the kind
+of drift the content model's guard table exists to rule out.
 
 ### 1. Single source, with real PDF files
 
 **Single-source, and the PDFs are generated at build time** — not a `window.print()` link, and not a
 separately designed document. `/resume` and `/resume/full` render from the `jobs` and `education`
-collections, and `scripts/build-pdf.mjs` prints those exact pages with Chromium into `dist/resume.pdf`
-and `dist/resume-full.pdf` using the site's own print stylesheet.
+collections, printed to PDF with the site's own print stylesheet.
 
 The rejected option is worth naming so it doesn't come back: a hand-designed PDF looks sharper right
 up until the first time a job entry changes, and then it is a second copy of every fact on the site.
@@ -418,35 +422,32 @@ resume has actually been sent to someone. Nothing about the current setup blocks
 Ali wanted a one-page _and_ a two-page resume. The schema models it as one list plus an extension:
 `highlights` is the one-pager, `highlightsExtended` is appended for the long version. **The two-pager
 is a strict superset by construction**, so a bullet can never say one thing on the short version and
-something else on the long one — there is only ever one copy of it.
+something else on the long one — there is only ever one copy of it. `ResumeDocument.astro` is the
+only place either version renders; don't add a second component.
 
-`src/components/ResumeDocument.astro` is the only place either version renders; `variant` decides how
-much. Don't add a second component, and don't let the two routes accumulate their own copy.
-
-**`scripts/build-pdf.mjs` asserts page counts** (1 and 2) and fails the build if either overflows.
-This is a real guard, not a formality: bullets accrete, and without it the day someone adds a sixth
-Second Dinner highlight is the day the "one page" resume quietly becomes two — discovered by a hiring
-manager rather than by CI. If it fires, move a bullet to `highlightsExtended`; don't shrink the type.
-Print density is already at 9.4pt/1.3, which is normal resume density and close enough to the floor
-that further shrinking would show.
+A page-count assertion (1 page, 2 pages) fails the build if either overflows — a real guard, not a
+formality: bullets accrete, and without it the day someone adds one bullet too many is the day the
+"one page" resume quietly becomes two, discovered by a hiring manager rather than by CI. Print
+density is already at 9.4pt/1.3, which is normal resume density and close enough to the floor that
+further shrinking would show — the fix for an overflow is moving a bullet to `highlightsExtended`,
+not shrinking type.
 
 ### 3. Weighting and cuts
 
-One page, front-loaded: Second Dinner 5 bullets, MobilityWare 3, Red 5 2, Kaneva 3, one-line
-education, one Tools line. The two-pager adds 2 / 2 / 1 / 2 more.
+Front-loaded, and **not** derived straight from source material length — see the revision below for
+the current rule. The weighting problem is inverted from what you'd expect, and this is the thing to
+remember: the "Source material (2019 resume, verbatim)" sections are _richest for the oldest jobs_.
+Kaneva's had two solid bullets to draw from; Second Dinner — the most important entry — had one stale
+sentence about "an unannounced mobile Marvel game." **Second Dinner's highlights come from the
+Phase 3 Marvel Snap write-up, not from its 2019 bullet.** Writing bullets straight from source
+material would have produced a resume weighted backwards.
 
 - **The GPA and Dean's List stay recorded and unrendered.** They are in
   `src/content/education/georgia-tech.md` and `ResumeDocument` deliberately doesn't print `honors`.
   Recording a fact is not the same as showing it.
 - **No PO Box, and no home address at all.** There is no sourced current city, so the resume header
   carries email, site, and LinkedIn and nothing else. (The PO Box was never on the site — it only
-  exists in `resources/WallickAli-Resume.pdf`, which is not served. See the loose end below.)
-- **The weighting problem is inverted from what you'd expect**, and this is the thing to remember:
-  the "Source material (2019 resume, verbatim)" sections are _richest for the oldest jobs_. Kaneva
-  has two solid bullets; Second Dinner — seven years, the most important entry — has one stale
-  sentence about "an unannounced mobile Marvel game." **Second Dinner's highlights come from the
-  Phase 3 Marvel Snap write-up, not from its 2019 bullet.** Writing bullets straight from source
-  material would have produced a resume weighted backwards.
+  exists in `resources/WallickAli-Resume.pdf`, which is not served. See "The PO Box files" below.)
 
 ### Weighting revisited — recency-weighted, per-job minimums (2026-08-23, closes #37)
 
@@ -461,7 +462,7 @@ toward recency** — a more recent job earns more detail before an older one doe
 and Red 5 — the two oldest entries — were trimmed to a single one-pager bullet each (their other
 bullets moved to `highlightsExtended`, so the two-pager still carries the fuller record) to make room
 for Second Dinner's two new 2024–present bullets, rather than demoting an existing Second Dinner
-bullet. Current one-pager shape: Second Dinner 7, MobilityWare 3, Red 5 1, Kaneva 1.
+bullet.
 
 **Not a one-time cut — apply this whenever the budget gets tight again.** The oldest job with bullets
 still above its floor is where the next trim comes from, not whichever job happens to be already open.
@@ -471,9 +472,7 @@ still above its floor is where the next trim comes from, not whichever job happe
 **No agent logs into the account.** The deliverable is `docs/LINKEDIN.md` — paste-ready blocks for
 Ali. Its role descriptions are the `highlights` + `highlightsExtended` bullets verbatim, i.e. exactly
 `/resume/full`, so LinkedIn stays the same single source rather than becoming a fourth place a fact
-can go stale. **Generated, not hand-maintained, since [#54](https://github.com/ali-wallick/Portfolio/issues/54):**
-`scripts/build-linkedin.mjs` renders it from the `jobs` and `education` collections; the file itself
-says not to edit it directly.
+can go stale. **Generated, not hand-maintained, since [#54](https://github.com/ali-wallick/Portfolio/issues/54).**
 
 ### Promotion years — settled 2026-08-17, do not reopen
 
@@ -497,16 +496,16 @@ its authority. Ask rather than infer.
 
 ### Phase 4 closed with the resume factual enough to move on
 
-Ali's call. Three things were deferred as improvements to something already true, not corrections to
-something wrong, and all three are tracked rather than described here:
+Ali's call. Two things were deferred as improvements to something already true, not corrections to
+something wrong, and both are tracked rather than described here:
 
-- **[#37](https://github.com/ali-wallick/Portfolio/issues/37)** — detail the 2024–present Godot work, which exists on the resume today as a
-  single clause while every other era has real engineering detail. The Phase 3 ceiling above governs
-  it absolutely: **craft, not product.**
 - **[#32](https://github.com/ali-wallick/Portfolio/issues/32)** — a tone and layout pass. Phase 4 optimised for _true_ and _fits_, never for how
   it reads on paper.
 - **[#35](https://github.com/ali-wallick/Portfolio/issues/35)** — commit the print-geometry differ as a build guard, agreed 2026-08-18 to happen
   as part of that pass.
+
+(A third deferred item, detailing the 2024–present Godot work, was [#37](https://github.com/ali-wallick/Portfolio/issues/37) — closed 2026-08-23. See the
+weighting revision above for what shipped.)
 
 **The hazard behind #35 is not a task and belongs here.** `src/styles/resume.css`'s `@media print`
 block pins paper by redefining tokens, and it pins only the tokens that existed when it was written
@@ -559,28 +558,15 @@ Final, settled, do not reopen or re-derive:
 | **Platforms**       | iOS · Android · PC                         |
 
 **Mechanism: `src/config/resume.ts`, not a derivation of jobs' `tech`.** Before this decision the
-Tools section was `[...new Set(jobs.flatMap(j => j.data.tech))]` — every job's `tech` array, deduped.
-That stopped being able to produce the right answer the moment the list was curated by hand rather
-than derived: items needed to be dropped (DeltaDNA, C++, XML, ...) and others (Cursor, Claude Code)
-trace to no job at all. So **jobs' `tech` field is removed from the content model**, not repurposed —
-it had exactly one consumer, this line, and once the section stopped deriving from it, keeping an
-unread field around is exactly the kind of dead data this content model's guard table exists to rule
-out. `resumeTools` in `src/config/resume.ts` is a `Record<ResumeToolCategory, string[]>`: a tool is
-written down _inside_ one of the three category keys, so there is no way to add one without
-classifying it, and TypeScript's excess-property checking on that literal rejects a category that
-isn't one of the three declared — `npm run check` fails to compile rather than silently dropping the
-entry. Same shape as `STATUS_LABEL` in `src/lib/content.ts`: a status without a colour pair is a
-compile error there, not a silent fallback, and this is that rule applied to tools instead of
-statuses.
-
-**Three labelled rows cost real print height.** `ResumeDocument.astro` renders `RESUME_TOOL_CATEGORIES`
-as a `<dl>` of `dt`/`dd` pairs instead of one joined line; `resume.css` grew matching rules in both
-the screen and print halves. No new design tokens were needed — the new selectors are structural, not
-color or type — so `resume.css`'s `@media print` pin block didn't need a new entry. The one-pager still
-passes `build:pdf`'s page-count assertion at 1 page, with the committed baseline in
-`scripts/resume-print-baseline.json` updated to match (`check-resume-print.mjs --update`) — the geometry
-differ this file's Phase 5 section describes caught the shape change exactly as designed and it was
-reviewed as intentional, not a leak.
+Tools section was derived from every job's `tech` array, deduped — which stopped being able to
+produce the right answer once the list needed hand-curation (items dropped, others like Cursor and
+Claude Code tracing to no job at all). So **jobs' `tech` field is removed from the content model
+entirely**, not repurposed — it had exactly one consumer, and keeping an unread field around is
+exactly the kind of dead data the content model's guard table exists to rule out. `resumeTools` is
+written by hand, one tool per category key, with TypeScript rejecting a category that isn't one of
+the three declared. Full mechanism and the print-height consequence of the change are in the
+`update-resume` skill; the shape resolved to a `<dl>` in `ResumeDocument.astro`, no new design
+tokens needed.
 
 ---
 
