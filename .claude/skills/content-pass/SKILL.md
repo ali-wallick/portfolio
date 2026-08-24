@@ -156,6 +156,18 @@ already made — a caption reading "Touching one is instant death" next to a bod
 "...and touching a zombie means instant death" is a straight repeat a reader hits within one
 paragraph. Read the rendered page, not just the audit output, before calling a page done ([#92](https://github.com/ali-wallick/Portfolio/issues/92)).
 
+**Match caption line-wrap length across one gallery row, now that `.gallery` bottom-aligns.**
+`align-items: end` (added for #96, [#148](https://github.com/ali-wallick/Portfolio/pull/148)) flushes
+each _card's_ bottom edge to the row — image plus caption stacked — not each image's. A caption that
+wraps one line longer than its row-mates pushes its own image higher than theirs, even though the
+cards' bottoms line up exactly. This is what it-will-kill-you's third gallery caption did
+([#93](https://github.com/ali-wallick/Portfolio/issues/93)): the audit script won't catch it, because
+it measures text, not rendered layout. Whenever a gallery has 2+ items, check with the rendered page
+— `getBoundingClientRect()` on each `.gallery img`, or eyeball it at a normal desktop width — and
+shorten the outlier caption to match its neighbors' line count. A shorter caption is almost always the
+easier fix than lengthening the others. The step 10 sweep below found this already shipped, unnoticed,
+on two merged pages.
+
 **The archive tier's descriptive-only caption convention is a default, not an absolute.** Dead Booty
 and Prodigal's captions avoid "I"/"Ali" on purpose, matching the tier's lower-key framing. Night
 Light's ceiling-fan caption is first person anyway ("The ceiling fan: a prop I modeled for the
@@ -211,6 +223,13 @@ description current as the page moves — a comment noting what changed and why 
 but rewrite the description itself before the PR is done, so it reflects where the page landed and
 not just where it started.
 
+**Rebase onto `main` before finishing, especially with several content-pass branches active at
+once.** It-will-kill-you's branch picked up `align-items: end` (from #96/#148) partway through
+review after a rebase, which is what surfaced the caption/bottom-alignment interaction above — a
+stale branch would have merged without ever exercising that CSS. Content-pass PRs land in quick
+succession and several touch shared CSS (`.gallery`, `.media`), not just their own content file, so
+a branch opened even a day earlier can be missing a fix a sibling pass already shipped.
+
 ## 8. File what you found sideways
 
 A per-page pass keeps surfacing cross-page problems. **Comment on the affected page's own
@@ -250,6 +269,14 @@ sentence being negotiable rather than fixed (§4), archive bodies not being capp
 (§4), and the descriptive-only archive caption convention being a default to reach for, not a rule to
 defend against a direct request (§5).
 
+#93 (It Will Kill You) added one more, this time mechanical rather than a wording judgment call:
+the gallery caption/bottom-alignment interaction (§5), caught only because a post-merge rebase pulled
+in a sibling pass's CSS change mid-review, not because anything in the pass itself was looking for
+it. It also surfaced a real front-matter question — whether a multi-hat, non-job-title `role` should
+be a short comma-separated tag list (`Designer, Artist`) rather than a sentence — which turned out to
+already be `add-project`'s territory, not this skill's; see that skill's `role` guidance and
+[#152](https://github.com/ali-wallick/Portfolio/issues/152).
+
 **Not every pass will find something, and that's a fine outcome.** Don't manufacture a finding to
 fill the step. A page that needed no back-and-forth on wording is a page that confirmed the skills
 already cover it.
@@ -271,6 +298,14 @@ new tell or preference, spend a few minutes checking whether it already shipped 
 **Suggest, don't fix.** This step produces candidates for other pages' own content-pass issues (step
 8's mechanism), not new edits bundled into the current PR. A finding on another page is that page's
 pass, with its own branch and its own PR, per the one-page-one-PR rule this skill opened with.
+
+**#93's sweep for the caption/bottom-alignment interaction found it already live on two merged
+pages.** Every project's `gallery` array with 2+ items was checked at desktop width via rendered
+`getBoundingClientRect()`, not by eyeballing captions or counting characters — character count alone
+doesn't predict where a caption wraps. Dead Booty and Night Light both have one gallery image sitting
+noticeably higher than its row-mate; It Fits I Sits and Prodigal happen not to, because their
+captions wrap to matching line counts by coincidence, not by design. Commented on #92 and #96 with
+specific shortened-caption suggestions rather than fixing here.
 
 ## Open findings this skill has not resolved
 

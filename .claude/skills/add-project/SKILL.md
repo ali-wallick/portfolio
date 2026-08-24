@@ -32,7 +32,16 @@ Required to create anything:
 Strongly wanted, and **required before the entry can be published** (`draft: false`):
 
 - `summary` — one line, under 220 characters, used verbatim on cards and in the archive list.
-- `role` — in Ali's words. "Lead UI Programmer", not "Contributor".
+- `role` — in Ali's words. "Lead UI Programmer", not "Contributor". For an entry with more than one
+  hat and no single job title, use a short comma-separated tag list rather than a sentence —
+  `Designer, Artist`, not `Level design, virus character art, and modeling`. Agent nouns (Designer,
+  Artist, Programmer), not activity nouns (Design, Art, Programming) — that matches how every
+  job-derived role already reads elsewhere on the site (`Software Engineer`, `UI Programmer`).
+  Precedent: Dead Booty, It Will Kill You
+  ([#93](https://github.com/ali-wallick/Portfolio/issues/93)). It's still a hand-joined string today;
+  [#152](https://github.com/ali-wallick/Portfolio/issues/152) tracks converting `role` to a real
+  array to match `engine`/`platforms`/`tech`, rendered the same comma-joined way — write it as
+  comma-separated text until that lands.
 - `hero` — an image or a YouTube video.
 
 Optional but valuable: `engine`, `tech`, `platforms`, `teamSize`, `collaborators`, `event`, `job`,
