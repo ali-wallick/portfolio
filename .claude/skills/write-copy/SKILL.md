@@ -84,6 +84,14 @@ Things to cut on sight, because they aren't hers at any dosage:
   or a full stop. Parentheses are the most characteristic of her: _"(and went for multiplayer which
   is always a ridiculous game jam choice)"_. Splitting a 32-word em-dash sentence into two 16-word
   sentences usually fixes the length problem and the punctuation problem at once.
+- **The thesis-colon aphorism.** A complete declarative sentence, a colon, then a clause that mirrors
+  or restates it — _"The constraint was the whole project: say as much as possible with as few
+  pixels and colors as the system allowed."_ It's the mic-drop shape a model reaches for, and it's
+  dangerous precisely because it passes every other check here: no em dash, normal sentence length,
+  no banned words — and it still read as generated the moment Ali saw it ([#92](https://github.com/ali-wallick/Portfolio/issues/92)). State the idea
+  plainly instead: _"Working within its pixel and color limits ended up being most of the game
+  design."_ **Distinct from the positive move in §4.11** — that's a short noun label
+  ("Localization:") followed by ordinary explanation; this is a full sentence performing a reveal.
 - **Autopilot vocabulary**: leverage, robust, seamless, delve, myriad, plethora, testament,
   landscape, elevate, unlock, cutting-edge, "deep dive", "at the end of the day", "it's worth
   noting", "in today's ... world", ensure, utilize, facilitate. Write make sure, use, help.

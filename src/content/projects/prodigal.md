@@ -23,17 +23,15 @@ gallery:
     alt: >-
       Prodigal's top-down hunting screen, with the wolf chasing a rabbit across
       an open field and a timer counting down in the corner
-    caption: >-
-      The hunting screen. Catching the rabbit before the timer runs out is the
-      only way to get energy back.
+    caption: The hunting screen.
   - type: image
     src: ../../assets/images/projects/prodigal/screenshot2.png
     alt: >-
       Prodigal's title screen, a photograph of a running wolf with the game's
       logo and a Start / Instructions menu
-    caption: The title screen. That wolf photo is one of the two pictures I didn’t make.
+    caption: The title screen.
 draft: false
 ---
 
-A wolf leaves its pack to find food and has to get home without running out of energy, hunting along
-the way on a separate top-down screen with a rabbit and a timer.
+A wolf leaves its pack to find food and has to get home before running out of energy. Along the way,
+it hunts on a separate top-down screen with a rabbit and a timer.

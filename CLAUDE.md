@@ -1089,6 +1089,17 @@ design (side-scrolling travel, top-down hunt), and Ali's own note that the openi
 pictures aren't hers. The last of those was the load-bearing one — `role: Solo — design, programming,
 and art` was, on its own, a slightly _broader_ claim than what she wrote herself in 2009.
 
+**Correction, 2026-08-24 (#92): the load-bearing reasoning above no longer holds, and the caption it
+justified is gone.** `role` was trimmed sitewide to a title with no scope (see "The wording pass"
+below) — Prodigal's is `Solo developer` now, not `Solo — design, programming, and art` — so the
+overclaim the wolf-photo caption was correcting doesn't exist any more. Ali's call on #92 was to cut
+that sentence from the caption entirely rather than keep it as now-unnecessary color: **"it's so old
+it's more just for fun to show cool old projects."** That's a calibration worth carrying to the rest
+of this tier, not just a Prodigal fact: a caption doesn't need to preserve a credit-scope caveat
+forever once the metadata it was correcting stops overclaiming, and the oldest/smallest entries get
+the least precious treatment. The underlying rule — don't claim more credit than the source supports
+— still lives in `role` itself; it just doesn't also need a caption saying so.
+
 **Two of Prodigal's three screenshots were already in `src/assets/` and referenced by nothing.**
 Worth checking for on any archive page before concluding it has no material: the Phase 3 asset
 migration moved the whole keep-list, and only the heroes ever got wired up.

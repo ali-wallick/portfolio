@@ -127,6 +127,19 @@ A low first-person count on an archive page is also fine and not worth chasing.
 (`didn't`). Both render on the same page, and a caption next to a paragraph shows the difference.
 Type the curly apostrophe directly in YAML when the two sit near each other.
 
+**Lean third person when describing gameplay, not "you."** Not a hard rule — but "You play a pirate
+hunting..." can read a little like an instruction manual for a portfolio site, where "A pirate
+hunts..." reads more like a synopsis. Prodigal's body already does this ("A wolf leaves its pack to
+find food..."). Worth a second look whenever "you" shows up describing a mechanic, since it's an
+easy default to reach for without noticing. Caught on dead-booty ([#92](https://github.com/ali-wallick/Portfolio/issues/92)) after shipping with "you"
+first.
+
+**Check a caption against the body it sits next to.** The audit script measures each field in
+isolation, so it won't catch a gallery caption restating a fact the body paragraph right above it
+already made — a caption reading "Touching one is instant death" next to a body sentence ending
+"...and touching a zombie means instant death" is a straight repeat a reader hits within one
+paragraph. Read the rendered page, not just the audit output, before calling a page done ([#92](https://github.com/ali-wallick/Portfolio/issues/92)).
+
 ## 6. Verify
 
 ```bash
@@ -158,6 +171,15 @@ gh pr create --title "Content pass: /projects/<slug> (#<n>)" --body "..."
 The PR body should say **what the old page had that the new one didn't**, what you cut on purpose,
 and the measured numbers. Not a diff summary — the diff is right there.
 
+**Offer options on lines that carry weight, not just a single rewrite.** For a sentence doing real
+interpretive work — the summary's hook, a body's framing sentence, anything Ali is likely to have a
+personal reaction to — draft two or three genuine alternatives and let her pick, rather than
+committing to one and waiting to be corrected. It's cheaper for her to react to three short options
+than to describe in prose what's off about a single line, and it's how the dead-booty pass
+([#92](https://github.com/ali-wallick/Portfolio/issues/92)) actually landed its best sentences — including the fix for the "thesis-colon aphorism" tell
+in `write-copy`. Not every line needs this: captions, plumbing, and anything low-stakes are fine as
+a single pass.
+
 **Budget for more than one round.** Prodigal's PR went through three rounds of changes after the
 first audit-driven draft — dropping a credit that didn't hold up, a full reframe around a fact only
 Ali had, then a further trim once the reframe made two earlier paragraphs read as clutter. None of
@@ -182,6 +204,44 @@ Issue numbers, for reference: #89 art-of-rescue, #90 cor-ex-machina, #91 critter
 **And correct `CLAUDE.md` when the pass disproves something in it.** It's the file every session
 reads first, which makes a false line there more expensive than anywhere else. #97 found that its
 claim about em dashes being eliminated was wrong by four instances.
+
+## 9. Before merging, pass the skills themselves
+
+A page-level pass is also a data point on `content-pass` and `write-copy` — every conversation is a
+live test of whether the guidance in them actually holds up against a real page and Ali's real
+reactions. Before the PR merges, look back over what happened: a tell that slipped through every
+mechanical check until Ali caught it on read, a line of guidance that turned out too rigid (or was
+missing entirely), a working pattern worth naming so the next pass starts with it instead of
+reinventing it. If a future pass would hit the same thing blind, write it into the skill that governs
+it now rather than leaving it to be rediscovered.
+
+This is exactly how #92 produced three things: `write-copy`'s "thesis-colon aphorism" tell (a
+construction that passed every existing check and still read as generated), `content-pass`'s "offer
+options on lines that carry weight" preference, and the lean toward third person over "you" in
+gameplay descriptions. None of them were anticipated going in — they came from reading back over the
+pass once the content itself was settled.
+
+**Not every pass will find something, and that's a fine outcome.** Don't manufacture a finding to
+fill the step. A page that needed no back-and-forth on wording is a page that confirmed the skills
+already cover it.
+
+## 10. Sweep previously-updated content for what step 9 just found
+
+The skills only improve going forward. A page that content-pass or write-copy already touched can
+still be carrying a pattern that didn't have a name yet when it was written — #92's own summary
+shipped a thesis-colon aphorism that every mechanical check waved through. When step 9 produces a
+new tell or preference, spend a few minutes checking whether it already shipped somewhere else.
+
+- **Mechanical patterns** (em dashes, a caption repeating its body) — the audit script's `--all`
+  sweep or a targeted grep gets there fast.
+- **Phrasing patterns that aren't mechanically detectable** (the thesis-colon aphorism, second-person
+  gameplay descriptions) — spot-check pages a content-pass has already run on, since those are the
+  ones written under a version of the skill that didn't know about the pattern yet. The issue list in
+  step 8 is the roster; sitewide passes like #31/#134 count too.
+
+**Suggest, don't fix.** This step produces candidates for other pages' own content-pass issues (step
+8's mechanism), not new edits bundled into the current PR. A finding on another page is that page's
+pass, with its own branch and its own PR, per the one-page-one-PR rule this skill opened with.
 
 ## Open findings this skill has not resolved
 
