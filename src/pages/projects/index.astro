@@ -32,7 +32,7 @@ const total = featured.length + archive.length;
             <span class="card-index" aria-hidden="true">
               {String(i + 1).padStart(2, '0')}
             </span>
-            <ProjectVisual project={project} />
+            <ProjectVisual project={project} aspect="square" />
             <div class="card-body">
               <h3 class="card-title">{project.data.title}</h3>
               <ProjectMeta project={project} />
@@ -60,7 +60,7 @@ const total = featured.length + archive.length;
       archive.map((project) => (
         <li>
           <a class="tile" href={`/projects/${project.id}`}>
-            <ProjectVisual project={project} size="tile" />
+            <ProjectVisual project={project} size="tile" aspect="wide" />
             <h3 class="tile-title">{project.data.title}</h3>
             <ProjectMeta project={project} />
           </a>

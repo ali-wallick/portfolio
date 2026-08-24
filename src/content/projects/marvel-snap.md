@@ -12,6 +12,16 @@ tech: [C#]
 platforms: [iOS, Android, PC]
 job: second-dinner
 role: Client Engineer, then Feature Engineer
+# Card/tile thumbnail override — the official app icon, not the video poster
+# frame `projectThumb()` would otherwise fall back to (which has a burned-in
+# "OFFICIAL ANNOUNCE" / "© 2022 MARVEL" bug). See #64.
+thumb: ../../assets/images/projects/marvel-snap/thumb-logo.jpg
+# Wide (homepage) thumbnail — official key art (character roster + wordmark),
+# sourced by Ali from MobyGames. Chosen over an in-game screenshot (a card
+# reveal moment, tried first) because it reads more clearly at the rendered
+# thumbnail size — that legibility test, not the source type, is what
+# actually decided it. See #64.
+thumbWide: ../../assets/images/projects/marvel-snap/thumb-wide.jpg
 hero:
   type: youtube
   id: 61zjv1HcJDI

@@ -17,6 +17,14 @@ platforms: []
 job: mobilityware
 role: Pitch, prototype, and level editor
 summary: Pitched and prototyped a mobile puzzle game about cats fitting in boxes at a company game jam, won People's Choice, and built the level editor that made the demo possible.
+# Card/tile thumbnail override — a square crop of the same Puzzle Cats key
+# art centered on its wordmark, rather than the wide banner `hero` uses.
+# See #64.
+thumb: ../../assets/images/projects/it-fits-i-sits/thumb-square.webp
+# Wide (homepage) thumbnail — a tighter 16:9 crop of the same key art than
+# the full `hero` banner falls back to by default: zoomed in enough that the
+# wordmark reads clearly at thumbnail size. See #64.
+thumbWide: ../../assets/images/projects/it-fits-i-sits/thumb-wide.webp
 hero:
   type: image
   src: ../../assets/images/projects/it-fits-i-sits/puzzle-cats-banner.webp

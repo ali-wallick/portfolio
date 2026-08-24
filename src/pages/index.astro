@@ -36,7 +36,13 @@ const currentNote = await getCurrentNote();
       the archive's twelve get the compact treatment on /projects, so the two
       tiers differ structurally and not only in what they are called. */
   }
-  <ul class="card-grid">
+  {
+    /* Bigger than /projects' 9rem default (base.css) — wide cards with no
+       summary paragraph beside them read better a little larger here than
+       the square ones on /projects do. Settled on a live slider comparing
+       both pages side by side (#64). */
+  }
+  <ul class="card-grid" style="--thumb-card-size: 12rem">
     {
       featured.map((project, i) => (
         <li>
@@ -44,7 +50,7 @@ const currentNote = await getCurrentNote();
             <span class="card-index" aria-hidden="true">
               {String(i + 1).padStart(2, '0')}
             </span>
-            <ProjectVisual project={project} />
+            <ProjectVisual project={project} aspect="wide" />
             <div class="card-body">
               <h3 class="card-title">{project.data.title}</h3>
               <ProjectMeta project={project} />

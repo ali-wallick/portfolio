@@ -32,14 +32,15 @@ interface Props {
   project: Project;
   /** Tiles are small enough to want a different crop and a smaller request. */
   size?: 'card' | 'tile';
+  aspect: 'square' | 'wide';
 }
 
-const { project, size = 'card' } = Astro.props;
-const src = projectThumb(project);
+const { project, size = 'card', aspect } = Astro.props;
+const src = projectThumb(project, aspect);
 
 // Widths are the rendered box at 2x, not the source size — the point of going
 // through `image()` is not shipping a 1280px file into a 200px slot.
-const widths = size === 'card' ? [320, 640] : [240, 480];
+const widths = size === 'card' ? [144, 288] : [240, 480];
 ---
 
 {
@@ -50,7 +51,7 @@ const widths = size === 'card' ? [320, 640] : [240, 480];
         alt=""
         widths={widths}
         sizes={
-          size === 'card' ? '(max-width: 40rem) 100vw, 16rem' : '(max-width: 40rem) 50vw, 12rem'
+          size === 'card' ? '(max-width: 40rem) 100vw, 9rem' : '(max-width: 40rem) 50vw, 12rem'
         }
         loading="lazy"
         decoding="async"

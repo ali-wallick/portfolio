@@ -10,6 +10,22 @@ tech: [Lua]
 platforms: [PC]
 job: kaneva
 role: Software Engineer
+# Square card/tile thumbnail (on /projects) — the Kaneva cube icon, cropped
+# from the full lockup Ali provided and padded to a square canvas. Icon only,
+# no wordmark: the full lockup's text reads too small in the shared square
+# frame (the wordmark is proportionally wider than Firefall's badge was), and
+# the card title already carries the name. Padded onto a fixed light plate
+# (--color-surface, light mode) rather than left transparent — the logo's
+# wordmark is near-black and was unreadable against the dark theme's card
+# background. `-v2`: renamed, not just re-saved — Astro's dev image endpoint
+# caches by URL for a year, so overwriting the same filename left Safari
+# showing the pre-fix version indefinitely. See #64.
+thumb: ../../assets/images/projects/kaneva/thumb-logo-v2.png
+# Wide card thumbnail (on the homepage) — the full lockup this time, cropped
+# tight and padded to 16:9, same fixed light plate as `thumb` above. Ali's
+# call: the best available, given there's no real capture from her time
+# there.
+thumbWide: ../../assets/images/projects/kaneva/thumb-logo-wide-v2.png
 hero:
   type: image
   src: ../../assets/images/projects/kaneva/screenshot1.png

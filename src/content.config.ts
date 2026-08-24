@@ -172,6 +172,15 @@ const projects = defineCollection({
         thumb: image().optional(),
 
         /**
+         * The same override as `thumb`, for a 16:9 context instead of a
+         * square one (#64). Optional and usually absent for the same reason
+         * `thumb` is: `projectThumb()` in src/lib/content.ts falls back to
+         * the hero image or its poster frame when this isn't set, so most
+         * projects need nothing here at all.
+         */
+        thumbWide: image().optional(),
+
+        /**
          * Draft entries render in `astro dev` and on preview deploys, and are
          * excluded from the production build. Every project seeded in Phase 2
          * is a draft: the metadata is real, the prose is Phase 3's job.

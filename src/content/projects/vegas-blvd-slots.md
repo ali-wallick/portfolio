@@ -10,6 +10,14 @@ tech: [C#, DeltaDNA]
 platforms: [iOS, Android]
 job: mobilityware
 role: Software Engineer II — live-ops and slot-machine systems
+# Card/tile thumbnail override — the app icon, not the video poster frame.
+# Sourced via an APKPure mirror since the listing is delisted from both
+# stores (see the dead store links below). See #64.
+thumb: ../../assets/images/projects/vegas-blvd-slots/thumb-logo.png
+# Wide (homepage) thumbnail — a "BIG WIN" store-listing screenshot Ali
+# sourced, replacing the video poster frame (a trailer still, less crisp
+# than a real gameplay capture). See #64.
+thumbWide: ../../assets/images/projects/vegas-blvd-slots/thumb-wide.jpg
 hero:
   type: youtube
   id: 8gtbz_T4-yY

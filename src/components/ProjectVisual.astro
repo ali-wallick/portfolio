@@ -24,16 +24,18 @@ import { projectThumb, type Project } from '~/lib/content';
 interface Props {
   project: Project;
   size?: 'card' | 'tile';
+  /** No default — every call site sets this explicitly (#64). */
+  aspect: 'square' | 'wide';
 }
 
-const { project, size = 'card' } = Astro.props;
-const src = projectThumb(project);
+const { project, size = 'card', aspect } = Astro.props;
+const src = projectThumb(project, aspect);
 ---
 
-<div class="visual" data-size={size}>
+<div class="visual" data-size={size} data-aspect={aspect}>
   {
     src ? (
-      <ProjectThumb project={project} size={size} />
+      <ProjectThumb project={project} size={size} aspect={aspect} />
     ) : (
       <ProjectCardArt project={project} size={size} />
     )

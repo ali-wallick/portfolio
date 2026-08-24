@@ -141,11 +141,23 @@ const POSTERS = Object.fromEntries(
  * The image to show for a project on a card or tile, or `undefined` when there
  * isn't one.
  *
- * Three sources, in order of how much they were chosen for this job:
+ * `aspect` picks which override wins — `thumb` for a square context, `thumbWide`
+ * for a 16:9 one (#64: the featured cards read better wide on the homepage,
+ * where there's no summary paragraph beside them, and square on /projects and
+ * the archive tiles). Whichever one is unset falls through to the same shared
+ * source, so a project with no `thumbWide` isn't missing an image — it gets
+ * the general-purpose one instead:
  *
- *   1. `thumb` in front matter — an explicit override, normally absent.
+ *   1. `thumb` / `thumbWide` in front matter — an explicit override, normally
+ *      absent, and the only step that differs by `aspect`.
  *   2. An image `hero` — already a still of the work, so it is its own thumbnail.
  *   3. A poster frame — for the nine projects whose hero is a video.
+ *
+ * That fallback is why It Fits I Sits and Kaneva need no `thumbWide` at all —
+ * their `hero` is already an image suited to either shape. It's also why the
+ * three projects with a video `hero` (Marvel Snap, Vegas Blvd Slots, Firefall)
+ * still show a YouTube poster frame in the wide slot until a real wide capture
+ * lands in `thumbWide`: the fallback has nothing better to reach for.
  *
  * ## Why there is no `alt` here
  *
@@ -168,9 +180,13 @@ const POSTERS = Object.fromEntries(
  * explicitly empty alt and still rejects a missing one, which is the
  * distinction the guard was always meant to draw.
  */
-export function projectThumb(project: Project): ImageMetadata | undefined {
-  const { thumb, hero } = project.data;
-  if (thumb) return thumb;
+export function projectThumb(
+  project: Project,
+  aspect: 'square' | 'wide' = 'square',
+): ImageMetadata | undefined {
+  const { thumb, thumbWide, hero } = project.data;
+  const override = aspect === 'wide' ? thumbWide : thumb;
+  if (override) return override;
   if (hero?.type === 'image') return hero.src;
   return POSTERS[project.id];
 }

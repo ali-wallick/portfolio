@@ -10,6 +10,15 @@ tech: [Lua, XML, C++]
 platforms: [PC]
 job: red-5-studios
 role: UI Programmer
+# Card/tile thumbnail override — the official wordmark, padded to a square
+# canvas so it isn't cropped by the shared 1:1 thumbnail frame. See #64.
+thumb: ../../assets/images/projects/firefall/thumb-logo.png
+# Wide (homepage) thumbnail — the game's own in-engine title screen, sourced
+# by Ali from MobyGames. Replaced an MMORPG.com press screenshot (mech vs.
+# sky) that was the best available before this turned up. `-v2`: renamed
+# after a crop tweak, not just re-saved — see the note on Kaneva's `thumb`
+# for why. See #64.
+thumbWide: ../../assets/images/projects/firefall/thumb-wide-v2.jpg
 hero:
   type: youtube
   id: 2cxeAhxSoyo

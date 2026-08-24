@@ -945,7 +945,7 @@ hr {
 .thumb img,
 .card-art {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 1;
   object-fit: cover;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
@@ -956,9 +956,17 @@ hr {
   display: block;
 }
 
+/* Square is the default; wide is an explicit opt-in per call site (#64) — the
+   homepage's featured cards use it, /projects' featured cards and the archive
+   tiles don't. See the `aspect` prop on ProjectVisual.astro. */
+.visual[data-aspect='wide'] .thumb img,
+.visual[data-aspect='wide'] .card-art {
+  aspect-ratio: 16 / 9;
+}
+
 .visual[data-size='card'] {
   flex: none;
-  width: 16rem;
+  width: var(--thumb-card-size, 9rem);
 }
 
 /* In a tile the visual leads, so it spans the full width and sits above the
@@ -1159,6 +1167,18 @@ hr {
   .visual[data-size='card'] {
     order: -1;
     width: 100%;
+  }
+
+  /* A square crop (#64) reads as oversized full-bleed at phone width — a
+     16:9 crop at the same width is much shorter and doesn't have this
+     problem, so this only targets the square variant. `.visual` itself
+     stays at 100% so it still forces the title/metadata onto their own row
+     below it; capping the image inside it instead keeps that wrap trigger
+     intact. */
+  .visual[data-size='card'][data-aspect='square'] .thumb img,
+  .visual[data-size='card'][data-aspect='square'] .card-art {
+    max-width: 11rem;
+    margin: 0 auto;
   }
 
   /* The ranking number keeps its row with the title rather than sitting alone
