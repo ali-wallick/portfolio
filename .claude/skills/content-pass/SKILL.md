@@ -86,6 +86,12 @@ doesn't:
   surfaced it; it only came out once Ali saw the draft and reacted. Don't treat "the sources are
   exhausted" as "the facts are exhausted." If a page still reads generic after the audit and the
   old page, ask her directly before writing final copy.
+- **What does the old page call the thing itself?** Not every project is comfortable being called
+  "a game." Night Light's draft defaulted to "the whole game" out of habit; Ali's reaction was
+  "game is a stretch for what this is." The old page had already hedged this, unread until then —
+  "Although this is considered a 'scene,' it has definite game elements" — so the fix was sitting
+  in the primary source the whole time. Check what noun the old page reaches for (scene, piece,
+  demo, sketch) before defaulting to "game," especially for coursework and non-interactive pieces.
 
 ## 4. Decide the shape before writing
 
@@ -103,7 +109,17 @@ The tiers behave differently, and `src/content.config.ts` is the contract:
   calibrated to what the tier mostly is — early student and jam work that doesn't need much — not a
   ceiling on a richer entry demoted into it later. Prodigal shipped at one short paragraph after two
   rounds of trimming a longer draft — that trend (write more than you'll need, then cut on review)
-  is the working reference, not a word count.
+  is the working reference, not a word count. **Nor is it a one-paragraph rule.** Night Light shipped
+  two — a concept sentence, then the contribution detail — once Ali asked for the split. One
+  paragraph is the common shape because most archive entries only have one idea; add a second when
+  there are genuinely two (what it is, versus what she built), don't force a run-on to preserve a
+  paragraph count nobody asked for.
+- **The summary/body split for the concept sentence is negotiable, not fixed.** Every summary so far
+  has paired a context sentence with a concept/hook sentence, contribution detail going in the body.
+  Night Light moved the hook sentence ("Comfort a boy afraid of the dark...") out of the summary and
+  into the body instead, on Ali's call, leaving the summary as a single context-only sentence. If a
+  body exists for a page, the concept sentence doesn't have to live in the summary by default — ask
+  if it's not obvious which reads better.
 
 **If the shape changes, that is a decision, not an edit.** Stop and get Ali's call, because it sets
 a pattern across a tier rather than fixing one page. Then record it in `CLAUDE.md` _and_ in
@@ -139,6 +155,12 @@ isolation, so it won't catch a gallery caption restating a fact the body paragra
 already made — a caption reading "Touching one is instant death" next to a body sentence ending
 "...and touching a zombie means instant death" is a straight repeat a reader hits within one
 paragraph. Read the rendered page, not just the audit output, before calling a page done ([#92](https://github.com/ali-wallick/Portfolio/issues/92)).
+
+**The archive tier's descriptive-only caption convention is a default, not an absolute.** Dead Booty
+and Prodigal's captions avoid "I"/"Ali" on purpose, matching the tier's lower-key framing. Night
+Light's ceiling-fan caption is first person anyway ("The ceiling fan: a prop I modeled for the
+scene.") because Ali asked for it directly, to credit a specific contribution the caption sits next
+to. Reach for the descriptive default; don't defend it against a direct request to do otherwise.
 
 ## 6. Verify
 
@@ -220,6 +242,13 @@ construction that passed every existing check and still read as generated), `con
 options on lines that carry weight" preference, and the lean toward third person over "you" in
 gameplay descriptions. None of them were anticipated going in — they came from reading back over the
 pass once the content itself was settled.
+
+#96 (Night Light) produced a second round of these, this time from several rounds of Ali reacting to
+the live preview across one PR rather than a single pre-merge draft: checking what the old page
+itself calls the thing before defaulting to "game" (§3), the summary/body split for the concept
+sentence being negotiable rather than fixed (§4), archive bodies not being capped at one paragraph
+(§4), and the descriptive-only archive caption convention being a default to reach for, not a rule to
+defend against a direct request (§5).
 
 **Not every pass will find something, and that's a fine outcome.** Don't manufacture a finding to
 fill the step. A page that needed no back-and-forth on wording is a page that confirmed the skills
