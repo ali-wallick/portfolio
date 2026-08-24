@@ -13,7 +13,7 @@ collaborators:
   - name: Matt Lovett
   - name: Robert Spessard
     url: https://robertspessard.com
-role: Level design, virus character art, and modeling
+role: Designer, Artist
 summary: >-
   A two-player head-to-head Georgia Tech class project. One player is a
   virus-infected human racing for a cure. The other is the virus trying to
@@ -22,6 +22,28 @@ hero:
   type: youtube
   id: Erk81CCfc5A
   title: It Will Kill You gameplay
+gallery:
+  - type: image
+    src: ../../assets/images/projects/it-will-kill-you/level.jpg
+    alt: >-
+      The level map for It Will Kill You, its outline shaped like a human
+      body and divided into nodes for the head, arms, and legs
+    caption: The level, shaped like the body it's fought over.
+  - type: image
+    src: ../../assets/images/projects/it-will-kill-you/character.jpeg
+    alt: >-
+      The virus character model, a spiked capsule with a coiled core, sitting
+      on a partially built rig
+    caption: The virus, modeled after a bacteriophage.
+  - type: image
+    src: ../../assets/images/projects/it-will-kill-you/modeling.jpeg
+    alt: The textured body-border model that outlines the virus-side level
+    caption: The body border, modeled to frame the level.
 links: []
 draft: false
 ---
+
+The level is shaped like the human body, with nodes mapped to the arms, legs, and eyes for the virus
+to attack. I designed it. The trick was keeping the human from getting cornered in a narrow limb
+while the virus closed in from every side. I also modeled the virus character after a bacteriophage,
+and most of the virus-side level geometry.
