@@ -927,13 +927,20 @@ file. Combined with #21 splitting the cutover out on its own, the natural replac
 each stage relative to the one event that matters — **pre-launch, launch, post-launch**:
 
 - **Pre-launch** — everything that must be true before the domain moves. What "Phase 6" tracked,
-  minus the cutover itself. GitHub milestone `Pre-launch` (was `Phase 6 — Launch`), issue label
-  `pre-launch` (was `phase-6`).
+  minus the cutover itself. GitHub milestone `Pre-launch` (was `Phase 6 — Launch`).
 - **Launch** — the cutover session itself: #34, #55, and [#74](https://github.com/ali-wallick/Portfolio/issues/74)
-  (flip `live` to `true` in the same PR as the cutover). New GitHub milestone `Launch`, new label
-  `launch`.
+  (flip `live` to `true` in the same PR as the cutover). New GitHub milestone `Launch`.
 - **Post-launch** — everything after. What "Phase 7" tracked. GitHub milestone `Post-launch` (was
-  `Phase 7 — Keep it alive`), issue label `post-launch` (was `phase-7`).
+  `Phase 7 — Keep it alive`).
+
+**Stage is tracked by milestone alone, not a matching label.** Phase 6 originally paired each
+milestone with an identically-named label (`pre-launch`, `launch`, `post-launch`), but by
+2026-08-23 every issue's label was a 1:1 echo of its milestone — pure duplication, and it had
+already drifted out of sync on two issues. The three labels were deleted; `decision` and
+`needs-ali` stay, since those cut across milestones rather than mirroring one. `launch-blocker`
+also stays — coincidentally 1:1 with the Launch milestone today, but conceptually distinct (a
+pre-launch issue could someday be a genuine blocker too), so it isn't redundant the way the stage
+labels were.
 
 **Phases 0–5 keep their numbers.** They're a closed historical record — each has a dated gate
 outcome and an execution outcome below, and renaming them buys nothing while breaking every
