@@ -37,7 +37,7 @@ Strongly wanted, and **required before the entry can be published** (`draft: fal
   `Designer, Artist`, not `Level design, virus character art, and modeling`. Agent nouns (Designer,
   Artist, Programmer), not activity nouns (Design, Art, Programming) — that matches how every
   job-derived role already reads elsewhere on the site (`Software Engineer`, `UI Programmer`).
-  Precedent: Dead Booty, It Will Kill You
+  Precedent: Dead Booty, It Will Kill You, Mini Mages
   ([#93](https://github.com/ali-wallick/Portfolio/issues/93)). It's still a hand-joined string today;
   [#152](https://github.com/ali-wallick/Portfolio/issues/152) tracks converting `role` to a real
   array to match `engine`/`platforms`/`tech`, rendered the same comma-joined way — write it as

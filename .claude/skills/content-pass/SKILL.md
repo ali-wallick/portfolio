@@ -135,6 +135,17 @@ The tiers behave differently, and `src/content.config.ts` is the contract:
 a pattern across a tier rather than fixing one page. Then record it in `CLAUDE.md` _and_ in
 `content.config.ts`'s tier comment, since a decision recorded in one place drifts.
 
+**A bulleted list is a valid shape for an archive body when there are 3+ enumerable named things.**
+Settled 2026-08-24 on mini-mages ([#95](https://github.com/ali-wallick/Portfolio/issues/95)). The
+first draft described three named mini-games as three sentences run together, each starting with the
+game's name as its subject ("Summon is...", "Potions is...", "Dragon Battle..."). Ali's read on the
+branch preview: a scannable list beats that pattern once every sentence has the same shape. Use the
+bold-label convention Marvel Snap's featured write-up already established
+(`**Label.** Explanation.`), but at list-item scale: `**Label:** clause.` — colon rather than period,
+because a list item is usually one clause, not a full sentence, and the word after the colon is
+capitalized. This isn't a general license for lists in archive bodies; reach for it specifically when
+the alternative is several sentences that all open with a proper noun and a linking verb.
+
 ## 5. Write it
 
 Follow `write-copy`. Then measure both ways — they answer different questions:
@@ -165,6 +176,14 @@ isolation, so it won't catch a gallery caption restating a fact the body paragra
 already made — a caption reading "Touching one is instant death" next to a body sentence ending
 "...and touching a zombie means instant death" is a straight repeat a reader hits within one
 paragraph. Read the rendered page, not just the audit output, before calling a page done ([#92](https://github.com/ali-wallick/Portfolio/issues/92)).
+
+**Prefer real game-dev vocabulary over a familiar everyday metaphor when describing a mechanic.**
+Mini-mages' first draft described Dragon Battle's controls as the iPhones becoming "steering
+wheels" — accurate, but a car metaphor for what a game developer would just call tilt controls.
+Ali's fix on [#95](https://github.com/ali-wallick/Portfolio/issues/95): "tilt controllers." Same
+accelerometer input either way; only one phrasing sounds like it was written by someone who builds
+games, which is the whole brief (CLAUDE.md: "obvious a game developer made this"). Worth a second
+look whenever a mechanic is described via a real-world analogy instead of its actual game-dev name.
 
 **Match caption line-wrap length across one gallery row, now that `.gallery` bottom-aligns.**
 `align-items: end` (added for #96, [#148](https://github.com/ali-wallick/Portfolio/pull/148)) flushes
