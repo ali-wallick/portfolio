@@ -9,7 +9,7 @@ tech: [C, Assembly]
 platforms: [Game Boy Advance]
 event: Georgia Tech, CS 2261
 teamSize: 1
-role: Solo developer
+role: Solo Developer
 summary: >-
   My project for Georgia Tech's Media Device Architecture course, programming
   a Game Boy Advance game in C and assembly.

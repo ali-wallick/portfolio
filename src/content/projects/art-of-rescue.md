@@ -12,7 +12,7 @@ collaborators:
   - name: Raschel Mead
   - name: Erica Penk
   - name: Katie Stokes
-role: Lead programmer
+role: Programmer
 summary: >-
   A Flash prototype that teaches art history through platforming. Free the
   trapped artists through levels made from their own famous motifs.
