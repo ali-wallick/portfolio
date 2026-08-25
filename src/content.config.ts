@@ -53,6 +53,13 @@ const year = z
  * the old site linked firefall.com, kaneva.com and argamestudio.org for years
  * after they went dark. Components render dead links as plain text, so the
  * credit survives without the broken promise.
+ *
+ * Check the Wayback Machine before reaching for `dead: true` on a citation
+ * worth keeping clickable — e.g. a press writeup that corroborates a credit,
+ * as opposed to a store listing or a site's own homepage, where the fact of
+ * its having existed isn't the point. If a snapshot renders the real page,
+ * use it as `url` (append " (via Wayback Machine)" to `label`) instead of
+ * marking the link dead. See secret-garden.md.
  */
 const link = z.object({
   label: z.string().min(1),

@@ -80,6 +80,16 @@ doesn't:
   `role` field can be broader than the sentence it was compressed from.
 - **What is safe to drop?** Old pages carry control manuals, "click here to play" for dead
   downloads, and second-person instructions. Cut those without ceremony.
+- **Before marking a `links[]` entry `dead: true`, check the Wayback Machine.** A citation worth
+  keeping clickable — a press writeup that corroborates a credit, especially — is worth more as a
+  working archived link than as the "No longer online: X" plain text `dead: true` renders. Store
+  listings and a project's own dead homepage are a weaker case: the fact of having existed usually
+  isn't the point, so plain `dead: true` (or dropping the link) is fine there. Settled on
+  secret-garden (#98): its Qualcomm AR Game Studio writeup swapped a 404'd `argamestudio.org` URL
+  for a working `web.archive.org` snapshot, label suffixed `(via Wayback Machine)`, `dead` dropped
+  entirely since the link now resolves. See `content.config.ts`'s `link` schema comment, which
+  carries the same rule. **Worth a look on kaneva.com, firefall.com, and Vegas Blvd Slots' two dead
+  store links when those pages' own passes come around — not done here.**
 - **Is there context only Ali has?** The old page and the blog archive are not the only place a
   fact can live. Prodigal's strongest material — a named Georgia Tech course, built on real
   hardware in C and assembly — was in neither. No amount of re-reading old pages would have
@@ -229,6 +239,18 @@ review after a rebase, which is what surfaced the caption/bottom-alignment inter
 stale branch would have merged without ever exercising that CSS. Content-pass PRs land in quick
 succession and several touch shared CSS (`.gallery`, `.media`), not just their own content file, so
 a branch opened even a day earlier can be missing a fix a sibling pass already shipped.
+
+**If the branch contains a revert of something later merged separately, diff against `origin/main`
+after rebasing — don't trust a clean rebase alone.** Secret Garden's branch (#154, #98) picked up an
+unrelated tooling change mid-pass, so it was reverted locally and re-landed as its own PR (#155),
+which merged first. Rebasing #154 onto the now-updated `main` replayed the _revert_ commit for
+real: git's rebase recognizes an add-commit as already-upstream by patch-id and skips it
+automatically, but a revert commit's patch has no upstream match (the upstream version merged
+through a different, separately-authored commit), so it replayed as a genuine deletion of content
+`main` had just gained from the sibling PR. `git diff origin/main -- <files>` after the rebase
+showed it plainly — files being _removed_, not left alone. Fix: `git rebase --onto
+<commit-before-the-revert> <revert-commit>` to drop the now-redundant revert, then re-diff to
+confirm the file list matches what the branch is actually supposed to touch.
 
 ## 8. File what you found sideways
 

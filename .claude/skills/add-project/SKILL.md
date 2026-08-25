@@ -57,8 +57,20 @@ Optional but valuable: `engine`, `tech`, `platforms`, `teamSize`, `collaborators
 - **Professional work uses `job:`, not a company name.** It is a reference into the `jobs`
   collection (`job: mobilityware`), so a project and the resume can never disagree about who Ali
   worked for. Jam and school work uses `event:` instead.
-- **A link you know is dead gets `dead: true`, not deletion.** It renders as plain text instead of an
-  anchor. The credit is still true even when the site is gone.
+- **Georgia Tech `event` values follow one format, standardized 2026-08-24:** `Georgia Tech` always
+  leads, followed by at most one `, <short descriptor>` for the specific lab, studio, or course —
+  never "at Georgia Tech", never a chained multi-level org name. `event` renders on the `/projects`
+  grid cards, not just the detail page, so a long or oddly-ordered value shows up as uneven card
+  heights across the archive grid, not just as an inconsistency on one page. Bare `Georgia Tech` is
+  correct and complete when there's no subsection worth naming — don't force one. See
+  `content.config.ts`'s `event` comment for the full rule and examples (Secret Garden, KinoClue,
+  Mini Mages, Prodigal).
+- **A link you know is dead gets `dead: true`, not deletion** — but check the Wayback Machine first
+  if it's a citation worth keeping clickable (a press writeup that corroborates a credit, especially).
+  A working `web.archive.org` snapshot as `url`, label suffixed `(via Wayback Machine)`, beats
+  `dead: true`'s "No longer online: X" plain text — it keeps the citation live instead of just
+  inert. Reserve `dead: true` for links where the fact of having existed isn't really the point (a
+  store listing, a project's own dead homepage). See `content.config.ts`'s `link` schema comment.
 - **`featured` requires `featureOrder`** (a positive integer) to place it on the projects page.
 - **Leave fields empty when the source doesn't support them.** Don't infer an engine from a
   platform.
