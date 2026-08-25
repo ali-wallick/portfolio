@@ -1163,6 +1163,13 @@ So: **work on a branch, always.** Never commit straight to `main`, and don't mer
 checking in. Push early enough that there's a preview URL to look at while the work is still cheap
 to redirect. Setup and troubleshooting: [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md).
 
+**Every PR description gets the expected branch preview URL, computed and included up front —
+don't make Ali wait for or scroll to Cloudflare's own bot comment.** Build it from the pushed
+branch name using the rule in `docs/CLOUDFLARE.md`'s "Using it" section: lowercase, `/` replaced
+with `-`, then `-portfolio.ali-wallick.workers.dev` appended. If the sanitized name pushes the
+`<branch>-portfolio` label past 63 characters, don't guess at Cloudflare's truncation — say so and
+point to the bot's comment for the exact link instead of stating a wrong URL as fact.
+
 ### Don't touch
 
 - **DNS, the registrar, email.** Phase 1 is closed. None of it is back in scope.

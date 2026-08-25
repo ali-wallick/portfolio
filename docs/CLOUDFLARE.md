@@ -230,8 +230,14 @@ Two URLs get commented onto the pull request:
 - **Branch preview**: `<branch-name>-portfolio.<subdomain>.workers.dev` — always the branch's latest
   build. This is the one to bookmark on a phone.
 
-Branch names become hostnames, so keep them short and lowercase-hyphenated. Names over 63 characters
-get truncated with a hash appended.
+Branch names become hostnames, so keep them short and lowercase-hyphenated. The construction is
+mechanical enough to predict before Cloudflare's bot comments it onto the PR: lowercase the branch
+name, replace every `/` with `-` (confirmed empirically — `claude/content-pass-92-0b6879` became
+`claude-content-pass-92-0b6879-portfolio.ali-wallick.workers.dev`), then append
+`-portfolio.ali-wallick.workers.dev`. Names over 63 characters get truncated with a hash appended,
+and that part isn't worth predicting by hand — Cloudflare's exact truncation isn't documented, so
+past that length, quote the branch name and point at the bot's own comment instead of stating a
+guessed URL as fact.
 
 ---
 
