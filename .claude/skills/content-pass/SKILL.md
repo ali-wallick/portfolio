@@ -90,6 +90,18 @@ doesn't:
   entirely since the link now resolves. See `content.config.ts`'s `link` schema comment, which
   carries the same rule. **Worth a look on kaneva.com, firefall.com, and Vegas Blvd Slots' two dead
   store links when those pages' own passes come around — not done here.**
+  **Within the weaker case, prefer dropping over `dead: true` for a broken interaction, not just a
+  broken citation.** Settled on cor-ex-machina (#90): its "Play online" link was a Unity Web Player
+  build, dead regardless of whether the host answers, and the first draft kept it as `dead: true`
+  because the skill's wording above treats both options as equally fine. Ali's reaction to seeing
+  "No longer online: Play online" render on the page was to cut it outright. The distinction that
+  makes the call: **a dead homepage is proof the thing existed; a dead "play now" link is a broken
+  action offering nothing once it fails.** kaneva.com and firefall.com are the opposite case and
+  should stay `dead: true`, not be dropped — they're the literal example CLAUDE.md's content-model
+  guard table names ("firefall.com, kaneva.com ... linked as live calls to action for years after
+  going dark"), so keeping them as inert text is the guard doing its job, not a leftover to clean
+  up. Ask "does the reader lose information if this link disappears, or just a broken button?"
+  before defaulting to `dead: true` on the weaker case.
 - **Is there context only Ali has?** The old page and the blog archive are not the only place a
   fact can live. Prodigal's strongest material — a named Georgia Tech course, built on real
   hardware in C and assembly — was in neither. No amount of re-reading old pages would have
