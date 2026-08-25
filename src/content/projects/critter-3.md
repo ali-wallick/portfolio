@@ -50,7 +50,8 @@ draft: false
 
 Global Game Jam 2011's theme was extinction. Our team was three Georgia Tech programmers and four
 SCAD art students for the weekend. We built a cube world where each face held an animal population
-that needed the right resources to survive.
+that needed the right resources to survive. It also shipped in two difficulty modes, easy with two
+resources per face and hard with three.
 
 I was one of the three programmers. I built much of the core mechanics (the camera controls for
 looking around the cube, the resource-cycling clicks) plus a lot of the graphics. Design was a

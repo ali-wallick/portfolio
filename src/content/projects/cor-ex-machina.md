@@ -34,6 +34,9 @@ heart has gone still, and the player has a couple of laps around it to start it 
 left click pushes nearby orbs away and shrinks the player. A right click pulls them close and grows
 the player, and herding enough orbs home takes balancing the two.
 
+None of our early ideas were coming together, and by Saturday evening we'd kept only the herding
+mechanic and scrapped the rest. We rebuilt around a steampunk look in the final 18 hours.
+
 I coded the opening and closing sequences, wired up the music and sound effects, and built the
 lighting that shows how strongly the heart is beating. On the design side I worked on level design,
 animation, and the "cutscene" moments bookending the game. A team of Berklee School of Music

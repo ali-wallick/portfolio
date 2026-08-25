@@ -249,17 +249,23 @@ accelerometer input either way; only one phrasing sounds like it was written by 
 games, which is the whole brief (CLAUDE.md: "obvious a game developer made this"). Worth a second
 look whenever a mechanic is described via a real-world analogy instead of its actual game-dev name.
 
-**Match caption line-wrap length across one gallery row, now that `.gallery` bottom-aligns.**
-`align-items: end` (added for #96, [#148](https://github.com/ali-wallick/Portfolio/pull/148)) flushes
-each _card's_ bottom edge to the row — image plus caption stacked — not each image's. A caption that
-wraps one line longer than its row-mates pushes its own image higher than theirs, even though the
-cards' bottoms line up exactly. This is what it-will-kill-you's third gallery caption did
-([#93](https://github.com/ali-wallick/Portfolio/issues/93)): the audit script won't catch it, because
-it measures text, not rendered layout. Whenever a gallery has 2+ items, check with the rendered page
-— `getBoundingClientRect()` on each `.gallery img`, or eyeball it at a normal desktop width — and
-shorten the outlier caption to match its neighbors' line count. A shorter caption is almost always the
-easier fix than lengthening the others. The step 10 sweep below found this already shipped, unnoticed,
-on two merged pages.
+**Gallery image misalignment is fixed at the CSS level now, not by trimming captions.** `.gallery`
+used to bottom-align (`align-items: end`, added for #96,
+[#148](https://github.com/ali-wallick/Portfolio/pull/148)), which flushed each _card's_ bottom edge to
+the row but let each image's top float independently. The original theory was that a caption wrapping
+one line longer than its row-mates was the cause — true on it-will-kill-you's third caption
+([#93](https://github.com/ali-wallick/Portfolio/issues/93)), which is where this was first caught, but
+not the whole story: a 2026-08-24 sweep of every archive gallery found the same misalignment on 6 of 8
+pages, including ones where every caption in the row matched line for line (critter-3). The real cause
+is that gallery images keep their source aspect ratio and are never cropped, so two images of the same
+column width render at different heights regardless of their captions. `.gallery` now uses
+`align-items: start` (`src/styles/base.css`), which pins every image's top to the row — the one
+alignment a mixed-aspect-ratio row can actually guarantee — and no longer needs a caption-length fix to
+do it. **Caption-length matching is still worth doing**, just for a smaller reason: it keeps the row's
+_bottom_ edge (now the one that can go ragged) from looking uneven. Check with the rendered page —
+`getBoundingClientRect()` on each `.gallery img` and its `figure`, or eyeball it at a normal desktop
+width — and shorten the outlier caption to match its neighbors' line count if the ragged bottom bothers
+you. It's cosmetic now, not a correctness bug.
 
 **The archive tier's descriptive-only caption convention is a default, not an absolute.** Dead Booty
 and Prodigal's captions avoid "I"/"Ali" on purpose, matching the tier's lower-key framing. Night
@@ -425,13 +431,29 @@ new tell or preference, spend a few minutes checking whether it already shipped 
 8's mechanism), not new edits bundled into the current PR. A finding on another page is that page's
 pass, with its own branch and its own PR, per the one-page-one-PR rule this skill opened with.
 
-**#93's sweep for the caption/bottom-alignment interaction found it already live on two merged
-pages.** Every project's `gallery` array with 2+ items was checked at desktop width via rendered
-`getBoundingClientRect()`, not by eyeballing captions or counting characters — character count alone
-doesn't predict where a caption wraps. Dead Booty and Night Light both have one gallery image sitting
-noticeably higher than its row-mate; It Fits I Sits and Prodigal happen not to, because their
-captions wrap to matching line counts by coincidence, not by design. Commented on #92 and #96 with
-specific shortened-caption suggestions rather than fixing here.
+**#93's sweep for the caption/bottom-alignment interaction found it already live on two merged pages,
+and a fuller sweep on 2026-08-24 found it on four more.** Every project's `gallery` array with 2+ items
+was checked at desktop width via rendered `getBoundingClientRect()`, not by eyeballing captions or
+counting characters. The first pass (Dead Booty, Night Light) assumed caption line-wrap was the whole
+cause; checking the rest of the archive tier (art-of-rescue, critter-3, mini-mages, it-will-kill-you,
+plus secret-garden and prodigal as controls) found the same misalignment on pages with matching caption
+line counts too — critter-3's two captions are both 2 lines and its images still sat 17px apart, and
+art-of-rescue's images were 110px apart. That ruled out "shorten the caption" as a real fix; the actual
+cause and the fix (`align-items: start` in `.gallery`) are under §5 above. Nothing needed re-editing on
+any of the six pages — this shipped as one CSS change instead of six separate caption edits.
+
+**When a finding from step 9 turns out to be a `content/archive/` blog-matching gap, sweep the blog
+against every already-passed page, not just the one that surfaced it.** #99 established "grep
+`content/archive/` for a matching post whenever a project has a plausible publication-year match" (§3),
+but that check was never run backward against the pages passed before #99 — only applied going
+forward. A 2026-08-24 sweep ran it against the other ten archive pages and found two real hits
+immediately: cor-ex-machina's own GGJ 2013 recap post has the team scrapping most of the game and
+restarting around a steampunk look with 18 hours left (missing from #90's page, the same
+struggle-then-pulled-it-off shape #99 itself established), and critter-3's GGJ 2011 post names the
+game's two difficulty modes (also missing, now added) and the actual team name, "Team Pandas is
+Stupid" (Ali's call to leave out — cute, not load-bearing). Same failure shape as the caption sweep
+above: a check learned mid-pass doesn't retroactively apply to pages that shipped before it existed, so
+it has to be swept on purpose.
 
 ## Open findings this skill has not resolved
 

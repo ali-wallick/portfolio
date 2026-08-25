@@ -834,11 +834,25 @@ hr {
 }
 
 /* Same frame convention as `.media` — a gallery shot isn't pressable either
-   — laid out as a grid instead of a single wide column. */
+   — laid out as a grid instead of a single wide column.
+
+   `align-items: start`, not `end`. Source images keep whatever aspect ratio
+   they were captured at — nothing here gets cropped to match its row-mates
+   — so an `end`-aligned row puts each image's TOP at a different height
+   depending on its own aspect ratio and its caption's line count. That's a
+   real bug, not a hypothetical one: a sweep of every archive gallery found
+   it on 6 of 8 pages, up to 110px of visible offset between neighbors on
+   /projects/art-of-rescue, and present even where captions matched line for
+   line (critter-3), so caption length was never the whole story. `start`
+   pins every image's top to the row, which is the one alignment a
+   mixed-aspect-ratio row can actually guarantee. The trade is the row's
+   bottom edge, which can go ragged if captions in it wrap to different line
+   counts — content-pass's caption-length-matching guidance is what keeps
+   that in check now, not layout. */
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-  align-items: end;
+  align-items: start;
   gap: var(--space-6);
   margin: var(--space-6) 0;
 }
