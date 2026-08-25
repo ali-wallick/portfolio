@@ -153,6 +153,16 @@ const projects = defineCollection({
          * Professional work points at the job it was done under, rather than
          * repeating a company name that could drift. Jam and school work uses
          * `event` instead.
+         *
+         * It renders on the `/projects` grid cards, not just the detail page,
+         * so format matters at a glance across a twelve-entry archive.
+         * Standardized 2026-08-24: `Georgia Tech` always leads, followed by at
+         * most one `, <short descriptor>` for the specific lab, studio, or
+         * course — never "at Georgia Tech", never a chained multi-level org
+         * name (`Synaesthetic Media Lab, GVU Center, Georgia Tech` measured out
+         * 20px taller than its row-mates on the archive grid before this).
+         * `Georgia Tech` bare is a correct, unforced answer when there's no
+         * subsection worth naming.
          */
         job: reference('jobs').optional(),
         event: z.string().min(1).optional(),

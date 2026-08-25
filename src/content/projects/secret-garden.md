@@ -6,7 +6,7 @@ status: prototype
 engine: [Unity]
 tech: [Qualcomm AR SDK]
 platforms: [Android]
-event: Qualcomm Augmented Reality Game Studio at Georgia Tech
+event: Georgia Tech, Qualcomm AR Game Studio
 teamSize: 3
 collaborators:
   - name: Rose Peng

@@ -5,7 +5,7 @@ startYear: 2011
 status: coursework
 engine: [Unity]
 platforms: [iOS]
-event: Georgia Tech senior capstone
+event: Georgia Tech, senior capstone
 teamSize: 5
 collaborators:
   - name: Wes Anderson
