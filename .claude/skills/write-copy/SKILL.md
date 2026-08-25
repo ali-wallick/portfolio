@@ -150,6 +150,16 @@ Copied from her own sentences, not from a style guide:
 11. **Label a section, then explain it plainly.** Bolded label, colon, ordinary prose. Both her
     escalation letter and her volunteer synthesis doc are built this way — independent confirmation
     that the Marvel Snap page's structure is hers.
+12. **Earn a success claim with the obstacle first — don't reach for "the first X that actually
+    worked."** That construction passes every other check here (no em dash, in-range length, no
+    banned vocabulary) and still reads as a flex, and the mechanism is specific: "first X that
+    actually worked" implies a string of earlier X's that didn't, an unflattering claim about her
+    own past work that nothing sources. It isn't a comparison to anyone else — Ali's own read
+    ([#99](https://github.com/ali-wallick/Portfolio/issues/99)) was "like in the past I made things
+    that didn't work?" Her own move, from the 2014 GGJ blog post behind tilting-at-windmills: state
+    the concrete difficulty ("a very locked-down network at the jam site"), then let a short, earned
+    exclamation carry the payoff — "we pulled through with a great little prototype." The obstacle
+    is what makes the win worth stating instead of implying a history of failure.
 
 ## 5. Never let a tone pass change a fact
 

@@ -130,6 +130,25 @@ doesn't:
   and populated `collaborators` with real names neither the old page nor the blog archive had.
   Worth fetching even when the current `url` still resolves, if the page might carry credits, a
   brief description, or other structured detail the site's own old page compressed away.
+- **Check that every `links[].url` on the page actually resolves before shipping — don't assume a
+  link is fine because nothing flagged it.** `check-links.mjs` deliberately does not fetch external
+  links (by design, for CI speed — see its header comment), and the audit script doesn't either, so
+  a dead outbound link only gets caught if a human tries it. tilting-at-windmills'
+  ([#99](https://github.com/ali-wallick/Portfolio/issues/99)) Global Game Jam link had shipped
+  through an earlier pass undetected — `curl -I` on it 403s. A `curl -sIL <url>` per link (or the
+  Wayback-availability API, `archive.org/wayback/available?url=<url>`) takes seconds and would have
+  caught it before merge instead of after, on Ali's own click-through. Same rule as the dead-link
+  guidance above applies once you find one: check Wayback before deciding `dead: true` vs. an
+  archived-link swap.
+- **`content/archive/` (the blog) is a separate source from `snapshot/`, and the audit script only
+  reads the latter.** tilting-at-windmills' first draft used only the old site page and produced a
+  flat "my first multiplayer jam prototype that actually worked" — accurate, but read as a boast on
+  review. `content/archive/2014-02-02-global-game-jam-2014.md`, Ali's own post about that exact jam,
+  had the real story: multiplayer was the stretch goal, a locked-down network at the jam site made
+  it a real fight, and the team pulled through anyway. The audit's "old page" section is a genuine
+  aid but it is not the whole primary-source surface — `grep -ril <project-or-theme-keyword>
+content/archive/` for a matching post is worth doing every time a project has a plausible
+  publication-year match, not just when the current copy already reads thin.
 - **"X, Y among them" implies an open set — check the source's actual count before using it.**
   Art of Rescue's pre-pass summary read "levels made from their own famous motifs, Monet's lily
   pads among them," naming one artist as if it were a sample from a longer list. The old page
@@ -279,6 +298,13 @@ gh pr create --title "Content pass: /projects/<slug> (#<n>)" --body "..."
 The PR body should say **what the old page had that the new one didn't**, what you cut on purpose,
 and the measured numbers. Not a diff summary — the diff is right there.
 
+**Lead the PR body with `Closes #<n>`, naming the page's own sub-issue.** GitHub only auto-closes an
+issue on merge if the closing keyword (`Closes`, `Fixes`, `Resolves`) appears in the PR body or a
+commit message — a title like `Content pass: /projects/<slug> (#<n>)` references the issue but does
+not close it, which is why this has landed inconsistently across earlier passes. Put it as the first
+line of the body (`Closes #99`, not buried mid-paragraph in a `[#99](...)` markdown link), so the
+issue actually closes when the PR merges instead of sitting open for a human to close by hand.
+
 **Offer options on lines that carry weight, not just a single rewrite.** For a sentence doing real
 interpretive work — the summary's hook, a body's framing sentence, anything Ali is likely to have a
 personal reaction to — draft two or three genuine alternatives and let her pick, rather than
@@ -362,6 +388,20 @@ it. It also surfaced a real front-matter question — whether a multi-hat, non-j
 be a short comma-separated tag list (`Designer, Artist`) rather than a sentence — which turned out to
 already be `add-project`'s territory, not this skill's; see that skill's `role` guidance and
 [#152](https://github.com/ali-wallick/Portfolio/issues/152).
+
+#99 (Tilting at Windmills) produced three more, all from Ali's review of the merged-looking PR
+rather than anything the mechanical checks caught: the `content/archive/` blog-as-source gap and the
+verify-every-link gap (both §3, above), and a new `write-copy` positive move. The draft's closing
+line — "My first multiplayer jam prototype that actually worked" — passed every mechanical check
+(no em dash, in-range sentence length, no banned vocabulary) and still read to Ali as a flex. Her own
+description of why: "like in the past I made things that didn't work?" — the "first X that actually
+worked" construction implies a string of past failures nothing in the piece supports, and it isn't a
+comparison to anyone else, it's an unsourced claim about her own track record. Her fix request was
+concrete: state the obstacle, then let a short exclamation carry the payoff ("But we pulled it
+off!"), the same shape as her own blog's "It ended up being quite tough […] but we pulled through
+with a great little prototype." That's now `write-copy`'s positive move §4.12 — the "first X that
+actually worked" phrasing is the tell; the fix is earning the win with the specific difficulty
+instead.
 
 **Not every pass will find something, and that's a fine outcome.** Don't manufacture a finding to
 fill the step. A page that needed no back-and-forth on wording is a page that confirmed the skills
