@@ -118,6 +118,23 @@ doesn't:
   and populated `collaborators` with real names neither the old page nor the blog archive had.
   Worth fetching even when the current `url` still resolves, if the page might carry credits, a
   brief description, or other structured detail the site's own old page compressed away.
+- **"X, Y among them" implies an open set — check the source's actual count before using it.**
+  Art of Rescue's pre-pass summary read "levels made from their own famous motifs, Monet's lily
+  pads among them," naming one artist as if it were a sample from a longer list. The old page
+  says the team built exactly two levels, Monet and Dalí — a closed set of two, not a list worth
+  gesturing at. Ali's fix on the branch preview (#89) was to name both in the body instead
+  ("one modeled on Monet's garden and one on Dalí's melting clocks") rather than hedge with
+  "among them" over a two-item list. Reach for "among them" / "such as" only when the source
+  actually supports more items than you're naming; when the full list is short, just state it.
+- **A named team/group credit in the summary or body duplicates what `collaborators` already
+  renders, and no other archive entry does it.** Art of Rescue's summary named the team
+  ("built by an all-women team, Team Femtastic Four") in prose; checking the other eight archive
+  entries with `collaborators` (critter-3, dead-booty, it-fits-i-sits, it-will-kill-you,
+  kinoclue, mini-mages, night-light, secret-garden) found none repeat the team's name or
+  composition in the summary or body — the rendered "Team" section from `collaborators` is the
+  only place it appears. Ali cut it on review (#89). Treat a team name/description sitting in
+  prose as a sitewide-convention mismatch to flag proactively, not just something to wait for
+  Ali to catch.
 
 ## 4. Decide the shape before writing
 
