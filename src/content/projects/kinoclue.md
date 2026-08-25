@@ -16,7 +16,7 @@ collaborators:
   - name: Russell Brooks
   - name: Susan Robinson
   - name: Ali Mazalek
-role: Research and development
+role: Researcher
 summary: >-
   A tangible tabletop murder-mystery prototype based on the board game Clue.
   Physical game pieces attract and repel each other to reveal connections
