@@ -102,6 +102,22 @@ doesn't:
   "Although this is considered a 'scene,' it has definite game elements" — so the fix was sitting
   in the primary source the whole time. Check what noun the old page reaches for (scene, piece,
   demo, sketch) before defaulting to "game," especially for coursework and non-interactive pieces.
+- **A comparison used for shape or feel can silently donate a mechanic that was never actually
+  there.** Critter³'s source called it "a cross between Rubik's Cube and Sudoku" — about the
+  cube's six sides and the placement logic, not about twisting anything. The draft nonetheless
+  credited Ali with building "the cube's rotation," inferred from the comparison plus the old
+  page's own "the turning and clicking mechanism" line — except "turning" there meant the camera
+  orbit ("use the right mouse button and drag to look around"), not a puzzle mechanic. Nothing in
+  the audit or the stats script can catch this; it took Ali reading the draft and knowing her own
+  game. When a source pitches a project as "X, but like [famous thing]," verify the comparison
+  against the actual how-to-play instructions before writing what it implies into a mechanics
+  description — the famous thing's own mechanic is not evidence.
+- **The Wayback Machine is also a content source, not just a dead-link fix.** Checking it for
+  critter-3's broken Global Game Jam link (per the rule above) surfaced the game's own credits
+  page — full names for all seven team members, split by discipline — which confirmed `teamSize`
+  and populated `collaborators` with real names neither the old page nor the blog archive had.
+  Worth fetching even when the current `url` still resolves, if the page might carry credits, a
+  brief description, or other structured detail the site's own old page compressed away.
 
 ## 4. Decide the shape before writing
 

@@ -80,6 +80,14 @@ Things that are only bad in bulk — use them when the sentence genuinely wants 
 
 Things to cut on sight, because they aren't hers at any dosage:
 
+- **The "part X, part Y" genre-blend hedge.** _"Part Rubik's Cube and part Sudoku"_ is the same
+  device as "part heist thriller, part coming-of-age story" — a neat balanced construction a model
+  reaches for to describe something by comparison instead of stating it. Even when the comparison
+  itself is sourced (critter-3, [#91](https://github.com/ali-wallick/Portfolio/issues/91): the
+  archived source page really does say "a cross between Rubik's Cube and Sudoku"), the "part X and
+  part Y" phrasing is the more polished-sounding version of that same idea. Flagged on sight by
+  Ali. State the mechanic instead of the comparison — see the content-pass note on comparisons
+  donating mechanics that were never actually there.
 - **Em dashes.** Zero in 9,937 words of her writing. Use a spaced en dash (–), a comma, parentheses,
   or a full stop. Parentheses are the most characteristic of her: _"(and went for multiplayer which
   is always a ridiculous game jam choice)"_. Splitting a 32-word em-dash sentence into two 16-word
@@ -170,6 +178,15 @@ It reports tell counts and drift from Ali's measured baseline. **It is advisory 
 wired into `npm run verify`** — tone is not gateable, and every number in it has a legitimate reason
 to be exceeded. Exceeding one on purpose is a fine answer. Exceeding one by accident is what the
 script is for.
+
+**A closing quotation mark right after a sentence-ending period defeats the sentence splitter.**
+Its regex only breaks a sentence on `[.!?]` followed by whitespace — `Stupid." We built` has no
+whitespace between the period and the closing quote, so the two sentences merge into one and can
+trip the `sentences over 35 words` flag on prose that reads fine out loud (found on critter-3,
+#91). Read the flagged sentence before trimming it: if it's an artifact of quoted dialogue or a
+title ending a sentence, restructure so the quote lands mid-sentence instead (`calling ourselves
+"X," was...` rather than `as "X."`), which sidesteps the false split without changing what the
+sentence says.
 
 Then finish the way every other content change here finishes:
 
