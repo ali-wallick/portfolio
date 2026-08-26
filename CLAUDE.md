@@ -244,7 +244,7 @@ and shouldn't be reinvented — see the reference for both quotes.
   joined as the **11th employee** (the studio was founded in 2018, confirmed exact — not an
   estimate), so the story is partly about helping build a company, not only a game.
 - Marvel Snap shipped **October 2022**. Ali worked on it from 2019 until **2024**, when she moved to
-  the studio's next team.
+  a new team at Second Dinner.
 - Critter³ is a **2011** jam entry. The old projects index filed it under 2013.
 - **KinoClue is undergraduate research, not a class project** — a Georgia Tech Synaesthetic Media Lab
   / GVU Center piece, "KinoClue: A Tangible Tabletop Mystery", credited to Russell Brooks, Ali
@@ -306,6 +306,15 @@ Ben Brode and Matt Wyble both on the record. No title, platform, or genre named.
 Ali moved to the studio's next team in 2024 and that it is a Godot project, and **cite the
 announcement**, which is stronger and more honest than the old hedge. It must not name or
 characterise the game.
+
+**Corrected 2026-08-26 (#129): "the studio's next team" is itself the wrong framing, not just a
+hedge.** It implies succession — that the Marvel Snap team wound down and this replaced it. Neither
+is true: Marvel Snap's team is still active, and Second Dinner has several new projects underway;
+Ali is on one of them, not "the" next one. Every surface using this phrasing — `currentNote`, the
+About page (which reads the same field), the Second Dinner job's `highlights` and `summary`, and the
+generated LinkedIn doc — was corrected to "a new team at Second Dinner." One thing checked directly
+with Ali and confirmed still true: hers is specifically **the studio's first game in Godot**, a
+narrower and still-accurate claim distinct from "one of several new projects."
 
 **Current work is not a project page.** The schema requires a `hero` on every published project, and
 this one can never have media — the schema is answering the question for us. It lives as a homepage

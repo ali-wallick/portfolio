@@ -539,6 +539,35 @@ index-style pass gets read: put the whole set in front of Ali at once, not one c
 the length convention and the "driving" overclaim were both only visible in contrast with the other
 four cards, not from reading Marvel Snap's card alone.
 
+#129 (the homepage hero) is the first page to close once as "confirmed, no changes needed" and then
+reopen. The original pass — audit, old-page read, rendered comparison — found nothing to change and
+closed clean, a legitimate outcome per the note below. What reopened it wasn't a miss in that pass;
+it was direct editorial iteration with Ali afterward, workshopping the lede and Currently line
+alternate-by-alternate over several rounds in chat. **A clean close isn't a permanent verdict,
+especially on the homepage hero** — this page's own issue body calls it the copy that "carries more
+weight per word than any other page-level copy in this pass," which cuts both ways: it's also worth
+revisiting under direct editorial pressure even after a pass finds nothing wrong. Reopening the issue
+and shipping the fix as a follow-up PR (#180) is the right mechanism; a prior close is not a reason to
+avoid touching a line again.
+
+That iteration also reproduced the #136 pattern in a new setting: **a wording objection can turn into
+a factual correction mid-conversation, not just when reading a fresh draft.** Ali's objection to the
+Currently line's "Second Dinner's next team" started as taste ("I don't like the idea that it's the
+next team") and turned out to be substance — "next team" implies the Marvel Snap team wound down and
+this replaced it, which is false; Snap's team is still active and there are several new projects, hers
+being one of them. Watch for that shift from taste to fact in any live workshopping session, not only
+in an initial draft read — when it happens, the fix's scope jumps from one field to everywhere the
+fact is duplicated.
+
+**That duplication isn't limited to content collections.** Grepping only `src/content/` for the
+corrected phrase would have missed a real instance: the same fact was also hand-written into
+`scripts/build-linkedin.mjs`'s `ABOUT` template string — prose baked into the generator script itself,
+not sourced from any collection, and invisible to a content-file-only grep. `docs/LINKEDIN.md`'s own
+header correctly warns not to edit the generated file by hand, but that warning doesn't help you find
+the un-generated copy that produced it. **When propagating a fact correction, grep `src/`, `scripts/`,
+and `docs/` together, not just `src/content/`** — a generator script can carry hand-authored prose
+holding the same fact.
+
 **Not every pass will find something, and that's a fine outcome.** Don't manufacture a finding to
 fill the step. A page that needed no back-and-forth on wording is a page that confirmed the skills
 already cover it.

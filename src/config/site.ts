@@ -7,8 +7,12 @@
 
 export const site = {
   name: 'Ali Wallick',
-  /** Confirmed at the Phase 3 gate — still accurate, kept as-is. */
-  role: 'Game Developer',
+  /**
+   * "Game Developer" alone was confirmed at the Phase 3 gate. "Software
+   * Engineer" added 2026-08-26, on Ali's call, to close the gap between this
+   * line and the homepage lede's own "I'm a software engineer" opener.
+   */
+  role: 'Game Developer · Software Engineer',
   url: 'https://aliwallick.com',
 
   /**

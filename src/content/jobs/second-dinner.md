@@ -32,7 +32,7 @@ roles:
 highlights:
   - >-
     Joined as the studio's 11th employee, before it had shipped anything. Five
-    years on Marvel Snap, which launched in October 2022, then its next team from
+    years on Marvel Snap, which launched in October 2022, then a new team from
     2024, on the studio's first game in Godot.
   - >-
     Drove a migration to MVVM architecture on a live product. Built the
@@ -51,8 +51,8 @@ highlights:
     Built the Braze integration that let live-ops and marketing ship content
     without an app update: main-screen carousel, news page, and modal pop-ups.
   - >-
-    On the studio's next team, built a UI framework for other engineers to build
-    reusable UI on top of, keeping the team moving quickly in Godot.
+    On a new team at Second Dinner, built a UI framework for other engineers to
+    build reusable UI on top of, keeping the team moving quickly in Godot.
   - >-
     Built a GitHub Action that turns a Jira or Sentry issue into an automated
     repro. It hands the ticket to a model harness (Cursor cloud agents) and
@@ -72,10 +72,10 @@ highlightsExtended:
     integrating native mobile plugins, and standing up unit testing.
 summary: >-
   Joined as the studio's 11th employee and spent five years on Marvel Snap,
-  which shipped in October 2022. Moved to Second Dinner's next team in 2024,
-  building the studio's first game in Godot.
+  which shipped in October 2022. Moved to a new team at Second Dinner in
+  2024, building the studio's first game in Godot.
 currentNote: >-
-  Since 2024, I've been on Second Dinner's next team, building the studio's
+  Since 2024, I've been on a new team at Second Dinner, building the studio's
   first game in Godot.
 ---
 
