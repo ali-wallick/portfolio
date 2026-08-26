@@ -70,10 +70,6 @@ highlightsExtended:
     General client and platform work on the studio's Godot project: engine
     updates, reporting and fixing engine bugs with partners at W4 Games,
     integrating native mobile plugins, and standing up unit testing.
-summary: >-
-  Joined as the studio's 11th employee and spent five years on Marvel Snap,
-  which shipped in October 2022. Moved to a new team at Second Dinner in
-  2024, building the studio's first game in Godot.
 currentNote: >-
   Since 2024, I've been on a new team at Second Dinner, building the studio's
   first game in Godot.

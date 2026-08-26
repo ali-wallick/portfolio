@@ -23,10 +23,6 @@ highlightsExtended:
     Worked at the boundary between the Lua/XML UI scripting layer and the
     studio's C++ engine, on a team and codebase substantially larger than any
     before it.
-summary: >-
-  UI programmer on Firefall, a large-scale PC shooter, and my first time on a
-  team that size. Built and standardized menu and HUD elements across a much
-  bigger codebase than Kaneva's.
 ---
 
 ## Source material (2019 resume, verbatim — not current copy)

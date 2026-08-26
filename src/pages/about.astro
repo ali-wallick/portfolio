@@ -1,20 +1,35 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '~/layouts/BaseLayout.astro';
-import { getJobs, formatSpan, currentTitle, getCurrentNote } from '~/lib/content';
+import { getCurrentNote } from '~/lib/content';
 import { externalLinkProps } from '~/lib/links';
 import portrait from '~/assets/images/me.jpg';
 import cosplay from '~/assets/images/me2.jpg';
 
 /**
- * The career timeline here is generated from the same `jobs` collection the
- * resume page reads. The prose around it is Phase 3's.
+ * The "Where I've worked" job list this page used to render (title, company,
+ * dates, a `summary` paragraph per job) was cut 2026-08-26 (#135, #141): it
+ * duplicated the resume, and the per-job `summary` field it existed to render
+ * had no other consumer, so it came out of the content model entirely rather
+ * than sitting as unread data — same precedent as dropping jobs' `tech` for
+ * #39. The career paragraph below is now the only work overview on this page,
+ * and links each era to its project page instead.
  */
-const jobs = await getJobs('site');
 const currentNote = await getCurrentNote();
 
 const w4GamesAnnouncement =
   'https://www.w4games.com/blog/w4-games-news-1/second-dinner-studios-becomes-a-strategic-investor-in-w4-games-and-plans-to-build-the-largest-game-in-godot-yet-37';
+/**
+ * `currentNote` is shared, single-source prose (see `content.config.ts`) — it
+ * can't carry a raw URL without breaking its own length cap and duplicating
+ * `w4GamesAnnouncement` into content. Instead of appending a separate citation
+ * sentence, this page links the word "Godot" within the field's own rendered
+ * text. If `currentNote` is ever reworded without "Godot" in it, this split
+ * silently drops the citation — update it alongside any such edit.
+ */
+const [beforeGodot, afterGodot] = currentNote.split('Godot');
+const instagramUrl = 'https://www.instagram.com/aliwallick/';
+const synagogueUrl = 'https://www.universitysynagogue.org/';
 ---
 
 <BaseLayout
@@ -40,53 +55,43 @@ const w4GamesAnnouncement =
   </figure>
 
   <p>
-    Born and raised in Miami, I got interested in games young. Young enough that at seven I burned
-    through my family's long-distance minutes calling my uncle for advice on <em>Myst</em>. In high
-    school I found the Computational Media program at Georgia Tech: computer science and digital
-    media, in equal parts. I discovered my love for programming there, especially front-end work,
-    where I get to combine the logic of programming with the creativity of design. I took every game
-    development class I could find and went to Global Game Jam and the Microsoft College Puzzle
-    Challenge. I graduated in 2011 with one goal: get into the games industry.
+    Born and raised in Miami, I got interested in games young. By seven, I was calling my uncle for
+    advice on <em>Myst</em>. In high school I found the Computational Media program at Georgia Tech:
+    equal parts computer science and digital media. I discovered my love for programming there,
+    especially front-end work, where I get to combine the logic of programming with the creativity
+    of design. It's also where I met my husband, Robert, a fellow game developer. I graduated in
+    2011 and set out to break into the games industry.
   </p>
 
   <p>
-    That's mostly what the rest of this page is. I've been at it since 2011, nearly all of it in UI
-    and systems engineering. Four years at Kaneva, where I went from a new engineer to leading the
-    UI team. Then a year on a much bigger PC shooter at Red 5 Studios, and three years shipping
-    casino mobile games at MobilityWare. In 2019 I joined Second Dinner as the studio's 11th
-    employee. I spent five years on{' '}
-    <a href="/projects/marvel-snap">Marvel Snap</a>, which shipped in October 2022. {currentNote}{
-      ' '
-    }
-    Second Dinner has said as much{' '}
-    <a href={w4GamesAnnouncement} {...externalLinkProps(w4GamesAnnouncement)}>publicly</a>. Beyond
-    that, it's not mine to talk about yet.
+    I've worked in games since then, nearly all of it in UI, feature, and client engineering. Four
+    years at <a href="/projects/kaneva">Kaneva</a>, where I went from a new engineer to leading the
+    UI team. Then a year on Red 5's <a href="/projects/firefall">Firefall</a>, a much bigger PC
+    shooter. After that, three years shipping casino mobile games at MobilityWare, mostly on{' '}
+    <a href="/projects/vegas-blvd-slots">Vegas Blvd Slots</a>. In 2019 I joined Second Dinner as its
+    11th employee. I spent five years on <a href="/projects/marvel-snap">Marvel Snap</a>, which
+    shipped in October 2022. {beforeGodot}
+    <a href={w4GamesAnnouncement} {...externalLinkProps(w4GamesAnnouncement)}>Godot</a>
+    {afterGodot}
   </p>
 
-  <h2>Where I've Worked</h2>
-  <ul class="project-list">
-    {
-      jobs.map((job) => (
-        <li>
-          <strong>{currentTitle(job)}</strong>, {job.data.company}
-          <p class="meta">
-            {job.data.location} · {formatSpan(job.data.start, job.data.end)}
-          </p>
-          {job.data.summary && <p>{job.data.summary}</p>}
-        </li>
-      ))
-    }
-  </ul>
+  <p>
+    I still enjoy talking about the work, going back to my first two panels in 2013. These days it's
+    smaller and more local. I made a deck for a Girl Scout troop on what game development is
+    actually like. I also spoke to a college class about the job itself, including overcoming
+    anxiety and imposter syndrome.
+  </p>
 
   <h2>Off the Clock</h2>
 
   {
     /* `me2.jpg`, also unused since the Phase 3 migration, and the strongest
-      image argument on this page — it is the Kerbal Space Program cosplay whose
-      Dragon Con win the paragraph below already describes. An image that
-      illustrates a sentence already on the page earns its place in a way a
-      decorative one never does, which is why this slot is more convincing than
-      the portrait above it despite being the smaller file. */
+      image argument on this page — it is the Kerbal Space Program cosplay the
+      second paragraph below describes. Floated above both paragraphs, not just
+      the one that names it: with two paragraphs in this section, a float
+      placed between them only wraps the second one, leaving the first at full
+      width and the two edges misaligned (#141, caught on the branch preview).
+      Floating it first lets both paragraphs wrap it consistently. */
   }
   <figure class="aside-figure">
     <Image
@@ -99,11 +104,22 @@ const w4GamesAnnouncement =
   </figure>
 
   <p>
-    Most of my free time goes to my family, including my young daughter and our pets. The rest goes
-    to games, reading, camping, cooking, baking, and crafting, usually with friends along the way.
-    I'm a longtime science fiction and fantasy fan, in books and on screen. I still make time for
-    game jams and personal projects on the side. Away from the computer I gravitate toward hands-on,
-    creative things. Costuming is one of them, including a Best Group Costume win at Dragon Con for
-    a <em>Kerbal Space Program</em> cosplay.
+    Most of my free time goes to my family, including my young daughter and our pets. We're settled
+    in Southern California these days, and I love it here. The rest goes to strategy and indie video
+    games, reading science fiction and fantasy, camping, and traveling when we can. I also cook and
+    bake a lot, enough that I post the results on{' '}
+    <a href={instagramUrl} {...externalLinkProps(instagramUrl)}>Instagram</a>. I still make time for
+    game jams and personal projects on the side.
+  </p>
+
+  <p>
+    Costuming is one of the hands-on, creative things I gravitate toward away from the computer.
+    I've been going to Dragon Con for 20-plus years now, including a Best Group Costume win for a{
+      ' '
+    }
+    <em>Kerbal Space Program</em> cosplay. I've also spent the last five years on the board of my synagogue,{
+      ' '
+    }
+    <a href={synagogueUrl} {...externalLinkProps(synagogueUrl)}>University Synagogue</a> in Orange County.
   </p>
 </BaseLayout>

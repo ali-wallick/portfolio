@@ -1080,8 +1080,33 @@ between text and an inline element, use `{' '}`, never a bare line break.**
 
 **"Fifteen years" is the homepage's number, not every page's.** It stays in the homepage lede and
 meta description. `/about` gives the start year (2011) instead, because four occurrences of one
-number across the site read as a tic. Ali also flagged that she expects to **cull the About page's
-job list** eventually, since it duplicates the resume's job — tracked separately, not done here.
+number across the site read as a tic.
+
+### The About page's job list is gone, and so is `jobs[].summary` (2026-08-26, closes #135, #141)
+
+Ali flagged during the wording pass that she expected to cull `/about`'s "Where I've worked" list
+eventually, since it duplicated the resume's job — filed as #135 and left for later. Revisited
+directly as #141's content pass rather than deferred further: **the section is cut, not shrunk.**
+The career paragraph is now the only work overview on the page, and it links each era (Kaneva,
+Firefall, Vegas Blvd Slots, Marvel Snap) to that project's page instead of restating title/company/
+dates a second time.
+
+**`jobs[].summary` came out of the content model entirely**, same precedent as dropping `tech` from
+jobs for #39: the field existed to feed this one section, nothing else ever rendered it, and once
+the section was gone it would have been unread data. Don't reintroduce a per-job summary field
+without a second consumer for it.
+
+**The page also picked up material only Ali could supply**, prompted by a direct interview rather
+than mined from `snapshot/` or `content/archive/` — most of the old page's content predates 2015 and
+a re-read alone wasn't going to surface what's true now. New: a paragraph on speaking (a deck for a
+Girl Scout troop, a college class talk on the job itself and imposter syndrome, both call back to
+her first two panels in 2013 — see `content/archive/2013-10-25-my-first-2-panels.md`), her husband
+Robert (also a software engineer, met at Georgia Tech, replacing a generic "took every game dev
+class" sentence in the origin paragraph), an Instagram link for cooking/baking, and a second
+"Off the clock" paragraph on Dragon Con (20-plus years, not just the one cosplay win) and five years
+on the board of her synagogue, University Synagogue in Orange County. The origin paragraph was also
+trimmed on Ali's agreement that leading the page with a decade-plus-old story "isn't ideal anymore" —
+not removed, just lighter.
 
 ### Archive pages may carry a short body (2026-08-24, from #97)
 

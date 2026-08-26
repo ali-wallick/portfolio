@@ -137,6 +137,15 @@ doesn't:
   surfaced it; it only came out once Ali saw the draft and reacted. Don't treat "the sources are
   exhausted" as "the facts are exhausted." If a page still reads generic after the audit and the
   old page, ask her directly before writing final copy.
+  **Stronger version, from `/about` ([#141](https://github.com/ali-wallick/Portfolio/issues/141),
+  2026-08-26): sometimes the interview should come first, not last.** Ali's own framing — "most of
+  the content was taken from over a decade ago... interview me" — was a signal that the page's
+  whole premise, not one fact on it, had aged out of its sources. Leading with an interview instead
+  of auditing/re-reading first surfaced the richest material on the page: speaking to a college
+  class and a Girl Scout troop, her husband, a synagogue board seat, an Instagram worth linking —
+  none of it had any trace in `snapshot/` or `content/archive/` to find by reading harder. When the
+  ask itself says "rethink," don't spend the first round mining old pages for something that isn't
+  there.
 - **A verb describing _how_ something was accomplished is its own claim, separate from whether the
   accomplishment itself is real — and a prior gate sign-off doesn't mean it was fact-checked.**
   marvel-snap ([#136](https://github.com/ali-wallick/Portfolio/issues/136), 2026-08-26): "Championing
@@ -378,6 +387,25 @@ Light's ceiling-fan caption is first person anyway ("The ceiling fan: a prop I m
 scene.") because Ali asked for it directly, to credit a specific contribution the caption sits next
 to. Reach for the descriptive default; don't defend it against a direct request to do otherwise.
 
+**A floated image sitting between two paragraphs only wraps the second one.** `/about`'s
+`.aside-figure` ([#141](https://github.com/ali-wallick/Portfolio/issues/141), 2026-08-26) sat
+between the family/hobbies paragraph and the costuming paragraph — CSS float only affects content
+that comes _after_ it in the DOM, so the first paragraph rendered full width while only the second
+wrapped the image, producing a visibly ragged left edge that Ali caught on the branch preview
+screenshot, not anything mechanical. Not specific to this page: any pass that adds a second
+paragraph next to an existing single-paragraph-plus-float layout will reproduce it. The fix is
+moving the figure above both paragraphs so they wrap it together, not a CSS change to the float
+itself — check whether a floated image on the page you're touching has exactly one paragraph
+following it before adding a second.
+
+**A shared, length-capped prose field can't carry a citation URL — link a word inside its rendered
+text instead of editing the field.** `jobs[].currentNote` ([#141](https://github.com/ali-wallick/Portfolio/issues/141)) is read verbatim by both the homepage and About and capped at 280
+characters; appending the citation URL Ali wanted would have blown the cap and duplicated the URL
+into content data besides. The fix: split the field's rendered string around the one word that
+names the fact ("Godot") and wrap just that word in the link in the `.astro` template, leaving the
+field itself untouched and still single-sourced. This is fragile if the field's wording ever drops
+that word — leave a comment noting the coupling wherever you do it, the way `about.astro` does.
+
 ## 6. Verify
 
 ```bash
@@ -597,6 +625,18 @@ keeping from that:
   `build-pdf.mjs`'s hashed-input list too. Fixed in step 6 above — check `git status` for regenerated
   PDFs after touching _any_ sitewide file this skill's pages might edit, not just the content
   collection.
+
+#141 (`/about`) was the first page rewritten from a direct interview rather than an audit-and-old-page
+read — Ali's own framing made that the right starting point, not a fallback to reach for only once
+the written sources ran dry (§3). It also produced two purely mechanical findings that had nothing
+to do with wording, both caught by Ali on the rendered branch preview rather than by any script: a
+floated image sitting between two paragraphs only wraps the one that comes after it in the DOM (§5),
+and linking a fact inside a shared, length-capped content field (`jobs[].currentNote`) needs a
+presentational word-split in the template rather than an edited field, since the field itself can't
+carry a citation URL without blowing its cap or duplicating the URL into content data (§5). Neither
+is specific to About — the float bug can recur on any page with a single-paragraph-plus-float layout
+that gains a second paragraph, and the shared-field technique applies to any other field read by more
+than one page.
 
 **Not every pass will find something, and that's a fine outcome.** Don't manufacture a finding to
 fill the step. A page that needed no back-and-forth on wording is a page that confirmed the skills

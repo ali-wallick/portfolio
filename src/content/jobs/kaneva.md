@@ -51,10 +51,6 @@ highlightsExtended:
     Also built context menus for people and objects, menus for swapping video and
     Flash content on in-game objects, and the welcome and builder tutorials.
     Worked with the engine and web teams whenever a menu touched either.
-summary: >-
-  Grew from an entry-level engineer into the lead UI programmer over four years.
-  Led a full HUD overhaul, and built a menu animation system other engineers
-  adopted for their own work.
 ---
 
 ## Source material (2019 resume, verbatim — not current copy)

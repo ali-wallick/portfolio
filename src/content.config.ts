@@ -280,8 +280,6 @@ const jobs = defineCollection({
         .array(z.object({ title: z.string().min(1), start: datePart }))
         .nonempty('at least one role'),
 
-      /** One line for the site bio. */
-      summary: z.string().min(1).max(280).optional(),
       /**
        * The "currently" line — required when `end` is omitted (the current
        * job). Read by the homepage lede and the About intro via
