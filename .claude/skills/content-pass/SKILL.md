@@ -111,8 +111,9 @@ doesn't:
   section previously said didn't need it. **The actual rule: check Wayback before settling for
   `dead: true` on any homepage, not only on citations** — a working snapshot of the real product
   beats inert text even when "the fact of having existed" is the whole point, because the snapshot
-  _shows_ that fact instead of just asserting it. firefall.com hasn't been checked yet; don't assume
-  `dead: true` is the right outcome there without looking.
+  _shows_ that fact instead of just asserting it. **Checked on firefall.com too (#139, 2026-08-25):**
+  same fix, swapped to a November 2015 snapshot (during Ali's time at Red 5), labeled `firefall.com
+(via Wayback Machine)`, `dead` dropped.
 - **Is there context only Ali has?** The old page and the blog archive are not the only place a
   fact can live. Prodigal's strongest material — a named Georgia Tech course, built on real
   hardware in C and assembly — was in neither. No amount of re-reading old pages would have

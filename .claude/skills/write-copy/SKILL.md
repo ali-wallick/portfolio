@@ -121,6 +121,21 @@ Things to cut on sight, because they aren't hers at any dosage:
   The tell is the move itself — stating the fact, then explicitly narrating what it taught her —
   regardless of the sentence's shape. Cut the reflection and let the fact carry it: _"It ended up
   being adopted by both the UI and game teams"_ already says everything the moral was reaching for.
+- **The two above stack, and the stack is worse than either alone.** firefall
+  ([#139](https://github.com/ali-wallick/Portfolio/issues/139)) shipped a "What I learned" closer
+  with a thesis-colon-shaped sentence immediately followed by a taught-me-a-lesson-shaped one —
+  _"That's a different kind of ownership than end to end at Kaneva. I learned to work at the
+  boundary between my own scripting layer and the core engine, alongside the engineers who owned
+  the rest of it."_ Each sentence alone might pass a quick read; back to back they read as one
+  continuous wrap-it-up move, because a "What I learned" section is structurally the reflective beat
+  of the page and both tells are reflection-shaped. Worth checking a closing paragraph as a unit, not
+  just sentence by sentence. Ali's fix, picked from three options: name the specific team and end on
+  a plain concrete fact instead — _"I worked right at the boundary between the Lua/XML layer and the
+  core engine. That put me in the engine team's code almost as often as my own."_ **Also worth
+  noting: this draft wasn't compressed from an old page** — it was written fresh from facts Ali
+  described live in chat (team size, disciplines, other teams). The AI-tell risk isn't specific to
+  the source-compression scenario `content-pass` is built around; it shows up just as readily when
+  composing new copy directly from a dictated brief.
 - **Autopilot vocabulary**: leverage, robust, seamless, delve, myriad, plethora, testament,
   landscape, elevate, unlock, cutting-edge, "deep dive", "at the end of the day", "it's worth
   noting", "in today's ... world", ensure, utilize, facilitate. Write make sure, use, help.
