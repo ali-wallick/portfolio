@@ -96,12 +96,23 @@ doesn't:
   because the skill's wording above treats both options as equally fine. Ali's reaction to seeing
   "No longer online: Play online" render on the page was to cut it outright. The distinction that
   makes the call: **a dead homepage is proof the thing existed; a dead "play now" link is a broken
-  action offering nothing once it fails.** kaneva.com and firefall.com are the opposite case and
-  should stay `dead: true`, not be dropped — they're the literal example CLAUDE.md's content-model
-  guard table names ("firefall.com, kaneva.com ... linked as live calls to action for years after
-  going dark"), so keeping them as inert text is the guard doing its job, not a leftover to clean
-  up. Ask "does the reader lose information if this link disappears, or just a broken button?"
-  before defaulting to `dead: true` on the weaker case.
+  action offering nothing once it fails.** Ask "does the reader lose information if this link
+  disappears, or just a broken button?" before defaulting to `dead: true` on the weaker case.
+  **Correction, 2026-08-25 (#140): a dead homepage isn't actually a reason to stop at `dead: true`
+  either, if a good Wayback snapshot exists.** An earlier version of this section named kaneva.com
+  and firefall.com as the case that should stay `dead: true` rather than get a Wayback swap, reading
+  the guard table's own example (CLAUDE.md: "firefall.com, kaneva.com ... linked as live calls to
+  action for years after going dark") as a rule about those specific domains. It isn't — that
+  sentence is about the _old site's_ bug (a dead homepage staying up as a live-looking call to
+  action), not an instruction to keep the current site's citation inert forever. Once kaneva.com's
+  page actually rendered "No longer online: kaneva.com," Ali's real reaction was to ask for a
+  Wayback link instead — swapped to a June 2013 snapshot, during her time there, labeled `kaneva.com
+(via Wayback Machine)`, `dead` dropped. Same fix as secret-garden, applied to the case this
+  section previously said didn't need it. **The actual rule: check Wayback before settling for
+  `dead: true` on any homepage, not only on citations** — a working snapshot of the real product
+  beats inert text even when "the fact of having existed" is the whole point, because the snapshot
+  _shows_ that fact instead of just asserting it. firefall.com hasn't been checked yet; don't assume
+  `dead: true` is the right outcome there without looking.
 - **Is there context only Ali has?** The old page and the blog archive are not the only place a
   fact can live. Prodigal's strongest material — a named Georgia Tech course, built on real
   hardware in C and assembly — was in neither. No amount of re-reading old pages would have
@@ -210,6 +221,13 @@ because a list item is usually one clause, not a full sentence, and the word aft
 capitalized. This isn't a general license for lists in archive bodies; reach for it specifically when
 the alternative is several sentences that all open with a proper noun and a linking verb.
 
+**Extended to a featured body, on kaneva ([#140](https://github.com/ali-wallick/Portfolio/issues/140)), 2026-08-25 — this isn't archive-only after all.** Kaneva's `## What I built` buried eight
+menu categories in two dense, comma-heavy sentences — the same "several parallel items dumped into
+prose" shape mini-mages hit, just in a featured page rather than an archive one. Ali's fix was the
+same device: `- **Label:** clause.` Nothing in the reasoning above was actually archive-specific; the
+qualifier was just untested until a featured page needed it. Reach for this whenever the alternative
+is a prose list of 3+ parallel items, regardless of tier.
+
 ## 5. Write it
 
 Follow `write-copy`. Then measure both ways — they answer different questions:
@@ -240,6 +258,14 @@ isolation, so it won't catch a gallery caption restating a fact the body paragra
 already made — a caption reading "Touching one is instant death" next to a body sentence ending
 "...and touching a zombie means instant death" is a straight repeat a reader hits within one
 paragraph. Read the rendered page, not just the audit output, before calling a page done ([#92](https://github.com/ali-wallick/Portfolio/issues/92)).
+
+**Check inline bold for a reason, not just a pattern.** kaneva ([#140](https://github.com/ali-wallick/Portfolio/issues/140)) had a single word bolded mid-sentence in body prose ("a menu
+**animation** system") with no comment or issue tying it to a decision — a leftover from the
+original Phase 3 draft that four separate revisits of this page never questioned. The site's actual
+bold convention is structural: bulleted-list labels (`**Label:**`), paragraph lead-ins (Marvel Snap's
+`**Championing a migration...**`). A bold word sitting inside an ordinary sentence, with nothing else
+like it on the page, is worth asking about rather than assuming it's deliberate emphasis — the audit
+script has no way to flag this, since it isn't wrong markdown, just unexplained.
 
 **Prefer real game-dev vocabulary over a familiar everyday metaphor when describing a mechanic.**
 Mini-mages' first draft described Dragon Battle's controls as the iPhones becoming "steering

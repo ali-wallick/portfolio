@@ -5,7 +5,7 @@ featureOrder: 5
 startYear: 2011
 endYear: 2015
 status: shipped
-engine: [Kaneva proprietary engine]
+engine: [Kaneva Engine]
 tech: [Lua]
 platforms: [PC]
 job: kaneva
@@ -30,12 +30,33 @@ hero:
   type: image
   src: ../../assets/images/projects/kaneva/screenshot1.png
   alt: Kaneva's virtual-world events menu and object panel
+# Confirmed unused by #140's audit sweep (audit-page.mjs false-negatives on
+# generic filenames shared across projects). Both are real UI Ali built and
+# describes in prose, not decorative — the property editor and the
+# inventory/building menu.
+gallery:
+  - type: image
+    src: ../../assets/images/projects/kaneva/screenshot2.png
+    alt: >-
+      The property editor for a scripted teleporter object, showing its
+      editable fields next to a preview of the object
+    caption: The property editor for scripted objects.
+  - type: image
+    src: ../../assets/images/projects/kaneva/screenshot3.png
+    alt: >-
+      The Building tab of the inventory menu, showing a grid of placeable
+      objects like wall panels, stairs, and furniture
+    caption: The inventory menu's Building tab.
 summary: Grew from technical support into leading UI programming on a social virtual-world platform, building many of the game's menus.
 links:
-  - label: kaneva.com
-    url: http://www.kaneva.com/
+  # kaneva.com itself is a dead domain now (parked/squatted). Swapped for a
+  # Wayback Machine snapshot from June 2013, during Ali's time there, so the
+  # link shows the actual product instead of a 404 or a parking page. `dead`
+  # dropped since the archived URL resolves — same pattern as secret-garden's
+  # argamestudio.org fix (#98).
+  - label: kaneva.com (via Wayback Machine)
+    url: https://web.archive.org/web/20130604063555/http://www.kaneva.com/
     kind: site
-    dead: true
   - label: 'Kaneva — Virtual Worlds Museum'
     url: https://www.virtualworlds.museum/exhibits/kaneva
     kind: press
@@ -43,28 +64,36 @@ draft: false
 ---
 
 The World of Kaneva was a social virtual world and game platform: avatars, user-generated content,
-and full worlds built with integrated scripting. It was my first job out of college. Four years
-there took me from technical support to leading UI programming for the whole game.
+and full worlds built with integrated scripting. It was my first job out of college, and over four
+years there I moved from technical support into leading UI programming for the entire game.
 
 ## What I built
 
-I started as a Technical Support Engineer, helping players with their scripting. I also built game
+I began as a Technical Support Engineer, helping players with their scripting. I also built game
 templates (Treasure Hunt and Adventure among them) that let players assemble small games of their
-own by dropping items and defining levels. I liked UI work more than support, so I moved to it full
-time. By the end of four years I was Lead UI Programmer. I worked on many of the game's menus end to
-end in the studio's in-house Lua menu system. That ran from design collaboration, through laying
-them out off the artists' comps, to programming the functionality.
+own by dropping items and defining levels.
 
-That list ended up being long. The player and build/creator HUDs, inventory and bank menus, the
-travel menu for browsing user-created worlds, and the events menu for finding and joining player-run
-events. Also a visual property editor for scripted objects, menus for swapping video and Flash
-content on in-game objects, context menus for right-clicking people and objects, and the welcome and
-builder tutorials. I worked closely with the engine and web teams whenever a menu touched either.
+I later moved into UI work full time, where I built many of the game's menus end to end in the
+studio's in-house Lua menu system, from design collaboration through layout and implementation. I
+worked closely with the engine and web teams whenever a menu touched either.
+
+- **HUD:** Player and build/creator HUD menus.
+- **Inventory:** Player inventory and storage/bank menus.
+- **Travel:** Browsing user-created worlds.
+- **Events:** Finding and joining player-run events.
+- **Smart objects:** A visual property editor for scripted objects.
+- **Media select:** Swapping video and Flash content on in-game objects.
+- **Context menus:** Right-click info and actions for people and objects.
+- **Tutorials:** Welcome and builder walkthroughs.
+
+In 2014, I led a full overhaul of the HUD, from the code design document through to release.
+
+I also built a menu animation system after growing frustrated with hand-coding each transition
+individually. It was later adopted by both the UI and game teams.
 
 ## What I learned
 
-The project I'm proudest of from this job isn't on that list, because it isn't a menu. It's a menu
-**animation** system I built after getting fed up with hand-coding every transition. It ended up
-being adopted by both the UI and game teams. That taught me something that's stuck. The most
-valuable thing I build is sometimes not the feature, but the tool that makes the next ten features
-cheaper.
+Kaneva is where I discovered a love for UI programming that I have carried forward ever since.
+Beyond that, much of what I took from the job concerned working in a professional environment more
+broadly. That included coordinating with a full team, working within established source control,
+supporting real customers, and using project-tracking tools such as Jira.

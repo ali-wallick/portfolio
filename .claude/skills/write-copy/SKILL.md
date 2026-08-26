@@ -57,6 +57,17 @@ words in the blog and 0.7 in formal documents; 96 exclamations in the blog and 9
 of documents. The site sits at 22 contractions per 1k and is fine. Don't tune either against a
 sitewide number — tune them against the row above.
 
+**The table is the default, not a ceiling — a single page can deviate on explicit request.** Kaneva
+([#140](https://github.com/ali-wallick/Portfolio/issues/140)), 2026-08-25: Ali asked for the whole
+page to read more formal and less conversational than the "warm but composed" project-write-up row
+above. What worked was drafting two genuinely different directions — a light dial-down (cut
+contractions and soft connectives like "I enjoyed," keep the story shape) and a dry technical-report
+register (clipped declarative sentences, no narrative color) — and asking which one, or something in
+between, rather than guessing at one rewrite. She picked the lighter one. First person and past tense
+held in both drafts; those aren't register, they're settled sitewide (CLAUDE.md). **Record a register
+override where it happened** (the page's own PR, or a comment on its issue), not as a change to the
+table above — it's a one-page exception, not a new default.
+
 ## 3. AI tells — the pattern is the tell, not the instance
 
 **This is the part to get right, and the failure mode is over-correcting.** Prose written to dodge
@@ -100,6 +111,16 @@ Things to cut on sight, because they aren't hers at any dosage:
   plainly instead: _"Working within its pixel and color limits ended up being most of the game
   design."_ **Distinct from the positive move in §4.11** — that's a short noun label
   ("Localization:") followed by ordinary explanation; this is a full sentence performing a reveal.
+- **The "taught me a lesson" closer.** A specific accomplishment followed by a sentence that
+  generalizes it into a moral — _"That taught me something that's stuck. The most valuable thing I
+  build is sometimes not the feature, but the tool that makes the next ten features cheaper."_ Ali's
+  reaction on kaneva ([#140](https://github.com/ali-wallick/Portfolio/issues/140)) wasn't "this
+  sounds AI" — it was "this is sappy." **Distinct from both neighbors above**: it isn't a colon
+  construction (so the thesis-colon check doesn't catch it), and it's a single antithesis on the
+  whole page, not a repeated one (so the dosage rule for antithesis above doesn't catch it either).
+  The tell is the move itself — stating the fact, then explicitly narrating what it taught her —
+  regardless of the sentence's shape. Cut the reflection and let the fact carry it: _"It ended up
+  being adopted by both the UI and game teams"_ already says everything the moral was reaching for.
 - **Autopilot vocabulary**: leverage, robust, seamless, delve, myriad, plethora, testament,
   landscape, elevate, unlock, cutting-edge, "deep dive", "at the end of the day", "it's worth
   noting", "in today's ... world", ensure, utilize, facilitate. Write make sure, use, help.
