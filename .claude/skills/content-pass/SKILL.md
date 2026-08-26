@@ -137,6 +137,19 @@ doesn't:
   surfaced it; it only came out once Ali saw the draft and reacted. Don't treat "the sources are
   exhausted" as "the facts are exhausted." If a page still reads generic after the audit and the
   old page, ask her directly before writing final copy.
+- **A verb describing _how_ something was accomplished is its own claim, separate from whether the
+  accomplishment itself is real — and a prior gate sign-off doesn't mean it was fact-checked.**
+  marvel-snap ([#136](https://github.com/ali-wallick/Portfolio/issues/136), 2026-08-26): "Championing
+  a migration to MVVM... arguing for it and getting a team to come along" had been signed off at the
+  Phase 3 gate and repeated across five surfaces (the project page's body, its `summary`, the resume
+  bullet, LinkedIn, and the CLAUDE.md gate outcome that was the source everyone else copied from) —
+  and it was wrong. What actually happened was tooling-led: she built out the tooling that made the
+  architecture practical to adopt and encouraged teammates onto it, not an advocacy campaign. The
+  migration itself, and her leading it, were both true the whole time; only the mechanism was
+  misdescribed. Words like _argued for_, _championed_, _pushed_, _convinced_ narrate an interpersonal
+  story that's easy to get subtly wrong even when the underlying fact is solid and long-settled —
+  worth reading back to Ali specifically, the same way a date or a headcount gets checked, rather
+  than assuming an old gate's framing was ever verified at this level of detail.
 - **What does the old page call the thing itself?** Not every project is comfortable being called
   "a game." Night Light's draft defaulted to "the whole game" out of habit; Ali's reaction was
   "game is a stretch for what this is." The old page had already hedged this, unread until then —

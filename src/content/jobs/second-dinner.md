@@ -35,8 +35,9 @@ highlights:
     years on Marvel Snap, which launched in October 2022, then its next team from
     2024, on the studio's first game in Godot.
   - >-
-    Championed and helped lead a migration to MVVM architecture on a live
-    product, alongside the push to ship the PC client.
+    Drove a migration to MVVM architecture on a live product. Built the
+    supporting tooling and brought teammates onto the new working patterns,
+    alongside the push to ship the PC client.
   - >-
     Shipped Snap on PC in two stages. Stage one was a direct mobile port for Steam
     Early Access at the October 2022 launch. Stage two reworked much of the UI to

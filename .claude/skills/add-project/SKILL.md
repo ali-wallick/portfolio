@@ -78,17 +78,30 @@ Optional but valuable: `engine`, `tech`, `platforms`, `teamSize`, `collaborators
 
 ## 4. Media
 
-Images live in `src/assets/projects/<slug>/` and are referenced relative to the Markdown file:
+Images live in `src/assets/images/projects/<slug>/` and are referenced relative to the Markdown
+file:
 
 ```yaml
 hero:
   type: image
-  src: ../../assets/projects/vegas-blvd-slots/hero.png
+  src: ../../assets/images/projects/vegas-blvd-slots/hero.png
   alt: A slot machine mid-spin, three sevens lined up
 ```
 
 `alt` is required by the schema and the path is validated at build time, so a typo or a renamed file
 fails the build rather than shipping a broken image.
+
+**For a live commercial title with no personal captures of your own** (a shipped, currently-running
+game rather than a jam or student project), official screenshots are the right source — the game's
+own Steam/App Store/press-kit assets, not a fan site. Marvel Snap's gallery
+([#136](https://github.com/ali-wallick/Portfolio/issues/136), 2026-08-26) came from the Steam store
+page's own screenshot carousel and a press image already cited in `links`. **Watch for fan sites
+rendering their own database UI, not the actual game** — marvelsnapzone.com's card pages looked like
+in-game screenshots at a glance but are that site's own layout displaying card data, not a capture of
+Marvel Snap itself; the real evidence was a screenshot embedded in a press article, and separately,
+Steam's own store screenshots. Verify what's actually on screen, not just where the image was linked
+from. **Downloading any file needs the user's explicit go-ahead — state the filename, source, and
+size before saving one**, same as any other file download.
 
 ## 5. Verify
 

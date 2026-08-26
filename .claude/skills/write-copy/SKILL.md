@@ -227,6 +227,16 @@ wired into `npm run verify`** — tone is not gateable, and every number in it h
 to be exceeded. Exceeding one on purpose is a fine answer. Exceeding one by accident is what the
 script is for.
 
+**A bolded lead-in label defeats the sentence splitter the same way, and it inflates the number
+rather than merely merging two sentences.** `**Driving an MVVM migration for the PC launch.**
+Alongside the push...` puts `.**` — a period followed by asterisks, not whitespace — between the
+label and the sentence, so the two fuse and the label's words are counted as part of it. On
+marvel-snap ([#136](https://github.com/ali-wallick/Portfolio/issues/136), 2026-08-26) that reported
+one sentence "over 35 words" at 39w for a sentence that is actually 31w. **Any page using the §4.11
+bolded-label move will do this on every label**, so check the rendered figure before trimming:
+`audit-page.mjs` reads `dist/` with the markdown already stripped, and reported 31w for the same
+sentence. Trim what the reader actually reads, not the markdown.
+
 **A closing quotation mark right after a sentence-ending period defeats the sentence splitter.**
 Its regex only breaks a sentence on `[.!?]` followed by whitespace — `Stupid." We built` has no
 whitespace between the period and the closing quote, so the two sentences merge into one and can

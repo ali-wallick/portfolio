@@ -29,7 +29,7 @@ Option 1 is what LinkedIn defaults to and says the least. Option 2 carries the s
 ```text
 I've been building games for fifteen years, mostly in UI and systems engineering — the layer where a game's interface, its live-ops plumbing, and its meta systems all have to agree with each other.
 
-I'm at Second Dinner now, where I joined in 2019 as the studio's 11th employee, before it had shipped anything. I spent five years on Marvel Snap: early on as a client engineer in Unity, doing notifications, deep linking, localization, and live-ops integration, and later as a feature engineer on meta gameplay systems spanning client and server, card and deck cosmetics, and the deckbuilding UI. The work I'm proudest of there is championing a migration to an MVVM architecture on a live product, owning localization end to end, and the two-stage PC launch — a direct mobile port for Steam Early Access, then rebuilding much of the UI to be genuinely landscape- and mouse-and-keyboard-native when we exited Early Access in 2023. Since 2024 I've been on Second Dinner's next team, building the studio's first game in Godot.
+I'm at Second Dinner now, where I joined in 2019 as the studio's 11th employee, before it had shipped anything. I spent five years on Marvel Snap: early on as a client engineer in Unity, doing notifications, deep linking, localization, and live-ops integration, and later as a feature engineer on meta gameplay systems spanning client and server, card and deck cosmetics, and the deckbuilding UI. The work I'm proudest of there is driving a migration to an MVVM architecture on a live product, owning localization end to end, and the two-stage PC launch — a direct mobile port for Steam Early Access, then rebuilding much of the UI to be genuinely landscape- and mouse-and-keyboard-native when we exited Early Access in 2023. Since 2024 I've been on Second Dinner's next team, building the studio's first game in Godot.
 
 Before that: three years at MobilityWare on Vegas Blvd Slots, architecting the live-ops systems that let the game change without a client update; a year at Red 5 Studios on Firefall's HUD and menus, on a much bigger team and codebase than I'd worked on before; and four years at Kaneva, where I started in technical support and grew into leading UI programming for a social virtual world.
 
@@ -46,7 +46,7 @@ Something I keep relearning: the most valuable thing I can build is often not th
 
 ```text
 • Joined as the studio's 11th employee, before it had shipped anything. Five years on Marvel Snap, which launched in October 2022, then its next team from 2024, on the studio's first game in Godot.
-• Championed and helped lead a migration to MVVM architecture on a live product, alongside the push to ship the PC client.
+• Drove a migration to MVVM architecture on a live product. Built the supporting tooling and brought teammates onto the new working patterns, alongside the push to ship the PC client.
 • Shipped Snap on PC in two stages. Stage one was a direct mobile port for Steam Early Access at the October 2022 launch. Stage two reworked much of the UI to be landscape- and mouse-and-keyboard-native for the Early Access exit in August 2023.
 • Owned localization end to end: Unity's Localization package, the import/export pipeline, font handling, and the workflow the team localized UI text through.
 • Built the Braze integration that let live-ops and marketing ship content without an app update: main-screen carousel, news page, and modal pop-ups.

@@ -350,8 +350,15 @@ a cross-cutting aside; it was promoted at the gate with her agreement, because a
 leadership on a shipped live product is the strongest single item here and the most senior-sounding
 without being vague.
 
-1. **Championing a migration to an MVVM architecture**, alongside the push to launch the PC client.
-   Not just doing the work — arguing for it and getting a team to come along.
+1. **Driving a migration to an MVVM architecture**, alongside the push to launch the PC client.
+   **Corrected 2026-08-26 (#136), and the correction matters.** This gate recorded it as "arguing
+   for it and getting a team to come along", and every surface inherited that: the project page said
+   "I argued for a migration", its `summary` and the resume bullet both said "championing"/
+   "championed". Ali's own account on reading it back is that there was no argument to win — she
+   built out the tooling that made an MVVM architecture practical to adopt, and encouraged teammates
+   to migrate their working patterns onto it. That is the same shape as her Kaneva menu animation
+   system (build the tool, other teams adopt it), and more concrete than advocacy. **The seniority
+   claim survives, it just rests on the tooling and the adoption rather than on winning a debate.**
 2. **The PC launch, as a two-stage arc** — and the second stage is the interesting one:
    - Steam **Early Access from the 18 October 2022 global launch** was a _direct port of the mobile
      client_.
