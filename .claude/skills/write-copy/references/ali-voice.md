@@ -27,34 +27,51 @@ warmth of the latter.
 
 `node .claude/skills/write-copy/scripts/copy-stats.mjs --baseline` reproduces the blog column.
 
-| Metric                   | Blog (2010–19) | Documents (2016–24) | Interview (2017) | Chat (2026) | The site |
-| ------------------------ | -------------- | ------------------- | ---------------- | ----------- | -------- |
-| Words measured           | 5,122          | 4,229               | 323              | 263         | 5,743    |
-| **Mean sentence length** | **16.9**       | **17.2**            | **14.6**         | **17.5**    | **32.2** |
-| Longest sentence         | 57             | 44                  | **27**           | 36          | 49       |
-| Em dashes per 1k         | **0.0**        | **0.0**             | **0.0**          | **0.0**     | 15.8     |
-| Contractions per 1k      | 17.0           | 0.7                 | 18.6             | 49.4        | 21.6     |
-| Exclamation points       | 96             | 9                   | 8                | 0           | 2        |
-| Question marks           | 6              | 16                  | 0                | 3           | 0        |
+| Metric                   | Blog (2010–19) | Documents (2016–24) | Interview (2017) | Chat (2026) | Site (before) | Site (now) |
+| ------------------------ | -------------- | ------------------- | ---------------- | ----------- | ------------- | ---------- |
+| Words measured           | 5,122          | 4,229               | 323              | 263         | 5,743         | 3,045      |
+| **Mean sentence length** | **16.9**       | **17.2**            | **14.6**         | **17.5**    | **32.2**      | **16.2**   |
+| Longest sentence         | 57             | 44                  | **27**           | 36          | 49            | 39         |
+| Em dashes per 1k         | **0.0**        | **0.0**             | **0.0**          | **0.0**     | 15.8          | **0.0**    |
+| Contractions per 1k      | 17.0           | 0.7                 | 18.6             | 49.4        | 21.6          | 16.9       |
+| Exclamation points       | 96             | 9                   | 8                | 0           | 2             | 1          |
+| Question marks           | 6              | 16                  | 0                | 3           | 0             | 0          |
+
+**The "Site (now)" column is post-pass and is the one to read.** #31 and its 21 sub-issues closed
+2026-08-26; the "before" column is kept because it is the evidence that motivated the pass, not a
+description of anything that still exists. Scope note: "before" measured 5,743 words across all
+content; "now" measures 3,045 words of `src/content/{projects,jobs}` **body prose only** — front
+matter and `.astro` page copy are excluded, and the drop in total is real (the em-dash pass tightened
+prose, and `jobs[].summary` came out of the model entirely for #135/#141). **The exclamation row
+counts body prose only, so it reads 1** — the site's second one lives in `currentNote`, front matter
+rendered on two pages, and is outside this scope rather than missing from it.
+
+Re-measure with `copy-stats.mjs src/content/projects/*.md src/content/jobs/*.md`.
 
 ### The two findings that matter
 
 **1. Seventeen words.** Four corpora: a blog written in her twenties (16.9), formal adult documents
 (17.2), an employer Q&A (14.6), and messages typed into a chat window in 2026 (17.5). Sixteen years,
 five genres, and everything sits between 14.6 and 17.5. **That is her sentence**, not an artifact of
-any one register — it holds when she is being careful and when she isn't trying at all. The site's
-copy is at 32, not occasionally long but uniformly double. **This is the highest-leverage fix
-available, ahead of any word choice.** A page can avoid every AI tell on this list and still not
-sound like her.
+any one register — it holds when she is being careful and when she isn't trying at all. A page can
+avoid every AI tell on this list and still not sound like her if every sentence carries three
+clauses.
 
-The sharpest way to put it: **the longest sentence in the entire 2017 interview is 27 words, which
-is shorter than the site's average.**
+**This gap is closed, and the number is now a floor to hold rather than a target to chase.** The
+site was at 32.2 when this file was written — uniformly double, not occasionally long — and the #31
+pass brought it to 16.2. The failure mode from here is the opposite one: don't "improve" a page by
+consolidating short sentences back into long ones. `CLAUDE.md` carries the same warning.
+
+The sharpest way to put the original finding: **the longest sentence in the entire 2017 interview is
+27 words, which was shorter than the site's average.**
 
 The chat and interview corpora are too small to take prose cues from, and chat's contraction and
 first-person rates are register artifacts. They earn their rows for the one number.
 
-**2. Zero em dashes in 9,937 words.** Across all four corpora, Ali has not used one. The site has 91
-in 5,743 words of content.
+**2. Zero em dashes in 9,937 words.** Across all four corpora, Ali has not used one. The site had 91
+in 5,743 words when this was written; it now has **zero in visible page prose**, and that is
+deliberate rather than incidental. The `{title} — Ali Wallick` `<title>`/`og:title` template is the
+one surviving instance sitewide and stays — it is a structural separator, not prose.
 
 _(Earlier drafts of this file said "one em dash." That one instance turned out to be in a `note:`
 field written by a previous agent in a blog post's front matter — not Ali's writing at all. Corrected
@@ -73,9 +90,17 @@ She reaches for something else every single time:
 - **Contractions are genre-dependent, not a voice trait.** 17/1k in the blog, 0.7/1k in formal
   documents. The site sits at 21.6 and is fine. Don't tune this.
 - **Exclamation points are genre-dependent too.** 96 in the blog, 9 in the documents. Do not sprinkle
-  the blog's rate across the site. The signal is only that her natural register is warmer than the
-  site currently is; one earned exclamation on a page where something genuinely great happened is
-  in-voice.
+  the blog's rate across the site. **Settled 2026-08-26: the site's near-zero rate is correct and is
+  not a gap to close.** Ali's own framing on reviewing the finished pass — "some warmth is good but
+  I'm definitely wanting to veer more professional than the old site." The evidence agrees, and the
+  mechanism is the thing to carry forward: **both exclamations in the site's visible prose are there
+  because Ali asked for them directly.** "But we pulled it off!" (tilting-at-windmills) came from
+  [#99](https://github.com/ali-wallick/Portfolio/issues/99), and "the studio's first game in Godot!"
+  (`currentNote`, rendered on the homepage and About) came from her review of the recalibration pass
+  itself — she rejected a proposed warmth clause in the homepage lede and asked for the exclamation
+  instead, on the ground that the current work is the thing worth being glad about. **When she wants
+  one, she says so.** One earned exclamation where something genuinely great happened is in-voice; a
+  pass that adds them to hit a rate is not.
 - **Question marks go the other way.** She uses them _more_ in adult writing than in the blog —
   see "Pressing with questions" below. The site has none.
 
@@ -148,9 +173,30 @@ programming," "I love the idea of being able to work on games that reach such di
 "I love being able to get in every day and work on challenges that make our games tick," "I also love
 all the board games that are coming to mobile."
 
-The site's copy states what she did. It almost never states that she liked it. That's the warmth gap
-the exclamation-point numbers hint at, in a form that's actually usable in portfolio register — an
-enthusiasm verb costs nothing and doesn't turn a page into a blog.
+The site's copy states what she did, and states that she liked it sparingly. **The enthusiasm verb —
+not the exclamation point — is the instrument that carries warmth at professional register**, and
+this interview is the proof: it is an employer-published Q&A, not a blog, and she still says "I love"
+five times in 320 words. An enthusiasm verb costs nothing and doesn't turn a page into a blog.
+
+**Where the site actually landed (measured 2026-08-26, post-pass).** Four of the five featured pages
+carry exactly one warmth beat, and all four sit in the closing `## What I Learned` section rather
+than the body: Kaneva ("discovered a love for UI programming"), Marvel Snap ("I'm proudest of
+watching Second Dinner grow"), Vegas Blvd Slots ("real respect for how much depth", "some of the most
+satisfying work I did there"), and About ("I still enjoy talking about the work", "my love for
+programming"). Firefall and I Fits I Sits close on a plain concrete fact instead, and **Firefall's is
+a deliberate choice** — [#139](https://github.com/ali-wallick/Portfolio/issues/139) cut a
+reflective closer from that page and Ali picked the flat ending. The 11 archive entries carry none,
+which is also deliberate: "it's so old it's more just for fun to show cool old projects" (#92).
+
+**The homepage carries one too, and how it got there is the useful part.** It had none, and a
+proposed warmth clause in the lede ("which is what drew me to it") was **rejected** in favour of a
+single exclamation on `currentNote`: "building the studio's first game in Godot!" Ali's reasoning —
+the current work is the thing worth being glad about, so the warmth belongs on the Currently line
+rather than bolted onto #129's workshopped lede. **Prefer moving a warmth beat onto the thing that
+actually warrants it over adding a clause to copy that already works.**
+
+**So the pattern is: one warmth beat, at the end, on the pages with a closer.** That is the settled
+shape. Adding a second to a page that has one, or a first to the archive tier, is drift.
 
 ### She names specific things instead of gesturing at categories
 

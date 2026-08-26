@@ -70,9 +70,13 @@ highlightsExtended:
     General client and platform work on the studio's Godot project: engine
     updates, reporting and fixing engine bugs with partners at W4 Games,
     integrating native mobile plugins, and standing up unit testing.
+# The exclamation is deliberate and is the site's second one in visible prose
+# (see `write-copy`'s settled note on dosage). Ali's call, 2026-08-26: the
+# homepage wanted a warmth beat, and the current work is the thing worth being
+# glad about. Read by both the homepage and About, so it lands on both.
 currentNote: >-
   Since 2024, I've been on a new team at Second Dinner, building the studio's
-  first game in Godot.
+  first game in Godot!
 ---
 
 ## Source material (2019 resume, verbatim — not current copy)

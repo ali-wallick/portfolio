@@ -88,8 +88,7 @@ doesn't:
   secret-garden (#98): its Qualcomm AR Game Studio writeup swapped a 404'd `argamestudio.org` URL
   for a working `web.archive.org` snapshot, label suffixed `(via Wayback Machine)`, `dead` dropped
   entirely since the link now resolves. See `content.config.ts`'s `link` schema comment, which
-  carries the same rule. **Worth a look on kaneva.com, firefall.com, and Vegas Blvd Slots' two dead
-  store links when those pages' own passes come around — not done here.**
+  carries the same rule.
   **Within the weaker case, prefer dropping over `dead: true` for a broken interaction, not just a
   broken citation.** Settled on cor-ex-machina (#90): its "Play online" link was a Unity Web Player
   build, dead regardless of whether the host answers, and the first draft kept it as `dead: true`

@@ -21,31 +21,33 @@ Four independent corpora underpin it: her blog (2010–2019), a set of adult doc
 MobilityWare's 2017 "Meet Ali Wallick" Q&A, and her own chat messages from 2026. The numbers worth
 carrying in your head:
 
-|                      | Blog     | Documents | Interview | Chat     | The site |
-| -------------------- | -------- | --------- | --------- | -------- | -------- |
-| Mean sentence length | **16.9** | **17.2**  | **14.6**  | **17.5** | 32.2     |
-| Em dashes per 1k     | **0.0**  | **0.0**   | **0.0**   | **0.0**  | 15.8     |
+|                      | Blog     | Documents | Interview | Chat     | Site (before) | Site (now) |
+| -------------------- | -------- | --------- | --------- | -------- | ------------- | ---------- |
+| Mean sentence length | **16.9** | **17.2**  | **14.6**  | **17.5** | 32.2          | **16.2**   |
+| Em dashes per 1k     | **0.0**  | **0.0**   | **0.0**   | **0.0**  | 15.8          | **0.0**    |
 
 **Seventeen words is her sentence.** Sixteen years, five genres, everything between 14.6 and 17.5 —
-it holds when she's careful and when she isn't trying. The site is at 32, not occasionally but
-uniformly. **This is the highest-leverage fix available, ahead of any word choice**: a page can pass
-every trope check below and still not sound like her because every sentence carries three clauses.
-The sharpest version: **the longest sentence in her whole 2017 interview is 27 words, shorter than
-the site's average.**
+it holds when she's careful and when she isn't trying. A page can pass every trope check below and
+still not sound like her because every sentence carries three clauses.
 
-**Zero em dashes in 9,937 words of hers**, against 91 in the site's 5,743.
+**Both gaps are closed as of 2026-08-26** — #31 and its 21 sub-issues shipped, taking the site from
+32.2 words to 16.2 and from 91 em dashes to zero. **The numbers are now a position to hold, not a
+target to chase**, and the live failure mode is the reverse of the original one: don't re-consolidate
+short sentences into long ones, and don't reintroduce an em dash "for rhythm." Re-measure before
+assuming either has slipped, and read the "Site (now)" column, not "before."
 
 ## 2. Register depends on the surface
 
 One voice, three settings. Getting this wrong reads worse than any individual bad sentence.
 
-| Surface                                | Register                                                                        |
-| -------------------------------------- | ------------------------------------------------------------------------------- |
-| Blog-derived prose, About              | Warmest. Contractions, parentheticals, an earned exclamation.                   |
-| Project write-ups                      | Warm but composed. First person, past tense, specifics forward.                 |
-| `highlights` / `highlightsExtended`    | Résumé register: verb-first, subject dropped, no contractions, no exclamations. |
-| Microcopy — nav, 404, contact, buttons | Shortest. Plain and a little dry. A joke only if it's actually funny.           |
-| Alt text, meta descriptions            | Descriptive, not voiced. Say what's in the image.                               |
+| Surface                                | Register                                                                         |
+| -------------------------------------- | -------------------------------------------------------------------------------- |
+| Blog-derived prose, About              | Warmest. Contractions, parentheticals, a rare earned exclamation.                |
+| Project write-ups                      | Composed. First person, past tense, specifics forward, one warmth beat at close. |
+| Archive-tier entries                   | Composed and lower-key. No warmth beat; "cool old projects", not a pitch.        |
+| `highlights` / `highlightsExtended`    | Résumé register: verb-first, subject dropped, no contractions, no exclamations.  |
+| Microcopy — nav, 404, contact, buttons | Shortest. Plain and a little dry. A joke only if it's actually funny.            |
+| Alt text, meta descriptions            | Descriptive, not voiced. Say what's in the image.                                |
 
 **For resume work, this skill is half the job.** It governs how a bullet reads; the `update-resume`
 skill governs where it lives, the per-job bullet budget, and the regeneration pipeline (PDFs,
@@ -54,7 +56,7 @@ will fail `npm run check:pdf` at deploy time.
 
 **Contractions and exclamations track the surface, not the voice.** She runs 17 contractions per 1k
 words in the blog and 0.7 in formal documents; 96 exclamations in the blog and 9 across 4,200 words
-of documents. The site sits at 22 contractions per 1k and is fine. Don't tune either against a
+of documents. The site sits at 16.9 contractions per 1k and is fine. Don't tune either against a
 sitewide number — tune them against the row above.
 
 **The table is the default, not a ceiling — a single page can deviate on explicit request.** Kaneva
@@ -66,7 +68,25 @@ register (clipped declarative sentences, no narrative color) — and asking whic
 between, rather than guessing at one rewrite. She picked the lighter one. First person and past tense
 held in both drafts; those aren't register, they're settled sitewide (CLAUDE.md). **Record a register
 override where it happened** (the page's own PR, or a comment on its issue), not as a change to the
-table above — it's a one-page exception, not a new default.
+table above.
+
+**Correction, 2026-08-26: that override stopped being a one-page exception and is now the site's
+default.** Kaneva's dial-down propagated by citation — [#137](https://github.com/ali-wallick/Portfolio/issues/137)
+reworded Vegas Blvd Slots specifically to match "I Fits I Sits, Firefall, and Kaneva," at which point
+four of the five featured pages were formal by explicit request and the "warm but composed" row was
+describing a register no page still had. Ali's own read on the finished pass: **"some warmth is good
+but I'm definitely wanting to veer more professional than the old site."** The table rows above are
+rewritten to say what the site actually does, and the mechanism worth keeping is the one Kaneva
+established: **when a register call is genuinely open, draft two distinct directions and ask, rather
+than guessing at one rewrite.**
+
+**"More professional than the old site" is the calibration, and the old site is the thing to measure
+against — not the blog.** The 2010 homepage's "I'm a gal passionate about developing games" is the
+register being moved away from. The adult documents corpus (17.2-word sentences, 0.7 contractions per
+1k, 9 exclamations in 4,200 words) is the target, and `references/ali-voice.md` is explicit that the
+site wants "the register of the former with some of the warmth of the latter." **Some. The site is
+under the documents' exclamation rate right now and that is fine** — see the settled note in the
+reference before treating any warmth metric as a gap to close.
 
 ## 3. AI tells — the pattern is the tell, not the instance
 
@@ -176,10 +196,21 @@ Copied from her own sentences, not from a style guide:
    about a decision that was reasonable at the time and still had to be redone.
 8. **Open with a question when a piece of work solved a real problem.** She uses question marks more
    in adult writing than in the blog; the site uses none. One, to state the problem, is in voice.
-9. **Say that she liked it.** She leads with an enthusiasm verb five times in 320 words of
-   interview: "I love being able to get in every day and work on challenges that make our games
-   tick." The site records what she did and almost never that she enjoyed it. One "I loved building
-   this" costs nothing and doesn't turn a page into a blog.
+9. **Say that she liked it — once, at the close.** She leads with an enthusiasm verb five times in
+   320 words of interview: "I love being able to get in every day and work on challenges that make
+   our games tick." That interview is employer-published, not a blog, which is what makes the
+   enthusiasm verb the right instrument for warmth at professional register — it costs nothing and
+   doesn't turn a page into a blog, where an exclamation point would.
+   **The site's settled dosage, measured 2026-08-26: exactly one beat, in the closing section.**
+   Kaneva, Marvel Snap, Vegas Blvd Slots and About each carry one; the homepage carries one on its
+   Currently line; Firefall and I Fits I Sits deliberately carry none (Firefall's flat closer was
+   Ali's pick on #139); the archive tier carries none by design. Adding a second to a page that has
+   one, or a first to an archive entry, is drift rather than warmth — see `references/ali-voice.md`
+   for the full map.
+   **When a page needs a beat, look for the thing that already warrants one before writing a new
+   clause.** The homepage's beat is a single exclamation on `currentNote` ("the studio's first game
+   in Godot!"), chosen by Ali over a proposed warmth clause in the lede — the current work was
+   already the gladdest fact on the page, so it only needed the punctuation to say so.
 10. **Name the specific thing.** Blendoku, Carcassone, Castles of the Mad King Ludwig — not "board
     games". The same instinct as the undramatised numbers, applied to nouns, and the most reliable
     single marker of her writing.
