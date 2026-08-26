@@ -26,7 +26,8 @@ highlightsExtended:
     and keeping the game current through several major Unity version upgrades.
   - >-
     Ported the previous slots title, Hot Streak Slots, from native iOS to Unity,
-    and built blackjack, video poker, and keno for an early unreleased casino app.
+    and built blackjack, video poker, and keno for an early unreleased casino app
+    whose team later merged into Vegas Blvd Slots, which shipped as slots only.
 summary: >-
   Three years building casino mobile games in Unity, most of it on Vegas Blvd
   Slots. Pitched a game jam prototype, I Fits I Sits, that later shipped as

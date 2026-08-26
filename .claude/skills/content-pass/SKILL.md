@@ -114,6 +114,23 @@ doesn't:
   _shows_ that fact instead of just asserting it. **Checked on firefall.com too (#139, 2026-08-25):**
   same fix, swapped to a November 2015 snapshot (during Ali's time at Red 5), labeled `firefall.com
 (via Wayback Machine)`, `dead` dropped.
+- **A Wayback snapshot returning 200 is not proof it works — verify a swap in an actual browser, not
+  just `curl`.** Found on vegas-blvd-slots ([#137](https://github.com/ali-wallick/Portfolio/issues/137), 2026-08-26). An archived App Store listing had a full 200
+  response and complete HTML via `curl`, and shipped as a Wayback swap on that evidence alone.
+  Opened for real in a browser, it never showed the listing — it hung indefinitely on the App
+  Store's own "Connecting to Apple Music..." iTunes-redirect interstitial, which archived replay can
+  never resolve, because that's client-side JS trying to open a native app that isn't there. The
+  same page tripped the opposite failure in the other direction: MobilityWare's own product page (a
+  Wix site) `curl`'d back as almost no visible text, because Wix is entirely client-rendered and
+  `curl` never executes the JS that builds the page — opened in a browser, it was the fuller, working
+  page that ended up shipping instead. `curl`/the availability API only prove a URL _responds_; they
+  can't tell you whether the page that loads is the real thing, a stuck redirect, or an empty shell.
+  For any Wayback swap, load it in a browser (the Browser pane tools, not a raw fetch) and read what
+  a visitor would actually see before treating it as the fix. The site's three prior Wayback swaps
+  (kaneva.com, firefall.com, secret-garden's argamestudio.org) were spot-checked the same way after
+  this was found and all render correctly — the risk is specific to client-redirect pages like app
+  stores, not to Wayback swaps in general, but there's no way to know which kind a given URL is
+  without looking.
 - **Is there context only Ali has?** The old page and the blog archive are not the only place a
   fact can live. Prodigal's strongest material — a named Georgia Tech course, built on real
   hardware in C and assembly — was in neither. No amount of re-reading old pages would have
@@ -253,6 +270,16 @@ hunts..." reads more like a synopsis. Prodigal's body already does this ("A wolf
 find food..."). Worth a second look whenever "you" shows up describing a mechanic, since it's an
 easy default to reach for without noticing. Caught on dead-booty ([#92](https://github.com/ali-wallick/Portfolio/issues/92)) after shipping with "you"
 first.
+
+**Asked to bring one page's register closer to named sibling pages, `grep` the site for the flagged
+phrase before rewriting it.** vegas-blvd-slots ([#137](https://github.com/ali-wallick/Portfolio/issues/137)): asked to make the page read more formal like
+I Fits I Sits, Firefall, and Kaneva, the specific casual phrases worth fixing weren't obvious from
+feel alone — "cut my teeth," "entirely myself," and the "I went in... I came out..." narrative
+bookend all sound perfectly normal read once. `grep -rn "<phrase>" src/content/projects/
+src/content/jobs/` confirmed all three were unique to this one page, used nowhere else on the site —
+that's the actual signal a phrase is a register outlier rather than just an ordinary casual word the
+rest of the site also uses at the same rate. Don't reach for this on every wording tweak; it's for
+the specific ask of matching one page's tone to others by name.
 
 **Check a caption against the body it sits next to.** The audit script measures each field in
 isolation, so it won't catch a gallery caption restating a fact the body paragraph right above it
@@ -435,6 +462,18 @@ off!"), the same shape as her own blog's "It ended up being quite tough […] bu
 with a great little prototype." That's now `write-copy`'s positive move §4.12 — the "first X that
 actually worked" phrasing is the tell; the fix is earning the win with the specific difficulty
 instead.
+
+#137 (Vegas Blvd Slots) produced the Wayback in-browser verification finding above (§3) — the biggest
+single miss so far, since it shipped a genuinely broken link and only got caught because Ali asked a
+follow-up question rather than anything in the pass itself flagging it. It also surfaced a smaller,
+narrower method: asked to bring one page's register in line with named sibling pages, `grep` the rest
+of the site for the flagged phrase before rewriting it. "Cut my teeth," "entirely myself," and "went
+in... came out..." were all confirmed unique to this one page across every other project and job
+file before being reworded — the check is what separates "this phrase is casual" (true of plenty of
+words on the site and not a problem) from "this phrase is an outlier nowhere else uses" (the actual
+signal a register mismatch exists). Not added as a new `write-copy` tell, since none of the three are
+AI-tell material — a sentence-initial "But" in particular is called out as a positive move
+elsewhere in that skill (§3) and reworking one here was a local choice for this page, not a rule.
 
 **Not every pass will find something, and that's a fine outcome.** Don't manufacture a finding to
 fill the step. A page that needed no back-and-forth on wording is a page that confirmed the skills

@@ -1615,7 +1615,7 @@
           "x": 0,
           "y": 0,
           "width": 1280,
-          "height": 988.7
+          "height": 1004.98
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -1630,7 +1630,7 @@
           "x": 0,
           "y": 0,
           "width": 1280,
-          "height": 988.7
+          "height": 1004.98
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -1810,7 +1810,7 @@
           "x": 0,
           "y": 0,
           "width": 1280,
-          "height": 988.7
+          "height": 1004.98
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -1900,7 +1900,7 @@
           "x": 0,
           "y": 0,
           "width": 1280,
-          "height": 988.7
+          "height": 1004.98
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -2245,7 +2245,7 @@
           "x": 0,
           "y": 178,
           "width": 1280,
-          "height": 738.33
+          "height": 754.61
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -2530,7 +2530,7 @@
           "x": 0,
           "y": 477.7,
           "width": 1280,
-          "height": 163.47
+          "height": 179.75
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -2620,7 +2620,7 @@
           "x": 0,
           "y": 513.89,
           "width": 1280,
-          "height": 127.28
+          "height": 143.56
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -2695,7 +2695,7 @@
           "x": 16,
           "y": 624.89,
           "width": 1264,
-          "height": 16.28
+          "height": 32.56
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -2708,7 +2708,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3)",
         "rect": {
           "x": 0,
-          "y": 651.17,
+          "y": 667.45,
           "width": 1280,
           "height": 91.69
         },
@@ -2723,7 +2723,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 651.17,
+          "y": 667.45,
           "width": 1280,
           "height": 16.59
         },
@@ -2738,7 +2738,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 651.17,
+          "y": 667.45,
           "width": 197.25,
           "height": 15.98
         },
@@ -2753,7 +2753,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
         "rect": {
           "x": 103.53,
-          "y": 651.17,
+          "y": 667.45,
           "width": 93.72,
           "height": 16
         },
@@ -2768,7 +2768,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
           "x": 1186.61,
-          "y": 652.17,
+          "y": 668.45,
           "width": 93.39,
           "height": 15.59
         },
@@ -2783,7 +2783,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3) > p.meta.resume-job-meta:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 667.77,
+          "y": 684.05,
           "width": 513.98,
           "height": 15.59
         },
@@ -2798,7 +2798,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 687.36,
+          "y": 703.64,
           "width": 1280,
           "height": 55.5
         },
@@ -2813,7 +2813,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 687.36,
+          "y": 703.64,
           "width": 1264,
           "height": 16.28
         },
@@ -2828,7 +2828,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2)",
         "rect": {
           "x": 16,
-          "y": 706.97,
+          "y": 723.25,
           "width": 1264,
           "height": 16.28
         },
@@ -2843,7 +2843,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3)",
         "rect": {
           "x": 16,
-          "y": 726.58,
+          "y": 742.86,
           "width": 1264,
           "height": 16.28
         },
@@ -2858,7 +2858,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4)",
         "rect": {
           "x": 0,
-          "y": 752.86,
+          "y": 769.14,
           "width": 1280,
           "height": 163.47
         },
@@ -2873,7 +2873,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 752.86,
+          "y": 769.14,
           "width": 1280,
           "height": 16.59
         },
@@ -2888,7 +2888,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 752.86,
+          "y": 769.14,
           "width": 209.23,
           "height": 15.98
         },
@@ -2903,7 +2903,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
         "rect": {
           "x": 125.23,
-          "y": 752.86,
+          "y": 769.14,
           "width": 84,
           "height": 16
         },
@@ -2918,7 +2918,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
           "x": 1212.52,
-          "y": 753.86,
+          "y": 770.14,
           "width": 67.48,
           "height": 15.59
         },
@@ -2933,7 +2933,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > p.meta.resume-job-meta:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 769.45,
+          "y": 785.73,
           "width": 513.98,
           "height": 15.59
         },
@@ -2948,7 +2948,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 789.05,
+          "y": 805.33,
           "width": 1280,
           "height": 127.28
         },
@@ -2963,7 +2963,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 789.05,
+          "y": 805.33,
           "width": 1264,
           "height": 16.28
         },
@@ -2978,7 +2978,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2)",
         "rect": {
           "x": 16,
-          "y": 808.66,
+          "y": 824.94,
           "width": 1264,
           "height": 32.56
         },
@@ -2993,7 +2993,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3)",
         "rect": {
           "x": 16,
-          "y": 844.55,
+          "y": 860.83,
           "width": 1264,
           "height": 16.28
         },
@@ -3008,7 +3008,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(4)",
         "rect": {
           "x": 16,
-          "y": 864.16,
+          "y": 880.44,
           "width": 1264,
           "height": 16.28
         },
@@ -3023,7 +3023,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(5)",
         "rect": {
           "x": 16,
-          "y": 883.77,
+          "y": 900.05,
           "width": 1264,
           "height": 32.56
         },
@@ -3038,7 +3038,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3)",
         "rect": {
           "x": 0,
-          "y": 928.33,
+          "y": 944.61,
           "width": 1280,
           "height": 60.38
         },
@@ -3053,7 +3053,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > h2:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 928.33,
+          "y": 944.61,
           "width": 1280,
           "height": 18.86
         },
@@ -3068,7 +3068,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 956.52,
+          "y": 972.8,
           "width": 1280,
           "height": 32.19
         },
@@ -3083,7 +3083,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 956.52,
+          "y": 972.8,
           "width": 1280,
           "height": 16.59
         },
@@ -3098,7 +3098,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 956.52,
+          "y": 972.8,
           "width": 375.63,
           "height": 15.98
         },
@@ -3113,7 +3113,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
         "rect": {
           "x": 174.47,
-          "y": 956.52,
+          "y": 972.8,
           "width": 201.16,
           "height": 16
         },
@@ -3128,7 +3128,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
           "x": 1254.06,
-          "y": 957.52,
+          "y": 973.8,
           "width": 25.94,
           "height": 15.59
         },
@@ -3143,7 +3143,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > p.meta.resume-job-meta:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 973.11,
+          "y": 989.39,
           "width": 513.98,
           "height": 15.59
         },
