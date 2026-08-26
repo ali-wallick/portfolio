@@ -391,10 +391,18 @@ Two known traps:
   [#144](https://github.com/ali-wallick/Portfolio/issues/144). Confirm it fails on a clean tree
   before blaming your branch, and check your own files directly:
   `npx prettier --check <files>`.
-- **Touching `src/content.config.ts` invalidates the resume PDFs.** It's one of
-  `build-pdf.mjs`'s hashed inputs, so even a comment edit changes `scripts/resume-pdf.lock.json`.
-  `npm run build` regenerates them; commit `public/*.pdf` and the lock with your change or
-  `npm run check:pdf` fails the deploy.
+- **It's not just `content.config.ts` — any of `build-pdf.mjs`'s hashed inputs invalidates the
+  resume PDFs**, and that list is wider than a page's own content file: `src/styles/base.css` and
+  `tokens.css` are on it too, alongside `site.ts`, `content.ts`, and the resume components
+  themselves (see the list at the top of `inputFiles()` in `scripts/build-pdf.mjs`). Found on #100
+  ([#184](https://github.com/ali-wallick/Portfolio/pull/184)): adding icon markup to `.button` in
+  `base.css` — a change with nothing to do with the resume — still changed
+  `scripts/resume-pdf.lock.json`'s hash. `npm run build` regenerates the PDFs; commit `public/*.pdf`
+  and the lock with your change (even when the PDFs render pixel-identical, which they will if the
+  change doesn't touch anything the resume actually renders) or `npm run check:pdf` fails the
+  deploy. If a content-pass branch touches sitewide CSS or `site.ts` for any reason, check
+  `git status` for regenerated PDFs before opening the PR — don't assume only a content-file edit
+  triggers this.
 
 ## 7. Branch, preview, PR
 
@@ -567,6 +575,28 @@ header correctly warns not to edit the generated file by hand, but that warning 
 the un-generated copy that produced it. **When propagating a fact correction, grep `src/`, `scripts/`,
 and `docs/` together, not just `src/content/`** — a generator script can carry hand-authored prose
 holding the same fact.
+
+#100 (`/contact`, [#184](https://github.com/ali-wallick/Portfolio/pull/184)) is the first pass where
+the wording verdict and the PR's actual scope came apart cleanly rather than through iteration. The
+copy needed nothing — audit clean, matches #134's prior sign-off — and that's where a copy-only pass
+would stop. But asked directly, in the same conversation, "any thoughts, and what about icons on the
+social buttons," Ali's answer to the icon question was "just do it," which turned a confirmed-clean
+content pass into a PR that ships a small UI change with **zero copy changes in it**. Two things worth
+keeping from that:
+
+- **A content-pass conversation isn't scoped to content the moment the copy verdict lands.** The
+  session is still open, and a direct follow-up ask — even a visual one, normally Phase 5 territory
+  per `CLAUDE.md` — is a request to fulfil in the same PR, not a cue to file a separate polish issue
+  and defer. The exploratory-question norm still applies first (answer with a recommendation, don't
+  implement until she agrees), but once she says "do it," that's the same authorization a content
+  edit would get, just for a different kind of change. Don't let "this skill is about wording" turn
+  into "I can't touch anything else this session."
+- **The known-hashed-inputs trap in step 6 was too narrow.** It only named `content.config.ts`; this
+  PR's icon change touched `base.css` instead (a `.button` layout change unrelated to the resume) and
+  still invalidated `scripts/resume-pdf.lock.json`, because `base.css` and `tokens.css` are on
+  `build-pdf.mjs`'s hashed-input list too. Fixed in step 6 above — check `git status` for regenerated
+  PDFs after touching _any_ sitewide file this skill's pages might edit, not just the content
+  collection.
 
 **Not every pass will find something, and that's a fine outcome.** Don't manufacture a finding to
 fill the step. A page that needed no back-and-forth on wording is a page that confirmed the skills

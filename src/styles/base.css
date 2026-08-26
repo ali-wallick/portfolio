@@ -529,12 +529,21 @@ hr {
 }
 
 .button {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   font-family: var(--font-display);
   font-weight: 600;
   font-size: var(--text-sm);
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-pill);
+}
+
+.button-icon {
+  width: 1em;
+  height: 1em;
+  flex: none;
+  fill: currentColor;
 }
 
 .button-accent {
