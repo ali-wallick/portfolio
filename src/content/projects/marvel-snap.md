@@ -74,7 +74,9 @@ links:
   - label: MARVEL SNAP Pictionary!
     url: https://www.youtube.com/watch?v=ALvP-EyOkBo
     kind: video
-summary: Five years on Marvel Snap's client and server systems, from early client work to driving its MVVM migration and shipping it on PC.
+summary: >-
+  Five years of client and feature engineering on Marvel Snap, from early UI and localization
+  work to supporting its MVVM migration and PC launch.
 draft: false
 ---
 

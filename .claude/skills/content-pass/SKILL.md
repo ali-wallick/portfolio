@@ -150,6 +150,35 @@ doesn't:
   story that's easy to get subtly wrong even when the underlying fact is solid and long-settled —
   worth reading back to Ali specifically, the same way a date or a headcount gets checked, rather
   than assuming an old gate's framing was ever verified at this level of detail.
+- **A verb corrected once doesn't stay corrected when the same fact gets restated somewhere new.**
+  marvel-snap's MVVM migration verb was already corrected from "championing / arguing for" to a
+  tooling-led framing at the #136 pass — but when that same fact got compressed into the
+  `/projects` index summary during #101 (2026-08-26), it landed as "driving its MVVM migration,"
+  reintroducing a milder version of the same overclaim in a location the earlier fix never touched.
+  Ali caught it on read: "It was a team effort and I feel like driving is an overclaim." Landed on
+  "supporting its MVVM migration," matching the body's own framing ("alongside the push to launch
+  the PC client," "we rebuilt it"). Check the verb again independently whenever a fact gets
+  restated on a new surface — a summary, LinkedIn, the resume — a fix in one place doesn't
+  propagate to the others.
+- **A summary can overclaim through inclusion alone, even when every word in it is true.**
+  Also marvel-snap/#101: the summary named "client and server systems," which is accurate — the
+  body's own account of her later feature-engineering work genuinely spans client and server code.
+  Ali's read was still that server "wasn't a significant part" of her contribution, because naming
+  it in a one-line, three-or-four-fact summary gives it the same visual weight as everything else
+  in the sentence, independent of how much of the actual work it was. A summary is compression, and
+  compression promotes whatever survives it — check with the source whether a technically-true
+  detail deserves that promotion, not just whether it's true.
+- **A body's credit-scope caveat doesn't reach the `summary` automatically, and `summary` is
+  sometimes the only prose a reader sees.** Found on the `/projects` index pass
+  ([#101](https://github.com/ali-wallick/Portfolio/issues/101), 2026-08-26): i-fits-i-sits' body
+  says outright "I did not work on either shipped release," but the card on `/projects` — which
+  only renders `summary`, never the body — said the prototype "grew into Puzzle Cats, downloaded
+  more than a million times," with nothing on the card itself attributing the shipping to other
+  teams. CLAUDE.md is explicit that this project must never read as if she's credited on Puzzle
+  Cats, and the summary alone, out of context, could be read that way. Whenever a project's body
+  carries a "didn't work on X" / "other teams built Y" caveat, check the `summary` in isolation —
+  as a reader who never clicks through would see it — not just for wording quality against the
+  body it accompanies.
 - **What does the old page call the thing itself?** Not every project is comfortable being called
   "a game." Night Light's draft defaulted to "the whole game" out of habit; Ali's reaction was
   "game is a stretch for what this is." The old page had already hedged this, unread until then —
@@ -293,6 +322,15 @@ src/content/jobs/` confirmed all three were unique to this one page, used nowher
 that's the actual signal a phrase is a register outlier rather than just an ordinary casual word the
 rest of the site also uses at the same rate. Don't reach for this on every wording tweak; it's for
 the specific ask of matching one page's tone to others by name.
+
+**Featured project summaries are a single sentence, sitewide.** Settled on `/projects` (#101,
+2026-08-26). All five had shipped as one sentence already, but it wasn't written down anywhere until
+Ali flagged a two-sentence draft directly: "I like these descriptions being a single sentence."
+When a summary is carrying more facts than fit in one sentence, move the overflow into the body
+instead of letting the summary run to two — i-fits-i-sits' Puzzle Cats name and its download/rating
+stats moved into the body paragraph that already covers the game's later history, right next to "I
+did not work on either shipped release," which turned out to be a better home for that detail than
+the card ever was.
 
 **Check a caption against the body it sits next to.** The audit script measures each field in
 isolation, so it won't catch a gallery caption restating a fact the body paragraph right above it
@@ -487,6 +525,19 @@ words on the site and not a problem) from "this phrase is an outlier nowhere els
 signal a register mismatch exists). Not added as a new `write-copy` tell, since none of the three are
 AI-tell material — a sentence-initial "But" in particular is called out as a positive move
 elsewhere in that skill (§3) and reworking one here was a local choice for this page, not a rule.
+
+#101 (`/projects`, the index) was the first non-project page worked, and it produced the most
+findings-per-word of any pass so far, precisely because the summaries are so short that every word
+carries weight. Three landed in `content-pass` itself (above, §3 and §5): the credit-scope-caveat
+gap, the single-sentence convention, and the verb/inclusion overclaim pair. None of them were
+mechanically detectable — no em dash, no banned phrase, nothing `copy-stats.mjs` or the audit script
+would flag, since all five summaries were already inside every measured range. They only surfaced
+because Ali read all five side by side and reacted to two of them in successive rounds
+(i-fits-i-sits' length, then Marvel Snap's "driving"/"server" framing) rather than reading each
+project's page in isolation the way earlier passes did. **Worth building into how a summary-only or
+index-style pass gets read: put the whole set in front of Ali at once, not one card at a time** —
+the length convention and the "driving" overclaim were both only visible in contrast with the other
+four cards, not from reading Marvel Snap's card alone.
 
 **Not every pass will find something, and that's a fine outcome.** Don't manufacture a finding to
 fill the step. A page that needed no back-and-forth on wording is a page that confirmed the skills

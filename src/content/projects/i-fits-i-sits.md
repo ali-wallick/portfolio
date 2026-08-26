@@ -35,9 +35,8 @@ collaborators:
   - name: Robert Spessard
     url: https://robertspessard.com
 summary: >-
-  Pitched and prototyped a mobile puzzle game about cats fitting in boxes at a game jam, and
-  won People's Choice. It grew into Puzzle Cats, downloaded more than a million times with a
-  4.7-star rating.
+  Pitched and prototyped a puzzle game at a company game jam, winning People's Choice, then
+  other teams developed it into a popular mobile game.
 # Card/tile thumbnail override — a square crop of the same Puzzle Cats key
 # art centered on its wordmark, rather than the wide banner `hero` uses.
 # See #64.
@@ -112,8 +111,8 @@ stayed on Vegas Blvd Slots while other teams took it forward. It shipped first o
 Games as It Fits I Sits, renamed since our original name was already taken there. I stayed in the
 loop and saw it peak at 188K daily active users. It later moved to iOS and Android under another new
 name, [Puzzle Cats](https://www.mobilityware.com/puzzle-cats/), a better fit for marketing than a cat
-pun, and is still live. I did not work on either shipped release. The core mechanic in both stayed close
-to our week-one prototype.
+pun, and is still live, downloaded more than a million times with a 4.7-star rating. I did not work
+on either shipped release. The core mechanic in both stayed close to our week-one prototype.
 
 ## What I learned
 
