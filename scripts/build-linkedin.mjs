@@ -158,7 +158,7 @@ const JOB_NOTES = {
   },
   mobilityware: {
     after:
-      '> **Don\'t soften the It Fits I Sits bullet.** "Other teams took it to release" is doing ' +
+      '> **Don\'t soften the I Fits I Sits bullet.** "Other teams took it to release" is doing ' +
       'real work: it is the difference between an accurate credit and implying a credit on Puzzle ' +
       'Cats, which Ali does not have. The honest version is the better story anyway — a one-week ' +
       'jam pitch that outlived her time at the studio and is still live years later.',

@@ -66,12 +66,12 @@ Something I keep relearning: the most valuable thing I can build is often not th
 ```text
 • Architected Vegas Blvd Slots' live-ops systems: a server-controllable store, and a DeltaDNA integration driving in-app messaging, promo carousels, and eventing. Customizable text let marketing run campaigns without engineering.
 • Engineered new slot machines and their features and bonus games, on a title carrying 50+ machines plus rewards, gifting, leagues, and tournaments.
-• Pitched It Fits I Sits at the studio game jam and built the week-long prototype. Focused on a level editor that exported JSON and let us author 61 levels for pitch day. Won People's Choice; other teams took it to release, later as Puzzle Cats.
+• Pitched I Fits I Sits at the studio game jam and built the week-long prototype. Focused on a level editor that exported JSON and let us author 61 levels for pitch day. Won People's Choice; other teams took it to release, renamed It Fits I Sits and later Puzzle Cats.
 • Led cross-cutting work that spanned the whole title, including GDPR support and keeping the game current through several major Unity version upgrades.
 • Ported the previous slots title, Hot Streak Slots, from native iOS to Unity, and built blackjack, video poker, and keno for an early unreleased casino app.
 ```
 
-> **Don't soften the It Fits I Sits bullet.** "Other teams took it to release" is doing real work: it is the difference between an accurate credit and implying a credit on Puzzle Cats, which Ali does not have. The honest version is the better story anyway — a one-week jam pitch that outlived her time at the studio and is still live years later.
+> **Don't soften the I Fits I Sits bullet.** "Other teams took it to release" is doing real work: it is the difference between an accurate credit and implying a credit on Puzzle Cats, which Ali does not have. The honest version is the better story anyway — a one-week jam pitch that outlived her time at the studio and is still live years later.
 
 ---
 

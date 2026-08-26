@@ -16,10 +16,10 @@ highlights:
     Engineered new slot machines and their features and bonus games, on a title
     carrying 50+ machines plus rewards, gifting, leagues, and tournaments.
   - >-
-    Pitched It Fits I Sits at the studio game jam and built the week-long
+    Pitched I Fits I Sits at the studio game jam and built the week-long
     prototype. Focused on a level editor that exported JSON and let us author 61
     levels for pitch day. Won People's Choice; other teams took it to release,
-    later as Puzzle Cats.
+    renamed It Fits I Sits and later Puzzle Cats.
 highlightsExtended:
   - >-
     Led cross-cutting work that spanned the whole title, including GDPR support
@@ -29,7 +29,7 @@ highlightsExtended:
     and built blackjack, video poker, and keno for an early unreleased casino app.
 summary: >-
   Three years building casino mobile games in Unity, most of it on Vegas Blvd
-  Slots. Pitched a game jam prototype, It Fits I Sits, that later shipped as
+  Slots. Pitched a game jam prototype, I Fits I Sits, that later shipped as
   Puzzle Cats after I'd moved on.
 ---
 

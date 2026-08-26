@@ -172,7 +172,7 @@ content/archive/` for a matching post is worth doing every time a project has a 
 - **A named team/group credit in the summary or body duplicates what `collaborators` already
   renders, and no other archive entry does it.** Art of Rescue's summary named the team
   ("built by an all-women team, Team Femtastic Four") in prose; checking the other eight archive
-  entries with `collaborators` (critter-3, dead-booty, it-fits-i-sits, it-will-kill-you,
+  entries with `collaborators` (critter-3, dead-booty, i-fits-i-sits, it-will-kill-you,
   kinoclue, mini-mages, night-light, secret-garden) found none repeat the team's name or
   composition in the summary or body — the rendered "Team" section from `collaborators` is the
   only place it appears. Ali cut it on review (#89). Treat a team name/description sitting in
@@ -384,7 +384,7 @@ issue only for something no existing issue covers (tooling, build, a sitewide me
 Issue numbers, for reference: #89 art-of-rescue, #90 cor-ex-machina, #91 critter-3, #92 dead-booty,
 #93 it-will-kill-you, #94 kinoclue, #95 mini-mages, #96 night-light, #97 prodigal, #98 secret-garden,
 #99 tilting-at-windmills, #100 /contact, #101 /projects, #104 /404, #129 homepage, #136 marvel-snap,
-#137 vegas-blvd-slots, #138 it-fits-i-sits, #139 firefall, #140 kaneva, #141 /about. `/resume` and
+#137 vegas-blvd-slots, #138 i-fits-i-sits, #139 firefall, #140 kaneva, #141 /about. `/resume` and
 `/resume/full` are #32.
 
 **And correct `CLAUDE.md` when the pass disproves something in it.** It's the file every session

@@ -153,7 +153,7 @@ const POSTERS = Object.fromEntries(
  *   2. An image `hero` — already a still of the work, so it is its own thumbnail.
  *   3. A poster frame — for the nine projects whose hero is a video.
  *
- * That fallback is why It Fits I Sits and Kaneva need no `thumbWide` at all —
+ * That fallback is why I Fits I Sits and Kaneva need no `thumbWide` at all —
  * their `hero` is already an image suited to either shape. It's also why the
  * three projects with a video `hero` (Marvel Snap, Vegas Blvd Slots, Firefall)
  * still show a YouTube poster frame in the wide slot until a real wide capture

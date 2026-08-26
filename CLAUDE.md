@@ -254,19 +254,25 @@ and shouldn't be reinvented — see the reference for both quotes.
   First 2 Panels", MobilityWare, It Fits I Sits. This is where the site gets personality that can't
   be templated.
 
-#### It Fits I Sits — scope Ali's contribution precisely
+#### I Fits I Sits — scope Ali's contribution precisely
 
 The biggest content gap on the old site (no page at all), and the easiest to overclaim. What is true:
 
 - Ali **pitched** the concept at MobilityWare's Game Jam V (**March 2018** — the award certificate is
-  dated 03/23/18) and built the prototype with a team over one week. Her focus was the **level
-  editor**, which exported to JSON and let the team author **61 levels** for pitch day — enough that
-  the intro levels carried the whole tutorial with no guided tutorial needed.
+  dated 03/23/18) and built the prototype with a team over one week, under the name **I Fits I
+  Sits**. Her focus was the **level editor**, which exported to JSON and let the team author **61
+  levels** for pitch day — enough that the intro levels carried the whole tutorial with no guided
+  tutorial needed.
 - The team won the **People's Choice Award**, and the game was selected for full development.
 - **Ali did not work on either shipped release.** She stayed on Vegas Blvd Slots; other teams built
   the Facebook Instant Games version (which she was kept in the loop on, and which peaked at **188K
   daily active users** — her own figure, from the 2019-04-16 archive post) and later the iOS/Android
   release, [Puzzle Cats](https://www.mobilityware.com/puzzle-cats/), which is still live.
+- **The game was renamed twice after Ali's pitch, confirmed by her 2026-08-25.** MobilityWare shipped
+  the Facebook Instant Games version as **It Fits I Sits** — the pitch name, I Fits I Sits, was
+  already taken on that platform — then renamed it again as **Puzzle Cats** for the iOS/Android
+  release, a better fit for marketing than the cat pun. The site names the page after what Ali
+  actually pitched and built, not either later, out-of-her-hands rename.
 - MobilityWare's Puzzle Cats page **does not mention the origin**. The lineage is Ali's own account,
   so write it as hers. Never phrase it so a reader thinks she is credited on Puzzle Cats.
 
@@ -375,7 +381,7 @@ actually gates this phase.
 | ---------------- | -------------------------------- | ------------------------------------------------------------------------------- |
 | Marvel Snap      | `61zjv1HcJDI` + `start: 256`     | Marvel's own announcement, cued to Ali. Exactly what `start` is for.            |
 | Vegas Blvd Slots | `8gtbz_T4-yY`                    | already set                                                                     |
-| It Fits I Sits   | ⚠️ **none**                      | Ali to source a capture. Award-certificate photo is a gallery item, not a hero. |
+| I Fits I Sits    | ⚠️ **none**                      | Ali to source a capture. Award-certificate photo is a gallery item, not a hero. |
 | Firefall         | `2cxeAhxSoyo`                    | already set                                                                     |
 | Kaneva           | promote `kaneva/screenshot1.png` | a real shot of the events menu and object panel — the UI she led                |
 
@@ -410,7 +416,7 @@ Both are permanent, and both are the kind of thing that gets re-derived wrongly:
   about HR. **Don't force it into `roles[]`.**
 
 _Everything else this gate left open was closed during Phase 3 execution — the provisional `role`
-fields, the `TODO(phase-3-revisit)` sweep, and the It Fits I Sits hero. The one remainder, prototype
+fields, the `TODO(phase-3-revisit)` sweep, and the I Fits I Sits hero. The one remainder, prototype
 shots for the gallery, is [#46](https://github.com/ali-wallick/Portfolio/issues/46), which carries the framing that makes rough captures
 acceptable there and nowhere else on the site._
 

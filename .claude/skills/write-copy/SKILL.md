@@ -206,7 +206,9 @@ in, because a punchier sentence often wants a detail the source doesn't have.
   ask. `CLAUDE.md`'s "Facts worth having on hand" is the reference.
 - **The Second Dinner ceiling holds absolutely: craft, not product.** The 7 August 2024 W4 Games
   statement is the limit — Godot, next game, no title, platform, or genre.
-- **It Fits I Sits: never imply Ali worked on a shipped release.** She pitched and prototyped it.
+- **I Fits I Sits: never imply Ali worked on a shipped release.** She pitched and prototyped it,
+  under that name — both public names it shipped under later (It Fits I Sits, then Puzzle Cats)
+  were other teams' renames, not her work.
 - **Past tense for past work.** The site's founding bug was present tense that stopped being true.
 - **Marvel Snap pages are about her work on it, not about the game.**
 
