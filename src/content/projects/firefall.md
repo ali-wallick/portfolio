@@ -5,7 +5,7 @@ featureOrder: 4
 startYear: 2015
 endYear: 2016
 status: shipped
-engine: [Red 5 proprietary engine]
+engine: [Red 5 Engine]
 tech: [Lua, XML, C++]
 platforms: [PC]
 job: red-5-studios
