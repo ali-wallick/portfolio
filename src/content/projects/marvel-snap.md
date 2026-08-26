@@ -100,10 +100,12 @@ things from that span stand out.
 encouraged teammates to migrate their working patterns onto an MVVM architecture, and built out the
 tooling that made it practical to adopt.
 Snap's Steam Early Access launched globally on 18 October 2022 as a direct port of the mobile
-client, the fastest path to PC and a reasonable one for a first release. Then we exited Early Access
-on 22 August 2023, announced at Gamescom. That meant going back through a large chunk of the UI. We
-rebuilt it for a landscape screen and mouse-and-keyboard input, instead of a phone layout stretched
-onto a monitor.
+client, the fastest path to PC and a reasonable one for a first release. That December, Snap
+[won Best Mobile Game at The Game Awards](https://www.marvel.com/articles/games/marvel-snap-mobile-game-of-the-year-2022).
+It went on to [win Mobile Game of the Year at the DICE Awards](https://www.pocketgamer.biz/marvel-snap-wins-mobile-game-of-the-year-at-the-dice-awards/)
+the following February. Then we exited Early Access on 22 August 2023, announced at Gamescom. That
+meant going back through a large chunk of the UI. We rebuilt it for a landscape screen and
+mouse-and-keyboard input, instead of a phone layout stretched onto a monitor.
 
 **Building the card and collection systems.** I built and owned the screen players use to inspect
 an individual card:
