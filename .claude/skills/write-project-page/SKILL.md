@@ -56,7 +56,9 @@ Roughly 300–600 words, and it usually wants to cover:
 4. **What came of it** — shipped, won something, taught something, died on the vine. All fine, as
    long as it's true.
 
-Markdown headings start at `##` — the page renders `<h1>` from the `title` front matter.
+Markdown headings start at `##` — the page renders `<h1>` from the `title` front matter. Title-case
+multi-word headings ("What I Built", "What I Learned") — see `CLAUDE.md`'s "Voice and content
+conventions" for the rule.
 
 ## 4. Things that must not come back
 

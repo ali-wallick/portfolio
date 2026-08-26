@@ -84,7 +84,7 @@ I joined Second Dinner in 2019 as its 11th employee, before the studio had shipp
 Snap took about three years to reach launch. I spent that time, and the years after, helping build
 both the game and the studio around it.
 
-## What I built
+## What I Built
 
 Early on I was a client engineer doing core Unity work. The local notification plugin we used for
 iOS and Android had no shared interface between the two. I built one on top of a ScriptableObject,
@@ -141,7 +141,7 @@ players without an app update. The main-screen carousel pulled its content dynam
 so live-ops could update it directly. The same integration also drove the news page and modal
 pop-ups.
 
-## What I learned
+## What I Learned
 
 I'm proudest of watching Second Dinner grow over those five years. We went from a small company
 working on a prototype, to launching a global game, to running it in live ops for years after.

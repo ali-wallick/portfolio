@@ -99,7 +99,7 @@ week. I had jammed there before, but Game Jam V in March 2018 was the first time
 and I pitched a tangram-style puzzle game about cats fitting into boxes, inspired by watching our
 own cats do exactly that. We called it I Fits I Sits.
 
-## What I built
+## What I Built
 
 My focus for the week was the level editor. I believed early on that tooling would matter more than
 any individual level, so I built a system that exported to JSON and let the team assemble 61 levels
@@ -114,7 +114,7 @@ name, [Puzzle Cats](https://www.mobilityware.com/puzzle-cats/), a better fit for
 pun, and is still live, downloaded more than a million times with a 4.7-star rating. I did not work
 on either shipped release. The core mechanic in both stayed close to our week-one prototype.
 
-## What I learned
+## What I Learned
 
 The level editor turned out to be the most durable thing I built that week. It came from something
 I had already noticed at other jams: teams that got into trouble were usually the ones trying to

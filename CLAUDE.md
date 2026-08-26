@@ -199,6 +199,11 @@ Settled now:
   a fact. Empty fields degrade gracefully; wrong ones don't.
 - **Tone target:** modern, a bit irreverent. It should be obvious a game developer made this and not
   obvious which template they used.
+- **Multi-word headers are title case, not sentence case** (2026-08-26,
+  [#182](https://github.com/ali-wallick/Portfolio/issues/182)) — "Featured Work", "What I Built", not
+  "Featured work". Use AP/Chicago rules (small function words lowercase unless first/last), not
+  every-word-capitalized. Single-word headers and proper-noun `<h1>`s (site name, project titles, job
+  titles) are unaffected either way.
 
 **The voice is documented from primary sources, not described in the abstract** (2026-08-24). The
 `write-copy` skill carries quoted evidence and measurements in

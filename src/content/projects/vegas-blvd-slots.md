@@ -48,7 +48,7 @@ title, Hot Streak Slots, from native iOS to Unity. I also built blackjack, video
 an early, unreleased casino app. That team later merged into Vegas Blvd Slots, which shipped as
 slots only.
 
-## What I built
+## What I Built
 
 Most of my time was client-side: engineering support for new machines, and the features and bonus
 games that went with each one. Much of it was less about any one machine than the systems
@@ -59,7 +59,7 @@ without engineering in the loop. I also led a few cross-cutting projects that do
 "features". GDPR support was one, and keeping the game current through several major Unity version
 upgrades was another.
 
-## What I learned
+## What I Learned
 
 I had no background in slot machines starting out. I came away with real respect for how much depth
 is packed into what looks, from the outside, like a simple loop. There's a whole discipline to how a

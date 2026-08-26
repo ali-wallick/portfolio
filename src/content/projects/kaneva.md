@@ -67,7 +67,7 @@ The World of Kaneva was a social virtual world and game platform: avatars, user-
 and full worlds built with integrated scripting. It was my first job out of college, and over four
 years there I moved from technical support into leading UI programming for the entire game.
 
-## What I built
+## What I Built
 
 I began as a Technical Support Engineer, helping players with their scripting. I also built game
 templates (Treasure Hunt and Adventure among them) that let players assemble small games of their
@@ -91,7 +91,7 @@ In 2014, I led a full overhaul of the HUD, from the code design document through
 I also built a menu animation system after growing frustrated with hand-coding each transition
 individually. It was later adopted by both the UI and game teams.
 
-## What I learned
+## What I Learned
 
 Kaneva is where I discovered a love for UI programming that I have carried forward ever since.
 Beyond that, much of what I took from the job concerned working in a professional environment more

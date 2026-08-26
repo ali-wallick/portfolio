@@ -36,7 +36,7 @@ studio's own C++ engine, with a Lua/XML scripting layer on top for UI. I joined 
 for its Chinese launch and the worldwide relaunch overhaul that followed. It was my first time on a
 team and a codebase far larger than Kaneva's.
 
-## What I built
+## What I Built
 
 I worked across most of the game's HUD and menus: the radar, PvP elements, character progression and
 elite-level screens, and reward screens. Much of that work was less about any one screen than the
@@ -44,7 +44,7 @@ layer underneath. I built libraries for common menu and HUD elements so new UI d
 scratch. I also optimized the UI system itself, which mattered on a game that was already demanding
 on the client.
 
-## What I learned
+## What I Learned
 
 Kaneva's whole company was about 20 people. Firefall was the first time I worked on a UI team
 instead of being the UI team. It had several engineers, designers, and artists on UI alone, plus full

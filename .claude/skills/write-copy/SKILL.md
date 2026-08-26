@@ -197,7 +197,13 @@ Copied from her own sentences, not from a style guide:
     exclamation carry the payoff — "we pulled through with a great little prototype." The obstacle
     is what makes the win worth stating instead of implying a history of failure.
 
-## 5. Never let a tone pass change a fact
+## 5. Headers are title case
+
+Multi-word headers ("Featured Work", "What I Built") are title case, not sentence case — see
+`CLAUDE.md`'s "Voice and content conventions" for the rule and the AP/Chicago casing it follows.
+Applies to any header you write or touch, not just project write-ups.
+
+## 6. Never let a tone pass change a fact
 
 An edit pass is not a re-reporting pass. Tightening prose is exactly where invented specifics slip
 in, because a punchier sentence often wants a detail the source doesn't have.
@@ -212,7 +218,7 @@ in, because a punchier sentence often wants a detail the source doesn't have.
 - **Past tense for past work.** The site's founding bug was present tense that stopped being true.
 - **Marvel Snap pages are about her work on it, not about the game.**
 
-## 6. Measure, then read
+## 7. Measure, then read
 
 The repo settled its colours, fonts and motion on measurement rather than taste. Copy gets the same
 treatment.
@@ -255,7 +261,7 @@ SHOW_DRAFTS=true npm run build && npm run links
 If resume copy changed, `npm run build:pdf` and commit the regenerated `public/*.pdf` and
 `scripts/resume-pdf.lock.json` — `npm run check:pdf` fails the deploy on a stale PDF.
 
-## 7. Hand it back as a diff, not as a fait accompli
+## 8. Hand it back as a diff, not as a fait accompli
 
 Copy is Ali's, and a tone pass is the one kind of change where "it builds" proves nothing.
 
