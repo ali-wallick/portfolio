@@ -1,0 +1,5 @@
+/* Added by scripts/restore-snapshot.mjs — not part of the original site.
+   Styles the poster frames that replaced dead YouTube iframes. */
+.archived-video { display: inline-block; max-width: 100%; }
+.archived-video img { max-width: 100%; height: auto; border: 2px solid #4aa17a; }
+.archived-video-missing { color: #9f2b00; font-style: italic; }

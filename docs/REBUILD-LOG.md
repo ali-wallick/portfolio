@@ -2179,3 +2179,112 @@ part was deciding what "everywhere" includes — `docs/LINKEDIN.md` is generated
 its bullets went curly on their own and its hand-authored `About` would have stayed straight in the
 same paste-ready block. That is the #31 and #32 miss recurring for a third time: **a generated file
 is where a wording pass forgets to look, and it forgets again each time.**
+
+---
+
+## Preserving the old site (2026-08-26, PR #196)
+
+Prompted by a plain question — _how do I keep the old site so a before/after is easy later?_ — a few
+days before the DNS cutover. The answer turned out to be mostly "it already is preserved," with one
+defect that made the preservation less useful than it looked.
+
+### The archive recorded what the site said, not what it looked like
+
+`snapshot/` held 30 pages of faithful markup. It also held **50 dead asset references out of 54**,
+because Phase 3 deleted `resources/images/` at `ce4533e` after migrating the keep-list into
+`src/assets/`. `snapshot/README.md` still asserted the assets were "already committed under
+`resources/`" — true when written, quietly false for months.
+
+Nobody would have noticed by reading either file. `snapshot/README.md` describes a relationship
+between two directories, and the statement went stale when _the other one_ changed. **Cross-directory
+claims have no owner**, which is the same failure mode CLAUDE.md's guard table exists to rule out,
+appearing in prose instead of in data.
+
+### The check that asserted the property found the bugs
+
+The archive's whole value is not depending on anyone else's servers — the original decayed exactly
+that way, with html5shiv 404ing since Google Code shut in 2015 and nobody noticing for a decade. So
+the verification is a Playwright pass that fails if any page requests anything off-origin.
+
+It found **26 external requests on its first run**, in three classes the hand-written patterns had
+all missed:
+
+- the blog's **14 images**, referenced by absolute URL against `aliwallick.com` — in neither
+  `snapshot/` nor git, and about to become unrecoverable at the cutover
+- `wp-login.html`'s stylesheets and scripts — WordPress writes **single-quoted** attributes, and
+  pulls from `wp-admin` as well as `wp-includes`, so a pattern written against the hand-authored
+  pages matched none of it
+- the Unity install badge, an `<img>` outside the `<object>` the regex covered
+
+Each fix revealed the next; the count went 26, then 15, then 0. **The generalisable bit: "I removed
+the external dependencies" is a claim, and the difference between the claim and an assertion of it
+was three real bugs, one of which was load-bearing.** The blog images had no other copy under their
+original names.
+
+### Faithful restoration reproduced a privacy problem
+
+The first run restored all 54 assets from git, faithfully — including the 2019 resume PDF and its PO
+Box. That manufactured a **second copy** of the exact exposure two open issues exist to reduce, and
+it was committed before anyone noticed, by a script whose entire purpose was careful preservation.
+
+The fix is a `PREFER_WORKTREE` set naming the one path where the current file supersedes the
+historical blob. The lesson is not about PDFs: **preservation and privacy are different goals, and a
+tool built wholeheartedly for one will quietly work against the other.** Worth asking of any
+archiving task what it is faithfully preserving that someone spent effort removing.
+
+### Redaction, done properly, was cheaper than expected
+
+The address came out by deleting its `BT…ET` block from the page content stream rather than by
+drawing a rectangle over it — the covering-rectangle approach leaves the text extractable
+underneath, which is the standard way redactions fail in public. Verified four ways: text
+extraction (102 items to 101, exactly the right one), keyword probes, raw byte grep, and a pixel
+diff that put **every one of 2,439 changed pixels inside the address bounding box**.
+
+Two things made this tractable that were not obvious going in. **CLAUDE.md said the PDF "has to be
+decoded to read" and that `grep` gets nothing — true of the shell tools to hand, and false of
+`pdfjs-dist`**, which reads its ToUnicode map without complaint. And the text block was locatable by
+_computed position_ rather than byte offset, which is what makes the script survive the file being
+regenerated.
+
+The three libraries needed went in **outside the repo**. `package.json` is untouched. Carrying three
+dependencies for something that runs once is a bad trade, and the method is written down instead.
+
+### What could not be preserved
+
+**Three of the nine embedded videos are gone from YouTube** — all 403, deleted or private. There is
+no copy anywhere in the repo and never was; they were third-party embeds. The pages say so now.
+
+That is the honest shape of link rot on a fifteen-year-old site: the parts you hosted survive if you
+kept them, and the parts you embedded are gone on somebody else's schedule.
+
+### A decision that cannot be deferred, and was declined knowingly
+
+Ali chose to skip fresh Wayback captures of the site's final form, initially reasoning it could wait
+until the old site was fully down so nothing got re-indexed. **That reasoning inverts the mechanism**
+— Save Page Now fetches the URL live, so after the cutover it captures the new site, and after
+DreamHost is retired there is nothing behind it. Waiting is declining.
+
+She declined anyway once that was clear. **Then the premise turned out to be wrong**, which is the
+part actually worth recording.
+
+The claim that the final form was unarchived came from a CDX query using `collapse=urlkey` — which
+returns the **first** capture per URL, not the latest. First-seen dates were read as last-seen
+dates, and an argument about urgency was built on top of them. archive.org has the homepage from
+2025-11-10 and `/about` from 2025-08-30, both verified to contain the final Second Dinner content.
+**The capture was never at risk; it already existed.**
+
+Two things generalise. **"Let's do it later" is a reasonable instinct that some tasks silently do not
+support**, and it is on the agent to say which ones before the window shuts. But also: **an urgency
+claim deserves the same scrutiny as any other claim and tends to get less**, because urgency reads
+as a reason to move rather than a reason to check. This one survived into four documents, a PR body
+and an issue, and was caught only when Ali asked a casual follow-up about it.
+
+### Cost notes
+
+One session, no subagents past the initial survey. The survey was worth delegating — it swept
+`snapshot/`, `content/archive/`, `resources/`, the docs and the issue list in parallel, and returned
+the `ce4533e` fact that reframed the whole task. Everything after it was sequential work on known
+files, where a cold subagent would have cost more than it saved.
+
+The expensive part was iterating the self-containment check, and it was expensive in the right way:
+three rebuild-and-verify cycles, each finding a real class of bug.

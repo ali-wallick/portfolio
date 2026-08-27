@@ -630,6 +630,11 @@ most likely reason to do.
 the PNG was unreferenced by anything and had no argument for existing at all. The PNG is deleted from
 the working tree as of this decision.
 
+**Amended 2026-08-26: the kept PDF is now redacted, and the decision to keep it is unchanged.** Ali's
+call after the archive work below turned up a second copy of it. The address is out of the
+working-tree file; the original stays in history. This narrows the exposure to the history question
+and does not reopen #40.
+
 **Correction, 2026-08-24 ([#132](https://github.com/ali-wallick/Portfolio/issues/132)): "neither was
 served" was true of the Astro build and false of the old live site.** `aliwallick.com` serves that
 PDF today and Google has indexed it, returning it under a title generated from its own first line —
@@ -637,11 +642,18 @@ name, email, and PO Box. The address is public right now, not conditionally publ
 is. The decision to keep the file stands; what changes is that the remedy is a pre-launch redirect-map
 question (#132) rather than a re-check deferred to #48.
 
-**The PDF staying means the exposure is still live, not resolved.** `git rm` doesn't remove history
-either way, but the PDF is also still present in the current tree, still carrying a PO Box, still
-unserved. **If #48 (build-in-public) ever means making this repo public, this file needs a second
-look before that happens** — either strip the PO Box from a copy, or exclude it, or rewrite history.
-That's the implication for #48 this decision was supposed to record.
+**Superseded 2026-08-26: the "strip the PO Box from a copy" option is the one that was taken.** This
+paragraph used to say the tree copy was "still carrying a PO Box" and list three remedies. The
+working-tree PDF is redacted now (above), so what remains for #48 and
+[#109](https://github.com/ali-wallick/Portfolio/issues/109) is only the history question — `git rm`
+never removed history, and four blobs plus `v1-legacy` still carry it.
+
+**And the public copies are the larger exposure, not the repo.** See
+[#200](https://github.com/ali-wallick/Portfolio/issues/200): archive.org holds **seven** captures of
+the PDF, **two of `resources/images/resume.png`** — a rendered image of the same resume, where the
+address is simply legible and no redaction is possible — and a 2010 `resume.pdf` carrying a home
+street address and phone number. Making the repo public adds little to that until those are dealt
+with.
 
 ### The Skills section — settled 2026-08-23, closes #39
 
@@ -1148,9 +1160,10 @@ her own 2019 resume, not her blog.
 `{ label, text }` in the schema and renders as **`Label:`** plus a clipped formal clause. Ali's 2019
 resume was built exactly this way ("Vegas Blvd Slots:", "UI Programming:", "Client Engineering:"),
 which makes it the same argument the Phase 5 palette revival ran on: a format Ali chose herself
-cannot be mistaken for a template. `resources/WallickAli-Resume.pdf` is the only surviving copy of
-that document, and it has to be decoded to read — it is a subset-font PDF, so `grep` gets nothing
-and the machine has no `pdftotext`. Ali picked this over a wording-only alternative that kept the
+cannot be mistaken for a template. `resources/WallickAli-Resume.pdf` is the only copy of that document
+outside git history, and it has to be decoded to read — it is a subset-font PDF, so `grep` gets
+nothing and the machine has no `pdftotext`. (`pdfjs-dist` decodes it fine via its ToUnicode map;
+"undecodable" was only ever true of the shell tools to hand. See `docs/PRESERVATION.md`.) Ali picked this over a wording-only alternative that kept the
 current unlabelled shape.
 
 **Bullet labels are title case, and that is recovered too** (2026-08-26, Ali's question, same
@@ -1447,6 +1460,75 @@ worked, so let the pattern settle before sweeping siblings for it.
 
 ---
 
+## Preserving the old site (2026-08-26)
+
+The old DreamHost site is preserved well enough that `snapshot/` can eventually be tagged and
+deleted (#45) with nothing lost. **`docs/PRESERVATION.md` is the index** — where each artifact
+lives, how to view it, what could not be preserved. Read that rather than re-deriving any of it.
+What belongs here is only the decisions.
+
+**`snapshot/` did not render, and that was a defect rather than a property.** `snapshot/README.md`
+says its assets "are already committed under `resources/`" — true when Phase 0 wrote it, false since
+`ce4533e` deleted `resources/images/`. **50 of 54 asset references were dead**, so the snapshot
+preserved what the old site _said_ and not what it _looked like_. `scripts/restore-snapshot.mjs`
+repairs that into **`snapshot/rendered/`**.
+
+**The 26 original files are still byte-faithful and still guarded.** The reconstruction is a
+separate, clearly-derived subtree. `guard-preserved.sh` has one narrow exception for
+`snapshot/rendered/` — derived output, where hand-editing is pointless rather than destructive since
+the next run overwrites it. **Change the script, not its output.** It lives _under_ `snapshot/` on
+purpose: the whole archive is then one `git rm -r` when #45 comes around.
+
+**The output is committed, not regenerated on demand.** Same reasoning as the resume PDFs, with a
+sharper edge — the point of the archive is that `snapshot/` can be deleted, at which moment a
+regenerating script has no inputs left. One step also genuinely cannot be repeated: the blog's 14
+images live only on the old host, and were fetched while it was still up.
+
+**Self-containment is the property to protect, and it is asserted rather than assumed.**
+`--check-selfcontained` fails the archive if any page requests anything from another host. The
+original decayed precisely because it depended on other people's servers — html5shiv went down with
+Google Code in 2015 and nobody noticed for a decade. **This check earned itself on first run**,
+finding 26 requests still going out in three classes the patterns had missed, including the blog
+images that were about to become unrecoverable.
+
+**Three of the nine embedded videos are gone from YouTube** — deleted or private, all 403. Those
+pages say so explicitly now. No copy exists anywhere; those bytes were never Ali's to keep. Don't
+try to "fix" those placeholders.
+
+**Two things a future session would otherwise get wrong:**
+
+- **Faithful is not always the right default.** The first run restored the _unredacted_ resume PDF
+  into the archive, manufacturing a second copy of the exposure #197 and #200 exist to reduce — and
+  it was committed before anyone noticed. `PREFER_WORKTREE` in the restore script now supersedes
+  that one file. When preservation and privacy conflict, the conflict is the thing to notice.
+- **The verification worth copying is measurement, not inspection.** Everything asserted about this
+  archive was checked against the live server while it still answered: 54/54 assets and 14/14 blog
+  images byte-identical by sha256. That closes Phase 0's own lesson — _"verify it resolves" is not
+  the same as "preserved"_ — by measurement, and it doubles as the spot-check
+  [#51](https://github.com/ali-wallick/Portfolio/issues/51) wants before retiring WordPress.
+
+**Not done, and it turned out not to be needed: fresh Wayback captures of the site's final form.**
+Ali's call 2026-08-27, and the reason is stronger than the one first given. **archive.org already
+holds the final form** — the homepage was captured 2025-11-10, About 2025-08-30, and the Vegas Blvd
+page that was added in 2020 on 2025-09-17, all verified to contain the final Second Dinner content.
+
+**A correction worth keeping, because the mistake is easy to repeat.** This section first said the
+newest real capture was 2019-07-19 and that the final form was unarchived. That came from a CDX
+query using `collapse=urlkey`, which returns the **first** capture per URL, not the latest —
+first-seen dates read as last-seen dates. Anything asking "when was this last archived?" must not
+collapse, or must sort explicitly.
+
+The timing constraint is still real if it ever comes up for another reason: Save Page Now fetches
+the URL live, so after the cutover it captures the new site, and after DreamHost is retired there is
+nothing behind it. It just is not protecting anything that is missing.
+
+**If the archive is ever published** — a separate decision, currently not taken — three things need
+handling first, and they are in `docs/PRESERVATION.md`: don't serve `wp-login.html`, neuter
+`contact.html`'s form, and re-check the expired outbound domains, which is the exact bug
+`links[].dead: true` exists to prevent on the new site.
+
+---
+
 ## Working here
 
 ```bash
@@ -1506,9 +1588,13 @@ point to the bot's comment for the exact link instead of stating a wrong URL as 
   Phase 5 and **the only copy**; `snapshot/` has `colors.css` and nothing else. The findings are
   recorded under "What the gate corrected", and the recovered curve was re-examined and retuned in
   Phase 6 — but these are still the only primary sources if anyone reopens that.
-- **`resources/WallickAli-Resume.pdf`** — carries a PO Box. Kept deliberately (settled
-  [#40](https://github.com/ali-wallick/Portfolio/issues/40)); a real exposure only if the repo ever
-  goes public, so re-check before that happens.
+- **`resources/WallickAli-Resume.pdf`** — kept deliberately (settled
+  [#40](https://github.com/ali-wallick/Portfolio/issues/40)). **The working-tree copy no longer
+  carries the PO Box** (2026-08-26) — the address's text block was removed from the content stream,
+  not covered with a rectangle, and verified gone by extraction, byte grep and pixel diff. See
+  `docs/PRESERVATION.md`. **History is untouched**: four blobs across four commits, plus
+  `v1-legacy`, still carry it, which is what
+  [#109](https://github.com/ali-wallick/Portfolio/issues/109) is actually about.
 
 _The Phase 0 asset keep/drop list was **acted on in Phase 3**: the 50 keep-listed files moved to
 `src/assets/images/`, and the drop list — 86 unused social icons, 6 orphaned logos, and the 6.3 MB
