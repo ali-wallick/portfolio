@@ -258,6 +258,74 @@ const projects = defineCollection({
 // Jobs — the single source for the site bio AND the Phase 4 resume
 // ---------------------------------------------------------------------------
 
+/**
+ * One resume bullet: a short topic label and the clause it introduces.
+ *
+ * Settled 2026-08-26 (#32). Ali's own 2019 resume built every bullet this way
+ * -- a short topic label, a colon, then a clipped formal clause ("Vegas Blvd
+ * Slots:", "UI Programming:", "Client Engineering:"). The formality pass
+ * restored it, so the format is recovered from
+ * `resources/WallickAli-Resume.pdf` rather than invented. Same argument the
+ * Phase 5 palette revival ran on: a format Ali chose herself cannot be
+ * mistaken for a template.
+ *
+ * Structural rather than `**Markdown**` inside the string, for two reasons.
+ * Bullets render as `{h}` in ResumeDocument.astro and never touch a Markdown
+ * pipeline, so `**` would print literally on paper. And a *required* field
+ * makes the format unrepresentable to get wrong -- a bullet cannot quietly
+ * revert to unlabelled prose the way a convention in a style guide can. Same
+ * reasoning as `resumeTools` being a `Record` keyed by category, where a tool
+ * cannot be added without classifying it (src/config/resume.ts).
+ *
+ * `max(28)` on the label is the guard that does the real work. A label is a
+ * topic, not a sentence. The moment it starts carrying a clause, the document
+ * is drifting back toward the 20-words-per-sentence prose register that #32
+ * measured and removed, and this fails the build instead.
+ */
+const resumeBullet = z.object({
+  label: z
+    .string()
+    .min(1)
+    .max(28, 'a bullet label is a topic, not a clause -- keep it under 28 characters'),
+  text: z.string().min(1),
+  /**
+   * Continuation shown only on `/resume/full`, appended to `text`.
+   *
+   * Added 2026-08-26 (#32) for the case where one topic wants a short form on
+   * the one-pager and a fuller one on the two-pager -- Kaneva's UI programming
+   * bullet, and Firefall's, where the enumeration of specific screens is worth
+   * having on the long version and costs a third line on the short one.
+   *
+   * **This is the one shape that gets that without breaking the superset
+   * invariant**, which is why it is a continuation and not an override. The
+   * tempting alternative is a `highlightsConcise` that *replaces* `highlights`
+   * on the one-pager, and it is precisely the two-lists shape `highlightsExtended`
+   * below exists to rule out: two copies of one claim, free to drift, which is
+   * how the old site called the Marvel game "upcoming" on four pages at once.
+   * Here the long version is still literally the short one plus more, and each
+   * fact is still written exactly once.
+   *
+   * So: `extended` must *continue* `text`, never restate or contradict it. If
+   * the short and long versions of a bullet would need to say different things
+   * rather than one saying more, that is two bullets, not this field.
+   */
+  extended: z.string().min(1).optional(),
+  /**
+   * Key into the owning job's `bulletGroups`, which renders this bullet under a
+   * bold sub-heading instead of directly under the job.
+   *
+   * Added 2026-08-26 (#32) for Second Dinner, which is two bodies of work under
+   * one employer -- Marvel Snap and the Godot project -- and read as one
+   * undifferentiated list of seven bullets without this.
+   *
+   * A key, not the display string. Repeating "Marvel Snap" on six bullets is
+   * six chances to typo one into a group of its own; `superRefine` below
+   * rejects a key that isn't declared, so the failure is a build error rather
+   * than a stray heading nobody notices on page two.
+   */
+  group: z.string().min(1).optional(),
+});
+
 const jobs = defineCollection({
   loader: glob({ base: './src/content/jobs', pattern: '**/*.md' }),
   schema: z
@@ -289,10 +357,74 @@ const jobs = defineCollection({
        */
       currentNote: z.string().min(1).max(280).optional(),
       /**
-       * Resume bullets for the one-page resume, strongest first. Rendered
-       * verbatim.
+       * A company-level paragraph, rendered under the job head and above every
+       * bullet, with no bullet marker of its own.
+       *
+       * For the fact that belongs to the employer rather than to any one thing
+       * built there -- Second Dinner's "joined as the eleventh employee". That
+       * sentence spent Phase 4 riding on the front of a Marvel Snap bullet,
+       * where it was true and misfiled: it is not a Marvel Snap fact.
+       *
+       * One short paragraph. If it needs a second one it is probably a bullet.
        */
-      highlights: z.array(z.string()).default([]),
+      intro: z.string().min(1).max(280).optional(),
+
+      /**
+       * Bold sub-headings that bullets group under, keyed by the string a
+       * bullet's `group` names. Declaration order is not display order --
+       * `ResumeDocument` orders groups by where each first appears in the
+       * bullet list, so reordering the resume is a matter of moving bullets.
+       *
+       * `dates` and `intro` are optional and are the reason this is an object
+       * rather than a bare `Record<string, string>`: under one employer for seven years,
+       * "which years was that" is the question a reader actually has, and the
+       * job's own span cannot answer it for either half.
+       *
+       * **`dates` renders on `/resume/full` only** (Ali's call, #32) -- the one-pager
+       * has the job's own span directly overhead, and a second date column
+       * under it reads as clutter at that density. Recorded here regardless,
+       * the same shape as `honors` on education: it also feeds
+       * `docs/LINKEDIN.md`, which prints it in the group heading. `intro`
+       * renders on both densities.
+       */
+      bulletGroups: z
+        .record(
+          z.string().min(1),
+          z.object({
+            label: z
+              .string()
+              .min(1)
+              .max(40, 'a group heading names a body of work -- keep it under 40 characters'),
+            dates: z.string().min(1).optional(),
+            /**
+             * One clipped line under the heading, before the group's bullets.
+             * Same role at the group level that `intro` plays at the job level:
+             * what belongs to the whole body of work rather than to any one
+             * bullet of it.
+             *
+             * Added 2026-08-26 (#32) for Marvel Snap, where five years of
+             * bullets each described a system and none of them said she was on
+             * the title for its whole arc. That is a fact about the span, not
+             * about a system, so it had nowhere to live.
+             *
+             * Capped shorter than the job-level `intro` on purpose: this sits
+             * between a heading and a bullet list, and a second paragraph there
+             * stops reading as a subtitle.
+             */
+            intro: z
+              .string()
+              .min(1)
+              .max(
+                180,
+                'a group intro is a subtitle, not a paragraph -- keep it under 180 characters',
+              )
+              .optional(),
+          }),
+        )
+        .default({}),
+
+      /** Resume bullets for the one-page resume, strongest first. */
+      highlights: z.array(resumeBullet).default([]),
       /**
        * Extra bullets that only the two-page resume shows, appended after
        * `highlights` rather than replacing them.
@@ -304,7 +436,7 @@ const jobs = defineCollection({
        * the short one plus these, so trimming for space can never silently
        * change what a bullet claims. Put a fact in exactly one array.
        */
-      highlightsExtended: z.array(z.string()).default([]),
+      highlightsExtended: z.array(resumeBullet).default([]),
 
       /** Some roles earn a line on the resume but not a paragraph on the site. */
       onResume: z.boolean().default(true),
@@ -334,6 +466,56 @@ const jobs = defineCollection({
           message:
             'the current job (no `end`) requires `currentNote` for the homepage/About "currently" line',
         });
+      }
+
+      // Bullet groups: three guards, each closing a way this could go quietly
+      // wrong rather than loudly. A resume is printed to PDF by a build step
+      // nobody watches, so "renders oddly on page two" is not a failure mode
+      // that reaches anyone in time.
+      const groupKeys = new Set(Object.keys(data.bulletGroups));
+      const usedKeys = new Set<string>();
+      let grouped = 0;
+      let ungrouped = 0;
+
+      for (const list of ['highlights', 'highlightsExtended'] as const) {
+        for (const [i, bullet] of data[list].entries()) {
+          if (bullet.group === undefined) {
+            ungrouped++;
+            continue;
+          }
+          grouped++;
+          usedKeys.add(bullet.group);
+          if (!groupKeys.has(bullet.group)) {
+            ctx.addIssue({
+              code: 'custom',
+              path: [list, i, 'group'],
+              message: `unknown bullet group "${bullet.group}" -- declare it in \`bulletGroups\` (have: ${[...groupKeys].join(', ') || 'none'})`,
+            });
+          }
+        }
+      }
+
+      // All or nothing within a job. A single ungrouped bullet among grouped
+      // ones renders above the first heading, where it reads as belonging to
+      // whichever heading follows it — the one arrangement that states
+      // something false. `intro` is the supported way to say something at the
+      // job level.
+      if (grouped > 0 && ungrouped > 0) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['highlights'],
+          message: `${ungrouped} bullet(s) have no \`group\` while ${grouped} do -- group every bullet on a job or none of them, and put job-level prose in \`intro\``,
+        });
+      }
+
+      for (const key of groupKeys) {
+        if (!usedKeys.has(key)) {
+          ctx.addIssue({
+            code: 'custom',
+            path: ['bulletGroups', key],
+            message: `bullet group "${key}" is declared and never used -- delete it or point a bullet at it`,
+          });
+        }
       }
     }),
 });

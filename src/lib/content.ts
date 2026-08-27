@@ -88,6 +88,26 @@ export function formatSpan(start: string, end?: string): string {
   return `${formatDatePart(start)} – ${end ? formatDatePart(end) : 'Present'}`;
 }
 
+/**
+ * `2015 – 2016`, `2019 – Present`. Same as `formatSpan` but drops any stored
+ * month.
+ *
+ * The resume prints years only, settled with Ali 2026-08-26 (#32). Red 5's
+ * start is sourced to the month (`2015-06`, from about.php) and Second Dinner's
+ * promotion to `2021-12`, but with the "Previously ..." line gone from the
+ * resume the only month left on the page was Red 5's, and one month among four
+ * jobs reads as an inconsistency rather than as precision.
+ *
+ * **The stored precision is not dead data** — `docs/LINKEDIN.md` still prints
+ * both, via its own mirrored formatter in scripts/build-linkedin.mjs, and
+ * LinkedIn's position fields take a month natively. So the month has a reader;
+ * it just isn't this document.
+ */
+export function formatSpanYears(start: string, end?: string): string {
+  const year = (value: string) => value.split('-')[0]!;
+  return `${year(start)} – ${end ? year(end) : 'Present'}`;
+}
+
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 function formatDatePart(value: string): string {

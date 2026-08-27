@@ -175,13 +175,35 @@ const HEADLINE_OPTIONS = [
   'Game developer, 15 years in UI and systems engineering · Senior Software Engineer I at Second Dinner',
 ];
 
-const ABOUT = `I've been building games for fifteen years, mostly in UI and systems engineering — the layer where a game's interface, its live-ops plumbing, and its meta systems all have to agree with each other.
+/**
+ * LinkedIn's About field. Hand-authored, and the only long-form career prose
+ * on this site that is not derived from the collections.
+ *
+ * Reworded 2026-08-26 (#32). It had never been through the #31 wording pass,
+ * because #31 walked the site's rendered pages and this text lives in a
+ * generator script -- so it was still carrying three em dashes and the exact
+ * "taught me a lesson" closer that `write-copy` §3 bans by name (Ali's own
+ * word for that move on kaneva/#140 was "sappy"). The old closing paragraph
+ * stacked three separate tells at once: a thesis-colon, a "not X, but Y"
+ * antithesis, and the moral. It is cut, and the two examples it was moralising
+ * about now simply state themselves.
+ *
+ * **Register is deliberately warmer than the resume and cooler than the blog.**
+ * LinkedIn's About is first person and takes contractions; the #32 formality
+ * pass applies to the résumé-register bullets below, which are derived, not to
+ * this. What #32 does change here is the punctuation and the closer.
+ *
+ * Kept in sync by hand with `resumeSummary` in src/config/resume.ts -- the two
+ * places a career-level claim is written rather than derived, and therefore the
+ * two places one can drift.
+ */
+const ABOUT = `I've been building games for fifteen years, mostly in UI and systems engineering. That is the layer where a game's interface, its live-ops plumbing, and its meta systems all have to agree with each other.
 
-I'm at Second Dinner now, where I joined in 2019 as the studio's 11th employee, before it had shipped anything. I spent five years on Marvel Snap: early on as a client engineer in Unity, doing notifications, deep linking, localization, and live-ops integration, and later as a feature engineer on meta gameplay systems spanning client and server, card and deck cosmetics, and the deckbuilding UI. The work I'm proudest of there is driving a migration to an MVVM architecture on a live product, owning localization end to end, and the two-stage PC launch — a direct mobile port for Steam Early Access, then rebuilding much of the UI to be genuinely landscape- and mouse-and-keyboard-native when we exited Early Access in 2023. Since 2024 I've been on a new team at Second Dinner, building the studio's first game in Godot.
+I'm at Second Dinner now, where I joined in 2019 as the studio's 11th employee, before it had shipped a title. I spent five years on Marvel Snap. Early on I was a client engineer in Unity, doing notifications, deep linking, localization, and live-ops integration. Later I moved to feature engineering: meta gameplay systems spanning client and server, card and deck cosmetics, and the deckbuilding UI. The work I'm proudest of there is the tooling that made an MVVM architecture practical to adopt on a live product, owning localization end to end, and the two-stage PC launch. Steam Early Access shipped as a direct port of the mobile client, and exiting Early Access in 2023 meant rebuilding much of the UI to be genuinely landscape- and mouse-and-keyboard-native. Since 2024 I've been on a new team at Second Dinner, building the studio's first game in Godot.
 
-Before that: three years at MobilityWare on Vegas Blvd Slots, architecting the live-ops systems that let the game change without a client update; a year at Red 5 Studios on Firefall's HUD and menus, on a much bigger team and codebase than I'd worked on before; and four years at Kaneva, where I started in technical support and grew into leading UI programming for a social virtual world.
+Before that: three years at MobilityWare on Vegas Blvd Slots, architecting the live-ops systems that let the game change without a client update; a year at Red 5 Studios on Firefall's HUD and menus, on a much bigger team and codebase than I'd worked on before; and four years at Kaneva, where I started in technical support and grew into UI programming for a social virtual world.
 
-Something I keep relearning: the most valuable thing I can build is often not the feature itself, but the tool that makes the next ten features cheaper. That was true of the menu animation system at Kaneva that both the UI and game teams ended up adopting, and it was true of the level editor I built in a week for a game jam pitch that went on to outlive my time at the studio.`;
+A lot of my favourite work has been tooling. The menu animation system I built at Kaneva was picked up by both the UI and game teams, and the level editor I built in a week for a game jam pitch let us author 61 levels before pitch day. That game outlived my time at the studio and is still shipping.`;
 
 const WHAT_NOT_TO_DO = `LinkedIn is the one surface in this project that an agent can't verify after the fact, so the rules are stricter, not looser:
 
@@ -206,9 +228,52 @@ function renderJobSection(job) {
   const note = multiRoleNote(job) ?? JOB_NOTES[job.slug]?.before;
   if (note) lines.push('', note);
 
-  const bullets = [...job.data.highlights, ...job.data.highlightsExtended];
+  // Company-level prose, above the bullets — see the `intro` field's comment in
+  // src/content.config.ts for why it isn't a bullet.
+  if (job.data.intro) lines.push('', job.data.intro);
+
+  const bullets = [...(job.data.highlights ?? []), ...(job.data.highlightsExtended ?? [])];
   if (bullets.length > 0) {
-    lines.push('', '```text', ...bullets.map((b) => `• ${b}`), '```');
+    // `Label: text`, matching the resume's own labelled format (#32). LinkedIn
+    // renders no Markdown in a role description, so the label is plain text
+    // here rather than bold — the colon is what carries it.
+    // LinkedIn has no page limit, so it gets `extended` too — it is exactly
+    // /resume/full, which is what this file has always mirrored.
+    //
+    // Groups (#32) become a plain-text heading with their dates in parens,
+    // which is as much structure as a LinkedIn role description can hold. The
+    // grouping walk below is a second copy of `bulletBlocks` in
+    // ResumeDocument.astro, for the same reason `formatSpan` and
+    // `currentTitle` are duplicated here: this script parses the YAML itself
+    // and cannot import a `.ts` module that pulls in `astro:content`.
+    const groups = job.data.bulletGroups ?? {};
+    const order = [];
+    const byKey = new Map();
+    for (const bullet of bullets) {
+      const key = bullet.group ?? '';
+      if (!byKey.has(key)) {
+        byKey.set(key, []);
+        order.push(key);
+      }
+      byKey.get(key).push(bullet);
+    }
+
+    const body = [];
+    for (const key of order) {
+      const heading = key ? groups[key] : undefined;
+      if (heading) {
+        if (body.length > 0) body.push('');
+        body.push(heading.dates ? `${heading.label} (${heading.dates})` : heading.label);
+        // The group's `intro` renders on both resume densities, so it renders
+        // here too — this file mirrors /resume/full exactly.
+        if (heading.intro) body.push(heading.intro);
+      }
+      for (const b of byKey.get(key)) {
+        body.push(`• ${b.label}: ${[b.text, b.extended].filter(Boolean).join(' ')}`);
+      }
+    }
+
+    lines.push('', '```text', ...body, '```');
   }
 
   const after = JOB_NOTES[job.slug]?.after;

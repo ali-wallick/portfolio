@@ -14,6 +14,7 @@
     "check:pdf": "node scripts/build-pdf.mjs --check",
     "build:linkedin": "node scripts/build-linkedin.mjs",
     "check:linkedin": "node scripts/build-linkedin.mjs --check",
+    "resume:headroom": "node scripts/resume-headroom.mjs",
     "check:resume-print": "node scripts/check-resume-print.mjs",
     "update:resume-print": "node scripts/check-resume-print.mjs --update",
     "build:ci": "node scripts/build-ci.mjs",

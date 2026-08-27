@@ -11,18 +11,22 @@ roles:
 # toward recency, so the oldest jobs on the resume carry the least space.
 # See CLAUDE.md's Phase 4 weighting section for the general rule.
 highlights:
-  - >-
-    Built UI across Firefall's HUD and menus through its Chinese launch and
-    worldwide relaunch overhaul: radar, PvP HUD, character progression and
-    elite-level screens, and reward screens.
+  - label: Firefall
+    text: >-
+      Built UI across the HUD and menus through the game's Chinese launch and worldwide relaunch
+      overhaul.
+    extended: >-
+      Delivered the radar, the PvP HUD, character progression and elite-level screens, and
+      reward screens.
 highlightsExtended:
-  - >-
-    Created shared libraries for common menu and HUD elements, and optimized the
-    UI system itself on an already-loaded client.
-  - >-
-    Worked at the boundary between the Lua/XML UI scripting layer and the
-    studio's C++ engine, on a team and codebase substantially larger than any
-    before it.
+  - label: UI Systems
+    text: >-
+      Created shared libraries for common menu and HUD elements, and optimized the UI system
+      itself on an already-loaded client.
+  - label: Engine Integration
+    text: >-
+      Worked at the boundary between the Lua and XML UI scripting layer and the studio's C++
+      engine. The team and codebase were substantially larger than any before it.
 ---
 
 ## Source material (2019 resume, verbatim — not current copy)

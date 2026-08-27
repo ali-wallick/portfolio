@@ -95,6 +95,48 @@
     margin: 0;
   }
 
+  /* Company-level prose, above the groups. */
+  .resume-job-intro {
+    margin: var(--space-2) 0 0;
+    max-width: var(--measure);
+  }
+
+  /* Bold sub-heading for a body of work under one employer (#32). Same
+     title-left/dates-right shape as .resume-job-head one level up, one step
+     quieter: body size rather than --text-base, so it reads as subordinate to
+     the job title rather than competing with it. */
+  .resume-bullet-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0 var(--space-4);
+    margin-top: var(--space-3);
+    /* A third of `.resume-bullets`' own padding-left, expressed against the
+       same token so the two stay in proportion if that indent ever moves.
+       Ali's call (#32), from a four-way comparison rendered at paper width:
+       a full-width indent aligned the heading to the bullet text and read as
+       more nesting than the block wants. This is a nudge, and it is the one
+       candidate that does not line up with an existing edge -- deliberately,
+       since the point is to separate the heading from the job title above it
+       rather than to bind it to the bullets below. */
+    padding-left: calc(var(--space-4) / 3);
+  }
+
+  .resume-bullet-group h4 {
+    font-size: var(--text-sm);
+    margin: 0;
+  }
+
+  /* Group-level prose, one level down from .resume-job-intro. Indented to the
+     heading rather than to the bullet text, so it reads as a subtitle attached
+     to the heading above it and not as a bullet missing its marker. */
+  .resume-group-intro {
+    margin: var(--space-1) 0 0;
+    padding-left: calc(var(--space-4) / 3);
+    max-width: var(--measure);
+  }
+
   .resume-bullets {
     margin: var(--space-2) 0 0;
     padding-left: var(--space-4);
@@ -103,6 +145,25 @@
 
   .resume-bullets li {
     margin-bottom: var(--space-2);
+  }
+
+  /* The bullet's topic label (#32). `<b>` rather than `<strong>` on purpose:
+     this is typographic offsetting for scanning, not semantic emphasis — a
+     screen reader announcing "Localization" with stress on every one of
+     eighteen bullets is noise, and `<b>` is exactly the element HTML defines
+     for "draw attention without conveying importance". */
+  .resume-bullet-label {
+    font-weight: 600;
+    color: var(--color-heading);
+  }
+
+  .resume-bullet-label a {
+    color: inherit;
+  }
+
+  .resume-summary {
+    margin: 0;
+    max-width: var(--measure);
   }
 
   /* Three labelled rows (Engines & Tools / Languages / Platforms), not a
@@ -299,15 +360,68 @@
     letter-spacing: normal;
   }
 
-  /* 9.4pt/1.3 is ordinary resume density, not a squeeze — but it is close
-     enough to the floor that shrinking type further to win space would start
-     to show. Past this point the honest lever is fewer bullets, which is what
-     `maxPages` in scripts/build-pdf.mjs forces the conversation about. */
+  /* 9.4pt/1.35. Chosen, and now with real headroom behind it.
+
+     #32 booked this as "tuned to fit, not chosen" and asked whether it should
+     loosen. The first answer was no, and the number behind that answer was
+     wrong twice over -- worth reading, because both traps are easy to repeat.
+
+     MEASURE AT PRINT WIDTH OR THE NUMBER IS FICTION. First probed at
+     Playwright's default 1280px viewport, which reported 740px of a 960px
+     budget and made the one-pager look like it had 2.3 inches to spare. Prose
+     wraps to far fewer lines at 1280px than on paper, so every height came out
+     ~200px light. Raising the type to 11pt on that basis overflowed both
+     documents; the page-count assertion in scripts/build-pdf.mjs caught it.
+     The correct viewport is 701px: letter's 8.5in less the 0.6in side margins
+     in `@page` above, times 96. Budget is 960px (11in less 0.5in top and
+     bottom).
+
+     Measured properly the one-pager was 954px of 960. Six pixels. Then the
+     document got shorter twice, both Ali's calls on the same pass: the
+     "Previously ..." role line came off, and per-entry locations came off the
+     one-pager entirely (three of four jobs said "Irvine, CA"; the header states
+     the region once instead). That is worth 78px on its own.
+
+     A TABLE OF MEASUREMENTS GOES STALE. The version here previously said
+     10.25pt/1.3 filled the page exactly. Re-measured on 2026-08-26 against the
+     current wording it lands at 1011px -- 51px OVER -- and it had been wrong in
+     the unsafe direction for several commits. Re-measure before trusting any
+     row of this; do not size a change off it.
+
+     CURRENT, measured 2026-08-26: one-pager 850px of 960, two-pager 1629px of
+     1920. Scaled sets, every pt value in this block moving together:
+
+       9.4pt  / 1.3     830px  0.86pg
+       9.4pt  / 1.35    850px  0.89pg   <- shipped
+       9.4pt  / 1.4     871px  0.91pg
+       9.75pt / 1.3     894px  0.93pg
+       9.75pt / 1.35    917px  0.96pg
+       10pt   / 1.3     973px  1.01pg  over
+       10.25pt/ 1.3    1011px  1.05pg  over
+
+     THE SIZE COLUMN IS A CLIFF, NOT A SLOPE, and that is a fact about the
+     current wording rather than about the type. Six items are single-line with
+     ten characters of headroom or less -- both group subtitles, the job intro,
+     UI framework, PC launch, Agentic workflows -- so they fit at 9.4pt and all
+     wrap together at 10pt. That is why 830 -> 973px costs far more than the
+     6.4% the point size suggests. Add a bullet and the cliff moves.
+
+     WHY 1.35 AND NOT A BIGGER SIZE (Ali's call, 2026-08-26, #32). Leading was
+     the cheap half of the readability question: 20px for a visibly more open
+     page, against 64px for a 3.7% size bump nobody perceives. The size itself
+     was checked against the standard rather than assumed -- resume advice says
+     10-12pt, but that advice is calibrated to Times, and point size measures
+     the em box rather than the letters. Measured x-height per em: this stack
+     0.508, Arial 0.519, Calibri 0.523, Times 0.447, Georgia 0.481. So 9.4pt
+     here has the apparent size of ~10.7pt Times, and ~9.2pt Arial: inside the
+     serif range, at the low edge of the sans one. Not too small.
+
+     The remaining 110px -- 6.5 bullet lines -- is for content, not type. */
   body {
     background: #ffffff;
     color: #000000;
     font-size: 9.4pt;
-    line-height: 1.3;
+    line-height: 1.35;
 
     /*
      * Pinned because it is inherited, and because it already leaked once.
@@ -441,6 +555,46 @@
     margin: 0;
   }
 
+  .resume-job-intro {
+    margin: 3pt 0 0;
+    max-width: none;
+  }
+
+  /* `break-after: avoid` is the load-bearing part on paper: a group heading
+     that lands at the foot of page one with its bullets on page two is worse
+     than no heading at all, and the page-count assertion cannot see it. */
+  .resume-bullet-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0 12pt;
+    margin: 5pt 0 0;
+    /* A third of .resume-bullets' 12pt below — see the screen rule. */
+    padding-left: 4pt;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* Stated black for the same reason .resume-bullet-label below is: pinning
+     --color-heading on :root is not sufficient when any selector outranking a
+     bare :root can beat the print block. See the file header and #35. */
+  .resume-bullet-group h4 {
+    font-size: 9.4pt;
+    margin: 0;
+    color: #000000;
+  }
+
+  /* Same break rule as the heading, and for the same reason: a subtitle
+     separated from the bullets it introduces is worse than no subtitle. */
+  .resume-group-intro {
+    margin: 2pt 0 0;
+    padding-left: 4pt;
+    max-width: none;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
   .resume-bullets {
     margin: 3pt 0 0;
     padding-left: 12pt;
@@ -449,6 +603,25 @@
 
   .resume-bullets li {
     margin-bottom: 2.5pt;
+  }
+
+  /* Black, not the screen heading colour. `--color-heading` is pinned by the
+     print block above, but pinning is not sufficient on its own — see the
+     file header and #35. Stating the paper value here means a future screen
+     rule cannot reach it even by outranking `:root`. */
+  .resume-bullet-label {
+    font-weight: bold;
+    color: #000000;
+  }
+
+  .resume-bullet-label a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .resume-summary {
+    margin: 0;
+    max-width: none;
   }
 
   .resume-skills {

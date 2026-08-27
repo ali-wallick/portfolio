@@ -8,26 +8,35 @@ roles:
   - title: Software Engineer II
     start: '2016'
 highlights:
-  - >-
-    Architected Vegas Blvd Slots' live-ops systems: a server-controllable store,
-    and a DeltaDNA integration driving in-app messaging, promo carousels, and
-    eventing. Customizable text let marketing run campaigns without engineering.
-  - >-
-    Engineered new slot machines and their features and bonus games, on a title
-    carrying 50+ machines plus rewards, gifting, leagues, and tournaments.
-  - >-
-    Pitched I Fits I Sits at the studio game jam and built the week-long
-    prototype. Focused on a level editor that exported JSON and let us author 61
-    levels for pitch day. Won People's Choice; other teams took it to release,
-    renamed It Fits I Sits and later Puzzle Cats.
+  - label: Vegas Blvd Slots
+    text: >-
+      Architected the live-ops systems, including the in-game store and a DeltaDNA integration
+      driving in-app messaging and promo carousels. Customizable text let marketing run its own
+      campaigns.
+  - label: Slot Machines
+    text: >-
+      Engineered new machines, their features, and their bonus games, on a title carrying more
+      than 50 machines. Its meta systems included rewards, gifting, leagues, and tournaments.
+  - label: I Fits I Sits
+    text: >-
+      Pitched the concept at the studio game jam and built the week-long prototype. Focused on a
+      level editor the team used to author 61 levels. It won People's Choice, and other teams
+      later released it as Puzzle Cats.
+    extended: >-
+      The editor exported JSON, and the team authored those levels for pitch day. The game was
+      selected for development and shipped first on Facebook Instant Games as It Fits I Sits.
 highlightsExtended:
-  - >-
-    Led cross-cutting work that spanned the whole title, including GDPR support
-    and keeping the game current through several major Unity version upgrades.
-  - >-
-    Ported the previous slots title, Hot Streak Slots, from native iOS to Unity,
-    and built blackjack, video poker, and keno for an early unreleased casino app
-    whose team later merged into Vegas Blvd Slots, which shipped as slots only.
+  - label: Cross-Cutting Work
+    text: >-
+      Led work spanning the whole title, including GDPR support and several major Unity version
+      upgrades.
+  - label: Hot Streak Slots
+    text: >-
+      Ported the studio's previous slots title from native iOS to Unity.
+  - label: Unreleased Casino
+    text: >-
+      Built blackjack, video poker, and keno for an early casino app. Its team later merged into
+      Vegas Blvd Slots, which shipped as slots only.
 ---
 
 ## Source material (2019 resume, verbatim — not current copy)

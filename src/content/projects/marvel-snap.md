@@ -93,8 +93,9 @@ so a link could open the app straight to any screen, like the shop. The game's U
 at all when I got there. I organized the effort to get every menu translated, and did the first
 integration of Unity's Localization package to run it. I also built the client-side integration for
 live-ops tooling like Braze. Later I moved into feature engineering: meta gameplay systems spanning
-client and server code plus the UI for them, card and deck cosmetics, and the deckbuilding UI. Three
-things from that span stand out.
+client and server code plus the UI for them, card and deck cosmetics, and the deckbuilding UI. I built a lot of
+tooling for the team too, both in the Unity Editor and in the game itself. The card art tool was
+one, which our artists authored card art through. The in-game developer console was another. Three things from that span stand out.
 
 **Driving an MVVM migration for the PC launch.** Alongside the push to launch the PC client, I
 encouraged teammates to migrate their working patterns onto an MVVM architecture, and built out the
@@ -126,8 +127,9 @@ variants across their cards. Search and filtering had to work correctly against 
 a card's full metadata, not just its name in English. I built all of it for both mobile and PC,
 which meant two different input models.
 
-**Building the localization and live-ops pipelines.** I owned localization end to end: the
-import/export pipeline, and the workflow the rest of the team localized UI text through. I worked
+**Building the localization and live-ops pipelines.** We shipped in 15 languages. I owned
+localization end to end: the import/export pipeline, and the workflow the rest of the team
+localized UI text through. I worked
 directly with our publishers on all of it. Fonts were a project of their own:
 
 - **CJK fallback:** Proper support for CJK fonts, falling back to OS-level fonts when a given

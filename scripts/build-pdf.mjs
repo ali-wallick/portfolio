@@ -94,6 +94,22 @@ async function inputFiles() {
     'src/styles/tokens.css',
     'src/styles/base.css',
     'src/config/site.ts',
+    // Added 2026-08-26 (#32) after it shipped a stale PDF. This file has been
+    // a PDF input since #39 put the Skills section in it, and was never listed
+    // — so `check:pdf` passed on a resume whose Skills row had changed. #32
+    // widened the gap by adding the summary, the personal projects, and the
+    // header location here too, then walked straight into it: an edit that
+    // touched only this file reported "nothing changed" while
+    // `check:resume-print` reported 17 moved elements on /resume/full.
+    //
+    // Two guards on different mechanisms disagreeing is what surfaced it, and
+    // it is the second time on this pass that the geometry differ caught what
+    // the hash-and-count guards could not. Deliberately NOT adding
+    // `src/lib/links.ts`, which ResumeDocument also imports: it contributes
+    // only `target`/`rel`, which cannot change a rendered page's appearance,
+    // and listing files that can't invalidate the output trains people to
+    // ignore the invalidation.
+    'src/config/resume.ts',
     'src/lib/content.ts',
     'src/content.config.ts',
   ];

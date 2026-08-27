@@ -67,19 +67,19 @@ It had five such sections on 2026-08-20, describing work that was already tracke
 
 ## Settled — do not relitigate
 
-| Decision                | Choice                                                                                                                                                                                                                                                        |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Stack                   | Astro, Markdown content collections, `output: 'static'`. No framework, no adapter.                                                                                                                                                                            |
-| Deploy                  | Cloudflare **Workers** static assets, git push, one preview URL per branch. (The plan said Pages; Cloudflare has frozen Pages for new features and routes new Git projects to Workers. Same review loop, plus native `_redirects`. See `docs/CLOUDFLARE.md`.) |
-| Registrar / DNS / email | Cloudflare + iCloud+. **Closed in Phase 1. Out of scope. Do not touch.**                                                                                                                                                                                      |
-| Public address          | `contact@aliwallick.com`                                                                                                                                                                                                                                      |
-| Blog                    | Scraped to Markdown, mined for content. **No live blog section.**                                                                                                                                                                                             |
-| Projects                | Two tiers — 5 deep write-ups, ~12 in a compact scannable archive.                                                                                                                                                                                             |
-| Marvel Snap             | A full public credit. Officially credited at [marvelsnap.com/credits](https://marvelsnap.com/credits/) as **Senior Software Engineer I** — link it rather than asserting it.                                                                                  |
-| Current work            | **"Second Dinner's next game, built in Godot."** Not "an unannounced mobile title" — the studio went public in Aug 2024 and the old phrasing was vaguer than reality _and_ wrong about "mobile". See the Phase 3 gate outcome below.                          |
-| Contact form            | None. A `mailto:` and vetted social links. The old PHP form had no CSRF token, no rate limiting, and silently discarded the sender's name.                                                                                                                    |
-| Visual design           | Deferred to Phase 5, deliberately last.                                                                                                                                                                                                                       |
-| URLs                    | Extensionless (`/about`, `/projects/firefall`), matching the old `.htaccess` rewrites, so the pre-launch redirect map stays small.                                                                                                                            |
+| Decision                | Choice                                                                                                                                                                                                                                                                                                                                                |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Stack                   | Astro, Markdown content collections, `output: 'static'`. No framework, no adapter.                                                                                                                                                                                                                                                                    |
+| Deploy                  | Cloudflare **Workers** static assets, git push, one preview URL per branch. (The plan said Pages; Cloudflare has frozen Pages for new features and routes new Git projects to Workers. Same review loop, plus native `_redirects`. See `docs/CLOUDFLARE.md`.)                                                                                         |
+| Registrar / DNS / email | Cloudflare + iCloud+. **Closed in Phase 1. Out of scope. Do not touch.**                                                                                                                                                                                                                                                                              |
+| Public address          | `contact@aliwallick.com`                                                                                                                                                                                                                                                                                                                              |
+| Blog                    | Scraped to Markdown, mined for content. **No live blog section.**                                                                                                                                                                                                                                                                                     |
+| Projects                | Two tiers — 5 deep write-ups, ~12 in a compact scannable archive.                                                                                                                                                                                                                                                                                     |
+| Marvel Snap             | A full public credit. Officially credited at [marvelsnap.com/credits](https://marvelsnap.com/credits/) as **Senior Software Engineer I** — link it rather than asserting it.                                                                                                                                                                          |
+| Current work            | **"A new team at Second Dinner, building the studio's first game in Godot."** The studio went public in Aug 2024, so the old "an unannounced mobile title" hedge was vaguer than reality. Corrected twice since — see the Phase 3 gate outcome below for #129 (not "the studio's next team") and #32 (the platform _is_ public; "mobile" is sayable). |
+| Contact form            | None. A `mailto:` and vetted social links. The old PHP form had no CSRF token, no rate limiting, and silently discarded the sender's name.                                                                                                                                                                                                            |
+| Visual design           | Deferred to Phase 5, deliberately last.                                                                                                                                                                                                                                                                                                               |
+| URLs                    | Extensionless (`/about`, `/projects/firefall`), matching the old `.htaccess` rewrites, so the pre-launch redirect map stays small.                                                                                                                                                                                                                    |
 
 ---
 
@@ -321,6 +321,19 @@ generated LinkedIn doc — was corrected to "a new team at Second Dinner." One t
 with Ali and confirmed still true: hers is specifically **the studio's first game in Godot**, a
 narrower and still-accurate claim distinct from "one of several new projects."
 
+**Corrected again 2026-08-26 (#32): the platform is public, and this file had it backwards.** The
+row in the Settled table above, and the paragraph above that, both said the W4 announcement named no
+platform and that "mobile" was _wrong_ — the Phase 3 gate retired "an unannounced mobile title"
+partly on that basis. **Ali's own statement, 2026-08-26: "we have been public that it's a mobile
+game."** She is the primary source and works there; the gate's reading was an inference from one
+announcement, hers is knowledge of what the studio has said. **So "mobile" is sayable.** The resume's
+group heading is `Unreleased Mobile Game` and its subtitle names Godot, which puts both public facts
+on the page without either being a disclosure.
+
+Everything else the gate fenced off is untouched and still fenced: **no title, no genre, no
+features, no monetization, no studio internals.** This correction moves exactly one word across the
+line, on Ali's authority, and is not a general loosening of the 2024–present rule.
+
 **Current work is not a project page.** The schema requires a `hero` on every published project, and
 this one can never have media — the schema is answering the question for us. It lives as a homepage
 "currently" line, the top entry of the About timeline, and a paragraph on the Second Dinner job
@@ -518,8 +531,12 @@ material would have produced a resume weighted backwards.
 - **The GPA and Dean's List stay recorded and unrendered.** They are in
   `src/content/education/georgia-tech.md` and `ResumeDocument` deliberately doesn't print `honors`.
   Recording a fact is not the same as showing it.
-- **No PO Box, and no home address at all.** There is no sourced current city, so the resume header
-  carries email, site, and LinkedIn and nothing else. (The PO Box was never on the _new_ site. It is
+- **No PO Box.** **Half-superseded 2026-08-26 (#32), and the half that changed is the half that was
+  never about privacy.** This used to read "no PO Box, and no home address at all", justified by two
+  things: the PO Box is a real exposure (#40, #132), and _there was no sourced current city_. Ali
+  supplied one, so the second reason is gone — the header now carries `Orange County, California`
+  (`resumeLocation` in `src/config/resume.ts`), which is a metro region and not an address. **The PO
+  Box decision is untouched and nothing here reopens it.** (The PO Box was never on the _new_ site. It is
   in `resources/WallickAli-Resume.pdf`, which the old live site still serves and Google has indexed —
   see "The PO Box files" below and [#132](https://github.com/ali-wallick/Portfolio/issues/132).)
 
@@ -553,8 +570,10 @@ can go stale. **Generated, not hand-maintained, since [#54](https://github.com/a
 - **Second Dinner splits.** Software Engineer II from 2019, Senior Software Engineer I from
   **`2021-12`**. Ali supplied December 2021 and noted that if forced to a single year she'd say 2022
   — a December promotion sits a fortnight from the boundary, so "2021" undersells the senior tenure.
-  Month precision makes the rounding moot, and it is the only place the date is visible: the resume
-  prints `Previously Software Engineer II (2019 – Dec 2021)`.
+  Month precision makes the rounding moot. **Superseded 2026-08-26 (#32) on where it shows:** this
+  used to say the resume was "the only place the date is visible", printing
+  `Previously Software Engineer II (2019 – Dec 2021)`. The resume prints the current title only now,
+  and years only. `docs/LINKEDIN.md` is where the progression and its month are read.
 - **Kaneva stays a single entry**, Ali's call — the progression is fifteen years old and she is
   comfortable with the flattening. **No date is needed to keep one entry**; a year was only ever
   required to _split_ one.
@@ -1107,6 +1126,182 @@ class" sentence in the origin paragraph), an Instagram link for cooking/baking, 
 on the board of her synagogue, University Synagogue in Orange County. The origin paragraph was also
 trimmed on Ali's agreement that leading the page with a decade-plus-old story "isn't ideal anymore" —
 not removed, just lighter.
+
+## The resume formality pass (2026-08-26, closes #32)
+
+Ali's brief: **"significantly more formal" than the rest of the site.** Distinct from #31, which
+tuned site prose toward her own measured voice. The resume is a different genre, and the target is
+her own 2019 resume, not her blog.
+
+**The bullets are labelled now, and the format is recovered rather than invented.** Every bullet is
+`{ label, text }` in the schema and renders as **`Label:`** plus a clipped formal clause. Ali's 2019
+resume was built exactly this way ("Vegas Blvd Slots:", "UI Programming:", "Client Engineering:"),
+which makes it the same argument the Phase 5 palette revival ran on: a format Ali chose herself
+cannot be mistaken for a template. `resources/WallickAli-Resume.pdf` is the only surviving copy of
+that document, and it has to be decoded to read — it is a subset-font PDF, so `grep` gets nothing
+and the machine has no `pdftotext`. Ali picked this over a wording-only alternative that kept the
+current unlabelled shape.
+
+**Bullet labels are title case, and that is recovered too** (2026-08-26, Ali's question, same
+pass). Every label in the "Source material (2019 resume, verbatim)" sections of the four job files
+is title case -- `UI Programming`, `Client Engineering`, `Unreleased Casino` -- so the format's
+own primary source settles the casing along with the shape. It also removes an inconsistency the
+sentence-case version could not avoid: proper-noun labels (`Vegas Blvd Slots`, `Hot Streak Slots`)
+are title case whether you like it or not, and `Unreleased casino` sitting beside them read as a
+sentence fragment rather than the name of a thing.
+
+**This is a separate rule from [#182](https://github.com/ali-wallick/Portfolio/issues/182)**, which
+title-cased multi-word _headers_ and is scoped to headings. A run-in `<b>` label inside an `<li>` is
+not a header, so #182 did not reach these and does not govern them; the 2019 resume does. Same
+AP/Chicago rules apply (`Live-Ops Content`, `Cross-Cutting Work`). Costs nothing -- measured at
+701px, zero bullets rewrap and both documents are byte-for-byte the same height.
+
+**Structural, not `**Markdown**` in the string.** Bullets render as `{h}` and never touch a Markdown
+pipeline, so `**` would print literally on paper. A required field also makes the format
+unrepresentable to get wrong, and `max(28)` on the label makes the build fail rather than letting a
+label grow into a sentence. Same reasoning as `resumeTools` being a `Record` keyed by category.
+
+**Two `full`-only sections came back, both dropped in Phase 4 and both in Ali's 2019 original.** Her
+call, and the split matters: `resumeSummary` and `resumePersonalProjects` (`src/config/resume.ts`)
+appear on `/resume/full` and **not** on the one-pager. A summary on the one-pager restates the title
+line directly above it, and 2011 jam entries compete badly for space against 2024 work. On the
+two-pager both have room. Personal Projects is hand-curated rather than derived from the `projects`
+collection because the achievements live in those files' prose bodies (there is no `award` field,
+and adding one to serve a single consumer is the `tech`-field mistake from #39 again).
+
+**Game Over Ever After was a fourth entry and Ali cut it (2026-08-26).** Her 2019 resume listed it,
+which is why it was there. It was also the only entry with no page to link, having been removed from
+the collection at `906efc9` (#61) for lack of a `hero`. Cutting it means every _project_ in the
+section now links to its own page. **Don't restore it from the 2019 resume** on the theory that it
+only went for lack of media.
+
+**The resume prints the current title only, and years only** (Ali's follow-up on the same pass). The
+`· Previously Software Engineer II (2019 – Dec 2021)` line is gone, and with it the last month on the
+page — which is what made Red 5's sourced `2015-06` read as an inconsistency rather than as
+precision, so job spans are year-only now. **Neither fact was deleted, only unrendered here**, the
+same shape as `honors` on the education entry: `roles[]` and both stored months are still read by
+`docs/LINKEDIN.md`, where LinkedIn models multiple positions under one company natively and its date
+fields take a month. See the supersession note under "Promotion years" above.
+
+**A bullet may carry an `extended` continuation, shown only on the two-pager** (2026-08-26, Ali's
+call). Kaneva's one-pager bullet is now a single `UI programming` entry with the menu-animation
+system folded into it, and Firefall's drops its enumeration of specific screens; both expand on
+`/resume/full`, where the detail is worth the space.
+
+**The shape matters more than the two edits.** The obvious way to do this is a `highlightsConcise`
+that _replaces_ `highlights` on the one-pager, and that is exactly the two-lists shape
+`highlightsExtended` was designed to rule out: two copies of one claim, free to drift. `extended`
+_continues_ `text` instead, so the long version is still literally the short one plus more and each
+fact is still written once. **If a bullet's short and long forms would need to say different things
+rather than one saying more, that is two bullets, not this field.**
+
+Ali asked for Firefall to come down from three lines to two. On paper it was already two (the
+enumerated version and the trimmed one both filled two lines at 701px) — three is what it renders at
+on a phone, and roughly what the HTML page shows in a narrow window. Cutting the enumeration left
+`overhaul.` orphaned alone on line two, so it was tightened by one further word to fit **one** clean
+line. Worth knowing generally: **a line count is a property of a viewport, not of a sentence**, and
+the resume has three that differ.
+
+**Per-entry locations are gone from the one-pager, and the header states the region once** (Ali's
+call, same pass). Three of the four jobs said "Irvine, CA", so the column was mostly repetition. The
+two-pager keeps them, which also keeps `full` a strict superset of `concise`. **Worth 78px**, which
+is what turned the density question below from closed into open.
+
+### Second Dinner renders as grouped blocks, and the group carries three tiers
+
+Ali's call, 2026-08-26, and it is the structure the rest of that job's wording depends on. Phase 4
+rendered seven years under one employer as one undifferentiated run of bullets, so the reader had to
+infer from the word "Godot" in bullet six that the last two were not also about Marvel Snap.
+`bulletGroups` (see `src/content.config.ts`) splits it into a block per body of work, newest first.
+
+**Three tiers, and which density each renders on is the part worth knowing:**
+
+- **`intro` on the job** — what belongs to the employer rather than to either game. Both densities.
+- **`bulletGroups[key].label`** — the group heading. Both densities.
+- **`bulletGroups[key].intro`** — a subtitle for the span. **Both densities**, because it is a fact
+  about the whole body of work rather than extra detail.
+- **`bulletGroups[key].dates`** — `/resume/full` only. The job's own span sits directly overhead on
+  the one-pager, and a second date column under it reads as clutter at that density.
+
+**Grouping happens at render, ordered by first appearance in `highlights`, not by declaration order
+in `bulletGroups`.** Resequencing the resume means moving a bullet and nothing else. It is also what
+keeps a `highlightsExtended` bullet inside its own group on the two-pager rather than stranded after
+every group, which would have printed "Marvel Snap" as a heading twice.
+
+**A group `intro` is not a free place to put a fact.** It renders on both densities, and the Marvel
+Snap one sits at four characters of headroom — which is why the awards went in as their own
+`highlightsExtended` bullet instead of onto the end of it. When something belongs to the two-pager
+only, a bullet is the mechanism; the subtitle is not.
+
+**And the awards name their subject, against the register.** Every other bullet drops it and starts
+with a verb. "Marvel Snap won Best Mobile Game" keeps it deliberately, because a subjectless "Won
+Best Mobile Game" reads as a personal award. Both awards are for best _mobile_ game, which is also
+why they are not a continuation of the PC launch bullet — that would attach them to the one release
+they are not about.
+
+### The density question, measured twice and deliberately not acted on
+
+**#32 assumed the print density was "tuned to fit, not chosen" and asked whether it should loosen.
+It cannot, and the measurement that briefly said otherwise was an artifact.** Probed at Playwright's
+default 1280px viewport, the one-pager reported 740px of a 960px budget, which looked like 2.3
+inches of slack; prose wraps to far fewer lines at 1280px than on paper, so the real number was
+~200px higher and the conclusion inverted. Raising the type to 11pt on that basis overflowed both
+documents, and `build-pdf.mjs`'s page-count assertion caught it.
+
+**Measure at 701px** — letter's 8.5in less `@page`'s 0.6in side margins, times 96 — against a 960px
+height budget. That first put the one-pager at **954px into 960px**: six pixels, and the honest
+lever really was fewer bullets, exactly as #32 assumed.
+
+**Then the document got shorter twice** — the "Previously ..." line and the per-entry locations, both
+above — and it now renders **858px into 960px**. About 102px, or five bullet lines. So a density bump
+is available where it wasn't: 9.75pt/1.3 fits comfortably, 10.25pt/1.3 fits exactly and leaves
+nothing.
+
+**Not taken, on purpose.** 9.4 → 9.75pt is a 3.7% change nobody perceives, and 10.25pt spends every
+pixel of the new headroom to buy it, which is how a one-pager silently becomes two the next time a
+bullet lands. The 102px is banked as slack. `src/styles/resume.css` carries the scaled-set table, so
+if Ali wants the bump the cost is already priced.
+
+### The print-geometry differ was measuring the wrong width (2026-08-26)
+
+Found while trimming a bullet, and it is the third viewport trap in one pass, so the lesson is the
+generalisable part. `scripts/check-resume-print.mjs` set **no viewport**, so it ran at Playwright's
+default 1280px while emulating print media — _print CSS at a screen width_, a rendering that exists
+on no page and no sheet of paper.
+
+It still caught everything [#35](https://github.com/ali-wallick/Portfolio/issues/35) built it for,
+because colour, font, weight and tracking leaks are width-independent. **Reflow is not.** Cutting the
+I Fits I Sits bullet from three printed lines to two moved **zero** elements in the differ, because
+at 1280px both versions occupied the same two lines. Fixed to 701px, the same edit moves **92**.
+
+**The rule, now stated in three places because it caught three different things:** anything measured
+about this document is measured at 701px — letter's 8.5in less `@page`'s 0.6in side margins, times
+96 — against a 960px height budget. The density probe got it wrong and inverted a conclusion, the
+skill's guidance got it wrong, and the guard itself got it wrong.
+
+### Two things this pass deliberately did not do
+
+- **The apostrophes.** #32 listed them, and the honest answer is that they are not a resume problem.
+  YAML front matter does not go through Astro's smartypants, so the resume renders straight
+  apostrophes while Markdown project bodies render curly ones. The resume is internally consistent;
+  the mismatch is sitewide. `docs/REBUILD-LOG.md`'s original note already warned that fixing only
+  the resume creates a _third_ state, and that is still true, so this is
+  [#188](https://github.com/ali-wallick/Portfolio/issues/188) rather than a silent edit here.
+- **Raising the density**, above. Measured, costed, and left with Ali.
+
+### `docs/LINKEDIN.md`'s hand-authored About was never reached by #31
+
+Worth recording because it is a class of miss, not a one-off. #31 walked the site's rendered pages;
+`ABOUT` and `HEADLINE_OPTIONS` live in `scripts/build-linkedin.mjs`, so they were never in scope and
+still carried three em dashes and the exact "taught me a lesson" closer `write-copy` §3 bans by name
+(the old closing paragraph stacked a thesis-colon, a "not X, but Y" antithesis, and the moral, all
+three at once). Reworded here. **Its register stays warmer than the resume and cooler than the
+blog** — LinkedIn's About is first person and takes contractions, and the formality pass applies to
+the derived bullets, not to it. `resumeSummary` and `ABOUT` are the two places a career-level claim
+is _written_ rather than derived, which makes them the two places one can drift; each now points at
+the other.
+
+---
 
 ### Archive pages may carry a short body (2026-08-24, from #97)
 

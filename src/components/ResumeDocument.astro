@@ -1,7 +1,13 @@
 ---
-import { getJobs, getEducation, formatSpan, currentTitle } from '~/lib/content';
+import { getJobs, getEducation, formatSpanYears, currentTitle } from '~/lib/content';
 import { site, socials } from '~/config/site';
-import { RESUME_TOOL_CATEGORIES, resumeTools } from '~/config/resume';
+import {
+  RESUME_TOOL_CATEGORIES,
+  resumeTools,
+  resumeSummary,
+  resumePersonalProjects,
+  resumeLocation,
+} from '~/config/resume';
 import { externalLinkProps } from '~/lib/links';
 
 /**
@@ -33,6 +39,41 @@ const linkedIn = socials.find((s) => s.label === 'LinkedIn' && s.status === 'act
 
 /** `2011` from `2011-05`; the year alone is all a degree line needs. */
 const gradYear = (value: string) => value.slice(0, 4);
+
+type Bullet = (typeof jobs)[number]['data']['highlights'][number];
+type BulletGroups = (typeof jobs)[number]['data']['bulletGroups'];
+
+/**
+ * Split a job's bullets into the blocks that render under it.
+ *
+ * Order comes from the bullets, not from `bulletGroups`' declaration order, so
+ * resequencing the resume means moving bullets and nothing else. A job whose
+ * bullets carry no `group` yields exactly one headingless block, which is every
+ * job but Second Dinner and is byte-identical to what rendered before groups
+ * existed.
+ *
+ * On `/resume/full` this is what keeps a `highlightsExtended` bullet inside its
+ * own group rather than stranded after every group -- the superset invariant is
+ * about content, and appending the long-version bullets to the end of a grouped
+ * job would have printed "Marvel Snap" as a heading twice.
+ */
+function bulletBlocks(bullets: Bullet[], groups: BulletGroups) {
+  const order: string[] = [];
+  const byKey = new Map<string, Bullet[]>();
+  for (const bullet of bullets) {
+    const key = bullet.group ?? '';
+    if (!byKey.has(key)) {
+      byKey.set(key, []);
+      order.push(key);
+    }
+    byKey.get(key)!.push(bullet);
+  }
+  return order.map((key) => ({
+    key,
+    heading: key ? groups[key] : undefined,
+    items: byKey.get(key)!,
+  }));
+}
 ---
 
 <article class="resume">
@@ -43,7 +84,7 @@ const gradYear = (value: string) => value.slice(0, 4);
   }
   <header class="resume-head">
     <h1>{site.name}</h1>
-    <p class="resume-role">{site.role}</p>
+    <p class="resume-role">{site.role} · {resumeLocation}</p>
     <ul class="resume-contact">
       <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
       <li><a href={site.url}>{site.url.replace(/^https?:\/\//, '')}</a></li>
@@ -58,6 +99,22 @@ const gradYear = (value: string) => value.slice(0, 4);
       }
     </ul>
   </header>
+
+  {
+    /* Summary and Personal Projects are `full`-only, settled with Ali on #32.
+       The one-pager is the document you attach to an application; a summary
+       there restates the title line directly above it, and 2011 jam entries
+       compete badly for space against 2024 work under the recency-weighting
+       rule. The two-pager has room for both — see src/config/resume.ts. */
+  }
+  {
+    isFull && (
+      <section class="resume-section" aria-labelledby="summary">
+        <h2 id="summary">Summary</h2>
+        <p class="resume-summary">{resumeSummary}</p>
+      </section>
+    )
+  }
 
   <section class="resume-section" aria-labelledby="skills">
     <h2 id="skills">Skills</h2>
@@ -80,13 +137,13 @@ const gradYear = (value: string) => value.slice(0, 4);
         const bullets = isFull
           ? [...job.data.highlights, ...job.data.highlightsExtended]
           : job.data.highlights;
-        // Oldest first reads as a progression; `roles` is already stored that
-        // way. Each earlier role ran until the next one started, which is the
-        // only place a promotion date is actually visible — recording one
-        // without printing it would make `roles[]` a fact nobody can read.
-        const earlierRoles = job.data.roles
-          .slice(0, -1)
-          .map((r, i) => `${r.title} (${formatSpan(r.start, job.data.roles[i + 1]!.start)})`);
+        // `roles[]` carries the full progression and the resume deliberately
+        // prints only the current title — Ali's call, 2026-08-26 (#32). It used
+        // to render "· Previously Software Engineer II (2019 – Dec 2021)".
+        // Same shape as `honors` on education below: recorded is not the same
+        // as shown, and the progression still has a reader in
+        // docs/LINKEDIN.md, where LinkedIn models multiple positions under one
+        // company natively and genuinely wants it.
 
         return (
           <section class="resume-job">
@@ -94,24 +151,76 @@ const gradYear = (value: string) => value.slice(0, 4);
               <h3>
                 {currentTitle(job)} <span class="resume-company">· {job.data.company}</span>
               </h3>
-              <p class="meta resume-dates">{formatSpan(job.data.start, job.data.end)}</p>
+              <p class="meta resume-dates">{formatSpanYears(job.data.start, job.data.end)}</p>
             </div>
-            <p class="meta resume-job-meta">
-              {job.data.location}
-              {earlierRoles.length > 0 && <> · Previously {earlierRoles.join(', ')}</>}
-            </p>
-            {bullets.length > 0 && (
-              <ul class="resume-bullets">
-                {bullets.map((h) => (
-                  <li>{h}</li>
-                ))}
-              </ul>
-            )}
+            {/* One-pager drops per-entry locations entirely, Ali's call
+                 (#32). Three of four jobs said "Irvine, CA", so the column was
+                 mostly repetition, and the header now states the region once.
+                 Worth 78px on a document that had 24px of slack. The two-pager
+                 keeps them, which also keeps `full` a strict superset of
+                 `concise`. */}
+            {isFull && <p class="meta resume-job-meta">{job.data.location}</p>}
+            {/* Company-level prose, above the bullets and outside them. Ali's
+                 call (#32): under one employer for seven years, the fact that
+                 belongs to the employer shouldn't be riding on the front of a
+                 bullet about one of its games. */}
+            {job.data.intro && <p class="resume-job-intro">{job.data.intro}</p>}
+            {bulletBlocks(bullets, job.data.bulletGroups).map((block) => (
+              <>
+                {block.heading && (
+                  <div class="resume-bullet-group">
+                    <h4>{block.heading.label}</h4>
+                    {/* Two-pager only, Ali's call (#32) -- same shape as the
+                         per-entry locations above. The job's own span sits
+                         directly overhead on the one-pager, and a second date
+                         column under it reads as clutter at that density. */}
+                    {isFull && block.heading.dates && (
+                      <p class="meta resume-dates">{block.heading.dates}</p>
+                    )}
+                  </div>
+                )}
+                {/* Group-level prose, the same idea as the job's `intro` one
+                     level down. Renders on both densities -- it is a fact about
+                     the whole span rather than extra detail. */}
+                {block.heading?.intro && <p class="resume-group-intro">{block.heading.intro}</p>}
+                <ul class="resume-bullets">
+                  {block.items.map((h) => (
+                    <li>
+                      <b class="resume-bullet-label">{h.label}:</b> {h.text}
+                      {isFull && h.extended && <> {h.extended}</>}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ))}
           </section>
         );
       })
     }
   </section>
+
+  {
+    isFull && (
+      <section class="resume-section" aria-labelledby="personal-projects">
+        <h2 id="personal-projects">Personal Projects</h2>
+        <ul class="resume-bullets resume-personal">
+          {resumePersonalProjects.map((project) => (
+            <li>
+              <b class="resume-bullet-label">
+                {project.slug ? (
+                  <a href={`/projects/${project.slug}`}>{project.label}</a>
+                ) : (
+                  project.label
+                )}
+                :
+              </b>{' '}
+              {project.text}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
 
   <section class="resume-section" aria-labelledby="education">
     <h2 id="education">Education</h2>
@@ -129,7 +238,7 @@ const gradYear = (value: string) => value.slice(0, 4);
                rendered. A 2011 GPA and Dean's List are not load-bearing fifteen
                years into a career — recording a fact is not the same as
                showing it. */}
-          <p class="meta resume-job-meta">{entry.data.location}</p>
+          {isFull && <p class="meta resume-job-meta">{entry.data.location}</p>}
         </section>
       ))
     }

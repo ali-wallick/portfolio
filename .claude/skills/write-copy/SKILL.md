@@ -40,19 +40,71 @@ assuming either has slipped, and read the "Site (now)" column, not "before."
 
 One voice, three settings. Getting this wrong reads worse than any individual bad sentence.
 
-| Surface                                | Register                                                                         |
-| -------------------------------------- | -------------------------------------------------------------------------------- |
-| Blog-derived prose, About              | Warmest. Contractions, parentheticals, a rare earned exclamation.                |
-| Project write-ups                      | Composed. First person, past tense, specifics forward, one warmth beat at close. |
-| Archive-tier entries                   | Composed and lower-key. No warmth beat; "cool old projects", not a pitch.        |
-| `highlights` / `highlightsExtended`    | Résumé register: verb-first, subject dropped, no contractions, no exclamations.  |
-| Microcopy — nav, 404, contact, buttons | Shortest. Plain and a little dry. A joke only if it's actually funny.            |
-| Alt text, meta descriptions            | Descriptive, not voiced. Say what's in the image.                                |
+| Surface                                | Register                                                                           |
+| -------------------------------------- | ---------------------------------------------------------------------------------- |
+| Blog-derived prose, About              | Warmest. Contractions, parentheticals, a rare earned exclamation.                  |
+| Project write-ups                      | Composed. First person, past tense, specifics forward, one warmth beat at close.   |
+| Archive-tier entries                   | Composed and lower-key. No warmth beat; "cool old projects", not a pitch.          |
+| `highlights` / `highlightsExtended`    | Résumé register, and **labelled** — see §2.1. The most formal surface on the site. |
+| Microcopy — nav, 404, contact, buttons | Shortest. Plain and a little dry. A joke only if it's actually funny.              |
+| Alt text, meta descriptions            | Descriptive, not voiced. Say what's in the image.                                  |
 
 **For resume work, this skill is half the job.** It governs how a bullet reads; the `update-resume`
 skill governs where it lives, the per-job bullet budget, and the regeneration pipeline (PDFs,
 `docs/LINKEDIN.md`, the print-geometry baseline). Changing resume wording without reading that one
 will fail `npm run check:pdf` at deploy time.
+
+### 2.1 Résumé register is labelled, and it is deliberately not the site's prose voice
+
+Settled with Ali 2026-08-26 ([#32](https://github.com/ali-wallick/Portfolio/issues/32)). A bullet is
+`{ label, text }` in the schema, and renders as **`Label:`** followed by a clipped formal clause:
+
+> **Localization:** Owned the feature end to end, including Unity's Localization package, the import
+> and export pipeline, font handling, and the team's UI text workflow.
+
+**This is recovered, not invented.** Ali's own 2019 resume built every bullet this way — "Vegas Blvd
+Slots:", "UI Programming:", "Client Engineering:" — and it is the same move §4.11 already documents
+from her escalation letter and her volunteer synthesis doc. Decode
+`resources/WallickAli-Resume.pdf` before proposing a change to the format; it is the primary source,
+and it is the only place the original document survives.
+
+Rules that come with it:
+
+- **The label is a topic, not a clause.** `max(28)` chars, enforced by the schema, so the build fails
+  rather than the format silently eroding back into prose. Prefer the project or discipline name,
+  which is what the 2019 resume used.
+- **The label is title case** (2026-08-26, #32). `UI Programming`, `Live-Ops Content`,
+  `Cross-Cutting Work`; AP/Chicago rules. Recovered the same way the format was -- every label in the
+  job files' verbatim 2019 sections is title case, `Unreleased Casino` included. It is also the only
+  self-consistent option, since proper-noun labels are title case whether you choose it or not.
+- **Drop the subject, unless the subject isn't Ali.** The bullets are subject-dropped and verb-first
+  by default. The one deliberate exception on the page is the awards bullet, which names Marvel Snap:
+  a bare "Won Best Mobile Game" reads as a personal award. If the sentence's true subject is the
+  product or the team, say so rather than letting the register imply otherwise.
+- **Don't restate the label in the sentence.** "Localization: Owned localization end to end" wastes
+  the device. "Owned the feature end to end" says the same thing once.
+- **No contractions, no exclamations, no first person.** These bullets are subject-dropped, which is
+  why `--resume` scores them against a résumé baseline of zero for all three rather than the blog's.
+- **Verbs are formal, not conversational.** The #32 pass removed: "hands the ticket to", "brought
+  teammates onto", "took it to release", "let us author", "keeping the team moving quickly", and
+  "plus" used as a conjunction. Each reads fine in site prose and casual in a bullet.
+
+**Enumerations are allowed to run long, and there is now somewhere to put them.** The measured mark
+is 13.5 words and the shipped bullets sit at 17, and most of the excess is a verb followed by four or
+five named things. That is §4.10 — name the specific thing — and cutting it to hit a number would
+remove the most reliable marker of her writing to fix a metric. Tighten loose connective prose
+instead.
+
+When an enumeration genuinely costs a line on the one-pager, **move it to the bullet's `extended`
+field** rather than deleting it: it is a continuation appended only on `/resume/full`, so the fact
+survives at full detail on the long version. That is what happened to Firefall's list of screens and
+Kaneva's list of menus (#32). `update-resume` §1 has the rule that keeps this from becoming a second,
+drifting copy.
+
+**Two `full`-only sections carry their own register.** `resumeSummary` and `resumePersonalProjects`
+in `src/config/resume.ts` are hand-authored and appear on `/resume/full` only. The summary is three
+sentences and must not open with the 2019 original's "Programmer passionate about developing games",
+which is the throat-clearing formula §3 bans.
 
 **Contractions and exclamations track the surface, not the voice.** She runs 17 contractions per 1k
 words in the blog and 0.7 in formal documents; 96 exclamations in the blog and 9 across 4,200 words
@@ -257,7 +309,16 @@ treatment.
 ```bash
 node .claude/skills/write-copy/scripts/copy-stats.mjs src/content/projects/*.md
 node .claude/skills/write-copy/scripts/copy-stats.mjs --baseline   # Ali's own writing, for comparison
+node .claude/skills/write-copy/scripts/copy-stats.mjs --resume     # the resume bullets
 ```
+
+**Use `--resume` for resume work, never the default mode.** `strip()` removes front matter, and a
+resume bullet _lives_ in front matter — so pointing the default mode at `src/content/jobs/*.md`
+measures the "Source material (2019 resume, verbatim)" bodies and not one line of shipped copy. That
+was silently true for as long as the script existed, and it is why #32's opening measurement had to
+be taken before anything could be judged. `--resume` reads `highlights` + `highlightsExtended`,
+joins each bullet as the reader meets it (`Label: text`), and scores against the résumé baseline plus
+four formality tells the prose mode does not carry.
 
 It reports tell counts and drift from Ali's measured baseline. **It is advisory and deliberately not
 wired into `npm run verify`** — tone is not gateable, and every number in it has a legitimate reason

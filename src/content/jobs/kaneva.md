@@ -31,26 +31,30 @@ roles:
 # toward recency, so the oldest job on the resume carries the least space.
 # See CLAUDE.md's Phase 4 weighting section for the general rule.
 highlights:
-  - >-
-    Architected a menu animation system adopted by both the UI and game teams,
-    after hand-coding every transition became the bottleneck.
+  - label: UI Programming
+    text: >-
+      Built many of Kaneva's core menus end to end in the in-house Lua menu system. Architected
+      the menu animation system that replaced hand-coded transitions, which both the UI and game
+      teams adopted.
+    extended: >-
+      Worked from artists' comps through layout to functionality, covering the player and
+      creator HUDs, inventory and bank, travel, events, and a visual property editor for
+      scripted objects.
 highlightsExtended:
-  - >-
-    Built many of Kaneva's core menus end to end in the in-house Lua menu system,
-    from artists' comps through layout to functionality. Covered the player and
-    creator HUDs, inventory and bank, travel, events, and a visual property
-    editor for scripted objects.
-  - >-
-    Helped design and script a Lua-based game development environment built on
-    top of the virtual world.
-  - >-
-    Started in technical support, helping players with their in-world scripting
-    and building game templates (Treasure Hunt and Adventure among them) that let
-    players assemble small games of their own.
-  - >-
-    Also built context menus for people and objects, menus for swapping video and
-    Flash content on in-game objects, and the welcome and builder tutorials.
-    Worked with the engine and web teams whenever a menu touched either.
+  - label: Game Programming
+    text: >-
+      Helped design and script a Lua-based game development environment built on top of the
+      virtual world.
+  - label: Technical Support
+    text: >-
+      Joined Kaneva in support, helping players with their in-world scripting. Built game
+      templates, Treasure Hunt and Adventure among them, which players used to assemble small
+      games of their own.
+  - label: Additional UI
+    text: >-
+      Built context menus for people and objects, menus for swapping video and Flash content on
+      in-game objects, and the welcome and builder tutorials. Worked with the engine and web
+      teams whenever a menu touched either.
 ---
 
 ## Source material (2019 resume, verbatim — not current copy)

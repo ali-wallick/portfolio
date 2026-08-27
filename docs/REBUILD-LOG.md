@@ -1943,3 +1943,178 @@ The interview also supplied two positive markers the earlier corpora had underwe
 with an enthusiasm verb constantly (five "I love"s in 320 words, against a site that records what she
 did and almost never that she enjoyed it), and she names specific things rather than categories —
 Blendoku, Carcassone, Castles of the Mad King Ludwig, not "board games."
+
+---
+
+## The resume formality pass (2026-08-26, #32)
+
+Ali's brief was one sentence of direction and one of latitude: significantly more formal than the
+rest of the site, and "don't be constrained by" the existing skills. Both mattered. The formality
+call turned the pass into a genre problem rather than a wording one, and the latitude is what made
+it fine to change the schema instead of only the strings.
+
+### The primary source had to be decoded before anything could be judged
+
+"Revisit the original resume content" pointed at `resources/WallickAli-Resume.pdf`, which is kept
+deliberately (#40) and had never actually been read by an agent. It's a subset-font PDF: `grep`
+returns nothing, the machine has no `pdftotext`, and the Read tool needs `pdftoppm`. Decoding it
+meant pulling the `/ToUnicode` CMaps out of the object table and mapping the two-byte codes by hand,
+about thirty lines of Python.
+
+Worth the detour, because the document turned out to disagree with the current one structurally, not
+just tonally. It had a **Summary** section and a **Personal Projects** section that Phase 4 dropped,
+and — the finding that shaped the whole pass — **every bullet was labelled**: "Vegas Blvd Slots:",
+"UI Programming:", "Client Engineering:", a short topic label then a clipped clause.
+
+That reframed the register question. The choice put to Ali wasn't "how formal" in the abstract, it
+was wording-only versus **restoring a format she had chosen herself in 2019**, which is the same
+not-a-template-by-construction argument the Phase 5 palette revival won on. She picked the format.
+
+### The voice checker had never measured a resume bullet
+
+`copy-stats.mjs`'s `strip()` removes front matter. Resume bullets _live_ in front matter. So
+pointing the default mode at `src/content/jobs/*.md` measured the "Source material (2019 resume,
+verbatim)" bodies — the 2019 bullets — and reported them as if they were shipped copy. Silently,
+for as long as the script had existed, while `write-copy`'s own description listed "resume bullets"
+as in scope and §7 said to measure.
+
+A `--resume` mode fixes it: reads `highlights` + `highlightsExtended`, joins each bullet the way a
+reader meets it (`Label: text`), and scores against a résumé baseline where contractions and first
+person are zero _by definition of the genre_ rather than by measurement. It also carries four
+formality tells the prose mode doesn't — colloquial verbs, "plus" as a conjunction, contractions,
+label-shaped fragments.
+
+The opening measurement it produced is the number the pass ran on: **20.2 words per sentence against
+the 2019 resume's 13.2**, with seven colloquial verbs and three narrative fragments. The same shape
+as #31's finding, in a different genre, pointing the other way — the bullets read like site prose.
+Shipped state is 17w, longest sentence down from 39w to 25w, and the remaining excess is
+enumerations, which are the genre and were left alone.
+
+**The parser had to be rewritten mid-pass**, which is its own small lesson: it was written against
+the flat `- >-` string format and kept working after the schema changed to `{ label, text }`,
+quietly counting `label:` and `text: >-` as words and reporting no improvement at all. A tool that
+silently keeps running against a changed format is worse than one that breaks.
+
+### A measurement taken at the wrong viewport inverted a conclusion
+
+The one thing in this pass that went properly wrong. #32 asked whether the print density (9.4pt/1.3)
+should loosen, having assumed it was "tuned to fit, not chosen".
+
+Probed with Playwright at its **default 1280px viewport**, the one-pager rendered 740px into a 960px
+budget and the two-pager came to 1.05 pages. Read as: 2.3 inches of slack, type has been small for no
+reason since Phase 4, and the two-pager is a one-page document with four lines dangling. All three
+conclusions were wrong, and they were wrong for one reason — **prose wraps to far fewer lines at
+1280px than it does at paper width**, so every height came out roughly 200px light.
+
+Raising the type to 11pt on that basis overflowed both documents. `build-pdf.mjs`'s page-count
+assertion caught it immediately, which is exactly the guard Phase 4 built it to be.
+
+Measured properly (701px: letter's 8.5in less `@page`'s 0.6in side margins, times 96), the shipped
+one-pager renders **954px into 960px**. Six pixels of slack. **#32's premise was wrong and its
+instinct was right**: the density really can't loosen, and the honest lever really is fewer bullets,
+which it had already said. Raising to ~10.25pt costs roughly two one-pager bullets, so it went back
+to Ali as a content decision rather than being taken as a CSS one.
+
+Two things generalize. **A geometry measurement carries its viewport as a hidden argument** — the
+number is meaningless without it, and "0.77 pages" looked authoritative enough that it went into a
+source comment before anything checked it. And the layered guards did their job in order: the
+page-count assertion caught the overflow, then the #35 print-geometry differ caught a _second_,
+quieter bug in the revert — a `sed`-style replacement whose pattern matched `.resume-role` before
+`.resume-job-meta`, leaving one at 9pt and the other at 10.5pt. Nothing about the page count would
+ever have shown that. The differ named the element and the property.
+
+The final diff across both routes: **214 elements moved, zero non-geometry property changes.** Every
+difference was position or size, which is what adding labels and two sections should do, and
+confirmation that no colour or type token leaked to paper.
+
+### Scope that was flagged rather than absorbed
+
+- **`docs/LINKEDIN.md`'s hand-authored `About`** had never been through #31, because #31 walked the
+  site's rendered pages and this text lives in a generator script. It still carried three em dashes
+  and the exact "taught me a lesson" closer `write-copy` bans by name, stacked with a thesis-colon
+  and a "not X, but Y" antithesis in one paragraph. Reworded here, register left warmer than the
+  resume. **A generated file is a place a wording pass forgets to look.**
+- **The apostrophes**, which #32 listed. Not a resume problem: the resume is internally consistent
+  and the mismatch is sitewide, and the original deferral note's reasoning (fixing only the resume
+  creates a _third_ state) still holds. Opened as #188.
+- **Game Over Ever After** has no `projects` entry — removed at `906efc9` (#61) for lack of a `hero`.
+  A resume line needs no image, so it appears in Personal Projects sourced from the 2019 resume and
+  the snapshot, and `resume.ts` records why it can't be derived.
+
+### Cost notes
+
+Opus 5, one session, no subagents. The judgment was easy and the same as Phase 4's: the surface was
+four job files, one schema, one component, one stylesheet, two skills, and a generator — all
+readable directly, none of it a genuine unknown worth a cold context. The expensive part wasn't
+breadth, it was the three build-measure-revert cycles on density, which no amount of fan-out would
+have helped.
+
+### A third viewport trap, and this one was in a guard (2026-08-26)
+
+The density measurement inverted a conclusion by probing at 1280px instead of paper width. Then the
+`update-resume` skill's own guidance repeated the mistake. The third instance was the guard itself.
+
+`scripts/check-resume-print.mjs` set no viewport, so it ran at Playwright's default 1280px while
+calling `emulateMedia({ media: 'print' })` — print CSS at a screen width, a rendering that exists on
+no page and no sheet of paper. It still caught every bug #35 built it for, because colour, font,
+weight and tracking are width-independent. Reflow is not. Trimming the I Fits I Sits bullet from
+three printed lines to two moved **zero** elements through the differ; at 1280px both versions
+occupied the same two lines. Set to 701px, the same edit moves **92**.
+
+Two things worth keeping from it. **A guard that emulates one thing and measures under another is
+not obviously broken** — this one was demonstrably working, on real bugs, for its whole life, which
+is exactly why nobody looked. And the fix was verified by putting the old wording back and watching
+the count go 0 → 92, rather than by regenerating the baseline and trusting it, which would have
+proved nothing.
+
+### Spending the slack, and a measurement that finally paid (2026-08-26)
+
+The pass has two halves, and the second one only became possible because the first one shortened the
+document. Once the "Previously …" line and the per-entry locations came off, the one-pager had ~110px
+of room, and the question flipped from _what has to go_ to _what is missing_.
+
+**The gap was found by reading the subtitle against the bullets.** Marvel Snap's group intro says
+"client then feature engineer" — and the one-pager then showed four bullets of architecture,
+platform and pipeline work, nothing a player touches. The feature-engineering bullet existed the
+whole time, stranded on the two-pager. Promoting it moved it unchanged, which is what the superset
+invariant is _for_: a bullet is promoted, never rewritten, so the two densities cannot drift.
+
+**The project pages held three facts the resume had never carried** — the card credits feature, the
+CJK/Thai font work, and the Unity Editor tooling. That is the resume's version of `content-pass`'s
+rule about reading `snapshot/` first: a job's `highlights` are a compression of its project page, and
+compressions lose things silently. Worth flowing the other way too — the language count went onto
+both surfaces, since the project page had no number either.
+
+**The best scale number turned out to be the one Ali owned.** She raised awards and downloads and
+named the discomfort herself: those were out of her control. "15 languages" is scale attached to the
+thing she owned end to end, and it reads as a competency and a quantified outcome in one clause.
+It also cost nothing, which is the other half of the story.
+
+**Character headroom, not line count, is what governs a wording edit.** Measuring it means mutating a
+bullet's text node in an already-rendered print-emulated page and appending characters until the line
+count breaks. Hand-rolled four times across this session before becoming `scripts/resume-headroom.mjs`
+and `npm run resume:headroom`. Each time it decided the edit rather than describing it: the language
+count was free (62 characters of slack), `the artists' card art tool` fit where the spelled-out
+version wrapped (7), and title-casing fifteen labels cost **zero height** — 25 differ changes, every
+one width-only. Three of five candidate phrasings for one bullet wrapped; the winner was chosen on
+measured headroom, not on which read best in isolation.
+
+It also explains why the leftover slack never converts to type size. Four bullets sit at 2–5
+characters, so they wrap **together** on any size increase. The density curve is a cliff, not a
+slope, and it is a property of the wording rather than of the type.
+
+**The differ's ratios lie about mid-list insertions**, and this cost real verification time twice.
+The baseline keys on `li:nth-of-type(N)`, so inserting a bullet renumbers every sibling under it and
+the tool compares a one-line bullet against whatever used to hold that slot — ratios of 0.5, 0.33 and
+2.0 that look exactly like reflow and are not. The reliable check is per-bullet line counts keyed by
+label. Both signatures are now written into the `update-resume` skill, along with the two that _are_
+meaningful: width-only-with-equal-heights means a casing change that reflowed nothing, and every
+height scaling by one small factor means a leading change with no rewrap.
+
+**One question answered entirely from a primary source.** Whether bullet labels should be title case
+looked like a taste call and wasn't: every label in the four job files' verbatim 2019 sections is
+title case, `Unreleased Casino` included — which is the exact label the repo was rendering as
+`Unreleased casino` fifteen lines below its own quotation of it. Sentence case had also never been
+self-consistent, since proper-noun labels are title case regardless. Note this is _not_ #182, which
+title-cased headers; a run-in `<b>` inside an `<li>` is not a header, which is why that pass never
+reached these.

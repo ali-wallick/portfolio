@@ -40,3 +40,115 @@ export const resumeTools: Record<ResumeToolCategory, string[]> = {
   Languages: ['C#', 'GDScript', 'Lua'],
   Platforms: ['iOS', 'Android', 'PC'],
 };
+
+/**
+ * The two-pager's opening Summary. **`/resume/full` only — the one-pager has
+ * none.** Ali's call, 2026-08-26 (#32).
+ *
+ * Her 2019 resume opened with one and the Phase 4 rebuild dropped it. Restored
+ * to the long version only, because the one-pager is the document you attach to
+ * an application, where a summary mostly restates the title line and the first
+ * bullet it sits above. On the two-pager it has room to orient a reader before
+ * four jobs of detail.
+ *
+ * Written fresh, not recovered. The 2019 original opened "Programmer passionate
+ * about developing games of all varieties", which is exactly the throat-clearing
+ * the `write-copy` skill bans -- and the skill is explicit that the ban is on the
+ * opening-line formula, not on the word "passionate", which is genuinely hers.
+ *
+ * **Not the same text as `ABOUT` in scripts/build-linkedin.mjs, on purpose.**
+ * That one is ~1,900 characters of first-person prose for LinkedIn's About
+ * field; this is three sentences at resume register. Different genres, different
+ * lengths, both hand-authored. If you change a *fact* in one, change it in the
+ * other -- they are the two places on this site where a career-level claim is
+ * written rather than derived, which makes them the two places it can drift.
+ */
+export const resumeSummary =
+  'Senior software engineer with fifteen years building game clients, UI systems, and the ' +
+  'tooling behind them. Most recently Marvel Snap, through its 2022 launch and its PC ' +
+  "release. Currently on a new team at Second Dinner, building the studio's first game in " +
+  'Godot.';
+
+/**
+ * The two-pager's Personal Projects section. **`/resume/full` only.** Ali's
+ * call, 2026-08-26 (#32).
+ *
+ * Her 2019 resume carried this section and the Phase 4 rebuild dropped it, on
+ * the reasonable theory that /projects covers all 16 entries properly. What that
+ * missed: **the PDF travels on its own.** A recruiter who opens the attachment
+ * has the site's URL in the header and no particular reason to follow it, so the
+ * jam record was reachable only by someone already convinced.
+ *
+ * Hand-curated rather than derived from the `projects` collection, same
+ * precedent as `resumeTools` above (#39): which entries belong on a resume is a
+ * curation decision, not a query. It also could not be a derivation even if we
+ * wanted one, because **the achievements are not in the schema** -- Critter³'s
+ * Entelechy placing and Cor Ex Machina's second place live in those files'
+ * *prose bodies*, `projects` has no `award` field, and adding one to serve a
+ * single consumer is the `tech`-field mistake (#39) again.
+ *
+ * **Game Over Ever After was here and was cut, Ali's call 2026-08-26.** Her 2019
+ * resume listed it, and it was carried over on that basis. It was also the one
+ * entry with no page to link: removed from the collection at `906efc9` (#61)
+ * because the schema requires a `hero` and no usable image survives anywhere,
+ * in the repo or the snapshot. **Don't restore it from the 2019 resume** on the
+ * theory that it was dropped for lack of media -- the credit is true, and it was
+ * still cut on purpose.
+ *
+ * `slug` stays optional because "Speaking" is not a project and has none. Every
+ * *project* entry here now links; if you add one that can't, ask first, because
+ * that is the property that just got bought. It is used only by the HTML resume;
+ * the PDF ignores it.
+ */
+export interface ResumePersonalProject {
+  /** Short topic label, same convention as a job bullet's `label`. */
+  label: string;
+  text: string;
+  /** A `projects` collection slug, where the entry has a page. */
+  slug?: string;
+}
+
+export const resumePersonalProjects: ResumePersonalProject[] = [
+  {
+    label: 'Critter³',
+    slug: 'critter-3',
+    text: "Global Game Jam 2011 prototype, and a finalist in SCAD's Entelechy prototype contest that May.",
+  },
+  {
+    label: 'Cor Ex Machina',
+    slug: 'cor-ex-machina',
+    text: 'Global Game Jam 2013 prototype. Placed second at Atlanta, the largest jam site in the country that year.',
+  },
+  {
+    label: 'Speaking',
+    text: 'Panels at the Museum of Design Atlanta and SIEGE in 2013. More recently, talks for a Girl Scout troop and a college class on the work itself.',
+  },
+];
+
+/**
+ * The resume header's location line. Ali's call, 2026-08-26 (#32).
+ *
+ * **This supersedes half of a Phase 4 decision, so read that one first.** The
+ * Phase 4 gate settled "no PO Box, and no home address at all", and the reason
+ * given was twofold: the PO Box in `resources/WallickAli-Resume.pdf` is a real
+ * privacy exposure (#40, #132), and *there was no sourced current city*. Ali
+ * supplied one here, so the second reason is gone. The first is untouched --
+ * a metro region is not a street address, and nothing about this reopens the
+ * PO Box question.
+ *
+ * It replaces the per-entry location lines on the one-pager rather than adding
+ * to them (see ResumeDocument.astro). Three of the four jobs said "Irvine, CA";
+ * stating the region once in the header says the same thing in one line instead
+ * of five, and buys 78px on a document that had 24px of slack.
+ *
+ * Spelled out rather than "Orange County, CA" because that is how Ali wrote it,
+ * and because the header is the one place on the document with room for it. The
+ * two-pager still abbreviates in its per-job lines, which is the normal
+ * convention for an entry list.
+ *
+ * Resume-scoped deliberately, and NOT in `src/config/site.ts` next to name,
+ * role, and email. Those are sitewide and reachable by any page or meta tag;
+ * this is one line on one document, and a location is exactly the kind of fact
+ * that should have to be imported on purpose.
+ */
+export const resumeLocation = 'Orange County, California';

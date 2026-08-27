@@ -17,10 +17,50 @@ recreate the two-copies-drift problem the content model exists to prevent.
 - `src/content/jobs/<company>.md` — `highlights` (one-pager) and `highlightsExtended` (appended for
   the two-pager — a strict superset, never a second copy of the same fact worded differently).
 - `src/content/education/*.md`
-- `src/config/resume.ts` — the Skills section (Engines & Tools / Languages / Platforms). Hand-curated,
-  settled 2026-08-23 (#39). **Don't add or remove an entry without asking** — it's a depth claim, not
-  a capability list, and every current entry and omission traces to a direct decision from Ali, not
-  inference.
+- `src/config/resume.ts` — three hand-curated blocks, all settled with Ali directly:
+  - **Skills** (Engines & Tools / Languages / Platforms), settled 2026-08-23 (#39). **Don't add or
+    remove an entry without asking** — it's a depth claim, not a capability list, and every current
+    entry and omission traces to a direct decision from Ali, not inference.
+  - **`resumeSummary`**, settled 2026-08-26 (#32). Three sentences, **`/resume/full` only**.
+  - **`resumeLocation`**, settled 2026-08-26 (#32). The header's region line, on both variants. It
+    replaced the per-entry location lines on the one-pager rather than joining them — see the
+    supersession note in CLAUDE.md's Phase 4 section, which used to say "no home address at all".
+  - **`resumePersonalProjects`**, settled 2026-08-26 (#32). Three entries, **`/resume/full` only**.
+    Hand-curated rather than derived from the `projects` collection, because the achievements live
+    in those files' prose bodies and there is no `award` field. Game Over Ever After was a fourth
+    and Ali cut it; the file records why, and why not to restore it.
+
+**A bullet is `{ label, text, extended? }`, not a string** (2026-08-26, #32). It renders as
+**`Label:`** plus a clipped formal clause, which is how Ali's own 2019 resume was built. The label is
+capped at 28 characters by the schema so it stays a topic rather than growing into a sentence. For
+how the words should sound, the `write-copy` skill's §2.1 is the authority; this file only says where
+they live.
+
+**Labels are title case** (2026-08-26, #32). `UI Programming`, `Live-Ops Content`,
+`Cross-Cutting Work` -- AP/Chicago rules, small function words lowercase unless first or last. This
+is recovered like the format itself: every label in the four job files' "Source material (2019
+resume, verbatim)" sections is title case, `Unreleased Casino` included, which is the exact label
+this repo had been rendering as `Unreleased casino`. **Sentence case was never actually consistent**
+-- proper-noun labels (`Vegas Blvd Slots`, `Hot Streak Slots`) are title case regardless, so a
+sentence-case sibling beside them reads as a fragment rather than the name of a thing. Note this is
+a different rule from #182, which title-cased _headers_; a run-in `<b>` inside an `<li>` is not a
+header, which is why #182 never reached these.
+
+**Second Dinner renders as grouped blocks, and which tier renders on which density is not
+symmetric.** `bulletGroups` gives a job a heading per body of work. The group's `label` and `intro`
+render on **both** densities; its `dates` render on `/resume/full` only. The practical consequence,
+which already changed a decision: **a group `intro` is not a free place to park a two-pager fact.**
+Marvel Snap's sits at four characters of headroom, so anything appended to it costs a one-pager
+line. When something belongs to the long version only, the mechanism is a `highlightsExtended`
+bullet. Full rationale in CLAUDE.md's "Second Dinner renders as grouped blocks".
+
+**`extended` is a continuation, not an override.** It is appended to `text` on `/resume/full` and in
+`docs/LINKEDIN.md`, and omitted on the one-pager. Reach for it when one topic wants a short form on
+the one-pager and a fuller one on the two-pager — Kaneva's UI programming bullet and Firefall's are
+the two that exist. **Never add a field that _replaces_ `highlights` for the concise variant**; that
+is the two-lists shape `highlightsExtended` exists to rule out, and it reintroduces the drift the
+whole content model is built against. If the short and long forms would say different things rather
+than one saying more, write two bullets.
 
 ## 2. Sourcing a new bullet
 
@@ -33,17 +73,34 @@ order:
 3. The job file's "Source material (2019 resume, verbatim)" section — but read the weighting note
    below before leaning on this one.
 
+**Read the matching project page before concluding a job has no more material.** This is the
+resume's version of the `content-pass` rule about reading `snapshot/` first, and it paid three times
+in one #32 session: the card credits feature, the CJK/Thai font work, and the Unity Editor tooling
+were all written up on `src/content/projects/marvel-snap.md` and had reached **no version** of the
+resume. A job file's `highlights` are a compression of the project page, and compressions lose
+things silently. When you add such a fact, check whether it should flow the other way too -- the
+language count went onto both, since the project page had no number either.
+
+**A number that is also her scope beats a bigger number that isn't.** Ali's instinct on this was
+right and it generalises. Award wins and download counts are scale attached to nothing she did; "15
+languages" is scale attached to the thing she owned end to end, and it reads as a competency and a
+quantified outcome in the same clause. Reach for the second kind first. If a credential belongs to
+the product rather than to Ali, it can still go on -- but **name its subject** ("Marvel Snap won Best
+Mobile Game…"), against the register's usual subject-dropping, or a bare "Won Best Mobile Game"
+reads as a personal award.
+
 **The 2019-resume source material is richest for the oldest jobs and thinnest for the most important
 one (Second Dinner).** Writing bullets straight from it produces a resume weighted backwards. Prefer
 first-person interview material or an existing write-up over the stale verbatim bullet.
 
 **For how a bullet should _read_ — the résumé register, and what to avoid — use the `write-copy`
 skill.** This skill covers where bullets live, how they're sourced, and what to regenerate; that one
-covers the words. Résumé register is verb-first, subject dropped, no contractions, no exclamations,
-and it is deliberately different from the site's prose voice.
+covers the words. Résumé register is labelled, verb-first, subject dropped, no contractions and no
+exclamations, and it is deliberately different from the site's prose voice. `write-copy` §2.1 is the
+authority on the labelled format.
 
-**Craft, not product, for anything from the 2024–present Second Dinner era.** Godot, "the studio's
-next team", and nothing else — no title, platform, genre, feature, or monetization detail. Read
+**Craft, not product, for anything from the 2024–present Second Dinner era.** Godot, "a new team at
+Second Dinner", and nothing else — no title, platform, genre, feature, or monetization detail. Read
 CLAUDE.md's Phase 3 gate outcome if this ceiling is unfamiliar.
 
 ## 3. Fitting the budget: per-job floor, recency-weighted
@@ -51,6 +108,29 @@ CLAUDE.md's Phase 3 gate outcome if this ceiling is unfamiliar.
 A job carries a **1-bullet floor in `highlights`** and a **2-bullet floor across `highlights` +
 `highlightsExtended` combined**. Space above the floor is weighted toward recency — a more recent job
 earns more detail before an older one does.
+
+### Measure headroom before writing, not after
+
+```bash
+npm run build && npm run resume:headroom
+```
+
+It prints, per bullet, how many printed lines it occupies **and how many more characters its last
+line can take before it wraps**. That second number is the one that governs a wording edit, and it
+is not guessable: during #32 a language count went into the Localization bullet for free (62
+characters of headroom), a phrase naming who used a tool fit where the spelled-out version did not
+(7), and title-casing fifteen labels cost zero height at all.
+
+`--try 'Label=candidate text'` measures a candidate **without editing a file**, repeatable for
+comparing several. Use it before you commit to wording -- three of the five candidate phrasings
+tried in #32 wrapped, and the winner was picked on measured headroom rather than on which read best
+in isolation.
+
+**Headroom is why the slack does not convert to type size.** Several bullets sit at 2--5 characters,
+so they all wrap together on any size increase: the density curve is a cliff, not a slope, and it is
+a property of the current wording rather than of the type. Keep about two lines of document slack in
+reserve for the same reason -- with four bullets one word from a wrap, an edit you did not plan for
+can cost a line.
 
 When a new bullet needs room on the one-pager:
 
@@ -85,6 +165,27 @@ npm run update:resume-print  # rewrites scripts/resume-print-baseline.json
 If the differ reports something you _didn't_ intend to change, stop — that's a layout regression, not
 a baseline update to wave through.
 
+**Two signatures worth being able to read, because both look alarming and neither is:**
+
+- **All `rect`, heights identical, widths changed.** A casing or single-word edit that reflowed
+  nothing. Title-casing fifteen labels produced exactly this: 25 changes, every one width-only.
+- **A handful of `rect` ratios like 0.5, 0.33 or 2.0 in one list.** Almost always **selector shift,
+  not reflow.** The baseline keys on `li:nth-of-type(N)`, so inserting a bullet mid-list renumbers
+  every sibling under it and the differ compares a 1-line bullet against whatever used to hold that
+  position. **Do not read those ratios as a rewrap** — confirm with per-bullet line counts from
+  `npm run resume:headroom` instead, which is keyed by label and immune to the renumbering.
+
+Conversely, a genuine reflow shows as a height ratio near 1.5 or 2.0 on the element you actually
+edited, and a pure leading change shows as _every_ height scaling by the same small factor with no
+element rewrapping.
+
+**It renders at 701px (paper width) as of 2026-08-26 (#32).** Before that it used Playwright's
+default 1280px while emulating print media, which is print CSS at a screen width — a combination that
+exists on no sheet of paper. Colour, font and weight leaks are width-independent so it still caught
+everything #35 built it for, but reflow is not: trimming a bullet from three printed lines to two
+moved **zero** elements in the old setup, and 92 in the fixed one. If you ever measure this document
+by hand, measure it at 701px too.
+
 Then regenerate LinkedIn, since its content is the same collections rendered differently:
 
 ```bash
@@ -107,6 +208,20 @@ cannot fix itself — a partial commit here is a broken deploy, not a lint warni
 - **The page-count assertion only catches an overflow, not a leak smaller than a full page.** 19pt of
   silent reflow shipped once before the print-geometry differ existed (issue #35) — that's what step
   4's differ is for. Don't skip it just because the page count still passes.
+- **The one-pager's slack is real but finite, and the number must be measured at print width.**
+  It renders 928px into a 960px box (measured 2026-08-26, #32, after that pass spent its slack on
+  content). That is ~32px, under two bullet lines — and **re-measure with `npm run resume:headroom`
+  rather than trusting that number**, which is the whole point of this bullet: the scaled-set table
+  in `resume.css` sat stale through several commits and was wrong in the unsafe direction, and the
+  figure quoted here has already been wrong twice for the same reason.
+  **Measure at a 701px viewport** — letter's 8.5in less
+  `@page`'s 0.6in side margins, times 96 — against a 960px height budget (11in less the 0.5in top and
+  bottom margins). At Playwright's default 1280px the prose wraps to far fewer lines, which
+  under-reported the height by ~200px during #32 and briefly produced the opposite conclusion: that
+  the document had 2.3 inches to spare and the type could grow. It could not, at the time.
+  `src/styles/resume.css`'s density comment carries the full scaled-set table, why the leading
+  moved to 1.35 and the type size did not, and why 9.4pt is not too small (point size measures the
+  em box, not the letters; this stack's x-height makes it read as ~10.7pt Times).
 - **If a design token you touch reaches the resume, add it to `src/styles/resume.css`'s
   `@media print` block too.** That block pins paper by redefining tokens, and only covers the ones
   already listed — a new token silently reaches the PDF undefined. This mostly comes up doing design

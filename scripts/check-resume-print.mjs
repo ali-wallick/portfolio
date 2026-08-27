@@ -87,7 +87,30 @@ const captured = {};
 try {
   const { chromium } = await import('playwright');
   browser = await chromium.launch();
-  const context = await browser.newContext({ colorScheme: 'light' });
+  /**
+   * Letter (8.5in) less the 0.6in side margins `@page` sets in
+   * src/styles/resume.css, times 96 CSS px per inch. Paired height is the 11in
+   * page less its 0.5in top and bottom margins.
+   *
+   * Set explicitly, 2026-08-26 (#32). This ran at Playwright's default 1280x720
+   * for its whole life, which meant it rendered *print CSS at a screen width* —
+   * a combination that exists on no page and no sheet of paper. Colour, font and
+   * weight leaks are width-independent, so it still caught every bug it was
+   * built for (#35). Reflow is not: a bullet that rewraps only at paper width is
+   * invisible at 1280px, and one did. Trimming the I Fits I Sits bullet from
+   * three printed lines to two moved zero elements in this differ, because at
+   * 1280px both versions occupied the same two lines.
+   *
+   * Same trap as the density measurement earlier in #32, which read 740px of a
+   * 960px budget at 1280px and inverted the conclusion. If you measure anything
+   * about this document, measure it at 701px.
+   */
+  const PRINT_VIEWPORT = { width: 701, height: 960 };
+
+  const context = await browser.newContext({
+    colorScheme: 'light',
+    viewport: PRINT_VIEWPORT,
+  });
 
   for (const route of ROUTES) {
     const page = await context.newPage();
