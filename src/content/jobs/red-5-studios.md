@@ -23,10 +23,23 @@ highlightsExtended:
     text: >-
       Created shared libraries for common menu and HUD elements, and optimized the UI system
       itself on an already-loaded client.
+  # Second sentence replaced 2026-08-26 (two-page pass), Ali's call. It read
+  # "The team and codebase were substantially larger than any before it" -- the
+  # only sentence on either density that was an impression rather than a fact
+  # about the work, it did not belong to the label, and "substantially" is the
+  # kind of intensifier the #32 formality pass removed everywhere else.
+  #
+  # The replacement is the fact the old sentence was gesturing at, stated
+  # plainly and without the comparison: she wrote engine code too, not only UI
+  # code. Sourced from the Firefall page ("That put me in the engine team's
+  # code almost as often as my own"), with the "almost as often" dropped at
+  # Ali's request -- the claim is that she worked there, not how the split
+  # divided. The scale material stays on the project page, where a career
+  # observation belongs.
   - label: Engine Integration
     text: >-
       Worked at the boundary between the Lua and XML UI scripting layer and the studio's C++
-      engine. The team and codebase were substantially larger than any before it.
+      engine. Contributed to the engine codebase as well as the UI layer.
 ---
 
 ## Source material (2019 resume, verbatim — not current copy)

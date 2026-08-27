@@ -1930,7 +1930,7 @@
           "x": 0,
           "y": 0,
           "width": 701,
-          "height": 1757.02
+          "height": 1689.39
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -1945,7 +1945,7 @@
           "x": 0,
           "y": 0,
           "width": 701,
-          "height": 1757.02
+          "height": 1689.39
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -2125,7 +2125,7 @@
           "x": 0,
           "y": 0,
           "width": 701,
-          "height": 1757.02
+          "height": 1689.39
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -2215,7 +2215,7 @@
           "x": 0,
           "y": 0,
           "width": 701,
-          "height": 1757.02
+          "height": 1689.39
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -2380,7 +2380,7 @@
           "x": 0,
           "y": 84.39,
           "width": 701,
-          "height": 78.91
+          "height": 62
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -2410,7 +2410,7 @@
           "x": 0,
           "y": 112.58,
           "width": 701,
-          "height": 50.72
+          "height": 33.81
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -2423,7 +2423,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2)",
         "rect": {
           "x": 0,
-          "y": 175.3,
+          "y": 158.39,
           "width": 701,
           "height": 84.78
         },
@@ -2438,7 +2438,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > h2:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 175.3,
+          "y": 158.39,
           "width": 701,
           "height": 18.86
         },
@@ -2453,7 +2453,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 203.48,
+          "y": 186.58,
           "width": 701,
           "height": 56.59
         },
@@ -2468,7 +2468,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 203.48,
+          "y": 186.58,
           "width": 701,
           "height": 17.09
         },
@@ -2483,7 +2483,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(1) > dt:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 203.48,
+          "y": 186.58,
           "width": 99.34,
           "height": 17.09
         },
@@ -2498,7 +2498,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(1) > dd:nth-of-type(1)",
         "rect": {
           "x": 107.34,
-          "y": 203.48,
+          "y": 186.58,
           "width": 243.56,
           "height": 17.09
         },
@@ -2513,7 +2513,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(2)",
         "rect": {
           "x": 0,
-          "y": 223.23,
+          "y": 206.33,
           "width": 701,
           "height": 17.09
         },
@@ -2528,7 +2528,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(2) > dt:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 223.23,
+          "y": 206.33,
           "width": 69.03,
           "height": 17.09
         },
@@ -2543,7 +2543,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(2) > dd:nth-of-type(1)",
         "rect": {
           "x": 77.03,
-          "y": 223.23,
+          "y": 206.33,
           "width": 113.5,
           "height": 17.09
         },
@@ -2558,7 +2558,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(3)",
         "rect": {
           "x": 0,
-          "y": 242.98,
+          "y": 226.08,
           "width": 701,
           "height": 17.09
         },
@@ -2573,7 +2573,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(3) > dt:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 242.98,
+          "y": 226.08,
           "width": 61.91,
           "height": 17.09
         },
@@ -2588,7 +2588,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(3) > dd:nth-of-type(1)",
         "rect": {
           "x": 69.91,
-          "y": 242.98,
+          "y": 226.08,
           "width": 105.66,
           "height": 17.09
         },
@@ -2603,9 +2603,9 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3)",
         "rect": {
           "x": 0,
-          "y": 272.08,
+          "y": 255.17,
           "width": 701,
-          "height": 1280
+          "height": 1212.38
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -2618,7 +2618,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > h2:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 272.08,
+          "y": 255.17,
           "width": 701,
           "height": 18.86
         },
@@ -2633,9 +2633,9 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 300.27,
+          "y": 283.36,
           "width": 701,
-          "height": 569.22
+          "height": 535.41
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -2648,7 +2648,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 300.27,
+          "y": 283.36,
           "width": 701,
           "height": 17.19
         },
@@ -2663,7 +2663,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 300.27,
+          "y": 283.36,
           "width": 277.33,
           "height": 15.98
         },
@@ -2678,7 +2678,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
         "rect": {
           "x": 178.72,
-          "y": 300.27,
+          "y": 283.36,
           "width": 98.61,
           "height": 16
         },
@@ -2693,7 +2693,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
           "x": 615.86,
-          "y": 301.27,
+          "y": 284.36,
           "width": 85.14,
           "height": 16.19
         },
@@ -2708,7 +2708,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > p.meta.resume-job-meta:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 317.45,
+          "y": 300.55,
           "width": 513.98,
           "height": 16.19
         },
@@ -2723,7 +2723,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > p.resume-job-intro:nth-of-type(2)",
         "rect": {
           "x": 0,
-          "y": 337.64,
+          "y": 320.73,
           "width": 701,
           "height": 16.91
         },
@@ -2738,7 +2738,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-bullet-group:nth-of-type(2)",
         "rect": {
           "x": 0,
-          "y": 361.2,
+          "y": 344.3,
           "width": 701,
           "height": 16.19
         },
@@ -2753,7 +2753,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-bullet-group:nth-of-type(2) > h4:nth-of-type(1)",
         "rect": {
           "x": 5.33,
-          "y": 361.2,
+          "y": 344.3,
           "width": 155.41,
           "height": 15.03
         },
@@ -2768,7 +2768,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-bullet-group:nth-of-type(2) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
           "x": 614.28,
-          "y": 361.2,
+          "y": 344.3,
           "width": 86.72,
           "height": 16.19
         },
@@ -2783,7 +2783,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > p.resume-group-intro:nth-of-type(3)",
         "rect": {
           "x": 0,
-          "y": 380.05,
+          "y": 363.14,
           "width": 701,
           "height": 16.91
         },
@@ -2798,9 +2798,9 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 400.95,
+          "y": 384.05,
           "width": 701,
-          "height": 91.19
+          "height": 74.28
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -2813,7 +2813,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 400.95,
+          "y": 384.05,
           "width": 685,
           "height": 16.91
         },
@@ -2828,7 +2828,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 400.95,
+          "y": 384.05,
           "width": 90.98,
           "height": 15
         },
@@ -2843,9 +2843,9 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2)",
         "rect": {
           "x": 16,
-          "y": 421.19,
+          "y": 404.28,
           "width": 685,
-          "height": 50.72
+          "height": 33.81
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -2858,7 +2858,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 421.19,
+          "y": 404.28,
           "width": 119.27,
           "height": 15
         },
@@ -2873,7 +2873,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3)",
         "rect": {
           "x": 16,
-          "y": 475.23,
+          "y": 441.42,
           "width": 685,
           "height": 16.91
         },
@@ -2888,7 +2888,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 475.23,
+          "y": 441.42,
           "width": 121.67,
           "height": 15
         },
@@ -2903,7 +2903,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-bullet-group:nth-of-type(3)",
         "rect": {
           "x": 0,
-          "y": 498.8,
+          "y": 464.98,
           "width": 701,
           "height": 16.19
         },
@@ -2918,7 +2918,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-bullet-group:nth-of-type(3) > h4:nth-of-type(1)",
         "rect": {
           "x": 5.33,
-          "y": 498.8,
+          "y": 464.98,
           "width": 77.2,
           "height": 15.03
         },
@@ -2933,7 +2933,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-bullet-group:nth-of-type(3) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
           "x": 629.64,
-          "y": 498.8,
+          "y": 464.98,
           "width": 71.36,
           "height": 16.19
         },
@@ -2948,7 +2948,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > p.resume-group-intro:nth-of-type(4)",
         "rect": {
           "x": 0,
-          "y": 517.64,
+          "y": 483.83,
           "width": 701,
           "height": 16.91
         },
@@ -2963,9 +2963,9 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2)",
         "rect": {
           "x": 0,
-          "y": 538.55,
+          "y": 504.73,
           "width": 701,
-          "height": 330.94
+          "height": 314.03
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -2978,7 +2978,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 538.55,
+          "y": 504.73,
           "width": 685,
           "height": 33.81
         },
@@ -2993,7 +2993,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 538.55,
+          "y": 504.73,
           "width": 83.16,
           "height": 15
         },
@@ -3008,7 +3008,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(2)",
         "rect": {
           "x": 16,
-          "y": 575.69,
+          "y": 541.88,
           "width": 685,
           "height": 16.91
         },
@@ -3023,7 +3023,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(2) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 575.69,
+          "y": 541.88,
           "width": 70.78,
           "height": 15
         },
@@ -3038,7 +3038,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(3)",
         "rect": {
           "x": 16,
-          "y": 595.92,
+          "y": 562.11,
           "width": 685,
           "height": 33.81
         },
@@ -3053,7 +3053,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(3) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 595.92,
+          "y": 562.11,
           "width": 130.34,
           "height": 15
         },
@@ -3068,7 +3068,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(4)",
         "rect": {
           "x": 16,
-          "y": 633.06,
+          "y": 599.25,
           "width": 685,
           "height": 33.81
         },
@@ -3083,7 +3083,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(4) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 633.06,
+          "y": 599.25,
           "width": 83.31,
           "height": 15
         },
@@ -3098,7 +3098,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(5)",
         "rect": {
           "x": 16,
-          "y": 670.2,
+          "y": 636.39,
           "width": 685,
           "height": 16.91
         },
@@ -3113,7 +3113,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(5) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 670.2,
+          "y": 636.39,
           "width": 49.94,
           "height": 15
         },
@@ -3128,7 +3128,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(6)",
         "rect": {
           "x": 16,
-          "y": 690.44,
+          "y": 656.63,
           "width": 685,
           "height": 67.63
         },
@@ -3143,7 +3143,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(6) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 690.44,
+          "y": 656.63,
           "width": 79.69,
           "height": 15
         },
@@ -3158,7 +3158,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(7)",
         "rect": {
           "x": 16,
-          "y": 761.39,
+          "y": 727.58,
           "width": 685,
           "height": 33.81
         },
@@ -3173,7 +3173,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(7) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 761.39,
+          "y": 727.58,
           "width": 114.27,
           "height": 15
         },
@@ -3188,9 +3188,9 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(8)",
         "rect": {
           "x": 16,
-          "y": 798.53,
+          "y": 764.72,
           "width": 685,
-          "height": 33.81
+          "height": 16.91
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -3203,7 +3203,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(8) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 798.53,
+          "y": 764.72,
           "width": 119.27,
           "height": 15
         },
@@ -3218,7 +3218,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(9)",
         "rect": {
           "x": 16,
-          "y": 835.67,
+          "y": 784.95,
           "width": 685,
           "height": 33.81
         },
@@ -3233,7 +3233,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(9) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 835.67,
+          "y": 784.95,
           "width": 50.84,
           "height": 15
         },
@@ -3248,9 +3248,9 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2)",
         "rect": {
           "x": 0,
-          "y": 879.48,
+          "y": 828.77,
           "width": 701,
-          "height": 273.8
+          "height": 256.89
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -3263,7 +3263,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > div.resume-job-head:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 879.48,
+          "y": 828.77,
           "width": 701,
           "height": 17.19
         },
@@ -3278,7 +3278,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 879.48,
+          "y": 828.77,
           "width": 224.83,
           "height": 15.98
         },
@@ -3293,7 +3293,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
         "rect": {
           "x": 136.86,
-          "y": 879.48,
+          "y": 828.77,
           "width": 87.97,
           "height": 16
         },
@@ -3308,7 +3308,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
           "x": 631.22,
-          "y": 880.48,
+          "y": 829.77,
           "width": 69.78,
           "height": 16.19
         },
@@ -3323,7 +3323,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > p.meta.resume-job-meta:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 896.67,
+          "y": 845.95,
           "width": 513.98,
           "height": 16.19
         },
@@ -3338,9 +3338,9 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 916.86,
+          "y": 866.14,
           "width": 701,
-          "height": 236.42
+          "height": 219.52
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -3353,7 +3353,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 916.86,
+          "y": 866.14,
           "width": 685,
           "height": 33.81
         },
@@ -3368,7 +3368,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 916.86,
+          "y": 866.14,
           "width": 108.27,
           "height": 15
         },
@@ -3383,7 +3383,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2)",
         "rect": {
           "x": 16,
-          "y": 954,
+          "y": 903.28,
           "width": 685,
           "height": 33.81
         },
@@ -3398,7 +3398,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 954,
+          "y": 903.28,
           "width": 92.27,
           "height": 15
         },
@@ -3413,7 +3413,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3)",
         "rect": {
           "x": 16,
-          "y": 991.14,
+          "y": 940.42,
           "width": 685,
           "height": 67.63
         },
@@ -3428,7 +3428,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 991.14,
+          "y": 940.42,
           "width": 69.05,
           "height": 15
         },
@@ -3443,9 +3443,9 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(4)",
         "rect": {
           "x": 16,
-          "y": 1062.09,
+          "y": 1011.38,
           "width": 685,
-          "height": 33.81
+          "height": 16.91
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -3458,8 +3458,8 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(4) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1062.09,
-          "width": 129.11,
+          "y": 1011.38,
+          "width": 154.8,
           "height": 15
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
@@ -3473,7 +3473,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(5)",
         "rect": {
           "x": 16,
-          "y": 1099.23,
+          "y": 1031.61,
           "width": 685,
           "height": 16.91
         },
@@ -3488,7 +3488,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(5) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1099.23,
+          "y": 1031.61,
           "width": 106.42,
           "height": 15
         },
@@ -3503,7 +3503,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(6)",
         "rect": {
           "x": 16,
-          "y": 1119.47,
+          "y": 1051.84,
           "width": 685,
           "height": 33.81
         },
@@ -3518,7 +3518,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(6) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1119.47,
+          "y": 1051.84,
           "width": 121.52,
           "height": 15
         },
@@ -3533,7 +3533,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3)",
         "rect": {
           "x": 0,
-          "y": 1163.28,
+          "y": 1095.66,
           "width": 701,
           "height": 145.47
         },
@@ -3548,7 +3548,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1163.28,
+          "y": 1095.66,
           "width": 701,
           "height": 17.19
         },
@@ -3563,7 +3563,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1163.28,
+          "y": 1095.66,
           "width": 197.25,
           "height": 15.98
         },
@@ -3578,7 +3578,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
         "rect": {
           "x": 103.53,
-          "y": 1163.28,
+          "y": 1095.66,
           "width": 93.72,
           "height": 16
         },
@@ -3593,7 +3593,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
           "x": 631.45,
-          "y": 1164.28,
+          "y": 1096.66,
           "width": 69.55,
           "height": 16.19
         },
@@ -3608,7 +3608,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > p.meta.resume-job-meta:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1180.47,
+          "y": 1112.84,
           "width": 513.98,
           "height": 16.19
         },
@@ -3623,7 +3623,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1200.66,
+          "y": 1133.03,
           "width": 701,
           "height": 108.09
         },
@@ -3638,7 +3638,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1200.66,
+          "y": 1133.03,
           "width": 685,
           "height": 33.81
         },
@@ -3653,7 +3653,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1200.66,
+          "y": 1133.03,
           "width": 47.61,
           "height": 15
         },
@@ -3668,7 +3668,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2)",
         "rect": {
           "x": 16,
-          "y": 1237.8,
+          "y": 1170.17,
           "width": 685,
           "height": 33.81
         },
@@ -3683,7 +3683,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1237.8,
+          "y": 1170.17,
           "width": 74.94,
           "height": 15
         },
@@ -3698,7 +3698,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3)",
         "rect": {
           "x": 16,
-          "y": 1274.94,
+          "y": 1207.31,
           "width": 685,
           "height": 33.81
         },
@@ -3713,7 +3713,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1274.94,
+          "y": 1207.31,
           "width": 119.3,
           "height": 15
         },
@@ -3728,9 +3728,9 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4)",
         "rect": {
           "x": 0,
-          "y": 1318.75,
+          "y": 1251.13,
           "width": 701,
-          "height": 233.33
+          "height": 216.42
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -3743,7 +3743,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1318.75,
+          "y": 1251.13,
           "width": 701,
           "height": 17.19
         },
@@ -3758,7 +3758,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1318.75,
+          "y": 1251.13,
           "width": 209.23,
           "height": 15.98
         },
@@ -3773,7 +3773,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
         "rect": {
           "x": 125.23,
-          "y": 1318.75,
+          "y": 1251.13,
           "width": 84,
           "height": 16
         },
@@ -3788,7 +3788,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
           "x": 633.52,
-          "y": 1319.75,
+          "y": 1252.13,
           "width": 67.48,
           "height": 16.19
         },
@@ -3803,7 +3803,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > p.meta.resume-job-meta:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1335.94,
+          "y": 1268.31,
           "width": 513.98,
           "height": 16.19
         },
@@ -3818,9 +3818,9 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1356.13,
+          "y": 1288.5,
           "width": 701,
-          "height": 195.95
+          "height": 179.05
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -3833,7 +3833,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1356.13,
+          "y": 1288.5,
           "width": 685,
           "height": 67.63
         },
@@ -3848,7 +3848,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1356.13,
+          "y": 1288.5,
           "width": 105.73,
           "height": 15
         },
@@ -3863,7 +3863,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2)",
         "rect": {
           "x": 16,
-          "y": 1427.08,
+          "y": 1359.45,
           "width": 685,
           "height": 33.81
         },
@@ -3878,8 +3878,8 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1427.08,
-          "width": 128.22,
+          "y": 1359.45,
+          "width": 88.33,
           "height": 15
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
@@ -3893,7 +3893,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3)",
         "rect": {
           "x": 16,
-          "y": 1464.22,
+          "y": 1396.59,
           "width": 685,
           "height": 33.81
         },
@@ -3908,8 +3908,8 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1464.22,
-          "width": 117.8,
+          "y": 1396.59,
+          "width": 128.22,
           "height": 15
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
@@ -3923,9 +3923,9 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(4)",
         "rect": {
           "x": 16,
-          "y": 1501.36,
+          "y": 1433.73,
           "width": 685,
-          "height": 50.72
+          "height": 33.81
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -3938,8 +3938,8 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(4) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1501.36,
-          "width": 84.77,
+          "y": 1433.73,
+          "width": 117.8,
           "height": 15
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
@@ -3953,9 +3953,9 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4)",
         "rect": {
           "x": 0,
-          "y": 1564.08,
+          "y": 1479.55,
           "width": 701,
-          "height": 119.38
+          "height": 136.28
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -3968,7 +3968,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > h2:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1564.08,
+          "y": 1479.55,
           "width": 701,
           "height": 18.86
         },
@@ -3983,9 +3983,9 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1592.27,
+          "y": 1507.73,
           "width": 701,
-          "height": 91.19
+          "height": 108.09
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -3998,9 +3998,9 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1592.27,
+          "y": 1507.73,
           "width": 685,
-          "height": 16.91
+          "height": 33.81
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
         "fontSize": "12.5333px",
@@ -4013,7 +4013,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1592.27,
+          "y": 1507.73,
           "width": 50.98,
           "height": 15
         },
@@ -4028,7 +4028,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1) > a:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1592.27,
+          "y": 1507.73,
           "width": 46.66,
           "height": 15
         },
@@ -4043,7 +4043,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(2)",
         "rect": {
           "x": 16,
-          "y": 1612.5,
+          "y": 1544.88,
           "width": 685,
           "height": 33.81
         },
@@ -4058,7 +4058,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(2) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1612.5,
+          "y": 1544.88,
           "width": 100.7,
           "height": 15
         },
@@ -4073,7 +4073,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(2) > b.resume-bullet-label:nth-of-type(1) > a:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1612.5,
+          "y": 1544.88,
           "width": 96.38,
           "height": 15
         },
@@ -4088,7 +4088,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(3)",
         "rect": {
           "x": 16,
-          "y": 1649.64,
+          "y": 1582.02,
           "width": 685,
           "height": 33.81
         },
@@ -4103,7 +4103,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(3) > b.resume-bullet-label:nth-of-type(1)",
         "rect": {
           "x": 16,
-          "y": 1649.64,
+          "y": 1582.02,
           "width": 62.59,
           "height": 15
         },
@@ -4118,7 +4118,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5)",
         "rect": {
           "x": 0,
-          "y": 1695.45,
+          "y": 1627.83,
           "width": 701,
           "height": 61.56
         },
@@ -4133,7 +4133,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > h2:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1695.45,
+          "y": 1627.83,
           "width": 701,
           "height": 18.86
         },
@@ -4148,7 +4148,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1723.64,
+          "y": 1656.02,
           "width": 701,
           "height": 33.38
         },
@@ -4163,7 +4163,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1723.64,
+          "y": 1656.02,
           "width": 701,
           "height": 17.19
         },
@@ -4178,7 +4178,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1723.64,
+          "y": 1656.02,
           "width": 375.63,
           "height": 15.98
         },
@@ -4193,7 +4193,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
         "rect": {
           "x": 174.47,
-          "y": 1723.64,
+          "y": 1656.02,
           "width": 201.16,
           "height": 16
         },
@@ -4208,7 +4208,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
           "x": 675.06,
-          "y": 1724.64,
+          "y": 1657.02,
           "width": 25.94,
           "height": 16.19
         },
@@ -4223,7 +4223,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1) > p.meta.resume-job-meta:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1740.83,
+          "y": 1673.2,
           "width": 513.98,
           "height": 16.19
         },

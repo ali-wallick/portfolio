@@ -1301,6 +1301,72 @@ the derived bullets, not to it. `resumeSummary` and `ABOUT` are the two places a
 is _written_ rather than derived, which makes them the two places one can drift; each now points at
 the other.
 
+**It missed again on #32, which is the proof the "class of miss" framing was right.** The formality
+pass reworked the Second Dinner `intro` away from "before the studio had shipped a title" and
+`ABOUT` kept the retired phrasing, because #32 walked the resume and `ABOUT` is not on it. Caught by
+the two-page pass below and corrected to the same interviewing-and-culture framing. **Treat `ABOUT`
+as in scope for any pass that changes a career-level claim anywhere**, even one scoped to a document
+it isn't part of -- it is hand-authored, so no generator will catch the drift for you.
+
+---
+
+## The two-page pass (2026-08-26)
+
+The `/resume/full`-only content brought to the register the formality pass (#32) established for the
+one-pager: the Summary, Personal Projects, every `highlightsExtended` bullet, and every `extended`
+continuation. Shipped on [PR #192](https://github.com/ali-wallick/Portfolio/pull/192). **The
+one-pager was not touched** -- its half of `scripts/resume-print-baseline.json` came out
+byte-identical, which is the check worth repeating on any pass that claims to be long-version-only.
+
+Four decisions a future session would otherwise re-derive wrongly.
+
+**The Summary is an _orientation_ summary, and the overlap is chosen, not tolerated.** Ali picked it
+over a "through-line" alternative that said what no entry says -- the pattern across four studios,
+UI and the tooling other people build on -- which read more like a pitch than a resume line. So a
+skimmer who reads only the Summary is meant to leave with the current role and the headline credit,
+and restating the entries below it is the job. **What is still a bug is restating a _sentence_.** It
+ended on the Godot group's `intro` almost word for word, fifteen printed lines above the original.
+Don't "fix" the remaining overlap; do keep the phrasings apart.
+
+**Personal Projects are verb-first past tense, same register as a job bullet**, and the verbs are
+sourced from each project's `role` rather than inferred -- both jam entries were seven-person teams,
+so "Built" would have overclaimed. The entries used to be noun phrases and were not consistent with
+each other.
+
+**The Kaneva menu list splits by audience, and it took three shapes to get there.** It was spread
+across `UI Programming` and an `Additional UI` bullet two positions away; folding it into one bullet
+fixed a label named for its place on the page and produced a six-line wall, the heaviest bullet on
+either density; splitting it on the seam the Kaneva project page already uses -- menus everyone sees
+in `UI Programming`, menus for players _building_ the world in `Creator Tools` -- gave the same six
+lines with two subjects. **The list itself is settled and nothing was cut**; only its shape moved.
+`Creator Tools` also puts the resume's tooling through-line at its earliest point, which no surface
+said before.
+
+**A bullet label repeating across two `bulletGroups` is acceptable, and can be signal.**
+`Client Engineering` appears under both Second Dinner groups. With separate headings and date ranges
+it reads as the same competency at two points rather than a copy-paste -- the same argument the
+Phase 3 gate makes for the Marvel Snap `Tooling` bullet being worth a reader seeing twice. Don't
+rename either one.
+
+### Declined on purpose, so nobody "discovers" them later
+
+- **A `HUD Overhaul` bullet.** The Kaneva project page carries a dated lead-scope claim -- "In 2014,
+  I led a full overhaul of the HUD, from the code design document through to release" -- that is on
+  neither density. Drafted at one printed line and **declined by Ali**, not overlooked. If it is ever
+  reconsidered, one thing needs asking first: the page says "the HUD" while the menu list says
+  "player and build/creator HUD menus", so whether the overhaul covers both is unsourced.
+- **The longer `I Fits I Sits` continuation**, carrying "let level designers work in parallel instead
+  of waiting on engineering for each level" -- the strongest tooling-value claim on that page. Costs
+  a fifth printed line; the shorter version won.
+
+### The `extended` contract is easy to violate and easy to miss
+
+`I Fits I Sits` shipped an `extended` that restated its own `text` (the team authoring 61 levels,
+said twice), which `src/content.config.ts` explicitly forbids -- `extended` must _continue_ `text`,
+never restate it. It survived #32 because the two halves only ever render adjacently on one of the
+two documents. **When editing a bullet with an `extended`, read `text` and `extended` as one
+sentence-stream**, which is what `/resume/full` actually prints.
+
 ---
 
 ### Archive pages may carry a short body (2026-08-24, from #97)

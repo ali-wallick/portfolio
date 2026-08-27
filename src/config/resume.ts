@@ -56,6 +56,20 @@ export const resumeTools: Record<ResumeToolCategory, string[]> = {
  * the `write-copy` skill bans -- and the skill is explicit that the ban is on the
  * opening-line formula, not on the word "passionate", which is genuinely hers.
  *
+ * **It restates the two entries below it, and that is the chosen job for it.**
+ * Ali's call, 2026-08-26 (two-page pass), picking an "orientation" summary over
+ * a "through-line" one. The alternative said what no entry says -- the pattern
+ * across four studios, UI and the tooling other people build on -- and was
+ * rejected as reading more like a pitch than a resume line. So overlap with the
+ * Experience section is deliberate here: a skimmer who reads only this leaves
+ * with the current role and the headline credit.
+ *
+ * What is NOT allowed is the near-verbatim overlap this had until now. It ended
+ * "on a new team at Second Dinner, building the studio's first game in Godot",
+ * which is the Godot group's `intro` almost word for word, fifteen printed
+ * lines below it on the same page. Restating a fact is the job; restating a
+ * *sentence* is a bug. It also lost a printed line in the trim (3 to 2).
+ *
  * **Not the same text as `ABOUT` in scripts/build-linkedin.mjs, on purpose.**
  * That one is ~1,900 characters of first-person prose for LinkedIn's About
  * field; this is three sentences at resume register. Different genres, different
@@ -65,9 +79,8 @@ export const resumeTools: Record<ResumeToolCategory, string[]> = {
  */
 export const resumeSummary =
   'Senior software engineer with fifteen years building game clients, UI systems, and the ' +
-  'tooling behind them. Most recently Marvel Snap, through its 2022 launch and its PC ' +
-  "release. Currently on a new team at Second Dinner, building the studio's first game in " +
-  'Godot.';
+  "tooling behind them. Seven of those at Second Dinner, through Marvel Snap's launch, its " +
+  'PC release, and now a new project in Godot.';
 
 /**
  * The two-pager's Personal Projects section. **`/resume/full` only.** Ali's
@@ -99,6 +112,15 @@ export const resumeSummary =
  * *project* entry here now links; if you add one that can't, ask first, because
  * that is the property that just got bought. It is used only by the HTML resume;
  * the PDF ignores it.
+ *
+ * **Verb-first past tense, same register as a job bullet.** Ali's call,
+ * 2026-08-26 (two-page pass). These entries used to open with a noun phrase
+ * ("Global Game Jam 2011 prototype, and a finalist in ...") and were not even
+ * consistent with each other -- one verbless, one a fragment plus a verb-first
+ * clause, one two fragments -- which read as a different document pasted in
+ * under the Experience section. The two jam verbs are sourced from each
+ * project's `role` field (`Programmer`; `Programmer, Designer`), not inferred:
+ * both were seven-person teams, so "Built" would have overclaimed.
  */
 export interface ResumePersonalProject {
   /** Short topic label, same convention as a job bullet's `label`. */
@@ -112,16 +134,16 @@ export const resumePersonalProjects: ResumePersonalProject[] = [
   {
     label: 'Critter³',
     slug: 'critter-3',
-    text: "Global Game Jam 2011 prototype, and a finalist in SCAD's Entelechy prototype contest that May.",
+    text: "Programmed a cube-world puzzle game at Global Game Jam 2011. Reached the finals of SCAD's Entelechy prototype contest that May.",
   },
   {
     label: 'Cor Ex Machina',
     slug: 'cor-ex-machina',
-    text: 'Global Game Jam 2013 prototype. Placed second at Atlanta, the largest jam site in the country that year.',
+    text: 'Programmed and designed a herding game at Global Game Jam 2013. Placed second at Atlanta, the largest jam site in the country that year.',
   },
   {
     label: 'Speaking',
-    text: 'Panels at the Museum of Design Atlanta and SIEGE in 2013. More recently, talks for a Girl Scout troop and a college class on the work itself.',
+    text: 'Spoke on panels at the Museum of Design Atlanta and SIEGE in 2013. Gave talks for a Girl Scout troop in 2020 and a college class on the work itself in 2023.',
   },
 ];
 

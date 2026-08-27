@@ -36,11 +36,41 @@ highlights:
       Built many of Kaneva's core menus end to end in the in-house Lua menu system. Architected
       the menu animation system that replaced hand-coded transitions, which both the UI and game
       teams adopted.
+    # The menu list stays whole -- settled, and it is the only concrete evidence
+    # of this job's scope -- but it has now been through two shapes in one day
+    # (2026-08-26, two-page pass), so read both before moving it again. It was
+    # split across `UI Programming` and an `Additional UI` bullet two positions
+    # away, which met the reader twice under a label named for its place on the
+    # page. Folding it into one bullet fixed the label and produced a six-line
+    # wall, the heaviest bullet on either density.
+    #
+    # Split again, this time on a seam the Kaneva project page already uses:
+    # menus everyone sees stay here, and the ones for players *building* the
+    # world are `Creator Tools` below. Four lines plus two, so the same six as
+    # the wall, with two subjects instead of one run-on. Nothing was cut.
+    #
+    # Two smaller things came out of the rewrite. "End to end" in `text` and
+    # "from artists' comps through layout to functionality" here were the same
+    # claim twice, so this keeps the artists' comps (a collaboration fact `text`
+    # does not carry) and drops the re-explanation. And leading on `Took` avoids
+    # `Worked ... Worked ...` opening two consecutive sentences.
     extended: >-
-      Worked from artists' comps through layout to functionality, covering the player and
-      creator HUDs, inventory and bank, travel, events, and a visual property editor for
-      scripted objects.
+      Took the player and creator HUDs, inventory and bank, travel, events, context menus, and
+      the welcome tutorial from artists' comps through to release. Worked with the engine and web
+      teams whenever a menu touched either.
 highlightsExtended:
+  # The creator-facing half of the menu list, split out of `UI Programming`
+  # above 2026-08-26 (two-page pass), Ali's call. Kaneva was a user-generated
+  # virtual world, so "the menus for building the world" is a real body of work
+  # and not a leftovers bucket -- which is what the old `Additional UI` label
+  # was. It also puts the resume's strongest through-line at its earliest point:
+  # the menu animation system, the I Fits I Sits level editor, Marvel Snap's
+  # card art tool and developer console, and the Godot editor tooling are all
+  # the same instinct, and nothing on the page said it started here.
+  - label: Creator Tools
+    text: >-
+      Built a visual property editor for scripted objects, menus for swapping video and Flash
+      content onto them, and the builder walkthrough.
   - label: Game Programming
     text: >-
       Helped design and script a Lua-based game development environment built on top of the
@@ -50,11 +80,6 @@ highlightsExtended:
       Joined Kaneva in support, helping players with their in-world scripting. Built game
       templates, Treasure Hunt and Adventure among them, which players used to assemble small
       games of their own.
-  - label: Additional UI
-    text: >-
-      Built context menus for people and objects, menus for swapping video and Flash content on
-      in-game objects, and the welcome and builder tutorials. Worked with the engine and web
-      teams whenever a menu touched either.
 ---
 
 ## Source material (2019 resume, verbatim — not current copy)

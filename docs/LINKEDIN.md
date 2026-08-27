@@ -29,11 +29,11 @@ Option 1 is what LinkedIn defaults to and says the least. Option 2 carries the s
 ```text
 I've been building games for fifteen years, mostly in UI and systems engineering. That is the layer where a game's interface, its live-ops plumbing, and its meta systems all have to agree with each other.
 
-I'm at Second Dinner now, where I joined in 2019 as the studio's 11th employee, before it had shipped a title. I spent five years on Marvel Snap. Early on I was a client engineer in Unity, doing notifications, deep linking, localization, and live-ops integration. Later I moved to feature engineering: meta gameplay systems spanning client and server, card and deck cosmetics, and the deckbuilding UI. The work I'm proudest of there is the tooling that made an MVVM architecture practical to adopt on a live product, owning localization end to end, and the two-stage PC launch. Steam Early Access shipped as a direct port of the mobile client, and exiting Early Access in 2023 meant rebuilding much of the UI to be genuinely landscape- and mouse-and-keyboard-native. Since 2024 I've been on a new team at Second Dinner, building the studio's first game in Godot.
+I'm at Second Dinner now, where I joined in 2019 as the studio's 11th employee. I've interviewed candidates and helped shape the culture as we've grown past 100. I spent five years on Marvel Snap. Early on I was a client engineer in Unity, doing notifications, deep linking, and live-ops integration. Later I moved to feature engineering: meta gameplay systems spanning client and server, card and deck cosmetics, and the deckbuilding UI. The work I'm proudest of there is the tooling that made an MVVM architecture practical to adopt on a live product, owning localization end to end, and the two-stage PC launch. Steam Early Access shipped as a direct port of the mobile client, and exiting Early Access in 2023 meant rebuilding much of the UI for a landscape screen and mouse-and-keyboard input. Since 2024 I've been on a new team at Second Dinner, building the studio's first game in Godot.
 
 Before that: three years at MobilityWare on Vegas Blvd Slots, architecting the live-ops systems that let the game change without a client update; a year at Red 5 Studios on Firefall's HUD and menus, on a much bigger team and codebase than I'd worked on before; and four years at Kaneva, where I started in technical support and grew into UI programming for a social virtual world.
 
-A lot of my favourite work has been tooling. The menu animation system I built at Kaneva was picked up by both the UI and game teams, and the level editor I built in a week for a game jam pitch let us author 61 levels before pitch day. That game outlived my time at the studio and is still shipping.
+A lot of my favorite work has been tooling. The menu animation system I built at Kaneva was picked up by both the UI and game teams, and the level editor I built in a week for a game jam pitch let us author 61 levels before pitch day. That game outlived my time at the studio and is still shipping.
 ```
 
 ---
@@ -50,7 +50,7 @@ Joined as the eleventh employee, interviewing and helping shape the culture as t
 Unreleased Mobile Game (2024 – Present)
 Joined a new team in 2024 to build the studio's first game in Godot.
 • UI Framework: Built the game's UI framework. Other engineers develop reusable interface code against it.
-• Client Engineering: Built client testing workflows and Godot editor tooling for the team. Reported and fixed engine bugs with partners at W4 Games. Also delivered engine version updates and native mobile plugin integration on the project.
+• Client Engineering: Built client testing workflows and Godot editor tooling for the team. Reported and fixed engine bugs with partners at W4 Games. Delivered engine version updates and native mobile plugin integration.
 • Agentic Workflows: Contributed to the team's agentic commands and skills, and built automation into CI.
 
 Marvel Snap (2019 – 2024)
@@ -62,7 +62,7 @@ Client then feature engineer, from prototype through production, the mobile and 
 • Tooling: Built Unity Editor and in-game tooling, including the artists' card art tool and the developer console.
 • Localization: Owned the feature end to end in 15 languages, including Unity's Localization package, the import and export pipeline, font handling, and the team's UI text workflow. Extended font support with CJK fallback to OS typefaces and correct rendering for Thai's stacked diacritics. Kept only shipped glyphs resident, loading player-typed text dynamically.
 • Live-Ops Content: Built the Braze integration that allowed live-ops and marketing to publish the main-screen carousel, news page, and modal pop-ups without an app update.
-• Client Engineering: Delivered push notifications, deep linking, the first pass of localization, and live-ops tooling integration in the Unity client.
+• Client Engineering: Delivered push notifications and deep linking in the Unity client.
 • Awards: Marvel Snap won Best Mobile Game at The Game Awards in 2022, and Mobile Game of the Year at the DICE Awards in 2023.
 ```
 
@@ -75,8 +75,8 @@ Client then feature engineer, from prototype through production, the mobile and 
 ```text
 • Vegas Blvd Slots: Architected the live-ops systems, including the in-game store and a DeltaDNA integration driving in-app messaging and promo carousels. Customizable text let marketing run its own campaigns.
 • Slot Machines: Engineered new machines, their features, and their bonus games, on a title carrying more than 50 machines. Its meta systems included rewards, gifting, leagues, and tournaments.
-• I Fits I Sits: Pitched the concept at the studio game jam and built the week-long prototype. Focused on a level editor the team used to author 61 levels. It won People's Choice, and other teams later released it as Puzzle Cats. The editor exported JSON, and the team authored those levels for pitch day. The game was selected for development and shipped first on Facebook Instant Games as It Fits I Sits.
-• Cross-Cutting Work: Led work spanning the whole title, including GDPR support and several major Unity version upgrades.
+• I Fits I Sits: Pitched the concept at the studio game jam and built the week-long prototype. Focused on a level editor the team used to author 61 levels. It won People's Choice, and other teams later released it as Puzzle Cats. The editor exported JSON, and the intro levels the designers built taught the mechanics with no separate tutorial. It shipped first on Facebook Instant Games as It Fits I Sits.
+• Compliance & Upgrades: Led GDPR support and several major Unity version upgrades across the title.
 • Hot Streak Slots: Ported the studio's previous slots title from native iOS to Unity.
 • Unreleased Casino: Built blackjack, video poker, and keno for an early casino app. Its team later merged into Vegas Blvd Slots, which shipped as slots only.
 ```
@@ -92,7 +92,7 @@ Client then feature engineer, from prototype through production, the mobile and 
 ```text
 • Firefall: Built UI across the HUD and menus through the game's Chinese launch and worldwide relaunch overhaul. Delivered the radar, the PvP HUD, character progression and elite-level screens, and reward screens.
 • UI Systems: Created shared libraries for common menu and HUD elements, and optimized the UI system itself on an already-loaded client.
-• Engine Integration: Worked at the boundary between the Lua and XML UI scripting layer and the studio's C++ engine. The team and codebase were substantially larger than any before it.
+• Engine Integration: Worked at the boundary between the Lua and XML UI scripting layer and the studio's C++ engine. Contributed to the engine codebase as well as the UI layer.
 ```
 
 ---
@@ -102,10 +102,10 @@ Client then feature engineer, from prototype through production, the mobile and 
 **Title:** Software Engineer · **Atlanta, GA** · 2011 – 2015
 
 ```text
-• UI Programming: Built many of Kaneva's core menus end to end in the in-house Lua menu system. Architected the menu animation system that replaced hand-coded transitions, which both the UI and game teams adopted. Worked from artists' comps through layout to functionality, covering the player and creator HUDs, inventory and bank, travel, events, and a visual property editor for scripted objects.
+• UI Programming: Built many of Kaneva's core menus end to end in the in-house Lua menu system. Architected the menu animation system that replaced hand-coded transitions, which both the UI and game teams adopted. Took the player and creator HUDs, inventory and bank, travel, events, context menus, and the welcome tutorial from artists' comps through to release. Worked with the engine and web teams whenever a menu touched either.
+• Creator Tools: Built a visual property editor for scripted objects, menus for swapping video and Flash content onto them, and the builder walkthrough.
 • Game Programming: Helped design and script a Lua-based game development environment built on top of the virtual world.
 • Technical Support: Joined Kaneva in support, helping players with their in-world scripting. Built game templates, Treasure Hunt and Adventure among them, which players used to assemble small games of their own.
-• Additional UI: Built context menus for people and objects, menus for swapping video and Flash content on in-game objects, and the welcome and builder tutorials. Worked with the engine and web teams whenever a menu touched either.
 ```
 
 **One entry, by Ali's decision** — the progression from Technical Support Engineer to Lead UI Programmer is old enough that she's comfortable flattening it to a single title on the resume, and it needs no promotion date to stay one entry.

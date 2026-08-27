@@ -110,8 +110,13 @@ highlights:
     text: >-
       Built client testing workflows and Godot editor tooling for the team. Reported and fixed
       engine bugs with partners at W4 Games.
+    # Four words out 2026-08-26 (two-page pass), 3 printed lines to 2. "Also"
+    # was the only connective on either density -- every other sentence on this
+    # document starts on its verb -- and "on the project" is already scoped
+    # twice, by the `Unreleased Mobile Game` heading and by the two sentences
+    # in front of it.
     extended: >-
-      Also delivered engine version updates and native mobile plugin integration on the project.
+      Delivered engine version updates and native mobile plugin integration.
   - group: godot
     label: Agentic Workflows
     # "Contributed to", not "authored" -- the commands and skills are the team's
@@ -212,11 +217,19 @@ highlights:
       Built the Braze integration that allowed live-ops and marketing to publish the main-screen
       carousel, news page, and modal pop-ups without an app update.
 highlightsExtended:
+  # Trimmed 2026-08-26 (two-page pass). This used to read "push notifications,
+  # deep linking, the first pass of localization, and live-ops tooling
+  # integration" -- and two of those four collided with one-pager bullets that
+  # render a few lines above it on `/resume/full`: `Localization` ("owned the
+  # feature end to end") and `Live-Ops Content` (the Braze integration). The
+  # early/late distinction was real but invisible, because nothing in the text
+  # said "early" -- that is carried by the group's `intro` ("client then
+  # feature engineer"), which sits half a page up. What is left is the two
+  # items no other bullet claims.
   - group: snap
     label: Client Engineering
     text: >-
-      Delivered push notifications, deep linking, the first pass of localization, and live-ops
-      tooling integration in the Unity client.
+      Delivered push notifications and deep linking in the Unity client.
   # Two-pager only, and its own bullet rather than a continuation of PC launch
   # -- Ali's call, 2026-08-26, and she is right about why: both awards are for
   # best *mobile* game, so hanging them off the bullet about the PC client
