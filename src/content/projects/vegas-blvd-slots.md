@@ -29,10 +29,10 @@ links:
   # App Store snapshot looked good in raw HTML but actually hangs on a
   # "Connecting to Apple Music..." interstitial in a real browser — App
   # Store pages of that era redirect through the iTunes app-open flow, which
-  # never resolves in archived replay. mobilityware.com's own product page
-  # (Dec 2019, during Ali's tenure) renders for real: nav, logo, hero
+  # never resolves in archived replay. mobilityware.com’s own product page
+  # (Dec 2019, during Ali’s tenure) renders for real: nav, logo, hero
   # banner, and copy, verified in-browser. No snapshot exists anywhere for
-  # the Android listing's URL, so it's dropped rather than kept as a dead
+  # the Android listing’s URL, so it’s dropped rather than kept as a dead
   # link — a broken "Download for Android" offers nothing once the game
   # shipped on iOS too.
   - label: Vegas Blvd Slots on MobilityWare.com (via Wayback Machine)
@@ -55,13 +55,13 @@ games that went with each one. Much of it was less about any one machine than th
 underneath them. I architected the live-ops systems that let the game change without a client
 update. That was a server-controllable store, plus a DeltaDNA integration driving in-app messaging,
 promo carousels, and eventing. All of it had customizable text, so marketing could run campaigns
-without engineering in the loop. I also led a few cross-cutting projects that don't fit neatly into
+without engineering in the loop. I also led a few cross-cutting projects that don’t fit neatly into
 "features". GDPR support was one, and keeping the game current through several major Unity version
 upgrades was another.
 
 ## What I Learned
 
 I had no background in slot machines starting out. I came away with real respect for how much depth
-is packed into what looks, from the outside, like a simple loop. There's a whole discipline to how a
-machine's features and bonus games are put together. Building the live-ops systems that let
+is packed into what looks, from the outside, like a simple loop. There’s a whole discipline to how a
+machine’s features and bonus games are put together. Building the live-ops systems that let
 the team iterate on that was some of the most satisfying work I did there.

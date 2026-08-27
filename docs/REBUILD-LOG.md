@@ -2118,3 +2118,64 @@ title case, `Unreleased Casino` included — which is the exact label the repo w
 self-consistent, since proper-noun labels are title case regardless. Note this is _not_ #182, which
 title-cased headers; a run-in `<b>` inside an `<li>` is not a header, which is why that pass never
 reached these.
+
+---
+
+## One apostrophe, sitewide (2026-08-26, #188)
+
+Split out of #32, which found the mismatch and deliberately refused to half-fix it. YAML front
+matter does not go through Astro's smartypants and Markdown bodies do, so `summary`, `caption`,
+`role` and `alt` rendered `didn't` while the paragraph beside them rendered `didn’t`. Both are on
+the same page — a project page shows a caption and a body paragraph within an inch of each other.
+
+### The issue was a decision, not a task
+
+There was no correctness argument either way, and the two answers had wildly different costs.
+Straight everywhere was one line (`smartypants: false`) plus one stray character; curly everywhere
+meant converting ~210 characters across front matter, `.astro` prose, `src/config/`, and the
+LinkedIn generator. Straight was also the de facto convention already, 202 to 1 in `src/content/`.
+
+**Ali picked curly.** Worth recording that the cheap option was cheap for a reason that does not
+survive contact with the actual question: `smartypants: false` does not make the site consistent,
+it makes it consistently wrong-looking, and the majority-rules argument was counting a mistake.
+
+### Bodies carry the character too, even though they do not have to
+
+Smartypants would curl a Markdown body's apostrophes on its own, so converting body source changes
+nothing about the output. It was done anyway, and that is the decision most likely to look like
+busywork later.
+
+The alternative rule is "type `’` in front matter, `'` in bodies" — which is a rule about which
+_surface_ you are on, and needing to know that is precisely the bug being fixed. One character
+everywhere is a rule you cannot be on the wrong side of.
+
+### The guard checks the output, not the source
+
+`scripts/check-links.mjs` gained rule 6. Checking source would need one rule per file type and would
+still miss the seam, because the seam is not in any file — it is where three sources land on one
+page. The rendered HTML is the only place they meet, so that is where the assertion lives. It covers
+text nodes, `alt`, and meta descriptions, and exempts `<code>`/`<pre>`: a straight apostrophe inside
+backticks is quoting source, not writing prose. `about.astro` already discusses `{' '}` in a comment,
+and a write-up that quoted it in a code span would be correct to leave it straight.
+
+Verified by breaking it deliberately in a copy of `dist/` — both branches fire, and a synthetic
+`<code>{' '}</code>` does not.
+
+### Two things the sweep found that a grep for `'` would not have
+
+- **`Dalí's`** in art-of-rescue. The first pass matched on `[A-Za-z0-9³` + backtick`]` and `í` is in
+  none of those. Widening to `\w` caught it. The lesson generalises past this repo: an
+  ASCII-letter class is a bug in any text that has been through a name.
+- **An escaped `\'`** inside a single-quoted JS string in `build-linkedin.mjs`. Invisible to a
+  lookbehind for a word character, because the preceding character is a backslash. Found by
+  regenerating `docs/LINKEDIN.md` and grepping the _output_ — the same argument as the guard above,
+  arriving a second time in one session.
+
+### Cost notes
+
+Opus 5, one session, no subagents. Fan-out would have bought nothing: the sweep is one regex applied
+to twenty-one files, and the only judgment in the whole task was a question for Ali. The expensive
+part was deciding what "everywhere" includes — `docs/LINKEDIN.md` is generated from front matter, so
+its bullets went curly on their own and its hand-authored `About` would have stayed straight in the
+same paste-ready block. That is the #31 and #32 miss recurring for a third time: **a generated file
+is where a wording pass forgets to look, and it forgets again each time.**

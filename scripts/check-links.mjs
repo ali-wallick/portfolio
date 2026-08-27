@@ -16,6 +16,9 @@
  *   3. Every <img> has alt text          — none of the old ones did.
  *   4. Every page has <title> + viewport — the old site had no viewport meta at
  *                                          all and rendered zoomed out on phones.
+ *   5. One apostrophe, everywhere         — front matter used to render `didn't`
+ *                                          next to a body paragraph's `didn’t`
+ *                                          on the same page (#188).
  *
  * External links are NOT fetched. That makes the check fast, offline, and
  * deterministic in CI; genuinely dead outbound links are tracked in the content
@@ -139,12 +142,50 @@ for (const file of htmlFiles) {
       report(rel, `HTML comment in published output (use {/* */} in .astro): ${preview}…`);
     }
   }
+
+  // --- 6. One apostrophe, everywhere ---------------------------------------
+  //
+  // Settled #188: the site uses the typographic apostrophe (’). The bug is not
+  // that a straight one is wrong on its own — it is that only SOME of the site
+  // got them. Markdown bodies go through Astro's smartypants and come out curly;
+  // YAML front matter and .astro prose do not, so a `caption` rendered `didn't`
+  // directly beside a paragraph's `didn’t`. Both were on the same page.
+  //
+  // Checked on the OUTPUT rather than the source on purpose: that is the only
+  // place the three sources meet, so it catches the seam wherever it opens
+  // without caring which file the text came from.
+  //
+  // Code is exempt — `{' '}` in a write-up about .astro whitespace is quoting
+  // source, not writing prose, and curling it would make it wrong.
+  const prose = html
+    .replace(/<(script|style|pre|code)\b[^>]*>[\s\S]*?<\/\1>/gi, '')
+    .replace(/<[^>]+>/g, ' ');
+  const straight = /&#0*39;|&apos;|&#x0*27;|'/i;
+  if (straight.test(prose)) {
+    const at = prose.search(straight);
+    const context = prose
+      .slice(Math.max(0, at - 40), at + 20)
+      .replace(/\s+/g, ' ')
+      .trim();
+    report(rel, `straight apostrophe in rendered prose (use ’, #188): …${context}…`);
+  }
+
+  // Alt text and meta descriptions are prose too, and they live in attributes
+  // where the tag-stripping above cannot see them.
+  for (const [tag] of html.matchAll(/<(?:img|meta)\b[^>]*>/gi)) {
+    for (const name of ['alt', 'content']) {
+      const value = attr(tag, name);
+      if (value && straight.test(value)) {
+        report(rel, `straight apostrophe in ${name}="…" (use ’, #188): ${value.slice(0, 60)}…`);
+      }
+    }
+  }
 }
 
 const pageWord = htmlFiles.length === 1 ? 'page' : 'pages';
 if (problems.length === 0) {
   console.log(
-    `✓ ${htmlFiles.length} ${pageWord} checked — links resolve, no http://, alt text present.`,
+    `✓ ${htmlFiles.length} ${pageWord} checked — links resolve, no http://, alt text present, apostrophes curly.`,
   );
   process.exit(0);
 }

@@ -27,19 +27,19 @@ gallery:
   - type: image
     src: ../../assets/images/projects/mini-mages/poster.jpg
     alt: >-
-      Four players' hands holding iPhones around a shared iPad displaying the
+      Four players’ hands holding iPhones around a shared iPad displaying the
       Mini Mages title screen
     caption: iPhones and an iPad, mid-connection.
   - type: image
     src: ../../assets/images/projects/mini-mages/design.png
     alt: >-
       Four monster icons in the corners of an iPad screen facing a golden
-      dragon in the center, from Mini Mages' Summon mini-game
+      dragon in the center, from Mini Mages’ Summon mini-game
     caption: 'Summon: four monsters, one counter.'
   - type: image
     src: ../../assets/images/projects/mini-mages/screenshot.png
     alt: >-
-      Top-down view of Mini Mages' Dragon Battle mini-game, with a dragon
+      Top-down view of Mini Mages’ Dragon Battle mini-game, with a dragon
       flying over a river past fireballs
     caption: 'Dragon Battle: dragons trading fireballs.'
 links: []

@@ -20,18 +20,18 @@ highlights:
   - label: I Fits I Sits
     text: >-
       Pitched the concept at the studio game jam and built the week-long prototype. Focused on a
-      level editor the team used to author 61 levels. It won People's Choice, and other teams
+      level editor the team used to author 61 levels. It won People’s Choice, and other teams
       later released it as Puzzle Cats.
     # Rewritten 2026-08-26 (two-page pass). The old first sentence -- "the team
-    # authored those levels for pitch day" -- restated `text`'s "a level editor
+    # authored those levels for pitch day" -- restated `text`’s "a level editor
     # the team used to author 61 levels", which is exactly what the `extended`
-    # field's contract forbids (see src/content.config.ts): it must continue
+    # field’s contract forbids (see src/content.config.ts): it must continue
     # `text`, never restate it. "Selected for development" also went, since
     # `text` already says other teams released it.
     #
     # What replaced it is the payoff, sourced from the I Fits I Sits page: the
     # editor "worked well enough that the level designers built the intro
-    # levels to teach the game's mechanics with no separate tutorial". That is
+    # levels to teach the game’s mechanics with no separate tutorial". That is
     # the point of building tooling first and it reached no version of the
     # resume before now. Same four printed lines, one restated fact traded for
     # an outcome.
@@ -44,8 +44,8 @@ highlights:
       The editor exported JSON, and the intro levels the designers built taught the mechanics
       with no separate tutorial. It shipped first on Facebook Instant Games as It Fits I Sits.
 highlightsExtended:
-  # Relabelled and tightened 2026-08-26 (two-page pass), Ali's call. Was
-  # `Cross-Cutting Work`, which named the bullet's position on the page rather
+  # Relabelled and tightened 2026-08-26 (two-page pass), Ali’s call. Was
+  # `Cross-Cutting Work`, which named the bullet’s position on the page rather
   # than a body of work -- the only label on either density that would stop
   # making sense if the bullet moved. Every other label at this job is a
   # product name, so a discipline label was the odd one out here regardless;
@@ -60,7 +60,7 @@ highlightsExtended:
       Led GDPR support and several major Unity version upgrades across the title.
   - label: Hot Streak Slots
     text: >-
-      Ported the studio's previous slots title from native iOS to Unity.
+      Ported the studio’s previous slots title from native iOS to Unity.
   - label: Unreleased Casino
     text: >-
       Built blackjack, video poker, and keno for an early casino app. Its team later merged into
@@ -70,6 +70,6 @@ highlightsExtended:
 ## Source material (2019 resume, verbatim — not current copy)
 
 - _Vegas Blvd Slots:_ Developing and overhauling features across the game. Architect various systems to support Live Ops such as a server-customizable store, and integrating DeltaDNA with additional support for promo carousels and custom text. Programming new slot machines and their features.
-- _It Fits I Sits:_ Pitched concept for a mobile cat puzzle game for the annual game jam. Created a prototype with a team over a week. Won "People's Choice Award" and game was selected to be developed and released for Facebook Instant Games.
+- _It Fits I Sits:_ Pitched concept for a mobile cat puzzle game for the annual game jam. Created a prototype with a team over a week. Won "People’s Choice Award" and game was selected to be developed and released for Facebook Instant Games.
 - _Unreleased Casino:_ Developed games including video poker, blackjack, and keno.
 - _Hot Streak Slots:_ Assisted in porting the iOS native mobile game to Unity.

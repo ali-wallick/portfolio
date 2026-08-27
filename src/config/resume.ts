@@ -79,7 +79,7 @@ export const resumeTools: Record<ResumeToolCategory, string[]> = {
  */
 export const resumeSummary =
   'Senior software engineer with fifteen years building game clients, UI systems, and the ' +
-  "tooling behind them. Seven of those at Second Dinner, through Marvel Snap's launch, its " +
+  'tooling behind them. Seven of those at Second Dinner, through Marvel Snap’s launch, its ' +
   'PC release, and now a new project in Godot.';
 
 /**
@@ -134,7 +134,7 @@ export const resumePersonalProjects: ResumePersonalProject[] = [
   {
     label: 'Critter³',
     slug: 'critter-3',
-    text: "Programmed a cube-world puzzle game at Global Game Jam 2011. Reached the finals of SCAD's Entelechy prototype contest that May.",
+    text: 'Programmed a cube-world puzzle game at Global Game Jam 2011. Reached the finals of SCAD’s Entelechy prototype contest that May.',
   },
   {
     label: 'Cor Ex Machina',

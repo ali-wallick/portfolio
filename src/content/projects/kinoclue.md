@@ -7,10 +7,10 @@ status: prototype
 engine: []
 platforms: [Tabletop computing]
 # Undergraduate research, not a class project — the Synaesthetic Media Lab at
-# Georgia Tech's GVU Center, not a course. Re-tagged at the Phase 3 gate.
+# Georgia Tech’s GVU Center, not a course. Re-tagged at the Phase 3 gate.
 # GVU Center dropped from the rendered value 2026-08-24 (standardized event
-# format): it's a nesting detail, not something a reader needs to place the
-# work. Kept here in the comment since it's still a true, sourced fact.
+# format): it’s a nesting detail, not something a reader needs to place the
+# work. Kept here in the comment since it’s still a true, sourced fact.
 event: Georgia Tech, Synaesthetic Media Lab
 collaborators:
   - name: Russell Brooks

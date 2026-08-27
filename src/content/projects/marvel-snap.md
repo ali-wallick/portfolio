@@ -3,8 +3,8 @@ title: Marvel Snap
 tier: featured
 featureOrder: 1
 startYear: 2019
-# Ali's involvement, not the product's lifespan — Snap is still live, she moved to
-# Second Dinner's Godot project in 2024.
+# Ali’s involvement, not the product’s lifespan — Snap is still live, she moved to
+# Second Dinner’s Godot project in 2024.
 endYear: 2024
 status: shipped
 engine: [Unity]
@@ -26,10 +26,10 @@ hero:
   type: youtube
   id: 61zjv1HcJDI
   title: MARVEL SNAP — Official Announcement & Gameplay First Look
-  # Cued to Ali's segment. This is the whole reason `start` exists in the schema.
+  # Cued to Ali’s segment. This is the whole reason `start` exists in the schema.
   start: 256
-# Two official screenshots from Marvel Snap's Steam store page, picked by Ali
-# as the two that best cover the systems described in this page's "What I
+# Two official screenshots from Marvel Snap’s Steam store page, picked by Ali
+# as the two that best cover the systems described in this page’s "What I
 # built": the collection/deckbuilding screen (search + filter) and the card
 # detail screen (variants, cosmetics, artist credit). Plus a still Ali
 # supplied from her own segment in the hero video, cued at `start: 256` above.
@@ -51,7 +51,7 @@ gallery:
   - type: image
     src: ../../assets/images/projects/marvel-snap/gallery-announcement-still.jpg
     alt: >-
-      Ali Wallick speaking on camera in Marvel Snap's official announcement
+      Ali Wallick speaking on camera in Marvel Snap’s official announcement
       video, with an on-screen lower third reading her name and title
     caption: On camera for the official announcement video.
 links:
@@ -89,9 +89,9 @@ both the game and the studio around it.
 Early on I was a client engineer doing core Unity work. The local notification plugin we used for
 iOS and Android had no shared interface between the two. I built one on top of a ScriptableObject,
 so design could set up a notification once and have it work on both platforms. I added deep linking
-so a link could open the app straight to any screen, like the shop. The game's UI wasn't localized
+so a link could open the app straight to any screen, like the shop. The game’s UI wasn’t localized
 at all when I got there. I organized the effort to get every menu translated, and did the first
-integration of Unity's Localization package to run it. I also built the client-side integration for
+integration of Unity’s Localization package to run it. I also built the client-side integration for
 live-ops tooling like Braze. Later I moved into feature engineering: meta gameplay systems spanning
 client and server code plus the UI for them, card and deck cosmetics, and the deckbuilding UI. I built a lot of
 tooling for the team too, both in the Unity Editor and in the game itself. The card art tool was
@@ -100,7 +100,7 @@ one, which our artists authored card art through. The in-game developer console 
 **Driving an MVVM migration for the PC launch.** Alongside the push to launch the PC client, I
 encouraged teammates to migrate their working patterns onto an MVVM architecture, and built out the
 tooling that made it practical to adopt.
-Snap's Steam Early Access launched globally on 18 October 2022 as a direct port of the mobile
+Snap’s Steam Early Access launched globally on 18 October 2022 as a direct port of the mobile
 client, the fastest path to PC and a reasonable one for a first release. That December, Snap
 [won Best Mobile Game at The Game Awards](https://www.marvel.com/articles/games/marvel-snap-mobile-game-of-the-year-2022).
 It went on to [win Mobile Game of the Year at the DICE Awards](https://www.pocketgamer.biz/marvel-snap-wins-mobile-game-of-the-year-at-the-dice-awards/)
@@ -111,20 +111,20 @@ mouse-and-keyboard input, instead of a phone layout stretched onto a monitor.
 **Building the card and collection systems.** I built and owned the screen players use to inspect
 an individual card:
 
-- **Sub-cards:** Toggling through a card's sub-cards.
+- **Sub-cards:** Toggling through a card’s sub-cards.
 - **Upgrading:** Spending boosters and credits to upgrade a card.
-- **Variants:** Browsing and selecting a card's cosmetic variants.
-- **Stats and abilities:** The card's stats and ability text.
-- **Animation preview:** Previewing a variant's animation and effects.
+- **Variants:** Browsing and selecting a card’s cosmetic variants.
+- **Stats and abilities:** The card’s stats and ability text.
+- **Animation preview:** Previewing a variant’s animation and effects.
 
 The screen also carries artist credits. Card art shipped with no in-game attribution for who drew
 it, something players had been asking for since launch. I argued for the feature and built it:
-tapping a card's nameplate surfaces who sketched, inked, and colored it, with an icon for each role.
+tapping a card’s nameplate surfaces who sketched, inked, and colored it, with an icon for each role.
 It shipped in January 2023 and was covered by gaming press, including
 [GamesRadar](https://www.gamesradar.com/marvel-snap-adds-full-creator-credits-to-all-card-art/).
 I also built the screens players use to browse their collection, build decks, and apply cosmetic
 variants across their cards. Search and filtering had to work correctly against localized text and
-a card's full metadata, not just its name in English. I built all of it for both mobile and PC,
+a card’s full metadata, not just its name in English. I built all of it for both mobile and PC,
 which meant two different input models.
 
 **Building the localization and live-ops pipelines.** We shipped in 15 languages. I owned
@@ -133,12 +133,12 @@ localized UI text through. I worked
 directly with our publishers on all of it. Fonts were a project of their own:
 
 - **CJK fallback:** Proper support for CJK fonts, falling back to OS-level fonts when a given
-  typeface didn't cover a character.
-- **Memory footprint:** Only the game's own shipped characters stayed in memory by default, instead
-  of loading every supported language's full glyph set up front.
+  typeface didn’t cover a character.
+- **Memory footprint:** Only the game’s own shipped characters stayed in memory by default, instead
+  of loading every supported language’s full glyph set up front.
 - **User-generated text:** Glyphs for text players typed themselves loaded in dynamically, rather
   than paying that overhead for every player.
-- **Thai diacritics:** Correct rendering of Thai's stacked diacritic marks.
+- **Thai diacritics:** Correct rendering of Thai’s stacked diacritic marks.
 
 I also built the client-side integration that let live-ops and marketing put content in front of
 players without an app update. The main-screen carousel pulled its content dynamically from Braze,
@@ -147,5 +147,5 @@ pop-ups.
 
 ## What I Learned
 
-I'm proudest of watching Second Dinner grow over those five years. We went from a small company
+I’m proudest of watching Second Dinner grow over those five years. We went from a small company
 working on a prototype, to launching a global game, to running it in live ops for years after.

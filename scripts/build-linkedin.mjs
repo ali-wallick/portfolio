@@ -152,13 +152,13 @@ function multiRoleNote(job) {
 const JOB_NOTES = {
   kaneva: {
     after:
-      "**One entry, by Ali's decision** — the progression from Technical Support Engineer to " +
-      "Lead UI Programmer is old enough that she's comfortable flattening it to a single title on " +
+      '**One entry, by Ali’s decision** — the progression from Technical Support Engineer to ' +
+      'Lead UI Programmer is old enough that she’s comfortable flattening it to a single title on ' +
       'the resume, and it needs no promotion date to stay one entry.',
   },
   mobilityware: {
     after:
-      '> **Don\'t soften the I Fits I Sits bullet.** "Other teams took it to release" is doing ' +
+      '> **Don’t soften the I Fits I Sits bullet.** "Other teams took it to release" is doing ' +
       'real work: it is the difference between an accurate credit and implying a credit on Puzzle ' +
       'Cats, which Ali does not have. The honest version is the better story anyway — a one-week ' +
       'jam pitch that outlived her time at the studio and is still live years later.',
@@ -197,22 +197,22 @@ const HEADLINE_OPTIONS = [
  * places a career-level claim is written rather than derived, and therefore the
  * two places one can drift.
  */
-const ABOUT = `I've been building games for fifteen years, mostly in UI and systems engineering. That is the layer where a game's interface, its live-ops plumbing, and its meta systems all have to agree with each other.
+const ABOUT = `I’ve been building games for fifteen years, mostly in UI and systems engineering. That is the layer where a game’s interface, its live-ops plumbing, and its meta systems all have to agree with each other.
 
-I'm at Second Dinner now, where I joined in 2019 as the studio's 11th employee. I've interviewed candidates and helped shape the culture as we've grown past 100. I spent five years on Marvel Snap. Early on I was a client engineer in Unity, doing notifications, deep linking, and live-ops integration. Later I moved to feature engineering: meta gameplay systems spanning client and server, card and deck cosmetics, and the deckbuilding UI. The work I'm proudest of there is the tooling that made an MVVM architecture practical to adopt on a live product, owning localization end to end, and the two-stage PC launch. Steam Early Access shipped as a direct port of the mobile client, and exiting Early Access in 2023 meant rebuilding much of the UI for a landscape screen and mouse-and-keyboard input. Since 2024 I've been on a new team at Second Dinner, building the studio's first game in Godot.
+I’m at Second Dinner now, where I joined in 2019 as the studio’s 11th employee. I’ve interviewed candidates and helped shape the culture as we’ve grown past 100. I spent five years on Marvel Snap. Early on I was a client engineer in Unity, doing notifications, deep linking, and live-ops integration. Later I moved to feature engineering: meta gameplay systems spanning client and server, card and deck cosmetics, and the deckbuilding UI. The work I’m proudest of there is the tooling that made an MVVM architecture practical to adopt on a live product, owning localization end to end, and the two-stage PC launch. Steam Early Access shipped as a direct port of the mobile client, and exiting Early Access in 2023 meant rebuilding much of the UI for a landscape screen and mouse-and-keyboard input. Since 2024 I’ve been on a new team at Second Dinner, building the studio’s first game in Godot.
 
-Before that: three years at MobilityWare on Vegas Blvd Slots, architecting the live-ops systems that let the game change without a client update; a year at Red 5 Studios on Firefall's HUD and menus, on a much bigger team and codebase than I'd worked on before; and four years at Kaneva, where I started in technical support and grew into UI programming for a social virtual world.
+Before that: three years at MobilityWare on Vegas Blvd Slots, architecting the live-ops systems that let the game change without a client update; a year at Red 5 Studios on Firefall’s HUD and menus, on a much bigger team and codebase than I’d worked on before; and four years at Kaneva, where I started in technical support and grew into UI programming for a social virtual world.
 
 A lot of my favorite work has been tooling. The menu animation system I built at Kaneva was picked up by both the UI and game teams, and the level editor I built in a week for a game jam pitch let us author 61 levels before pitch day. That game outlived my time at the studio and is still shipping.`;
 
-const WHAT_NOT_TO_DO = `LinkedIn is the one surface in this project that an agent can't verify after the fact, so the rules are stricter, not looser:
+const WHAT_NOT_TO_DO = `LinkedIn is the one surface in this project that an agent can’t verify after the fact, so the rules are stricter, not looser:
 
-- **Don't name or characterise Second Dinner's current game.** The studio said publicly on 7 August
+- **Don’t name or characterise Second Dinner’s current game.** The studio said publicly on 7 August
   2024, via the [W4 Games investment](https://www.w4games.com/blog/w4-games-news-1/second-dinner-studios-becomes-a-strategic-investor-in-w4-games-and-plans-to-build-the-largest-game-in-godot-yet-37),
-  that it's building its next game in Godot. That is the ceiling. No title, platform, or genre.
-- **Don't restore "unannounced mobile Marvel game."** It was accurate in 2019 and has been wrong
+  that it’s building its next game in Godot. That is the ceiling. No title, platform, or genre.
+- **Don’t restore "unannounced mobile Marvel game."** It was accurate in 2019 and has been wrong
   since October 2022.
-- **Don't claim a Puzzle Cats credit.** See the note under MobilityWare.`;
+- **Don’t claim a Puzzle Cats credit.** See the note under MobilityWare.`;
 
 // ---------------------------------------------------------------------------
 // Assembly
@@ -291,7 +291,7 @@ function renderEducationSection(education) {
     if (entry.data.honors.length > 0) {
       lines.push(
         '',
-        `The ${entry.data.end.slice(0, 4)} GPA and Dean's List entries are recorded in ` +
+        `The ${entry.data.end.slice(0, 4)} GPA and Dean’s List entries are recorded in ` +
           `\`src/content/education/${entry.slug}.md\` and deliberately not shown — fifteen years ` +
           'into a career they are not load-bearing. Same call on LinkedIn: leave the honors fields ' +
           'empty.',
@@ -316,7 +316,7 @@ async function buildDocument() {
       '',
       '**This is copy for Ali to paste in herself, not a sync.** Nothing automated touches the ' +
         'LinkedIn account: an agent logging into a personal profile is an account-access boundary ' +
-        "worth keeping bright, and LinkedIn's own terms are unfriendly to it besides. So this file " +
+        'worth keeping bright, and LinkedIn’s own terms are unfriendly to it besides. So this file ' +
         'is the handoff format.',
       '',
       '**Where the Experience and Education sections come from.** Straight off the `jobs` and ' +
@@ -326,7 +326,7 @@ async function buildDocument() {
         'regenerate this file rather than editing LinkedIn from memory.',
       '',
       '**The Headline and About sections below are hand-authored**, not derived — they are ' +
-        "LinkedIn-specific prose, not resume bullets, so there's nothing in the collections to " +
+        'LinkedIn-specific prose, not resume bullets, so there’s nothing in the collections to ' +
         'generate them from. Revisit them by editing `HEADLINE_OPTIONS` and `ABOUT` in the ' +
         'generator script.',
       '',
@@ -334,7 +334,7 @@ async function buildDocument() {
       '',
       '## Headline',
       '',
-      "220 characters max. Three options, most conservative first — pick one, they're all true.",
+      '220 characters max. Three options, most conservative first — pick one, they’re all true.',
       '',
       ...HEADLINE_OPTIONS.map((h, i) => `${i + 1}. \`${h}\``),
       '',
@@ -373,7 +373,7 @@ async function buildDocument() {
       '## Notes',
       '',
       "- **The résumé's Tools line has no workflow tooling** — version control, CI, profiling. " +
-        "It's derived strictly from each job's `tech` field, same as the skills implied above. " +
+        'It’s derived strictly from each job’s `tech` field, same as the skills implied above. ' +
         'Tracked as [#39](https://github.com/ali-wallick/Portfolio/issues/39), not fixed here.',
       '- **The 2024–present Godot work is a single clause** in the Second Dinner bullets above, ' +
         'same as the resume. Tracked as [#37](https://github.com/ali-wallick/Portfolio/issues/37); ' +

@@ -37,8 +37,8 @@ links:
 draft: false
 ---
 
-Global Game Jam 2014's theme was "We don't see things as they are, we see them as we
-are." Don Quixote was the natural pick for it, since he can't tell a windmill from a giant.
+Global Game Jam 2014’s theme was "We don’t see things as they are, we see them as we
+are." Don Quixote was the natural pick for it, since he can’t tell a windmill from a giant.
 Multiplayer was the stretch goal that year, and a locked-down network at the jam site made it
 a real fight. But we pulled it off!
 

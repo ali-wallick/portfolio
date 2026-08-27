@@ -204,6 +204,16 @@ Settled now:
   "Featured work". Use AP/Chicago rules (small function words lowercase unless first/last), not
   every-word-capitalized. Single-word headers and proper-noun `<h1>`s (site name, project titles, job
   titles) are unaffected either way.
+- **The apostrophe is `’`, and it is typed, not generated** (2026-08-26,
+  [#188](https://github.com/ali-wallick/Portfolio/issues/188)). Ali's call. Front matter, Markdown
+  bodies, `.astro` prose, `src/config/*.ts` strings, and `scripts/build-linkedin.mjs`'s hand-authored
+  blocks all carry it directly. **Markdown bodies do not need to — Astro's smartypants curls them
+  anyway — and they carry it regardless**, because a rule with an exception in it is a rule someone
+  has to remember which surface they are on. That was the bug: only bodies got smartypants, so a
+  `caption` rendered `didn't` beside a paragraph's `didn’t` on the same page. Straight apostrophes
+  inside code stay straight; they are quoting source. `scripts/check-links.mjs` fails the build on a
+  straight apostrophe in rendered prose, alt text, or a meta description — **checked on the output,
+  not the source, because the output is the only place the three sources meet.**
 
 **The voice is documented from primary sources, not described in the abstract** (2026-08-24). The
 `write-copy` skill carries quoted evidence and measurements in
@@ -1287,6 +1297,8 @@ skill's guidance got it wrong, and the guard itself got it wrong.
   the mismatch is sitewide. `docs/REBUILD-LOG.md`'s original note already warned that fixing only
   the resume creates a _third_ state, and that is still true, so this is
   [#188](https://github.com/ali-wallick/Portfolio/issues/188) rather than a silent edit here.
+  **Settled there on 2026-08-26 — curly everywhere. See the convention under "Voice and content
+  conventions" above.**
 - **Raising the density**, above. Measured, costed, and left with Ali.
 
 ### `docs/LINKEDIN.md`'s hand-authored About was never reached by #31

@@ -8,5 +8,5 @@ honors:
   # Recorded, not necessarily shown. The plan drops both from the Phase 4 resume:
   # a 2011 GPA is not load-bearing fifteen years into a career.
   - 'Major GPA: 3.25'
-  - "5-time Dean's List recipient"
+  - '5-time Dean’s List recipient'
 ---

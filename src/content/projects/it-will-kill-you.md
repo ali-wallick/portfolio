@@ -28,7 +28,7 @@ gallery:
     alt: >-
       The level map for It Will Kill You, its outline shaped like a human
       body and divided into nodes for the head, arms, and legs
-    caption: The level, shaped like the body it's fought over.
+    caption: The level, shaped like the body it’s fought over.
   - type: image
     src: ../../assets/images/projects/it-will-kill-you/character.jpeg
     alt: >-

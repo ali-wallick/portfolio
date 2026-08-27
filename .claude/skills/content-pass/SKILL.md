@@ -310,9 +310,16 @@ The audit should come back with **no em dashes** and a mean in the neighbourhood
 fine and common on archive pages, where most of the text describes a game rather than an argument.
 A low first-person count on an archive page is also fine and not worth chasing.
 
-**Apostrophes:** Markdown body text gets typographic quotes (`didn’t`); front matter does not
-(`didn't`). Both render on the same page, and a caption next to a paragraph shows the difference.
-Type the curly apostrophe directly in YAML when the two sit near each other.
+**Apostrophes: type ’, everywhere.** Settled sitewide on [#188](https://github.com/ali-wallick/Portfolio/issues/188) — front matter, Markdown bodies,
+`.astro` prose, and the hand-authored strings in `src/config/` and `scripts/build-linkedin.mjs` all
+use the typographic apostrophe. Markdown bodies would get there on their own (Astro's smartypants
+curls them), but nothing else does, so a `caption` used to render `didn't` directly beside a
+paragraph's `didn’t`. Do not rely on smartypants even in a body — one character, one rule, no
+surface to remember. The exception is code: a straight apostrophe inside backticks is quoting
+source, not writing prose, and leaving it alone is correct.
+
+`npm run links` fails the build on a straight apostrophe in rendered prose, alt text, or a
+meta description, so a slip is a CI failure rather than something to catch by eye.
 
 **Lean third person when describing gameplay, not "you."** Not a hard rule — but "You play a pirate
 hunting..." can read a little like an instruction manual for a portfolio site, where "A pirate

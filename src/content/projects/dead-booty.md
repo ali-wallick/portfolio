@@ -18,18 +18,18 @@ summary: >-
 hero:
   type: image
   src: ../../assets/images/projects/dead-booty/DeadBooty.jpg
-  alt: Dead Booty's pixel-art pirate hunting treasure on an Atari 2600 screen
+  alt: Dead Booty’s pixel-art pirate hunting treasure on an Atari 2600 screen
 gallery:
   - type: image
     src: ../../assets/images/projects/dead-booty/art.png
     alt: >-
-      Dead Booty's in-game screen, with the pirate sprite standing near a
+      Dead Booty’s in-game screen, with the pirate sprite standing near a
       zombie sprite on a yellow-and-blue island
     caption: The pirate and one of the zombies.
   - type: image
     src: ../../assets/images/projects/dead-booty/design.png
     alt: >-
-      Dead Booty's title screen, with the game's name spelled out in red,
+      Dead Booty’s title screen, with the game’s name spelled out in red,
       orange, and blue pixel-art letters
     caption: The title screen.
 links: []
