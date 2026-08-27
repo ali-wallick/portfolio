@@ -10,19 +10,19 @@ that produced it is in git history at `git show 0eec28f:infra/PHASE-1-RUNBOOK.md
 
 ## The zone as it stands
 
-Verified live 2026-08-27, re-baselined the same day ([#55](https://github.com/ali-wallick/Portfolio/issues/55)).
+Verified live 2026-08-27, re-baselined the same day ([#55](https://github.com/ali-wallick/Portfolio/issues/55)) and updated again after the cutover ([#34](https://github.com/ali-wallick/Portfolio/issues/34)) the same evening.
 
 | Name                   | Type   | Value                                                                                              | Notes                                                                                                                                                                                               |
 | ---------------------- | ------ | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `aliwallick.com`       | NS     | `dilbert` / `adele.ns.cloudflare.com.`                                                             | Cloudflare                                                                                                                                                                                          |
-| `aliwallick.com`       | A      | `173.236.243.216`                                                                                  | **Still DreamHost.** The site cutover is [#34](https://github.com/ali-wallick/Portfolio/issues/34).                                                                                                 |
+| `aliwallick.com`       | AAAA   | `100::`, **proxied**                                                                               | **The site.** Written by the `portfolio` Worker's Custom Domain at the cutover, not by hand — the dashboard shows it as a `Worker` row. Codified in `wrangler.jsonc`.                               |
 | `aliwallick.com`       | MX     | `10 mx01` / `10 mx02.mail.icloud.com.`                                                             | **Mail. Do not break.**                                                                                                                                                                             |
 | `aliwallick.com`       | TXT    | `v=spf1 mx include:netblocks.dreamhost.com include:relay.mailchannels.net include:icloud.com -all` | Tightened to `-all` 2026-08-22 ([#42](https://github.com/ali-wallick/Portfolio/issues/42), closed). Two dead includes remain, tracked as [#43](https://github.com/ali-wallick/Portfolio/issues/43). |
 | `aliwallick.com`       | TXT    | `apple-domain=…`                                                                                   | iCloud+ custom-domain proof.                                                                                                                                                                        |
 | `aliwallick.com`       | TXT    | `google-site-verification=SNE4…`                                                                   | **Re-verified under Ali's own account** ([#44](https://github.com/ali-wallick/Portfolio/issues/44), closed). Not the DreamHost-era value — that one is gone.                                        |
 | `sig1._domainkey`      | CNAME  | `sig1.dkim.…icloudmailadmin.com.`                                                                  | DKIM, confirmed passing 2026-08-16.                                                                                                                                                                 |
 | `_dmarc`               | TXT    | `v=DMARC1; p=none; rua=mailto:contact@aliwallick.com`                                              | Added 2026-08-22 ([#41](https://github.com/ali-wallick/Portfolio/issues/41), closed). Monitoring only — never existed here or on DreamHost.                                                         |
-| `www`                  | A      | `173.236.243.216`                                                                                  | DreamHost, same as apex.                                                                                                                                                                            |
+| `www`                  | A      | `192.0.2.0`, **proxied**                                                                           | Originless placeholder. Requests never reach it; a zone-level Single Redirect rule 301s `www` to the apex, path and query preserved ([#193](https://github.com/ali-wallick/Portfolio/issues/193)).  |
 | `mail`                 | A / MX | `64.90.62.162`, MailChannels                                                                       | **Leftover.** Nothing sends through it now.                                                                                                                                                         |
 | `autoconfig`           | CNAME  | `autoconfig.dreamhost.com.`                                                                        | **Leftover.** Mail-client auto-setup for a mailbox that's gone.                                                                                                                                     |
 | `ftp`                  | A      | `173.236.243.216`                                                                                  | **Leftover.** DreamHost FTP, unused.                                                                                                                                                                |
@@ -33,6 +33,13 @@ alongside the two already recorded. All four are the same family of staleness as
 in [#43](https://github.com/ali-wallick/Portfolio/issues/43) and should go with it. `verify-dns.sh`
 deliberately asserts none of them — see its closing comment for why asserting either their presence or
 their absence would be wrong.
+
+**They survived the cutover on purpose, and the sequencing is not arbitrary.** #43 is blocked on
+[#51](https://github.com/ali-wallick/Portfolio/issues/51) rather than on the cutover, because
+WordPress can still originate mail through `wp_mail()` until it is gone — pulling the SPF includes
+while it can send is how you get a silent delivery failure. `ftp` is the one worth keeping longest:
+retiring the WordPress install may well mean reaching DreamHost over FTP to retrieve files first.
+Delete it and you have removed a route to the thing you are still working on.
 
 ## The files
 
