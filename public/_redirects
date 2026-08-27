@@ -51,6 +51,15 @@
 /blog                         /about                         301
 /blog/                        /about                         301
 
+# --- Old resume PDF: redirect, not a stray file -----------------------------
+# resources/WallickAli-Resume.pdf carries Ali's old PO Box and is still live
+# and indexed by Google under a title built from that address (#132). Without
+# this rule the URL would 404 silently at cutover (wrangler.jsonc's
+# not_found_handling default) rather than by decision. Sending it to the
+# current one-page resume gives anyone following the old indexed link a real,
+# current, PO-Box-free document instead of a dead end.
+/resources/WallickAli-Resume.pdf /resume.pdf 301
+
 # --- Stray public files: deliberate 404, not a redirect --------------------
 # todo.txt, palette.html, colors.css, and wp-login.php were live at capture
 # time but have no honest destination on the new site — todo.txt and
