@@ -2395,3 +2395,100 @@ the README, which is where a record nobody should depend on belongs.
 One session, no subagents, and fan-out would have been actively wrong here: every question was a
 `dig` against one zone, and the findings only became visible by holding the whole zone in view at
 once — the missing `sig1` selector is only interesting _next to_ the present `dreamhost` one.
+
+## The DNS cutover (2026-08-27, #34, #74)
+
+The domain moved. `aliwallick.com` serves the Astro site from Cloudflare Workers, `www` 301s to the
+apex, and mail was verified send-and-receive on both addresses before and after. `docs/LAUNCH.md`'s
+ten steps ran in order and the runbook held up — the two things that went wrong were both outside it.
+
+### The gate that mattered was not the one the runbook named
+
+Step 4 says to confirm the production build goes green in the Workers Builds log, because
+`workers_dev: false` means there is nowhere to browse to yet. Cloudflare had an active incident that
+evening — **"Workers Builds are Degraded ... builds are not running"** — so the build queued and sat
+at `Initializing build environment...` for nineteen minutes without starting.
+
+Two diagnoses were formed and **both were wrong**. The first was head-of-line blocking: a `main`
+build had queued 37 seconds earlier and was equally stuck, which is a tidy story that cancelling it
+disproved in one call. The second was `previews_enabled: false` in the build config, which reads like
+non-production builds being disabled and is not that — branch previews build fine, as the write-up
+PR's own preview later proved. Both were plausible, internally consistent, and derived from real
+observations.
+
+What actually settled it was **asking a different question**: not "what is the build doing" but
+"does a production deployment exist." The Worker's deployment list still ended at 2026-08-22, and
+every version uploaded that evening was tagged `version_upload` — the `wrangler versions upload`
+preview path, not `wrangler deploy`. That is a fact about the world rather than a status field's
+opinion of itself, and it was available the whole time.
+
+**The generalisable version: when a status field and an outcome disagree, go and look at the
+outcome.** A build system reporting `queued` is a claim; a deployment record with a timestamp is
+evidence. The cutover was blocked for an hour on a question that one API call answered.
+
+A related trap worth naming, because it looks like failure and isn't: a fully green build log ends
+with `No targets deployed for portfolio`. That is not an error. It means no route or Custom Domain
+exists to serve the version yet, which is precisely the intended state between steps 4 and 5.
+
+### `dig` cannot be trusted from Ali's machine
+
+Step 2 records the rollback values, and the TTLs read back wrong: 258, then 300, then 75, then 53 →
+50 → 47 across three seconds. TTLs that **decrement** are a cache answering. This persisted when
+querying Cloudflare's nameservers by IP with `+norecurse`, which should be unambiguous — so something
+on the network path intercepts port 53 and answers from its own cache.
+
+Every DNS reading that mattered afterwards went over DNS-over-HTTPS instead, cross-checked against
+two independent resolvers:
+
+```bash
+curl -s -H 'accept: application/dns-json' \
+  "https://cloudflare-dns.com/dns-query?name=aliwallick.com&type=A"
+curl -s "https://dns.google/resolve?name=aliwallick.com&type=A"
+```
+
+**`infra/verify-dns.sh` is unaffected, and it is worth being precise about why.** Interception
+corrupts TTLs, not record values, and the script asserts values and resolvability — never a TTL. So
+it stayed correct throughout and exited 0 on both sides of the cutover, which is exactly what #55
+re-baselined it to do. The hazard is to a human reading `dig` output by hand mid-cutover, which is
+why the warning lives in `infra/README.md` next to the tool rather than in this log.
+
+### Two steps turned out to be no-ops, for opposite reasons
+
+Step 3 lowers the apex and `www` TTLs so rollback bites quickly; step 10 raises them back. **Step 10
+had nothing to do.** Steps 5 and 6 replace both records with _proxied_ ones — the Custom Domain
+writes a proxied `AAAA 100::` on the apex, and `www` becomes a proxied `A 192.0.2.0` — and Cloudflare
+forces proxied records to Auto (300s). The 60s TTLs were attached to records that no longer exist by
+the time step 10 runs.
+
+Ali's call on the timing is also worth recording, because the reasoning generalises past this site:
+the argument for leaving TTLs low is fast rollback during the window you are most likely to want it,
+and she declined it — a portfolio is not a service, and closing the task out the same day was worth
+more than an hour of theoretical revert speed. Correct for the blast radius involved.
+
+### The runbook's own preconditions caught a stale checkout
+
+Step 1 requires `verify-dns.sh` to exit 0, and it exited 1 with four failures — against a #55 that
+was already closed and merged. The cause was a local `main` sitting one commit behind `origin/main`.
+Trivial, and the point is that **the precondition worked**: a check written to be trustworthy failed
+loudly instead of being waved through, which is the entire argument #55 was filed on. Had it still
+had three known-bad results, a fourth would have been noise.
+
+### What is still open
+
+`robots.txt` as served is not the file this repo generates — Cloudflare injects a Managed block
+disallowing nine AI crawlers ahead of it. Search indexing is unaffected (`Allow: /` and the sitemap
+line are intact, which is what step 7 asserts), so it was not launch-blocking and was deliberately
+not touched during the cutover. It is a content-licensing posture applied by a platform default
+rather than chosen, and it is [#215](https://github.com/ali-wallick/Portfolio/issues/215).
+
+### Cost notes
+
+One session, no subagents, and this is the clearest case yet where fan-out would have been wrong:
+the work is a strictly ordered procedure with an irreversible step in the middle, and every decision
+depended on the previous step's observed result. There was nothing to parallelise and a great deal
+to get wrong by acting on stale context.
+
+The hour lost to the Cloudflare incident was not agent cost — it was wall-clock waiting — but the
+two wrong diagnoses were, and both came from reasoning about a status field instead of querying for
+an outcome. Cheaper instinct: when something claims to be in progress, ask what it has actually
+produced.

@@ -3,6 +3,13 @@
 **One document, one order, for the DNS cutover.** Point `aliwallick.com` at the new site without
 breaking Ali's email.
 
+> **Executed 2026-08-27.** The cutover is done — `aliwallick.com` serves the site, `www` 301s to the
+> apex, mail verified both directions on both addresses either side of it, `verify-dns.sh` exits 0.
+> This document is kept as the record of how it was done, and the two steps that behaved differently
+> from how they were written are corrected in place below. The narrative — including the Cloudflare
+> Workers Builds incident that stalled step 4 for an hour — is in
+> [`REBUILD-LOG.md`](REBUILD-LOG.md).
+
 This is the procedure. **What's still open is tracked in the
 [`Launch` milestone](https://github.com/ali-wallick/Portfolio/milestone/3)**, not here — the same
 split CLAUDE.md draws everywhere else: this file says _how_, the issues say _what's left_. Issue
@@ -80,7 +87,12 @@ TTL elapse before continuing** — otherwise resolvers are still holding the old
 you were trying to shorten.
 
 This cuts both the propagation wait in step 7 and, more to the point, the time a rollback takes to
-bite. Raise them back after step 9.
+bite.
+
+**Do not plan on raising them back — step 10's item is a no-op, confirmed 2026-08-27.** Steps 5 and 6
+replace both records with _proxied_ ones (the Custom Domain writes a proxied `AAAA` on the apex; `www`
+becomes a proxied `A`), and Cloudflare forces proxied records to Auto/300s. The lowered TTLs are
+attached to records that no longer exist by the time you get there.
 
 ### 4. Flip `live`, and ship it to `release`
 
@@ -105,6 +117,20 @@ Nothing is publicly reachable yet, which is what makes doing this before the DNS
 
 **Confirm the build goes green in the Workers Builds log before continuing.** Not by browsing to it —
 there's nowhere to browse to yet.
+
+**Better: confirm a new _production deployment_ exists, not that a build says it succeeded.** A build
+status is a claim; a deployment with a timestamp is evidence. On 2026-08-27 a Cloudflare incident left
+this build queued for nineteen minutes while two plausible-but-wrong diagnoses were chased, and the
+question that actually settled it was whether the Worker's deployment list had moved.
+
+```bash
+# the deployment list should gain an entry, and its version should match the build log's
+# "Current Version ID"; versions tagged `version_upload` are previews, not production
+```
+
+Two things that look like failure and are not: a green log ending in `No targets deployed for
+portfolio` just means no route exists yet, which is the intended state between steps 4 and 5; and
+`previews_enabled: false` in the build config does **not** mean branch builds are disabled.
 
 > `release` has historically run far behind `main` (80 commits, last measured 2026-08-27). A large
 > diff here is expected, not a symptom.
@@ -198,7 +224,8 @@ It should still exit 0 — with the apex now legitimately different from step 1'
 
 ### 10. After it's up
 
-- Raise the TTLs from step 3 back to normal.
+- ~~Raise the TTLs from step 3 back to normal.~~ **No-op** — steps 5 and 6 already replaced both
+  records with proxied ones, which Cloudflare pins to Auto/300s. See step 3.
 - **Submit `https://aliwallick.com/sitemap.xml`** in Search Console.
   [#44](https://github.com/ali-wallick/Portfolio/issues/44) verified the domain as a property under
   Ali's own Google account specifically so data starts flowing from launch.

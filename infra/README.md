@@ -79,6 +79,32 @@ nameserver. There is no fixed IP left to assert.
 reasoning covers the apex. Whether the hostname serves the **right site** is an HTTP question, and
 [`docs/LAUNCH.md`](../docs/LAUNCH.md) step 7 checks it there, where it is actually visible.
 
+### ⚠️ `dig` is intercepted on Ali's machine — read DNS over HTTPS instead
+
+Found during the cutover (2026-08-27). `dig` from this machine does **not** reach the nameserver you
+name. TTLs come back decrementing across repeated queries — 53, then 50, then 47 three seconds later
+— which is a cache answering, not an authoritative server. It persists when querying Cloudflare's
+nameservers _by IP_ with `+norecurse`, so something on the network path is intercepting port 53.
+
+**This matters most at exactly the wrong moment.** A cutover is when someone reads a TTL by hand to
+decide whether it is safe to continue, and an intercepted `dig` will quietly tell them the old value
+is still live, or that a change they just made has not landed. During the launch it briefly made a
+completed TTL change look like it had not applied.
+
+Use DNS-over-HTTPS, and cross-check two resolvers:
+
+```bash
+curl -s -H 'accept: application/dns-json' \
+  "https://cloudflare-dns.com/dns-query?name=aliwallick.com&type=A"
+curl -s "https://dns.google/resolve?name=aliwallick.com&type=A"
+```
+
+**`verify-dns.sh` is not affected, and the reason is worth knowing rather than assuming.**
+Interception corrupts TTLs, not record values. The script asserts values and resolvability and never
+reads a TTL, so it stayed correct throughout the cutover and exited 0 on both sides of it. Don't
+"fix" it to use DoH on the strength of this warning — the warning is about humans reading `dig`
+output, not about the tool.
+
 ### ⚠️ `capture-dns-baseline.sh` is only as good as its probe list
 
 AXFR is refused, so the zone is probed by name and **anything the list does not name is invisible.**

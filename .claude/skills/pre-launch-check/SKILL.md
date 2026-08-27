@@ -98,7 +98,12 @@ caught it, and will not catch its successor.
 
 Check both desktop and phone. Check dark mode.
 
-## 6. Launch-only (Phase 6 — skip for an ordinary merge)
+## 6. Launch-only (skip for an ordinary merge)
+
+**The site is live as of 2026-08-27**, so these now run against `https://aliwallick.com` directly
+rather than a preview URL — which is stronger, because a preview cannot exercise the redirect map,
+the `www` redirect, or the real certificate. ("Phase 6" was this section's old name; the stages are
+pre-launch / launch / post-launch now — see CLAUDE.md.)
 
 - **Outbound links still resolve.** `npm run links:external` — deliberately outside `npm run verify`
   (see CLAUDE.md), so nothing runs it for you. It buckets results three ways: a host that answers 403
@@ -113,10 +118,24 @@ Check both desktop and phone. Check dark mode.
   `snapshot/` against the new site.
 - **OG previews.** Paste a link into Slack, Discord, and iMessage and confirm the card renders. The
   old tags were `http://`, so previews broke everywhere.
-- **Favicon, `robots.txt`, sitemap** all present.
+- **Favicon, `robots.txt`, sitemap** all present. Note that the _served_ `robots.txt` is not the
+  generated one — Cloudflare injects a Managed block ahead of it
+  ([#215](https://github.com/ali-wallick/Portfolio/issues/215)). Check that `Allow: /` and the
+  `Sitemap:` line survive; don't be alarmed by the crawler `Disallow`s above them.
 - **Analytics** — Cloudflare Web Analytics, no cookie banner needed.
 - **Email still delivers**, before and after any DNS change. Phase 1 is closed and this repo does not
-  touch DNS, but a cutover is the one moment to re-verify.
+  touch DNS, but a cutover is the one moment to re-verify. `./infra/verify-dns.sh` must exit 0; it is
+  written to hold on both sides of a cutover, so a non-zero exit is a real signal.
+- **`www` still 301s to the apex, preserving path _and_ query.** It is a zone-level Single Redirect
+  rule, not `public/_redirects` (which matches paths, not hosts), so nothing in this repo will catch
+  it breaking.
+
+  ```bash
+  curl -sI "https://www.aliwallick.com/projects/firefall?a=1" | grep -iE '^HTTP|^location'
+  ```
+
+- **Reading DNS by hand? Use DoH, not `dig`.** `dig` is intercepted on Ali's machine and returns
+  cached, decrementing TTLs even against a nameserver's IP with `+norecurse`. See `infra/README.md`.
 
 ## Report
 
