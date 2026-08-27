@@ -24,13 +24,15 @@
  * ## Three buckets, not two
  *
  * The naive version of this script cries wolf and gets ignored by its third
- * run. LinkedIn answers HTTP 999 to anything that isn't a browser, and
- * Instagram and GitHub commonly answer 403 to a bare HEAD from a datacenter
- * IP. None of that means the page is gone. So results are bucketed:
+ * run. LinkedIn answers HTTP 999 to anything that isn't a browser, Instagram
+ * and GitHub commonly answer 403 to a bare HEAD from a datacenter IP, and
+ * universitysynagogue.org answers 406 the same way (confirmed alive and
+ * rendering normally in a real browser — see #204). None of that means the
+ * page is gone. So results are bucketed:
  *
  *   OK           2xx/3xx. The link resolves.
- *   UNVERIFIABLE 401/403/405/429/999, or a proxy/network refusal. The host is
- *                answering but won't answer *us*. Needs a human with a
+ *   UNVERIFIABLE 401/403/405/406/429/999, or a proxy/network refusal. The host
+ *                is answering but won't answer *us*. Needs a human with a
  *                browser; it is not evidence of rot.
  *   DEAD         404/410, DNS failure, or 5xx that persists. Act on these.
  *
@@ -63,7 +65,7 @@ const CONCURRENCY = 6;
 const TIMEOUT_MS = 20_000;
 
 /** Statuses that mean "the host is answering, but not to a script." */
-const UNVERIFIABLE_STATUS = new Set([401, 403, 405, 429, 999]);
+const UNVERIFIABLE_STATUS = new Set([401, 403, 405, 406, 429, 999]);
 
 if (!existsSync(DIST)) {
   console.error(`✗ ${DIST} does not exist — run \`npm run build\` first.`);
