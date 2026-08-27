@@ -98,8 +98,9 @@ Cloudflare's own `x-preview-user-error` placeholder, not the site's real 404.
   people actually look at, so it needs the same "no drafts" treatment a real production build gets —
   otherwise the day someone adds a sixth draft project, friends see it before Ali does.
 
-**At Phase 6 launch:** merge `master` → `release`. That push is the one Workers Builds actually
-deploys to production. Nothing else about the launch checklist changes.
+**At launch:** merge `main` → `release`. That push is the one Workers Builds actually deploys to
+production — it is step 4 of [`docs/LAUNCH.md`](LAUNCH.md). Nothing else about the launch checklist
+changes.
 
 ---
 
@@ -208,12 +209,19 @@ npm error enoent Could not read package.json
 Non-production branch builds work fine in the meantime, which is the half that matters for the
 review loop. The production build goes green on the merge commit.
 
-### Do NOT add a custom domain yet
+### Do NOT add a custom domain yet — until the cutover, which has its own runbook
 
-`aliwallick.com` still serves the old PHP site from DreamHost, and it stays that way until **Phase
-6**. Attaching the domain now would cut the live site over to an unstyled shell.
+`aliwallick.com` still serves the old PHP site from DreamHost, and it stays that way until the
+**Launch** stage. Attaching the domain now would cut the live site over ahead of every check that is
+supposed to happen first.
 
 `*.workers.dev` URLs are all that's needed until then.
+
+**When it is time, the procedure is [`docs/LAUNCH.md`](LAUNCH.md), not this section.** Attaching the
+domain is step 5 of ten there, and the steps around it — flipping `live`, merging `main` → `release`,
+recording the rollback value, `www` — are the ones that make it safe. This section used to be where
+[#34](https://github.com/ali-wallick/Portfolio/issues/34) sent you for instructions, which meant the
+one irreversible step in the project pointed at a page that only said _don't_.
 
 ---
 

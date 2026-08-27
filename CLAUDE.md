@@ -102,7 +102,7 @@ describe what happened during that time.
 | 4           | Resume, one source                                                                                                                   | ✅ merged                                                          |
 | 5           | Design                                                                                                                               | ✅ merged                                                          |
 | Pre-launch  | Favicon, OG, a11y, redirects, remaining content/resume calls, wording revisit — everything that must be true before the domain moves | 🚧 [tracked](https://github.com/ali-wallick/Portfolio/milestone/1) |
-| Launch      | The DNS cutover itself — its own moment, not gated on Pre-launch closing (#21)                                                       | [tracked](https://github.com/ali-wallick/Portfolio/milestone/3)    |
+| Launch      | The DNS cutover itself — its own moment, not gated on Pre-launch closing (#21). Procedure: [`docs/LAUNCH.md`](docs/LAUNCH.md)        | [tracked](https://github.com/ali-wallick/Portfolio/milestone/3)    |
 | Post-launch | Keep it alive                                                                                                                        | [tracked](https://github.com/ali-wallick/Portfolio/milestone/2)    |
 
 **Sequencing principle: structure before skin.** Phases 2–4 produce a complete, correct,
@@ -1546,6 +1546,7 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 | `src/components/ResumeDocument.astro` | The resume, both densities. `variant` is the only difference.                 |
 | `scripts/build-linkedin.mjs`          | Generates `docs/LINKEDIN.md` from the `jobs`/`education` collections.         |
 | `docs/LINKEDIN.md`                    | Paste-ready LinkedIn copy. Generated — a handoff for Ali, never a sync.       |
+| `docs/LAUNCH.md`                      | **The cutover runbook.** One ordered procedure; start here to launch.         |
 | `docs/REBUILD-LOG.md`                 | Running record. Phase 7's source material.                                    |
 | `infra/README.md`                     | The live zone, the DNS tooling, and Phase 1's record.                         |
 | GitHub issues                         | What's actually left. Milestones per phase; `decision` and `needs-ali`.       |
