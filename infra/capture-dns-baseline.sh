@@ -14,9 +14,17 @@ NS="${2:-$(dig +short NS "$DOMAIN" | head -1)}"
 # records recoverable until delivery is re-verified.
 HOSTS=(www mail webmail smtp imap pop ftp blog cpanel autodiscover autoconfig
        m dev test staging shop store api cdn ns1 ns2 email mailer list lists)
+# DKIM selectors are per-provider, so this list is hand-maintained and anything
+# it does not name is invisible to the capture. That is not hypothetical: it
+# omitted sig1._domainkey -- iCloud's selector, and the zone's ONLY live DKIM
+# record -- from every capture between the 2026-08-16 migration and 2026-08-27,
+# while still listing dreamhost._domainkey, the selector that had been replaced.
+# A baseline that silently drops the record you most need is worse than no
+# baseline. Add the selector when you add the provider.
 TXT_HOSTS=(_dmarc _domainkey dreamhost._domainkey default._domainkey
            google._domainkey mailchannels._domainkey selector1._domainkey
-           selector2._domainkey k1._domainkey _acme-challenge)
+           selector2._domainkey k1._domainkey _acme-challenge
+           sig1._domainkey sig2._domainkey)
 
 echo "; DNS baseline for $DOMAIN"
 echo "; captured $(date -u '+%Y-%m-%dT%H:%M:%SZ') from authoritative NS: $NS"

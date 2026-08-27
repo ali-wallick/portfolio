@@ -10,68 +10,106 @@ that produced it is in git history at `git show 0eec28f:infra/PHASE-1-RUNBOOK.md
 
 ## The zone as it stands
 
-Verified live 2026-08-20.
+Verified live 2026-08-27, re-baselined the same day ([#55](https://github.com/ali-wallick/Portfolio/issues/55)).
 
-| Name              | Type   | Value                                                                                              | Notes                                                                                                                                                                                               |
-| ----------------- | ------ | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `aliwallick.com`  | NS     | `dilbert` / `adele.ns.cloudflare.com.`                                                             | Cloudflare                                                                                                                                                                                          |
-| `aliwallick.com`  | A      | `173.236.243.216`                                                                                  | **Still DreamHost.** The site cutover is [#34](https://github.com/ali-wallick/Portfolio/issues/34).                                                                                                 |
-| `aliwallick.com`  | MX     | `10 mx01` / `10 mx02.mail.icloud.com.`                                                             | **Mail. Do not break.**                                                                                                                                                                             |
-| `aliwallick.com`  | TXT    | `v=spf1 mx include:netblocks.dreamhost.com include:relay.mailchannels.net include:icloud.com -all` | Tightened to `-all` 2026-08-22 ([#42](https://github.com/ali-wallick/Portfolio/issues/42), closed). Two dead includes remain, tracked as [#43](https://github.com/ali-wallick/Portfolio/issues/43). |
-| `aliwallick.com`  | TXT    | `apple-domain=…`                                                                                   | iCloud+ custom-domain proof.                                                                                                                                                                        |
-| `aliwallick.com`  | TXT    | `google-site-verification=…`                                                                       | Carried over from DreamHost, never re-checked ([#44](https://github.com/ali-wallick/Portfolio/issues/44)).                                                                                          |
-| `sig1._domainkey` | CNAME  | `sig1.dkim.…icloudmailadmin.com.`                                                                  | DKIM, confirmed passing 2026-08-16.                                                                                                                                                                 |
-| `_dmarc`          | TXT    | `v=DMARC1; p=none; rua=mailto:contact@aliwallick.com`                                              | Added 2026-08-22 ([#41](https://github.com/ali-wallick/Portfolio/issues/41), closed). Monitoring only — never existed here or on DreamHost.                                                         |
-| `www`             | A      | `173.236.243.216`                                                                                  | DreamHost, same as apex.                                                                                                                                                                            |
-| `mail`            | A / MX | `64.90.62.162`, MailChannels                                                                       | **Leftover.** Nothing sends through it now.                                                                                                                                                         |
-| `autoconfig`      | CNAME  | `autoconfig.dreamhost.com.`                                                                        | **Leftover.** Mail-client auto-setup for a mailbox that's gone.                                                                                                                                     |
+| Name                   | Type   | Value                                                                                              | Notes                                                                                                                                                                                               |
+| ---------------------- | ------ | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `aliwallick.com`       | NS     | `dilbert` / `adele.ns.cloudflare.com.`                                                             | Cloudflare                                                                                                                                                                                          |
+| `aliwallick.com`       | A      | `173.236.243.216`                                                                                  | **Still DreamHost.** The site cutover is [#34](https://github.com/ali-wallick/Portfolio/issues/34).                                                                                                 |
+| `aliwallick.com`       | MX     | `10 mx01` / `10 mx02.mail.icloud.com.`                                                             | **Mail. Do not break.**                                                                                                                                                                             |
+| `aliwallick.com`       | TXT    | `v=spf1 mx include:netblocks.dreamhost.com include:relay.mailchannels.net include:icloud.com -all` | Tightened to `-all` 2026-08-22 ([#42](https://github.com/ali-wallick/Portfolio/issues/42), closed). Two dead includes remain, tracked as [#43](https://github.com/ali-wallick/Portfolio/issues/43). |
+| `aliwallick.com`       | TXT    | `apple-domain=…`                                                                                   | iCloud+ custom-domain proof.                                                                                                                                                                        |
+| `aliwallick.com`       | TXT    | `google-site-verification=SNE4…`                                                                   | **Re-verified under Ali's own account** ([#44](https://github.com/ali-wallick/Portfolio/issues/44), closed). Not the DreamHost-era value — that one is gone.                                        |
+| `sig1._domainkey`      | CNAME  | `sig1.dkim.…icloudmailadmin.com.`                                                                  | DKIM, confirmed passing 2026-08-16.                                                                                                                                                                 |
+| `_dmarc`               | TXT    | `v=DMARC1; p=none; rua=mailto:contact@aliwallick.com`                                              | Added 2026-08-22 ([#41](https://github.com/ali-wallick/Portfolio/issues/41), closed). Monitoring only — never existed here or on DreamHost.                                                         |
+| `www`                  | A      | `173.236.243.216`                                                                                  | DreamHost, same as apex.                                                                                                                                                                            |
+| `mail`                 | A / MX | `64.90.62.162`, MailChannels                                                                       | **Leftover.** Nothing sends through it now.                                                                                                                                                         |
+| `autoconfig`           | CNAME  | `autoconfig.dreamhost.com.`                                                                        | **Leftover.** Mail-client auto-setup for a mailbox that's gone.                                                                                                                                     |
+| `ftp`                  | A      | `173.236.243.216`                                                                                  | **Leftover.** DreamHost FTP, unused.                                                                                                                                                                |
+| `dreamhost._domainkey` | TXT    | DKIM, 2 strings                                                                                    | **Leftover.** The superseded key; `sig1` is the live one.                                                                                                                                           |
 
-The two leftovers are the same family of staleness as #43 and should go with it.
+**Four leftovers, not two.** The re-baseline (#55) found `ftp` and the superseded `dreamhost._domainkey`
+alongside the two already recorded. All four are the same family of staleness as the dead SPF includes
+in [#43](https://github.com/ali-wallick/Portfolio/issues/43) and should go with it. `verify-dns.sh`
+deliberately asserts none of them — see its closing comment for why asserting either their presence or
+their absence would be wrong.
 
 ## The files
 
-| File                              | What it's for                                                                                         |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `capture-dns-baseline.sh`         | Re-runnable, read-only capture of the authoritative zone. Generic — no changes needed to re-baseline. |
-| `dns-baseline-aliwallick.com.txt` | **The pre-migration DreamHost zone**, captured 2026-08-16. A historical record, and the only copy.    |
-| `verify-dns.sh`                   | Diffs a candidate nameserver against the baseline. Exit 0 = every record matches.                     |
+| File                                                   | What it's for                                                                                                            |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| `capture-dns-baseline.sh`                              | Re-runnable, read-only capture of the authoritative zone. **Its probe list is hand-maintained** — see the warning below. |
+| `dns-baseline-aliwallick.com.txt`                      | **The current zone**, captured 2026-08-27 from Cloudflare. What `verify-dns.sh` reads.                                   |
+| `dns-baseline-aliwallick.com.dreamhost-2026-08-16.txt` | **The pre-migration DreamHost zone.** A historical record, and the only copy. Never overwrite it.                        |
+| `verify-dns.sh`                                        | Asserts the zone is intact, mail above all. Exit 0 = safe to proceed.                                                    |
 
 ```bash
 ./infra/verify-dns.sh                          # check public resolution
 ./infra/verify-dns.sh dilbert.ns.cloudflare.com  # check one nameserver directly
 ```
 
-### ⚠️ `verify-dns.sh` currently exits 1, and that is expected
+### `verify-dns.sh` exits 0, and every assertion in it must survive the cutover
 
-Its baseline predates the migration, so it reports the iCloud MX records and the amended SPF as
-failures — **the three changes Phase 1 existed to make.** The script is correct; its reference point
-is a world that was deliberately replaced.
+Re-baselined 2026-08-27, closing [#55](https://github.com/ali-wallick/Portfolio/issues/55). It used
+to print `STOP` for three expected reasons — the iCloud MX records and the amended SPF, i.e. the
+changes Phase 1 existed to make. The script was right; its reference point was a world that had been
+deliberately replaced.
 
-**This matters at cutover.** [#34](https://github.com/ali-wallick/Portfolio/issues/34) requires
-verifying mail before and after, and this is the obvious tool to reach for. The danger isn't
-believing the `STOP` — it's learning to ignore it, because three expected failures is exactly the
-state in which a fourth, real one gets waved through. **Re-baseline first:
-[#55](https://github.com/ali-wallick/Portfolio/issues/55).** Note that the expected set inside
-`verify-dns.sh` is hand-derived, so a fresh baseline file alone will not fix it.
+**The lesson generalises, and it is the reason the rewritten script is shaped the way it is.** The
+danger was never believing the `STOP`; it was learning to ignore it, because three expected failures
+is exactly the state in which a fourth, real one gets waved through — during the one irreversible
+step in the project. So the standing rule is now: **every assertion must be true both before and
+after the cutover, and an assertion known to break on a scheduled future change is the same bug in a
+new costume.**
 
-### The DKIM trap — why `verify-dns.sh` asserts a magic substring
+Three assertions are written as invariants rather than values for exactly that reason, each marked
+`WHY` in the script:
+
+| Instead of pinning            | It asserts                                                     | Because                                                                                                                       |
+| ----------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| the full SPF string           | `v=spf1` + `include:icloud.com` + `-all`                       | [#43](https://github.com/ali-wallick/Portfolio/issues/43) will remove two dead includes; pinning would schedule a false STOP. |
+| the DKIM key's bytes          | key exists, is a `DKIM1` record, and has no whitespace in `p=` | Apple owns the key and may rotate it. See the DKIM trap below.                                                                |
+| the apex and `www` `A` values | that they resolve at all                                       | Both legitimately change at the cutover. See below.                                                                           |
+
+**The site's `A` records are asserted as "resolves", not as a value.** Before the cutover both are
+DreamHost's `173.236.243.216`; after it the apex is a Custom Domain and `www` is a proxied
+placeholder, so both answer with Cloudflare anycast addresses even against the authoritative
+nameserver. There is no fixed IP left to assert.
+[#193](https://github.com/ali-wallick/Portfolio/issues/193) settled this for `www` and the same
+reasoning covers the apex. Whether the hostname serves the **right site** is an HTTP question, and
+[`docs/LAUNCH.md`](../docs/LAUNCH.md) step 7 checks it there, where it is actually visible.
+
+### ⚠️ `capture-dns-baseline.sh` is only as good as its probe list
+
+AXFR is refused, so the zone is probed by name and **anything the list does not name is invisible.**
+That is not hypothetical. Its `TXT_HOSTS` list was written against DreamHost and never updated, so
+between the 2026-08-16 migration and 2026-08-27 every capture omitted `sig1._domainkey` — iCloud's
+selector, and the zone's **only live DKIM record** — while still dutifully capturing
+`dreamhost._domainkey`, the selector that had been replaced. A baseline that silently drops the
+record you most need is worse than no baseline. **Add the selector when you add the provider.**
+
+### The DKIM trap — now caught as an invariant, not a magic substring
 
 DNS caps a single TXT string at 255 bytes, so a DKIM key is split across strings that rejoin with
-**no separator**:
+**no separator**. A dashboard that rejoins them with a space produces a record that looks right and
+silently fails signature validation — mail starts landing in spam with no obvious cause.
 
-```
-...c9E+eYr4Un | Jsu89oJkt9ilov3pnJMcep...
-```
+`verify-dns.sh` used to assert a hardcoded substring spanning that junction. **It doesn't any more,
+and the change is a strengthening rather than a removal.** That assertion made sense when the key was
+a TXT record Ali pasted by hand. It is a CNAME now: Apple publishes the key and can rotate it
+whenever it likes, so pinning key bytes would turn a routine rotation into a `STOP`.
 
-A dashboard that rejoins them with a space produces a record that looks right and silently fails
-signature validation — mail starts landing in spam with no obvious cause. `verify-dns.sh` asserts the
-junction substring `c9E+eYr4UnJsu89oJkt9ilov3pnJMcep` for that reason alone. Keep the assertion when
-re-baselining; the string will change, the trap won't.
+The bug is caught generically instead — **a base64 DKIM key contains no whitespace, so any space
+inside `p=` is the bug**, for this key and every future one. Same trap, no brittleness, and it now
+covers keys nobody has seen yet. (The old README said "keep the assertion; the string will change,
+the trap won't." This is that instruction honoured, not overruled.)
 
-The related lesson, from the migration itself: the first test send passed SPF but returned
-`dkim=permerror (no key for signature)`. The CNAME was correct and pointed at Apple's key host —
-Apple simply hadn't published the key yet. **A correct DNS record and a working DNS record are not
-the same thing when a third party owns what it points at.** A retest an hour later passed.
+**Assert both ends of a CNAME'd key.** The migration produced the failure that proves why: the first
+test send passed SPF but returned `dkim=permerror (no key for signature)`. The CNAME was correct and
+pointed at Apple's key host — Apple simply hadn't published the key yet. **A correct DNS record and a
+working DNS record are not the same thing when a third party owns what it points at.** A retest an
+hour later passed. So the script checks the CNAME (Ali's record) _and_ that a plausible key actually
+resolves through it (Apple's).
 
 ## The pre-migration zone, for reference
 

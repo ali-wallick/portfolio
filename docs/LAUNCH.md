@@ -20,27 +20,28 @@ Fixed here.
 **Do it deliberately, and don't let it ride along at the end of a long session.** This is the only
 step in the project with a blast radius outside the repo — Ali's mail runs on this domain.
 
-Four things should be true before step 1. None of them is "every other issue is closed" — per
+Three things should be true before step 1. None of them is "every other issue is closed" — per
 [#21](https://github.com/ali-wallick/Portfolio/issues/21) the cutover is its own moment and is not
 gated on the `Pre-launch` milestone emptying.
 
-| Precondition                                                                                                        | Why                                                                                                                                                                                               |
-| ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [#55](https://github.com/ali-wallick/Portfolio/issues/55) closed — `verify-dns.sh` exits 0                          | It's the tool you'll reach for in steps 1 and 9, and today it prints `STOP` for three expected reasons. Three known-bad results is exactly the state where a fourth, real one gets waved through. |
-| [#132](https://github.com/ali-wallick/Portfolio/issues/132) answered — what `/resources/WallickAli-Resume.pdf` does | It's indexed by Google with a PO Box in the result title, and right now it 404s at cutover by omission rather than by choice.                                                                     |
-| [#128](https://github.com/ali-wallick/Portfolio/issues/128) done — final review                                     | Last look at the site while it's still cheap to fix.                                                                                                                                              |
+| Precondition                                                                                                        | Why                                                                                                                                                                                                                                                                                                                                                  |
+| ------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [#55](https://github.com/ali-wallick/Portfolio/issues/55) closed — `verify-dns.sh` exits 0                          | It's the tool you reach for in steps 1 and 9. Re-baselined 2026-08-27, and every assertion in it is now written to hold both before _and_ after the cutover — so a non-zero exit at step 9 is a real signal rather than the expected noise it used to be. **Run it anyway at step 1 and confirm it exits 0**; that is the point of the precondition. |
+| [#132](https://github.com/ali-wallick/Portfolio/issues/132) answered — what `/resources/WallickAli-Resume.pdf` does | It's indexed by Google with a PO Box in the result title, and right now it 404s at cutover by omission rather than by choice.                                                                                                                                                                                                                        |
+| [#128](https://github.com/ali-wallick/Portfolio/issues/128) done — final review                                     | Last look at the site while it's still cheap to fix.                                                                                                                                                                                                                                                                                                 |
 
 ### Facts you'll need in front of you
 
-| Thing                  | Value                                                                        |
-| ---------------------- | ---------------------------------------------------------------------------- |
-| Worker                 | `portfolio`                                                                  |
-| Production branch      | **`release`** — not `main`. See `docs/CLOUDFLARE.md`.                        |
-| Apex `A` record today  | `173.236.243.216` (DreamHost) — **re-read it live, don't trust this number** |
-| `www` `A` record today | `173.236.243.216` (DreamHost)                                                |
-| Mail                   | iCloud+, `MX 10 mx01/mx02.mail.icloud.com` — **untouched by this procedure** |
-| Addresses to verify    | `ali@aliwallick.com` and `contact@aliwallick.com`                            |
-| The noindex flag       | `export const live = false` at `src/config/site.ts:48`                       |
+| Thing                  | Value                                                                                      |
+| ---------------------- | ------------------------------------------------------------------------------------------ |
+| Worker                 | `portfolio`                                                                                |
+| Production branch      | **`release`** — not `main`. See `docs/CLOUDFLARE.md`.                                      |
+| Apex `A` record today  | `173.236.243.216` (DreamHost) — **re-read it live, don't trust this number**               |
+| `www` `A` record today | `173.236.243.216` (DreamHost)                                                              |
+| Mail                   | iCloud+, `MX 10 mx01/mx02.mail.icloud.com` — **untouched by this procedure**               |
+| Addresses to verify    | `ali@aliwallick.com` and `contact@aliwallick.com`                                          |
+| The noindex flag       | `export const live = false` at `src/config/site.ts:48`                                     |
+| Apex / `www` TTL today | **300s** (Cloudflare "Auto"), measured 2026-08-27 — so step 3's wait is minutes, not hours |
 
 **`workers_dev` is `false`**, so production has no public URL of its own before step 5. That's why
 step 4 can't be verified by browsing to it and has to be verified from the build log.
@@ -98,7 +99,7 @@ Nothing is publicly reachable yet, which is what makes doing this before the DNS
 **Confirm the build goes green in the Workers Builds log before continuing.** Not by browsing to it —
 there's nowhere to browse to yet.
 
-> `release` has historically run far behind `main` (70 commits, last measured 2026-08-26). A large
+> `release` has historically run far behind `main` (80 commits, last measured 2026-08-27). A large
 > diff here is expected, not a symptom.
 
 ### 5. Attach the apex as a Custom Domain

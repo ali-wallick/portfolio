@@ -2328,3 +2328,70 @@ cold subagents on both cost and quality. The expensive part was verifying candid
 their sources before flagging them, and it paid twice: #178 turned out to be already narrowed by a
 same-day comment, and the "million downloads" figure traced to a sourced commit — so it went into
 the review as a staleness note rather than a wrong accusation of invention.
+
+## Re-baselining DNS before the cutover (2026-08-27, #55)
+
+The first Launch-milestone item, and the precondition `docs/LAUNCH.md` puts ahead of every other
+step. `infra/verify-dns.sh` had been printing `STOP` since the Phase 1 migration — not because
+anything was wrong, but because its expected set was captured from DreamHost on 2026-08-16, _before_
+the migration it was then used to check. It reported the iCloud MX records and the amended SPF as
+failures: the changes Phase 1 existed to make.
+
+### The interesting part is not fixing it, it's what "fixed" had to mean
+
+A re-baseline that only swapped in today's values would have re-created the same bug on a delay,
+because three of the records it asserts are _scheduled to change_: the SPF loses two dead includes
+when [#43](https://github.com/ali-wallick/Portfolio/issues/43) lands, Apple can rotate the DKIM key
+whenever it likes, and the apex and `www` addresses change at the cutover itself — which is the whole
+point of the exercise.
+
+So the rule the rewrite is built on: **every assertion must be true both before and after the
+cutover, and an assertion known to break on a scheduled future change is the same bug in a new
+costume.** Where a value is expected to move, the script asserts the invariant instead:
+
+| Instead of pinning         | It asserts                                             |
+| -------------------------- | ------------------------------------------------------ |
+| the full SPF string        | `v=spf1` + `include:icloud.com` + `-all`               |
+| the DKIM key's bytes       | a `DKIM1` key resolves, with **no whitespace in `p=`** |
+| the apex / `www` `A` value | that the hostname resolves at all                      |
+
+### The DKIM assertion got stronger by becoming less specific
+
+`infra/README.md` carried a standing instruction to keep a hardcoded substring spanning the two
+halves of the DKIM key — the junction where a dashboard rejoining strings with a space would show up,
+silently failing signature validation. That made sense when the key was a TXT record Ali pasted by
+hand. It is a CNAME to Apple now, so pinning key bytes would turn a routine rotation into a `STOP`.
+
+The generalisation was sitting in the problem itself: **a base64 DKIM key contains no whitespace, so
+any space inside `p=` is the bug** — for this key and every future one. Same trap, no brittleness,
+and it now covers keys nobody has seen yet. Negative-tested against four crafted values (good,
+space-joined, truncated, not-a-DKIM-record); all four behave.
+
+The script also asserts _both ends_ of the CNAME, because the migration produced exactly that
+failure: the first test send returned `dkim=permerror (no key for signature)` with a perfectly
+correct CNAME, because Apple had not published the key yet.
+
+### The capture script was hiding the record that mattered most
+
+`capture-dns-baseline.sh` was described in `infra/README.md` as "generic — no changes needed to
+re-baseline," and #55 repeated that. Both were wrong. AXFR is refused, so the zone is probed by name
+from a hand-maintained list, and that list was written against DreamHost: it named
+`dreamhost._domainkey` (superseded) and **not `sig1._domainkey`** — iCloud's selector, and the zone's
+only live DKIM record. Every capture between 2026-08-16 and this one silently omitted it.
+
+Worth stating plainly because it is the same shape as the print block's denylist under Phase 5: a
+list that passes anything nobody enumerated, wearing the clothes of a complete record.
+
+### Four leftovers, not two
+
+#55 named `mail` and `autoconfig` as DreamHost leftovers. The capture found two more nobody had
+recorded: `ftp` and the superseded `dreamhost._domainkey` TXT. All four are queued with #43's dead
+SPF includes. **The script asserts none of them** — asserting their presence schedules a false
+failure for the day #43 lands, and asserting their absence fails today. They live in the baseline and
+the README, which is where a record nobody should depend on belongs.
+
+### Cost notes
+
+One session, no subagents, and fan-out would have been actively wrong here: every question was a
+`dig` against one zone, and the findings only became visible by holding the whole zone in view at
+once — the missing `sig1` selector is only interesting _next to_ the present `dreamhost` one.
