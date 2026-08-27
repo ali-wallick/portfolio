@@ -1,6 +1,5 @@
 ---
 company: MobilityWare
-companyUrl: https://www.mobilityware.com
 location: Irvine, CA
 start: '2016'
 end: '2019'
@@ -8,11 +7,20 @@ roles:
   - title: Software Engineer II
     start: '2016'
 highlights:
+  # "server-controllable", not "in-game" (#128, item 9). The adjective is the
+  # live-ops claim -- an in-game store is just a store, and what made it
+  # live-ops work is that the server drove it. Both the project page ("a
+  # server-controllable store") and the 2019 source bullet
+  # ("server-customizable store") carry it; only the resume had dropped it.
+  # "Controllable" over "customizable" to match the project page and to avoid
+  # echoing "Customizable text" in the same bullet. Measured with
+  # `resume:headroom --try`: 3 printed lines before and after, on both
+  # densities.
   - label: Vegas Blvd Slots
     text: >-
-      Architected the live-ops systems, including the in-game store and a DeltaDNA integration
-      driving in-app messaging and promo carousels. Customizable text let marketing run its own
-      campaigns.
+      Architected the live-ops systems, including a server-controllable store and a DeltaDNA
+      integration driving in-app messaging and promo carousels. Customizable text let marketing
+      run its own campaigns.
   - label: Slot Machines
     text: >-
       Engineered new machines, their features, and their bonus games, on a title carrying more

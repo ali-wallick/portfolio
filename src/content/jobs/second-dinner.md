@@ -1,6 +1,5 @@
 ---
 company: Second Dinner
-companyUrl: https://www.seconddinner.com
 location: Irvine, CA
 # Year only, deliberately. No source gives the start month, and the resume
 # prints the job span as "2019 – Present" where a month would add nothing. The
@@ -78,8 +77,16 @@ bulletGroups:
     # several projects underway, so "next" implies a succession that did not
     # happen. "The studio’s first game in Godot" is the narrower claim that is
     # true, checked with Ali directly.
+    # "Moved to", not "Joined" (#128, item 8). The job's own `intro` directly
+    # overhead opens on "Joined as the eleventh employee", and two "Joined"
+    # openers three printed lines apart is the same repetition the #32 pass
+    # removed elsewhere (see Kaneva's `extended`, which leads on "Took" to
+    # avoid "Worked ... Worked ..."). This one moved rather than that one
+    # because the job intro sits at four characters of headroom and this sits
+    # at 36, measured. It is also the more accurate verb: she moved here from
+    # Marvel Snap, which is the group directly below.
     intro: >-
-      Joined a new team in 2024 to build the studio’s first game in Godot.
+      Moved to a new team in 2024 to build the studio’s first game in Godot.
   snap:
     label: Marvel Snap
     dates: 2019 – 2024

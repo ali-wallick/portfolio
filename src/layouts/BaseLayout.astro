@@ -65,6 +65,27 @@ const fullTitle = bareTitle ? title : `${title} — ${site.name}`;
 const cleanPath = Astro.url.pathname.replace(/(^|\/)index\.html$/, '$1').replace(/\.html$/, '');
 const canonical = new URL(cleanPath, site.url).href;
 const ogImage = new URL(image, site.url).href;
+/**
+ * `aria-current` distinguishes the page you are on from the section it sits in
+ * (#128, item 15b). `page` means "this link IS the current page"; on
+ * /projects/marvel-snap the Projects nav item is an ancestor, not the page, and
+ * the accurate value there is the generic `true`.
+ *
+ * Derived from `cleanPath` rather than `Astro.url.pathname`, which carries the
+ * `.html` that `build.format: 'file'` adds. The old `pathname.startsWith(href)`
+ * test worked only because "/about.html" happens to start with "/about" -- and
+ * it would also have matched a future "/resumes" against "/resume".
+ *
+ * **Two consumers key off this attribute, so it is not free to change.**
+ * `base.css` styles the current nav pill, and `src/scripts/reticle.ts` uses it
+ * to find the reticle's resting home. Both now match on `[aria-current]`
+ * rather than on the `page` value, so a section-level `true` still highlights
+ * and still parks the reticle.
+ */
+function navCurrent(href: string): 'page' | 'true' | undefined {
+  if (cleanPath === href) return 'page';
+  return cleanPath.startsWith(`${href}/`) ? 'true' : undefined;
+}
 ---
 
 <!doctype html>
@@ -168,11 +189,7 @@ const ogImage = new URL(image, site.url).href;
             {
               nav.map((item) => (
                 <li>
-                  <a
-                    class="nav-link"
-                    href={item.href}
-                    aria-current={Astro.url.pathname.startsWith(item.href) ? 'page' : undefined}
-                  >
+                  <a class="nav-link" href={item.href} aria-current={navCurrent(item.href)}>
                     {item.label}
                   </a>
                 </li>

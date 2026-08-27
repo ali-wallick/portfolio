@@ -1,5 +1,11 @@
 ---
-company: Kaneva, LLC
+# "Kaneva", not "Kaneva, LLC" (#128, item 10, Ali's call 2026-08-27). It was
+# the only company on the site carrying a legal suffix, beside Second Dinner,
+# MobilityWare and Red 5 Studios. Nothing in `snapshot/` uses the suffix -- the
+# old site says "Kaneva" throughout -- and one field feeds every surface at
+# once: the homepage card, /projects, the project page meta strip, the resume,
+# and docs/LINKEDIN.md.
+company: Kaneva
 location: Atlanta, GA
 start: '2011'
 end: '2015'

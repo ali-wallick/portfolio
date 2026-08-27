@@ -1507,7 +1507,7 @@
         "rect": {
           "x": 0,
           "y": 815.55,
-          "width": 209.23,
+          "width": 177.73,
           "height": 15.98
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
@@ -1522,7 +1522,7 @@
         "rect": {
           "x": 125.23,
           "y": 815.55,
-          "width": 84,
+          "width": 52.5,
           "height": 16
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
@@ -3759,7 +3759,7 @@
         "rect": {
           "x": 0,
           "y": 1251.13,
-          "width": 209.23,
+          "width": 177.73,
           "height": 15.98
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
@@ -3774,7 +3774,7 @@
         "rect": {
           "x": 125.23,
           "y": 1251.13,
-          "width": 84,
+          "width": 52.5,
           "height": 16
         },
         "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",

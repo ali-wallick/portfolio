@@ -281,12 +281,12 @@ hr {
 /* The current page is *filled*, not displaced. Filled needs a colour that can
    carry text, which is why `--color-accent-block` exists alongside the louder
    `--color-accent` the reticle draws itself in. */
-.nav-link[aria-current='page'] {
+.nav-link[aria-current] {
   background: var(--color-accent-block);
   border-color: var(--color-accent-block);
   color: var(--color-on-accent);
 }
-.nav-link[aria-current='page']:visited {
+.nav-link[aria-current]:visited {
   color: var(--color-on-accent);
 }
 

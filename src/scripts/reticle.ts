@@ -130,7 +130,11 @@ const header = document.querySelector<HTMLElement>('.site-header');
  * they come back.
  */
 const home =
-  document.querySelector<HTMLElement>('.nav-link[aria-current="page"]') ??
+  // `[aria-current]`, not `[aria-current="page"]`: a project or resume subpage
+  // marks its section's nav item `true` rather than `page` (#128, item 15b),
+  // and the reticle should still rest there rather than falling back to the
+  // brand.
+  document.querySelector<HTMLElement>('.nav-link[aria-current]') ??
   document.querySelector<HTMLElement>('.brand');
 
 let hovered: HTMLElement | null = null;

@@ -48,7 +48,7 @@ Joined as the eleventh employee, interviewing and helping shape the culture as t
 
 ```text
 Unreleased Mobile Game (2024 – Present)
-Joined a new team in 2024 to build the studio’s first game in Godot.
+Moved to a new team in 2024 to build the studio’s first game in Godot.
 • UI Framework: Built the game’s UI framework. Other engineers develop reusable interface code against it.
 • Client Engineering: Built client testing workflows and Godot editor tooling for the team. Reported and fixed engine bugs with partners at W4 Games. Delivered engine version updates and native mobile plugin integration.
 • Agentic Workflows: Contributed to the team’s agentic commands and skills, and built automation into CI.
@@ -73,7 +73,7 @@ Client then feature engineer, from prototype through production, the mobile and 
 **Title:** Software Engineer II · **Irvine, CA** · 2016 – 2019
 
 ```text
-• Vegas Blvd Slots: Architected the live-ops systems, including the in-game store and a DeltaDNA integration driving in-app messaging and promo carousels. Customizable text let marketing run its own campaigns.
+• Vegas Blvd Slots: Architected the live-ops systems, including a server-controllable store and a DeltaDNA integration driving in-app messaging and promo carousels. Customizable text let marketing run its own campaigns.
 • Slot Machines: Engineered new machines, their features, and their bonus games, on a title carrying more than 50 machines. Its meta systems included rewards, gifting, leagues, and tournaments.
 • I Fits I Sits: Pitched the concept at the studio game jam and built the week-long prototype. Focused on a level editor the team used to author 61 levels. It won People’s Choice, and other teams later released it as Puzzle Cats. The editor exported JSON, and the intro levels the designers built taught the mechanics with no separate tutorial. It shipped first on Facebook Instant Games as It Fits I Sits.
 • Compliance & Upgrades: Led GDPR support and several major Unity version upgrades across the title.
@@ -97,7 +97,7 @@ Client then feature engineer, from prototype through production, the mobile and 
 
 ---
 
-## Experience — Kaneva, LLC
+## Experience — Kaneva
 
 **Title:** Software Engineer · **Atlanta, GA** · 2011 – 2015
 

@@ -331,7 +331,21 @@ const jobs = defineCollection({
   schema: z
     .object({
       company: z.string().min(1),
-      companyUrl: z.url().optional(),
+      /**
+       * No `companyUrl`. It was removed 2026-08-27 (#128, item 11) having
+       * never been rendered by anything -- the same call as dropping `tech`
+       * for #39 and `summary` for #141, and for the same reason: a field with
+       * no reader is the dead data this model's guard table exists to rule
+       * out, and it rots silently because nothing fails when it goes wrong.
+       *
+       * The two URLs it held were not lost with it -- both companies are
+       * reachable from the project pages' own `links[]`, which is where an
+       * outbound link belongs, next to the credit it supports.
+       *
+       * **Don't reinstate it speculatively.** If #106 (JSON-LD, schema.org
+       * `Person.worksFor`) eventually wants an organization URL, add it back
+       * then, with the consumer in the same commit.
+       */
       location: z.string().min(1),
 
       start: datePart,
