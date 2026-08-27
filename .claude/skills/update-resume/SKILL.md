@@ -146,6 +146,28 @@ with the user if the "which job" answer isn't obvious (e.g. two jobs tied at the
 
 ## 4. The regeneration pipeline
 
+> **Run this on macOS. It currently produces a broken resume anywhere else.**
+>
+> `resume.css` pins paper's `--font-body` to `system-ui`, which resolves to SF Pro on macOS (what the
+> committed PDFs embed) and to DejaVu Sans in a Linux container. DejaVu is wider, and the one-pager
+> goes from fitting to **1058px of a 960px budget — two pages**, which `build:pdf`'s own page-count
+> assertion then rejects. Measured 2026-08-27 on
+> [#191](https://github.com/ali-wallick/Portfolio/issues/191#issuecomment-5441653054).
+>
+> Two consequences worth knowing before you start:
+>
+> - **`npm run build` writes both PDFs _before_ it asserts page counts**, so a failed run still
+>   leaves regenerated files in the working tree. On Linux that silently replaces the committed
+>   macOS PDFs with unusable ones. `git status` after any failed `build:pdf`, and
+>   `git checkout -- public/resume.pdf public/resume-full.pdf` to undo it.
+> - **If you cannot run this, do not improvise.** Committing Linux-rendered PDFs ships a two-page
+>   "one-pager" set in a face nobody chose, and trimming a real bullet until it fits DejaVu damages
+>   the document to satisfy a font that will never be used. Make the source edit, say plainly that
+>   the PDFs are stale and why, and hand the regeneration off — CI and the Cloudflare deploy will
+>   both be red until someone runs it, and that is the correct state, not a thing to work around.
+>
+> `npm run build:linkedin` has no font dependency and is safe to run anywhere.
+
 Any change to a job's `highlights` / `highlightsExtended` / `roles` / dates, or to `resumeTools`,
 touches five files. **Run the pipeline in this order and commit all of it together** — a partial
 regen fails `npm run verify` and, worse, can ship a stale PDF next to correct HTML:

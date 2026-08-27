@@ -5,7 +5,11 @@ startYear: 2010
 status: coursework
 engine: [Unity]
 platforms: [PC]
-event: Georgia Tech
+# Course sourced from the old site, which says the game was made "for Georgia
+# Tech's Video Game Design class" (#128, item 13). Same shape as Prodigal's
+# CS 2261: name the course when a source gives it, leave `Georgia Tech` bare
+# when none does. No course number is claimed -- the old page never gave one.
+event: Georgia Tech, Video Game Design
 teamSize: 5
 collaborators:
   - name: Sam Brown
@@ -15,7 +19,7 @@ collaborators:
     url: https://robertspessard.com
 role: Designer, Artist
 summary: >-
-  A two-player head-to-head Georgia Tech class project. One player is a
+  A two-player head-to-head class project. One player is a
   virus-infected human racing for a cure. The other is the virus trying to
   stop him.
 hero:

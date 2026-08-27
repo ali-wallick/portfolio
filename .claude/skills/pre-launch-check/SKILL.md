@@ -100,6 +100,14 @@ Check both desktop and phone. Check dark mode.
 
 ## 6. Launch-only (Phase 6 — skip for an ordinary merge)
 
+- **Outbound links still resolve.** `npm run links:external` — deliberately outside `npm run verify`
+  (see CLAUDE.md), so nothing runs it for you. It buckets results three ways: a host that answers 403
+  or 999 to a script is **unverifiable**, not dead, and only genuinely-gone links fail the run.
+  **Open the unverifiable ones in a browser** — the list that matters is short and named in
+  [#204](https://github.com/ali-wallick/Portfolio/issues/204). Two of them cannot be checked by
+  status code at all: a deleted YouTube video still returns 200 on `/embed/` (the script resolves
+  those through oEmbed instead), and a Wayback snapshot URL keeps resolving while its _replay_ can
+  fail, which is how the Vegas Blvd App Store capture was caught hanging on an interstitial.
 - **Redirects.** Every old URL resolves or redirects. The old `.htaccess` served extensionless paths
   (`/about`, `/projects/critter`), and `/blog/*` needs somewhere to land. Crawl the old URL list in
   `snapshot/` against the new site.

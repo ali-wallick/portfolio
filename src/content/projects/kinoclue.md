@@ -28,3 +28,12 @@ hero:
 links: []
 draft: false
 ---
+
+The connections ran on Kinopuzzle, a system for modeling metadata relationships. Play otherwise
+followed the board game closely. Players took turns moving between rooms, then guessed at the
+culprit, the weapon, and the room. Short videos played when related pieces met, telling a player
+whether a guess held up.
+
+A murder mystery needs private information, and a shared tabletop does not naturally allow it. Each
+player’s piece was a hinged block, with papers inside to mark clues on. The design put an image on
+top and a fiducial marker underneath, so the table could tell the pieces apart.

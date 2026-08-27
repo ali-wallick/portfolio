@@ -1536,7 +1536,17 @@ npm run dev                        # localhost:4321, drafts visible
 npm run verify                     # everything CI runs
 npm run build:pdf                  # just the resume PDFs, against an existing dist/
 SHOW_DRAFTS=true npm run build     # what a Cloudflare preview serves
+npm run links:external             # outbound link liveness — by hand, not in CI
 ```
+
+**`links:external` is deliberately outside `verify`, and that is not an oversight to correct.**
+`check-links.mjs` never fetches an outbound URL, which keeps the gating check fast, offline and
+deterministic — but it leaves link rot unwatched on a site whose content model has a `links[].dead`
+field precisely because the old one linked three domains for years after they went dark. This is
+that missing half, run by hand before a launch and periodically after one. Wiring it into CI would
+make a deploy fail because somebody else's server is down, which is worse than the rot it catches.
+It buckets results three ways rather than two: a host that answers 403 or 999 to a script (LinkedIn
+always does) is reported **unverifiable**, not dead, and only genuinely-gone links fail the run.
 
 Node is pinned by `.nvmrc` (22). Local dev on a newer Node is fine; CI and Cloudflare both read the
 file.
@@ -1629,6 +1639,7 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 | `src/config/site.ts`                  | Name, email, nav, social links (all `pending` until Phase 3 audits them).     |
 | `src/config/resume.ts`                | The resume's Skills section — settled, hand-curated, not derived from `tech`. |
 | `scripts/check-links.mjs`             | Post-build checks. Every rule is a regression guard for a real old bug.       |
+| `scripts/check-links-external.mjs`    | Outbound link liveness. **Manual (`npm run links:external`), never in CI.**   |
 | `scripts/build-pdf.mjs`               | Renders the resume routes to PDF and asserts their page counts.               |
 | `src/components/ResumeDocument.astro` | The resume, both densities. `variant` is the only difference.                 |
 | `scripts/build-linkedin.mjs`          | Generates `docs/LINKEDIN.md` from the `jobs`/`education` collections.         |

@@ -76,7 +76,7 @@ links:
     kind: video
 summary: >-
   Five years of client and feature engineering on Marvel Snap, from early UI and localization
-  work to supporting its MVVM migration and PC launch.
+  work to the tooling behind its MVVM migration and its PC launch.
 draft: false
 ---
 
@@ -95,20 +95,22 @@ integration of Unity’s Localization package to run it. I also built the client
 live-ops tooling like Braze. Later I moved into feature engineering: meta gameplay systems spanning
 client and server code plus the UI for them, card and deck cosmetics, and the deckbuilding UI. I built a lot of
 tooling for the team too, both in the Unity Editor and in the game itself. The card art tool was
-one, which our artists authored card art through. The in-game developer console was another. Three things from that span stand out.
+one, which our artists authored card art through. The in-game developer console was another. Four things from that span stand out.
 
-**Driving an MVVM migration for the PC launch.** Alongside the push to launch the PC client, I
-encouraged teammates to migrate their working patterns onto an MVVM architecture, and built out the
-tooling that made it practical to adopt.
-Snap’s Steam Early Access launched globally on 18 October 2022 as a direct port of the mobile
-client, the fastest path to PC and a reasonable one for a first release. That December, Snap
+**Building the tooling for an MVVM migration.** Alongside the push to launch the PC client, I built
+the tooling that made an MVVM architecture practical to adopt on a live product, and encouraged
+teammates to migrate their working patterns onto it.
+
+**The PC launch, in two stages.** Snap’s Steam Early Access launched globally on October 18, 2022 as
+a direct port of the mobile client, the fastest path to PC and a reasonable one for a first release.
+That December, Snap
 [won Best Mobile Game at The Game Awards](https://www.marvel.com/articles/games/marvel-snap-mobile-game-of-the-year-2022).
 It went on to [win Mobile Game of the Year at the DICE Awards](https://www.pocketgamer.biz/marvel-snap-wins-mobile-game-of-the-year-at-the-dice-awards/)
-the following February. Then we exited Early Access on 22 August 2023, announced at Gamescom. That
+the following February. Then we exited Early Access on August 22, 2023, announced at Gamescom. That
 meant going back through a large chunk of the UI. We rebuilt it for a landscape screen and
 mouse-and-keyboard input, instead of a phone layout stretched onto a monitor.
 
-**Building the card and collection systems.** I built and owned the screen players use to inspect
+**The card and collection systems.** I built and owned the screen players use to inspect
 an individual card:
 
 - **Sub-cards:** Toggling through a card’s sub-cards.
@@ -146,6 +148,10 @@ so live-ops could update it directly. The same integration also drove the news p
 pop-ups.
 
 ## What I Learned
+
+Shipping a game and running one turned out to be different jobs. Most of what I learned after launch
+was about changing a live product without breaking it. Migrating its architecture and letting live
+ops publish content without an app update were both versions of that problem.
 
 I’m proudest of watching Second Dinner grow over those five years. We went from a small company
 working on a prototype, to launching a global game, to running it in live ops for years after.

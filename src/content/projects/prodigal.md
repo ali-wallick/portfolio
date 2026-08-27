@@ -10,9 +10,13 @@ platforms: [Game Boy Advance]
 event: Georgia Tech, CS 2261
 teamSize: 1
 role: Solo Developer
+# Third person, like every other archive lede (#128, item 15a). This was the
+# only summary on the site opening in the first person, and it renders as the
+# page lede where its five siblings all open on an article. "Georgia Tech"
+# also came out: the meta strip states it directly above, from `event`.
 summary: >-
-  My project for Georgia Tech’s Media Device Architecture course, programming
-  a Game Boy Advance game in C and assembly.
+  A Game Boy Advance game programmed in C and assembly for a Media Device
+  Architecture course.
 hero:
   type: image
   src: ../../assets/images/projects/prodigal/screenshot1.png

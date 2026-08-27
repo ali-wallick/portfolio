@@ -24,6 +24,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "links": "node scripts/check-links.mjs",
+    "links:external": "node scripts/check-links-external.mjs",
     "verify": "npm run format:check && npm run check && npm run build && npm run check:pdf && npm run check:resume-print && npm run check:linkedin && npm run links"
   },
   "dependencies": {

@@ -5,14 +5,19 @@ startYear: 2010
 status: coursework
 engine: [Unity]
 platforms: [Web]
-event: Georgia Tech
+# Course sourced from the old site: "our last project in our Construction of a
+# Moving Image class" (#128, item 13). The summary's "film class" is a gloss
+# on that title, which does not announce itself as film, so both earn their
+# place -- but the summary drops its own "Georgia Tech" now that this field
+# carries it.
+event: Georgia Tech, Construction of a Moving Image
 teamSize: 3
 collaborators:
   - name: Wes Anderson
   - name: Esther Estroff
 role: Programmer
 summary: >-
-  A HUD-less mood piece for a Georgia Tech film class.
+  A HUD-less mood piece for a film class.
 hero:
   type: image
   src: ../../assets/images/projects/night-light/screenshot.png

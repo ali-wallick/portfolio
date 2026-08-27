@@ -139,9 +139,13 @@ The 2011 GPA and Dean’s List entries are recorded in `src/content/education/ge
 
 LinkedIn is the one surface in this project that an agent can’t verify after the fact, so the rules are stricter, not looser:
 
-- **Don’t name or characterise Second Dinner’s current game.** The studio said publicly on 7 August
-  2024, via the [W4 Games investment](https://www.w4games.com/blog/w4-games-news-1/second-dinner-studios-becomes-a-strategic-investor-in-w4-games-and-plans-to-build-the-largest-game-in-godot-yet-37),
-  that it’s building its next game in Godot. That is the ceiling. No title, platform, or genre.
+- **Don’t name or characterise Second Dinner’s current game.** Two facts are public and sayable. The
+  studio said on 7 August 2024, via the [W4 Games investment](https://www.w4games.com/blog/w4-games-news-1/second-dinner-studios-becomes-a-strategic-investor-in-w4-games-and-plans-to-build-the-largest-game-in-godot-yet-37),
+  that it is building an ambitious game in Godot; and Ali confirmed 2026-08-26 that the studio has
+  been public about it being mobile. That is the ceiling. **No title, no genre, no features, no
+  monetization** — and don’t call it the studio’s "next" game, which implies a succession that did
+  not happen (see CLAUDE.md, #129). It is one of several new projects, and hers is the studio’s
+  first game in Godot.
 - **Don’t restore "unannounced mobile Marvel game."** It was accurate in 2019 and has been wrong
   since October 2022.
 - **Don’t claim a Puzzle Cats credit.** See the note under MobilityWare.
