@@ -94,6 +94,13 @@ Two commits, one merge, in this order:
 2. **Merge `main` → `release`.** _This push is the production deploy_ — Workers Builds runs
    `wrangler deploy` off `release`.
 
+> **The flag commit must carry regenerated resume PDFs.** `src/config/site.ts` is in
+> `build-pdf.mjs`'s input-hash list, so flipping `live` invalidates the committed PDFs even though
+> the resume renders identically — and `check:pdf` is what Cloudflare runs, so the deploy goes red.
+> [PR #213](https://github.com/ali-wallick/Portfolio/pull/213) already includes them; if you ever
+> flip the flag in a fresh branch instead, run `npm run build:pdf` **on macOS** and commit
+> `public/*.pdf` with `scripts/resume-pdf.lock.json`.
+
 Nothing is publicly reachable yet, which is what makes doing this before the DNS change safe.
 
 **Confirm the build goes green in the Workers Builds log before continuing.** Not by browsing to it —

@@ -35,17 +35,23 @@ export const site = {
 /**
  * Whether aliwallick.com is the live production domain yet.
  *
- * `false` for every build until the DNS cutover — every branch preview,
- * including `main`'s and `release`'s, is pre-launch, because aliwallick.com
- * still serves the old PHP site. `BaseLayout.astro`'s sitewide
- * `<meta name="robots" content="noindex">` and `robots.txt`'s Allow/Disallow
- * both derive from this one flag rather than each tracking it separately, so
- * they can't drift out of sync with each other.
+ * Flipped to `true` at the DNS cutover (#74, #34). `BaseLayout.astro`'s
+ * sitewide `<meta name="robots" content="noindex">` and `robots.txt`'s
+ * Allow/Disallow both derive from this one flag rather than each tracking it
+ * separately, so they can't drift out of sync with each other. Flipping it
+ * un-noindexes every page, opens the crawl directives, and adds `robots.txt`'s
+ * `Sitemap:` line, all in one edit.
  *
- * TODO(launch): flip to `true` in the same PR as the DNS cutover (#74) — not
- * before, since the whole point is staying noindexed until that moment.
+ * One consequence, recorded rather than decided: this is a plain constant, not
+ * derived from the branch, so flipping it makes BRANCH PREVIEWS indexable too.
+ * `robots.txt.ts`'s comment still describes the pre-cutover world where every
+ * preview said `Disallow`. Draft project pages are unaffected — they carry
+ * their own `noindex` (`projects/[...slug].astro`) — and every preview page
+ * canonicalises to aliwallick.com, so the exposure is duplicate hostnames
+ * rather than leaked content. Whether previews should go back to `Disallow`
+ * via `WORKERS_CI_BRANCH` is #212.
  */
-export const live = false;
+export const live = true;
 
 export type SocialLink = {
   label: string;
