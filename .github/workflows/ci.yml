@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
 
 # A second push to the same branch cancels the first — this repo gets a lot of
 # small preview-driven pushes and there is no value in finishing a stale run.
@@ -77,17 +78,29 @@ jobs:
     name: Lighthouse
     runs-on: ubuntu-latest
     needs: build
+    # Skip on draft PRs to avoid burning Actions minutes on a build most of
+    # which is thrown away the moment another commit lands. `push` events have
+    # no `pull_request` payload at all, so the draft check only applies to the
+    # `pull_request` trigger; `main` pushes always run it. Pairs with the
+    # `ready_for_review` type added to the workflow's `pull_request` trigger
+    # above, so marking a PR ready runs Lighthouse even with no new commit.
+    if: github.event_name == 'push' || github.event.pull_request.draft == false
     steps:
       - uses: actions/checkout@v7
 
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
-          cache: npm
 
-      - run: npm ci
-
-      # Lighthouse gates the PRODUCTION build — what actually ships.
+      # Lighthouse gates the PRODUCTION build — what actually ships. It reuses
+      # the `build` job's own `dist/`, uploaded above, rather than rebuilding:
+      # same commit, same production settings, so a second `astro build` would
+      # only reproduce the first one at the cost of a full `npm ci`. That `npm
+      # ci` would also be pure waste here — it exists in the `build` job to
+      # trigger the `postinstall` Playwright Chromium download for
+      # `build:pdf`, which this job never runs. Neither `npx @lhci/cli`
+      # (self-installing) nor scripts/lighthouse-summary.mjs (no dependencies
+      # beyond node:fs/node:path) needs node_modules at all.
       #
       # The first run pointed it at a drafts-visible build so project pages
       # would be non-empty, and it failed for two reasons that were both
@@ -101,8 +114,11 @@ jobs:
       # video embed back to the url list in lighthouserc.json. Expect the
       # third-party iframe to cost a few best-practices points, and decide then
       # whether to carve out that audit or lower the threshold for those pages.
-      - name: Build
-        run: npm run build
+      - name: Download build
+        uses: actions/download-artifact@v7
+        with:
+          name: dist
+          path: dist
 
       - name: Lighthouse CI
         run: npx --yes @lhci/cli@0.15.x autorun
