@@ -209,19 +209,24 @@ npm error enoent Could not read package.json
 Non-production branch builds work fine in the meantime, which is the half that matters for the
 review loop. The production build goes green on the merge commit.
 
-### Do NOT add a custom domain yet — until the cutover, which has its own runbook
+### The custom domain is attached — the cutover happened 2026-08-27
 
-`aliwallick.com` still serves the old PHP site from DreamHost, and it stays that way until the
-**Launch** stage. Attaching the domain now would cut the live site over ahead of every check that is
-supposed to happen first.
+`aliwallick.com` is a Custom Domain on the `portfolio` Worker, and the apex is the canonical address.
+This section used to say _"Do NOT add a custom domain yet"_, which was correct right up until it
+wasn't; the procedure that replaced it is [`docs/LAUNCH.md`](LAUNCH.md), where attaching the domain
+is step 5 of ten and the steps around it are what made it safe.
 
-`*.workers.dev` URLs are all that's needed until then.
+**It is declared in `wrangler.jsonc` as a route, not just in the dashboard.** Same durability
+argument as `workers_dev: false` directly above it there: `wrangler deploy` reconciles the config
+against deployed state, so a Custom Domain living only as dashboard state can be dropped by a later
+deploy. If you are adding another hostname, add it there rather than only in the UI.
 
-**When it is time, the procedure is [`docs/LAUNCH.md`](LAUNCH.md), not this section.** Attaching the
-domain is step 5 of ten there, and the steps around it — flipping `live`, merging `main` → `release`,
-recording the rollback value, `www` — are the ones that make it safe. This section used to be where
-[#34](https://github.com/ali-wallick/Portfolio/issues/34) sent you for instructions, which meant the
-one irreversible step in the project pointed at a page that only said _don't_.
+**`www` is not a Custom Domain and must not become one.** A Custom Domain matches its hostname
+exactly and serves the site at it — which is the duplicate-content bug
+[#193](https://github.com/ali-wallick/Portfolio/issues/193) was filed about. `www` is instead a
+proxied placeholder `A` record (`192.0.2.0`) plus a zone-level Single Redirect rule 301ing to the
+apex with path and query preserved. `public/_redirects` cannot express it, because it matches paths
+and not hosts.
 
 ---
 

@@ -3,9 +3,10 @@
   "name": "portfolio",
   "compatibility_date": "2026-08-16",
 
-  // The production workers.dev URL must stay OFF until Phase 6 — aliwallick.com
-  // still serves the old PHP site from DreamHost, and nothing here should be
-  // reachable at a stable public address before the real domain cutover.
+  // The production workers.dev URL stays OFF. Before the cutover this kept the
+  // site unreachable while aliwallick.com still served the old PHP site; now
+  // that the apex is attached below, it keeps the apex the *only* public
+  // address, so there is no second hostname competing with the canonical one.
   //
   // This is not decorative. The first `master` deploy after the Phase 2 merge
   // silently re-enabled it: `wrangler deploy` defaults `workers_dev` to true
@@ -15,6 +16,16 @@
   // Wrangler file"). Setting it here makes the setting durable across every
   // future deploy instead of dashboard state someone has to remember.
   "workers_dev": false,
+
+  // The apex, attached as a Custom Domain at the cutover (LAUNCH.md step 5).
+  // It lives here rather than only in the dashboard for exactly the reason
+  // `workers_dev` does: `wrangler deploy` reconciles this file against the
+  // deployed state, so a Custom Domain that exists only as dashboard state is
+  // liable to be silently dropped by the next deploy. Declaring it makes it
+  // durable. `www` is deliberately NOT here — it is a proxied placeholder plus
+  // a zone-level Single Redirect rule (LAUNCH.md step 6, #193), because a
+  // Custom Domain matches its hostname exactly and cannot express a redirect.
+  "routes": [{ "pattern": "aliwallick.com", "custom_domain": true }],
 
   // A static-asset-only Worker: there is no `main`, no server code, and nothing
   // to keep warm. Astro builds to `dist/` and Cloudflare serves it from the
