@@ -2288,3 +2288,43 @@ files, where a cold subagent would have cost more than it saved.
 
 The expensive part was iterating the self-containment check, and it was expensive in the right way:
 three rebuild-and-verify cycles, each finding a real class of bug.
+
+## The agent review (2026-08-27, #128)
+
+#128 asks for a final review of the site, half agent and half human. The agent half ran 2026-08-27
+against `70ecd15` and delivered fifteen recommendations, prioritized and effort-tagged, as
+[a comment on the issue](https://github.com/ali-wallick/Portfolio/issues/128#issuecomment-5436019674).
+This entry records the method and what it says about the tooling, not the findings — those live on
+the issue, per the rule that issues track work.
+
+### What only reading caught
+
+The guards all held: links, alt text, apostrophes, PDF freshness, LinkedIn freshness green, and the
+voice numbers still at target after a week of content passes (17.0-word mean across the seven main
+prose surfaces, zero em dashes in rendered prose). What no guard caught is drift _between prose
+surfaces_: three different verbs for the MVVM claim on three surfaces, /about crediting "leading the
+UI team" at Kaneva while the Firefall page says she was "the UI team", and the LinkedIn doc's
+derived half naming the platform its own hand-authored guidance still bans. Fact _fields_ can't
+drift here by construction; sentences still can. No guard for that exists or plausibly could — it is
+what a review is for, which is presumably why #128 exists.
+
+The most productive single technique was the one #188 already recorded for apostrophes: check the
+rendered output, because the output is the only place the sources meet. The LinkedIn contradiction
+is invisible from either file alone.
+
+### Two environment notes
+
+`check:resume-print` reproduced #191 exactly — 223 elements "moved" on an untouched tree once a
+browser was wired up, font rendering rather than content, with the `check:pdf` hash guard green
+beside it. And the review sandbox's egress policy blocked every external fetch, so link _liveness_ —
+the one class of rot this site's whole `dead:` philosophy is about — was unreviewable from here and
+became a recommendation instead of a finding.
+
+### Cost notes
+
+One session, no subagents. The file set was fully known (16 projects, 4 jobs, 9 pages, 2 docs), so
+fan-out had nothing to discover — sequential reads with the standing brief already in context beat
+cold subagents on both cost and quality. The expensive part was verifying candidate findings against
+their sources before flagging them, and it paid twice: #178 turned out to be already narrowed by a
+same-day comment, and the "million downloads" figure traced to a sourced commit — so it went into
+the review as a staleness note rather than a wrong accusation of invention.
