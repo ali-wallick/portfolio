@@ -27,7 +27,6 @@ gated on the `Pre-launch` milestone emptying.
 | Precondition                                                                                                        | Why                                                                                                                                                                                               |
 | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [#55](https://github.com/ali-wallick/Portfolio/issues/55) closed — `verify-dns.sh` exits 0                          | It's the tool you'll reach for in steps 1 and 9, and today it prints `STOP` for three expected reasons. Three known-bad results is exactly the state where a fourth, real one gets waved through. |
-| [#193](https://github.com/ali-wallick/Portfolio/issues/193) answered — what `www` does                              | Step 6 needs a decision, not a discovery.                                                                                                                                                         |
 | [#132](https://github.com/ali-wallick/Portfolio/issues/132) answered — what `/resources/WallickAli-Resume.pdf` does | It's indexed by Google with a PO Box in the result title, and right now it 404s at cutover by omission rather than by choice.                                                                     |
 | [#128](https://github.com/ali-wallick/Portfolio/issues/128) done — final review                                     | Last look at the site while it's still cheap to fix.                                                                                                                                              |
 
@@ -126,8 +125,9 @@ it, because it's the part that feels dangerous and isn't.
 
 ### 6. Handle `www`
 
-Per [#193](https://github.com/ali-wallick/Portfolio/issues/193), and assuming the recommended answer
-(301 to the apex — it's what every canonical, `og:url` and sitemap entry on the site already says):
+**Settled on [#193](https://github.com/ali-wallick/Portfolio/issues/193): the apex is the real
+address, and `www` 301s to it.** Both hostnames work after this step — typing `www` lands on the
+right page rather than failing. It just doesn't stay there.
 
 1. Replace the `www` `A` record with a **proxied** `A` record pointing at `192.0.2.0` — the reserved
    placeholder for originless setups. Proxied is the load-bearing word: requests never reach that
@@ -137,6 +137,10 @@ Per [#193](https://github.com/ali-wallick/Portfolio/issues/193), and assuming th
 
 A Custom Domain matches its hostname exactly, so attaching the apex in step 5 does nothing for `www`.
 And `public/_redirects` can't do this — it matches paths, not hosts.
+
+**301, not 302.** The status code is what tells Google the two hostnames are one site and consolidates
+the old `www` URLs' ranking onto the apex. A `www` that merely also served the site, with no redirect,
+is the duplicate-content bug #193 was filed about.
 
 ### 7. Confirm the site serves
 
@@ -151,6 +155,11 @@ curl -sI https://www.aliwallick.com/projects/firefall | head -3
   didn't ship.
 - No `<meta name="robots" content="noindex">` in the page source.
 - `www` 301s **to the same path**, not to the homepage.
+
+**This curl is the only check that covers `www`, on purpose.** Once `www` is proxied, `dig` returns
+Cloudflare's anycast addresses rather than the `192.0.2.0` placeholder — even against the authoritative
+nameserver — so there is no IP for `verify-dns.sh` to assert. #193 settled that it checks only that `www`
+still resolves, and the redirect is verified here at the HTTP level where it is actually visible.
 
 ### 8. Re-run the redirect map against the real domain
 
