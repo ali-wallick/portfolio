@@ -149,9 +149,11 @@ pop-ups.
 
 ## What I Learned
 
-Shipping a game and running one turned out to be different jobs. Most of what I learned after launch
-was about changing a live product without breaking it. Migrating its architecture and letting live
-ops publish content without an app update were both versions of that problem.
+Five years on Snap took me through the whole arc: prototype, pre-production, launch, live ops. Until
+then, I’d only ever joined a game already in production or already shipped, never seen the full
+cycle through. I got to watch systems I built early get stress-tested by years of real content, and
+see how live-ops needs shaped what came after.
 
-I’m proudest of watching Second Dinner grow over those five years. We went from a small company
-working on a prototype, to launching a global game, to running it in live ops for years after.
+More than the game itself, I’m proud of watching Second Dinner grow up around me over those five
+years, from a small team still finding its footing to a studio that could launch and sustain a live
+global game.
