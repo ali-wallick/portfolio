@@ -30,9 +30,13 @@
  * runs on Cloudflare too: a deploy carrying an out-of-date resume fails rather
  * than shipping.
  *
- * A second reason committing beats regenerating per-deploy: `--font-body` is
- * `system-ui`, which resolves to a different typeface on macOS than on Linux.
- * A committed PDF is the one Ali actually looked at, not a Linux re-render of it.
+ * A second reason committing beats regenerating per-deploy, though a weaker
+ * one since #191: `--font-body` used to be `system-ui`, resolving to a
+ * different typeface on macOS than on Linux, so a committed PDF was the only
+ * way to guarantee it was the one Ali actually looked at. It now names a
+ * specific self-hosted face (Public Sans), so a Linux re-render is no longer
+ * a different document — but Cloudflare still can't produce one at all, which
+ * is reason enough on its own.
  *
  * ## Two implementation choices worth not undoing
  *

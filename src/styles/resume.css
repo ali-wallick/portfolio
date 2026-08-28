@@ -234,9 +234,17 @@
     --color-on-accent: #000000;
     --color-on-accent-link: #000000;
 
-    --font-body:
-      system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-      'Apple Color Emoji', 'Segoe UI Emoji';
+    /* Public Sans, not system-ui (#191). system-ui is machine-dependent — it
+       resolved to SF Pro by accident of whichever Mac last rendered the PDF,
+       a face not licensed for embedding in a distributed document, and to
+       whatever fontconfig picks on Linux (DejaVu Sans, measured, which
+       overflows the one-pager). Public Sans is self-hosted via @fontsource
+       (see resume.astro / resume/full.astro), OFL-licensed, and purpose-built
+       as a free Helvetica substitute for exactly this kind of document —
+       USWDS uses it for the same reason. That makes the PDF reproducible on
+       any machine, CI included, and makes scripts/resume-print-baseline.json
+       portable off macOS for the first time. */
+    --font-body: 'Public Sans', Helvetica, Arial, sans-serif;
     --font-display: var(--font-body);
     --font-heading: var(--font-body);
     --font-sans: var(--font-body);

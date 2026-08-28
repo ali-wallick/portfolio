@@ -1413,6 +1413,64 @@ sentence-stream**, which is what `/resume/full` actually prints.
 
 ---
 
+## The resume print face is Public Sans, not `system-ui` (2026-08-27, closes #191)
+
+Item 2 of #191, the thing item 1 (`check:resume-print` in CI) was blocked on. `resume.css` pinned the
+print block's `--font-body` to `system-ui`, which is not a decision, it's an accident of whichever
+machine last rendered the PDF: SF Pro on Ali's Mac, DejaVu Sans on Linux — measured, and DejaVu is
+wide enough to overflow the one-pager to two pages. Worse, **SF Pro was never licensed for this use**
+— Apple's font license restricts it to Apple-platform software and marketing, and a resume PDF
+handed to a hiring manager is neither. The committed PDFs were carrying an unlicensed embed by
+accident, not by choice.
+
+**Public Sans, Ali's call, sans-serif ruled in from the start.** Compared against Source Sans 3, IBM
+Plex Sans, Source Serif 4 (dropped immediately — "definitely stick with sans serif"), then Arimo and
+Work Sans once Public Sans and IBM Plex Sans emerged as the front-runners. All are OFL-licensed and
+self-hostable. Public Sans won on fit with Ali's own taste ("more of a Helvetica fan") — it's USWDS's
+purpose-built free Helvetica substitute for exactly this kind of formal document, so it's a face
+chosen on the same "not a template, because we picked it" logic as the palette revival and the #66
+face confirmation, not a default reached for because it was there.
+
+**Work Sans is out, and how it got caught is worth keeping.** `build-pdf.mjs`'s page-count assertion
+(`page.pdf()` via Chromium's real `@page` pagination) reported Work Sans at a clean 1/1 pages — and
+it was wrong. Measured against the real budget this file already established under "The density
+question, measured twice and deliberately not acted on" (701×960, letter width minus `@page`'s side
+margins), Work Sans's content ran 1024px into a 960px budget, 64px over. Chromium's print pagination
+is apparently more forgiving right at the page-break threshold than the actual layout budget is. The
+page-count check alone would have shipped a resume quietly missing its bottom margin. **This is the
+701×960 rule paying for itself a second time** — measure anything about this document at that
+viewport, not by trusting a page count in isolation.
+
+**Public Sans measured 928px — 32px under budget, and within 5px of what the SF Pro accident was
+already fitting.** Near-zero reflow risk relative to the document everyone has already been looking
+at.
+
+**Mechanism: self-hosted via `@fontsource`, imported only on the two resume routes, not
+`BaseLayout`.** `src/pages/resume.astro` and `src/pages/resume/full.astro` each import
+`@fontsource/public-sans/latin-400.css` and `latin-700.css` directly — the same "self-hosted, latin
+subset" pattern `BaseLayout` uses for the screen faces, just scoped narrower, because Public Sans has
+no reason to load on any other page. It has zero effect on-screen: `resume.css`'s `@media print`
+block is the only place `--font-body` points at it, so the on-screen `/resume` page still reads in
+Figtree, unchanged. What changes is that Chromium now embeds the same font file everywhere the PDF is
+rendered, instead of resolving `system-ui` to whatever the machine happens to have.
+
+**That's what actually unblocks item 1.** `scripts/resume-print-baseline.json` was recorded on macOS
+against a font that rendered differently on Linux; it's re-baselined against Public Sans now, and
+`check:resume-print` is in `.github/workflows/ci.yml`. A real reflow or style leak still fails CI; a
+platform font substitution can't produce a false positive any more, because there's no longer a
+platform-dependent font in the loop.
+
+**Correction, same day, from this guard's first real CI run: identical font file is not identical
+rendering.** `check:resume-print` went red on `ubuntu-latest` anyway — not from a font substitution,
+but because CoreText (macOS) and FreeType (Linux) hint and shape the _same_ embedded Public Sans
+file slightly differently. Every diff was a text element's `x`/`width` shifting by a few percent
+(topping out ~4.8%), with zero `y` or `height` diffs — nothing actually wrapped differently, no
+colour or weight changed. `check-resume-print.mjs` now tolerates that specific, bounded drift (a
+relative width/x tolerance, kept tight on `y`/`height` so a genuine reflow still fails loudly) rather
+than either loosening the guard wholesale or chasing pixel parity across two font-rasterization
+engines that were never going to have it. Worth knowing generally: "self-hosted, same file, every
+machine" solves _which_ font loads; it doesn't solve exactly how the OS text engine draws it.
+
 ### Archive pages may carry a short body (2026-08-24, from #97)
 
 **Ali's call, and it sets the pattern for all 11 archive entries, not just the one it came up on.**

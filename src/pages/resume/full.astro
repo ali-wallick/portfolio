@@ -4,6 +4,11 @@ import ResumeDocument from '~/components/ResumeDocument.astro';
 import ResumeActions from '~/components/ResumeActions.astro';
 import '~/styles/resume.css';
 
+/* See resume.astro — same print-only Public Sans import, needed here too
+   since /resume/full renders through the same print pipeline. */
+import '@fontsource/public-sans/latin-400.css';
+import '@fontsource/public-sans/latin-700.css';
+
 /**
  * The two-page resume — the same document as `/resume`, with each job's
  * `highlightsExtended` bullets appended.

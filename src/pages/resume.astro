@@ -4,6 +4,16 @@ import ResumeDocument from '~/components/ResumeDocument.astro';
 import ResumeActions from '~/components/ResumeActions.astro';
 import '~/styles/resume.css';
 
+/* Self-hosted, latin subset, weight axis only — same reasoning as BaseLayout's
+   screen fonts. Print-only: resume.css's `@media print` block is the only
+   place `--font-body` points at Public Sans, so this has no effect on the
+   on-screen page, which still reads in Figtree. It exists so the print block
+   names a specific embeddable face instead of `system-ui`, which resolves to
+   a different, unlicensed-for-embedding typeface (SF Pro) on every machine
+   that renders it — see #191. */
+import '@fontsource/public-sans/latin-400.css';
+import '@fontsource/public-sans/latin-700.css';
+
 /**
  * The one-page resume — the version you attach to an application.
  *

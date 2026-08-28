@@ -21,16 +21,30 @@
  * zero pages and zero bytes still shows up as a named element with a named
  * property that moved.
  *
- * ## Why this runs in `npm run verify` and nowhere near `npm run build` or CI
+ * ## Why this now runs in CI too (#191)
  *
- * `--font-body` is `system-ui`, which resolves to a different (and smaller)
- * typeface on Linux than on the macOS machine that captures the baseline —
- * the exact reason `.github/workflows/ci.yml` already declines to
- * byte-compare the committed resume PDFs across platforms. A fine-grained
- * geometry diff would false-positive on that same font substitution, on
- * nearly every element, on every CI run. So this stays a local, macOS-authored
- * guard, like the committed PDFs themselves: wired into `verify`, never into
- * `build`, `build:pdf`, `check:pdf`, or the GitHub Actions workflow.
+ * Until #191, `--font-body` was `system-ui`, which resolved to a different
+ * (and smaller) typeface on Linux than on the macOS machine that captures the
+ * baseline, so a fine-grained geometry diff would false-positive on that font
+ * substitution on nearly every element, on every CI run. This stayed a local,
+ * macOS-only guard for that reason: wired into `verify`, kept out of `build`,
+ * `build:pdf`, `check:pdf`, and the GitHub Actions workflow.
+ *
+ * `resume.css` now names a specific self-hosted face (Public Sans, via
+ * @fontsource) instead of `system-ui`, so the baseline this script diffs
+ * against is portable — the same font *file* loads on macOS and
+ * ubuntu-latest, which is what actually blocked this. `.github/workflows/ci.yml`
+ * runs `check:resume-print` as of #191; a real reflow or style leak still
+ * fails the build, a platform font substitution no longer can.
+ *
+ * The same embedded font is not pixel-identical across platforms, though —
+ * discovered on this guard's first real CI run. CoreText (macOS) and
+ * FreeType (Linux) hint and shape glyph runs slightly differently, so a text
+ * element's width/x can differ by a few percent with no font, colour,
+ * weight, or reflow change behind it (every diff on that run was width/x
+ * only — zero `y` or `height` diffs, so nothing actually wrapped
+ * differently). See `X_TOLERANCE_ABS`/`X_TOLERANCE_REL` below: this script
+ * tolerates that specific, bounded kind of drift and nothing else.
  *
  * Usage:
  *   node scripts/check-resume-print.mjs            # diff against the baseline
@@ -65,6 +79,51 @@ const STYLE_PROPS = [
   'color',
   'backgroundColor',
 ];
+
+/**
+ * Cross-platform text-rasterization tolerance (#191, discovered when this
+ * guard first ran in CI on ubuntu-latest against a baseline recorded on
+ * macOS). Even with the *identical* embedded font file — Public Sans is
+ * self-hosted via @fontsource, not `system-ui` — CoreText (macOS) and
+ * FreeType (Linux) hint and shape glyph runs slightly differently, so a
+ * text element's measured width/x can differ by a few percent with no font,
+ * colour, weight, or reflow change behind it. Measured on the real CI run:
+ * every diff was width/x only (zero `y` or `height` diffs, so no line ever
+ * wrapped differently), topping out at ~4.8% of the element's width on the
+ * widest text runs. `X_TOLERANCE` is set comfortably above that; `y` and
+ * `height` keep a near-zero tolerance (just enough for float rounding)
+ * because a real reflow — the thing this script exists to catch — shows up
+ * there, not in `x`/`width` alone.
+ */
+const X_TOLERANCE_ABS = 2;
+const X_TOLERANCE_REL = 0.06;
+const Y_TOLERANCE_ABS = 0.5;
+
+function within(delta, base, cur, absTolerance, relTolerance) {
+  const tolerance = Math.max(absTolerance, relTolerance * Math.max(Math.abs(base), Math.abs(cur)));
+  return delta <= tolerance;
+}
+
+/** True if two captured rects differ by more than the platform-rasterization
+ * tolerance above. `x`/`width` get the generous, relative tolerance; `y`/
+ * `height` stay tight, so a genuine reflow still fails loudly. */
+function rectsDiffer(base, cur) {
+  if (!within(Math.abs(base.x - cur.x), base.x, cur.x, X_TOLERANCE_ABS, X_TOLERANCE_REL))
+    return true;
+  if (
+    !within(
+      Math.abs(base.width - cur.width),
+      base.width,
+      cur.width,
+      X_TOLERANCE_ABS,
+      X_TOLERANCE_REL,
+    )
+  )
+    return true;
+  if (Math.abs(base.y - cur.y) > Y_TOLERANCE_ABS) return true;
+  if (Math.abs(base.height - cur.height) > Y_TOLERANCE_ABS) return true;
+  return false;
+}
 
 if (!existsSync(DIST)) {
   console.error(`✗ ${DIST} does not exist — run \`astro build\` first.`);
@@ -268,7 +327,7 @@ for (const route of ROUTES) {
     const cur = curByPath.get(p);
     const fieldDiffs = [];
 
-    if (JSON.stringify(base.rect) !== JSON.stringify(cur.rect)) {
+    if (rectsDiffer(base.rect, cur.rect)) {
       fieldDiffs.push({ field: 'rect', from: base.rect, to: cur.rect });
     }
     for (const prop of STYLE_PROPS) {
