@@ -1598,11 +1598,17 @@ original bar.
 assertion off leaves the category score exactly where it was. When a third-party cost has to be
 absorbed, the threshold is the only lever; an audit-level `off` is not.
 
-**Do not read a passing 0.96 as comfortable.** `errors-in-console` fails on every page, gated ones
-included, and always has — the Cloudflare Insights beacon POSTs to a host whose CORS preflight
-cannot match lhci's random localhost port. That is a flat 0.04 off every page for an artifact of
-serving `dist/` locally, so the sitewide gate runs on one hundredth of headroom.
-[#221](https://github.com/ali-wallick/Portfolio/issues/221).
+**`errors-in-console` used to fail on every page, gated ones included, and it was never about the
+site.** The Cloudflare Insights beacon's CORS preflight can never match lhci's random localhost
+port — `cloudflareinsights.com` always echoes back a portless `http://localhost` on
+`Access-Control-Allow-Origin`, confirmed by probing the endpoint directly with several origins —
+so it cost a flat 0.04 on every page against the 0.95 bar, and the audit was guarding nothing: it
+was already failing, so a real console error wouldn't have moved the score. **Fixed
+([#221](https://github.com/ali-wallick/Portfolio/issues/221)), not by loosening the threshold or
+skipping the audit** — `scripts/strip-lighthouse-beacon.mjs` strips the beacon `<script>` tag from
+the CI job's own downloaded copy of `dist/` before lhci runs, so the audit measures the site again
+instead of a third party. The `build` job's uploaded artifact, and everything Cloudflare actually
+deploys, still carry the beacon — only the disposable copy Lighthouse reads is touched.
 
 ### `public/_headers` carries the safe set, and two headers are deliberately not in it (2026-08-27)
 

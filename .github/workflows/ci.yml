@@ -139,18 +139,25 @@ jobs:
       # leaves the category score where it was. Every other page and every
       # other category still holds the original bar.
       #
-      # Worth knowing about the 0.05 that is left: `errors-in-console` fails on
-      # EVERY page, gated ones included, and always has. The Cloudflare
-      # Insights beacon POSTs to cloudflareinsights.com, whose CORS preflight
-      # can't match lhci's random localhost port, so every page scores 0.96
-      # against a 0.95 bar — one hundredth of headroom, spent on an artifact of
-      # serving `dist/` locally rather than on anything about the site. See
-      # #221; don't read a future 0.96 as comfortable.
+      # `errors-in-console` used to fail on EVERY page, gated ones included,
+      # because the Cloudflare Insights beacon's CORS preflight can never
+      # match lhci's local server: cloudflareinsights.com always echoes back
+      # a portless `http://localhost` on `Access-Control-Allow-Origin`, no
+      # matter what origin actually asked, and lhci's `staticDistDir` always
+      # binds a random port. That cost a flat 0.04 on every page against a
+      # 0.95 bar. Fixed (#221) by stripping the beacon tag from this
+      # downloaded copy of `dist/` before Lighthouse ever sees it — the
+      # `build` job's uploaded artifact, and everything Cloudflare deploys,
+      # keep the beacon. On aliwallick.com the origin matches the beacon's
+      # own and none of this ever came up.
       - name: Download build
         uses: actions/download-artifact@v7
         with:
           name: dist
           path: dist
+
+      - name: Strip Cloudflare beacon (Lighthouse-only)
+        run: node scripts/strip-lighthouse-beacon.mjs dist
 
       - name: Lighthouse CI
         run: npx --yes @lhci/cli@0.15.x autorun

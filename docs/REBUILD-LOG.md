@@ -2568,3 +2568,50 @@ because `gh issue list` plus one batched `gh issue view` answered it in two call
 
 The expensive part was not reasoning, it was Lighthouse: four full lhci runs at 27 page-loads each,
 three of them controls. Worth it. The run that mattered was the one that failed.
+
+## Fixing the Lighthouse beacon artifact (2026-08-27, #221)
+
+#221 filed itself with two candidate fixes and a lean toward the second: don't emit the beacon
+during a Lighthouse-measured build, or serve `dist/` on a fixed port matching Cloudflare's echoed
+origin, "cheap to test." Neither survived contact.
+
+### The "cheap" fix wasn't
+
+Probing `cloudflareinsights.com`'s preflight directly, with a spread of `Origin` headers, settled
+what the issue only inferred from one browser error: the endpoint always strips the port from
+whatever origin it echoes back, for every host tried — `localhost`, `127.0.0.1`, and arbitrary
+hostnames alike. That means the only origin that can ever match is a **portless** one, which for
+`http://` means literally port 80. Reading lhci's own `staticDistDir` source confirmed the second
+option was never going to be cheap: `FallbackServer.listen()` hardcodes `server.listen(0)`, and even
+an explicit `url` list gets its port forcibly overwritten to match. Getting to port 80 means
+abandoning `staticDistDir` and its `express.static` + `compression` server entirely, standing up a
+replacement, and binding a privileged port in CI — real surface area, and a risk to the very
+performance budget this gate protects, not the "cheap to test" the issue guessed at.
+
+### The actual fix is a third option nobody had written down
+
+Strip the beacon `<script>` tag from the **downloaded copy** of `dist/` inside the `lighthouse` job,
+right before lhci runs — `scripts/strip-lighthouse-beacon.mjs`. Touches nothing upstream: the
+`build` job's uploaded artifact is untouched, Astro's build logic gains no new mode, and Cloudflare's
+actual deployment still carries the beacon exactly as before. `errors-in-console` measures the site
+again instead of a third party's CORS policy.
+
+Verified against the live endpoint, not assumed: an OPTIONS preflight with `Origin: http://localhost`
+(no port) comes back `Access-Control-Allow-Origin: http://localhost` — matches. The same request with
+any port, including `:80` spelled out explicitly, still comes back portless — doesn't match. That is
+what makes "just fix the port" a dead end regardless of which port is picked, short of 80 itself.
+
+Verified end to end locally, not just read: built the real production `dist/`, ran `lhci collect`
+against it once and reproduced the exact two-line console error from the issue (`errors-in-console`
+0, `best-practices` 0.96). Ran the strip script against a copy, re-ran the identical collect — `1`
+and `1`. The `dist/` the `build` job uploads was left alone throughout; only a scratch copy was ever
+mutated.
+
+### Cost notes
+
+One session, no subagents. The work was almost entirely verification rather than writing code: two
+curl probes into a third-party CORS policy, a read of `@lhci/cli`'s installed source to confirm a
+negative (staticDistDir cannot be pinned to a port), and a real local lhci run before and after the
+fix. The script itself is nine lines of logic. Confidence came from measuring the actual endpoint
+and the actual before/after scores, not from the issue's own reasoning — which was plausible and
+wrong about which option was cheap.
