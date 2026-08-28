@@ -1650,6 +1650,44 @@ with `-`, then `-portfolio.ali-wallick.workers.dev` appended. If the sanitized n
 `<branch>-portfolio` label past 63 characters, don't guess at Cloudflare's truncation — say so and
 point to the bot's comment for the exact link instead of stating a wrong URL as fact.
 
+### Merging to `main` does not deploy. `release` does. (2026-08-27)
+
+**Say "merged", not "deployed", until `main` → `release` is pushed.** Workers Builds' configured
+production branch is `release`, so a push to `main` takes the `wrangler versions upload` path — it
+builds, it produces a `main-portfolio.ali-wallick.workers.dev` alias, and it changes nothing the
+public can see. Only `release` takes the `wrangler deploy` path. This is written down in
+[`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md) and is step 4 of
+[`docs/LAUNCH.md`](docs/LAUNCH.md); it is repeated here because it was read there, for the preview
+URL rule, and the deploy half was not noticed.
+
+Merging six PRs and then watching the apex for half an hour is the cost of getting this wrong.
+**Deploying is also its own decision** — merging a PR is not authorisation to push `release`.
+
+Two diagnostics that wasted most of that half hour, worth keeping so nobody repeats them:
+`cf-cache-status: HIT` came back on a URL that had **never been requested**, so on this zone that
+header proves nothing about caching; and an `Authorization`-header cache bypass still returned old
+bytes, which reads as "the origin is stale" when the real answer was "you are asking a hostname
+that is not the one you deployed to." The check that actually settled it in one request was the
+version alias in Cloudflare's own commit check output, which names the exact build's URL.
+
+### Deployed state drifts from the repo, and it has now happened three times
+
+The general rule behind the section above. **When something about the live site disagrees with what
+a checkout implies, suspect dashboard or zone state before suspecting the build.**
+
+- `workers_dev` re-enabled itself, because `wrangler deploy` defaults it to `true` when it is not
+  set explicitly — undoing a dashboard disable from minutes earlier. Fixed by pinning it in
+  `wrangler.jsonc`.
+- The served `robots.txt` is not the generated one: Cloudflare injects a Managed block ahead of it
+  ([#215](https://github.com/ali-wallick/Portfolio/issues/215)).
+- Production deploys from `release`, a Workers Builds setting with no representation in the repo at
+  all — which is exactly why it was possible to read `wrangler.jsonc` closely and still be wrong
+  about what deploys.
+
+The pattern is the same each time: **the thing that determines behaviour lives somewhere a
+checkout cannot show you.** `wrangler.jsonc` codifies what it can (`workers_dev`, the apex Custom
+Domain) precisely for this reason, and the residue is what these notes are for.
+
 ### Don't touch
 
 - **DNS, the registrar, email.** Phase 1 is closed. None of it is back in scope.
