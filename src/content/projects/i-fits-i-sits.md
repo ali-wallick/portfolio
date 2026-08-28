@@ -21,7 +21,7 @@ engine: [Unity]
 # them. The prose carries the release story instead.
 platforms: []
 job: mobilityware
-role: Designer, Programmer
+role: [Designer, Programmer]
 # Ali co-pitched with Robert Spessard, per her own 2019 blog post ("Robert and I
 # thought it would be hilarious", "pitched alongside Rob") and confirmed by her
 # 2026-08-24. Same person as the `collaborators` entry on it-will-kill-you,

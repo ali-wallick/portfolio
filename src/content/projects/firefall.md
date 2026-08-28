@@ -9,7 +9,7 @@ engine: [Firefall Engine]
 tech: [Lua, XML, C++]
 platforms: [PC]
 job: red-5-studios
-role: UI Programmer
+role: [UI Programmer]
 # Card/tile thumbnail override — the official wordmark, padded to a square
 # canvas so it isn’t cropped by the shared 1:1 thumbnail frame. See #64.
 thumb: ../../assets/images/projects/firefall/thumb-logo.png

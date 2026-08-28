@@ -1097,6 +1097,16 @@ deliberate rather than incidental.
 **superseded by Ali on 2026-08-24**: it is now just `Software Engineer II`. The scope was doing the
 prose's job in a metadata slot. This supersedes the Phase 3 execution note above.
 
+**And `role` is an array as of 2026-08-27** ([#152](https://github.com/ali-wallick/Portfolio/issues/152),
+decided in the [PR #151](https://github.com/ali-wallick/Portfolio/pull/151) review thread). It was
+the one multi-value field on a project modelled as free text, so `Designer, Artist` was a
+hand-joined string that only looked structured. Rendered output is unchanged — `ProjectMeta.astro`
+joins with `, `, and a one-hat role is simply a one-item array. **The join is deliberately not the
+meta strip's `·`**, which separates metadata _categories_; inside `role` it would read
+"Georgia Tech · Designer · Artist" as three independent facts rather than a location and a two-part
+role. This also makes the title-only rule above structural rather than a convention: a scope clause
+was easy to append to a string and is conspicuous as an array element.
+
 **Correction, 2026-08-24 (#97): that change was not "the last em dash in visible copy," as this file
 claimed until now.** Five `role` fields carried the same em-dash-plus-scope shape, all of them
 rendered in the meta strip on `/projects` and on each project page. Prodigal's was trimmed with #97

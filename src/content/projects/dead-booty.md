@@ -11,7 +11,7 @@ teamSize: 3
 collaborators:
   - name: Elias Diestler
   - name: Harrison Leach
-role: Designer, Artist
+role: [Designer, Artist]
 summary: >-
   A treasure-hunt game for actual Atari 2600 hardware. Working within its
   pixel and color limits ended up being most of the game design.

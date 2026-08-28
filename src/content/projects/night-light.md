@@ -15,7 +15,7 @@ teamSize: 3
 collaborators:
   - name: Wes Anderson
   - name: Esther Estroff
-role: Programmer
+role: [Programmer]
 summary: >-
   A HUD-less mood piece for a film class.
 hero:

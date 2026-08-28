@@ -149,8 +149,20 @@ const projects = defineCollection({
         tech: z.array(z.string()).default([]),
         platforms: z.array(z.string()).default([]),
 
-        /** Ali's role, in her words. "Lead UI Programmer", not "Contributor". */
-        role: z.string().min(1).optional(),
+        /**
+         * Ali's role, in her words. "Lead UI Programmer", not "Contributor".
+         *
+         * An array, matching `engine`, `platforms` and `tech` (#152) — it was
+         * the one multi-value field on a project modelled as free text, which
+         * left `Designer, Artist` as a hand-written string that only looked
+         * structured. `ProjectMeta.astro` joins it with `, `; that separator is
+         * a render choice and is deliberately NOT the meta strip's `·`, which
+         * separates different metadata CATEGORIES. Using `·` inside `role`
+         * would flatten "Georgia Tech · Designer · Artist" into three
+         * independent-looking facts instead of one location and a two-part
+         * role.
+         */
+        role: z.array(z.string().min(1)).nonempty().optional(),
         teamSize: z.number().int().positive().optional(),
         collaborators: z
           .array(z.object({ name: z.string().min(1), url: z.url().optional() }))

@@ -17,7 +17,7 @@ collaborators:
   - name: Matt Lovett
   - name: Robert Spessard
     url: https://robertspessard.com
-role: Designer, Artist
+role: [Designer, Artist]
 summary: >-
   A two-player head-to-head class project. One player is a
   virus-infected human racing for a cure. The other is the virus trying to

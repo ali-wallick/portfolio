@@ -9,7 +9,7 @@ engine: [Kaneva Engine]
 tech: [Lua]
 platforms: [PC]
 job: kaneva
-role: Software Engineer
+role: [Software Engineer]
 # Square card/tile thumbnail (on /projects) — the Kaneva cube icon, cropped
 # from the full lockup Ali provided and padded to a square canvas. Icon only,
 # no wordmark: the full lockup’s text reads too small in the shared square

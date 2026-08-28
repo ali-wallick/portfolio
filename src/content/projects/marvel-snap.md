@@ -11,7 +11,7 @@ engine: [Unity]
 tech: [C#]
 platforms: [iOS, Android, PC]
 job: second-dinner
-role: Senior Software Engineer
+role: [Senior Software Engineer]
 # Card/tile thumbnail override — the official app icon, not the video poster
 # frame `projectThumb()` would otherwise fall back to (which has a burned-in
 # "OFFICIAL ANNOUNCE" / "© 2022 MARVEL" bug). See #64.

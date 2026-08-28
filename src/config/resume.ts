@@ -119,8 +119,8 @@ export const resumeSummary =
  * consistent with each other -- one verbless, one a fragment plus a verb-first
  * clause, one two fragments -- which read as a different document pasted in
  * under the Experience section. The two jam verbs are sourced from each
- * project's `role` field (`Programmer`; `Programmer, Designer`), not inferred:
- * both were seven-person teams, so "Built" would have overclaimed.
+ * project's `role` field (`[Programmer]`; `[Programmer, Designer]`), not
+ * inferred: both were seven-person teams, so "Built" would have overclaimed.
  */
 export interface ResumePersonalProject {
   /** Short topic label, same convention as a job bullet's `label`. */

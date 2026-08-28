@@ -9,7 +9,7 @@ tech: [C, Assembly]
 platforms: [Game Boy Advance]
 event: Georgia Tech, CS 2261
 teamSize: 1
-role: Solo Developer
+role: [Solo Developer]
 # Third person, like every other archive lede (#128, item 15a). This was the
 # only summary on the site opening in the first person, and it renders as the
 # page lede where its five siblings all open on an article. "Georgia Tech"

@@ -32,9 +32,16 @@ const where = job?.data.company ?? d.event;
 // through tech and then platform rather than printing an empty field.
 const built = d.engine.length ? d.engine : d.tech.length ? d.tech : d.platforms;
 
-const fields = [formatYears(d.startYear, d.endYear), built.join(', '), where, d.role].filter(
-  Boolean,
-);
+// `role` joins with `, `, matching `built` above and NOT the meta strip's `·`
+// separator (#152). `·` separates metadata categories; using it inside one
+// field would read "Georgia Tech · Designer · Artist" as three independent
+// facts rather than a location and a two-part role.
+const fields = [
+  formatYears(d.startYear, d.endYear),
+  built.join(', '),
+  where,
+  d.role?.join(', '),
+].filter(Boolean);
 ---
 
 <p class="meta-strip">

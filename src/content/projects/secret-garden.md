@@ -12,7 +12,7 @@ collaborators:
   - name: Rose Peng
   - name: Robert Spessard
     url: https://robertspessard.com
-role: Programmer
+role: [Programmer]
 summary: >-
   A handheld augmented-reality maze game for Qualcomm’s AR Game Studio at
   Georgia Tech. Place markers on a printed maze to redirect a girl past traps

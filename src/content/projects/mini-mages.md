@@ -14,7 +14,7 @@ collaborators:
   - name: Rose Peng
   - name: Robert Spessard
     url: https://robertspessard.com
-role: Programmer, Designer
+role: [Programmer, Designer]
 summary: >-
   A Georgia Tech senior capstone built for a client. A four-player wizard
   tournament played on an iPad with up to four Bluetooth-networked iPhones.

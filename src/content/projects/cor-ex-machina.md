@@ -7,7 +7,7 @@ engine: [Unity]
 platforms: [Web]
 event: Global Game Jam 2013
 teamSize: 7
-role: Programmer, Designer
+role: [Programmer, Designer]
 summary: >-
   A herding game set inside a robot’s heart, built for the 2013 Global Game
   Jam. It placed second at Atlanta, the largest GGJ site in the US that year.

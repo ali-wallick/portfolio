@@ -9,7 +9,7 @@ engine: [Unity]
 tech: [C#, DeltaDNA]
 platforms: [iOS, Android]
 job: mobilityware
-role: Software Engineer II
+role: [Software Engineer II]
 # Card/tile thumbnail override — the app icon, not the video poster frame.
 # Sourced via an APKPure mirror since the listing is delisted from both
 # stores (see the Wayback link below). See #64.

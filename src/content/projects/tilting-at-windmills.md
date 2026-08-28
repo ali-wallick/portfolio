@@ -21,7 +21,7 @@ collaborators:
   - name: Alex Gelinas
   - name: Zack Moore
   - name: David Curtis
-role: Programmer
+role: [Programmer]
 summary: >-
   A two-player competitive/co-op jam game. Don Quixote and Sancho ride
   together, one seeing giants and the other trying to stop him from hitting

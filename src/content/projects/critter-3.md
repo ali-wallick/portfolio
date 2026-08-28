@@ -19,7 +19,7 @@ collaborators:
   - name: Cody Kicklighter
   - name: Joe Miranda
   - name: Leigh Ann Kinnison
-role: Programmer
+role: [Programmer]
 summary: >-
   A cube-world puzzle game from Global Game Jam 2011. Cycle each tile’s
   resource until it matches what its face’s animal population needs to
