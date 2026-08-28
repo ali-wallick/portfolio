@@ -183,17 +183,43 @@ async function readTree(dir) {
   return out;
 }
 
+/**
+ * Assets sitting in this project's directory that nothing references.
+ *
+ * Matched on `projects/<slug>/<filename>` rather than the bare filename (#157).
+ * Filenames are NOT unique across projects — `design.png`, `screenshot2.png`
+ * and `Cards.jpg` each belong to several — so a bare-substring search let one
+ * project's reference vouch for another project's orphan, and the check
+ * silently reported "none" on pages that had real unused media. The relative
+ * path is what's actually unique, and it is what front matter writes:
+ * `../../assets/images/projects/critter-3/design.png`.
+ *
+ * The sweep still covers components and layouts, not just this project's own
+ * Markdown: a hero can be referenced from a page template as easily as from
+ * front matter, and scoping to the one content file would trade this false
+ * negative for a false positive.
+ *
+ * A wildcard slug is accepted too, because not every reference is a literal
+ * path. `POSTERS` in src/lib/content.ts picks up every project's `poster.jpg`
+ * through a single `import.meta.glob` over `projects`, a `*` segment, and
+ * `poster.jpg` — deliberately, so that adding a project stays one Markdown
+ * file. Matching only the literal path reported all five poster frames as
+ * orphans on the first run of this fix, which is the same bug in the other
+ * direction.
+ */
 async function unusedAssets(slug) {
   const dir = path.join(ASSETS, slug);
   if (!existsSync(dir)) return [];
   const files = await readdir(dir);
   const sources = [];
-  for (const d of ['src/content', 'src/pages', 'src/components', 'src/layouts']) {
+  for (const d of ['src/content', 'src/pages', 'src/components', 'src/layouts', 'src/lib']) {
     const abs = path.join(ROOT, d);
     if (existsSync(abs)) sources.push(...(await readTree(abs)));
   }
   const haystack = sources.join('\n');
-  return files.filter((f) => !haystack.includes(f));
+  return files.filter(
+    (f) => !haystack.includes(`projects/${slug}/${f}`) && !haystack.includes(`projects/*/${f}`),
+  );
 }
 
 function heading(s) {

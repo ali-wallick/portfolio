@@ -16,3 +16,10 @@ dist/
 .astro/
 node_modules/
 package-lock.json
+
+# Agent worktrees (#144). Git already ignores these via .git/info/exclude, but
+# Prettier only reads .gitignore and .prettierignore — so without this line it
+# format-checks a whole second copy of the repo, including the snapshot/ and
+# content/archive/ preservation records the rules above exist to protect. Do
+# not delete this as redundant with .gitignore; it isn't in .gitignore.
+.claude/worktrees/

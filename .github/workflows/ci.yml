@@ -64,6 +64,20 @@ jobs:
       - name: Resume PDFs are current
         run: npm run check:pdf
 
+      # docs/LINKEDIN.md is generated from the jobs/education collections, so a
+      # bullet edit that isn't regenerated leaves Ali pasting stale copy into
+      # the one surface no agent can check afterwards.
+      #
+      # `check:resume-print` is deliberately NOT here, and that is item 1 of
+      # #191 rather than an oversight: scripts/resume-print-baseline.json was
+      # recorded on macOS, and resume.css pins the print block's `--font-body`
+      # to `system-ui`, so ubuntu-latest renders a different face with
+      # different metrics and the differ would fail for font reasons unrelated
+      # to the change under review. It needs a call on naming an embeddable
+      # face for paper first. This guard has no font dependency.
+      - name: LinkedIn doc is current
+        run: npm run check:linkedin
+
       - name: Link & markup checks
         run: npm run links
 
