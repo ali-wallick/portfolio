@@ -48,9 +48,16 @@ interface Props {
    * mistake to notice, not a silent fallback to a generic image.
    */
   image: string;
+  /**
+   * A schema.org object to emit as JSON-LD (#106). Optional: only the homepage
+   * carries one today. Build it in `src/lib/structured-data.ts` from the
+   * collections rather than writing a literal here — a hand-typed block is a
+   * second place a fact can go stale.
+   */
+  jsonLd?: object;
 }
 
-const { title, description, bareTitle = false, noindex = false, image } = Astro.props;
+const { title, description, bareTitle = false, noindex = false, image, jsonLd } = Astro.props;
 
 const fullTitle = bareTitle ? title : `${title} — ${site.name}`;
 
@@ -116,6 +123,20 @@ function navCurrent(href: string): 'page' | 'true' | undefined {
          crawl directive can't disagree about whether the site is launched. */
     }
     {(!live || noindex) && <meta name="robots" content="noindex" />}
+
+    {
+      /* JSON-LD (#106). `<` is escaped rather than trusted: the payload is
+         ours today, but a `</script>` appearing in any string it reads would
+         otherwise close this tag early and spill the rest into the document. */
+    }
+    {
+      jsonLd && (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')}
+        />
+      )
+    }
 
     {
       /* Favicon (#26): the reticle, reduced to favicon scale — see the SVG's

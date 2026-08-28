@@ -1,0 +1,29 @@
+# Security headers (#105). Cloudflare Workers serves this file natively — one
+# of the reasons Workers was picked over Pages (docs/CLOUDFLARE.md).
+#
+# The stakes here are genuinely low and that is why this is a short file rather
+# than a thorough one: static site, no auth, no forms, no cookies, no user
+# input, no secrets in the client. The old site's one real attack surface, the
+# PHP contact form, is gone by decision. This is hygiene and defence in depth,
+# not a hole being closed.
+#
+# ## Two things are deliberately absent
+#
+# **Content-Security-Policy.** The site loads a YouTube iframe on project pages
+# and the Cloudflare Insights beacon sitewide, so a CSP written by guesswork
+# silently breaks embeds or analytics rather than failing loudly. Getting it
+# right means shipping Content-Security-Policy-Report-Only first and reading
+# real reports, which needs real traffic — the site has only just started
+# receiving any. Not guessed at here.
+#
+# **Strict-Transport-Security.** Additive and safe, but it is also a
+# zone-level Cloudflare setting, and picking ONE of the two places is the whole
+# point. Setting it here and at the edge is the drift this repo avoids
+# everywhere else. Ali's call which. Whichever wins, don't reach for a long
+# max-age with `preload` until the domain has been serving HTTPS happily for a
+# while — `preload` is the one line here that is hard to walk back.
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY

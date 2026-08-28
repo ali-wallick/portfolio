@@ -1594,6 +1594,28 @@ cannot match lhci's random localhost port. That is a flat 0.04 off every page fo
 serving `dist/` locally, so the sitewide gate runs on one hundredth of headroom.
 [#221](https://github.com/ali-wallick/Portfolio/issues/221).
 
+### `public/_headers` carries the safe set, and two headers are deliberately not in it (2026-08-27)
+
+Settled with [#105](https://github.com/ali-wallick/Portfolio/issues/105), which was a gap rather
+than a position — nothing had ever decided either way. `nosniff`,
+`Referrer-Policy: strict-origin-when-cross-origin` and `X-Frame-Options: DENY` ship; **`CSP` and
+`HSTS` do not, and the file says why so the absence reads as a choice.** CSP needs
+`Report-Only` against real traffic before it is enforced, because the site loads a YouTube iframe
+and the Insights beacon and a guessed policy breaks them silently. HSTS is also a zone-level
+Cloudflare setting, and it belongs in exactly one of the two places — Ali's call which.
+
+### The homepage's JSON-LD is derived, and that is the whole design (2026-08-27)
+
+[#106](https://github.com/ali-wallick/Portfolio/issues/106). `src/lib/structured-data.ts` builds a
+schema.org `Person` from `site.ts`, the `active` socials, and the current job's own
+`roles`/`company` — the same sources `/resume` and the About timeline read. **A literal JSON-LD
+block would be a second place every fact on it could go stale**, which is the failure the content
+model exists to rule out. The Marvel Snap credit URL is read off that project's `press` link rather
+than retyped, the same way `scripts/build-linkedin.mjs` reads it.
+
+**The Second Dinner ceiling applies to structured data exactly as it does to prose.** `worksFor`
+names the studio and stops; a machine-readable claim is not a lesser one.
+
 ### The review loop
 
 This loop — not any single tool — is what makes agentic work on a visual project good, and it is the

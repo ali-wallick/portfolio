@@ -4,9 +4,11 @@ import ProjectMeta from '~/components/ProjectMeta.astro';
 import ProjectVisual from '~/components/ProjectVisual.astro';
 import { site } from '~/config/site';
 import { getFeaturedProjects, getCurrentNote } from '~/lib/content';
+import { personJsonLd } from '~/lib/structured-data';
 
 const featured = await getFeaturedProjects();
 const currentNote = await getCurrentNote();
+const jsonLd = await personJsonLd();
 ---
 
 <BaseLayout
@@ -14,6 +16,7 @@ const currentNote = await getCurrentNote();
   description="Ali Wallick, game developer. Fifteen years in UI and systems engineering, five of them on Marvel Snap at Second Dinner."
   image="/og/home.jpg"
   bareTitle
+  jsonLd={jsonLd}
 >
   <div class="hero">
     <p class="eyebrow">{site.role}</p>
