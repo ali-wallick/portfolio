@@ -1,10 +1,12 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import ProjectMeta from '~/components/ProjectMeta.astro';
 import ProjectVisual from '~/components/ProjectVisual.astro';
 import { site } from '~/config/site';
 import { getFeaturedProjects, getCurrentNote } from '~/lib/content';
 import { personJsonLd } from '~/lib/structured-data';
+import portrait from '~/assets/images/me.jpg';
 
 const featured = await getFeaturedProjects();
 const currentNote = await getCurrentNote();
@@ -18,8 +20,35 @@ const jsonLd = await personJsonLd();
   bareTitle
   jsonLd={jsonLd}
 >
+  {
+    /* The face was already here, just not on the page: `buildBrandCard()` in
+      scripts/generate-og-images.mjs has composited `me.jpg` into /og/home.jpg
+      since #70, so a share of the homepage led with Ali’s photo beside her
+      name while the page itself ran text-only until the first project
+      thumbnail. This is the page keeping the card’s promise (#181).
+
+      Same source file as /about’s `.portrait`, deliberately — one headshot,
+      one crop value, two slots. */
+  }
+  {
+    /* Four flat children, no wrapper around the heading. Each is placed by
+      grid area, which is what lets the narrow layout sit the photo beside the
+      name while the eyebrow above and the lede below stay full width. A
+      wrapper would force those three to move as a unit. */
+  }
   <div class="hero">
+    <figure class="hero-portrait">
+      <Image
+        src={portrait}
+        alt="Ali Wallick"
+        widths={[104, 208, 416]}
+        sizes="(max-width: 40em) 4.5rem, 13rem"
+        loading="eager"
+      />
+    </figure>
+
     <p class="eyebrow">{site.role}</p>
+
     <h1>{site.name}</h1>
 
     <p class="lede">

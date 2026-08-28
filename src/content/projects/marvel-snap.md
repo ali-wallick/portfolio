@@ -34,6 +34,21 @@ hero:
 # detail screen (variants, cosmetics, artist credit). Plus a still Ali
 # supplied from her own segment in the hero video, cued at `start: 256` above.
 gallery:
+  # Leads the gallery because it illustrates this page's opening sentence —
+  # joining as the 11th employee, before the studio had shipped anything —
+  # rather than any of the systems below it. It is the only evidence anywhere
+  # on the site for that claim, which also appears on /about and the resume.
+  # Publicly posted, and Ali confirmed it is Second Dinner in 2019 (2026-08-27).
+  # 2019 is the era the W4 announcement and the shipped game already made
+  # describable, so it clears the Phase 3 gate's ceiling on the 2024-present
+  # work. Not a Snap team photo — the game was unannounced in 2019 — so the
+  # caption names the studio and stops.
+  - type: image
+    src: ../../assets/images/projects/marvel-snap/gallery-second-dinner-2019.jpg
+    alt: >-
+      The Second Dinner team in 2019 — about a dozen people crowded into an
+      office, mugging at a wide-angle camera held at arm’s length
+    caption: Second Dinner in 2019, not long after I joined.
   - type: image
     src: ../../assets/images/projects/marvel-snap/gallery-collection-screen.jpg
     alt: >-

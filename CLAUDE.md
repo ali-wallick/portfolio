@@ -359,6 +359,16 @@ Everything else the gate fenced off is untouched and still fenced: **no title, n
 features, no monetization, no studio internals.** This correction moves exactly one word across the
 line, on Ali's authority, and is not a general loosening of the 2024–present rule.
 
+**A publicly-posted studio photo is not "how the studio operates" (2026-08-27, Ali's ruling).** "No
+studio internals" reads naturally as covering an office interior with a dozen identifiable
+colleagues in it, and
+[#59](https://github.com/ali-wallick/Portfolio/issues/59) was written under exactly that caution.
+Ali supplied a 2019 Second Dinner team photo, confirmed it was **posted publicly**, and cleared it
+for use. It ships on the Marvel Snap page. **The two facts that make it clearable are worth keeping
+attached to it**: it is public already, and 2019 is inside the window the shipped game made
+describable. Neither holds for the 2024–present work, so this fences nothing new open — a photo of
+the Godot team would still be off limits, and so would a private photo from any era.
+
 **Current work is not a project page.** The schema requires a `hero` on every published project, and
 this one can never have media — the schema is answering the question for us. It lives as a homepage
 "currently" line, the top entry of the About timeline, and a paragraph on the Second Dinner job
@@ -1174,6 +1184,66 @@ class" sentence in the origin paragraph), an Instagram link for cooking/baking, 
 on the board of her synagogue, University Synagogue in Orange County. The origin paragraph was also
 trimmed on Ali's agreement that leading the page with a decade-plus-old story "isn't ideal anymore" —
 not removed, just lighter.
+
+### Every photograph illustrates the prose beside it (2026-08-27, closes #181)
+
+The rule the photo pass settled, and the one worth carrying forward: **a photograph on this site
+earns its slot by illustrating the sentences next to it, not by being a nice picture of Ali.** It
+decided every placement below, including the two that lost.
+
+| Where                   | What                            | Illustrating                                                           |
+| ----------------------- | ------------------------------- | ---------------------------------------------------------------------- |
+| `/` hero                | The headshot                    | The share card's own promise, below                                    |
+| `/about` top            | Ali as a kid holding a game box | "I got interested in games young"                                      |
+| `/about` Off the Clock  | A cosplay she made              | "Costuming is one of the hands-on, creative things I gravitate toward" |
+| `/projects/marvel-snap` | Second Dinner, 2019             | "I joined … as its 11th employee", the page's opening line             |
+
+**The homepage was under-delivering on its own OG card.** `buildBrandCard()` has composited
+`me.jpg` into `/og/home.jpg` since #70, so sharing `/` put Ali's face beside her name while the page
+itself ran text-only to the first project thumbnail. That mismatch, not "the page looks bare", is
+what #181 actually was.
+
+**The 2019 studio photo lost `/about` and won Marvel Snap on the same rule.** It is a work photo,
+and the claim it evidences — 11th employee, before the studio had shipped anything — is that page's
+opening sentence. On `/about` it would have sat in a career paragraph that gives four studios equal
+billing. It is the only evidence anywhere on the site for a claim that also appears on `/about` and
+the résumé. **Caption it as the studio, never as the Snap team**: the game was unannounced in 2019.
+
+**`/about` deliberately carries no current photo of Ali.** Both images on it are her, from roughly
+1997 and 2019. The homepage carries the current one and every OG card leads with it. Flagged to Ali
+three times and left as-is each time, so it is a decision rather than an oversight.
+
+**Two candidates were declined and should not be rediscovered.** A **family photo** for Off the
+Clock: it is the one candidate that is purely personal rather than also evidence for something the
+page argues, and it would have put a minor on a public site — a call for Ali, not a design question.
+A **Zion Narrows hiking shot**, which lost to the cosplay because a costume is something she _made_
+and a hike is a place she went; that slot is the only image on the site of her making something with
+her hands outside work, which is the non-work register of the "logic of programming and creativity
+of design" thesis recorded above. The honest cost, since it is a real one: every image on the site
+is now games-adjacent.
+
+**The Kerbal shot (`me2.jpg`) is unreferenced and kept on purpose.** It is the costume the award
+sentence names, but Ali is not visibly in it — which stopped being acceptable once the headshot left
+the page. She may redo it, so the asset stays rather than being cleaned up as dead.
+
+**The homepage hero has two layouts on purpose, and unifying them was measured and rejected.**
+They answer different questions. Narrow sizes the photo to a **text span** — a right float topped
+out level with the eyebrow and running to the bottom of the name, 94px measured on a 390px phone —
+so the lede wraps around it. Wide sizes it as a **portrait**, 13rem in a grid, balanced against the
+"currently" module's right edge. A single float at every width gets close: eyebrow, name and photo
+land on identical coordinates at 1280px. But it drops the "currently" module 12px, because a
+float-contained block sizes to the float rather than to grid rows, and it changes the lede's
+constraint from the grid column (592px) to `--measure` (646px). That is a visible change to the
+layout Ali signed off on, bought to smooth a transition only someone resizing a desktop window
+sees. **The binding constraint on the narrow half is the name, not the photo**: at 320px
+"Ali Wallick" has 3px of slack beside the photo, so growing it or lengthening `site.name` wraps it.
+
+**One layout fact, because the slot now takes mixed aspect ratios.** `.aside-figure` caps on
+**height, not width**. Sized to a shared width, a portrait source ran 375px tall against the
+near-square one's 231px — taller than the section it floats in, so it overhung the footer. A
+portrait source also needs `.aside-figure-crop`, and `aspect-ratio` there must have a definite
+`height` to resolve against: with both dimensions `auto` the image silently collapses to 2×2 rather
+than failing loudly.
 
 ## The resume formality pass (2026-08-26, closes #32)
 

@@ -3,8 +3,8 @@ import { Image } from 'astro:assets';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import { getCurrentNote } from '~/lib/content';
 import { externalLinkProps } from '~/lib/links';
-import portrait from '~/assets/images/me.jpg';
-import cosplay from '~/assets/images/me2.jpg';
+import young from '~/assets/images/me-young.jpg';
+import cosplay from '~/assets/images/me-necrodancer.jpg';
 
 /**
  * The "Where I've worked" job list this page used to render (title, company,
@@ -40,18 +40,29 @@ const synagogueUrl = 'https://www.universitysynagogue.org/';
   <h1>About</h1>
 
   {
-    /* The one page on the site where a face is the obvious content. `me.jpg`
-      is a real headshot as of #64/#70 — replaced the full-body hiking shot
-      that used to stand in this slot, whose face was a few dozen pixels
-      inside a 12rem circle. `.portrait img` crops to square with
-      `object-fit: cover` so whatever gets dropped in here next doesn't have
-      to be pre-cropped.
+    /* The headshot that used to sit here moved to the homepage hero (#181),
+      where it keeps the promise /og/home.jpg was already making. What
+      replaced it illustrates the paragraph beside it instead of merely
+      sitting next to it: the opening line is about getting interested in
+      games young, and this is that.
+
+      Square, not the circle the headshot had. A `border-radius: 50%` mask
+      crops the corners, and the corners are where the box is — which is the
+      whole subject. Shares `.aside-figure` with the cosplay shot below
+      rather than inventing a third float width.
 
       Real alt text, unlike the project thumbnails: this is not duplicating
       adjacent link text, so the model's guard applies normally. */
   }
-  <figure class="portrait">
-    <Image src={portrait} alt="Ali Wallick" widths={[180, 360]} sizes="12rem" loading="eager" />
+  <figure class="aside-figure">
+    <Image
+      src={young}
+      alt="Ali as a kid, grinning and holding up a big-box PC game, The Ultimate Titanic Collection, in front of a TV cabinet"
+      widths={[300, 600]}
+      sizes="14rem"
+      loading="eager"
+    />
+    <figcaption class="meta">Gamer from an early age.</figcaption>
   </figure>
 
   <p>
@@ -85,22 +96,36 @@ const synagogueUrl = 'https://www.universitysynagogue.org/';
   <h2>Off the Clock</h2>
 
   {
-    /* `me2.jpg`, also unused since the Phase 3 migration, and the strongest
-      image argument on this page — it is the Kerbal Space Program cosplay the
-      second paragraph below describes. Floated above both paragraphs, not just
-      the one that names it: with two paragraphs in this section, a float
-      placed between them only wraps the second one, leaving the first at full
-      width and the two edges misaligned (#141, caught on the branch preview).
-      Floating it first lets both paragraphs wrap it consistently. */
+    /* Replaced the Kerbal Space Program shot (`me2.jpg`) that stood here from
+      #141. That one is the costume the paragraph's award sentence names, but
+      it is a picture of two helmets and Ali is not visibly in it — which
+      stopped mattering when the headshot was on this page and started
+      mattering once it moved to the homepage (#181). This one shows her, and
+      still shows a costume she made, which is the point of the slot: it is
+      the only image on the site of Ali making something with her hands
+      outside work.
+
+      The award sentence is untouched and still true. The photo simply shows a
+      different costume than the one that won, which the caption says outright
+      rather than leaving a reader to assume this is the Kerbal one. 2019 is
+      off the file's own timestamp (2019-08-29), which lands inside Dragon Con
+      2019's run — it is not inferred from the venue.
+
+      Floated above both paragraphs, not just the one that names costuming:
+      with two paragraphs in this section, a float placed between them only
+      wraps the second one, leaving the first at full width and the two edges
+      misaligned (#141, caught on the branch preview). Floating it first lets
+      both paragraphs wrap it consistently. */
   }
-  <figure class="aside-figure">
+  <figure class="aside-figure aside-figure-crop">
     <Image
       src={cosplay}
-      alt="Kerbal Space Program cosplay — oversized green kerbal heads in white space helmets"
+      alt="Ali at Dragon Con in a Crypt of the NecroDancer cosplay: long yellow wig, blue headband, orange tunic over a grey long-sleeved shirt, leather belt, fingerless gloves, and tall boots"
       widths={[300, 600]}
       sizes="14rem"
       loading="lazy"
     />
+    <figcaption class="meta"><em>Crypt of the NecroDancer</em> cosplay.</figcaption>
   </figure>
 
   <p>

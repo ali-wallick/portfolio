@@ -737,6 +737,157 @@ hr {
 
 .hero {
   padding: var(--space-8) 0 var(--space-4);
+  /* Side-by-side with the headshot (#181). `--measure-wide` matches the
+     "currently" module below, so the hero's right edge lines up with the two
+     bordered blocks rather than floating loose between them. */
+  max-width: var(--measure-wide);
+  /* Grid, and the four children are placed flat rather than wrapped, because
+     the two layouts group them differently. Wide stacks all three text rows in
+     one column beside the photo; narrow sits the photo beside the NAME only,
+     with the eyebrow above and the lede below at full width. Any wrapper
+     around the heading would force those to move together. */
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'eyebrow photo'
+    'name    photo'
+    'lede    photo';
+  column-gap: var(--space-8);
+  align-items: start;
+}
+
+/* No row-gap anywhere in this grid, deliberately. The photo spans every row on
+   the wide layout, so a row-gap would open holes between the eyebrow, the name
+   and the lede to buy spacing that only the narrow layout needs. Narrow
+   spacing is margin on the individual items. */
+
+.hero > h1 {
+  grid-area: name;
+  /* A grid item defaults to `min-width: auto`, which refuses to shrink below
+     its content's intrinsic width — that would let a long name push the photo
+     off the right edge before anything wrapped. */
+  min-width: 0;
+}
+
+.hero > .lede {
+  grid-area: lede;
+}
+
+.hero > .eyebrow {
+  grid-area: eyebrow;
+  /* Both of these exist for the wrapped, narrow case; see the note above the
+     40em block. They are no-ops on one line. */
+  text-wrap: balance;
+  align-items: start;
+}
+
+.hero > .eyebrow::before {
+  /* Optically re-centres the marker on the FIRST line, reproducing what
+     `align-items: center` gives on a single line: (20px line - 8.8px marker)
+     / 2. */
+  margin-top: 0.35rem;
+}
+
+.hero-portrait {
+  grid-area: photo;
+  /* Centred against the text column it spans. On the wide layout this is
+     currently indistinguishable from top alignment, because a 207px text block
+     against a 208px photo makes "centred" and "top" the same answer to within
+     a pixel — stated explicitly so that editing the lede's length does not
+     silently change where the photo sits. */
+  align-self: center;
+  width: 13rem;
+  margin: 0;
+}
+
+.hero-portrait img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  /* Hand-fitted to this photo, and it reads backwards: a higher X% shows more
+     of the source's right side, which pushes the subject left within the crop.
+     35% was tried first and visibly pushed the face further right. 60% was
+     picked from a labelled comparison strip rather than by eye; the next photo
+     dropped in here will want its own value. (Carried over from /about's
+     `.portrait`, which this replaced in #181.) */
+  object-position: 60% 50%;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+}
+
+/* Inline beside the name, Ali's call, and the size is what makes it possible
+   rather than a preference: at 13rem the photo has to take its own row here,
+   and a row of its own is what made it read as orphaned in the first place.
+   At 4.5rem it is an avatar next to a name, which is a shape people recognise
+   and which spends ~72px of vertical instead of ~192px.
+
+   On the RIGHT, the same side it sits on wide, so it does not jump across the
+   page at the breakpoint, and its right edge lands on the eyebrow's and the
+   lede's.
+
+   Floated rather than placed in a grid cell, so the lede wraps beside the
+   photo and then runs back to full width underneath it. In the grid version
+   the photo held a column for its whole height and the lede never got that
+   width back, which both lengthened the paragraph and left the space under the
+   photo empty.
+
+   The figure is FIRST in the DOM, ahead of the eyebrow. A float only affects
+   content that follows it, so this is what tops the photo out level with the
+   eyebrow rather than with the name — Ali's call — and lets all three text
+   blocks wrap it. Source order does not disturb the wide layout, which places
+   all four children by grid area.
+
+   The cost is the eyebrow, and it is width-dependent. That line is mono at a
+   fixed size, so it measures a flat 287px regardless of viewport; the float
+   leaves it 270px on a 390px phone, so it wraps to two lines there and sets on
+   one line from roughly 465px up. Two lines is the accepted cost of the
+   alignment, and it costs about 20px net.
+
+   Left alone it broke as "GAME DEVELOPER · SOFTWARE" / "ENGINEER", splitting
+   the job title across lines — `text-wrap: balance` moves the break onto the
+   separator, where the line already divides. And the marker is aligned to the
+   first line rather than centred, since centring a bullet against a two-line
+   block floats it into the gap between them; the `::before` offset reproduces
+   the centred position on a single line, so the wide layout is unchanged.
+
+   5.875rem is a measured value, not a round one: 94px is exactly the distance
+   from the top of the eyebrow to the bottom of the name on a 390px phone,
+   where the eyebrow takes two lines. Ali asked for that span as a MINIMUM, so
+   the photo is deliberately not re-sized per width — from ~465px up the
+   eyebrow collapses to one line, the span shrinks to 74px, and the photo
+   overhangs the name by 20px into the lede, which the float simply wraps.
+
+   The binding constraint is the name, and it is tight at the very bottom of
+   the range: at 320px the name has 3px of slack beside a 94px photo, so any
+   further growth here wraps "Ali Wallick" onto two lines. 375px has 58px of
+   slack, and no current iPhone is 320px — but that is the number to check
+   before touching this width or `site.name`.
+
+   The eyebrow stays full width above rather than joining the photo's row. It
+   is the longest line in the hero and wraps to two ragged lines in the
+   narrower column, which costs back most of what the inline arrangement
+   saves.
+
+   4.5rem is close to the ceiling, and the constraint is the NAME, not the
+   photo. `--text-4xl` bottoms out at 39px, so the h1 does not shrink further
+   on a small phone: at 320px "Ali Wallick" measures 175px in a 200px column,
+   25px of slack. A longer `site.name`, or a bigger photo here, wraps it. */
+@media (max-width: 40em) {
+  .hero {
+    /* Not a grid here. A grid reserves a full-height column for the photo, so
+       the lede sits in a permanently narrower column instead of running back
+       to full width once it clears the photo. `flow-root` rather than plain
+       `block` so the float is contained and cannot escape into the "currently"
+       module below. */
+    display: flow-root;
+  }
+
+  .hero-portrait {
+    float: right;
+    width: 5.875rem;
+    margin: 0 0 var(--space-3) var(--space-4);
+  }
 }
 
 .hero h1 {
@@ -1090,51 +1241,69 @@ hr {
   font-size: var(--text-base);
 }
 
-/* --- The About portrait --------------------------------------------------
+/* --- The /about floats ---------------------------------------------------
  *
- * /about was the longest prose page on the site with no image on it at all.
- * Floated rather than stacked so the opening paragraph wraps around it: a
+ * Both slots on /about, floated so the paragraph beside each one wraps it: a
  * full-width photo above the text pushes every word below the fold, which
  * trades one problem for another.
+ *
+ * Square rather than circular, which is why the two share a class. Each is a
+ * picture of a *thing* — the game box in the childhood shot, the Kerbal
+ * helmets in the cosplay one — and a circular mask is a portrait convention
+ * that crops exactly the corners those subjects live in.
  */
-.portrait {
-  float: right;
-  width: 12rem;
-  margin: 0 0 var(--space-4) var(--space-6);
-  shape-outside: circle();
-}
-
-.portrait img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  /* A higher X% shows more of the source's right side, which pushes the
-     subject left within the crop — the inverse of what it sounds like.
-     (Got this backwards once already: 35% was tried first and visibly
-     pushed the face further right, confirmed against a live preview.) 60%
-     is this specific photo, picked from a labelled comparison strip rather
-     than by eye alone; the next photo dropped into this slot will likely
-     want its own value. */
-  object-position: 60% 50%;
-  border-radius: 50%;
-  border: 1px solid var(--color-border);
-}
-
-/* The second slot, beside "Off the clock". Square rather than circular: it is a
-   picture of a *thing* — the Kerbal cosplay the paragraph describes — and a
-   circular mask is a portrait convention that would crop the helmets. */
 .aside-figure {
   float: right;
-  width: 14rem;
+  max-width: 14rem;
   margin: 0 0 var(--space-4) var(--space-6);
 }
 
 .aside-figure img {
   display: block;
-  width: 100%;
+  /* Capped on HEIGHT, not width, because the two photos in these slots have
+     different aspect ratios. Sized to a shared 14rem width, the portrait
+     cosplay ran 375px tall against the near-square childhood shot's 231px —
+     taller than the whole "Off the clock" section it floats in, so it
+     overhung the footer. Matching height instead gives the two floats the
+     same visual weight, crops neither, and lets the float box shrink-to-fit
+     whatever width that implies. */
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 16rem;
+  /* These are right floats, and a height-capped portrait is narrower than the
+     caption under it — which sets the box width. Without this the two floats'
+     right edges disagree by ~30px against the text column they share. */
+  margin-left: auto;
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
+}
+
+.aside-figure figcaption {
+  margin-top: var(--space-2);
+}
+
+/* A portrait source in this slot is taller than the section it floats in even
+   after the height cap, so its caption crossed the footer rule. This crops the
+   bottom instead of shrinking the whole photo, so the subject reads bigger
+   rather than smaller — which is the point, since the slot exists to show a
+   costume. `0%` cuts from the bottom only: there is barely any headroom above
+   the subject to give back, and the bottom is boots and carpet. Losing the
+   bottom of the boots is the intended cost, not a side effect. */
+.aside-figure-crop img {
+  /* An explicit width, unlike the uncropped case: `aspect-ratio` needs a
+     definite length to resolve against, and the shared rule sets both `width`
+     and `height` to auto — which collapses the image to 2px rather than
+     failing loudly. Pinning the HEIGHT (not the width) is what keeps the crop
+     gentle: sized to the full 14rem box this ratio runs 269px tall and the
+     caption still crossed the footer rule, and buying that back by cropping
+     harder would have taken the whole boot rather than the bottom of it. */
+  height: 15rem;
+  width: auto;
+  max-height: none;
+  aspect-ratio: 5 / 6;
+  object-fit: cover;
+  object-position: 50% 0%;
 }
 
 /* --- Narrow ---------------------------------------------------------------
@@ -1211,11 +1380,18 @@ hr {
     order: 0;
   }
 
-  /* Floating a 12rem portrait inside a ~20rem column leaves a gutter too narrow
-     to set type in. It centres and takes its own row. */
-  .portrait,
+  /* Floating a 14rem figure inside a ~20rem column leaves a gutter too narrow
+     to set type in. Both /about floats centre and take their own row. */
   .aside-figure {
     float: none;
     margin: 0 auto var(--space-6);
+  }
+
+  /* The right-edge alignment above is a fact about right floats. Once the
+     figure is centred there is no shared right edge to hold, and a
+     height-capped portrait left with `margin-left: auto` sits visibly off
+     centre inside its own box. */
+  .aside-figure img {
+    margin-inline: auto;
   }
 }
