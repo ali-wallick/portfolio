@@ -167,16 +167,23 @@ Use the skills — they encode the schema, the conventions, and the verification
 - `.claude/skills/add-project/` — add or update a project entry.
 - `.claude/skills/write-project-page/` — write a project write-up from source material.
 - `.claude/skills/write-copy/` — write or edit any prose on the site in Ali's voice.
-- `.claude/skills/content-pass/` — run one page of the #31 content revisit pass.
+- `.claude/skills/content-pass/` — revisit or update a page that already exists.
 - `.claude/skills/update-resume/` — add, update, or rebalance resume content.
 - `.claude/skills/pre-launch-check/` — the full pre-merge / pre-launch sweep.
 
-`content-pass` is the method and `write-copy` is the voice; a content-pass session uses both. The
-one thing it exists to enforce: **read the old page in `snapshot/` before deciding the current one
-is fine.** #31 calls itself an edit pass and not a re-reporting pass, which is right about facts and
-misleading about coverage — Phase 3 wrote every page by compressing an old one, and a pass that only
-reads the current page inherits every compression silently. That is how #97's page came to be clean,
-in voice, and missing the reason the game has its name.
+`content-pass` is the method and `write-copy` is the voice; a session revisiting a page uses both.
+Adding something new starts one step earlier — `add-project` for front matter, `write-project-page`
+for the prose — and comes back to `content-pass` to revisit what shipped.
+
+**The old-page comparison came out of `content-pass` on 2026-08-27 ([#147](https://github.com/ali-wallick/Portfolio/issues/147)), and that is a closure, not a
+loosening.** Through #31 the skill's central rule was _read the old page in `snapshot/` before
+deciding the current one is fine_, because Phase 3 wrote every page by compressing an old one and a
+pass that only read the current page inherited every compression silently — that is how #97's page
+came to be clean, in voice, and missing the reason the game has its name. Every page has now been
+compared once, across #31's 21 sub-issues; a new project has no old page to compare against; and
+[#45](https://github.com/ali-wallick/Portfolio/issues/45) will eventually delete `snapshot/`, which
+the audit script used to read. **`snapshot/` is still the reference for "what did the old page
+say?"** — it just isn't a step in every pass any more.
 
 Note: the skill list loads at session start, so a skill added mid-session isn't invocable until the
 next one. Read its `SKILL.md` and follow it directly in that case.
@@ -1110,9 +1117,10 @@ was easy to append to a string and is conspicuous as an array element.
 **Correction, 2026-08-24 (#97): that change was not "the last em dash in visible copy," as this file
 claimed until now.** Five `role` fields carried the same em-dash-plus-scope shape, all of them
 rendered in the meta strip on `/projects` and on each project page. Prodigal's was trimmed with #97
-(`Solo — design, programming, and art` → `Solo developer`). Four remain, each recorded on its own
-page's content-pass issue rather than a new one: art-of-rescue (#89), critter-3 (#91),
-secret-garden (#98), tilting-at-windmills (#99). The sitewide claim was checked by walking the
+(`Solo — design, programming, and art` → `Solo developer`). Four remained at the time — art-of-rescue
+(#89), critter-3 (#91), secret-garden (#98), tilting-at-windmills (#99) — and each was resolved on
+its own page's content pass rather than in a sweep; no `role` field carries an em dash today. The
+sitewide claim was checked by walking the
 rendered DOM, not by reading the source — **the `<title>`/`og:title` template
 (`{title} — Ali Wallick`) also carries one on all 23 routes, and it stays**: it is a structural
 separator, not prose.

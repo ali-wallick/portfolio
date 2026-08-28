@@ -32,6 +32,14 @@ Required to create anything:
 Strongly wanted, and **required before the entry can be published** (`draft: false`):
 
 - `summary` — one line, under 220 characters, used verbatim on cards and in the archive list.
+  **A featured summary is a single sentence, sitewide** — Ali's call on
+  [#101](https://github.com/ali-wallick/Portfolio/issues/101): "I like these descriptions being a
+  single sentence." When it's carrying more facts than fit in one, move the overflow into the body
+  rather than letting the summary run to two. **And where the concept sentence lives is negotiable
+  when the entry has a body**: most summaries pair a context sentence with a concept hook, but Night
+  Light moved its hook into the body and left a context-only summary
+  ([#96](https://github.com/ali-wallick/Portfolio/issues/96)). Ask if it isn't obvious which reads
+  better.
 - `role` — an array, in Ali's words. `[Lead UI Programmer]`, not `[Contributor]`. For an entry with
   more than one hat and no single job title, use a short tag list rather than a sentence —
   `[Designer, Artist]`, not `[Level design, virus character art, and modeling]`. Agent nouns
@@ -64,12 +72,28 @@ Optional but valuable: `engine`, `tech`, `platforms`, `collaborators`, `event`, 
   correct and complete when there's no subsection worth naming — don't force one. See
   `content.config.ts`'s `event` comment for the full rule and examples (Secret Garden, KinoClue,
   Mini Mages, Prodigal).
-- **A link you know is dead gets `dead: true`, not deletion** — but check the Wayback Machine first
-  if it's a citation worth keeping clickable (a press writeup that corroborates a credit, especially).
-  A working `web.archive.org` snapshot as `url`, label suffixed `(via Wayback Machine)`, beats
-  `dead: true`'s "No longer online: X" plain text — it keeps the citation live instead of just
-  inert. Reserve `dead: true` for links where the fact of having existed isn't really the point (a
-  store listing, a project's own dead homepage). See `content.config.ts`'s `link` schema comment.
+- **A link you know is dead gets `dead: true`, not deletion — but check the Wayback Machine first,
+  on any URL, homepages included.** A working `web.archive.org` snapshot as `url`, label suffixed
+  `(via Wayback Machine)`, beats `dead: true`'s inert "No longer online: X" text, because the
+  snapshot _shows_ the thing existed instead of asserting it. This was originally scoped to
+  citations, with a project's own dead homepage listed as the case that didn't need it — wrong: once
+  kaneva.com actually rendered "No longer online: kaneva.com," Ali asked for a Wayback link
+  ([#140](https://github.com/ali-wallick/Portfolio/issues/140)), and firefall.com got the same fix
+  ([#139](https://github.com/ali-wallick/Portfolio/issues/139)). Both point at snapshots from Ali's
+  time there. See `content.config.ts`'s `link` schema comment.
+  **Prefer dropping the link outright over `dead: true` for a broken _action_.** A dead homepage is
+  proof the thing existed; a dead "Play online" link (Cor Ex Machina's Unity Web Player build) is a
+  broken button offering nothing once it fails, and Ali cut it on sight
+  ([#90](https://github.com/ali-wallick/Portfolio/issues/90)). Ask whether the reader loses
+  information or just a broken button.
+  **Load a Wayback swap in a browser before shipping it — `curl` cannot tell you it works.** An
+  archived App Store listing returned a full 200 with complete HTML and shipped on that evidence;
+  opened for real it hung forever on Apple's client-side "Connecting to Apple Music..."
+  interstitial, which archived replay can never resolve. The same page tripped the reverse: a Wix
+  product page `curl`'d back as almost no text because it's entirely client-rendered, and was the
+  fuller working page in a browser ([#137](https://github.com/ali-wallick/Portfolio/issues/137)).
+  `curl` and the availability API only prove a URL _responds_. Use the Browser pane tools and read
+  what a visitor would actually see.
 - **`featured` requires `featureOrder`** (a positive integer) to place it on the projects page.
 - **Leave fields empty when the source doesn't support them.** Don't infer an engine from a
   platform.
@@ -89,6 +113,12 @@ hero:
 
 `alt` is required by the schema and the path is validated at build time, so a typo or a renamed file
 fails the build rather than shipping a broken image.
+
+**Archive-tier captions are descriptive by default** — no "I" or "Ali" — matching the tier's
+lower-key framing (Dead Booty, Prodigal). It is a default to reach for, not a rule to defend against
+a direct request: Night Light's ceiling-fan caption is first person because Ali asked for it, to
+credit a specific contribution the caption sits next to
+([#96](https://github.com/ali-wallick/Portfolio/issues/96)).
 
 **For a live commercial title with no personal captures of your own** (a shipped, currently-running
 game rather than a jam or student project), official screenshots are the right source — the game's
@@ -113,6 +143,13 @@ SHOW_DRAFTS=true npm run build && npm run links
 The build validates the schema and every collection reference. If the entry is not a draft, the
 build also enforces that summary, role, and hero are all present — that is what "done" means for a
 project page.
+
+**Check that every `links[].url` actually resolves — nothing in CI will.** `check-links.mjs`
+deliberately does not fetch external links (for CI speed; see its header comment), and neither does
+the content-pass audit script, so a dead outbound link only gets caught when a human clicks it —
+which is how Tilting at Windmills shipped a 403'ing Global Game Jam link through an earlier pass
+([#99](https://github.com/ali-wallick/Portfolio/issues/99)). A `curl -sIL <url>` per link takes
+seconds. Once you find one, the `dead: true` guidance in §3 applies.
 
 Then tell the user the page's URL path so they can look at it on the preview deploy.
 

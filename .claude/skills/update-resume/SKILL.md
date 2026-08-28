@@ -73,9 +73,10 @@ order:
 3. The job file's "Source material (2019 resume, verbatim)" section — but read the weighting note
    below before leaning on this one.
 
-**Read the matching project page before concluding a job has no more material.** This is the
-resume's version of the `content-pass` rule about reading `snapshot/` first, and it paid three times
-in one #32 session: the card credits feature, the CJK/Thai font work, and the Unity Editor tooling
+**Read the matching project page before concluding a job has no more material.** A job file's
+`highlights` are a compression of its project page, and **compressions lose things silently** — the
+same reason a page is worth reading against its own sources rather than on its own. It paid three
+times in one #32 session: the card credits feature, the CJK/Thai font work, and the Unity Editor tooling
 were all written up on `src/content/projects/marvel-snap.md` and had reached **no version** of the
 resume. A job file's `highlights` are a compression of the project page, and compressions lose
 things silently. When you add such a fact, check whether it should flow the other way too -- the

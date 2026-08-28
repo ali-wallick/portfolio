@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * Mechanical half of a per-page content pass (#31 and its sub-issues).
+ * Mechanical half of a page's content pass.
  *
- * The judgment stays in SKILL.md. This script only does the four checks that
+ * The judgment stays in SKILL.md. This script only does the three checks that
  * are easy to skip, and each of which was missed by hand at least once:
  *
  *  1. Em dashes in RENDERED copy, attributed back to their source line.
@@ -12,10 +12,7 @@
  *     copy" while four more were live on /projects.
  *  2. Sentence stats on rendered copy rather than source, for the same reason.
  *     `copy-stats.mjs` measures the file; this measures the page.
- *  3. The old page's prose, so what a Phase 3 summary DROPPED is visible.
- *     A tone pass is not a re-reporting pass, but the compression it inherits
- *     may already have changed a fact.
- *  4. Unused media already sitting in src/assets/ for this project. The Phase 3
+ *  3. Unused media already sitting in src/assets/ for this project. The Phase 3
  *     migration moved the whole keep-list; only heroes ever got wired up.
  *
  * Reads dist/, so run `SHOW_DRAFTS=true npm run build` first.
@@ -32,7 +29,6 @@ import path from 'node:path';
 
 const ROOT = process.cwd();
 const DIST = path.join(ROOT, 'dist');
-const SNAPSHOT = path.join(ROOT, 'snapshot');
 const CONTENT = path.join(ROOT, 'src/content/projects');
 const ASSETS = path.join(ROOT, 'src/assets/images/projects');
 
@@ -115,26 +111,6 @@ function sentenceStats(text) {
 }
 
 const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
-
-/**
- * Snapshot filenames are the old site's camelCase and do not match the new
- * slugs: critter-3 -> critter.html, vegas-blvd-slots -> vegasBlvd.html.
- * Match on a normalised prefix either way, and print what matched so a human
- * can sanity-check it.
- */
-async function findSnapshot(slug) {
-  const dir = path.join(SNAPSHOT, 'projects');
-  if (!existsSync(dir)) return null;
-  const files = (await readdir(dir)).filter((f) => f.endsWith('.html') && f !== 'index.html');
-  const want = norm(slug);
-  const exact = files.find((f) => norm(f.replace(/\.html$/, '')) === want);
-  if (exact) return path.join(dir, exact);
-  const prefix = files.find((f) => {
-    const n = norm(f.replace(/\.html$/, ''));
-    return n.startsWith(want) || want.startsWith(n);
-  });
-  return prefix ? path.join(dir, prefix) : null;
-}
 
 /**
  * Which front-matter key or body line does this em dash come from?
@@ -280,33 +256,7 @@ async function auditRoute(route) {
 
   if (!slug) return;
 
-  // 3. The old page, for what the Phase 3 summary dropped.
-  heading('Old page (snapshot/)');
-  const snapFile = await findSnapshot(slug);
-  if (!snapFile) {
-    console.log('  none. No old page for this project, so nothing was dropped.');
-  } else {
-    const snapHtml = await readFile(snapFile, 'utf8');
-    const body =
-      extract(snapHtml, /<div class="content">([\s\S]*?)<h3 class="back">/i) ??
-      extract(snapHtml, /<div class="content">([\s\S]*?)<\/div>/i);
-    const snapText = body ? stripTags(body) : '';
-    const ss = sentenceStats(snapText);
-    console.log(`  ${path.relative(ROOT, snapFile)}`);
-    console.log(`  ${ss.words} words then, ${s.words} now`);
-    const imgs = [...snapHtml.matchAll(/<img[^>]+src="([^"]+)"/g)]
-      .map((m) => m[1])
-      .filter((u) => u.includes('/projects/'));
-    if (imgs.length) {
-      console.log(`  ${imgs.length} image(s) on the old page:`);
-      for (const u of imgs) console.log(`    ${u}`);
-    }
-    console.log('');
-    console.log('  --- old prose. Read it for what the summary dropped, not for wording ---');
-    for (const line of snapText.split('\n')) console.log(`  | ${line}`);
-  }
-
-  // 4. Unused media already in the repo.
+  // 3. Unused media already in the repo.
   heading('Unused media in src/assets/');
   const unused = await unusedAssets(slug);
   if (unused.length === 0) {
