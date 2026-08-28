@@ -43,8 +43,8 @@ Strongly wanted, and **required before the entry can be published** (`draft: fal
   ([#152](https://github.com/ali-wallick/Portfolio/issues/152)).
 - `hero` — an image or a YouTube video.
 
-Optional but valuable: `engine`, `tech`, `platforms`, `teamSize`, `collaborators`, `event`, `job`,
-`links`, `gallery`, `shortTitle`.
+Optional but valuable: `engine`, `tech`, `platforms`, `collaborators`, `event`, `job`, `links`,
+`gallery`, `shortTitle`.
 
 ## 3. Rules that are easy to get wrong
 
@@ -130,7 +130,6 @@ tech: [C#]
 platforms: [iOS, Android]
 role: [Client Engineer]
 job: second-dinner # OR: event: Global Game Jam 2024
-teamSize: 6
 links:
   - label: Download for iOS
     url: https://apps.apple.com/...

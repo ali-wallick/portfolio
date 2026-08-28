@@ -7,7 +7,6 @@ status: coursework
 engine: []
 platforms: [Atari 2600]
 event: Georgia Tech
-teamSize: 3
 collaborators:
   - name: Elias Diestler
   - name: Harrison Leach

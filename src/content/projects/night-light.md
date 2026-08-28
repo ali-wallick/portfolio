@@ -11,7 +11,6 @@ platforms: [Web]
 # place -- but the summary drops its own "Georgia Tech" now that this field
 # carries it.
 event: Georgia Tech, Construction of a Moving Image
-teamSize: 3
 collaborators:
   - name: Wes Anderson
   - name: Esther Estroff

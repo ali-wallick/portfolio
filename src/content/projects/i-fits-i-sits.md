@@ -25,15 +25,15 @@ role: [Designer, Programmer]
 # Ali co-pitched with Robert Spessard, per her own 2019 blog post ("Robert and I
 # thought it would be hilarious", "pitched alongside Rob") and confirmed by her
 # 2026-08-24. Same person as the `collaborators` entry on it-will-kill-you,
-# mini-mages and secret-garden, so the URL matches theirs.
+# mini-mages and secret-garden.
 #
-# NOTE: this is deliberately NOT the whole jam team. The blog post says "a really
-# great team formed" and credits "our level designers" without naming anyone, and
-# no source records the size or the other members. See #142 — the rendered "Team"
-# section reads as a complete list, which it isn’t.
+# This is deliberately NOT the whole jam team — the blog post says "a really great
+# team formed" and credits "our level designers" without naming anyone, and no
+# source records the size or the other members. Left as-is rather than reworded
+# (#142, 2026-08-27): these two names are specifically who pitched the game, which
+# is what this page is about, not a claim that the build team was only two people.
 collaborators:
   - name: Robert Spessard
-    url: https://robertspessard.com
 summary: >-
   Pitched and prototyped a puzzle game at a company game jam, winning People’s Choice, then
   other teams developed it into a popular mobile game.

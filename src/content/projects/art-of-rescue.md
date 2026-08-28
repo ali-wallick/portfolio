@@ -7,7 +7,6 @@ engine: []
 tech: [Flash, ActionScript]
 platforms: [Web]
 event: Georgia Tech
-teamSize: 4
 collaborators:
   - name: Raschel Mead
   - name: Erica Penk

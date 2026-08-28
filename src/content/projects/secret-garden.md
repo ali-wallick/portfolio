@@ -7,11 +7,9 @@ engine: [Unity]
 tech: [Qualcomm AR SDK]
 platforms: [Android]
 event: Georgia Tech, Qualcomm AR Game Studio
-teamSize: 3
 collaborators:
   - name: Rose Peng
   - name: Robert Spessard
-    url: https://robertspessard.com
 role: [Programmer]
 summary: >-
   A handheld augmented-reality maze game for Qualcomm’s AR Game Studio at

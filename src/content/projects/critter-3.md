@@ -10,11 +10,9 @@ status: jam
 engine: [Unity]
 platforms: [Web]
 event: Global Game Jam 2011
-teamSize: 7
 collaborators:
   - name: Alex Hunt
   - name: Robert Spessard
-    url: https://robertspessard.com
   - name: Chase Bueker
   - name: Cody Kicklighter
   - name: Joe Miranda

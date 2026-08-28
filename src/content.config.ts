@@ -163,10 +163,7 @@ const projects = defineCollection({
          * role.
          */
         role: z.array(z.string().min(1)).nonempty().optional(),
-        teamSize: z.number().int().positive().optional(),
-        collaborators: z
-          .array(z.object({ name: z.string().min(1), url: z.url().optional() }))
-          .default([]),
+        collaborators: z.array(z.object({ name: z.string().min(1) })).default([]),
 
         /**
          * Professional work points at the job it was done under, rather than

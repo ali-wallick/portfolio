@@ -6,14 +6,11 @@ status: coursework
 engine: [Unity]
 platforms: [iOS]
 event: Georgia Tech, senior capstone
-teamSize: 5
 collaborators:
   - name: Wes Anderson
   - name: Joseph Maliksi
-    url: https://josephmaliksi.com
   - name: Rose Peng
   - name: Robert Spessard
-    url: https://robertspessard.com
 role: [Programmer, Designer]
 summary: >-
   A Georgia Tech senior capstone built for a client. A four-player wizard

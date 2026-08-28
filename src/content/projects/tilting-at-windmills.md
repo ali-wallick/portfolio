@@ -6,14 +6,12 @@ status: jam
 engine: [Unity]
 platforms: [PC, iPad]
 event: Global Game Jam 2014
-teamSize: 13
 collaborators:
   - name: Heather Dettore
   - name: Cody Kicklighter
   - name: Amy Treadway
   - name: Ken Kinnison
   - name: Rob Spessard
-    url: https://robertspessard.com
   - name: Brandon Treadway
   - name: Chase Bueker
   - name: Leigh Ann Kinnison

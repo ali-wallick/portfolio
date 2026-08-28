@@ -6,7 +6,6 @@ status: jam
 engine: [Unity]
 platforms: [Web]
 event: Global Game Jam 2013
-teamSize: 7
 role: [Programmer, Designer]
 summary: >-
   A herding game set inside a robot’s heart, built for the 2013 Global Game
