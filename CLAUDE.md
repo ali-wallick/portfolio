@@ -36,12 +36,19 @@ clear it was a second, thinner source for the same build-in-public page the log 
 decision they drifted — the plan's decisions table still listed Second Dinner's current work under a
 phrasing retired below. That is the failure mode the guard table further down exists to rule out.
 
-**Remaining work is tracked as GitHub issues, not in a document.** The list lives in three
-milestones — [`Pre-launch`](https://github.com/ali-wallick/Portfolio/milestone/1),
-[`Launch`](https://github.com/ali-wallick/Portfolio/milestone/3), and
-[`Post-launch`](https://github.com/ali-wallick/Portfolio/milestone/2). Each issue carries its
-source, why it was deferred, and what unblocks it, so a cold session can pick one up without
-reading scrollback.
+**Remaining work is tracked as GitHub issues, not in a document.** Most of it carries no
+milestone at all — milestones here mark a genuine distinction, not a status label, so once
+`Pre-launch` and `Launch` closed at the cutover, `Post-launch` stopped discriminating anything (every
+open issue is trivially "after launch" once the domain has moved) and was closed too
+(2026-08-28), the same call the Phase 6 gate made when it deleted the stage labels for being a 1:1
+echo of their milestone. Two milestones are still active because they mark something a plain issue
+list can't: [`Deferred`](https://github.com/ali-wallick/Portfolio/milestone/5) for a `decision` that
+isn't ripe yet — blocked on a future event or on there being enough to act on, not simply
+deprioritized — and
+[`DreamHost renewal deadline`](https://github.com/ali-wallick/Portfolio/milestone/4), a
+single-issue milestone tracking the one piece of this project that depends on someone else's
+timeline (#52). Each issue carries its source, why it was deferred, and what unblocks it, so a cold
+session can pick one up without reading scrollback.
 
 Two labels do real work. **`decision`** marks the four things that block work rather than being work
 — they need a call from Ali, not a commit, and several issues are explicitly blocked on them.
@@ -94,17 +101,17 @@ relative to the domain moving, which is the one event with a blast radius outsid
 retired as names for current work, even though the historical prose below still uses them to
 describe what happened during that time.
 
-| Phase       | What                                                                                                                                 | State                                                              |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
-| 0           | Preserve — blog scrape, snapshot, asset inventory                                                                                    | ✅ merged                                                          |
-| 1           | Infrastructure — domain, DNS, email                                                                                                  | ✅ merged                                                          |
-| 2           | Foundation & agentic tooling                                                                                                         | ✅ merged                                                          |
-| 3           | Content: get it true                                                                                                                 | ✅ merged                                                          |
-| 4           | Resume, one source                                                                                                                   | ✅ merged                                                          |
-| 5           | Design                                                                                                                               | ✅ merged                                                          |
-| Pre-launch  | Favicon, OG, a11y, redirects, remaining content/resume calls, wording revisit — everything that must be true before the domain moves | 🚧 [tracked](https://github.com/ali-wallick/Portfolio/milestone/1) |
-| Launch      | The DNS cutover itself — its own moment, not gated on Pre-launch closing (#21). Procedure: [`docs/LAUNCH.md`](docs/LAUNCH.md)        | [tracked](https://github.com/ali-wallick/Portfolio/milestone/3)    |
-| Post-launch | Keep it alive                                                                                                                        | [tracked](https://github.com/ali-wallick/Portfolio/milestone/2)    |
+| Phase       | What                                                                                                                                 | State                                     |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------- |
+| 0           | Preserve — blog scrape, snapshot, asset inventory                                                                                    | ✅ merged                                 |
+| 1           | Infrastructure — domain, DNS, email                                                                                                  | ✅ merged                                 |
+| 2           | Foundation & agentic tooling                                                                                                         | ✅ merged                                 |
+| 3           | Content: get it true                                                                                                                 | ✅ merged                                 |
+| 4           | Resume, one source                                                                                                                   | ✅ merged                                 |
+| 5           | Design                                                                                                                               | ✅ merged                                 |
+| Pre-launch  | Favicon, OG, a11y, redirects, remaining content/resume calls, wording revisit — everything that must be true before the domain moves | ✅ done, milestone closed                 |
+| Launch      | The DNS cutover itself — its own moment, not gated on Pre-launch closing (#21). Procedure: [`docs/LAUNCH.md`](docs/LAUNCH.md)        | ✅ done, milestone closed                 |
+| Post-launch | Keep it alive                                                                                                                        | 🚧 ongoing — milestone retired, see above |
 
 **Sequencing principle: structure before skin.** Phases 2–4 produce a complete, correct,
 deliberately unstyled site. Design lands in Phase 5 onto content that already exists, so directions
