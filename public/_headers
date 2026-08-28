@@ -27,3 +27,19 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
+
+# Branch previews must never be indexable, independent of whether `main` is
+# public (#212). `live` (src/config/site.ts) governs robots.txt and the
+# per-page <meta name="robots"> for the one build this site produces — it
+# can't also answer "which hostname is this," because the build is static and
+# the same output serves both aliwallick.com and every *.workers.dev preview.
+# Only a per-host rule can draw that line, which is what this is.
+#
+# `:branch` matches any single label ahead of the account subdomain, so this
+# covers every `<branch>-portfolio.ali-wallick.workers.dev` preview — not just
+# main-portfolio, the one that's deliberately public for sharing — as
+# defense-in-depth if a preview's Cloudflare Access gate is ever off. robots.txt
+# still says `Allow` on these hosts; that's deliberate; a page has to be
+# crawlable for a crawler to see this header and drop it from the index.
+https://:branch.ali-wallick.workers.dev/*
+  X-Robots-Tag: noindex
