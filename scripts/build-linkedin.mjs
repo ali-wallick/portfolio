@@ -50,10 +50,10 @@
  *   node scripts/build-linkedin.mjs --check    # verify the committed file is current
  */
 
-import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
-import { parse as parseYaml } from 'yaml';
+import { readEntries, readFrontmatter } from './lib/frontmatter.mjs';
 
 const CHECK_ONLY = process.argv.includes('--check');
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -64,18 +64,9 @@ const OUT_FILE = path.join(ROOT, 'docs/LINKEDIN.md');
 
 // ---------------------------------------------------------------------------
 // Read the same front matter src/content.config.ts validates, without Astro.
+// `readEntries` lives in ./lib/frontmatter.mjs — build-pdf.mjs hashes the same
+// parsed data to decide whether the committed PDFs are stale (#114).
 // ---------------------------------------------------------------------------
-
-async function readEntries(dir) {
-  const files = (await readdir(dir)).filter((f) => f.endsWith('.md')).sort();
-  const entries = [];
-  for (const file of files) {
-    const raw = await readFile(path.join(dir, file), 'utf8');
-    const match = raw.match(/^---\n([\s\S]*?)\n---/);
-    entries.push({ slug: file.replace(/\.md$/, ''), data: parseYaml(match[1]) });
-  }
-  return entries;
-}
 
 /** Mirrors `getJobs('resume')` in src/lib/content.ts: onResume jobs, most recent first. */
 async function loadResumeJobs() {
@@ -94,9 +85,7 @@ async function loadEducation() {
 
 /** The official Marvel Snap credit link, read off the project rather than retyped here. */
 async function loadMarvelSnapCreditUrl() {
-  const raw = await readFile(path.join(PROJECTS_DIR, 'marvel-snap.md'), 'utf8');
-  const match = raw.match(/^---\n([\s\S]*?)\n---/);
-  const data = parseYaml(match[1]);
+  const data = await readFrontmatter(path.join(PROJECTS_DIR, 'marvel-snap.md'));
   const credit = data.links.find((l) => l.kind === 'press');
   if (!credit) throw new Error('marvel-snap.md has no press-kind link for the official credit');
   return credit.url;

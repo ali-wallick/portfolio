@@ -62,17 +62,24 @@
  * (e.g. after touching an input the hash doesn't cover, or to refresh the
  * committed files' internal timestamps on purpose).
  *
+ * The hash has two halves (#114). Everything that renders the document —
+ * components, stylesheets, config — is hashed by raw bytes. The `jobs` and
+ * `education` collections are hashed by their PARSED front matter, so editing
+ * a comment in a content file no longer reports the PDFs as stale. See
+ * `byteHashedFiles` and `CONTENT_COLLECTIONS` below.
+ *
  * Usage:
  *   node scripts/build-pdf.mjs            # regenerate if inputs changed (needs Chromium)
  *   node scripts/build-pdf.mjs --force    # regenerate unconditionally
  *   node scripts/build-pdf.mjs --check    # verify the committed PDFs are current
  */
 
-import { readFile, writeFile, copyFile, readdir } from 'node:fs/promises';
+import { readFile, writeFile, copyFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { serveDist } from './lib/serve-dist.mjs';
+import { readEntries } from './lib/frontmatter.mjs';
 
 const CHECK_ONLY = process.argv.includes('--check');
 const DIST = path.resolve('dist');
@@ -80,12 +87,15 @@ const PUBLIC = path.resolve('public');
 const LOCK = path.resolve('scripts/resume-pdf.lock.json');
 
 /**
- * Every file that can change what the PDFs look like. If you add one — a new
- * component the resume renders, a stylesheet it imports — add it here, or the
- * staleness check silently stops covering it.
+ * Every file that can change what the PDFs look like, hashed by raw bytes. If
+ * you add one — a new component the resume renders, a stylesheet it imports —
+ * add it here, or the staleness check silently stops covering it.
+ *
+ * The jobs and education collections are NOT here: they are hashed
+ * semantically instead, by CONTENT_COLLECTIONS below.
  */
-async function inputFiles() {
-  const explicit = [
+function byteHashedFiles() {
+  return [
     'src/components/ResumeDocument.astro',
     'src/components/ResumeActions.astro',
     'src/pages/resume.astro',
@@ -112,21 +122,60 @@ async function inputFiles() {
     'src/config/resume.ts',
     'src/lib/content.ts',
     'src/content.config.ts',
-  ];
-  const globbed = [];
-  for (const dir of ['src/content/jobs', 'src/content/education']) {
-    for (const name of (await readdir(dir)).sort()) {
-      if (name.endsWith('.md')) globbed.push(path.join(dir, name));
-    }
+  ].sort();
+}
+
+/**
+ * Hashed by their PARSED front matter rather than their bytes (#114).
+ *
+ * These two collections carry a lot of explanatory prose — src/content/jobs/
+ * second-dinner.md opens with ~25 comment lines before its first bullet — and
+ * byte-hashing meant recording a decision in a comment cost a Chromium regen
+ * and a binary diff on public/*.pdf for zero visible difference. Comments and
+ * formatting do not survive YAML parsing, so hashing the parsed data drops
+ * exactly the noise and keeps every field that renders.
+ *
+ * Markdown BODIES are excluded along with the comments, because
+ * ResumeDocument.astro renders no body — only front matter fields. That is not
+ * a standing assumption anyone has to remember: ResumeDocument.astro is itself
+ * byte-hashed above, so the commit that taught it to render a body would
+ * invalidate the hash at that moment, which is when someone would come back
+ * here.
+ */
+const CONTENT_COLLECTIONS = ['src/content/jobs', 'src/content/education'];
+
+/**
+ * Stable JSON: object keys sorted at every depth, array order preserved.
+ *
+ * Key order in a YAML file is authoring order, so without this a bullet moved
+ * within its own group — which changes nothing about the parsed values — would
+ * still read as a change. Array order is meaningful and deliberately kept:
+ * `highlights` order drives the resume's grouping (see CLAUDE.md).
+ */
+function stableStringify(value) {
+  if (Array.isArray(value)) return `[${value.map(stableStringify).join(',')}]`;
+  if (value && typeof value === 'object') {
+    const body = Object.keys(value)
+      .sort()
+      .map((k) => `${JSON.stringify(k)}:${stableStringify(value[k])}`)
+      .join(',');
+    return `{${body}}`;
   }
-  return [...explicit, ...globbed].sort();
+  return JSON.stringify(value ?? null);
 }
 
 async function inputHash() {
   const hash = createHash('sha256');
-  for (const file of await inputFiles()) {
+  for (const file of byteHashedFiles()) {
     hash.update(file);
     hash.update(await readFile(file));
+  }
+  for (const dir of CONTENT_COLLECTIONS) {
+    hash.update(dir);
+    for (const { slug, data } of await readEntries(dir)) {
+      hash.update(slug);
+      hash.update(stableStringify(data));
+    }
   }
   return hash.digest('hex');
 }
