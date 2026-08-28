@@ -2492,3 +2492,79 @@ The hour lost to the Cloudflare incident was not agent cost — it was wall-cloc
 two wrong diagnoses were, and both came from reasoning about a status field instead of querying for
 an outcome. Cheaper instinct: when something claims to be in progress, ask what it has actually
 produced.
+
+## The first post-launch sweep (2026-08-27, #144, #157, #191, #114, #103, #106, #105, #152)
+
+The first session after the cutover, and the first one whose brief was a question rather than a
+task: _are there any issues you can knock out without much input from me?_ Forty-one open issues,
+all post-launch. Eight came out self-contained, in five PRs.
+
+The sorting criterion is the reusable part. Not "is this small" — several of these were not — but
+**does closing it require a call only Ali can make.** That put #212 (previews indexable),
+#215 (the injected AI-crawler `robots.txt`), #178 (the LinkedIn `ABOUT` rewrite) and #142 (whether
+the It Fits I Sits team list can be made complete) out of scope despite three of them being small,
+while keeping #103 in despite it needing a judgment call — because the call was one a measurement
+could settle rather than a preference.
+
+### Three fixes verified green, and none of the greens meant anything
+
+The through-line of the session, and it turned up three separate times in three different tools.
+
+**#157's audit-script fix produced output byte-identical to the code it replaced.** Every orphan
+the issue listed had since been wired up by content passes, so a diff of the tool's output proved
+nothing either way. It had to be verified against a synthetic bug instead — an unreferenced
+`Cards.jpg` dropped into `prodigal/`, colliding with `critter-3`'s referenced one. Old code:
+`none`. New code: the orphan. **A regression guard with no live regression can only be tested by
+manufacturing one.**
+
+The same fix also shipped a false-positive on its first pass, caught only because the diff was
+_not_ empty: matching literal paths reported all five `poster.jpg` frames as orphans, because
+`POSTERS` in `src/lib/content.ts` globs them rather than naming them. The fix for a false negative
+introduced a false positive in the same function, and the empty-diff expectation is what surfaced
+it.
+
+**#103's Lighthouse `assertMatrix` failed open, and reported success.** Put at `ci.assertMatrix`
+instead of `ci.assert.assertMatrix`, lhci ran **zero assertions** and printed
+`Done running autorun.` That is indistinguishable from a passing gate. It surfaced only by trying
+to force a failure and getting `Error: No assertions to use`. Once nested correctly, both matrix
+entries were confirmed by negative control: tightening the project entry fails `marvel-snap` alone;
+tightening the catch-all fails exactly the seven non-project pages and neither project page.
+
+The first negative control was itself useless — it set `performance` to 1.0, and performance is
+already 1.0 on every page. **A control has to be chosen against a metric that actually varies.**
+
+**#152's schema change could have failed open too.** A refactor whose entire claim is "rendered
+output is byte-identical" looks identical to a schema that silently stopped validating. Two
+controls: a bare string is rejected, and so is an empty array.
+
+### #103 found something worth more than the issue it closed
+
+The issue asked what a YouTube iframe costs. Answer: exactly the 0.93 the four-year-old
+`TODO(phase-3)` predicted, and it is one audit — a `youtube-nocookie.com` cookie.
+
+The finding nobody was looking for is that **`errors-in-console` fails on every page, gated ones
+included, and always has.** The Cloudflare Insights beacon POSTs to a host whose CORS preflight
+cannot match lhci's random localhost port, so every page scores 0.96 against a 0.95 bar. The
+sitewide gate has been running on one hundredth of headroom, spent on an artifact of serving
+`dist/` locally. Filed as [#221](https://github.com/ali-wallick/Portfolio/issues/221) rather than
+fixed, since the good fix is a separate change.
+
+**Measuring a new page taught more about the five old ones than about the new one.**
+
+Also learned, and general: `categories:best-practices` asserts the score _Lighthouse computes_. An
+audit-level `off` does not raise it. When a third-party cost has to be absorbed, the threshold is
+the only lever — which is why the issue's preferred remedy ("carve out that audit") was not
+available.
+
+### Cost notes
+
+One session, no subagents, five branches. Fan-out was considered and rejected on the same grounds
+as the cutover session, for a different reason: the issues were genuinely independent, but each one
+was two to six tool calls of work against a repo whose context this session already held. A
+subagent per issue would have paid full cold-start cost eight times to save nothing.
+
+The one thing that _would_ have justified fan-out — surveying 41 unknown issues — was cheap inline
+because `gh issue list` plus one batched `gh issue view` answered it in two calls.
+
+The expensive part was not reasoning, it was Lighthouse: four full lhci runs at 27 page-loads each,
+three of them controls. Worth it. The run that mattered was the one that failed.
