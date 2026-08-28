@@ -122,12 +122,30 @@ jobs:
       #   - SEO 0.54, because draft pages emit `robots: noindex`, which
       #     Lighthouse's SEO category correctly and heavily penalizes.
       #   - Best practices 0.93 on the one page carrying a YouTube iframe.
-      # Neither says anything about the site Ali will publish.
+      # Neither said anything about the site Ali publishes.
       #
-      # TODO(phase-3): once real project pages are published, add one WITH a
-      # video embed back to the url list in lighthouserc.json. Expect the
-      # third-party iframe to cost a few best-practices points, and decide then
-      # whether to carve out that audit or lower the threshold for those pages.
+      # Project detail pages are measured now (#103) — /projects/marvel-snap
+      # for the video hero and /projects/prodigal as an image-hero control,
+      # plus /resume/full and /404, which were unmeasured too. Measured against
+      # a production build, the iframe's cost is exactly the 0.93 predicted
+      # above, and it is one audit: `inspector-issues`, reporting a cookie set
+      # by youtube-nocookie.com. Third-party, inside an iframe, not ours to
+      # fix.
+      #
+      # Resolved by lowering best-practices to 0.90 for project detail pages
+      # only, via lighthouserc.json's assertMatrix — NOT by carving out the
+      # audit, which would not have worked: `categories:best-practices` asserts
+      # the score Lighthouse computes, so switching an audit assertion off
+      # leaves the category score where it was. Every other page and every
+      # other category still holds the original bar.
+      #
+      # Worth knowing about the 0.05 that is left: `errors-in-console` fails on
+      # EVERY page, gated ones included, and always has. The Cloudflare
+      # Insights beacon POSTs to cloudflareinsights.com, whose CORS preflight
+      # can't match lhci's random localhost port, so every page scores 0.96
+      # against a 0.95 bar — one hundredth of headroom, spent on an artifact of
+      # serving `dist/` locally rather than on anything about the site. See
+      # #221; don't read a future 0.96 as comfortable.
       - name: Download build
         uses: actions/download-artifact@v7
         with:

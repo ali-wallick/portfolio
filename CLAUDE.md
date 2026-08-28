@@ -1570,6 +1570,30 @@ a token is not sufficient either** — any selector outranking a bare `:root` be
 regardless of the media query. Both failure modes, and the fix, are under Phase 5 below and in
 [#35](https://github.com/ali-wallick/Portfolio/issues/35).
 
+### Project pages are held to a lower best-practices bar, and the reason is one audit (2026-08-27)
+
+Settled with [#103](https://github.com/ali-wallick/Portfolio/issues/103), which added
+`/projects/marvel-snap`, `/projects/prodigal`, `/resume/full` and `/404` to `lighthouserc.json` —
+before it, the most complex template on the site was the one Lighthouse never measured.
+
+**Project detail pages assert `categories:best-practices` at 0.90; everything else stays at 0.95.**
+Split with `assertMatrix`, so the looser bar reaches project pages and nothing else. Measured, the
+whole gap is a single audit: `inspector-issues`, reporting a cookie set by `youtube-nocookie.com`
+inside the hero embed. Third party, inside an iframe, not ours to fix. Every other page and every
+other category — accessibility still at a flat 1.0, which the newly-gated pages meet — holds the
+original bar.
+
+**Carving out the audit instead does not work, and that is the part worth remembering.**
+`categories:best-practices` asserts the score _Lighthouse computes_, so switching an audit
+assertion off leaves the category score exactly where it was. When a third-party cost has to be
+absorbed, the threshold is the only lever; an audit-level `off` is not.
+
+**Do not read a passing 0.96 as comfortable.** `errors-in-console` fails on every page, gated ones
+included, and always has — the Cloudflare Insights beacon POSTs to a host whose CORS preflight
+cannot match lhci's random localhost port. That is a flat 0.04 off every page for an artifact of
+serving `dist/` locally, so the sitewide gate runs on one hundredth of headroom.
+[#221](https://github.com/ali-wallick/Portfolio/issues/221).
+
 ### The review loop
 
 This loop — not any single tool — is what makes agentic work on a visual project good, and it is the
