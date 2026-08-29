@@ -14,7 +14,10 @@ import '@fontsource/public-sans/latin-700.css';
  * `highlightsExtended` bullets appended.
  *
  * It is a superset by construction, not by discipline: there is one component
- * and one set of bullets, and `variant` only decides how many of them render.
+ * and one set of bullets, and `data-density` only decides how many of them
+ * show. This route stays a plain static page on purpose — it is the no-JS
+ * fallback for /resume's in-place toggle and the source of resume-full.pdf,
+ * so it loads no script and its links are ordinary navigation.
  */
 ---
 
@@ -24,5 +27,5 @@ import '@fontsource/public-sans/latin-700.css';
   image="/og/resume.jpg"
 >
   <ResumeActions current="full" />
-  <ResumeDocument variant="full" />
+  <ResumeDocument density="full" />
 </BaseLayout>

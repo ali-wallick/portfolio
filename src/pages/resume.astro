@@ -21,10 +21,13 @@ import '@fontsource/public-sans/latin-700.css';
  * invisible to screen readers. This is real text, rendered from the same `jobs`
  * and `education` collections the About page reads, so the two cannot drift.
  *
- * `/resume/full` is the same document with `highlightsExtended` appended. Both
- * are rendered to PDF at build time by `scripts/build-pdf.mjs` — see
- * `src/styles/resume.css` for the print rules that make that output look
- * deliberate rather than like a printed webpage.
+ * `/resume/full` is the same document with `highlightsExtended` appended —
+ * and, since the density toggle, literally the same DOM: this page ships the
+ * full superset with `data-density="concise"` hiding the two-pager's extras,
+ * and src/scripts/resume-density.ts flips that attribute in place. /resume/full
+ * stays the no-JS fallback. Both are rendered to PDF at build time by
+ * `scripts/build-pdf.mjs` — see `src/styles/resume.css` for the print rules
+ * that make that output look deliberate rather than like a printed webpage.
  */
 ---
 
@@ -34,5 +37,20 @@ import '@fontsource/public-sans/latin-700.css';
   image="/og/resume.jpg"
 >
   <ResumeActions current="concise" />
-  <ResumeDocument variant="concise" />
+  <ResumeDocument density="concise" />
+  <script is:inline>
+    // Deep link: /resume#full must not flash concise before the deferred
+    // module runs. Runs synchronously during parse, right after the article —
+    // before first paint of it in practice. Top-level on purpose:
+    // prettier-plugin-astro cannot parse a multi-statement <script> nested
+    // inside a `{cond && (…)}` expression (see CLAUDE.md, the calibration
+    // switcher note). Everything else about the toggle lives in
+    // src/scripts/resume-density.ts, which only syncs the controls on load.
+    if (location.hash === '#full') {
+      document.querySelector('article.resume')?.setAttribute('data-density', 'full');
+    }
+  </script>
+  <script>
+    import '~/scripts/resume-density';
+  </script>
 </BaseLayout>

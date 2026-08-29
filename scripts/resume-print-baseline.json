@@ -213,6 +213,51 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > div.resume-switch:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > div.resume-switch:nth-of-type(1) > a:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > div.resume-switch:nth-of-type(1) > a:nth-of-type(2)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > p.meta:nth-of-type(1)",
         "rect": {
           "x": 0,
@@ -228,52 +273,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > p.meta:nth-of-type(1) > strong:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "14.4px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(51, 51, 51)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > p.meta:nth-of-type(1) > a:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "14.4px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > p.meta:nth-of-type(2)",
-        "rect": {
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "14.4px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(51, 51, 51)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > p.meta:nth-of-type(2) > a:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 0,
@@ -337,7 +337,7 @@
         "rect": {
           "x": 0,
           "y": 30.66,
-          "width": 582.61,
+          "width": 612,
           "height": 18.89
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -352,7 +352,7 @@
         "rect": {
           "x": 0,
           "y": 54.88,
-          "width": 499.39,
+          "width": 476,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -367,7 +367,7 @@
         "rect": {
           "x": 0,
           "y": 54.88,
-          "width": 130.41,
+          "width": 137,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -382,7 +382,7 @@
         "rect": {
           "x": 0,
           "y": 55.88,
-          "width": 130.41,
+          "width": 137,
           "height": 14
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -395,9 +395,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > header.resume-head:nth-of-type(1) > ul.resume-contact:nth-of-type(1) > li:nth-of-type(2)",
         "rect": {
-          "x": 146.41,
+          "x": 153,
           "y": 54.88,
-          "width": 78.58,
+          "width": 82,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -410,9 +410,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > header.resume-head:nth-of-type(1) > ul.resume-contact:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
         "rect": {
-          "x": 146.41,
+          "x": 153,
           "y": 55.88,
-          "width": 78.58,
+          "width": 82,
           "height": 14
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -425,9 +425,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > header.resume-head:nth-of-type(1) > ul.resume-contact:nth-of-type(1) > li:nth-of-type(3)",
         "rect": {
-          "x": 240.98,
+          "x": 251,
           "y": 54.88,
-          "width": 140.97,
+          "width": 145,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -440,9 +440,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > header.resume-head:nth-of-type(1) > ul.resume-contact:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
         "rect": {
-          "x": 240.98,
+          "x": 251,
           "y": 55.88,
-          "width": 140.97,
+          "width": 145,
           "height": 14
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -453,7 +453,37 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(1) > h2:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.6667px",
+        "fontWeight": "700",
+        "letterSpacing": "1.14px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(1) > p.resume-summary:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2)",
         "rect": {
           "x": 0,
           "y": 84.39,
@@ -468,7 +498,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(1) > h2:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > h2:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 84.39,
@@ -483,7 +513,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(1) > dl.resume-skills:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 112.58,
@@ -498,7 +528,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(1) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 112.58,
@@ -513,11 +543,11 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(1) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(1) > dt:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(1) > dt:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 112.58,
-          "width": 95.97,
+          "width": 97,
           "height": 17.09
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -528,11 +558,11 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(1) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(1) > dd:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(1) > dd:nth-of-type(1)",
         "rect": {
-          "x": 103.97,
+          "x": 105,
           "y": 112.58,
-          "width": 234.7,
+          "width": 235,
           "height": 17.09
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -543,7 +573,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(1) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(2)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(2)",
         "rect": {
           "x": 0,
           "y": 132.33,
@@ -558,11 +588,11 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(1) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(2) > dt:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(2) > dt:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 132.33,
-          "width": 66.19,
+          "width": 67,
           "height": 17.09
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -573,11 +603,11 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(1) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(2) > dd:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(2) > dd:nth-of-type(1)",
         "rect": {
-          "x": 74.19,
+          "x": 75,
           "y": 132.33,
-          "width": 109.59,
+          "width": 110,
           "height": 17.09
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -588,7 +618,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(1) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(3)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(3)",
         "rect": {
           "x": 0,
           "y": 152.08,
@@ -603,11 +633,11 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(1) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(3) > dt:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(3) > dt:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 152.08,
-          "width": 59.64,
+          "width": 59,
           "height": 17.09
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -618,11 +648,11 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(1) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(3) > dd:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(3) > dd:nth-of-type(1)",
         "rect": {
-          "x": 67.64,
+          "x": 67,
           "y": 152.08,
-          "width": 102.27,
+          "width": 102,
           "height": 17.09
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -633,7 +663,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3)",
         "rect": {
           "x": 0,
           "y": 181.17,
@@ -648,7 +678,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > h2:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > h2:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 181.17,
@@ -663,7 +693,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 209.36,
@@ -678,970 +708,10 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 209.36,
-          "width": 701,
-          "height": 17.19
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 209.36,
-          "width": 269.95,
-          "height": 15.98
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "13.3333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
-        "rect": {
-          "x": 172.86,
-          "y": 209.36,
-          "width": 97.09,
-          "height": 16
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "13.3333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
-        "rect": {
-          "x": 621.73,
-          "y": 210.36,
-          "width": 79.27,
-          "height": 16.19
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(51, 51, 51)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > p.resume-job-intro:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 230.55,
-          "width": 701,
-          "height": 16.91
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > div.resume-bullet-group:nth-of-type(2)",
-        "rect": {
-          "x": 0,
-          "y": 254.11,
-          "width": 701,
-          "height": 15.03
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > div.resume-bullet-group:nth-of-type(2) > h4:nth-of-type(1)",
-        "rect": {
-          "x": 5.33,
-          "y": 254.11,
-          "width": 149.47,
-          "height": 15.03
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > p.resume-group-intro:nth-of-type(2)",
-        "rect": {
-          "x": 0,
-          "y": 271.8,
-          "width": 701,
-          "height": 16.91
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 292.7,
-          "width": 701,
-          "height": 74.28
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 292.7,
-          "width": 685,
-          "height": 16.91
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 292.7,
-          "width": 86.55,
-          "height": 15
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2)",
-        "rect": {
-          "x": 16,
-          "y": 312.94,
-          "width": 685,
-          "height": 33.81
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2) > b.resume-bullet-label:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 312.94,
-          "width": 114.55,
-          "height": 15
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3)",
-        "rect": {
-          "x": 16,
-          "y": 350.08,
-          "width": 685,
-          "height": 16.91
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3) > b.resume-bullet-label:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 350.08,
-          "width": 115.59,
-          "height": 15
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > div.resume-bullet-group:nth-of-type(3)",
-        "rect": {
-          "x": 0,
-          "y": 373.64,
-          "width": 701,
-          "height": 15.03
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > div.resume-bullet-group:nth-of-type(3) > h4:nth-of-type(1)",
-        "rect": {
-          "x": 5.33,
-          "y": 373.64,
-          "width": 75.16,
-          "height": 15.03
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > p.resume-group-intro:nth-of-type(3)",
-        "rect": {
-          "x": 0,
-          "y": 391.33,
-          "width": 701,
-          "height": 16.91
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2)",
-        "rect": {
-          "x": 0,
-          "y": 412.23,
-          "width": 701,
-          "height": 205.94
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 412.23,
-          "width": 685,
-          "height": 33.81
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 412.23,
-          "width": 79.13,
-          "height": 15
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(2)",
-        "rect": {
-          "x": 16,
-          "y": 449.38,
-          "width": 685,
-          "height": 16.91
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(2) > b.resume-bullet-label:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 449.38,
-          "width": 66.8,
-          "height": 15
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(3)",
-        "rect": {
-          "x": 16,
-          "y": 469.61,
-          "width": 685,
-          "height": 33.81
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(3) > b.resume-bullet-label:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 469.61,
-          "width": 124.97,
-          "height": 15
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(4)",
-        "rect": {
-          "x": 16,
-          "y": 506.75,
-          "width": 685,
-          "height": 16.91
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(4) > b.resume-bullet-label:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 506.75,
-          "width": 79.06,
-          "height": 15
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(5)",
-        "rect": {
-          "x": 16,
-          "y": 526.98,
-          "width": 685,
-          "height": 16.91
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(5) > b.resume-bullet-label:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 526.98,
-          "width": 47.33,
-          "height": 15
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(6)",
-        "rect": {
-          "x": 16,
-          "y": 547.22,
-          "width": 685,
-          "height": 33.81
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(6) > b.resume-bullet-label:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 547.22,
-          "width": 75.47,
-          "height": 15
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(7)",
-        "rect": {
-          "x": 16,
-          "y": 584.36,
-          "width": 685,
-          "height": 33.81
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(7) > b.resume-bullet-label:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 584.36,
-          "width": 106.94,
-          "height": 15
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(2)",
-        "rect": {
-          "x": 0,
-          "y": 628.17,
-          "width": 701,
-          "height": 129.28
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(2) > div.resume-job-head:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 628.17,
-          "width": 701,
-          "height": 17.19
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(2) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 628.17,
-          "width": 220.77,
-          "height": 15.98
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "13.3333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(2) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
-        "rect": {
-          "x": 132.5,
-          "y": 628.17,
-          "width": 88.27,
-          "height": 16
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "13.3333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(2) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
-        "rect": {
-          "x": 638.08,
-          "y": 629.17,
-          "width": 62.92,
-          "height": 16.19
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(51, 51, 51)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 649.36,
-          "width": 701,
-          "height": 108.09
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 649.36,
-          "width": 685,
-          "height": 33.81
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 649.36,
-          "width": 103.06,
-          "height": 15
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2)",
-        "rect": {
-          "x": 16,
-          "y": 686.5,
-          "width": 685,
-          "height": 33.81
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2) > b.resume-bullet-label:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 686.5,
-          "width": 88.28,
-          "height": 15
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3)",
-        "rect": {
-          "x": 16,
-          "y": 723.64,
-          "width": 685,
-          "height": 33.81
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3) > b.resume-bullet-label:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 723.64,
-          "width": 66.08,
-          "height": 15
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3)",
-        "rect": {
-          "x": 0,
-          "y": 767.45,
-          "width": 701,
-          "height": 38.09
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 767.45,
-          "width": 701,
-          "height": 17.19
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 767.45,
-          "width": 192.47,
-          "height": 15.98
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "13.3333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
-        "rect": {
-          "x": 99.84,
-          "y": 767.45,
-          "width": 92.63,
-          "height": 16
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "13.3333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
-        "rect": {
-          "x": 637.89,
-          "y": 768.45,
-          "width": 63.11,
-          "height": 16.19
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(51, 51, 51)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 788.64,
-          "width": 701,
-          "height": 16.91
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 788.64,
-          "width": 685,
-          "height": 16.91
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 788.64,
-          "width": 46.92,
-          "height": 15
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4)",
-        "rect": {
-          "x": 0,
-          "y": 815.55,
-          "width": 701,
-          "height": 55
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 815.55,
-          "width": 701,
-          "height": 17.19
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 815.55,
-          "width": 172.91,
-          "height": 15.98
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "13.3333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
-        "rect": {
-          "x": 121.3,
-          "y": 815.55,
-          "width": 51.61,
-          "height": 16
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "13.3333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
-        "rect": {
-          "x": 640.47,
-          "y": 816.55,
-          "width": 60.53,
-          "height": 16.19
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(51, 51, 51)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 836.73,
-          "width": 701,
-          "height": 33.81
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 836.73,
-          "width": 685,
-          "height": 33.81
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1)",
-        "rect": {
-          "x": 16,
-          "y": 836.73,
-          "width": 100.72,
-          "height": 15
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3)",
-        "rect": {
-          "x": 0,
-          "y": 882.55,
-          "width": 701,
-          "height": 45.38
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > h2:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 882.55,
-          "width": 701,
-          "height": 18.86
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.6667px",
-        "fontWeight": "700",
-        "letterSpacing": "1.14px",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 910.73,
-          "width": 701,
-          "height": 17.19
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "12.5333px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 910.73,
+          "y": 209.36,
           "width": 701,
           "height": 17.19
         },
@@ -1656,8 +726,8 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 910.73,
-          "width": 368.25,
+          "y": 209.36,
+          "width": 273,
           "height": 15.98
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -1670,9 +740,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
         "rect": {
-          "x": 168.08,
-          "y": 910.73,
-          "width": 200.17,
+          "x": 175,
+          "y": 209.36,
+          "width": 98,
           "height": 16
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -1685,9 +755,1269 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
-          "x": 676.73,
+          "x": 619,
+          "y": 210.36,
+          "width": 82,
+          "height": 16.19
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > p.resume-job-intro:nth-of-type(2)",
+        "rect": {
+          "x": 0,
+          "y": 230.55,
+          "width": 701,
+          "height": 16.91
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-bullet-group:nth-of-type(2)",
+        "rect": {
+          "x": 0,
+          "y": 254.11,
+          "width": 701,
+          "height": 15.03
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-bullet-group:nth-of-type(2) > h4:nth-of-type(1)",
+        "rect": {
+          "x": 5.33,
+          "y": 254.11,
+          "width": 149,
+          "height": 15.03
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > p.resume-group-intro:nth-of-type(3)",
+        "rect": {
+          "x": 0,
+          "y": 271.8,
+          "width": 701,
+          "height": 16.91
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 292.7,
+          "width": 701,
+          "height": 74.28
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 292.7,
+          "width": 685,
+          "height": 16.91
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 292.7,
+          "width": 86,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2)",
+        "rect": {
+          "x": 16,
+          "y": 312.94,
+          "width": 685,
+          "height": 33.81
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 312.94,
+          "width": 111,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3)",
+        "rect": {
+          "x": 16,
+          "y": 350.08,
+          "width": 685,
+          "height": 16.91
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 350.08,
+          "width": 115,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-bullet-group:nth-of-type(3)",
+        "rect": {
+          "x": 0,
+          "y": 373.64,
+          "width": 701,
+          "height": 15.03
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-bullet-group:nth-of-type(3) > h4:nth-of-type(1)",
+        "rect": {
+          "x": 5.33,
+          "y": 373.64,
+          "width": 75,
+          "height": 15.03
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > p.resume-group-intro:nth-of-type(4)",
+        "rect": {
+          "x": 0,
+          "y": 391.33,
+          "width": 701,
+          "height": 16.91
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2)",
+        "rect": {
+          "x": 0,
+          "y": 412.23,
+          "width": 701,
+          "height": 205.94
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 412.23,
+          "width": 685,
+          "height": 33.81
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 412.23,
+          "width": 77,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(2)",
+        "rect": {
+          "x": 16,
+          "y": 449.38,
+          "width": 685,
+          "height": 16.91
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(2) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 449.38,
+          "width": 65,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(3)",
+        "rect": {
+          "x": 16,
+          "y": 469.61,
+          "width": 685,
+          "height": 33.81
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(3) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 469.61,
+          "width": 122,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(4)",
+        "rect": {
+          "x": 16,
+          "y": 506.75,
+          "width": 685,
+          "height": 16.91
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(4) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 506.75,
+          "width": 79,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(5)",
+        "rect": {
+          "x": 16,
+          "y": 526.98,
+          "width": 685,
+          "height": 16.91
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(5) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 526.98,
+          "width": 46,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(6)",
+        "rect": {
+          "x": 16,
+          "y": 547.22,
+          "width": 685,
+          "height": 33.81
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(6) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 547.22,
+          "width": 73,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(7)",
+        "rect": {
+          "x": 16,
+          "y": 584.36,
+          "width": 685,
+          "height": 33.81
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(7) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 584.36,
+          "width": 107,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(8) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(9) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2)",
+        "rect": {
+          "x": 0,
+          "y": 628.17,
+          "width": 701,
+          "height": 129.28
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > div.resume-job-head:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 628.17,
+          "width": 701,
+          "height": 17.19
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 628.17,
+          "width": 222,
+          "height": 15.98
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "13.3333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
+        "rect": {
+          "x": 134,
+          "y": 628.17,
+          "width": 88,
+          "height": 16
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "13.3333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
+        "rect": {
+          "x": 638,
+          "y": 629.17,
+          "width": 63,
+          "height": 16.19
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 649.36,
+          "width": 701,
+          "height": 108.09
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 649.36,
+          "width": 685,
+          "height": 33.81
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 649.36,
+          "width": 106,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2)",
+        "rect": {
+          "x": 16,
+          "y": 686.5,
+          "width": 685,
+          "height": 33.81
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 686.5,
+          "width": 87,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3)",
+        "rect": {
+          "x": 16,
+          "y": 723.64,
+          "width": 685,
+          "height": 33.81
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 723.64,
+          "width": 67,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(4) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(5) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(6) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3)",
+        "rect": {
+          "x": 0,
+          "y": 767.45,
+          "width": 701,
+          "height": 38.09
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 767.45,
+          "width": 701,
+          "height": 17.19
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 767.45,
+          "width": 194,
+          "height": 15.98
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "13.3333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
+        "rect": {
+          "x": 100,
+          "y": 767.45,
+          "width": 94,
+          "height": 16
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "13.3333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
+        "rect": {
+          "x": 638,
+          "y": 768.45,
+          "width": 63,
+          "height": 16.19
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 788.64,
+          "width": 701,
+          "height": 16.91
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 788.64,
+          "width": 685,
+          "height": 16.91
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 788.64,
+          "width": 46,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4)",
+        "rect": {
+          "x": 0,
+          "y": 815.55,
+          "width": 701,
+          "height": 55
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 815.55,
+          "width": 701,
+          "height": 17.19
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 815.55,
+          "width": 175,
+          "height": 15.98
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "13.3333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
+        "rect": {
+          "x": 123,
+          "y": 815.55,
+          "width": 52,
+          "height": 16
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "13.3333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
+        "rect": {
+          "x": 640,
+          "y": 816.55,
+          "width": 61,
+          "height": 16.19
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 836.73,
+          "width": 701,
+          "height": 33.81
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 836.73,
+          "width": 685,
+          "height": 33.81
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 836.73,
+          "width": 99,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(4) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > h2:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.6667px",
+        "fontWeight": "700",
+        "letterSpacing": "1.14px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(1) > b.resume-bullet-label:nth-of-type(1) > a:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(2)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(2) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(2) > b.resume-bullet-label:nth-of-type(1) > a:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(3)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(3) > b.resume-bullet-label:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5)",
+        "rect": {
+          "x": 0,
+          "y": 882.55,
+          "width": 701,
+          "height": 45.38
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > h2:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 882.55,
+          "width": 701,
+          "height": 18.86
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.6667px",
+        "fontWeight": "700",
+        "letterSpacing": "1.14px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 910.73,
+          "width": 701,
+          "height": 17.19
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 910.73,
+          "width": 701,
+          "height": 17.19
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 910.73,
+          "width": 376,
+          "height": 15.98
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "13.3333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
+        "rect": {
+          "x": 173,
+          "y": 910.73,
+          "width": 203,
+          "height": 16
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "13.3333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
+        "rect": {
+          "x": 677,
           "y": 911.73,
-          "width": 24.27,
+          "width": 24,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2135,6 +2465,51 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > div.resume-switch:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > div.resume-switch:nth-of-type(1) > a:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > div.resume-switch:nth-of-type(1) > a:nth-of-type(2)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > p.meta:nth-of-type(1)",
         "rect": {
           "x": 0,
@@ -2150,52 +2525,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > p.meta:nth-of-type(1) > strong:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "14.4px",
-        "fontWeight": "700",
-        "letterSpacing": "normal",
-        "color": "rgb(51, 51, 51)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > p.meta:nth-of-type(1) > a:nth-of-type(1)",
-        "rect": {
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "14.4px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(0, 0, 0)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > p.meta:nth-of-type(2)",
-        "rect": {
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
-        "fontSize": "14.4px",
-        "fontWeight": "400",
-        "letterSpacing": "normal",
-        "color": "rgb(51, 51, 51)",
-        "backgroundColor": "rgba(0, 0, 0, 0)"
-      },
-      {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > p.meta:nth-of-type(2) > a:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 0,
@@ -2259,7 +2589,7 @@
         "rect": {
           "x": 0,
           "y": 30.66,
-          "width": 582.61,
+          "width": 612,
           "height": 18.89
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2274,7 +2604,7 @@
         "rect": {
           "x": 0,
           "y": 54.88,
-          "width": 499.39,
+          "width": 476,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2289,7 +2619,7 @@
         "rect": {
           "x": 0,
           "y": 54.88,
-          "width": 130.41,
+          "width": 137,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2304,7 +2634,7 @@
         "rect": {
           "x": 0,
           "y": 55.88,
-          "width": 130.41,
+          "width": 137,
           "height": 14
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2317,9 +2647,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > header.resume-head:nth-of-type(1) > ul.resume-contact:nth-of-type(1) > li:nth-of-type(2)",
         "rect": {
-          "x": 146.41,
+          "x": 153,
           "y": 54.88,
-          "width": 78.58,
+          "width": 82,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2332,9 +2662,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > header.resume-head:nth-of-type(1) > ul.resume-contact:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
         "rect": {
-          "x": 146.41,
+          "x": 153,
           "y": 55.88,
-          "width": 78.58,
+          "width": 82,
           "height": 14
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2347,9 +2677,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > header.resume-head:nth-of-type(1) > ul.resume-contact:nth-of-type(1) > li:nth-of-type(3)",
         "rect": {
-          "x": 240.98,
+          "x": 251,
           "y": 54.88,
-          "width": 140.97,
+          "width": 145,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2362,9 +2692,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > header.resume-head:nth-of-type(1) > ul.resume-contact:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
         "rect": {
-          "x": 240.98,
+          "x": 251,
           "y": 55.88,
-          "width": 140.97,
+          "width": 145,
           "height": 14
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2484,7 +2814,7 @@
         "rect": {
           "x": 0,
           "y": 186.58,
-          "width": 95.97,
+          "width": 97,
           "height": 17.09
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2497,9 +2827,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(1) > dd:nth-of-type(1)",
         "rect": {
-          "x": 103.97,
+          "x": 105,
           "y": 186.58,
-          "width": 234.7,
+          "width": 235,
           "height": 17.09
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2529,7 +2859,7 @@
         "rect": {
           "x": 0,
           "y": 206.33,
-          "width": 66.19,
+          "width": 67,
           "height": 17.09
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2542,9 +2872,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(2) > dd:nth-of-type(1)",
         "rect": {
-          "x": 74.19,
+          "x": 75,
           "y": 206.33,
-          "width": 109.59,
+          "width": 110,
           "height": 17.09
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2574,7 +2904,7 @@
         "rect": {
           "x": 0,
           "y": 226.08,
-          "width": 59.64,
+          "width": 59,
           "height": 17.09
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2587,9 +2917,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(2) > dl.resume-skills:nth-of-type(1) > div.resume-skills-row:nth-of-type(3) > dd:nth-of-type(1)",
         "rect": {
-          "x": 67.64,
+          "x": 67,
           "y": 226.08,
-          "width": 102.27,
+          "width": 102,
           "height": 17.09
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2664,7 +2994,7 @@
         "rect": {
           "x": 0,
           "y": 283.36,
-          "width": 269.95,
+          "width": 273,
           "height": 15.98
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2677,9 +3007,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
         "rect": {
-          "x": 172.86,
+          "x": 175,
           "y": 283.36,
-          "width": 97.09,
+          "width": 98,
           "height": 16
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2692,9 +3022,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
-          "x": 621.73,
+          "x": 619,
           "y": 284.36,
-          "width": 79.27,
+          "width": 82,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2709,7 +3039,7 @@
         "rect": {
           "x": 0,
           "y": 300.55,
-          "width": 499.39,
+          "width": 476,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2754,7 +3084,7 @@
         "rect": {
           "x": 5.33,
           "y": 344.3,
-          "width": 149.47,
+          "width": 149,
           "height": 15.03
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2767,9 +3097,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-bullet-group:nth-of-type(2) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
-          "x": 619.42,
+          "x": 617,
           "y": 344.3,
-          "width": 81.58,
+          "width": 84,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2829,7 +3159,7 @@
         "rect": {
           "x": 16,
           "y": 384.05,
-          "width": 86.55,
+          "width": 86,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2859,12 +3189,27 @@
         "rect": {
           "x": 16,
           "y": 404.28,
-          "width": 114.55,
+          "width": 111,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
         "fontSize": "12.5333px",
         "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(2) > span:nth-of-type(1)",
+        "rect": {
+          "x": 208,
+          "y": 421.19,
+          "width": 406,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
         "letterSpacing": "normal",
         "color": "rgb(0, 0, 0)",
         "backgroundColor": "rgba(0, 0, 0, 0)"
@@ -2889,7 +3234,7 @@
         "rect": {
           "x": 16,
           "y": 441.42,
-          "width": 115.59,
+          "width": 115,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2919,7 +3264,7 @@
         "rect": {
           "x": 5.33,
           "y": 464.98,
-          "width": 75.16,
+          "width": 75,
           "height": 15.03
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2932,9 +3277,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > div.resume-bullet-group:nth-of-type(3) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
-          "x": 635.75,
+          "x": 635,
           "y": 464.98,
-          "width": 65.25,
+          "width": 66,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -2994,7 +3339,7 @@
         "rect": {
           "x": 16,
           "y": 504.73,
-          "width": 79.13,
+          "width": 77,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3024,7 +3369,7 @@
         "rect": {
           "x": 16,
           "y": 541.88,
-          "width": 66.8,
+          "width": 65,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3054,7 +3399,7 @@
         "rect": {
           "x": 16,
           "y": 562.11,
-          "width": 124.97,
+          "width": 122,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3084,12 +3429,27 @@
         "rect": {
           "x": 16,
           "y": 599.25,
-          "width": 79.06,
+          "width": 79,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
         "fontSize": "12.5333px",
         "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(4) > span:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 599.25,
+          "width": 680,
+          "height": 31.91
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
         "letterSpacing": "normal",
         "color": "rgb(0, 0, 0)",
         "backgroundColor": "rgba(0, 0, 0, 0)"
@@ -3114,7 +3474,7 @@
         "rect": {
           "x": 16,
           "y": 636.39,
-          "width": 47.33,
+          "width": 46,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3144,12 +3504,27 @@
         "rect": {
           "x": 16,
           "y": 656.63,
-          "width": 75.47,
+          "width": 73,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
         "fontSize": "12.5333px",
         "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(1) > ul.resume-bullets:nth-of-type(2) > li:nth-of-type(6) > span:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 673.53,
+          "width": 674,
+          "height": 48.81
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
         "letterSpacing": "normal",
         "color": "rgb(0, 0, 0)",
         "backgroundColor": "rgba(0, 0, 0, 0)"
@@ -3174,7 +3549,7 @@
         "rect": {
           "x": 16,
           "y": 727.58,
-          "width": 106.94,
+          "width": 107,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3204,7 +3579,7 @@
         "rect": {
           "x": 16,
           "y": 764.72,
-          "width": 114.55,
+          "width": 111,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3234,7 +3609,7 @@
         "rect": {
           "x": 16,
           "y": 784.95,
-          "width": 47.73,
+          "width": 48,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3279,7 +3654,7 @@
         "rect": {
           "x": 0,
           "y": 828.77,
-          "width": 220.77,
+          "width": 222,
           "height": 15.98
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3292,9 +3667,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
         "rect": {
-          "x": 132.5,
+          "x": 134,
           "y": 828.77,
-          "width": 88.27,
+          "width": 88,
           "height": 16
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3307,9 +3682,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
-          "x": 638.08,
+          "x": 638,
           "y": 829.77,
-          "width": 62.92,
+          "width": 63,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3324,7 +3699,7 @@
         "rect": {
           "x": 0,
           "y": 845.95,
-          "width": 499.39,
+          "width": 476,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3369,7 +3744,7 @@
         "rect": {
           "x": 16,
           "y": 866.14,
-          "width": 103.06,
+          "width": 106,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3399,7 +3774,7 @@
         "rect": {
           "x": 16,
           "y": 903.28,
-          "width": 88.28,
+          "width": 87,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3429,12 +3804,27 @@
         "rect": {
           "x": 16,
           "y": 940.42,
-          "width": 66.08,
+          "width": 67,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
         "fontSize": "12.5333px",
         "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(2) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(3) > span:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 957.33,
+          "width": 675,
+          "height": 48.81
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
         "letterSpacing": "normal",
         "color": "rgb(0, 0, 0)",
         "backgroundColor": "rgba(0, 0, 0, 0)"
@@ -3459,7 +3849,7 @@
         "rect": {
           "x": 16,
           "y": 1011.38,
-          "width": 147.89,
+          "width": 148,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3489,7 +3879,7 @@
         "rect": {
           "x": 16,
           "y": 1031.61,
-          "width": 102.34,
+          "width": 103,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3519,7 +3909,7 @@
         "rect": {
           "x": 16,
           "y": 1051.84,
-          "width": 114.98,
+          "width": 114,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3564,7 +3954,7 @@
         "rect": {
           "x": 0,
           "y": 1095.66,
-          "width": 192.47,
+          "width": 194,
           "height": 15.98
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3577,9 +3967,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
         "rect": {
-          "x": 99.84,
+          "x": 100,
           "y": 1095.66,
-          "width": 92.63,
+          "width": 94,
           "height": 16
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3592,9 +3982,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
-          "x": 637.89,
+          "x": 638,
           "y": 1096.66,
-          "width": 63.11,
+          "width": 63,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3609,7 +3999,7 @@
         "rect": {
           "x": 0,
           "y": 1112.84,
-          "width": 499.39,
+          "width": 476,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3654,12 +4044,27 @@
         "rect": {
           "x": 16,
           "y": 1133.03,
-          "width": 46.92,
+          "width": 46,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
         "fontSize": "12.5333px",
         "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(3) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1) > span:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 1149.94,
+          "width": 581,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
         "letterSpacing": "normal",
         "color": "rgb(0, 0, 0)",
         "backgroundColor": "rgba(0, 0, 0, 0)"
@@ -3684,7 +4089,7 @@
         "rect": {
           "x": 16,
           "y": 1170.17,
-          "width": 71.27,
+          "width": 72,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3714,7 +4119,7 @@
         "rect": {
           "x": 16,
           "y": 1207.31,
-          "width": 113.56,
+          "width": 111,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3759,7 +4164,7 @@
         "rect": {
           "x": 0,
           "y": 1251.13,
-          "width": 172.91,
+          "width": 175,
           "height": 15.98
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3772,9 +4177,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
         "rect": {
-          "x": 121.3,
+          "x": 123,
           "y": 1251.13,
-          "width": 51.61,
+          "width": 52,
           "height": 16
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3787,9 +4192,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
-          "x": 640.47,
+          "x": 640,
           "y": 1252.13,
-          "width": 60.53,
+          "width": 61,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3804,7 +4209,7 @@
         "rect": {
           "x": 0,
           "y": 1268.31,
-          "width": 499.39,
+          "width": 476,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3849,12 +4254,27 @@
         "rect": {
           "x": 16,
           "y": 1288.5,
-          "width": 100.72,
+          "width": 99,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
         "fontSize": "12.5333px",
         "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(3) > section.resume-job:nth-of-type(4) > ul.resume-bullets:nth-of-type(1) > li:nth-of-type(1) > span:nth-of-type(1)",
+        "rect": {
+          "x": 16,
+          "y": 1305.41,
+          "width": 664,
+          "height": 48.81
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
         "letterSpacing": "normal",
         "color": "rgb(0, 0, 0)",
         "backgroundColor": "rgba(0, 0, 0, 0)"
@@ -3879,7 +4299,7 @@
         "rect": {
           "x": 16,
           "y": 1359.45,
-          "width": 83.59,
+          "width": 83,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3909,7 +4329,7 @@
         "rect": {
           "x": 16,
           "y": 1396.59,
-          "width": 122.8,
+          "width": 121,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -3939,7 +4359,7 @@
         "rect": {
           "x": 16,
           "y": 1433.73,
-          "width": 112.16,
+          "width": 111,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -4014,7 +4434,7 @@
         "rect": {
           "x": 16,
           "y": 1507.73,
-          "width": 48.41,
+          "width": 47,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -4029,7 +4449,7 @@
         "rect": {
           "x": 16,
           "y": 1507.73,
-          "width": 45.02,
+          "width": 44,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -4059,7 +4479,7 @@
         "rect": {
           "x": 16,
           "y": 1544.88,
-          "width": 96.39,
+          "width": 94,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -4074,7 +4494,7 @@
         "rect": {
           "x": 16,
           "y": 1544.88,
-          "width": 93,
+          "width": 91,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -4104,7 +4524,7 @@
         "rect": {
           "x": 16,
           "y": 1582.02,
-          "width": 59.89,
+          "width": 59,
           "height": 15
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -4179,7 +4599,7 @@
         "rect": {
           "x": 0,
           "y": 1656.02,
-          "width": 368.25,
+          "width": 376,
           "height": 15.98
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -4192,9 +4612,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1) > span.resume-company:nth-of-type(1)",
         "rect": {
-          "x": 168.08,
+          "x": 173,
           "y": 1656.02,
-          "width": 200.17,
+          "width": 203,
           "height": 16
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -4207,9 +4627,9 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
-          "x": 676.73,
+          "x": 677,
           "y": 1657.02,
-          "width": 24.27,
+          "width": 24,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
@@ -4224,7 +4644,7 @@
         "rect": {
           "x": 0,
           "y": 1673.2,
-          "width": 499.39,
+          "width": 476,
           "height": 16.19
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",

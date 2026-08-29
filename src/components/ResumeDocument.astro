@@ -19,18 +19,35 @@ import { externalLinkProps } from '~/lib/links';
  * site described the Marvel game as "upcoming" on four pages simultaneously
  * because four pages each owned their own copy of the fact.
  *
- * So there is one component and one collection, and `variant` only decides how
- * much of it renders. `full` is a strict superset of `concise` — it appends
- * `highlightsExtended` to `highlights` rather than swapping in a different
- * list. A bullet cannot say one thing on the short version and another on the
- * long one, because there is only ever one copy of it.
+ * So there is one component and one collection, and `full` is a strict
+ * superset of `concise` — it appends `highlightsExtended` to `highlights`
+ * rather than swapping in a different list. A bullet cannot say one thing on
+ * the short version and another on the long one, because there is only ever
+ * one copy of it.
+ *
+ * Both densities now ship in ONE DOM. Every node always renders; full-only
+ * nodes carry `data-full-only`, and `data-density` on the article decides
+ * visibility via the one both-media rule in src/styles/resume.css:
+ *
+ *   .resume[data-density='concise'] [data-full-only] { display: none }
+ *
+ * That is what lets /resume toggle density in place (src/scripts/
+ * resume-density.ts) instead of navigating — and it governs paper too, so
+ * printing a page prints the density you are looking at. `density` here is
+ * only the INITIAL state attribute, no longer a render switch.
  */
 interface Props {
-  variant: 'concise' | 'full';
+  density: 'concise' | 'full';
 }
 
-const { variant } = Astro.props;
-const isFull = variant === 'full';
+const { density } = Astro.props;
+
+/**
+ * Emit `data-full-only` as a valueless attribute, or omit it entirely.
+ * CSS matches on presence, so the value never matters — `undefined` is how
+ * Astro is told to leave the attribute off.
+ */
+const fullOnly = (on: boolean) => (on ? '' : undefined);
 
 const jobs = await getJobs('resume');
 const education = await getEducation();
@@ -42,6 +59,9 @@ const gradYear = (value: string) => value.slice(0, 4);
 
 type Bullet = (typeof jobs)[number]['data']['highlights'][number];
 type BulletGroups = (typeof jobs)[number]['data']['bulletGroups'];
+/** A bullet plus where it came from — `highlightsExtended` bullets render on
+ * both routes now and are hidden at concise density by `data-full-only`. */
+type MergedBullet = Bullet & { fullOnly: boolean };
 
 /**
  * Split a job's bullets into the blocks that render under it.
@@ -52,14 +72,20 @@ type BulletGroups = (typeof jobs)[number]['data']['bulletGroups'];
  * job but Second Dinner and is byte-identical to what rendered before groups
  * existed.
  *
- * On `/resume/full` this is what keeps a `highlightsExtended` bullet inside its
- * own group rather than stranded after every group -- the superset invariant is
- * about content, and appending the long-version bullets to the end of a grouped
- * job would have printed "Marvel Snap" as a heading twice.
+ * This is also what keeps a `highlightsExtended` bullet inside its own group
+ * rather than stranded after every group -- the superset invariant is about
+ * content, and appending the long-version bullets to the end of a grouped job
+ * would have printed "Marvel Snap" as a heading twice.
+ *
+ * A block whose items are ALL extended is itself full-only: its heading,
+ * subtitle and `<ul>` must hide at concise density or the one-pager shows an
+ * empty group. No group is shaped that way today, and a whole JOB can't be
+ * (every job carries a 1-bullet `highlights` floor — CLAUDE.md's weighting
+ * rule), so this guard is for the group case only.
  */
-function bulletBlocks(bullets: Bullet[], groups: BulletGroups) {
+function bulletBlocks(bullets: MergedBullet[], groups: BulletGroups) {
   const order: string[] = [];
-  const byKey = new Map<string, Bullet[]>();
+  const byKey = new Map<string, MergedBullet[]>();
   for (const bullet of bullets) {
     const key = bullet.group ?? '';
     if (!byKey.has(key)) {
@@ -68,15 +94,19 @@ function bulletBlocks(bullets: Bullet[], groups: BulletGroups) {
     }
     byKey.get(key)!.push(bullet);
   }
-  return order.map((key) => ({
-    key,
-    heading: key ? groups[key] : undefined,
-    items: byKey.get(key)!,
-  }));
+  return order.map((key) => {
+    const items = byKey.get(key)!;
+    return {
+      key,
+      heading: key ? groups[key] : undefined,
+      items,
+      fullOnly: items.every((item) => item.fullOnly),
+    };
+  });
 }
 ---
 
-<article class="resume">
+<article class="resume" data-density={density}>
   {
     /* The site header carries this on screen, but a printed page has no nav —
        and a PDF that doesn't say whose resume it is on the page itself is a
@@ -101,20 +131,17 @@ function bulletBlocks(bullets: Bullet[], groups: BulletGroups) {
   </header>
 
   {
-    /* Summary and Personal Projects are `full`-only, settled with Ali on #32.
-       The one-pager is the document you attach to an application; a summary
-       there restates the title line directly above it, and 2011 jam entries
-       compete badly for space against 2024 work under the recency-weighting
-       rule. The two-pager has room for both — see src/config/resume.ts. */
+    /* Summary and Personal Projects are full-only (`data-full-only`), settled
+       with Ali on #32. The one-pager is the document you attach to an
+       application; a summary there restates the title line directly above it,
+       and 2011 jam entries compete badly for space against 2024 work under the
+       recency-weighting rule. The two-pager has room for both — see
+       src/config/resume.ts. */
   }
-  {
-    isFull && (
-      <section class="resume-section" aria-labelledby="summary">
-        <h2 id="summary">Summary</h2>
-        <p class="resume-summary">{resumeSummary}</p>
-      </section>
-    )
-  }
+  <section class="resume-section" aria-labelledby="summary" data-full-only>
+    <h2 id="summary">Summary</h2>
+    <p class="resume-summary">{resumeSummary}</p>
+  </section>
 
   <section class="resume-section" aria-labelledby="skills">
     <h2 id="skills">Skills</h2>
@@ -134,9 +161,10 @@ function bulletBlocks(bullets: Bullet[], groups: BulletGroups) {
     <h2 id="experience">Experience</h2>
     {
       jobs.map((job) => {
-        const bullets = isFull
-          ? [...job.data.highlights, ...job.data.highlightsExtended]
-          : job.data.highlights;
+        const bullets: MergedBullet[] = [
+          ...job.data.highlights.map((b) => ({ ...b, fullOnly: false })),
+          ...job.data.highlightsExtended.map((b) => ({ ...b, fullOnly: true })),
+        ];
         // `roles[]` carries the full progression and the resume deliberately
         // prints only the current title — Ali's call, 2026-08-26 (#32). It used
         // to render "· Previously Software Engineer II (2019 – Dec 2021)".
@@ -159,7 +187,9 @@ function bulletBlocks(bullets: Bullet[], groups: BulletGroups) {
                  Worth 78px on a document that had 24px of slack. The two-pager
                  keeps them, which also keeps `full` a strict superset of
                  `concise`. */}
-            {isFull && <p class="meta resume-job-meta">{job.data.location}</p>}
+            <p class="meta resume-job-meta" data-full-only>
+              {job.data.location}
+            </p>
             {/* Company-level prose, above the bullets and outside them. Ali's
                  call (#32): under one employer for seven years, the fact that
                  belongs to the employer shouldn't be riding on the front of a
@@ -168,26 +198,39 @@ function bulletBlocks(bullets: Bullet[], groups: BulletGroups) {
             {bulletBlocks(bullets, job.data.bulletGroups).map((block) => (
               <>
                 {block.heading && (
-                  <div class="resume-bullet-group">
+                  <div class="resume-bullet-group" data-full-only={fullOnly(block.fullOnly)}>
                     <h4>{block.heading.label}</h4>
                     {/* Two-pager only, Ali's call (#32) -- same shape as the
                          per-entry locations above. The job's own span sits
                          directly overhead on the one-pager, and a second date
                          column under it reads as clutter at that density. */}
-                    {isFull && block.heading.dates && (
-                      <p class="meta resume-dates">{block.heading.dates}</p>
+                    {block.heading.dates && (
+                      <p class="meta resume-dates" data-full-only>
+                        {block.heading.dates}
+                      </p>
                     )}
                   </div>
                 )}
                 {/* Group-level prose, the same idea as the job's `intro` one
                      level down. Renders on both densities -- it is a fact about
                      the whole span rather than extra detail. */}
-                {block.heading?.intro && <p class="resume-group-intro">{block.heading.intro}</p>}
-                <ul class="resume-bullets">
+                {block.heading?.intro && (
+                  <p class="resume-group-intro" data-full-only={fullOnly(block.fullOnly)}>
+                    {block.heading.intro}
+                  </p>
+                )}
+                <ul class="resume-bullets" data-full-only={fullOnly(block.fullOnly)}>
                   {block.items.map((h) => (
-                    <li>
+                    <li data-full-only={fullOnly(h.fullOnly)}>
                       <b class="resume-bullet-label">{h.label}:</b> {h.text}
-                      {isFull && h.extended && <> {h.extended}</>}
+                      {/* The space lives INSIDE the span, so hiding the span
+                           removes it too and the concise sentence ends clean.
+                           Don't "simplify" it to a space between the nodes:
+                           Astro strips whitespace between a text node and an
+                           element when a newline separates them (the 404 page's
+                           missing-space bug — see CLAUDE.md, the wording
+                           pass). */}
+                      {h.extended && <span data-full-only> {h.extended}</span>}
                     </li>
                   ))}
                 </ul>
@@ -199,28 +242,26 @@ function bulletBlocks(bullets: Bullet[], groups: BulletGroups) {
     }
   </section>
 
-  {
-    isFull && (
-      <section class="resume-section" aria-labelledby="personal-projects">
-        <h2 id="personal-projects">Personal Projects</h2>
-        <ul class="resume-bullets resume-personal">
-          {resumePersonalProjects.map((project) => (
-            <li>
-              <b class="resume-bullet-label">
-                {project.slug ? (
-                  <a href={`/projects/${project.slug}`}>{project.label}</a>
-                ) : (
-                  project.label
-                )}
-                :
-              </b>{' '}
-              {project.text}
-            </li>
-          ))}
-        </ul>
-      </section>
-    )
-  }
+  <section class="resume-section" aria-labelledby="personal-projects" data-full-only>
+    <h2 id="personal-projects">Personal Projects</h2>
+    <ul class="resume-bullets resume-personal">
+      {
+        resumePersonalProjects.map((project) => (
+          <li>
+            <b class="resume-bullet-label">
+              {project.slug ? (
+                <a href={`/projects/${project.slug}`}>{project.label}</a>
+              ) : (
+                project.label
+              )}
+              :
+            </b>{' '}
+            {project.text}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
 
   <section class="resume-section" aria-labelledby="education">
     <h2 id="education">Education</h2>
@@ -238,7 +279,9 @@ function bulletBlocks(bullets: Bullet[], groups: BulletGroups) {
                rendered. A 2011 GPA and Dean's List are not load-bearing fifteen
                years into a career — recording a fact is not the same as
                showing it. */}
-          {isFull && <p class="meta resume-job-meta">{entry.data.location}</p>}
+          <p class="meta resume-job-meta" data-full-only>
+            {entry.data.location}
+          </p>
         </section>
       ))
     }

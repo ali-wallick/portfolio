@@ -188,6 +188,13 @@ npm run update:resume-print  # rewrites scripts/resume-print-baseline.json
 If the differ reports something you _didn't_ intend to change, stop — that's a layout regression, not
 a baseline update to wave through.
 
+**Since the density toggle (both densities in one DOM, full-only nodes hidden by
+`data-full-only`), every resume edit renumbers paths on BOTH routes.** The baseline's
+`nth-of-type` counts hidden siblings, so adding a `highlightsExtended` bullet shifts the
+one-pager's visible `li` paths too, and hidden subtrees' children appear as zero-rect rows.
+Expect noisier `--update` diffs than the edit alone suggests; what matters is that the
+_values_ (y/height especially) of visible rows didn't move, not that paths were renamed.
+
 **Two signatures worth being able to read, because both look alarming and neither is:**
 
 - **All `rect`, heights identical, widths changed.** A casing or single-word edit that reflowed

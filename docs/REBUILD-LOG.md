@@ -2615,3 +2615,54 @@ negative (staticDistDir cannot be pinned to a port), and a real local lhci run b
 fix. The script itself is nine lines of logic. Confidence came from measuring the actual endpoint
 and the actual before/after scores, not from the issue's own reasoning — which was plausible and
 wrong about which option was cheap.
+
+## The resume density toggle (2026-08-29)
+
+Ali asked for something more dynamic than the "Switch to two pages" link between /resume and
+/resume/full. Four options went to her in one pass — an in-place animated toggle, cross-document
+view transitions between the existing routes, per-section disclosure, and a game-settings framing
+of the toggle — and she picked the in-place toggle, after one good question: does it lock the
+two-pager into being a superset of the one-pager forever? (Answer: no more than the schema already
+does — `extended` must _continue_ `text` by contract — but it does make that property load-bearing
+in one more place. Recorded in CLAUDE.md.)
+
+The build leaned entirely on a Phase 4 decision paying off: because `full` is a strict superset of
+`concise` by construction, "concise" is literally the full DOM with full-only nodes hidden. So the
+whole feature is: render the superset always, mark full-only nodes with `data-full-only`, flip
+`data-density` on the article, and let one CSS rule — deliberately outside both `@media` scopes in
+resume.css, the file's single both-media rule — decide visibility on screen and paper alike. The
+animation is `document.startViewTransition`, feature-detected, skipped under reduced motion.
+/resume/full survives untouched as the no-JS fallback and the two-page PDF's source.
+
+### What the guards did, which is the interesting part
+
+The change is exactly the shape the resume's guard stack was built to interrogate, and every guard
+had something to say:
+
+- **The page-count assertion** proved the core claim directly: with the full superset in /resume's
+  DOM, `resume.pdf` still came out 1/1 pages — hidden `display:none` content adds zero print height.
+- **The print-geometry baseline** churned massively (its `nth-of-type` paths count hidden
+  siblings), which forced a value-level comparison instead of a wave-through: strip the paths,
+  align old rows against new, require the values to hold. Result: zero y/height deltas across all
+  97 + 138 laid-out rows on the two routes, six new inline spans on /resume/full (the `extended`
+  continuations, now real elements), and x/width drift up to ~29px that is the known
+  CoreText-to-FreeType rasterization gap — this baseline was regenerated on Linux against a
+  macOS-recorded predecessor.
+- **The input hash** gained `src/scripts/resume-density.ts`, the opposite call from the links.ts
+  exclusion and worth the comment: the script runs inside the exact Playwright navigation that
+  prints the PDFs, and its entire job is mutating the attribute the density rule keys off. Its
+  init is read-only w.r.t. the article for the same reason.
+
+One environment note for future remote sessions: the container's pre-installed Chromium (v1194 /
+Chrome 141) predates the repo's Playwright pin (v1234 / Chrome 151) and cdn.playwright.dev is
+proxy-blocked, so the browser was shimmed in via symlinks at the expected registry paths. The
+value-level baseline comparison doubled as the safety check on that substitution: zero y/height
+drift against the committed baseline means the version gap moved nothing that matters.
+
+### Cost notes
+
+One session: options first (a short exploration of the existing switch), then a plan pass with one
+Plan subagent to pressure-test the design against the print pipeline before writing code — it
+caught the baseline path-renumbering and the all-extended-group edge case in advance, both of which
+would otherwise have surfaced as mid-implementation surprises. Implementation itself was small
+(~six files); the verification sequence was most of the work, as it should be on this document.

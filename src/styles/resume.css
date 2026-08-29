@@ -13,6 +13,25 @@
  * should have to re-litigate against a design system.
  */
 
+/* --- Density ------------------------------------------------------------
+ *
+ * The ONE rule in this file that deliberately governs both screen and paper —
+ * outside the @media screen scope below and outside the @media print block,
+ * on purpose. ResumeDocument renders the full superset DOM on both routes;
+ * full-only nodes carry `data-full-only`, and `data-density` on the article
+ * decides what shows. On screen this is what the /resume toggle
+ * (src/scripts/resume-density.ts) flips; on paper it means printing the page
+ * prints the density you are looking at — and scripts/build-pdf.mjs's fresh,
+ * hash-less navigation of /resume prints concise, which is what keeps the
+ * one-page PDF one page. Everything hidden here is display:none, so it adds
+ * zero print height and scripts/check-resume-print.mjs's computed-style
+ * filter skips it.
+ */
+
+.resume[data-density='concise'] [data-full-only] {
+  display: none;
+}
+
 /* --- Screen -------------------------------------------------------------
  *
  * Scoped inside @media screen so nothing here can ever reach paper on
@@ -36,6 +55,45 @@
 
   .resume-actions p {
     margin: 0;
+  }
+
+  /* The density switch. One plate holding two segments — the plate is the
+     pressable thing, per base.css's "height means pressable", so the segments
+     themselves carry no shadow of their own. The active segment uses the same
+     accent-block pair as .button-accent; aria-current is the styling hook
+     because it is also the semantic state, so the two cannot disagree. */
+  .resume-switch {
+    display: inline-flex;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-rest);
+    overflow: hidden;
+  }
+
+  .resume-switch a {
+    padding: var(--space-1) var(--space-3);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    text-decoration: none;
+    color: inherit;
+    transition:
+      background-color var(--duration-fast) var(--ease),
+      color var(--duration-fast) var(--ease);
+  }
+
+  .resume-switch a:visited {
+    color: inherit;
+  }
+
+  .resume-switch a:hover:not([aria-current]) {
+    background: var(--color-accent-soft);
+  }
+
+  .resume-switch a[aria-current] {
+    background: var(--color-accent-block);
+    color: var(--color-on-accent);
   }
 
   .resume-head h1 {

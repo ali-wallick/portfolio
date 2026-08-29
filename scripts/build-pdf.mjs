@@ -126,6 +126,18 @@ function byteHashedFiles() {
     'src/config/resume.ts',
     'src/lib/content.ts',
     'src/content.config.ts',
+    // The density toggle's script — the opposite call from the links.ts
+    // exclusion above, and the distinction is worth stating. links.ts
+    // contributes only `target`/`rel`, which cannot change a rendered page's
+    // appearance. This script executes inside the exact Playwright navigation
+    // that prints the PDFs, and its entire job is mutating the attribute the
+    // both-media density rule in resume.css keys off. Today it is a no-op on
+    // a fresh, hash-less load BY DESIGN (its init never writes to the
+    // article) — but a future bug that flips density on load would change the
+    // printed PDF, and that is precisely the invalidation this hash exists to
+    // catch. resume.astro's inline #full script is covered already: the page
+    // file is byte-hashed above.
+    'src/scripts/resume-density.ts',
   ].sort();
 }
 

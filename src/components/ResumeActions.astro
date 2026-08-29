@@ -6,6 +6,19 @@
  * content, and `src/styles/resume.css` hides it entirely when printing. If it
  * lived inside the document it would end up in the PDF, which is precisely the
  * "printed webpage" look the print stylesheet exists to avoid.
+ *
+ * The switch is two real links, not buttons. Without JS they are exactly what
+ * they look like: ordinary navigation between /resume and /resume/full, which
+ * is the whole fallback story. On /resume, src/scripts/resume-density.ts
+ * upgrades them into an in-place toggle — it intercepts the click, flips the
+ * article's `data-density`, and moves `aria-current` here. After a toggle the
+ * `aria-current="page"` link's href (/resume/full) no longer matches the
+ * address bar (/resume#full); that is deliberate — the link still names the
+ * state you are reading, and honest link semantics beat fake buttons.
+ *
+ * `data-density-link` / `data-pdf-link` are the script's hooks, kept separate
+ * from the classes styling reads — same convention as the reticle keying off
+ * attributes.
  */
 interface Props {
   current: 'concise' | 'full';
@@ -19,13 +32,22 @@ const versions = [
 ] as const;
 
 const active = versions.find((v) => v.key === current)!;
-const other = versions.find((v) => v.key !== current)!;
 ---
 
-<div class="resume-actions" role="group" aria-label="Resume versions">
-  <p class="meta">
-    <strong>{active.label}</strong> · <a href={other.href}>Switch to {other.label.toLowerCase()}</a>
-  </p>
+<div class="resume-actions">
+  <div class="resume-switch" role="group" aria-label="Resume length">
+    {
+      versions.map((v) => (
+        <a
+          href={v.href}
+          aria-current={v.key === current ? 'page' : undefined}
+          data-density-link={v.key}
+        >
+          {v.label}
+        </a>
+      ))
+    }
+  </div>
   {
     /* A real file, generated from this exact page at build time — not a
        `window.print()` link that makes the reader produce their own.
@@ -36,6 +58,6 @@ const other = versions.find((v) => v.key !== current)!;
        chase — `npm run links` checks the built output, which is what ships. */
   }
   <p class="meta">
-    <a href={active.pdf} download>Download PDF</a>
+    <a href={active.pdf} download data-pdf-link>Download PDF</a>
   </p>
 </div>

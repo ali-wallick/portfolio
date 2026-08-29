@@ -1548,6 +1548,41 @@ than either loosening the guard wholesale or chasing pixel parity across two fon
 engines that were never going to have it. Worth knowing generally: "self-hosted, same file, every
 machine" solves _which_ font loads; it doesn't solve exactly how the OS text engine draws it.
 
+## The resume switches density in place (2026-08-29)
+
+Ali's pick from four options, chosen over cross-document view transitions between the two routes.
+`/resume` now toggles between the one-pager and two-pager in place instead of navigating: a
+segmented control flips `data-density` on the article, the document grows into its long form, the
+URL becomes `/resume#full`, and the PDF link follows. The mechanism a future session needs to know:
+
+- **Both densities ship in one DOM.** `ResumeDocument` renders the full superset always; full-only
+  nodes carry `data-full-only`, and `.resume[data-density='concise'] [data-full-only]
+{ display: none }` in `resume.css` decides visibility. That rule is deliberately the ONE rule in
+  the file outside both `@media` blocks — it governs screen and paper alike, so printing a page
+  prints the density on screen, and `build-pdf.mjs`'s fresh hash-less navigation of `/resume` still
+  prints concise. Don't move it inside a media query.
+- **This makes the superset property load-bearing in the UI, not just the schema.** Concise is
+  literally the full DOM minus hidden nodes. If a bullet ever needed to say _different_ things at
+  the two densities (which `content.config.ts` already forbids), the toggle would need a
+  concise-only/full-only node pair, not a schema loosening.
+- **`/resume/full` stays, unchanged in role: the no-JS fallback and the source of
+  `resume-full.pdf`.** It loads no script; its switch links are plain navigation. The shareable
+  two-pager URL for humans is still `/resume/full` — a no-JS visitor handed `/resume#full` sees
+  concise, which is the accepted cost of hash state.
+- **The enhancement script's init must never write to the article** (`src/scripts/
+resume-density.ts`, which is in `build-pdf.mjs`'s `byteHashedFiles` for exactly this reason —
+  a future on-load flip would silently change the committed PDF). The `#full` deep link is applied
+  by a tiny `is:inline` script in `resume.astro` before first paint; the module only syncs the
+  controls.
+- **The animation is `document.startViewTransition`**, feature-detected, skipped under
+  `prefers-reduced-motion` — checked in the script because no token can reach a view transition,
+  the same reasoning as the reticle's own fade curve. Firefox gets an instant flip. Per-element
+  `view-transition-name` polish was deliberately left for a later pass on a preview with Ali.
+- **The print-geometry baseline now renumbers on every resume edit.** `nth-of-type` counts hidden
+  siblings, so both routes' paths shift when a bullet is added anywhere, and hidden subtrees'
+  children appear as zero-rect rows. The `update-resume` skill carries the how-to-read-it note;
+  the check that matters is that visible rows' _values_ (y/height especially) didn't move.
+
 ### Archive pages may carry a short body (2026-08-24, from #97)
 
 **Ali's call, and it sets the pattern for all 11 archive entries, not just the one it came up on.**
