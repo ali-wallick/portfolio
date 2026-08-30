@@ -43,57 +43,222 @@
  */
 
 @media screen {
+  /* --- The actions bar, and the panel it is the edge of -------------------
+   *
+   * Settled with Ali on 2026-08-30 against a live switcher; the record is in
+   * the PR and in CLAUDE.md. `ResumeActions.astro` carries the shape and the
+   * progressive-enhancement contract. What is here is the geometry, and nearly
+   * every value in it is a measurement rather than a preference.
+   *
+   * EVERYTHING BELOW IS SCREEN-ONLY BY SCOPE, and that matters more than usual
+   * here: the panel styles `.resume` itself, which is the element that prints.
+   * A background, a border and 24px of padding reaching paper would change the
+   * PDF and blow the page-count assertion. The `@media screen` wrapper at the
+   * top of this file is what makes that impossible on specificity rather than
+   * on remembering to override it — see CLAUDE.md, "The print block can be
+   * beaten on specificity, not just on omission."
+   */
+
+  /* No border and no bottom margin: the panel's own top border is the rule the
+     tabs join, and the panel's top edge has to BE the bar's bottom edge. A
+     margin here would float that rule clear of the panel it is the edge of.
+     `position: relative` makes this the containing block for the download. */
   .resume-actions {
+    position: relative;
+    display: block;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  /* --- The tabs ---------------------------------------------------------
+     Flush against the panel's left edge, so the active tab's own top-left
+     radius supplies the card's corner. `margin-bottom: -1px` is the join: the
+     active tab's surface covers the panel's border beneath it.
+
+     Flush costs the label alignment and that was Ali's call — flush, the tab's
+     ordinary padding, and the label sitting on the name's left edge are three
+     things you can have two of. The label lands at 161 against the name's 169.
+
+     `--text-base`, which is a deliberate step off `--text-sm`, the size
+     `.nav-link` and `.button` share and the one the tabs inherited by default.
+     The case for deviating: the global nav is chrome above every page, these
+     tabs are the primary control OF this one, and it turns out `--text-base`
+     is not a new size on this page at all — `.resume-role`, the line directly
+     under the name, is already 16px. The tab now sits between the section
+     headings (20px) and the site nav (14.4px), which is where a document-level
+     control belongs. */
+  .resume-tabs {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2) var(--space-6);
-    align-items: baseline;
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: var(--space-3);
-    margin-bottom: var(--space-6);
+    gap: var(--space-1);
+    margin-bottom: -1px;
   }
 
-  .resume-actions p {
-    margin: 0;
-  }
-
-  /* The density switch. One plate holding two segments — the plate is the
-     pressable thing, per base.css's "height means pressable", so the segments
-     themselves carry no shadow of their own. The active segment uses the same
-     accent-block pair as .button-accent; aria-current is the styling hook
-     because it is also the semantic state, so the two cannot disagree. */
-  .resume-switch {
-    display: inline-flex;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-pill);
-    box-shadow: var(--shadow-rest);
-    overflow: hidden;
-  }
-
-  .resume-switch a {
-    padding: var(--space-1) var(--space-3);
+  .resume-tabs a {
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
+    color: var(--color-text-muted);
     text-decoration: none;
-    color: inherit;
     transition:
-      background-color var(--duration-fast) var(--ease),
-      color var(--duration-fast) var(--ease);
+      color var(--duration) var(--ease),
+      background-color var(--duration) var(--ease),
+      border-color var(--duration) var(--ease);
   }
 
-  .resume-switch a:visited {
-    color: inherit;
+  .resume-tabs a:visited {
+    color: var(--color-text-muted);
   }
 
-  .resume-switch a:hover:not([aria-current]) {
+  .resume-tabs a:hover {
+    color: var(--color-text);
     background: var(--color-accent-soft);
   }
 
-  .resume-switch a[aria-current] {
-    background: var(--color-accent-block);
-    color: var(--color-on-accent);
+  /* No accent fill on the active tab: `tokens.css` spends magenta on "where
+     you are", and on a tab strip the join IS where you are — a filled tab
+     would say it twice. Its left/top/right borders continue the panel's stroke
+     up and around it, so nothing extra is needed to wrap the outline. */
+  .resume-tabs a[aria-current='page'] {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  .resume-tabs a[aria-current='page']:hover {
+    background: var(--color-surface);
+  }
+
+  /* --- The panel --------------------------------------------------------
+     The résumé is a bordered sheet on the page's own column, and the tab is
+     its front edge.
+
+     A tab is the front edge of the surface behind it; before this the tab was
+     `--color-surface` while the page under it was `--color-bg`, so it was a
+     lighter patch touching a line with nothing behind it it could be the edge
+     of. The column is the page's, not the text's: the header, the nav rule,
+     `main` and the footer all sit at 144–1136 on a 1280 viewport, and an
+     earlier version that bled outward to keep the text still overhung the
+     header by 24px a side and overflowed `.layout` by 8. A panel wider than
+     the page it is on is not a sheet. The résumé insets within it instead. */
+  .resume {
+    background: var(--color-surface);
+    padding: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) var(--radius-lg);
+  }
+
+  /* THE CORNER FOLLOWS WHAT IS PAINTING ON IT, not what is selected.
+     Squared while the first tab covers it, so that tab's own 14px supplies it
+     and the two left edges run continuous; rounded once nothing is there, so
+     the corner it leaves behind is finished.
+
+     `data-density` is state the article already carries — the attribute the
+     toggle flips and the one the both-media density rule at the top of this
+     file keys off — and which tab is active IS the density. So this needs no
+     script and behaves identically on /resume/full and with JS dead.
+
+     Keying it off the ACTIVE tab was the obvious version and it was wrong: a
+     tab paints on hover too, so pointing at the first tab while the second is
+     selected dropped the fill onto a corner that had already rounded away,
+     leaving 8.8px of notch. `:focus-visible` is in for the same reason —
+     keyboard focus paints the same fill, and omitting it would reproduce the
+     notch for exactly the people least able to shrug it off.
+
+     Deliberately NOT transitioned. `border-radius` clamps at zero and
+     `--ease` overshoots by design (its 1.28 control point), so easing 14px to
+     0 would drive the value negative, clamp, and park at zero for the
+     overshoot instead of arriving — the same trap that gave the reticle's fade
+     its own curve. The density flip is wrapped in `startViewTransition`
+     anyway, which cross-fades the whole document over the top. */
+  .resume[data-density='full'] {
+    border-top-left-radius: var(--radius-lg);
+  }
+
+  .resume-actions:has(.resume-tabs a:first-child:hover) + .resume,
+  .resume-actions:has(.resume-tabs a:first-child:focus-visible) + .resume {
+    border-top-left-radius: 0;
+  }
+
+  /* --- The download -----------------------------------------------------
+     Inside the document's top right, level with the name.
+
+     `--space-6` below the rule is where the button's box and the `<h1>`'s line
+     box coincide top AND bottom: both are measured at 41px tall, so the button
+     is not aligned to the name but congruent with it.
+
+     THE VERTICAL AND HORIZONTAL OFFSETS ARE NOT SYMMETRIC, and the asymmetry
+     is real rather than a fudge. `top` pays no border pixel because two cancel:
+     the panel's 1px stroke pushes the name down, and `.resume-tabs`' 1px
+     overlap pulls the panel up by the same amount, so `100%` already lands
+     where the name's box starts. `right` has no such overlap, so the stroke
+     has to be paid — the dates sit at 1111 rather than 1112.
+
+     This was carried over from the lab with a `+ 1px` on `top` that measured
+     right there and 1px wrong here, because the port dropped the lab's inner
+     flex wrapper and the negative margin resolves differently against a block
+     parent. Which is the habit worth keeping, now on its fourth instance in
+     this one control: when a border or a negative margin is added to anything
+     an alignment is measured from, RE-MEASURE. Do not port the number.
+
+     Above 48em only. Below that the header's contact line runs toward the
+     button and there is no whitespace to float into, so it drops back into
+     normal flow above the tabs. */
+  @media (min-width: 48em) {
+    .resume-actions > .button {
+      position: absolute;
+      top: calc(100% + var(--space-6));
+      right: calc(var(--space-6) + 1px);
+    }
+  }
+
+  /* Below 48em the download leaves the header and rejoins normal flow — and it
+     has to go ABOVE the tabs, not after them. The tabs come first in the DOM
+     (they are the primary control, and that is the order a screen reader and a
+     keyboard should meet them in), so plain block flow would drop the button
+     between the tabs and the panel, leaving the tabs floating clear of the
+     edge they exist to join. `column-reverse` reorders the paint without
+     touching the DOM, which is the whole point: visual order changes, focus
+     order does not. */
+  @media (max-width: 47.999em) {
+    .resume-actions {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: flex-start;
+    }
+
+    .resume-actions > .button {
+      margin-bottom: var(--space-3);
+    }
+  }
+
+  /* The page count, riding along inside the download. Same trick as
+     `.draft-flag`: a quieter weight and a tint rather than a second control.
+
+     The reservation is the point. "2 pages" is one character longer than
+     "1 page" and the button's right edge is pinned to the document's, so the
+     extra character pushed its LEFT edge and the whole button jumped on every
+     toggle. Measured at 7.67px — one monospace character exactly, 0.599em at
+     `--text-xs`'s 12.8px, matching this repo's finding that every credible
+     mono is 0.600em per character.
+
+     Reserved in `rem`, not `ch`: `ch` is the width of the `0` glyph, so a `ch`
+     reservation is one width in the fallback font and another once DM Mono
+     loads, and the button would resettle after first paint — the same class of
+     bug as the `--measure` CLS finding under Phase 5. 3.36rem is what 7ch
+     measures in DM Mono at `--text-xs` (7 × 0.6 × 12.8px = 53.76px), pinned.
+     Re-measure if the mono face or `--text-xs` changes. `inline-block` because
+     `min-width` does nothing on an inline box. */
+  .resume-pages {
+    display: inline-block;
+    min-width: 3.36rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 400;
+    opacity: 0.75;
   }
 
   .resume-head h1 {

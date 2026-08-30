@@ -1583,6 +1583,77 @@ resume-density.ts`, which is in `build-pdf.mjs`'s `byteHashedFiles` for exactly 
   children appear as zero-rect rows. The `update-resume` skill carries the how-to-read-it note;
   the check that matters is that visible rows' _values_ (y/height especially) didn't move.
 
+## The résumé's actions bar is document tabs on a panel (2026-08-30)
+
+Settled with Ali against a live switcher on a `noindex` route, the same review-loop pattern as the
+motion values, the faces and the colour calibration. Eight controls, nine arrangements of one of
+them, four download weights and five panel treatments were compared; the scaffolding is deleted.
+The mechanics live in `src/components/ResumeActions.astro` and `src/styles/resume.css`. What belongs
+here is the shape and the two things a future session would otherwise get wrong.
+
+**The shape.** Two document tabs — `Highlights` / `Detailed` — flush against the left edge of the
+résumé, which is now a bordered panel on the page's own column with the document inset inside it.
+The download sits **inside** the panel's top right, level with the name, filled. The tabs join the
+panel by overlapping its top border by 1px.
+
+**The download moved inside the document, and that is what made it fillable.** It first shipped as a
+filled button above the résumé and read as an ad — Ali's husband's word, and she agreed. The
+diagnosis that survived: a saturated field on a page that is otherwise type on ground has nothing to
+belong to, and an element sharing none of the page's visual language is what an ad _is_. Three
+quieter weights were built to dim it. All three became unnecessary the moment placement changed:
+beside the name, on a panel, in a header, the button has things to belong to. **Do not re-derive the
+ad complaint as an argument against the accent block** — it was an argument against the accent block
+_floating above the document_, and that condition is gone.
+
+### Two findings most likely to be re-derived wrongly
+
+**The panel styles `.resume` itself, and `.resume` is the element that prints.** A background, a 1px
+border and 24px of padding reaching paper would change the PDF and blow the page-count assertion.
+They cannot, because they sit inside `resume.css`'s `@media screen` block — which is a statement
+about where the rules may apply at all, not a list of overrides, and is exactly the fix recorded
+under Phase 5 for the print block being beatable on specificity. **Anything added to the panel goes
+inside that block.** Verified when it landed: `check:resume-print` reported changes only inside
+`.resume-actions`, and the regenerated PDFs' text-placement operators were byte-identical to the
+previous ones across 3,137 and 6,107 operators.
+
+**The panel's top-left corner follows what is PAINTING on it, not what is selected.** Squared while
+the first tab covers it, so that tab's own radius supplies the card's corner; rounded once nothing is
+there. Keying it off the active tab is the obvious version and it is wrong: a tab paints on hover
+too, so pointing at the first tab while the second is selected drops the fill onto a corner that has
+already rounded away, leaving 8.8px of notch — measured, and caught by Ali before it was rendered.
+`:focus-visible` is in the selector for the same reason, since keyboard focus paints the same fill.
+It needs no script: `data-density` is already on the article, and which tab is active _is_ the
+density. **Not transitioned, deliberately** — `border-radius` clamps at zero while `--ease`
+overshoots, the same trap that gave the reticle's fade its own curve.
+
+### Smaller decisions, so they are not relitigated
+
+- **The tab strip is `--text-base`, a deliberate step off `--text-sm`.** `--text-sm` is the site's
+  control size: `.nav-link` and `.button` both use it, and the tabs inherited it by default rather
+  than by choice. Ali's question — what drives it — is what surfaced that. The deviation is
+  defensible because `--text-base` is not a new size on this page: `.resume-role`, the line directly
+  under the name, is already 16px, so the tabs now sit between the section headings (20px) and the
+  global nav (14.4px), which is where a document-level control belongs.
+- **Flush costs the label alignment, and that is the accepted trade.** Flush, the tab's ordinary
+  padding, and the tab's label sitting on the name's left edge are three things you can have two of.
+  A first-tab padding override bought all three and Ali rejected it for the asymmetry it put inside
+  one tab.
+- **The page count inside the download reserves the width of the longer string.** "2 pages" is one
+  monospace character wider than "1 page" — 7.67px — and the button's right edge is pinned, so
+  without the reservation every density toggle moved the button. Reserved in `rem`, not `ch`, for
+  the CLS reason under Phase 5.
+- **A 1px border moves whatever is measured from it, and this control hit that four times** — the
+  rule's own thickness, the tab's left border, the panel's border, and finally a `+ 1px` ported
+  from the lab that was right there and wrong here, because the port dropped an inner flex wrapper
+  and a negative margin resolved differently. Hence the habit, which generalises past this file:
+  **when a border or a negative margin is added to something an alignment is measured from,
+  re-measure — do not port the number.** The vertical and horizontal offsets on the download are
+  asymmetric today for exactly this reason, and that is correct rather than a fudge.
+- **Below 48em the download leaves the header and the bar becomes `column-reverse`.** The tabs are
+  first in the DOM because that is the order a keyboard and a screen reader should meet them in;
+  reversing the paint keeps them on the bottom line still touching the panel, without touching focus
+  order.
+
 ### Archive pages may carry a short body (2026-08-24, from #97)
 
 **Ali's call, and it sets the pattern for all 11 archive entries, not just the one it came up on.**

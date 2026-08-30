@@ -1,24 +1,47 @@
 ---
 /**
- * Screen-only chrome above the resume: switch density, or grab a PDF.
+ * Screen-only chrome for the resume: document tabs joined to the page's top
+ * edge, and a download sitting inside the document beside the name.
  *
  * Deliberately not part of `ResumeDocument` — this is navigation, not resume
  * content, and `src/styles/resume.css` hides it entirely when printing. If it
  * lived inside the document it would end up in the PDF, which is precisely the
  * "printed webpage" look the print stylesheet exists to avoid.
  *
- * The switch is two real links, not buttons. Without JS they are exactly what
- * they look like: ordinary navigation between /resume and /resume/full, which
- * is the whole fallback story. On /resume, src/scripts/resume-density.ts
- * upgrades them into an in-place toggle — it intercepts the click, flips the
- * article's `data-density`, and moves `aria-current` here. After a toggle the
+ * ## The shape, and why it is this one
+ *
+ * Settled with Ali on 2026-08-30 against a live switcher on a `noindex` route,
+ * which is gone now; the full record is in the PR and in CLAUDE.md. What the
+ * comparison established, in the order it was established:
+ *
+ * - **Tabs, not a switch.** The two densities are two views of one document,
+ *   which is what a tab strip means. The join to the page's top edge is the
+ *   whole device: the active tab overlaps the panel's border by 1px so its own
+ *   surface covers the line, and a tab clear of the line it belongs to reads
+ *   as a floating object rather than as part of the document.
+ * - **The download is inside the page, not in the bar.** Above the document it
+ *   was chrome — a plate on a page that is otherwise type on ground, with
+ *   nothing to belong to, which is what "it looks like an ad" was actually
+ *   about. In the header it belongs to the document and sits beside the one
+ *   line that can hold its own next to it, which is also why it can be filled.
+ * - **The résumé sits on a panel** at the page's own column, so the tab is the
+ *   front edge of something rather than a floating patch of colour.
+ *
+ * ## The progressive-enhancement contract
+ *
+ * The tabs are two real links, not `<button role="tab">`. Without JS they are
+ * exactly what they look like: ordinary navigation between /resume and
+ * /resume/full. On /resume, `src/scripts/resume-density.ts` upgrades them into
+ * an in-place toggle — it intercepts the click, flips the article's
+ * `data-density`, and moves `aria-current` here. After a toggle the
  * `aria-current="page"` link's href (/resume/full) no longer matches the
  * address bar (/resume#full); that is deliberate — the link still names the
- * state you are reading, and honest link semantics beat fake buttons.
+ * state you are reading, and honest link semantics beat fake buttons. A
+ * tablist that only worked with JS would give all of that up.
  *
- * `data-density-link` / `data-pdf-link` are the script's hooks, kept separate
- * from the classes styling reads — same convention as the reticle keying off
- * attributes.
+ * `data-density-link` / `data-pdf-link` / `data-pdf-pages` are the script's
+ * hooks, kept separate from the classes styling reads — same convention as the
+ * reticle keying off attributes.
  */
 interface Props {
   current: 'concise' | 'full';
@@ -26,16 +49,32 @@ interface Props {
 
 const { current } = Astro.props;
 
+/* "Highlights" says the short version is a selection rather than a truncation;
+   "Detailed" is Ali's pick for the long side. The page counts ride inside the
+   download rather than on the tabs: "one page / two pages" is a bad name for a
+   density and a genuinely useful fact about a file you are about to attach to
+   an application. */
 const versions = [
-  { key: 'concise', label: 'One page', href: '/resume', pdf: '/resume.pdf' },
-  { key: 'full', label: 'Two pages', href: '/resume/full', pdf: '/resume-full.pdf' },
+  { key: 'concise', label: 'Highlights', href: '/resume', pdf: '/resume.pdf', pages: '1 page' },
+  {
+    key: 'full',
+    label: 'Detailed',
+    href: '/resume/full',
+    pdf: '/resume-full.pdf',
+    pages: '2 pages',
+  },
 ] as const;
 
 const active = versions.find((v) => v.key === current)!;
+
+/* Same `.button-icon` convention the contact page's social buttons use —
+   24-viewport, `currentColor`, aria-hidden. */
+const DOWNLOAD_ICON =
+  'M12 3a1 1 0 0 1 1 1v9.6l3.3-3.3a1 1 0 1 1 1.4 1.4l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.4l3.3 3.3V4a1 1 0 0 1 1-1Zm-8 15a1 1 0 0 1 1 1v1h14v-1a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z';
 ---
 
 <div class="resume-actions">
-  <div class="resume-switch" role="group" aria-label="Resume length">
+  <div class="resume-tabs" role="group" aria-label="Resume length">
     {
       versions.map((v) => (
         <a
@@ -57,7 +96,11 @@ const active = versions.find((v) => v.key === current)!;
        there is nothing behind this link until the site is built. Not a bug to
        chase — `npm run links` checks the built output, which is what ships. */
   }
-  <p class="meta">
-    <a href={active.pdf} download data-pdf-link>Download PDF</a>
-  </p>
+  <a class="button button-accent" href={active.pdf} download data-pdf-link>
+    <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d={DOWNLOAD_ICON}></path>
+    </svg>
+    Download PDF
+    <span class="resume-pages" data-pdf-pages>{active.pages}</span>
+  </a>
 </div>

@@ -40,8 +40,15 @@ type Density = 'concise' | 'full';
 const article = document.querySelector<HTMLElement>('article.resume');
 const links = [...document.querySelectorAll<HTMLAnchorElement>('a[data-density-link]')];
 const pdfLink = document.querySelector<HTMLAnchorElement>('a[data-pdf-link]');
+const pdfPages = document.querySelector<HTMLElement>('[data-pdf-pages]');
 
 const PDF: Record<Density, string> = { concise: '/resume.pdf', full: '/resume-full.pdf' };
+
+/* The page count inside the download. It names the FILE, not the view, so it
+   has to move with the href rather than with the article — and its box is
+   reserved in resume.css for the longer string, so swapping it cannot shift
+   the button. */
+const PAGES: Record<Density, string> = { concise: '1 page', full: '2 pages' };
 
 if (article && links.length > 0) {
   const syncControls = (density: Density) => {
@@ -50,6 +57,7 @@ if (article && links.length > 0) {
       else link.removeAttribute('aria-current');
     }
     if (pdfLink) pdfLink.href = PDF[density];
+    if (pdfPages) pdfPages.textContent = PAGES[density];
   };
 
   const setDensity = (density: Density) => {

@@ -2666,3 +2666,94 @@ Plan subagent to pressure-test the design against the print pipeline before writ
 caught the baseline path-renumbering and the all-extended-group edge case in advance, both of which
 would otherwise have surfaced as mid-implementation surprises. Implementation itself was small
 (~six files); the verification sequence was most of the work, as it should be on this document.
+
+## The résumé actions bar (2026-08-30)
+
+The density switch shipped in #219 worked and looked like a settings control bolted above a
+document. This pass replaced it with document tabs on a panel, with the download inside the
+résumé's header. The interesting part is not the result but the loop that produced it, which ran
+almost entirely on rendered evidence rather than description.
+
+### The switcher pattern, run harder than before
+
+Same shape as the motion, faces and colour-calibration passes — one `noindex` route, live radios,
+every candidate on the same page against the real document. Two things were different this time.
+
+**The axes were narrowed by the reviewer, not by the builder.** It opened with eight controls and
+nine arrangements; Ali cut to one control immediately, then the placement question replaced the
+arrangement question, then the weight axis collapsed from four to two to settled. Every round the
+switcher got shorter. The rule that emerged and is worth keeping: **a switcher that still offers a
+decided question is a switcher nobody trusts the rest of** — so a settled axis comes off in the same
+commit that settles it, and the CSS deletes the overrides rather than promoting one of them.
+
+**Contact sheets beat the switcher for the comparisons that matter.** A live switcher is sequential;
+"which of these four is loudest" is a simultaneous question. Rendering all four states into one
+image, with the measurement under each, turned several rounds into one look. It also caught things
+the switcher could not: the notch under a hovered tab only exists in one of four state
+combinations, and it took a 2×3 grid with both tab states to see that a flush tab supplies the
+panel's corner only while it is the selected one.
+
+### What measuring first actually bought
+
+Three times a complaint turned out to have a different cause than the words suggested, and each time
+measuring before building changed what got built.
+
+- **"Make the tabs and the button the same height."** They already were, within 1px — the difference
+  was a 13px vertical offset. The axis that shipped varied altitude, not size, and the padding it
+  was competing with turned out to be 7px more than the plate's shadow needed.
+- **"The tabs look claustrophobic."** True, and the padding axis was the obvious answer. Ali's own
+  follow-up — what drives the font size — was the better one: type carries its own line box, so a
+  step up grew the strip 2.6px while making it 11% larger, where the padding mark spent 8px making
+  it emptier. That question also surfaced that the tabs had inherited `--text-sm` from `.nav-link`
+  and `.button` rather than choosing it, which is what turned a tweak into a deliberate deviation.
+- **"Can the border go all the way around?"** It can, and a 14px corner then eats the first 14px of
+  the panel's top edge, so a tab in that span has no straight line to join. That was rendered at 5×
+  rather than argued, and the picture did the explaining.
+
+### The reviewer caught two things the measurements did not
+
+Worth recording plainly, because both were failures of what was measured rather than of the
+measuring. **The first panel bled outward from the text column** to keep the text, dates and button
+from moving — which put it 24px wider than the header and footer on each side and 8px outside
+`.layout`'s own box. Every alignment that had been asserted still held; nobody had asserted the one
+that mattered. **And the corner rule keyed off the active tab**, which is correct until you notice a
+tab also paints on hover. Ali saw both by eye before either was rendered.
+
+The generalisable version: an assertion suite proves the things it was pointed at, and a reviewer
+looking at the page is still the thing that decides where to point it.
+
+### One pixel, four times
+
+The rule's own thickness, the tab's left border, the panel's border, and finally a `+ 1px` ported
+straight from the lab that was right there and 1px wrong in the shipped component, because the port
+dropped an inner flex wrapper and a negative margin resolved differently against a block parent.
+Hence the habit now written into `resume.css`: **when a border or a negative margin is added to
+anything an alignment is measured from, re-measure — do not port the number.** The download's
+vertical and horizontal offsets are asymmetric today because two 1px effects cancel on one axis and
+not the other, and that asymmetry is correct rather than a fudge.
+
+### Landing it, and what the guards said
+
+The panel styles `.resume` itself, which is the element that prints, so the whole treatment had to
+land inside `resume.css`'s `@media screen` scope. Three independent checks agreed it did:
+`check:resume-print` reported changes only inside `.resume-actions` and nothing in the document; the
+page-count assertion held at 1/1 and 2/2; and a content-stream diff of the regenerated PDFs against
+their predecessors found **zero differing text-placement operators** across 3,137 and 6,107.
+
+That last check was built for a different reason and paid for itself twice. The container's
+Chromium (v1194) predates the repo's Playwright pin (v1234) and `cdn.playwright.dev` is
+proxy-blocked, so the browser was shimmed in at the expected registry paths — the same trick as the
+density-toggle session, plus a headless-shell alias this time. Rendering the shipped PDFs with a
+browser the project does not pin is a real risk, and the operator diff is what retired it: byte
+identical output means the version gap moved nothing here. It also unblocked `check:resume-print`,
+which the session brief had assumed could not run in this container at all.
+
+### Cost notes
+
+One long session, and the token cost sat almost entirely in rendering rather than reasoning — every
+round was build, screenshot, measure, hand back an image. No subagents: the work was a single
+serial conversation with one reviewer, where each answer changed the next question, which is the
+shape delegation is worst at. The scaffolding was rewritten from scratch once, mid-session, after
+six rounds of index-based patching left a duplicated section and four contradictory `.ra-lab`
+blocks — cheaper than a seventh patch, and worth noticing as a signal: when surgical edits start
+producing contradictions rather than changes, the file is telling you to rewrite it.
