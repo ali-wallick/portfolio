@@ -2757,3 +2757,77 @@ shape delegation is worst at. The scaffolding was rewritten from scratch once, m
 six rounds of index-based patching left a duplicated section and four contradictory `.ra-lab`
 blocks — cheaper than a seventh patch, and worth noticing as a signal: when surgical edits start
 producing contradictions rather than changes, the file is telling you to rewrite it.
+
+## The switcher loop becomes a skill (2026-08-30)
+
+[#246](https://github.com/ali-wallick/Portfolio/issues/246). Four passes had run the live-switcher
+loop — the motion values (#33), the faces (#66), the colour calibration (#67) and the résumé actions
+bar (#239) — and every one of them built the scaffolding from scratch and deleted it. The method was
+transmitted only by example, which meant a new session learned it by reading this log and CLAUDE.md's
+records of past passes rather than by having it to hand.
+
+### What was worth codifying, and what was not
+
+The panel is radios, `localStorage`, and writing `data-*` onto a target. Roughly 120 lines, and it
+was different in all four passes because the axis was different. The rules around it are what made
+those passes work, and every one of them cost a real mistake: measure the candidates before choosing
+which go on the instrument, take a settled axis off in the commit that settles it, never let the
+panel cover what it compares, keep everything outside `byteHashedFiles`, judge every state rather
+than the default one, and seven measurement traps that each produced a plausible wrong number.
+
+So the skill carries the discipline, `references/scaffolding.md` carries the working shapes of the
+four files, and there is no shared component. **That is the issue's own second question answered:
+the panel does not become reusable code.** Three of the rules rule it out directly — scaffolding
+must duplicate a hashed module rather than import it, a shared component in `src/` is exactly an
+import, and permanent code has to be gated out of production forever where a deleted route cannot
+leak at all.
+
+### Recovering the source material
+
+The scaffolding was deleted before each merge, so none of it is on `main`. It is all still in the
+pull-request refs: `git fetch origin 'refs/pull/239/head:refs/remotes/pr/239'` brings back
+twenty-two commits of the actions-bar comparison, panel and all. Worth knowing generally — **a
+delete-before-merge convention does not lose the artifact, it just moves it somewhere `git log` on
+`main` will never show you.**
+
+### The contact sheet is the half a switcher cannot do
+
+`scripts/contact-sheet.mjs` is the one piece that became code. A live switcher is sequential; "which
+of these four is loudest" is simultaneous, and so is anything about a state you cannot be in twice at
+once. It takes a spec of states — theme, `data-*` writes, an optional click, hover or focus, and an
+expression to measure — and renders each into a tile, then lays the tiles out **in the browser** as
+an HTML grid and screenshots that. Compositing was the obvious approach and laying it out in the
+browser is better: labels and wrapping come free, and there is no SVG text to hand-place.
+
+Running it against `/resume` found four things that would otherwise have been rediscovered by
+whoever built the next sheet, and one of them is a fact about the site:
+
+- **There is no `data-theme` on this site.** `tokens.css` selects dark on `prefers-color-scheme`
+  alone. The first version wrote an attribute and produced a light tile labelled "dark" — the exact
+  category of convincing wrong answer the skill's traps section is about, appearing inside the tool
+  built to avoid it. It emulates the media feature now.
+- **The reticle parks its brackets on whatever the sheet just clicked**, so a tile of a selected tab
+  arrived framed in magenta that is not part of the candidate. The panel does the same thing to any
+  tile wider than its clip. Hence a `hide` list, which is the same problem #33 and #66 both solved
+  inside the live instrument, arriving a third time in a different tool.
+- **`attrs` writes state and `click` drives it**, and they are not interchangeable: where a script
+  owns a control, the attribute alone leaves `aria-current` and the href on the other state, so the
+  tile shows a combination that cannot occur.
+- **`fullPage` on the sheet page pads the grid with the rest of the viewport.** Screenshotting the
+  `body` locator crops to content.
+
+A fifth is a UX point rather than a bug: a bare Playwright timeout on a selector that moved does not
+say which of twelve tiles was being drawn, so every failure names its state now.
+
+### Cost notes
+
+One short session, no subagents — the work was reading four existing records and one recovered
+branch, which is a sequential read rather than a fan-out. Most of the cost was in the sources, not
+the writing: the four passes are documented across ~400 lines of this log and ~150 of CLAUDE.md, and
+the skill is a compression of them rather than anything new.
+
+One thing did not survive the trip. The issue body is truncated in every GitHub read path available
+to this session — it stops mid-sentence in rule 8, at the point where the text contains a literal
+`<script>`, which the API's HTML sanitiser appears to swallow along with everything after it. Rule 8
+is recoverable (it is the `prettier-plugin-astro` finding, recorded in full above and in CLAUDE.md),
+but whatever followed it is not. Flagged on the pull request rather than guessed at.

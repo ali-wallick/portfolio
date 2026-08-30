@@ -178,6 +178,10 @@ Use the skills — they encode the schema, the conventions, and the verification
 - `.claude/skills/update-resume/` — add, update, or rebalance resume content.
 - `.claude/skills/pre-launch-check/` — the full pre-merge / pre-launch sweep.
 
+One more skill is not about content at all and is listed here because this is where the skill list
+lives: `.claude/skills/design-switcher/` — the live-switcher review loop, for a look, motion or
+control decision that needs Ali's eye. See "The switcher loop is a skill now" under Design.
+
 `content-pass` is the method and `write-copy` is the voice; a session revisiting a page uses both.
 Adding something new starts one step earlier — `add-project` for front matter, `write-project-page`
 for the prose — and comes back to `content-pass` to revisit what shipped.
@@ -1653,6 +1657,36 @@ overshoots, the same trap that gave the reticle's fade its own curve.
   first in the DOM because that is the order a keyboard and a screen reader should meet them in;
   reversing the paint keeps them on the bottom line still touching the panel, without touching focus
   order.
+
+## The switcher loop is a skill now, and the panel deliberately is not (2026-08-30)
+
+Closes [#246](https://github.com/ali-wallick/Portfolio/issues/246). The live-switcher review loop
+had run four times — the motion values (#33), the faces (#66), the colour calibration (#67) and the
+résumé actions bar (#239) — and was transmitted only by example: a new session learned it by reading
+the records of past passes rather than by having the method to hand. It is
+`.claude/skills/design-switcher/` now, with the constraints and the traps in `SKILL.md`, the working
+shapes of the four scaffolding files in `references/scaffolding.md`, and a contact-sheet renderer in
+`scripts/contact-sheet.mjs`.
+
+**The decision the issue asked for: the panel does not become reusable code.** It stays a template
+inside the skill, copied and adapted per pass, and three of the loop's own rules are why. Scaffolding
+must not import a hashed module — a shared component in `src/` is exactly an import, and the first
+pass needing one more knob would edit it and drag every `byteHashedFiles` input along. A settled axis
+comes off in the commit that settles it, so the file is under continuous surgery for the life of a
+pass and byte-identical to nothing by the end. And permanent code in `src/` has to be gated out of
+production forever, where a deleted route cannot leak at all. What generalises is the shape and the
+traps; what does not is the axis, which is most of any real panel.
+
+**The contact sheet is the one piece that did become code**, because it is the half a switcher cannot
+do. A live switcher is sequential and "which of these four is loudest" is simultaneous; #239's
+tab-corner notch lived in exactly one of four state combinations. It renders every state into one
+labelled grid with its measurement under each tile, and the tiles are laid out by the browser rather
+than composited, so labels get real typography for free.
+
+**Building it turned up a fact worth having on hand: this site has no `data-theme` hook.**
+`tokens.css` selects dark on `prefers-color-scheme` alone, so anything comparing both themes has to
+emulate the media feature. Writing an attribute renders a light tile labelled "dark" — the exact
+shape of convincing wrong answer the skill's own traps section exists for.
 
 ### Archive pages may carry a short body (2026-08-24, from #97)
 
