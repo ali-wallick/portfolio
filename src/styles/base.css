@@ -1074,32 +1074,366 @@ hr {
   margin-top: var(--space-2);
 }
 
-/* Same frame convention as `.media` — a gallery shot isn't pressable either
-   — laid out as a grid instead of a single wide column.
-
-   `align-items: start`, not `end`. Source images keep whatever aspect ratio
-   they were captured at — nothing here gets cropped to match its row-mates
-   — so an `end`-aligned row puts each image's TOP at a different height
-   depending on its own aspect ratio and its caption's line count. That's a
-   real bug, not a hypothetical one: a sweep of every archive gallery found
-   it on 6 of 8 pages, up to 110px of visible offset between neighbors on
-   /projects/art-of-rescue, and present even where captions matched line for
-   line (critter-3), so caption length was never the whole story. `start`
-   pins every image's top to the row, which is the one alignment a
-   mixed-aspect-ratio row can actually guarantee. The trade is the row's
-   bottom edge, which can go ragged if captions in it wrap to different line
-   counts — content-pass's caption-length-matching guidance is what keeps
-   that in check now, not layout. */
+/* --- The gallery scroller (#166) ------------------------------------------
+ *
+ * One horizontally-scrolling row, replacing the wrapping grid this used to be.
+ *
+ * The grid's own long comment is worth carrying forward as reasoning even
+ * though its rule is gone. Source images keep whatever aspect ratio they were
+ * captured at — nothing here is cropped — so a bottom-aligned row put each
+ * image's TOP at a different height depending on its own ratio and its
+ * caption's line count. A sweep for #93 found that on 6 of 8 pages, up to 110px
+ * of visible offset between neighbours on /projects/art-of-rescue, and present
+ * even where captions matched line for line (critter-3). `align-items: start`
+ * was the fix, and it was the ONLY alignment a mixed-ratio row could guarantee
+ * while every cell was a fixed width.
+ *
+ * Sizing by height inverts that. Give every slide a shared height budget and
+ * let each take whatever width its own ratio produces, and both the top and the
+ * bottom of every image land on the same line — the thing the grid could never
+ * do. Still no cropping. What stays ragged is the bottom of the CAPTIONS, when
+ * their line counts differ, which is content-pass's caption-length guidance to
+ * keep in check rather than layout's.
+ *
+ * Nothing in here gets a plate. "Height means pressable" (tokens.css), and a
+ * gallery image is not — it keeps the border and radius `.media` gives it. The
+ * arrows are pressable and do get one, via `.button`.
+ */
 .gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-  align-items: start;
-  gap: var(--space-6);
+  --gallery-h: 16rem;
+  --gallery-fade: 3rem;
+  /* The edge fades hang off this rather than off the scroller, because a
+     pseudo-element on a scroll container scrolls away with the content. */
+  position: relative;
   margin: var(--space-6) 0;
 }
-.gallery .media {
+
+.gallery-viewport {
+  overflow-x: auto;
+  overflow-y: hidden;
+  /* Swiping past the end of the row must not turn into a browser back-gesture
+     or start scrolling the page sideways behind it. */
+  overscroll-behavior-x: contain;
+  /* `proximity`, not `mandatory`. Slide widths here run from ~160px (a 0.45
+     ratio level shot) to ~630px (a 16:9 screenshot), and mandatory snapping on
+     a row that uneven can trap the scroll between two snap points when one
+     slide is wider than the viewport. This tidies a near-miss and otherwise
+     stays out of the way. */
+  scroll-snap-type: x proximity;
+  /* :focus-visible is a 3px ring at 3px offset, and this box is focusable —
+     leave it somewhere to draw that the scroll container will not clip. */
+  padding-block: var(--space-2);
+}
+
+.gallery-track {
+  display: flex;
+  align-items: start;
+  gap: var(--space-6);
+  width: max-content;
+  /* Every `ul` on the site carries a bottom margin and a reading measure. */
   max-width: none;
   margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gallery-slide {
+  flex: none;
+  scroll-snap-align: start;
+}
+
+/* --- How wide a slide is --------------------------------------------------
+ *
+ * From the source's own aspect ratio, which `Media.astro` hands over as
+ * `--media-ar`, rather than from anything the browser works out
+ * for itself. A slide has to be as wide as its IMAGE and not as wide as its
+ * caption's longest line, and both of the obvious CSS answers to that fail:
+ * `width: min-content` with `max-width: 100%` on the image is a cyclic
+ * dependency that collapsed every image on the site to about 60px, and dropping
+ * the `max-width` makes `min-content` resolve to the source's full intrinsic
+ * width instead. Arithmetic on two build-time numbers has neither problem, and
+ * it gives the caption a definite box to wrap inside.
+ *
+ * The default fills the row: every image takes `--gallery-h`, so a gallery
+ * reads as one even band rather than as a ragged line of whatever sizes its
+ * sources happened to be. Nine of the twelve galleries here are 137-296px
+ * assets from 2009-2013, so that does mean upscaling them — at the settled
+ * 16rem row the worst case is 1.61x (Prodigal's 159px screenshots), against
+ * 2.21x at the 22rem this started on. That is the trade, made deliberately:
+ * a consistent row, and the softness kept low enough to live with by choosing
+ * a shorter row rather than by leaving the old assets small.
+ */
+.gallery .media {
+  /* An embed has no intrinsic size of its own, so 16:9 is the fallback and
+     images override it inline with their own. */
+  --media-ar: 16 / 9;
+  width: calc(var(--gallery-h) * var(--media-ar));
+  max-width: none;
+  margin: 0;
+}
+
+.gallery .media img,
+.gallery .media .embed {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+}
+
+/* --- Zoom (#166) ----------------------------------------------------------
+ *
+ * Only some gallery images open full size — the ones whose source has more to
+ * show than the row renders. That is twelve of the thirty here, and the split
+ * is the assets' own: everything that qualifies is at least 1.6x its rendered
+ * height, everything that does not is under 0.75x. `Media.astro` decides it.
+ *
+ * THE PLATE IS THE AFFORDANCE, and this is the height rule doing exactly what
+ * it was written for rather than an exception to it. "Height means pressable"
+ * is why a gallery image has never had one: it could not be pressed. A zoomable
+ * image can, so it gets the plate, the hover rise and the press-flat, and a
+ * non-zoomable one keeps the plain frame. The raised edge is what tells you
+ * which images open, in the vocabulary the rest of the site already uses,
+ * without inventing an icon that appears nowhere else.
+ *
+ * The visible consequence, since it is a real one: on /projects/mini-mages one
+ * raised image sits beside two flat ones, because only the 1280x720 poster has
+ * anything more to show than the two ~230px screenshots beside it. That reads
+ * as uneven until you know the rule, and as information once you do.
+ */
+.gallery-zoom {
+  display: block;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-rest);
+  transition:
+    transform var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease);
+}
+.gallery-zoom:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-high);
+}
+.gallery-zoom:active {
+  transform: translateY(var(--lift));
+  box-shadow: var(--shadow-flat);
+  transition-duration: var(--duration-fast);
+}
+/* The image already carries the border and radius `.media` gives it, so the
+   link must not draw a second one around it. */
+.gallery-zoom img {
+  display: block;
+}
+.gallery-zoom:hover img {
+  border-color: var(--color-accent);
+}
+
+/* The link's accessible name is the image's alt plus this, so a screen-reader
+   user is told the picture opens. Visually hidden rather than `display: none`,
+   which would take it out of the name entirely. */
+.gallery-zoom-hint {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* --- The zoom dialog ------------------------------------------------------
+ *
+ * One `<dialog>` per page, filled on open by gallery-zoom.ts. Native
+ * `showModal()` rather than a hand-rolled overlay: it traps focus, closes on
+ * Escape, returns focus to the link that opened it, and inerts the page behind
+ * it — all of which a div would have to reimplement, badly.
+ */
+.zoom-dialog {
+  max-width: min(92vw, 76rem);
+  max-height: 92vh;
+  padding: var(--space-4);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+.zoom-dialog::backdrop {
+  background: rgb(0 0 0 / 0.72);
+}
+.zoom-dialog img {
+  display: block;
+  max-width: 100%;
+  /* Leave room for the caption and the close button inside the 92vh cap. */
+  max-height: calc(92vh - 8rem);
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  border-radius: var(--radius);
+}
+.zoom-dialog figcaption {
+  margin-top: var(--space-3);
+  max-width: var(--measure);
+}
+/* Icon-only, so it takes the same square padding the gallery arrows do rather
+   than `.button`'s label-and-icon lozenge. Not `.gallery-arrow` itself: it does
+   not scroll anything, and that class carries a disabled state it can never
+   be in. */
+.zoom-close {
+  display: block;
+  margin-left: auto;
+  margin-bottom: var(--space-2);
+  padding: var(--space-2);
+}
+
+/* Below the picture rather than over it: an arrow floating on a photograph has
+   to invent its own contrast against whatever pixels are behind it, and these
+   already have the plate to say they are pressable. */
+.zoom-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+.zoom-nav[hidden] {
+  display: none;
+}
+.zoom-count {
+  margin: 0;
+  min-width: 5rem;
+  text-align: center;
+}
+.zoom-close .button-icon {
+  width: 1.25em;
+  height: 1.25em;
+}
+
+/* --- The scrolled edges ---------------------------------------------------
+ *
+ * A gradient over the page ground, not a `mask-image` on the scroller: the
+ * viewport now has a focus ring of its own, and a mask would clip it at exactly
+ * the two edges being faded. `--color-bg` is a real token in both themes, so
+ * nothing here is a hard-coded colour.
+ *
+ * `data-overflow` is set only by gallery-scroll.ts, which means a row that fits
+ * — a one- or two-image gallery on a desktop — carries no fade at all, and
+ * neither does a page whose script never ran. The fade is decoration; losing it
+ * without JS is the correct degradation.
+ */
+.gallery[data-overflow]::before,
+.gallery[data-overflow]::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  width: var(--gallery-fade);
+  pointer-events: none;
+  transition: opacity var(--duration) var(--ease);
+}
+.gallery[data-overflow]::before {
+  left: 0;
+  background: linear-gradient(to right, var(--color-bg), transparent);
+}
+.gallery[data-overflow]::after {
+  right: 0;
+  background: linear-gradient(to left, var(--color-bg), transparent);
+}
+.gallery[data-at-start]::before,
+.gallery[data-at-end]::after {
+  opacity: 0;
+}
+
+.gallery-nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+/* `display: flex` above beats the UA stylesheet's `[hidden] { display: none }`,
+   so without this the arrows render on every page whose script never ran —
+   which is exactly the dead-control case `hidden` is there to prevent. */
+.gallery-nav[hidden] {
+  display: none;
+}
+
+/* `.button`'s padding is sized for a label beside an icon; these carry only the
+   icon, so the box would otherwise be a wide lozenge around a chevron. */
+.gallery-arrow {
+  padding: var(--space-2);
+}
+.gallery-arrow .button-icon {
+  width: 1.25em;
+  height: 1.25em;
+}
+/* A disabled control is not pressable, so it should not sit on a plate claiming
+   otherwise — it rests flat, which is the same shape `:active` uses. */
+.gallery-arrow[disabled] {
+  opacity: 0.45;
+  box-shadow: var(--shadow-flat);
+  transform: translateY(var(--lift));
+  cursor: default;
+}
+.gallery-arrow[disabled]:hover {
+  border-color: var(--color-border);
+}
+
+/* --- The scrolled edges ---------------------------------------------------
+ *
+ * A gradient over the page ground, not a `mask-image` on the scroller: the
+ * viewport now has a focus ring of its own, and a mask would clip it at exactly
+ * the two edges being faded. `--color-bg` is a real token in both themes, so
+ * nothing here is a hard-coded colour.
+ *
+ * `data-overflow` is set only by gallery-scroll.ts, which means a row that fits
+ * — a one- or two-image gallery on a desktop — carries no fade at all, and
+ * neither does a page whose script never ran.
+ */
+.gallery[data-overflow]::before,
+.gallery[data-overflow]::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  width: var(--gallery-fade);
+  pointer-events: none;
+  transition: opacity var(--duration) var(--ease);
+}
+.gallery[data-overflow]::before {
+  left: 0;
+  background: linear-gradient(to right, var(--color-bg), transparent);
+}
+.gallery[data-overflow]::after {
+  right: 0;
+  background: linear-gradient(to left, var(--color-bg), transparent);
+}
+.gallery[data-at-start]::before,
+.gallery[data-at-end]::after {
+  opacity: 0;
+}
+
+.gallery-nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+/* `.button`'s padding is sized for a label beside an icon; these carry only the
+   icon, so the box would otherwise be a wide lozenge around a chevron. */
+.gallery-arrow {
+  padding: var(--space-2);
+}
+.gallery-arrow[disabled] {
+  opacity: 0.4;
+  /* A disabled control is not pressable, so it should not be sitting on a
+     plate claiming otherwise. */
+  box-shadow: var(--shadow-flat);
+  transform: translateY(var(--lift));
+  cursor: default;
+}
+.gallery-arrow[disabled]:hover {
+  border-color: var(--color-border);
+}
+.gallery-arrow .button-icon {
+  width: 1.25em;
+  height: 1.25em;
 }
 
 .embed {

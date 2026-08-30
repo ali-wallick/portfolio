@@ -2831,3 +2831,92 @@ to this session — it stops mid-sentence in rule 8, at the point where the text
 `<script>`, which the API's HTML sanitiser appears to swallow along with everything after it. Rule 8
 is recoverable (it is the `prettier-plugin-astro` finding, recorded in full above and in CLAUDE.md),
 but whatever followed it is not. Flagged on the pull request rather than guessed at.
+
+## The gallery scroller (2026-08-30)
+
+[#166](https://github.com/ali-wallick/Portfolio/issues/166), one line long: _"Might be nice to have
+horizontal scrollable dynamic library instead of the static wrapping one we have in place now."_ Ali
+added the shape she wanted in session — larger images, one row, scroll left and right past the page
+width. The settled decisions are in `CLAUDE.md`; what belongs here is how the session ran.
+
+### Measuring the content first turned two design questions into one
+
+The obvious plan was a scroller plus a switcher for the open look questions. What made it cheap was
+computing the gallery inventory before designing anything: thirty images across twelve galleries,
+with intrinsic sizes.
+
+That measurement did most of the work. It said the archive tier is 137–296px files from 2009–2013,
+so "larger images" and "sharper images" are in direct tension on nine of the twelve galleries — which
+is a fact to put in front of Ali rather than a preference to guess at. It said the aspect ratios span
+0.45 to 1.78, which is why a fixed-height row is a better answer to #93's no-cropping constraint than
+the grid it replaced. And when Ali later asked which galleries to compare rather than checking all
+twelve, the answer was already computed: `mini-mages` is the only gallery mixing one modern asset
+with two legacy ones, so it is the single page that discriminates every sizing option.
+
+**The zoom threshold is the clearest case.** Asked for "click to zoom, maybe just for larger photos",
+the instinct is to pick a multiplier and defend it. Computed, there was nothing to defend: at a 16rem
+row every image is either at least 1.60× its rendered height or at most 0.72×, with **nothing in
+between**. Any threshold from 0.8× to 1.5× selects the same twelve images. That is not a tuned
+number, it is a natural cleavage in the assets, and knowing it turned a design argument into a
+one-line rule with a comment explaining why the value does not matter.
+
+### Two bugs that only rendering could find
+
+**`width: min-content` plus `max-width: 100%` is a cyclic dependency.** The first implementation
+sized each slide to its image so the caption could not set the width. It typechecked, built clean,
+and collapsed every gallery image on the site to about 60px. Nothing in the CSS reads as wrong; a
+headless measurement pass found it in one run. The fix was to stop asking the browser and hand it the
+aspect ratio from build time, which `astro:assets` already knows.
+
+**An orphaned selector that was harmless by luck.** A slice-based rewrite left a bare
+`.embed { height: var(--gallery-h) }` where a `.gallery`-scoped one was intended, so in principle
+every YouTube hero on the site was squashed. Measured, the heroes were fine — `--gallery-h` is only
+declared on `.gallery`, so outside one the declaration is invalid at computed-value time and drops.
+Correct output, latent trap: defining that token anywhere higher would have broken three pages. Worth
+the general note that **an unscoped rule reading a scoped custom property fails silently in the right
+direction**, which is exactly the kind of bug that survives review.
+
+### The reticle fix that was correctly deferred and then correctly taken
+
+The design agent flagged early that element-level scroll does not bubble, so a focused element inside
+a horizontal scroller would leave the reticle's brackets parked. It also said the bug was latent
+rather than live, because nothing focusable sat inside the row — the arrows were deliberately placed
+outside it. That was right, and the listener was left out.
+
+Adding click-to-zoom put focusable links inside the scroller and made it live. The one-word fix went
+in then, with the reasoning attached. **Both calls were correct**, which is the point: "cheap
+insurance" is a bad reason to add code, and a changed premise is a good one.
+
+### The scaffolding, and a conflict that arrived mid-session
+
+The switcher followed the three before it, with one improvement available because this one was
+page-scoped rather than sitewide: it lived in the project-page template, so `BaseLayout.astro` was
+never touched at all and #62's CSS-bundle hazard was never engaged rather than worked around. It
+carried three axes, lost one per round as Ali settled them, and was deleted whole at the end.
+
+This pass and [#246](https://github.com/ali-wallick/Portfolio/issues/246) ran the same day and did
+not know about each other, so the loop was rebuilt from the records here rather than from the
+`design-switcher` skill that now holds it — which is exactly the cost that issue was opened to stop
+paying. The page-scoped variant above is the one finding from this pass worth folding back into it:
+where nothing outside one route can use the axis, the skill's "no new imports in `BaseLayout`" rule
+is satisfied by never touching the file at all.
+
+[#239](https://github.com/ali-wallick/Portfolio/pull/239) merged to `main` mid-session and conflicted
+on exactly three files — both resume PDFs and `resume-pdf.lock.json` — while no source file
+conflicted at all. Both branches touch `base.css`, which is a byte-hashed PDF input, so both
+regenerate the same artifacts. **Resolved by taking main's and then rebuilding from the merged tree**,
+because the correct lock hash is neither branch's; it is the merged input set's, and picking a side
+would have passed locally and failed CI.
+
+### Cost notes
+
+Two subagents, both worth it and both at the start: one exploring the gallery rendering path and
+inventory, one designing against those findings. The design agent returned four corrections to the
+brief, two of which changed the implementation — the cyclic-dependency warning about slide widths,
+and the observation that the reticle bug was latent rather than live. After that it was a single
+serial conversation, which is the shape delegation is worst at.
+
+Rendering dominated the cost again, as with the resume actions bar: every claim about layout was
+measured in a headless browser rather than argued, including the two bugs above. Chromium needed the
+same shim as the last two sessions — the container's build predates the repo's Playwright pin and
+`cdn.playwright.dev` is proxy-blocked.

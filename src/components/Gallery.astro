@@ -3,9 +3,44 @@ import Media from './Media.astro';
 import type { Project } from '~/lib/content';
 
 /**
- * A project's `gallery` array, rendered as a grid. Each item goes through
- * `Media`, so image handling and embed handling stay decided in one place —
- * this component only adds the grid layout around it.
+ * A project's `gallery` array, rendered as one horizontally-scrolling row.
+ *
+ * Each item still goes through `Media`, so image handling and embed handling
+ * stay decided in one place — this component only adds the scroller around it.
+ *
+ * ## Why a row and not the grid it replaces (#166)
+ *
+ * The grid it replaces wrapped at `minmax(14rem, 1fr)`, which gave four ~238px
+ * cells on a desktop and, for the eight two-image galleries on this site, a
+ * half-empty row that said nothing about there being more.
+ *
+ * A fixed-height row is also a better answer to the constraint the grid was
+ * working around than the grid was. Source images keep whatever aspect ratio
+ * they were captured at — nothing here is cropped, and #93 measured up to 110px
+ * of visible offset between neighbours when they were bottom-aligned. Sizing
+ * every slide to a shared height and letting each take its own natural width
+ * puts every image's top AND bottom on the same line, which the grid could only
+ * ever manage for the top.
+ *
+ * ## Three things about the markup are load-bearing
+ *
+ * 1. **`tabindex="0"` on the scroll region is required, not decorative.** A
+ *    scrollable region with no focusable children is unreachable by keyboard,
+ *    which axe reports as `scrollable-region-focusable` and which would fail
+ *    `lighthouserc.json`'s flat 1.0 accessibility bar on project pages.
+ * 2. **The arrows render `hidden` and `gallery-scroll.ts` unhides them.**
+ *    Progressive enhancement, the same contract as `reticle.ts` and
+ *    `resume-density.ts`: with no script the row still scrolls by touch,
+ *    trackpad and keyboard, and the page carries no dead controls.
+ * 3. **The arrows sit OUTSIDE the scroll region.** `reticle.ts` listens for
+ *    scroll on `window`, and element-level scroll does not bubble there — so
+ *    anything focusable inside a scroller slides out from under the brackets
+ *    and leaves them parked. Keeping the only controls outside it means nothing
+ *    focusable ever moves, and the reticle needs no change at all.
+ *
+ * They reuse `.button` rather than inventing a class, which is also what earns
+ * them the plate: "height means pressable" (tokens.css), and unlike the images
+ * beside them an arrow genuinely is.
  */
 interface Props {
   items: Project['data']['gallery'];
@@ -17,9 +52,43 @@ const { items } = Astro.props;
 {
   items.length > 0 && (
     <div class="gallery">
-      {items.map((item) => (
-        <Media item={item} />
-      ))}
+      <div
+        class="gallery-viewport"
+        tabindex="0"
+        role="group"
+        aria-label="Project gallery, scrollable"
+      >
+        <ul class="gallery-track">
+          {items.map((item) => (
+            <li class="gallery-slide">
+              <Media item={item} surface="gallery" />
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="gallery-nav" hidden>
+        <button
+          type="button"
+          class="button gallery-arrow"
+          data-dir="-1"
+          aria-label="Scroll gallery left"
+        >
+          <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M14.7 5.3a1 1 0 0 1 0 1.4L9.4 12l5.3 5.3a1 1 0 1 1-1.4 1.4l-6-6a1 1 0 0 1 0-1.4l6-6a1 1 0 0 1 1.4 0z" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="button gallery-arrow"
+          data-dir="1"
+          aria-label="Scroll gallery right"
+        >
+          <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M9.3 5.3a1 1 0 0 0 0 1.4L14.6 12l-5.3 5.3a1 1 0 1 0 1.4 1.4l6-6a1 1 0 0 0 0-1.4l-6-6a1 1 0 0 0-1.4 0z" />
+          </svg>
+        </button>
+      </div>
     </div>
   )
 }

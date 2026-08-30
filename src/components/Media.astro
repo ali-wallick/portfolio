@@ -1,19 +1,110 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import YouTube from './YouTube.astro';
 import type { Project } from '~/lib/content';
 
 /**
  * Renders one item of the media discriminated union. Every project surface goes
  * through here, so image handling and embed handling are decided once.
+ *
+ * ## The two surfaces want different requests
+ *
+ * A hero leads a page in a 44rem box. A gallery slide is sized by the row's
+ * height and is far smaller. Until #166 this component asked for neither — it
+ * was the only `<Image>` on the site with no `widths`/`sizes` at all, so a
+ * 2048px Marvel Snap screenshot shipped whole into a ~238px grid cell. The rule
+ * is `ProjectThumb.astro`'s: widths are the rendered box at 2x, not the source
+ * size.
+ *
+ * ## Why the widths are clamped rather than written down
+ *
+ * Nine of the twelve galleries on this site are built from 137-296px legacy
+ * assets. Asking sharp for an 800px variant of a 137px source is a request for
+ * an upscale, which `astro:assets` will not do — so the request is filtered
+ * against the source's own width instead of being stated as a constant. An
+ * image smaller than every requested width falls back to its intrinsic size,
+ * which is the largest honest thing it can offer.
  */
 type MediaItem = NonNullable<Project['data']['hero']>;
 
 interface Props {
   item: MediaItem;
+  /** `hero` leads a page at 44rem; `gallery` is sized by the scroller's row. */
+  surface?: 'hero' | 'gallery';
 }
 
-const { item } = Astro.props;
+const { item, surface = 'hero' } = Astro.props;
+
+/* A hero is capped on WIDTH at 44rem (704px). A gallery slide is capped on
+   HEIGHT, so its width follows its own aspect ratio: the widest a 22rem row
+   can hold at 16:9 is 626px, and the 0.45-ratio portrait on I Fits I Sits is
+   158px. 576 covers the top of that range at 1x, 1152 at 2x. */
+const targets = surface === 'hero' ? [704, 1408] : [576, 1152];
+const ceiling = targets[targets.length - 1];
+/* Everything below the source, then the source's own width capped at the
+   largest target. A 2048px screenshot yields 576/1152 and stops there; a 988px
+   still yields 576/988, so a 2x display gets the best the file actually has;
+   a 183px archive shot yields 183 alone, and no upscale is ever requested. */
+const widths =
+  item.type === 'image'
+    ? [
+        ...new Set([
+          ...targets.filter((w) => w < item.src.width),
+          Math.min(item.src.width, ceiling),
+        ]),
+      ].sort((a, b) => a - b)
+    : [];
+
+/* Necessarily an over-estimate on the gallery surface, since a slide's width
+   depends on its own ratio and `sizes` cannot know it. Over-estimating picks
+   the larger candidate, which is the safe direction to be wrong in. */
+/**
+ * The gallery row sizes each slide from the source's own aspect ratio rather
+ * than letting the browser work it out, because the obvious CSS answers all
+ * fail. A slide has to be as wide as its IMAGE, not as wide as its caption's
+ * longest line — but `width: min-content` on the figure plus `max-width: 100%`
+ * on the image is circular, and it collapsed every image on the site to about
+ * 60px. Dropping the `max-width` instead makes `min-content` resolve to the
+ * source's full intrinsic width, which is worse.
+ *
+ * Astro already knows both dimensions at build time, so hand the ratio to CSS
+ * and the width becomes arithmetic: `--gallery-h * --media-ar`. The caption
+ * then wraps inside a box that is exactly the picture's width.
+ */
+const mediaVars =
+  item.type === 'image' && surface === 'gallery'
+    ? `--media-ar:${item.src.width} / ${item.src.height}`
+    : undefined;
+
+/**
+ * Zoom (#166). A gallery image opens full size when the source has meaningfully
+ * more to show than the row renders; below that a lightbox is a bigger copy of
+ * what you were already looking at.
+ *
+ * 384px is 1.5x the settled 16rem row, and the threshold barely matters: at
+ * that row height every image on the site is either >=1.60x its rendered height
+ * or <=0.72x, with nothing in between. Anywhere from 0.8x to 1.5x picks the
+ * same twelve images out of thirty. That is a natural split in Ali's assets
+ * rather than a tuned number — nine of the twelve galleries are 137-296px files
+ * from 2009-2013, and those are the ones with nothing more to show.
+ *
+ * Stated as an ABSOLUTE height rather than as a multiple of `--gallery-h`, so
+ * which images offer zoom does not silently change if the row height is ever
+ * retuned. Height is the right dimension to test because the row is sized by
+ * height; width follows from the aspect ratio.
+ */
+const ZOOM_MIN_HEIGHT = 384;
+const zoomable =
+  item.type === 'image' && surface === 'gallery' && item.src.height >= ZOOM_MIN_HEIGHT;
+
+/* Capped at 1600px: past that a "full size" view is serving megabytes to show
+   detail no screen resolves. Only Marvel Snap's 2048px photo is affected. */
+const zoomSrc = zoomable
+  ? (await getImage({ src: item.src, width: Math.min(item.src.width, 1600), format: 'webp' })).src
+  : undefined;
+
+const sizes =
+  surface === 'hero' ? '(max-width: 46rem) 100vw, 44rem' : '(max-width: 40em) 80vw, 36rem';
 ---
 
 {
@@ -21,13 +112,40 @@ const { item } = Astro.props;
     unblurred drop shadow means one thing only — "this can be pressed" — and a
     hero image cannot, so it gets a border and a matching radius instead. */
 }
-<div class="media">
+<div class="media" style={mediaVars}>
   {
     item.type === 'youtube' ? (
       <YouTube id={item.id} title={item.title} start={item.start} />
     ) : (
       <figure>
-        <Image src={item.src} alt={item.alt} loading="lazy" />
+        {/* A real link to the full-size file, upgraded into a dialog by
+            gallery-zoom.ts — the same progressive-enhancement shape as the
+            resume's density switch. With no script it still opens the image,
+            which is the whole point of the control. */}
+        <Fragment>
+          {zoomable ? (
+            <a class="gallery-zoom" href={zoomSrc} data-caption={item.caption}>
+              <Image
+                src={item.src}
+                alt={item.alt}
+                widths={widths}
+                sizes={sizes}
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="gallery-zoom-hint">, view full size</span>
+            </a>
+          ) : (
+            <Image
+              src={item.src}
+              alt={item.alt}
+              widths={widths}
+              sizes={sizes}
+              loading="lazy"
+              decoding="async"
+            />
+          )}
+        </Fragment>
         {item.caption && <figcaption class="meta">{item.caption}</figcaption>}
       </figure>
     )

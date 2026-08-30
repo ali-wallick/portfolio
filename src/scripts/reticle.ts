@@ -98,7 +98,7 @@ const HOLD = 1600;
 const SETTLE = 25;
 
 /** Controls. Pointing at one is an act of aiming; pointing at prose isn't. */
-const HOVER_SELECTOR = '.nav-link, .card, .tile, .button, .backlink, .brand';
+const HOVER_SELECTOR = '.nav-link, .card, .tile, .button, .backlink, .brand, .gallery-zoom';
 
 /** Anything the keyboard can land on, because focus must always be visible. */
 const FOCUS_SELECTOR =
@@ -287,7 +287,15 @@ document.addEventListener('focusout', () => {
   commit(true);
 });
 
-window.addEventListener('scroll', schedule, { passive: true });
+/* `capture: true` is load-bearing, not defensive. Scroll events do not bubble,
+   so a bubbling listener here sees the page scrolling and NOTHING else — an
+   element-level scroller dispatches `scroll` at itself only. The gallery row
+   (#166) is one, and its zoomable images are focusable links inside it, so
+   without this the brackets stay parked at a slide's old x while the row
+   carries it sideways. The capture path runs window → … → target for every
+   event, so one listener covers the page and every scroller on it, and
+   `schedule()` already coalesces to one measurement per frame. */
+window.addEventListener('scroll', schedule, { passive: true, capture: true });
 window.addEventListener('resize', schedule);
 
 /**

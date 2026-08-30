@@ -1688,6 +1688,74 @@ than composited, so labels get real typography for free.
 emulate the media feature. Writing an attribute renders a light tile labelled "dark" — the exact
 shape of convincing wrong answer the skill's own traps section exists for.
 
+## The gallery is one scrolling row (2026-08-30, closes #166)
+
+Every project gallery is a single horizontally scrolling row, replacing the wrapping grid Phase 5
+shipped. The decisions, in the order a future session would trip over them.
+
+**A fixed-height row is a better answer to #93 than the grid was, not a departure from it.** Nothing
+on this site is cropped, so a row of mixed aspect ratios — 0.45 to 1.78 across the twelve galleries
+— can only guarantee ONE edge, and `align-items: start` guaranteed the top. Sizing every slide to a
+shared height and letting each take its own natural width puts the top **and** the bottom on the
+same line, which the grid could never do. What stays ragged is caption line counts, which is
+`content-pass`'s caption-length guidance to hold rather than layout's.
+
+**16rem, filling the row, in the page column.** All three are Ali's calls on the preview, and the
+first two settle each other: filling means upscaling the archive assets, and the shorter row is what
+makes that payable — **1.61× worst case at 16rem against 2.21× at 22rem**. Nine of the twelve
+galleries are 137–296px files from 2009–2013, so a consistent row and sharp old pictures are in
+direct tension and there is no option that escapes it. Full-bleed lost for being at its thinnest on
+the nine galleries holding one or two images, where it made a viewport-wide band around a single
+picture. Locking that in also took `overflow-x: clip` off the root, which only ever existed because
+`100vw` includes the vertical scrollbar.
+
+**Slide width is arithmetic on build-time numbers, and both obvious CSS answers fail.** `Media.astro`
+emits `--media-ar` and CSS multiplies it by `--gallery-h`. A slide has to be as wide as its IMAGE and
+not as wide as its caption's longest line — but `width: min-content` on the figure with
+`max-width: 100%` on the image is a cyclic dependency that collapsed every image on the site to about
+60px, and dropping the `max-width` makes `min-content` resolve to the source's full intrinsic width
+instead. Don't rediscover either.
+
+### Zoom, and the plate that announces it
+
+**An image opens full size when its source is at least 384px tall**, which is 1.5× the row. The
+threshold is not a tuned number: at a 16rem row every gallery image on this site is either **≥1.60×**
+its rendered height or **≤0.72×**, with nothing in between, so anywhere from 0.8× to 1.5× picks the
+same twelve of thirty. That is a natural split in Ali's assets rather than a judgment — the archive
+files have nothing more to show, and a lightbox on one is a bigger copy of what you were already
+looking at. **Stated as an absolute height** so it cannot drift if the row is ever retuned.
+
+**The plate is the affordance, and this is the height rule doing what it was written for rather than
+an exception to it.** "Height means pressable" is exactly why a gallery image never had one — it
+could not be pressed. A zoomable one can, so it takes the plate, the hover rise and the press-flat,
+and a non-zoomable one keeps the plain frame. The raised edge is what says which images open, in the
+vocabulary the site already has, instead of an icon that appears nowhere else. The visible
+consequence is real and was accepted deliberately: `/projects/mini-mages` shows one raised image
+beside two flat ones, because only its poster has more to show than the two ~230px screenshots.
+
+Left/right steps between the zoomable images of one gallery, stopping at the ends rather than
+wrapping — a reader who cannot tell whether they have seen everything is what wrapping costs. The
+controls hide below two, the same "no arrows where it makes no sense" rule the row itself follows.
+
+### Everything degrades to real HTML, and one thing had to move to keep it true
+
+The row is a plain `overflow-x: auto` element, so it scrolls by touch, trackpad and arrow key with
+no script at all. The arrows ship `hidden` and `gallery-scroll.ts` unhides them, so a page whose
+script never runs carries no dead controls. Every zoomable image is a real link to its full-size
+file, upgraded into a native `<dialog>`; a modified click is left alone so new-tab and save-as still
+work.
+
+**`tabindex="0"` on the scroll region is required, not decorative** — a scrollable region with no
+focusable children is unreachable by keyboard, which axe reports as `scrollable-region-focusable`
+and which fails the flat 1.0 accessibility bar `lighthouserc.json` holds project pages to. The
+script narrows it, removing the tab stop from a row that does not overflow.
+
+**`reticle.ts` listens for `scroll` in the CAPTURE phase now, and the reason generalises: scroll
+events do not bubble.** A bubbling listener on `window` sees the page scrolling and nothing else — an
+element-level scroller dispatches `scroll` at itself only. That was latent while the only controls
+sat outside the row, and went live the moment zoom put focusable links inside it. One listener on the
+capture path covers the page and every scroller on it.
+
 ### Archive pages may carry a short body (2026-08-24, from #97)
 
 **Ali's call, and it sets the pattern for all 11 archive entries, not just the one it came up on.**
