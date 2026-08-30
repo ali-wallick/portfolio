@@ -183,12 +183,93 @@ hr {
 /* Scoped inside `@media screen` (#62): `.layout` here is the exact same
    selector resume.css's `@media print` block uses to reset the page for
    paper, so every property tied at identical specificity and load order broke
-   the tie. See the note above `body`. */
+   the tie. See the note above `body`. That scoping is also what makes the
+   footer rule below free: `min-height` and the column are screen-only by
+   construction, so neither can reach the resume PDFs.
+
+   The column exists so the footer can't float mid-viewport on a page too
+   short to fill one. `/contact` and `/404` are the only two that are —
+   measured at 1280x900, every other page's footer sits well past the fold —
+   and on both the footer landed around 40% down with dead ground under it,
+   which reads as a page that failed to finish rather than one that is
+   deliberately brief.
+
+   `svh`, not `vh`: on a phone `100vh` is the viewport with browser chrome
+   *retracted*, so it overflows by the height of that chrome and gives every
+   short page a scrollbar to nowhere — the opposite of the fix. The `vh` line
+   above it is the fallback for anything that doesn't know `svh`, where
+   overscrolling slightly beats not filling at all.
+
+   Because `box-sizing` is `border-box`, the 100svh includes this rule's own
+   `padding-bottom`, so the footer rests `--space-16` above the bottom edge
+   rather than jammed against it. That is the intent, not a rounding error. */
 @media screen {
   .layout {
     max-width: var(--content-max);
     margin: 0 auto;
     padding: 0 var(--space-4) var(--space-16);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
+  /* Takes the slack, so the footer is pushed to the bottom rather than the
+     content being stretched to meet it. */
+  .layout > main {
+    flex: 1 0 auto;
+  }
+
+  /* --- Restoring three collapsed margins ---------------------------------
+   *
+   * A flex container's children do not margin-collapse, and this layout was
+   * quietly relying on three collapses that flex has just switched off. Each
+   * one measured as a real shift, so each is restored explicitly rather than
+   * left to be discovered on the preview. The rule throughout: reproduce what
+   * the collapsed layout *rendered*, not what its margins add up to.
+   *
+   * Verified by capturing every element's box on nine routes at three
+   * viewports before and after: no content element moves anywhere. Two
+   * footers still shift, and both are the flex item containing something it
+   * previously let escape rather than anything left un-restored:
+   *
+   *   - /resume and /resume/full gain 24px. A trailing `.resume-job` margin
+   *     three levels deep used to escape and be swallowed by the footer's
+   *     64px. Rule 3 can't reach it, and chasing it by depth would be a
+   *     denylist; 24px more air above the footer is the better trade.
+   *   - /about gains 64px, and this one is a fix. `main` now contains its
+   *     floats, so the cosplay figure stops overhanging into the footer's
+   *     gap — measured, that gap was 20px where the design asks for 64.
+   *
+   * The footer's own box also grows 16px sitewide, because its trailing `p`
+   * margin is now inside it. Nothing paints there (the footer's only edge is
+   * `border-top`) and total page height is unchanged, so this one is visible
+   * to a measuring script and to nobody else.
+   *
+   * 1. `.page-head`'s h1 sent its 16px up through two wrappers to collapse
+   *    against the header's 32px, which won. The header still supplies it.
+   *
+   *    `h1:first-child`, not `> h1`: on /projects an eyebrow precedes the
+   *    heading, so there the 16px never escaped — it is real space between
+   *    the two, and zeroing it pulled the whole page up 4px. */
+  .layout > main > .page-head:first-child > h1:first-child {
+    margin-top: 0;
+  }
+
+  /* 2. A bare h1 leading a page (/about, /404) has a 48px top margin, and
+   *    that one *beat* the header's 32px. Contributing the 16px difference
+   *    reproduces the 48px gap those two pages have always rendered. */
+  .layout > main > h1:first-child {
+    margin-top: var(--space-4);
+  }
+
+  /* 3. The last block in `main` sent its bottom margin down to collapse
+   *    against the footer's 64px, which won on every page — so dropping it
+   *    leaves the same 64px rather than adding to it. Without this the footer
+   *    sits 16-32px lower on every page on the site, varying by whatever
+   *    happened to end the page. */
+  .layout > main > :last-child {
+    margin-bottom: 0;
   }
 }
 
