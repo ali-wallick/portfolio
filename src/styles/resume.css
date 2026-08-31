@@ -149,10 +149,6 @@
     padding: var(--space-6);
     border: 1px solid var(--color-border);
     border-radius: 0 var(--radius-lg) var(--radius-lg) var(--radius-lg);
-    /* See the "Screen prose width" note above `.resume-job-intro` below for
-       what this value is and why. Declared here, not at `:root`, because it
-       has no reason to exist outside this panel. */
-    --resume-measure: 43.8125rem;
   }
 
   /* THE CORNER FOLLOWS WHAT IS PAINTING ON IT, not what is selected.
@@ -322,47 +318,47 @@
     margin: 0;
   }
 
-  /* --- Screen prose width (#244) --------------------------------------
+  /* --- Screen prose width (#244, revised #253) -------------------------
    *
-   * The sitewide `--measure` (40.4rem, tuned for /about's long-form prose)
-   * used to cap `.resume-job-intro`, `.resume-group-intro`, `.resume-bullets`
-   * and `.resume-summary` too, even though `.resume` itself runs the panel's
-   * full ~944px column and two siblings in the same panel — `.resume-contact`
-   * and `.resume-skills` — already opted out with `max-width: none`. The
-   * result was a silent ~300px gap to the right of every bullet, most visible
-   * at desktop widths, that made the résumé look unfinished rather than
-   * composed.
+   * The résumé's prose fills the panel. The panel is the sheet, and on paper
+   * the text runs the full page between the `@page` margins — so filling is
+   * what a résumé actually looks like, and it is the same argument the
+   * homepage's "currently" note settled on: a scanned, labelled bullet list
+   * is not the sustained reading `--measure` exists for.
    *
-   * `none` was the first fix tried and it overshot. Paper has no reading-
-   * measure cap at all on these blocks, but measuring real rendered bullets
-   * (not the `ch`-based estimate) shows why that matters here specifically:
-   * at the full 942px panel width, full lines ran 103–128 characters, well
-   * past WCAG 2.1 SC 1.4.8's 80-character guideline for a text block. That
-   * guideline is Level AAA — aspirational, not part of the AA baseline
-   * ADA/Section 508/EN 301 549 actually require, and the sitewide 646px
-   * `--measure` itself already ran up to 89 on this page's longest lines
-   * before this change — so it was never going to be hit exactly. But 128 is
-   * a different order of miss than 89, and there's no width that both
-   * eliminates the panel gap and holds the line strictly: reaching a
-   * guaranteed ≤80 needs roughly 580–600px, narrower than the original and
-   * right back to the complaint that started this.
+   * THIS REPLACES A PIN AT 701px, AND WHY IT WAS WRONG IS THE USEFUL PART.
+   * #244 capped these blocks at the résumé's print content width (letter's
+   * 8.5in less `@page`'s 0.6in side margins, ×96) on the reasoning that
+   * matching the page's measure would make the screen document resemble the
+   * printed one. Measured, it does the opposite. Paper sets this text in
+   * Public Sans at 9.4pt (12.53px); the screen sets it in Figtree at 16px. The
+   * same 701 pixels therefore carry very different amounts of text:
    *
-   * `--resume-measure` is the resolved compromise (Ali's call, 2026-08-31):
-   * 43.8125rem = 701px, the resume's own print content width (letter's 8.5in
-   * less `@page`'s 0.6in side margins, ×96, ÷16 — see the print budget note
-   * further down this file). It closes most of the panel gap, ties the
-   * screen width to a number this file already treats as load-bearing rather
-   * than picking one out of the air, and measures 90 characters average / 96
-   * max on this page's real bullets — still over 80, but the deliberate
-   * middle point between "matches the page" and "chases a AAA target this
-   * document was never strictly meeting." `--resume-measure` itself is
-   * declared on `.resume` above, not here — it has no reason to exist
-   * outside this panel. */
+   *     paper           701px @ 12.53px   113 avg / 118 max characters
+   *     screen at 701   701px @ 16px       90 avg /  96 max
+   *     screen filled   814px @ 16px      106 avg / 111 max
+   *
+   * So the pixel-matched column read 23 characters per line SHORTER than the
+   * page it was copying, and filling the panel lands within 7 of it. Ali's
+   * call (#253): go as wide as the panel, because wrapping differently from
+   * paper matters less than reading like the document. A width is not an
+   * appearance — the same trap as `ch`-is-not-characters one level up, which
+   * `tokens.css` warns about and #244 walked into anyway.
+   *
+   * The cost, stated plainly: at 106 avg these are the longest lines on the
+   * site, against 75 for body prose. That is accepted rather than overlooked.
+   * The 80-character figure in WCAG 2.1 SC 1.4.8 is Level AAA and is about
+   * sustained reading, where losing the return to the next line is the
+   * failure; these are one-to-three-line labelled bullets that are scanned.
+   *
+   * `--resume-measure` is deleted rather than left unused — an unread token is
+   * exactly the dead data the content model's guard table exists to rule out.
+   */
 
   /* Company-level prose, above the groups. */
   .resume-job-intro {
     margin: var(--space-2) 0 0;
-    max-width: var(--resume-measure);
+    max-width: none;
   }
 
   /* Bold sub-heading for a body of work under one employer (#32). Same
@@ -398,16 +394,15 @@
   .resume-group-intro {
     margin: var(--space-1) 0 0;
     padding-left: calc(var(--space-4) / 3);
-    max-width: var(--resume-measure);
+    max-width: none;
   }
 
-  /* Same `--resume-measure` as `.resume-job-intro` above (#244) — this is the
-   * block that made the panel gap visible in the first place, since it's most
-   * of the panel's height. */
+  /* Fills the panel, same as `.resume-job-intro` above — and this is the block
+   * the width note is really about, since it is most of the panel's height. */
   .resume-bullets {
     margin: var(--space-2) 0 0;
     padding-left: var(--space-4);
-    max-width: var(--resume-measure);
+    max-width: none;
   }
 
   .resume-bullets li {
@@ -428,12 +423,13 @@
     color: inherit;
   }
 
-  /* Same `--resume-measure` as the other prose blocks above (#244) —
-   * `.resume-contact` and `.resume-skills` stay `max-width: none` since
-   * they're short, un-wrapping lines rather than reading prose. */
+  /* Fills the panel, same as the other prose blocks above. `.resume-contact`
+   * and `.resume-skills` were already `none` before any of this — they are
+   * short, un-wrapping lines rather than reading prose, and their being the
+   * only uncapped blocks in the panel is what made the gap conspicuous. */
   .resume-summary {
     margin: 0;
-    max-width: var(--resume-measure);
+    max-width: none;
   }
 
   /* Three labelled rows (Engines & Tools / Languages / Platforms), not a

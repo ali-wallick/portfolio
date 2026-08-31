@@ -235,30 +235,71 @@
    *
    * The print block pins `--measure` separately, in `ch`, against the system
    * stack Phase 4's PDFs were generated with. Paper is unaffected either way.
+   *
+   * 37.5rem, SETTLED ON A LIVE SWITCHER (#253, 2026-08-31), and the number that
+   * chose it is characters per line rather than anything in `ch`. Measuring
+   * rendered prose across /about and four project pages — walking text nodes
+   * and bucketing them into visual lines, not estimating — the old 40.4rem ran
+   * **81 characters average and 98 at its longest, with 86% of full lines over
+   * 80**. WCAG 2.1 SC 1.4.8 puts the ceiling at 80. That is Level AAA, not the
+   * AA baseline ADA/Section 508/EN 301 549 require, so this is a readability
+   * call and not a compliance fix — but the gap was real and nobody had ever
+   * measured it, because every previous discussion of this token was conducted
+   * in `ch`.
+   *
+   * WHY `ch` HID IT, which is the part worth carrying forward: `1ch` is the
+   * `0` glyph, 10.25px in Figtree at 16px, while the average character in
+   * running prose is about 7.3px — prose is mostly narrow letters and spaces.
+   * Real characters per line run ~1.38x the `ch` count, so "63ch" is ~87
+   * characters. **Never reason about line length in `ch` on this site. Measure
+   * the rendered text.**
+   *
+   * The four candidates were spaced by measured effect, not by even rem steps:
+   * 40.4 / 37.5 / 35 / 32.5rem, landing at 86% / 50% / 4% / 0% of lines over
+   * 80. 38.75rem and 36.25rem were measured and dropped for sitting where a
+   * neighbour already sat. 37.5rem is Ali's pick: it halves the overage while
+   * staying legible as a column, where the two narrower marks read as
+   * article-width and cost more than they bought.
    */
-    --measure: 40.4rem;
+    --measure: 37.5rem;
 
-    /* The third width, and it exists because two were not enough.
+    /* The page column. 56rem, settled with `--measure-wide` below as one
+   * decision (#253, 2026-08-31) — see there for why the two are now welded
+   * together rather than chosen independently.
    *
-   * `--measure` is a *reading* width — how long a line of prose may get before
-   * it is tiring. `--content-max` is the page. Blocks that are neither — a
-   * bordered note, a row of cards with a thumbnail in it — had to pick one, and
-   * picking either was visibly wrong: the "currently" box at `--measure` and
-   * the featured cards at `--content-max` sat one above the other with a 24rem
-   * difference in right edge, which reads as a mistake rather than a hierarchy.
+   * Was 64rem. The site used to run three widths whose edges agreed with
+   * nothing: the header, `main` and the footer at 64rem, the feature blocks at
+   * 52rem, and prose narrower still — so on a 1280 viewport the nav ran to
+   * 1136 while the widest content on the page stopped at 976, leaving 160px of
+   * dead space under a header that reached past everything. That is the shape
+   * that matches no convention: the ordinary web pattern is ONE container
+   * shared by header, content and footer, with reading text narrower inside it.
+   */
+    --content-max: 56rem;
+
+    /* The feature tier — bordered notes, card rows, the hero embed. DERIVED,
+   * not chosen, and the derivation is the decision (#253).
    *
-   * 52rem is chosen against the content, not as a midpoint. It is wide enough
-   * that a featured card holds a 16rem thumbnail and still gives the metadata
-   * strip room to run without wrapping, and narrow enough that the "currently"
-   * note does not become a wide band with two lines floating in it.
+   * It used to be an independent 52rem, picked as "wide enough for a card with
+   * a 16rem thumbnail, narrow enough that the 'currently' note is not a wide
+   * band with two lines floating in it". That reasoning was sound and is
+   * superseded: the feature tier now simply IS the page column's content box,
+   * so a card, a note and the header all share one right edge.
+   *
+   * THE SUBTRACTION IS LOAD-BEARING. `.layout` carries `--space-4` of padding
+   * a side, so its content box is the column less 2rem. Feature blocks capped
+   * at the column's OUTER width would be capped by the container instead and
+   * this would still render correctly — but the token would then claim a width
+   * nothing renders at, which is exactly the `ch`-vs-characters trap one token
+   * up. Written as a calc so the two cannot drift: widen the column and this
+   * follows, which is the property the alignment depends on. Widening only the
+   * column silently un-aligns every card on the site.
    *
    * Prose inside one of these blocks still wraps at `--measure` — box width and
    * line length are different questions, and the global `p` rule keeps
    * answering the second one.
    */
-    --measure-wide: 52rem;
-
-    --content-max: 64rem;
+    --measure-wide: calc(var(--content-max) - var(--space-4) * 2);
 
     --radius: 6px;
     --radius-lg: 14px;

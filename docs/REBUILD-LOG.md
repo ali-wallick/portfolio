@@ -2920,3 +2920,89 @@ Rendering dominated the cost again, as with the resume actions bar: every claim 
 measured in a headless browser rather than argued, including the two bugs above. Chromium needed the
 same shim as the last two sessions — the container's build predates the repo's Playwright pin and
 `cdn.playwright.dev` is proxy-blocked.
+
+## The width system (2026-08-31)
+
+The fifth run of the switcher loop, and the first one that started as a question rather than a task.
+Ali asked why the résumé's text stopped short of its own panel; answering that honestly turned into
+the widths being a system instead of five values that had each made sense once.
+
+### The question kept getting better, and the work followed it
+
+Five distinct asks, in order: why is the résumé text narrow, is there an accessibility standard for
+line length, what about the rest of the site, what's most standard, and does the résumé need an
+exception. Each answer was measured before it was given, and three of the five overturned what the
+previous answer had implied. That is the shape to notice — not that the first answer was wrong, but
+that a question asked one level up kept being available.
+
+The résumé fix ([#244](https://github.com/ali-wallick/Portfolio/issues/244)) shipped twice as a
+result. The first version removed the cap entirely and matched paper, which is defensible and was
+wrong: it put bullets at 103–128 characters per line. The second pinned them to 701px, the print
+column, after Ali asked whether a standard existed. **The trigger was her question, not a check** —
+nothing in CI measures line length, and nothing could have.
+
+### `ch` had been hiding the real number for the life of the project
+
+The single finding worth the whole pass. `--measure` had been discussed in `ch` since Phase 5, and
+[#68](https://github.com/ali-wallick/Portfolio/issues/68) had already corrected the arithmetic once.
+The arithmetic was never the problem: `1ch` is the `0` glyph and real prose is mostly narrower
+characters and spaces, so characters per line run ~1.38× the `ch` count. "63ch" was ~87 characters,
+and 86% of the site's prose lines were over the 80 that WCAG 1.4.8 names.
+
+Nobody had measured it because measuring it requires walking text nodes and bucketing them by their
+rendered `top` — the number is not available from CSS, from the token, or from any check the repo
+runs. **A value can be correct-looking, documented, reviewed, and corrected once, and still never
+have been measured.**
+
+### Three widths found by looking, none by reading the stylesheet
+
+The résumé's prose, the project hero (a raw `44rem`, the only width on the site not expressed as a
+token), and the contact card. Every one was spotted on a preview — two of them by Ali, in passing,
+while looking at something else. A grep over `max-width` found none of them, because each was
+syntactically fine and only wrong relative to its neighbours.
+
+The rule that fell out and now lives in `CLAUDE.md`: **a frame has an edge, and an edge that agrees
+with nothing reads as a mistake.** Prose can sit narrower without looking wrong; a bordered box
+cannot. That one sentence decided all three and predicts the next one.
+
+### What rendering caught that reasoning did not
+
+- **The full-bleed header option scrolled the page sideways.** A `::before` at `inset: 0 -50vw`
+  moved the page 400px at 1280 and 195px at 390. Scoping `overflow-x: clip` to `:root` did not
+  contain it and neither did moving it to `body`; both were tried and measured. A `box-shadow`
+  spread paints outside the border box without contributing scrollable overflow, which is the
+  version that worked. #166 had removed a root-level clip for this exact reason and the trap was
+  walked straight back into.
+- **The résumé-as-sheet option detached the download button**, which is positioned against
+  `.resume-actions` rather than the panel. Invisible in the numbers, obvious in the screenshot.
+- **A P3 label claimed the shared edge landed at 976.** It lands at 1040, because `.layout` includes
+  its own padding. Caught by measuring the option rather than trusting the token it was derived from
+  — the same class of error as the `ch` finding, in miniature, inside the instrument built to find
+  it.
+
+### Two of my own assertions were wrong before the code was
+
+Worth recording because both were caught by the check rather than by review. A line-count method
+using `Range.getClientRects()` over a flex container returned one rect per item rather than per
+line, reporting "10 rows" for every card; and the final verification asserted a prose width of 744
+that came from an earlier _right-edge_ number, so it failed six times against correct code. **A
+failing assertion is not evidence the code is wrong**, and the instinct to trust the assertion over
+the artifact is the expensive one.
+
+Three template-literal backticks broke the build in the same way on three separate commits, which
+is a mechanical mistake that a guard would have caught faster than I did.
+
+### Cost notes
+
+No subagents, and that was right: this was one serial conversation where every step depended on the
+last measurement, which is the shape delegation is worst at.
+
+Rendering dominated again — roughly thirty headless measurement runs, every one answering a question
+that could have been argued instead. The ratio to argue about is that the measurements changed the
+outcome five times: the résumé width, the `ch` finding, the P3 narrowness, the hero-height coupling,
+and the full-bleed overflow. Chromium needed the same shim as the last three sessions.
+
+The rebase at the end conflicted on exactly the three generated artifacts — both PDFs and the lock —
+on both commits that touch `base.css`, and for the same reason [#239](https://github.com/ali-wallick/Portfolio/pull/239)
+did. Resolved the same way: take main's, rebuild from the merged tree, because the correct hash is
+the merged input set's and belongs to neither side.

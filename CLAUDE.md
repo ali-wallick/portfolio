@@ -1821,6 +1821,98 @@ worked, so let the pattern settle before sweeping siblings for it.
 
 ---
 
+## One page column, and never reason about line length in `ch` (2026-08-31, closes #253)
+
+Settled on a live switcher, the fifth run of that loop. Started as Ali asking why `--measure` was
+the number it was, and turned into the widths being a system rather than five values that each made
+sense once.
+
+**The site had three structural edges that agreed with nothing.** At 1280 the header, `main` and the
+footer ran to 1136 while the widest content stopped at 976 — 160px of dead space under a nav that
+reached past everything, plus prose narrower still. That shape matches no convention: the ordinary
+web pattern is **one container shared by header, content and footer, with reading text narrower
+inside it**. Worse, "widest content" meant different things per route — the résumé panel and the
+project galleries did reach 1136, so `--content-max` was chrome on some pages and a real content
+edge on others.
+
+**Settled: `--content-max: 56rem`, `--measure: 37.5rem`.** The page column comes down to meet the
+content rather than the content growing to meet the header, and every framed thing on the site now
+shares one right edge.
+
+### The finding worth carrying forward: `ch` is not characters
+
+Every previous discussion of `--measure` was conducted in `ch`, and `ch` **systematically
+understates** real line length. `1ch` is the `0` glyph — 10.25px in Figtree at 16px — while the
+average character in running prose is about **7.3px**, because prose is mostly narrow letters and
+spaces. Real characters per line run **~1.38× the `ch` count**, so the "63ch" everyone had in mind
+was **~87 characters**.
+
+Measured properly — walking text nodes and bucketing them into visual lines across /about and four
+project pages — the old 40.4rem ran **81 avg / 98 max, with 86% of full lines over 80**. WCAG 2.1
+SC 1.4.8 puts the ceiling at 80. **That is Level AAA, not the AA baseline ADA/Section 508/EN 301 549
+require**, so this was a readability call rather than a compliance fix — but it had been invisible
+for the life of the project because nobody measured the rendered text.
+
+**So: never reason about line length in `ch` on this site. Measure the output.** This is the third
+time a measurement in this file's history has overturned a plausible number ([#68](https://github.com/ali-wallick/Portfolio/issues/68)
+corrected the `ch` arithmetic, [#191](https://github.com/ali-wallick/Portfolio/issues/191) caught a
+page-count check passing a document 64px over budget, and now this).
+
+### The subtraction between the two width tokens is load-bearing
+
+`--measure-wide` is now **derived, not chosen**: `calc(var(--content-max) - var(--space-4) * 2)`.
+`.layout` carries `--space-4` of padding a side, so its content box is the column less 2rem, and
+feature blocks fill exactly that.
+
+**Written as a calc so the two cannot drift.** The alignment holds only while the container's
+content box is no wider than the feature cap — widen the column alone and every card silently stops
+filling it, restoring the mismatch this closed. A hand-maintained second value is precisely the
+drift the content model's guard table exists to rule out, and the token would otherwise claim a
+width nothing renders at, which is the `ch`-vs-characters trap one token up.
+
+### Three widths that had stopped participating, found by looking rather than by reading CSS
+
+Each was a value that made sense when it was written and quietly stopped agreeing with anything.
+All three were spotted on the preview, not in the stylesheet — which is the argument for the review
+loop, not for a linter.
+
+| What                    | Was                                                    | Now                                                                                                                |
+| ----------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| Résumé prose            | `--measure`, so it moved with unrelated site decisions | `--resume-measure` (701px), the print column, pinned ([#244](https://github.com/ali-wallick/Portfolio/issues/244)) |
+| Project hero (`.media`) | a raw `44rem`, the only width not a token              | fills the page column                                                                                              |
+| `.contact-card`         | `--measure`                                            | `--measure-wide`, like every other bordered note                                                                   |
+
+**The rule that decided all three: a frame has an edge, and an edge that agrees with nothing reads
+as a mistake.** Prose may sit narrower without looking wrong because it has no frame to align; a
+bordered box may not. That is why `.contact-card` moved and the prose measure did not.
+
+**The hero's `44rem` had a real reason and it scales with the column.** A 16:9 embed at the old
+64rem column is 576px tall and pushes the write-up below the fold — a fact about the _column_, not
+about 44rem. At 56rem it is 486px. So that change is coupled to this one: **re-check the hero height
+if the column ever widens again.** `Media.astro`'s `sizes` hint had to follow too, and that one has
+no guard behind it — an undersized hint downloads a too-small file and renders the hero soft, which
+no build check catches.
+
+### What was measured and rejected
+
+- **Content grows to meet the header** (everything at 64rem). Closest to the standard shape, but it
+  returns the "currently" box to a wide band with two lines floating in it — 346px of empty box
+  against today's 218px — which is the exact thing `--measure-wide` was created to prevent.
+- **A full-bleed header**, the single most common pattern on the web, and the only option that
+  needed no content width to change. Lost to Ali preferring the columns actually align. Its
+  implementation note is worth keeping anyway: a `::before` bled to `inset: 0 -50vw` scrolls the
+  page 400px sideways at 1280, and scoping `overflow-x: clip` to `:root` does **not** contain it
+  (nor does moving the clip to `body`). A `box-shadow` spread paints outside the border box without
+  contributing scrollable overflow, so there is nothing to clip.
+- **Narrowing further than 56rem.** 52rem was Ali's first preference and reads well at 1280, but it
+  is a fixed cap: 46% of a 1728 screen and 42% of 1920. What she liked about it was the alignment,
+  which is separable from the width.
+- **A résumé exception** to match print more closely. Unnecessary — [#244](https://github.com/ali-wallick/Portfolio/issues/244)
+  already pins the résumé's text column to 701px, the print content width, in its own token immune
+  to `--measure`. Narrowing the panel itself to sheet proportions was built and rejected: it makes
+  the panel a bordered box aligning with nothing (the rule above), and detaches the download button,
+  which is positioned against `.resume-actions` rather than the panel.
+
 ## Preserving the old site (2026-08-26)
 
 The old DreamHost site is preserved well enough that `snapshot/` can eventually be tagged and

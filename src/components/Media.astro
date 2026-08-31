@@ -103,8 +103,18 @@ const zoomSrc = zoomable
   ? (await getImage({ src: item.src, width: Math.min(item.src.width, 1600), format: 'webp' })).src
   : undefined;
 
+/* The hero hint tracks the page column, not a fixed width (#253). `.media`
+   used to cap at 44rem and this said so; now it fills `.layout`, whose content
+   box is the column less 1rem of padding a side. Getting this wrong is not a
+   layout bug but a sharpness one — an undersized hint downloads a too-small
+   file and the hero renders soft, which no build check would catch. Stated for
+   the widest the column can currently be (64rem, so 62rem of content): erring
+   large costs bytes, erring small costs pixels. RE-STATE IT IF THE COLUMN
+   CHANGES. */
 const sizes =
-  surface === 'hero' ? '(max-width: 46rem) 100vw, 44rem' : '(max-width: 40em) 80vw, 36rem';
+  surface === 'hero'
+    ? '(max-width: 64rem) calc(100vw - 2rem), 62rem'
+    : '(max-width: 40em) 80vw, 36rem';
 ---
 
 {

@@ -641,7 +641,15 @@ hr {
    is — it opens a mail client. */
 .contact-card {
   display: block;
-  max-width: var(--measure);
+  /* The feature tier, not the reading measure (#253). This is a bordered note,
+     which is the exact case `--measure-wide` was introduced for — the comment
+     on `.currently` names "a bordered note" as the block that needed a third
+     width. `.currently` was moved onto it and this was left behind, so the one
+     framed element on /contact was the only one that never lined up with the
+     header: short by 154px at the narrowest column and 346px at the widest.
+     A frame has an edge, and an edge that agrees with nothing reads as a
+     mistake rather than as hierarchy. */
+  max-width: var(--measure-wide);
   margin-bottom: var(--space-6);
 }
 
@@ -1028,6 +1036,25 @@ hr {
   border-radius: var(--radius-lg);
 }
 
+/* Fills the box rather than stopping at the reading measure (#253). The global
+   `p` rule caps every paragraph at `--measure`, which is a SUSTAINED READING
+   width — the length a line may run before finding the next one is tiring. A
+   one-line callout has no next line to find, so the cap buys nothing here and
+   cost 216px of visibly empty box beside a note that is the page's whole
+   statement of current work.
+
+   Ali's call. Removing the cap alone was not enough and is the reason
+   `currentNote` now carries a length ceiling: at 96 characters it wrapped to
+   89 plus a 6-character orphan, which looked worse than the capped version.
+   `text-wrap: balance` was measured as the alternative and rejected — it
+   evens the two lines but leaves the text ~400px wide inside an 814px box,
+   which reads as emptier still. The fix that worked was fitting the sentence
+   to one line; see the note on `currentNote` in
+   src/content/jobs/second-dinner.md for the constraints that keeps. */
+.currently > p {
+  max-width: none;
+}
+
 .currently > p:last-child {
   margin: 0;
   font-size: var(--text-lg);
@@ -1056,10 +1083,19 @@ hr {
    rule only means one thing. */
 .media {
   margin: var(--space-6) 0;
-  /* Wider than the prose measure, because a hero should lead — but not the
-     full 64rem column, which puts a 16:9 embed at 576px tall and pushes every
-     word of the write-up below the fold on a laptop. */
-  max-width: 44rem;
+  /* Fills the page column (#253). It used to cap at a raw `44rem`, which was
+     the only width on the site not expressed as a token and belonged to no
+     tier — so a project page carried three ragged right edges: prose, then
+     the hero, then the header and gallery. Measured at the old 64rem column
+     the hero fell 288px short of the container.
+
+     The 44rem was chosen for a real reason — a 16:9 embed at the full 64rem
+     column is 576px tall and pushes the write-up below the fold on a laptop —
+     and that reason SCALES WITH THE COLUMN rather than being a fact about
+     44rem. It is why this change is coupled to narrowing the page column in
+     the same pass: filling an 800px column puts a 16:9 hero at 450px, filling
+     992px puts it back at 558px. Re-check that height if the column ever
+     widens again. */
 }
 .media figure {
   margin: 0;
