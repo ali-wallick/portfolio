@@ -84,6 +84,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { serveDist } from './lib/serve-dist.mjs';
 import { readEntries } from './lib/frontmatter.mjs';
+import { launchChromium } from './lib/launch-chromium.mjs';
 
 const CHECK_ONLY = process.argv.includes('--check');
 const DIST = path.resolve('dist');
@@ -269,8 +270,7 @@ let browser;
 const problems = [];
 
 try {
-  const { chromium } = await import('playwright');
-  browser = await chromium.launch();
+  browser = await launchChromium();
   // The print stylesheet forces the paper palette, but a dark-mode context
   // would still evaluate the dark tokens first — start light and let @media
   // print be a backstop rather than the only defence.

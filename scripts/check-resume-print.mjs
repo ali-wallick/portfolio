@@ -55,6 +55,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { serveDist } from './lib/serve-dist.mjs';
+import { launchChromium } from './lib/launch-chromium.mjs';
 
 const UPDATE = process.argv.includes('--update');
 const DIST = path.resolve('dist');
@@ -144,8 +145,7 @@ let browser;
 const captured = {};
 
 try {
-  const { chromium } = await import('playwright');
-  browser = await chromium.launch();
+  browser = await launchChromium();
   /**
    * Letter (8.5in) less the 0.6in side margins `@page` sets in
    * src/styles/resume.css, times 96 CSS px per inch. Paired height is the 11in

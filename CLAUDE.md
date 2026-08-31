@@ -2008,6 +2008,18 @@ file.
 `npm run build` also regenerates the resume PDFs into `public/`, which needs Chromium — installed by
 a `postinstall` line in `package.json` (~95 MB, headless shell only). `npm run dev` doesn't touch it.
 
+**In a Claude Code web session, that install fails and is meant to** (2026-08-31, closes
+[#245](https://github.com/ali-wallick/Portfolio/issues/245)). The session's egress proxy blocks
+`cdn.playwright.dev`, so `playwright install` 403s — `node_modules` still ends up fully populated,
+only the browser download fails. `scripts/postinstall-playwright.mjs` runs the real install first,
+unchanged, in every environment; only on failure does it check for the session image's own
+preinstalled Chromium at `$PLAYWRIGHT_BROWSERS_PATH/chromium` and, if present, warn and exit clean
+instead of failing `npm ci`. A genuinely broken environment — no download, no fallback — still fails
+loudly. `scripts/lib/launch-chromium.mjs` is the other half: `build-pdf.mjs` and
+`check-resume-print.mjs` both try the normal `chromium.launch()` first and fall back to that same
+binary only if it throws, which is what actually lets `build:pdf` and `check:resume-print` run
+somewhere the pinned browser revision was never downloaded.
+
 **The PDFs are committed artifacts, and that isn't a shortcut — Cloudflare physically cannot build
 them.** Its build image has no root and lacks Chromium's shared libraries, so the browser dies at
 launch there while GitHub Actions builds the same commit fine. Details in
