@@ -230,6 +230,29 @@ and not hosts.
 
 ---
 
+## Managed robots.txt is kept, on purpose (2026-08-31, closes #215)
+
+`aliwallick.com/robots.txt` is not exactly `src/pages/robots.txt.ts`'s output. Cloudflare's zone-level
+**AI Crawl Control** prepends a Managed block ahead of the generated file, `Disallow`-ing nine
+AI-training crawlers (`GPTBot`, `ClaudeBot`, `Google-Extended`, `Applebot-Extended`, `Bytespider`,
+`CCBot`, `Amazonbot`, `meta-externalagent`, `CloudflareBrowserRenderingCrawler`) and asserting a
+`Content-Signal` / EU Directive 2019/790 preamble.
+
+**Ali's call: keep it, unchanged.** These are training-data crawlers, not the ones involved when
+someone asks an AI assistant about her today — that goes through ordinary search indexing
+(`Googlebot`, `Bingbot`) or a live fetch, neither of which this block touches. `Allow: /` and the
+sitemap line survive intact, so search discoverability is unaffected either way; what the block
+actually decides is whether her writing gets ingested into a future model's training data, which she'd
+rather it not.
+
+**Not changed to git-sourced.** The more consistent-with-this-repo option — disable Cloudflare's
+injection and hand-write the same crawler list into `robots.txt.ts` — was considered and declined:
+it would mean maintaining a crawler list Cloudflare already maintains, for a policy that costs nothing
+to leave as a zone-level default. If the crawler list or the licensing posture ever needs to be
+authored in git instead of inherited from Cloudflare, that's the fallback.
+
+---
+
 ## Using it
 
 ```bash
