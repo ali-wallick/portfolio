@@ -157,7 +157,7 @@ jobs:
       # keep the beacon. On aliwallick.com the origin matches the beacon's
       # own and none of this ever came up.
       - name: Download build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: dist
           path: dist
