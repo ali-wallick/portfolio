@@ -725,6 +725,7 @@
   .site-header,
   .site-footer,
   .skip-link,
+  .page-head,
   .resume-actions {
     display: none !important;
   }

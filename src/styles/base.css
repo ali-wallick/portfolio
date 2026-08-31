@@ -46,6 +46,66 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Scoped to screen: `scrollbar-gutter` on paper is meaningless, and
+   resume.css's print block resets `.layout` at a specificity this must not
+   have to argue with. See the note above `body`.
+
+   The vertical half of #247 was the page title moving; this is the horizontal
+   half. `/contact` and `/404` are short enough not to scroll (the `min-height`
+   column below is what makes that exact) while every other route does, so on
+   any platform with classic scrollbars — Windows and most Linux, and macOS
+   with "always show scrollbars" — the centred column jumped sideways by the
+   scrollbar's width when clicking between them. Reserving the gutter on every
+   page makes the column's position independent of the page's length.
+
+   A no-op on default macOS, where overlay scrollbars take no space at all,
+   which is exactly why it could sit here unnoticed for the life of the
+   project. */
+@media screen {
+  html {
+    scrollbar-gutter: stable;
+  }
+}
+
+/* --- Between pages -------------------------------------------------------
+ *
+ * The second half of #247: not where a page starts, but what happens between
+ * two of them. Cross-document view transitions, so following a link
+ * cross-fades the old page into the new one instead of cutting to it.
+ *
+ * No script and no client-side router — this is the native CSS feature, so it
+ * costs nothing on a browser that doesn't implement it (Firefox today), which
+ * simply navigates as before. That is the same posture the resume's density
+ * toggle takes with `document.startViewTransition`.
+ *
+ * The header is named, so it is treated as the SAME element across the
+ * navigation and stays put rather than cross-fading with the page under it.
+ * Without this the sticky nav dissolves and reappears on every click, which is
+ * more motion than the change deserves — only the content actually changed.
+ */
+@view-transition {
+  navigation: auto;
+}
+
+@media screen {
+  .site-header {
+    view-transition-name: site-header;
+  }
+}
+
+/* Motion is opt-out, and it has to be done here rather than in a token: no
+   custom property can reach a view transition's animation, the same reason
+   the reticle's fade carries its own curve. `navigation: auto` still applies —
+   the transition happens, it just has no duration, which is the documented way
+   to get an instant swap rather than a broken one. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
 /* Only `margin` and `font-family` here — the rest of `body`'s screen
    declarations live in the `@media screen` block below. resume.css's
    `@media print` block never sets either of these on `body`, so there is
@@ -220,13 +280,13 @@ hr {
     flex: 1 0 auto;
   }
 
-  /* --- Restoring three collapsed margins ---------------------------------
+  /* --- Restoring a collapsed margin --------------------------------------
    *
    * A flex container's children do not margin-collapse, and this layout was
-   * quietly relying on three collapses that flex has just switched off. Each
-   * one measured as a real shift, so each is restored explicitly rather than
-   * left to be discovered on the preview. The rule throughout: reproduce what
-   * the collapsed layout *rendered*, not what its margins add up to.
+   * quietly relying on three collapses that flex had switched off. Two of the
+   * three restorations are retired by #247 (see below); the rule for the one
+   * that remains is unchanged: reproduce what the collapsed layout
+   * *rendered*, not what its margins add up to.
    *
    * Verified by capturing every element's box on nine routes at three
    * viewports before and after: no content element moves anywhere. Two
@@ -246,24 +306,16 @@ hr {
    * `border-top`) and total page height is unchanged, so this one is visible
    * to a measuring script and to nobody else.
    *
-   * 1. `.page-head`'s h1 sent its 16px up through two wrappers to collapse
-   *    against the header's 32px, which won. The header still supplies it.
+   * Rules 1 and 2 are gone (#247). They restored a 16px margin on a
+   * `.page-head` h1 and a different one on a bare leading h1 — faithfully
+   * reproducing the fact that a page's title landed at a different height
+   * depending on which shape that page happened to use. That difference was
+   * the bug, not the contract: every route now opens with `PageHead.astro`,
+   * whose reserved `--page-kicker` slot supplies the whole gap above the title
+   * and supplies the same one everywhere. Nothing is left to restore, because
+   * `.page-head h1` no longer has a top margin to collapse.
    *
-   *    `h1:first-child`, not `> h1`: on /projects an eyebrow precedes the
-   *    heading, so there the 16px never escaped — it is real space between
-   *    the two, and zeroing it pulled the whole page up 4px. */
-  .layout > main > .page-head:first-child > h1:first-child {
-    margin-top: 0;
-  }
-
-  /* 2. A bare h1 leading a page (/about, /404) has a 48px top margin, and
-   *    that one *beat* the header's 32px. Contributing the 16px difference
-   *    reproduces the 48px gap those two pages have always rendered. */
-  .layout > main > h1:first-child {
-    margin-top: var(--space-4);
-  }
-
-  /* 3. The last block in `main` sent its bottom margin down to collapse
+   * 3. The last block in `main` sent its bottom margin down to collapse
    *    against the footer's 64px, which won on every page — so dropping it
    *    leaves the same 64px rather than adding to it. Without this the footer
    *    sits 16-32px lower on every page on the site, varying by whatever
@@ -825,7 +877,11 @@ hr {
 /* --- Page furniture ------------------------------------------------------ */
 
 .hero {
-  padding: var(--space-8) 0 var(--space-4);
+  /* No top padding: the eyebrow row below is sized to `--page-kicker`, which
+     is the same reserved slot every other route's title sits under (#247), so
+     the name lands on the shared title edge instead of 29px below it. The
+     bottom half of the old shorthand is unchanged. */
+  padding: 0 0 var(--space-4);
   /* Side-by-side with the headshot (#181). `--measure-wide` matches the
      "currently" module below, so the hero's right edge lines up with the two
      bordered blocks rather than floating loose between them. */
@@ -864,6 +920,19 @@ hr {
 
 .hero > .eyebrow {
   grid-area: eyebrow;
+  /* The hero's own kicker. Sized to the shared slot rather than to its own
+     content so the name below it lands on the same edge as every other page's
+     `<h1>` (#247) — this row IS `.page-kicker`, expressed in the hero's grid
+     because the hero places its four children flat and cannot wrap them.
+     `min-height` for the reason given on `.page-kicker`, and this is the
+     element that proved it: at 320px this eyebrow wraps to three lines, and
+     pinning it to a fixed 36px drew "ENGINEER" straight through the name. It
+     is exactly `--page-kicker` at every width where it fits on one line,
+     which is every width from 360px up — so the alignment holds where it can
+     and the narrow layout stays legible where it cannot.
+     The height replaces the margin-bottom `.eyebrow` carries by default. */
+  min-height: var(--page-kicker);
+  margin-bottom: 0;
   /* Both of these exist for the wrapped, narrow case; see the note above the
      40em block. They are no-ops on one line. */
   text-wrap: balance;
@@ -1061,12 +1130,51 @@ hr {
   line-height: 1.5;
 }
 
+/* The shared page-title block (#247). See PageHead.astro and the
+   `--page-kicker` token for why the slot above the heading is reserved on
+   every route rather than only on the routes that fill it. */
 .page-head {
   margin-bottom: var(--space-8);
 }
 
+/* The reserved line above the title. A fixed height, not a min-height: the
+   point is that its occupant — an eyebrow, a backlink, or nothing — cannot
+   move the heading.
+
+   The occupant sits at the TOP of the slot, so the remainder of the slot is
+   the gap between it and the title. Bottom-aligning it instead would put its
+   baseline on the heading's top edge with no gap at all; the slot has to be
+   taller than its contents for the space above the title to survive on the
+   pages that fill it.
+
+   `min-height`, not `height`, and the difference is a failure mode rather
+   than a preference. The slot holds one short line by contract — every
+   occupant today is an eyebrow or a backlink that fits at 320px — but a fixed
+   height silently OVERLAPS the title if one ever wraps, where a min-height
+   pushes it down. A title nudged 20px on one narrow viewport is a worse
+   alignment; a title with a word sitting on top of it is a broken page. This
+   was not hypothetical: the hero's eyebrow below wraps to three lines at
+   320px, and a fixed height there rendered "ENGINEER" through the middle of
+   "Ali Wallick". */
+.page-kicker {
+  display: flex;
+  align-items: start;
+  min-height: var(--page-kicker);
+}
+
+/* Both of these normally carry their own bottom margin to space themselves off
+   what follows. Inside the slot that margin would push the slot's own content
+   up off its baseline, and the slot already supplies the gap. */
+.page-kicker > .eyebrow,
+.page-kicker > .backlink {
+  margin-bottom: 0;
+}
+
+/* Zeroed, not tuned: the slot above is the entire gap between the top of
+   `main` and the title, on every route. A margin here would be added to it on
+   some pages and collapsed away on others, which is the bug. */
 .page-head h1 {
-  margin-top: var(--space-4);
+  margin-top: 0;
 }
 
 .backlink {

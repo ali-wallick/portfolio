@@ -215,6 +215,40 @@
     --space-12: 3rem;
     --space-16: 4rem;
 
+    /* --- The page title edge ----------------------------------------------
+   *
+   * The reserved height of the ONE line that may sit above a page's `<h1>` —
+   * an eyebrow, a backlink, nothing. It is reserved whether or not anything
+   * fills it, which is the entire point: `#247` was that every route put a
+   * different thing first, so the title landed at a different y on every page
+   * and clicking through the nav made it dance.
+   *
+   * Measured before the fix, at 1280 — the h1's top edge by route:
+   *
+   *   /contact  90   (nothing above it)
+   *   /about    106  (a bare h1's own 16px margin)
+   *   /projects 127  (an eyebrow)
+   *   /projects/* 132 (a backlink)
+   *   /         155  (the hero's own top padding)
+   *   /resume   165  (the density tabs, then the panel's padding)
+   *
+   * A 75px spread. Reserving the slot collapses it: `main` already starts at a
+   * constant 90 on every route, so a constant slot puts every h1 at 90 + this.
+   *
+   * 2.25rem = 36px, which is one `--text-sm` mono line (23px) plus
+   * `--space-3`. Chosen so that `/projects` — the page whose top was already
+   * composed with an eyebrow above the title, and the only one that looked
+   * deliberate — does not move: its h1 was at 127 and lands at 126.
+   *
+   * The residual is `/resume`, and it is documented rather than closed. Its
+   * tab strip is 51px, taller than this slot, so its panel sits ~14px below
+   * everyone else's title. Making the slot 51px would align it exactly at the
+   * cost of 51px of empty air above `About` — a real trade, and Ali's call on
+   * the preview rather than one to make silently here. Changing it is this one
+   * value; nothing else is fitted to 36px.
+   */
+    --page-kicker: 2.25rem;
+
     /* --- Layout -----------------------------------------------------------
    *
    * `--measure` is in `rem`, not `ch`, and that is load-bearing rather than a

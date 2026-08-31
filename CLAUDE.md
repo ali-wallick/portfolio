@@ -1914,6 +1914,98 @@ no build check catches.
   the panel a bordered box aligning with nothing (the rule above), and detaches the download button,
   which is positioned against `.resume-actions` rather than the panel.
 
+## One page title edge, and pages cross-fade between (2026-08-31, closes #247)
+
+Ali's report was that "home page clicking around has different heights." It measured worse than it
+sounds. `main` starts at a constant y on every route — the spread was entirely in **what each page
+put first**, and every route had picked its own shape:
+
+| Route            | h1 top at 1280 | What was above it           |
+| ---------------- | -------------- | --------------------------- |
+| `/contact`       | 90             | nothing                     |
+| `/about`, `/404` | 106            | a bare h1's own 16px margin |
+| `/projects`      | 127            | an eyebrow                  |
+| `/projects/*`    | 132            | a loose backlink            |
+| `/`              | 155            | the hero's own top padding  |
+| `/resume`        | 165            | the density tabs            |
+
+**75px of jump between adjacent nav items.** Every route now opens with `PageHead.astro`, whose
+reserved `--page-kicker` slot supplies the whole gap above the title, so **all nine land on exactly
+the same edge** (126 at 1280 and 768, 166 at 390). The homepage is the one deliberate exception
+below 360px, where its eyebrow wraps and the `min-height` slot nudges the name down rather than
+letting a word land on top of it.
+
+**The slot is reserved by the component, never by the caller** — a page with nothing to put above
+its title renders the same slot as one that does. Reserving it only where it is filled is precisely
+the bug, re-expressed as a convention each new page has to remember. Same move
+`content.config.ts` makes for content: the old site drifted because every page was free to be
+shaped its own way.
+
+**36px is fitted to `/projects`, deliberately.** That was the one page whose top was already
+composed — an eyebrow above the title — rather than accidental, so the value is the one that leaves
+it where it was (127 → 126). Everything else moved to meet it.
+
+**`min-height`, not `height`, and it is a failure mode rather than a preference.** A fixed height
+silently _overlaps_ the title when a kicker wraps; a min-height nudges it down. Not hypothetical —
+the hero's eyebrow wraps to three lines at 320px, and the first build of this drew "ENGINEER"
+through the middle of "Ali Wallick". A title nudged 20px on one narrow viewport is a worse
+alignment; a title with a word sitting on top of it is a broken page.
+
+**The résumé carries a `Resume` page title, and that is what closed the last route** (Ali's call on
+a five-candidate switcher, the sixth run of that loop). It was the only route with no page title,
+so its content met the shared edge 14px low at desktop and 67px low at 390. It now opens with
+`PageHead` like everything else, and the actions bar is what FOLLOWS the title rather than what
+stands in for it. All nine routes land on the same edge at 1280 and 768.
+
+**The switcher's finding, which is the part worth keeping: two of the five candidates aligned on a
+desktop and not on a phone.** Below 48em the actions bar goes `column-reverse` and stacks to 103px,
+so every candidate that sized the reserved slot to the TAB STRIP — growing the slot to 51px, or
+shrinking the tabs to 37px — fixed 1280 and left ~53px at 390. Both were recommended in this
+branch's own PR description before the instrument was built. **Only the two candidates that put
+something other than the strip at the title edge held at every width**, which is the whole reason
+the answer is a title rather than a spacing tweak.
+
+**`.page-head` is hidden in `resume.css`'s print block, beside `.resume-actions`.** Without it the
+title prints on the PDF. It is what keeps this change invisible on paper — verified as zero
+differing text-placement operators across 3,064 and 5,973, so the PDFs are byte-identical in
+content and differ only in metadata.
+
+**The résumé's name stays an `<h1>`, so `/resume` carries two.** Ali asked directly whether it had
+to stop being one, and the answer is no: multiple `<h1>`s are valid HTML5, are not an axe rule, and
+measured clean — accessibility 1.0 on both résumé routes with `heading-order` passing. Demoting the
+name to `<h2>` would have bought a convention and cost a print-side change to
+`.resume-head h1` plus a cascade question about the section headings under it. **The page title is
+the page's; the name is the document's.** Do not "fix" this by demoting one of them.
+
+**The two rules in `base.css` that restored collapsed h1 margins are gone with it.** They faithfully
+reproduced the fact that a title landed at a different height depending on which shape its page
+used — the difference was the bug, not the contract.
+
+### The horizontal half nobody had noticed
+
+`/contact` and `/404` are short enough not to scroll while every other route does, and there was no
+`scrollbar-gutter` anywhere — so on any platform with classic scrollbars the centred column _also_
+jumped sideways when clicking between them. `scrollbar-gutter: stable` on `html`, inside
+`@media screen`. **A no-op on default macOS**, where overlay scrollbars take no space, which is
+exactly why it survived the life of the project unseen: the machine the site is reviewed on cannot
+show the bug.
+
+### Pages cross-fade now, and it costs one CSS rule
+
+The second half of Ali's question was whether navigation could be smoother. Native cross-document
+view transitions (`@view-transition { navigation: auto }`) — **no script, no client-side router, no
+`astro:transitions`**, so a browser that doesn't implement it (Firefox today) navigates exactly as
+before. Same posture the résumé's density toggle takes with `document.startViewTransition`.
+
+**The header carries a `view-transition-name` so it is treated as the same element across the
+navigation** and stays put instead of dissolving under itself. Without that the sticky nav
+cross-fades on every click, which is more motion than the change earns — only the content changed.
+
+**Reduced motion is handled in CSS and cannot be a token.** No custom property can reach a view
+transition's animation, the same reason the reticle's fade carries its own written-in curve. The
+transition still runs with `animation: none`, which is the documented way to get an instant swap
+rather than a broken one.
+
 ## Preserving the old site (2026-08-26)
 
 The old DreamHost site is preserved well enough that `snapshot/` can eventually be tagged and

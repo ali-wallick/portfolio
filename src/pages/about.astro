@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHead from '~/components/PageHead.astro';
 import { getCurrentNote } from '~/lib/content';
 import { externalLinkProps } from '~/lib/links';
 import young from '~/assets/images/me-young.jpg';
@@ -37,7 +38,7 @@ const synagogueUrl = 'https://www.universitysynagogue.org/';
   description="How Ali Wallick got into games, and the four studios since: Kaneva, Red 5 Studios, MobilityWare, and Second Dinner."
   image="/og/home.jpg"
 >
-  <h1>About</h1>
+  <PageHead title="About" />
 
   {
     /* The headshot that used to sit here moved to the homepage hero (#181),

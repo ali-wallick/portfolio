@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHead from '~/components/PageHead.astro';
 import ProjectMeta from '~/components/ProjectMeta.astro';
 import ProjectVisual from '~/components/ProjectVisual.astro';
 import { getFeaturedProjects, getArchiveProjects } from '~/lib/content';
@@ -18,10 +19,9 @@ const total = featured.length + archive.length;
   description="Games and projects by Ali Wallick, from shipped titles to game jam entries."
   image="/og/projects.jpg"
 >
-  <div class="page-head">
-    <p class="eyebrow">{total} entries</p>
-    <h1>Projects</h1>
-  </div>
+  <PageHead title="Projects">
+    <p class="eyebrow" slot="kicker">{total} entries</p>
+  </PageHead>
 
   <h2>Featured</h2>
   <ul class="card-grid">

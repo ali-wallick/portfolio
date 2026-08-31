@@ -2,6 +2,7 @@
 import type { GetStaticPaths } from 'astro';
 import { render } from 'astro:content';
 import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHead from '~/components/PageHead.astro';
 import ProjectMeta from '~/components/ProjectMeta.astro';
 import Media from '~/components/Media.astro';
 import Gallery from '~/components/Gallery.astro';
@@ -39,12 +40,15 @@ const d = project.data;
   image={`/og/projects/${project.id}.jpg`}
   noindex={d.draft}
 >
-  <a class="backlink" href="/projects">← Projects</a>
-
-  <div class="page-head">
-    <h1>{d.title}</h1>
+  {
+    /* The backlink sits INSIDE the title block now (#247), in its reserved
+       kicker slot. Loose above it, it was an extra element in `main` that
+       pushed this page's title 42px lower than every other page's. */
+  }
+  <PageHead title={d.title}>
+    <a class="backlink" slot="kicker" href="/projects">← Projects</a>
     <ProjectMeta project={project} />
-  </div>
+  </PageHead>
 
   {d.hero && <Media item={d.hero} />}
   {d.summary && <p class="lede">{d.summary}</p>}

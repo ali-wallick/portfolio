@@ -213,7 +213,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > div.resume-tabs:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.page-head:nth-of-type(1) > div.page-kicker:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 0,
@@ -228,7 +228,22 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > div.resume-tabs:nth-of-type(1) > a:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.page-head:nth-of-type(1) > h1:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "39.056px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(2) > div.resume-tabs:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 0,
@@ -243,7 +258,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > div.resume-tabs:nth-of-type(1) > a:nth-of-type(2)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(2) > div.resume-tabs:nth-of-type(1) > a:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 0,
@@ -258,7 +273,22 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > a.button.button-accent:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(2) > div.resume-tabs:nth-of-type(1) > a:nth-of-type(2)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(2) > a.button.button-accent:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 0,
@@ -273,7 +303,7 @@
         "backgroundColor": "rgb(255, 255, 255)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > a.button.button-accent:nth-of-type(1) > svg:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(2) > a.button.button-accent:nth-of-type(1) > svg:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 0,
@@ -288,7 +318,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > a.button.button-accent:nth-of-type(1) > svg:nth-of-type(1) > path:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(2) > a.button.button-accent:nth-of-type(1) > svg:nth-of-type(1) > path:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 0,
@@ -303,7 +333,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > a.button.button-accent:nth-of-type(1) > span.resume-pages:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(2) > a.button.button-accent:nth-of-type(1) > span.resume-pages:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 0,
@@ -2495,7 +2525,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > div.resume-tabs:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.page-head:nth-of-type(1) > div.page-kicker:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 0,
@@ -2510,7 +2540,22 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > div.resume-tabs:nth-of-type(1) > a:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.page-head:nth-of-type(1) > h1:nth-of-type(1)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "39.056px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(2) > div.resume-tabs:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 0,
@@ -2525,7 +2570,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > div.resume-tabs:nth-of-type(1) > a:nth-of-type(2)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(2) > div.resume-tabs:nth-of-type(1) > a:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 0,
@@ -2540,7 +2585,22 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > a.button.button-accent:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(2) > div.resume-tabs:nth-of-type(1) > a:nth-of-type(2)",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(2) > a.button.button-accent:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 0,
@@ -2555,7 +2615,7 @@
         "backgroundColor": "rgb(255, 255, 255)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > a.button.button-accent:nth-of-type(1) > svg:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(2) > a.button.button-accent:nth-of-type(1) > svg:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 0,
@@ -2570,7 +2630,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > a.button.button-accent:nth-of-type(1) > svg:nth-of-type(1) > path:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(2) > a.button.button-accent:nth-of-type(1) > svg:nth-of-type(1) > path:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 0,
@@ -2585,7 +2645,7 @@
         "backgroundColor": "rgba(0, 0, 0, 0)"
       },
       {
-        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(1) > a.button.button-accent:nth-of-type(1) > span.resume-pages:nth-of-type(1)",
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > div.resume-actions:nth-of-type(2) > a.button.button-accent:nth-of-type(1) > span.resume-pages:nth-of-type(1)",
         "rect": {
           "x": 0,
           "y": 0,

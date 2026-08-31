@@ -3006,3 +3006,125 @@ The rebase at the end conflicted on exactly the three generated artifacts — bo
 on both commits that touch `base.css`, and for the same reason [#239](https://github.com/ali-wallick/Portfolio/pull/239)
 did. Resolved the same way: take main's, rebuild from the merged tree, because the correct hash is
 the merged input set's and belongs to neither side.
+
+---
+
+## #247 — one page title edge, and cross-fading between pages (2026-08-31)
+
+Ali's report was three words of symptom — "different heights" clicking around — and the useful part
+was that the cause was not where it sounds like it is. `main` already started at a constant y on
+every route. The spread was entirely in **what each page happened to put first**, and six routes had
+six answers: nothing, a bare h1 margin, an eyebrow, a loose backlink, the hero's own padding, the
+résumé's tabs. 75px between adjacent nav items.
+
+**The measurement reframed the fix.** Coming in, the plausible shape was "hunt down the per-page
+margins and equalise them" — and `base.css` already had two rules doing exactly that, added in the
+flex-column pass to _restore_ collapsed h1 margins. They were faithfully preserving the bug: each
+one reproduced the height a page's title had always rendered at, which was a different height per
+page. The fix was not another nudge but a reserved slot that makes the nudges unnecessary, and
+deleting both rules was part of the change rather than a risk to it.
+
+### Reserving beat equalising, and the component is why
+
+The slot is reserved by `PageHead.astro`, never by the caller. A page with nothing above its title
+renders the same slot as one that does. The alternative — a CSS rule each page opts into — is a
+convention every future page has to remember, which is the same failure the content model's guard
+table exists to rule out, one layer up.
+
+Fitting the value to `/projects` rather than picking a round number was worth the minute it took.
+That was the one page whose top had actually been composed (an eyebrow above the title) rather than
+landing where it landed, so anchoring to it means the only page that looked deliberate does not
+move.
+
+### The bug the first build introduced, and the general form of it
+
+Pinning the slot with `height` aligned everything and drew "ENGINEER" straight through "Ali Wallick"
+at 320px, where the hero's eyebrow wraps to three lines. `min-height` renders identically wherever
+the line fits and degrades to a nudge instead of an overlap.
+
+**The general form: when a fix works by constraining something, ask what the constraint does to the
+case that does not fit.** The screenshot caught it; no assertion I had written would have. The three
+measurement passes before it all reported perfect alignment at 320 — because the h1's top edge _was_
+at 166, exactly as intended, with a word sitting on it.
+
+### Two things found by looking rather than by being asked
+
+`scrollbar-gutter` was absent, so the two routes short enough not to scroll also shifted the centred
+column sideways relative to every other page. It is a no-op on default macOS — the machine this site
+is reviewed on physically cannot show the bug, which is why it survived this long. That is the same
+shape as the `errors-in-console` finding and the `cf-cache-status` one: **the review environment's
+own defaults hide a class of defect, and the only defence is knowing which class.**
+
+The second was the résumé, which does not align and is left not aligning. Its tab strip is taller
+than the slot, and both ways of closing the gap spend something settled — 51px of empty air above
+`About`, or #239's control size. Reporting a documented 14px residual is a better answer than
+picking one silently, and the whole cost of changing it later is one token value.
+
+### Cost notes
+
+No subagents. Same shape as #253: one serial thread where each step depended on the previous
+measurement.
+
+Rendering dominated again — six headless passes, and the ratio worth noting is that two of them
+changed the outcome (the initial survey, which relocated the bug from "margins" to "what each page
+puts first", and the screenshot that caught the overlap) while four confirmed. The confirmations
+were still cheap insurance: this change touches every route on the site, and the only alternative to
+measuring all nine was asserting about all nine.
+
+Chromium needed the same shim as the last four sessions — the pinned Playwright expects a headless
+shell build the image does not carry, symlinked into a scratch `PLAYWRIGHT_BROWSERS_PATH`. Worth
+noting that it has now cost setup time in five consecutive sessions.
+
+### The switcher that corrected its own author (2026-08-31)
+
+The sixth run of the live-switcher loop, and the first one where the instrument overturned the
+recommendation the person who built it had already put in writing.
+
+The PR description for #247 shipped with a documented residual and two suggested fixes: grow the
+reserved slot to the tab strip's 51px, or shrink the tabs to 37px. Both were measured, both were
+correct at 1280, and **both were wrong.** Below 48em the résumé's actions bar goes `column-reverse`
+and stacks to 103px, so anything sized to the tab strip fixes the desktop and leaves ~53px on a
+phone. Only the two candidates that put something OTHER than the strip at the title edge — a page
+title, or the panel's own border — held at every width.
+
+**Nothing about that required a switcher to discover; it required measuring four viewports instead
+of one.** But the switcher is what made measuring four viewports the obvious next step, because
+five candidates in one DOM made "check them all at 390" a single loop rather than five branches.
+
+**The instrument's own design carried the finding.** It rendered two blocks — an ordinary page's
+title block and the résumé top — rather than the résumé alone, because the axis is a relationship
+between two pages and one candidate's entire cost lands on the page it does not touch. A lab
+showing only `/resume` would have scored that candidate as identical to doing nothing, and
+recommended it.
+
+### Two measurement bugs, both of which returned believable numbers
+
+`parseFloat` on a `--page-kicker` of `"2.25rem"` yields `2.25`, which printed as a `2px` guide and
+looked like a plausible small offset rather than a unit error. And the résumé's leading edge is a
+different element per candidate — a title, a wrapper that has become the panel, or the panel — so
+reading the layout wrapper reported `1px` for three options that visibly differed, because the
+wrapper starts at the top whether or not anything paints there.
+
+Both are the same class as the traps already in the skill: a number that looks like a measurement
+and is not one. The fix in each case was to measure a rendered box rather than parse a declaration.
+
+### The question worth having been asked
+
+Ali's reply to the shortlist was "why does the name NEED to stop being an H1?" — and the honest
+answer was that it does not. Multiple `<h1>`s are valid HTML5, are not an axe rule, and measured at
+accessibility 1.0 with `heading-order` passing. The claim had been carried into the shortlist as a
+cost of her preferred option without being checked, which would have either talked her out of the
+right answer or bought a print-side change for a convention.
+
+**A constraint asserted in passing is still an assertion.** It cost one Lighthouse run to settle.
+
+### Cost notes
+
+No subagents; same serial shape as the two passes before it.
+
+The teardown was the cheapest part, which is the argument for the route-scoped variant of the loop:
+four new files, nothing existing edited, so settling it was `git rm` plus a two-line change to the
+two résumé routes. Every shipped file was byte-identical for the whole life of the instrument.
+
+Chromium needed the same shim for a sixth consecutive session, and Lighthouse additionally needed
+`--no-sandbox` because the container runs as root. Worth automating if a seventh session wants it.

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import ResumeDocument from '~/components/ResumeDocument.astro';
+import PageHead from '~/components/PageHead.astro';
 import ResumeActions from '~/components/ResumeActions.astro';
 import '~/styles/resume.css';
 
@@ -36,6 +37,17 @@ import '@fontsource/public-sans/latin-700.css';
   description="Ali Wallick’s resume. Game developer, fifteen years in UI and systems engineering."
   image="/og/resume.jpg"
 >
+  {
+    /* #247. The résumé was the one route with no page title, so its content
+      met the shared title edge 14px low on a desktop and 67px low on a phone,
+      where the actions bar stacks. A title puts THIS page's first line where
+      every other page's is, and the bar becomes what follows it rather than
+      what stands in for it.
+
+      Print never sees it — `resume.css`'s print block hides `.page-head`
+      alongside `.resume-actions`, which is why the PDFs are unchanged. */
+  }
+  <PageHead title="Resume" />
   <ResumeActions current="concise" />
   <ResumeDocument density="concise" />
   <script is:inline>

@@ -1,0 +1,47 @@
+---
+/**
+ * The title block every route opens with (#247).
+ *
+ * One job: put the `<h1>` at the same y on every page. Before this, each route
+ * put something different above its title — an eyebrow, a backlink, a bare
+ * margin, nothing at all — and the title landed anywhere from 90 to 165 on a
+ * 1280 viewport. Clicking through the nav made it jump every time.
+ *
+ * The fix is a reserved slot, not a set of per-page nudges. `main` already
+ * starts at a constant y on every route, so a `kicker` row of constant height
+ * above the heading is sufficient: the row is `--page-kicker` tall whether or
+ * not anything is in it, and the h1 always follows it. See the token's own
+ * comment in tokens.css for the measurements.
+ *
+ * **The slot is reserved by the component, never by the caller.** A page with
+ * nothing to put above its title renders this with no `kicker` slot and gets
+ * the same spacing as one that does — which is what makes the alignment
+ * unrepresentable to get wrong, rather than a convention each new page has to
+ * remember. That is the same move `content.config.ts` makes for content: the
+ * old site's pages drifted because every page was free to be shaped its own
+ * way.
+ *
+ * The `kicker` slot takes an eyebrow (`/`, `/projects`) or a backlink
+ * (project pages). It holds ONE line — it is a fixed-height slot, so a second
+ * line overflows it rather than pushing the title down, which is the whole
+ * property being bought here.
+ */
+interface Props {
+  /** The page title. Rendered as the route's only `<h1>`. */
+  title: string;
+  /** Extra classes on the wrapper, for a page that needs to reach it. */
+  class?: string;
+}
+
+const { title, class: className } = Astro.props;
+---
+
+<div class:list={['page-head', className]}>
+  {
+    /* Always rendered, even with nothing in it: this is the reserved slot, and
+       reserving it only on the pages that fill it would reinstate the bug. */
+  }
+  <div class="page-kicker"><slot name="kicker" /></div>
+  <h1>{title}</h1>
+  <slot />
+</div>

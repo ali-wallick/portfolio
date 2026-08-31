@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHead from '~/components/PageHead.astro';
 import { site, socials } from '~/config/site';
 import { showDrafts } from '~/lib/content';
 import { externalLinkProps } from '~/lib/links';
@@ -20,9 +21,7 @@ const shown = socials.filter(
 ---
 
 <BaseLayout title="Contact" description="Get in touch with Ali Wallick." image="/og/contact.jpg">
-  <div class="page-head">
-    <h1>Contact</h1>
-  </div>
+  <PageHead title="Contact" />
 
   <p>Email is the best way to reach me.</p>
 
