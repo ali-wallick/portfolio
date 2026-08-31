@@ -20,14 +20,14 @@
  *    no hash — and the concise default is what the one-page PDF and the print
  *    baseline are recorded from. On load this script only brings the controls
  *    (aria-current, the PDF link) in line with whatever density the article
- *    already carries; the #full deep link is applied before it runs, by the
- *    inline script in resume.astro. A future edit that flips the article on
- *    load would silently change the committed PDF — which is why this file is
- *    in build-pdf.mjs's byteHashedFiles.
+ *    already carries; the #detailed deep link is applied before it runs, by
+ *    the inline script in resume.astro. A future edit that flips the article
+ *    on load would silently change the committed PDF — which is why this file
+ *    is in build-pdf.mjs's byteHashedFiles.
  * 3. **`replaceState`, never `pushState`.** Toggling is a view change, not
  *    navigation — no history spam, no popstate handling. The hash makes the
  *    full view shareable to JS users; the durable shareable URL for the
- *    two-pager remains /resume/full, and a no-JS visitor handed /resume#full
+ *    two-pager remains /resume/full, and a no-JS visitor handed /resume#detailed
  *    sees the one-pager.
  * 4. **The reduced-motion check lives here, not in a token.** The view
  *    transition is the whole animation; a `--duration` token cannot reach it,
@@ -71,7 +71,7 @@ if (article && links.length > 0) {
     if (!reduced && typeof document.startViewTransition === 'function')
       document.startViewTransition(apply);
     else apply();
-    history.replaceState(null, '', density === 'full' ? '#full' : location.pathname);
+    history.replaceState(null, '', density === 'full' ? '#detailed' : location.pathname);
   };
 
   for (const link of links) {

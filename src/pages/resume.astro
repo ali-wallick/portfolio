@@ -39,14 +39,14 @@ import '@fontsource/public-sans/latin-700.css';
   <ResumeActions current="concise" />
   <ResumeDocument density="concise" />
   <script is:inline>
-    // Deep link: /resume#full must not flash concise before the deferred
+    // Deep link: /resume#detailed must not flash concise before the deferred
     // module runs. Runs synchronously during parse, right after the article —
     // before first paint of it in practice. Top-level on purpose:
     // prettier-plugin-astro cannot parse a multi-statement <script> nested
     // inside a `{cond && (…)}` expression (see CLAUDE.md, the calibration
     // switcher note). Everything else about the toggle lives in
     // src/scripts/resume-density.ts, which only syncs the controls on load.
-    if (location.hash === '#full') {
+    if (location.hash === '#detailed') {
       document.querySelector('article.resume')?.setAttribute('data-density', 'full');
     }
   </script>

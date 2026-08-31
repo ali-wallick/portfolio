@@ -1557,7 +1557,8 @@ machine" solves _which_ font loads; it doesn't solve exactly how the OS text eng
 Ali's pick from four options, chosen over cross-document view transitions between the two routes.
 `/resume` now toggles between the one-pager and two-pager in place instead of navigating: a
 segmented control flips `data-density` on the article, the document grows into its long form, the
-URL becomes `/resume#full`, and the PDF link follows. The mechanism a future session needs to know:
+URL becomes `/resume#detailed`, and the PDF link follows. The mechanism a future session needs to
+know:
 
 - **Both densities ship in one DOM.** `ResumeDocument` renders the full superset always; full-only
   nodes carry `data-full-only`, and `.resume[data-density='concise'] [data-full-only]
@@ -1571,13 +1572,13 @@ URL becomes `/resume#full`, and the PDF link follows. The mechanism a future ses
   concise-only/full-only node pair, not a schema loosening.
 - **`/resume/full` stays, unchanged in role: the no-JS fallback and the source of
   `resume-full.pdf`.** It loads no script; its switch links are plain navigation. The shareable
-  two-pager URL for humans is still `/resume/full` — a no-JS visitor handed `/resume#full` sees
+  two-pager URL for humans is still `/resume/full` — a no-JS visitor handed `/resume#detailed` sees
   concise, which is the accepted cost of hash state.
 - **The enhancement script's init must never write to the article** (`src/scripts/
 resume-density.ts`, which is in `build-pdf.mjs`'s `byteHashedFiles` for exactly this reason —
-  a future on-load flip would silently change the committed PDF). The `#full` deep link is applied
-  by a tiny `is:inline` script in `resume.astro` before first paint; the module only syncs the
-  controls.
+  a future on-load flip would silently change the committed PDF). The `#detailed` deep link is
+  applied by a tiny `is:inline` script in `resume.astro` before first paint; the module only syncs
+  the controls.
 - **The animation is `document.startViewTransition`**, feature-detected, skipped under
   `prefers-reduced-motion` — checked in the script because no token can reach a view transition,
   the same reasoning as the reticle's own fade curve. Firefox gets an instant flip. Per-element

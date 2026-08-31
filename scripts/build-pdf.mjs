@@ -135,8 +135,8 @@ function byteHashedFiles() {
     // a fresh, hash-less load BY DESIGN (its init never writes to the
     // article) — but a future bug that flips density on load would change the
     // printed PDF, and that is precisely the invalidation this hash exists to
-    // catch. resume.astro's inline #full script is covered already: the page
-    // file is byte-hashed above.
+    // catch. resume.astro's inline #detailed script is covered already: the
+    // page file is byte-hashed above.
     'src/scripts/resume-density.ts',
   ].sort();
 }
