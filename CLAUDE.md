@@ -1552,6 +1552,38 @@ than either loosening the guard wholesale or chasing pixel parity across two fon
 engines that were never going to have it. Worth knowing generally: "self-hosted, same file, every
 machine" solves _which_ font loads; it doesn't solve exactly how the OS text engine draws it.
 
+### An inline box's rect is a fact about line breaking, not about the element (2026-08-31, closes #284)
+
+The tolerance above had one blind spot, and it made `check:resume-print` red on Ali's Mac against a
+green CI on the same clean `main`. **`getBoundingClientRect()` on an inline element returns the union
+of its line boxes**, so it measures where the lines happened to break. The moment shaping drift in
+the _preceding_ text lets one more word fit at the end of a line, an unchanged element reports
+`680 × 31.91` in one environment and `468.84 × 15` in the other — a 31% width diff and a full
+line-height of `y`, while the containing `li` is byte-identical at `685 × 33.81` in both. Nothing
+wrapped differently; only which line the continuation started on.
+
+**Inline rows now assert `advance`** — the summed width of their line boxes — instead of that union
+rect. It is break-invariant (to within the space a break collapses, ~0.6% here) and still moves on a
+text edit, a font-size or tracking leak, or a padding leak. What it gives up is positional assertion
+on inline boxes, which is an admission rather than a loss: an inline's `x`/`y` is a function of line
+breaking and was never portably assertable. **Block-level elements keep the strict `y`/`height`
+check**, which is where a reflow belongs — a line gained or lost changes the height of the block
+containing it. Verified by injecting leaks: an inline `padding-inline` invisible to every captured
+style property flags 23 elements, and a real reflow flags 119.
+
+**The trigger was that the baseline had quietly become _Linux_-recorded, and nobody could see it.**
+#191's baseline is a mix of integer and fractional widths (CoreText subpixel advances); from #238
+onward every width in the file is a whole number, which is FreeType rounding. So macOS had been the
+odd one out for three commits, with no way to tell from the file. **The baseline now carries an
+`environment` block and the script names the mismatch above any diff** — "baseline recorded on
+linux, this run is darwin" — which is the line that would have started #284 instead of ending it.
+
+Two things that were investigated and are dead ends, so nobody re-runs them: **Node version is
+irrelevant** (Node launches the browser; it does not lay out text), and
+`--font-render-hinting=none`, `--disable-font-subpixel-positioning` and `--disable-lcd-text` produce
+byte-identical output on macOS, because they act on FreeType. There is no flag that makes the two
+platforms agree from this side.
+
 ## The resume switches density in place (2026-08-29)
 
 Ali's pick from four options, chosen over cross-document view transitions between the two routes.

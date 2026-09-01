@@ -46,6 +46,39 @@
  * differently). See `X_TOLERANCE_ABS`/`X_TOLERANCE_REL` below: this script
  * tolerates that specific, bounded kind of drift and nothing else.
  *
+ * ## Inline elements assert their advance, not their rect (#284)
+ *
+ * That tolerance had one blind spot, and it made this guard red on macOS
+ * against a green CI on the same commit. `getBoundingClientRect()` on an *inline*
+ * element returns the union of its line boxes, so it is a measurement of
+ * where the lines happened to break rather than of the element. The moment
+ * shaping drift in the *preceding* text lets one more word fit at the end of
+ * a line, the same unchanged element reports `680 × 31.91` in one environment
+ * and `468.84 × 15` in the other — a 31% width diff and a full line-height of
+ * `y`, with nothing wrapped differently and the containing block byte-identical
+ * at `685 × 33.81` in both.
+ *
+ * So inline rows record `advance`, the summed width of their line boxes, and
+ * that is what is compared. It is break-invariant, and it still moves on the
+ * things worth catching: a text edit, a font-size or tracking leak, a padding
+ * or border leak. (It is invariant to within a space: a break collapses the
+ * whitespace at it, so an advance can move by a space width when a word
+ * changes lines. That is ~0.6% here, well inside the tolerance below.)
+ *
+ * What it gives up is positional assertion on inline boxes, and that is not a
+ * loss so much as an admission: an inline's `x`/`y` is a function of where the
+ * lines broke, so it was never portably assertable. Block-level elements keep
+ * the strict `y`/`height` check, so a genuine reflow still fails loudly — a
+ * line gained or lost changes the height of the block containing it, which is
+ * where the assertion belongs.
+ *
+ * The trigger, worth knowing before reading a diff: the committed baseline had
+ * quietly been *Linux*-recorded since #238. Every width in it is a whole
+ * number, which is FreeType rounding advances; #191's macOS baseline was a
+ * mix of integers and fractions. The `environment` block in the baseline and
+ * the note printed above any diff exist so that is visible in one line
+ * instead of being re-derived.
+ *
  * Usage:
  *   node scripts/check-resume-print.mjs            # diff against the baseline
  *   node scripts/check-resume-print.mjs --update    # regenerate the baseline
@@ -141,11 +174,14 @@ if (!UPDATE && !existsSync(BASELINE)) {
 const { origin, close: closeServer } = await serveDist(DIST);
 
 let browser;
-/** @type {Record<string, Array<{path: string, rect: {x:number,y:number,width:number,height:number}} & Record<string,string>>>} */
+/** @type {Record<string, Array<{path: string} & Record<string, unknown>>>} */
 const captured = {};
+/** Recorded into the baseline and reported on a mismatch — see `environment` below. */
+let chromiumVersion = null;
 
 try {
   browser = await launchChromium();
+  chromiumVersion = browser.version();
   /**
    * Letter (8.5in) less the 0.6in side margins `@page` sets in
    * src/styles/resume.css, times 96 CSS px per inch. Paired height is the 11in
@@ -221,17 +257,39 @@ try {
         // stays correct if a future print rule hides something new.
         if (style.display === 'none') continue;
 
+        const round = (n) => Math.round(n * 100) / 100;
         const rect = el.getBoundingClientRect();
-        /** @type {Record<string, string>} */
-        const row = {
-          path: elementPath(el),
-          rect: {
-            x: Math.round(rect.x * 100) / 100,
-            y: Math.round(rect.y * 100) / 100,
-            width: Math.round(rect.width * 100) / 100,
-            height: Math.round(rect.height * 100) / 100,
-          },
-        };
+        /** @type {Record<string, unknown>} */
+        const row = { path: elementPath(el) };
+
+        if (style.display === 'inline') {
+          // An inline box fragments across line boxes, and
+          // getBoundingClientRect() returns their *union* — which is a fact
+          // about where the lines happened to break, not about the element.
+          // Assert the total advance instead (#284); `unionRect` is recorded
+          // for legibility when reading a failure and is deliberately not
+          // compared.
+          const boxes = el.getClientRects();
+          let advance = 0;
+          for (const box of boxes) advance += box.width;
+          row.inline = true;
+          row.advance = round(advance);
+          row.lineBoxes = boxes.length;
+          row.unionRect = {
+            x: round(rect.x),
+            y: round(rect.y),
+            width: round(rect.width),
+            height: round(rect.height),
+          };
+        } else {
+          row.rect = {
+            x: round(rect.x),
+            y: round(rect.y),
+            width: round(rect.width),
+            height: round(rect.height),
+          };
+        }
+
         for (const prop of styleProps) row[prop] = style[prop];
         rows.push(row);
       }
@@ -264,7 +322,10 @@ if (UPDATE) {
           'Generated by scripts/check-resume-print.mjs --update. Committed print-geometry ' +
           'baseline for the resume routes — do not edit by hand. Regenerate with ' +
           '`node scripts/check-resume-print.mjs --update` after an intentional change to ' +
-          'the resume, resume.css, or tokens.css, and commit the result.',
+          'the resume, resume.css, or tokens.css, and commit the result. Rows with ' +
+          '"inline": true assert "advance" (the summed width of the element\'s line boxes); ' +
+          'their "unionRect" and "lineBoxes" are informational only. See #284.',
+        environment: { platform: process.platform, chromium: chromiumVersion },
         routes: captured,
       },
       null,
@@ -273,10 +334,12 @@ if (UPDATE) {
   );
   console.log(`✓ wrote ${BASELINE}`);
   console.log(`  ${routeCounts}`);
+  console.log(`  recorded on ${process.platform} / Chromium ${chromiumVersion}`);
   process.exit(0);
 }
 
-const baseline = JSON.parse(await readFile(BASELINE, 'utf8')).routes;
+const baselineFile = JSON.parse(await readFile(BASELINE, 'utf8'));
+const baseline = baselineFile.routes;
 
 let harnessBroken = false;
 const changedPaths = [];
@@ -327,7 +390,28 @@ for (const route of ROUTES) {
     const cur = curByPath.get(p);
     const fieldDiffs = [];
 
-    if (rectsDiffer(base.rect, cur.rect)) {
+    if (!!base.inline !== !!cur.inline) {
+      // An element changing between inline and block-level layout is a real
+      // regression (and changes which geometry is even meaningful), so it is
+      // reported rather than quietly switching comparison modes.
+      fieldDiffs.push({
+        field: 'display',
+        from: base.inline ? 'inline' : 'block-level',
+        to: cur.inline ? 'inline' : 'block-level',
+      });
+    } else if (cur.inline) {
+      if (
+        !within(
+          Math.abs(base.advance - cur.advance),
+          base.advance,
+          cur.advance,
+          X_TOLERANCE_ABS,
+          X_TOLERANCE_REL,
+        )
+      ) {
+        fieldDiffs.push({ field: 'advance', from: base.advance, to: cur.advance });
+      }
+    } else if (rectsDiffer(base.rect, cur.rect)) {
       fieldDiffs.push({ field: 'rect', from: base.rect, to: cur.rect });
     }
     for (const prop of STYLE_PROPS) {
@@ -390,6 +474,19 @@ if (changedPaths.length === 0 && addedPaths.length === 0 && removedPaths.length 
 }
 
 console.error(`✗ resume print geometry differs from the committed baseline:\n`);
+
+// The baseline is portable but not pixel-identical across platforms — CoreText
+// and FreeType shape the same embedded font slightly differently — so say up
+// front when the machine reading it is not the machine that wrote it. #284 was
+// an hour of investigation that this one line would have started.
+const recorded = baselineFile.environment;
+if (recorded && (recorded.platform !== process.platform || recorded.chromium !== chromiumVersion)) {
+  console.error(
+    `  note: baseline recorded on ${recorded.platform} / Chromium ${recorded.chromium}; ` +
+      `this run is ${process.platform} / Chromium ${chromiumVersion}.\n`,
+  );
+}
+
 for (const { route, path: p, diffs } of changedPaths) {
   console.error(`  [${route}] ${p}`);
   for (const d of diffs) {

@@ -3281,3 +3281,90 @@ probe to price the download before asking, one download, one repair, one verific
 IDs cost nothing and turned "roughly how big is this?" into an exact table, which is what let the
 scoping decision be made on real numbers — and 1.1 GB of the 2.2 GB total turned out to sit in a
 single video nobody had flagged as large.
+
+---
+
+## #284 — the guard that was red on one machine and green on the other (2026-08-31)
+
+`check:resume-print` failed on Ali's Mac against a clean `main` while CI passed on the same commit,
+on exactly one element. The issue had already ruled out the branch, the browser channel and a stale
+`dist/`, and left four possible directions plus a leading hypothesis.
+
+### The hypothesis was half right, and the missing half was in the baseline file
+
+The issue's guess — that a multi-line inline box's union rect is where shaping drift crosses into
+apparent reflow — was the correct mechanism. What it did not have was why that mechanism had only
+just started firing.
+
+**The answer was sitting in the committed baseline, as a distribution.** Every width in it is a
+whole number. Whole-pixel glyph advances are FreeType rounding; #191's baseline, recorded on macOS,
+is a roughly even mix of integers and fractions. Counting integer widths per revision of the file
+took one script and dated the change precisely: mixed at `a0c7f73` (#191), all-integer from
+`65fe24f` (#238) onward. The baseline had been regenerated in a Linux environment three commits
+running, and macOS had been the odd one out ever since with nothing in the repo saying so.
+
+That reframed the issue. It was not a guard that had grown brittle; it was a guard measuring one
+platform against another, silently, in the one place where the tolerance model could not absorb it.
+
+### The issue's own first recommendation was the one to skip
+
+"Test under Node 22 first — cheapest discriminator." It is cheap, and it could not have discriminated
+anything: Node launches the browser, it does not lay out text. Worth noting because the reasoning
+that killed it is the same reasoning that found the real cause — ask which component actually
+produces the number in front of you.
+
+The other tempting direction died on measurement rather than on argument.
+`--font-render-hinting=none`, `--disable-font-subpixel-positioning` and `--disable-lcd-text` are the
+standard recipe for cross-platform text stability, and on macOS all three produce **byte-identical**
+output, because they act on FreeType. A fix that can only be verified on the platform that is not
+failing is not a fix.
+
+### What could and could not be verified before pushing
+
+The change needs a baseline regeneration — advance sums cannot be reconstructed from a stored union
+rect — and regenerating on macOS is the thing the issue explicitly warned against. So the question
+was whether a Linux run would pass against a macOS baseline, which is not answerable on a Mac.
+
+**It is answerable approximately, and that was enough to proceed.** For every element that was
+single-line on the old Linux baseline, its union width _is_ its advance, so the old file could be
+replayed against the new one under the new comparison: 154 of 154 comparable elements on `/resume`
+and 175 of 179 on `/resume/full`, zero failures, worst relative drift 4.81% against a 6% tolerance.
+The four unverifiable ones are the multi-line inlines, whose advances differ only by ordinary text
+drift plus a collapsed space. The tolerance is also symmetric — `within()` divides by
+`max(base, cur)` — so flipping which platform records the baseline moves no margin.
+
+### Negative tests, because a guard that passes proves nothing
+
+Relaxing an assertion is the kind of change that can quietly gut a check while turning it green, so
+three leaks were injected into the print block and measured:
+
+| Injected                                                                         | Flagged                                                  |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `letter-spacing` on the bullet labels                                            | caught on the captured style property _and_ on `advance` |
+| `padding-inline: 3px` on the labels — invisible to every captured style property | 23 elements, all on `advance`                            |
+| `word-spacing: 4px` on the bullets — a real reflow                               | 119 elements, on block `height`                          |
+
+The middle row is the one that mattered: it is a geometry-only leak on an inline element, exactly the
+class the relaxation could have dropped.
+
+One honest limit came out of the same exercise. `word-spacing: 1.5px` — a real leak — flags only two
+elements, because a few percent of extra text width sits inside the cross-platform tolerance. That is
+inherent to tolerating rasterizer drift at all and predates this change; it is not something the
+advance switch introduced.
+
+### The line that would have started the investigation instead of ending it
+
+The baseline now records `{ platform, chromium }` and the script prints the mismatch above any diff.
+An hour went into establishing "your baseline came from a different operating system," which is one
+line of output. **Any artifact compared across machines should say which machine wrote it** — the
+same shape as the video archive recording sha256s so a future session can prove an archive is
+intact.
+
+### Cost notes
+
+No subagents; a single investigation thread where each probe depended on the last. Four probe
+scripts, all disposable: one to dump the failing element's line boxes, one to characterise drift
+across all 333 elements, one to test the font flags, one to replay the old baseline under the new
+rules. **The integer-width count was the cheapest and by far the most valuable** — a few lines over
+five revisions of one JSON file, and it turned an open-ended "why does this machine differ" into a
+dated fact.
