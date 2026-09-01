@@ -976,8 +976,9 @@ hr {
      `.portrait`, which this replaced in #181.) */
   object-position: 60% 50%;
   border-radius: 50%;
-  border: var(--frame-mat) solid var(--color-surface);
-  outline: 1px solid var(--color-frame);
+  border: calc(var(--frame-mat) + var(--frame-line)) solid var(--color-surface);
+  outline: var(--frame-line) solid var(--color-frame);
+  outline-offset: calc(-1 * var(--frame-line));
 }
 
 /* Inline beside the name, Ali's call, and the size is what makes it possible
@@ -1218,8 +1219,9 @@ hr {
   display: block;
   width: 100%;
   border-radius: var(--radius-lg);
-  border: var(--frame-mat-lead) solid var(--color-surface);
-  outline: 1px solid var(--color-frame);
+  border: calc(var(--frame-mat-lead) + var(--frame-line)) solid var(--color-surface);
+  outline: var(--frame-line) solid var(--color-frame);
+  outline-offset: calc(-1 * var(--frame-line));
 }
 .media figcaption {
   margin-top: var(--space-2);
@@ -1335,7 +1337,7 @@ hr {
      to a set instead, and images in a set share a frame weight: the row is
      normalised on height, so letting each slide's mat vary would undo the
      shared top-and-bottom line the row exists to produce. */
-  border-width: var(--frame-mat);
+  border-width: calc(var(--frame-mat) + var(--frame-line));
   /* And the ratio has to apply to the BORDER box, or the mat breaks the one
      thing the row exists to guarantee.
 
@@ -1616,8 +1618,9 @@ hr {
 .embed {
   aspect-ratio: 16 / 9;
   width: 100%;
-  border: var(--frame-mat-lead) solid var(--color-surface);
-  outline: 1px solid var(--color-frame);
+  border: calc(var(--frame-mat-lead) + var(--frame-line)) solid var(--color-surface);
+  outline: var(--frame-line) solid var(--color-frame);
+  outline-offset: calc(-1 * var(--frame-line));
   border-radius: var(--radius-lg);
   display: block;
 }
@@ -1715,8 +1718,9 @@ hr {
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
-  border: var(--frame-mat) solid var(--color-surface);
-  outline: 1px solid var(--color-frame);
+  border: calc(var(--frame-mat) + var(--frame-line)) solid var(--color-surface);
+  outline: var(--frame-line) solid var(--color-frame);
+  outline-offset: calc(-1 * var(--frame-line));
   border-radius: var(--radius);
   background: var(--color-bg);
 }
@@ -1870,8 +1874,9 @@ hr {
      right edges disagree by ~30px against the text column they share. */
   margin-left: auto;
   border-radius: var(--radius-lg);
-  border: var(--frame-mat) solid var(--color-surface);
-  outline: 1px solid var(--color-frame);
+  border: calc(var(--frame-mat) + var(--frame-line)) solid var(--color-surface);
+  outline: var(--frame-line) solid var(--color-frame);
+  outline-offset: calc(-1 * var(--frame-line));
 }
 
 .aside-figure figcaption {

@@ -259,6 +259,16 @@
    * framed object; at 2/4 it reads as the same system, one size up. */
     --frame-mat: 2px;
     --frame-mat-lead: 4px;
+    /* The frame line, drawn INSIDE the element's own box (#283).
+       It used to be a plain `outline`, which paints OUTSIDE the border box —
+       and since framed media is already exactly the page column wide, that put
+       the line 1px beyond the column on each side, where the header's
+       background does not reach. The header only LOOKS full-bleed because it
+       shares `--color-bg` with the body, so the line read as painting over it.
+       Every frame's border is `mat + this`, and `outline-offset` pulls the
+       line back over that extra pixel: same visible mat as #163 settled, same
+       total footprint, but nothing paints outside the column any more. */
+    --frame-line: 1px;
 
     /* --- The page title edge ----------------------------------------------
    *
