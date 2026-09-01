@@ -95,6 +95,55 @@ const mediaSchema = (image: SchemaContext['image']) =>
       title: z.string().min(1),
       /** Start offset in seconds, for videos where the relevant bit is buried. */
       start: z.number().int().nonnegative().optional(),
+
+      /**
+       * A local still for the video. Required, not optional, because it does
+       * two jobs and the site needs both (#273).
+       *
+       * Live, it is the frame the embed box paints while YouTube is still
+       * answering — a hero used to be a cold iframe showing nothing at all.
+       * Dead, it is what the page shows *instead* of the embed.
+       *
+       * `src` goes through `image()` like every other picture in this file, so
+       * a renamed file fails CI rather than shipping a hole. `alt` sits beside
+       * it rather than being derived from `title`, because in the dead state
+       * this image is the content and alt text describes the picture, not the
+       * video it stands in for. Same pairing as the `image` variant above, for
+       * the same reason.
+       *
+       * **Not a YouTube thumbnail.** `maxresdefault.jpg` is a frame lifted out
+       * of the video and carries the video's licensing with it, so committing
+       * a third party's thumbnail is the same act as committing their trailer,
+       * only smaller. Every video on the site had usable local imagery already
+       * — see the table on #273 — so none of the three third-party ones needs
+       * one. The three on Ali's own channel use a frame from their own video,
+       * which was already the committed thumbnail for those projects.
+       *
+       * This is also where a card or tile thumbnail comes from when nothing
+       * overrides it; see `projectThumb()` in src/lib/content.ts.
+       */
+      poster: z.object({
+        src: image(),
+        alt: z.string().min(1),
+      }),
+
+      /**
+       * The video is gone from YouTube. Same field, same name and same
+       * semantics as `link.dead` above, for the same reason: record that we
+       * *know* the target is gone, and degrade to something honest instead of
+       * to a broken promise.
+       *
+       * It matters more here than on a link. `hero` is the one field the
+       * completeness check below makes non-negotiable, so a taken-down video
+       * is a required field rendering as a black box carrying YouTube's own
+       * error text, on a page the schema considers complete — and nothing in
+       * the build catches it, since the ID still matches the regex and the
+       * iframe still renders. `npm run links:external` is what finds one; it
+       * resolves embeds through oEmbed, because a dead video's embed URL
+       * answers 200 and a status check proves nothing. Flipping this is then
+       * the entire remediation.
+       */
+      dead: z.boolean().default(false),
     }),
   ]);
 
@@ -190,9 +239,8 @@ const projects = defineCollection({
         /**
          * An explicit override for the card/tile thumbnail. **Optional on
          * purpose, and usually absent** — `projectThumb()` in src/lib/content.ts
-         * derives a thumbnail with no front matter at all: an image `hero` is
-         * its own thumbnail, and a YouTube `hero` uses the poster frame
-         * committed alongside it by scripts/fetch-posters.mjs.
+         * derives a thumbnail from the hero: an image `hero` is its own
+         * thumbnail, and a YouTube `hero` has a `poster`.
          *
          * So this field exists for exactly one job: swapping in a better
          * picture later without touching the hero or the layout. A YouTube
@@ -210,8 +258,8 @@ const projects = defineCollection({
          * The same override as `thumb`, for a 16:9 context instead of a
          * square one (#64). Optional and usually absent for the same reason
          * `thumb` is: `projectThumb()` in src/lib/content.ts falls back to
-         * the hero image or its poster frame when this isn't set, so most
-         * projects need nothing here at all.
+         * the hero image or the hero video's poster when this isn't set, so
+         * most projects need nothing here at all.
          */
         thumbWide: image().optional(),
 

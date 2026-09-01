@@ -135,29 +135,6 @@ export async function getCurrentNote(): Promise<string> {
 // ---------------------------------------------------------------------------
 
 /**
- * Poster frames pulled from YouTube heroes by scripts/fetch-posters.mjs, keyed
- * by project slug.
- *
- * Globbed rather than declared in front matter, and that is the content model's
- * own rule being kept rather than bent: *"adding a project is one Markdown
- * file."* If a poster had to be named in front matter, every future project
- * with a video hero would need a second edit in a second place to get a
- * thumbnail — which is the shape this model exists to rule out. Drop a
- * `poster.jpg` next to the project's other assets and it is picked up.
- *
- * `eager` because these are used during render, and Vite hands back real
- * `ImageMetadata` — width and height included, which is what keeps `<Image>`
- * emitting intrinsic dimensions and the layout from shifting.
- */
-const POSTERS = Object.fromEntries(
-  Object.entries(
-    import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/projects/*/poster.jpg', {
-      eager: true,
-    }),
-  ).map(([path, module]) => [path.split('/').at(-2)!, module.default]),
-);
-
-/**
  * The image to show for a project on a card or tile, or `undefined` when there
  * isn't one.
  *
@@ -171,13 +148,19 @@ const POSTERS = Object.fromEntries(
  *   1. `thumb` / `thumbWide` in front matter — an explicit override, normally
  *      absent, and the only step that differs by `aspect`.
  *   2. An image `hero` — already a still of the work, so it is its own thumbnail.
- *   3. A poster frame — for the nine projects whose hero is a video.
+ *   3. A video `hero`'s `poster` — the still it shows when YouTube is slow or
+ *      gone, which is the same picture a card wants.
  *
  * That fallback is why I Fits I Sits and Kaneva need no `thumbWide` at all —
- * their `hero` is already an image suited to either shape. It's also why the
- * three projects with a video `hero` (Marvel Snap, Vegas Blvd Slots, Firefall)
- * still show a YouTube poster frame in the wide slot until a real wide capture
- * lands in `thumbWide`: the fallback has nothing better to reach for.
+ * their `hero` is already an image suited to either shape.
+ *
+ * Step 3 used to glob `poster.jpg` off disk by slug, which was the right answer
+ * while nothing named the poster in front matter — *"adding a project is one
+ * Markdown file"*. `poster` is a required field on a video hero now (#273), so
+ * the glob became a SECOND source for one picture: set a hero poster and the
+ * tile would still have shown whatever `poster.jpg` happened to be sitting
+ * beside it. That is the drift this model exists to rule out, so the glob is
+ * gone and both read the same field.
  *
  * ## Why there is no `alt` here
  *
@@ -208,7 +191,7 @@ export function projectThumb(
   const override = aspect === 'wide' ? thumbWide : thumb;
   if (override) return override;
   if (hero?.type === 'image') return hero.src;
-  return POSTERS[project.id];
+  return hero?.poster.src;
 }
 
 /** Human label for the honest-framing status field. */

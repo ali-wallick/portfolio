@@ -10,6 +10,19 @@
  * YouTube heroes" as the mechanical route that needs nothing from Ali, and this
  * is that route.
  *
+ * ## The output has to be named in front matter now
+ *
+ * When this was written, `poster.jpg` next to a project's other assets was
+ * picked up by a glob and became that project's thumbnail with no front matter
+ * at all. A video hero carries a required `poster` field as of #273, and the
+ * glob is gone — one picture, one place — so a file this fetches is inert until
+ * something points at it.
+ *
+ * Which mostly means this script is now a way to LOOK at what a video's own
+ * frame is, not the default source for a poster. #273's rule: a frame lifted
+ * out of a video carries that video's licensing, so it is fine for the three
+ * videos on Ali's own channel and not for a studio's trailer.
+ *
  * ## Run-once, commit the output
  *
  * This is NOT part of `npm run build`, deliberately. The images become ordinary

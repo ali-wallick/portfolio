@@ -24,6 +24,38 @@ import type { Project } from '~/lib/content';
  * against the source's own width instead of being stated as a constant. An
  * image smaller than every requested width falls back to its intrinsic size,
  * which is the largest honest thing it can offer.
+ *
+ * ## A dead video renders as a picture, through the same path
+ *
+ * `hero` is the one field the content model makes non-negotiable, so a
+ * taken-down video would otherwise be a required field rendering as a black box
+ * carrying YouTube's own error text. `dead: true` on the item swaps the embed
+ * for its poster and captions it (#273) — the same shape `links[].dead` has had
+ * since Phase 2, where a dead link renders as plain text so the credit survives
+ * without the broken promise.
+ *
+ * It is deliberately the *same* branch an `image` item takes rather than a
+ * third rendering: the still, the frame, the widths and the caption are all
+ * already right there, and a separate dead-video treatment would be a second
+ * place for them to drift.
+ *
+ * ## A LIVE video paints nothing until YouTube answers, on purpose
+ *
+ * #273 also proposed showing the poster behind the loading embed, on the
+ * reasoning that a cold iframe painting nothing is worth fixing. Built,
+ * reviewed on a preview, and **rejected by Ali** — do not put it back.
+ *
+ * The problem is not the wait, it is that the player paints ITS OWN thumbnail
+ * when it arrives. A still underneath therefore turns one transition into two,
+ * between two different pictures: ours cropped to the box, YouTube's fitted to
+ * the video. Blank to video reads as loading; picture to a different picture to
+ * video reads as a flash.
+ *
+ * Worth knowing if anyone tries again: it could not have been done in CSS
+ * anyway. A loading iframe is not transparent — it paints its initial
+ * `about:blank` over whatever is behind it — so the poster was invisible for
+ * exactly the window it existed for until a script hid the player, which is a
+ * second reason the idea is not as cheap as it looks.
  */
 type MediaItem = NonNullable<Project['data']['hero']>;
 
@@ -35,6 +67,43 @@ interface Props {
 
 const { item, surface = 'hero' } = Astro.props;
 
+/**
+ * What a taken-down video is captioned with, in one place rather than per
+ * project, so that flipping `dead` really is the entire remediation.
+ *
+ * It states a fact about the video and stops. It is not an apology, and it does
+ * not describe the picture above it — the poster's own `alt` does that. Same
+ * posture as a dead `link`, which renders as plain text rather than as an
+ * explanation of why it isn't clickable.
+ */
+const DEAD_VIDEO_CAPTION = 'This video is no longer on YouTube.';
+
+/**
+ * The still this item would render as a picture. An `image` is its own; a
+ * video's is its `poster`, captioned when we know the video is gone.
+ *
+ * Both variants therefore go through one set of image requests below, which is
+ * this component's whole job — a dead video's poster on the hero surface is the
+ * same box as an image on the hero surface, so it wants the same `widths` and
+ * the same `sizes` rather than a second set of targets.
+ */
+const still =
+  item.type === 'image'
+    ? { src: item.src, alt: item.alt, caption: item.caption }
+    : {
+        src: item.poster.src,
+        alt: item.poster.alt,
+        caption: item.dead ? DEAD_VIDEO_CAPTION : undefined,
+      };
+
+/**
+ * True when that still is what the reader actually looks at, rather than an
+ * embed. A live video's poster is never rendered here — it is the thumbnail
+ * source and the standby fallback, not part of this page — so it must not set
+ * the slide's aspect ratio or offer zoom.
+ */
+const isPicture = item.type === 'image' || item.dead;
+
 /* A hero is capped on WIDTH at 44rem (704px). A gallery slide is capped on
    HEIGHT, so its width follows its own aspect ratio: the widest a 22rem row
    can hold at 16:9 is 626px, and the 0.45-ratio portrait on I Fits I Sits is
@@ -45,15 +114,9 @@ const ceiling = targets[targets.length - 1];
    largest target. A 2048px screenshot yields 576/1152 and stops there; a 988px
    still yields 576/988, so a 2x display gets the best the file actually has;
    a 183px archive shot yields 183 alone, and no upscale is ever requested. */
-const widths =
-  item.type === 'image'
-    ? [
-        ...new Set([
-          ...targets.filter((w) => w < item.src.width),
-          Math.min(item.src.width, ceiling),
-        ]),
-      ].sort((a, b) => a - b)
-    : [];
+const widths = [
+  ...new Set([...targets.filter((w) => w < still.src.width), Math.min(still.src.width, ceiling)]),
+].sort((a, b) => a - b);
 
 /* Necessarily an over-estimate on the gallery surface, since a slide's width
    depends on its own ratio and `sizes` cannot know it. Over-estimating picks
@@ -72,8 +135,8 @@ const widths =
  * then wraps inside a box that is exactly the picture's width.
  */
 const mediaVars =
-  item.type === 'image' && surface === 'gallery'
-    ? `--media-ar:${item.src.width} / ${item.src.height}`
+  isPicture && surface === 'gallery'
+    ? `--media-ar:${still.src.width} / ${still.src.height}`
     : undefined;
 
 /**
@@ -94,13 +157,12 @@ const mediaVars =
  * height; width follows from the aspect ratio.
  */
 const ZOOM_MIN_HEIGHT = 384;
-const zoomable =
-  item.type === 'image' && surface === 'gallery' && item.src.height >= ZOOM_MIN_HEIGHT;
+const zoomable = isPicture && surface === 'gallery' && still.src.height >= ZOOM_MIN_HEIGHT;
 
 /* Capped at 1600px: past that a "full size" view is serving megabytes to show
    detail no screen resolves. Only Marvel Snap's 2048px photo is affected. */
 const zoomSrc = zoomable
-  ? (await getImage({ src: item.src, width: Math.min(item.src.width, 1600), format: 'webp' })).src
+  ? (await getImage({ src: still.src, width: Math.min(still.src.width, 1600), format: 'webp' })).src
   : undefined;
 
 /* The hero hint tracks the page column, not a fixed width (#253). `.media`
@@ -124,7 +186,7 @@ const sizes =
 }
 <div class="media" style={mediaVars}>
   {
-    item.type === 'youtube' ? (
+    item.type === 'youtube' && !item.dead ? (
       <YouTube id={item.id} title={item.title} start={item.start} />
     ) : (
       <figure>
@@ -134,10 +196,10 @@ const sizes =
             which is the whole point of the control. */}
         <Fragment>
           {zoomable ? (
-            <a class="gallery-zoom" href={zoomSrc} data-caption={item.caption}>
+            <a class="gallery-zoom" href={zoomSrc} data-caption={still.caption}>
               <Image
-                src={item.src}
-                alt={item.alt}
+                src={still.src}
+                alt={still.alt}
                 widths={widths}
                 sizes={sizes}
                 loading="lazy"
@@ -147,8 +209,8 @@ const sizes =
             </a>
           ) : (
             <Image
-              src={item.src}
-              alt={item.alt}
+              src={still.src}
+              alt={still.alt}
               widths={widths}
               sizes={sizes}
               loading="lazy"
@@ -156,7 +218,7 @@ const sizes =
             />
           )}
         </Fragment>
-        {item.caption && <figcaption class="meta">{item.caption}</figcaption>}
+        {still.caption && <figcaption class="meta">{still.caption}</figcaption>}
       </figure>
     )
   }

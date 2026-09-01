@@ -23,6 +23,14 @@ hero:
   type: youtube
   id: 2cxeAhxSoyo
   title: Firefall trailer
+  # The in-engine title screen, the same capture `thumbWide` uses (#273). Red 5
+  # is gone and firefall.com is already dead, so this is the hero most likely
+  # to need the fallback of the three third-party ones.
+  poster:
+    src: ../../assets/images/projects/firefall/thumb-wide-v2.jpg
+    alt: >-
+      Firefall’s title screen, its logo lit against a dark purple nebula over
+      a dim landscape
 summary: UI programming on a PC MMO shooter, across its Chinese launch and a worldwide relaunch overhaul.
 links:
   - label: firefall.com (via Wayback Machine)

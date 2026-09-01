@@ -22,6 +22,16 @@ hero:
   type: youtube
   id: 8gtbz_T4-yY
   title: Vegas Blvd Slots trailer
+  # The store-listing screenshot `thumbWide` uses (#273). It is 405px wide
+  # against a hero box around double that, so it upscales — the game is
+  # delisted from both stores and nothing larger survives outside the trailer
+  # itself, which is MobilityWare’s to license. Softness in a placeholder is
+  # the cheaper of those two costs.
+  poster:
+    src: ../../assets/images/projects/vegas-blvd-slots/thumb-wide.jpg
+    alt: >-
+      A Vegas Blvd Slots machine mid-payout, its reels filled with matching
+      symbols under a BIG WIN banner
 summary: Live-ops and slot-machine engineering on a mobile casino game with 50+ machines.
 links:
   # Checked 2026-08-16: both store listings 404 (delisted since 2019). Checked

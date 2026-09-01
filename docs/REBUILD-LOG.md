@@ -3447,3 +3447,88 @@ Verification that earned its keep: comparing the regenerated PDFs byte-for-byte 
 committed ones rather than trusting `check:pdf`. They differ only in `/CreationDate`, `/ModDate` —
 and, in the two-pager, an ephemeral localhost port inside two link annotations, which turned out to
 be a pre-existing defect in a file Ali attaches to job applications. Filed rather than fixed here.
+
+## #273 — a poster and a dead flag on the youtube media variant (2026-09-01)
+
+Piece 2 of #159, and the user-visible half of it. `hero` is the one field the content model refuses
+to let a published project omit, so a taken-down video was a required field rendering as a black box
+carrying YouTube's own error text on a page the schema considered complete. `links[].dead: true` had
+covered this class of problem on outbound links since Phase 2; the `youtube` media variant had no
+equivalent.
+
+### The half of the issue that was wrong twice, and the second time only a reviewer could see
+
+The issue's second half — _"when `dead` is false the poster is the iframe's own poster frame"_ —
+was wrong on the mechanism and then wrong on the idea, and the two failures needed completely
+different instruments.
+
+**The mechanism, caught by measuring.** Layering a still behind the embed does nothing, because a
+loading iframe is not transparent: a frame whose navigation is still in flight is displaying its
+initial `about:blank`, and that document paints an opaque canvas over whatever sits behind it. A
+hanging `src` in headless Chromium, a green image underneath, a screenshot — the green was not
+there. That is the fourth time in this project's history that measuring something plausible
+overturned it, and the first where the thing overturned was a premise in the issue rather than a
+number in the code. Ten lines of script fixed it, holding the player hidden until it loaded.
+
+**The idea, caught by Ali on the preview**, which no amount of measuring would have produced. The
+player paints its OWN thumbnail when it arrives, so a still underneath turns one transition into
+two, between two different pictures. Blank to video reads as loading; picture to a different picture
+to video reads as a flash. Her words: _"I don't think I like that flash."_
+
+Reverted, and the code came out cleanly — the live embed's markup is byte-identical to `main` again,
+the script is deleted, and `base.css` is untouched, which also stopped the résumé PDFs regenerating
+for a change that no longer reaches them.
+
+**Worth naming as a pattern rather than an incident: a fix for a problem nobody reported.** Nothing
+about a cold embed was ever a complaint. It was a plausible improvement, written into the issue as
+an aside, and it survived a schema, a component, a script, a CSS layer and a Lighthouse finding
+before anyone looked at what it actually did on a page. The measurement discipline this file keeps
+congratulating itself on had nothing to say about it, because everything about the implementation
+was correct.
+
+The one piece kept: **the backstop on `window`'s load event is not belt-and-braces.** A cached
+iframe can finish loading before a module runs, spending its own `load` event; `window`'s own load
+event waits for iframes, so at that moment it has not fired yet and it always arrives. Not in the
+codebase any more, and true the next time something hides an iframe.
+
+### The posters cost nothing to source and one rule to choose
+
+The rule: **a poster is local imagery, and never a frame lifted from a video Ali doesn't own** — that
+frame carries the video's licensing the way the trailer does, so committing Marvel's thumbnail is the
+same act as committing Marvel's trailer, only smaller.
+
+The issue's table of candidates was written without checking dimensions, and three of its picks are
+too small to lead an ~864px hero box: It Will Kill You's best is 183px, Secret Garden's 221px, Vegas
+Blvd Slots' 405px. So the rule had to do real work rather than just ratify the table. It Will Kill
+You takes a frame from its own video — a 2010 class project on a personal channel, which is not a
+studio's marketing asset, and is exactly the call the issue's own table already makes for Mini Mages.
+Secret Garden does not, because its best YouTube still is a 640x480 `sddefault` with the letterbox
+bars baked in, and bars inside a mat read worse than an upscale does. Vegas Blvd Slots keeps its
+405px store screenshot and the softness, because the only larger thing that exists is
+MobilityWare's trailer.
+
+### A required field made an existing mechanism redundant
+
+`poster.jpg` next to a project's assets had been globbed by slug to feed card and tile thumbnails,
+and that was the right answer while nothing named a poster in front matter — _"adding a project is
+one Markdown file."_ Once `poster` is required on a video hero, the glob is a **second source for one
+picture**: set a hero poster and the tile would still have shown whatever file happened to sit beside
+it. Removed from both consumers (`projectThumb()` and `generate-og-images.mjs`), behaviour identical,
+because the only three projects the glob actually fed resolve to the same files.
+
+Worth noticing generally: adding a field is a moment to check what the field makes unnecessary. The
+drift was not there before this change and would have been there after it.
+
+**And removing it was reasoned to be behaviour-identical, and was not.** Diffing the built site
+against `main` — 23 pages, byte for byte — turned up one `<img>` on `/projects` where Secret
+Garden's tile had silently swapped a 640x480 source for a 221px one, because its poster is
+deliberately not its video's own frame. Fixed with a `thumbWide` override, which is what that field
+is for. Two things generalise: **a fallback chain is worth diffing the OUTPUT of rather than reading**,
+and the first fix was wrong too — `thumb` looked obviously right and the archive tiles ask for the
+wide aspect, which only the diff showed.
+
+### Cost notes
+
+No subagents. The work was serial and small. The expensive part was not the measurement — that cost
+one throwaway script — it was building the live poster at all, which is most of what was written and
+all of what was then deleted.

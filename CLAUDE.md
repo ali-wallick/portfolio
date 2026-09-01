@@ -1882,6 +1882,99 @@ did not move — the résumé renders none of these surfaces — so the regenera
 PDFs differ only in Chromium's own metadata. Commit them with the change, per
 the standing rule.
 
+## A video hero carries a poster, and a dead one is a fact (2026-09-01, closes #273)
+
+The `youtube` media variant gains `poster` and `dead`, mirroring `links[].dead` exactly. `hero` is
+the one field the content model refuses to let a published project omit, so a taken-down video was a
+**required field rendering as a black box carrying YouTube's own error text**, on a page the schema
+considered complete. Flipping one boolean is now the entire remediation, the same as for a link.
+
+**`poster` is required even though a live page never renders it**, which is worth stating plainly
+because it looks like an unused field. It has two jobs: it is what a dead video degrades to, and it
+is where a card or tile thumbnail comes from. A video hero that is alive still shows nothing until
+YouTube answers — see below, that is a decision rather than an omission.
+
+**A dead video renders through the same branch an `image` item takes**, not a third rendering — same
+frame, same widths, same caption slot. The caption lives in `Media.astro` rather than in front
+matter, because a per-project string would mean flipping the boolean was not the whole remediation.
+It states a fact about the video and stops; the picture is described by its own `alt`.
+
+**`poster` is `{ src, alt }`, not a bare `image()`.** In the dead state that picture _is_ the
+content, and alt text describes the picture rather than the video it stands in for — deriving it
+from `title` would have put "Still from Firefall trailer" under what is actually a title screen.
+
+### A live video still paints nothing, and that is Ali's call rather than a gap
+
+#273 also proposed showing the poster behind the loading embed, on the reasoning that a cold iframe
+painting nothing is worth fixing. It was built, put on a preview, and **rejected. Do not put it
+back.**
+
+**The problem is not the wait, it is that the player paints its OWN thumbnail when it arrives.** A
+still underneath therefore turns one transition into two, between two different pictures: ours
+cropped to the box, YouTube's fitted to the video. Blank to video reads as loading; picture to a
+different picture to video reads as a flash. Ali's words on the preview: _"I don't think I like that
+flash."_ Nothing about a cold embed was ever a complaint; the fix was for a problem nobody had.
+
+**A click-to-play facade — our still up permanently, the player loaded on click — was offered and
+not taken.** It removes the swap and loads no YouTube at all until asked, at the cost of a click.
+Available if this is ever revisited; the flash is not the argument against it.
+
+**And it could not have been done in CSS anyway, which is the fact worth keeping.** A loading iframe
+is **not transparent** — a frame whose navigation is still in flight is displaying its initial
+`about:blank`, and that document paints an opaque canvas over whatever is behind it. Nothing on the
+parent side reaches it; the iframe element's own `background` is not what is being painted. Measured
+in headless Chromium against a hanging `src`, after building it the wrong way first. So a poster
+behind an embed always costs a script to hide the player, which is a second reason the idea is not
+as cheap as it looks.
+
+### The rule for choosing a poster
+
+**Local imagery, and never a frame lifted from a video Ali doesn't own.** A frame carries that
+video's licensing, so committing Marvel's thumbnail is the same act as committing Marvel's trailer,
+only smaller. Marvel Snap, Firefall and Vegas Blvd Slots therefore use imagery already committed for
+those pages.
+
+**The three on Ali's own channel are not that case**, and two of them need not to be: It Will Kill
+You's local candidates top out at 183px and Mini Mages' at ~230px, which cannot lead an ~864px hero.
+Both use a frame from their own student video, which is the call #273's own table already makes for
+Mini Mages. **Secret Garden deliberately does not**, because its best YouTube still is a 640x480
+`sddefault` with the letterbox bars baked in, and bars inside a mat read worse than an upscale does.
+
+**Two posters are soft and that is the accepted cost, not an oversight.** Vegas Blvd Slots upscales
+~2.1x and Secret Garden ~3.9x. The fix for either is a real capture, not a code change — and for
+Vegas Blvd Slots the only larger thing that exists is MobilityWare's own trailer.
+
+**A poster that is also in the page's gallery is accepted per page rather than ruled out.** Marvel
+Snap and Mini Mages both do it. On a live video the duplication is invisible; on a dead one the
+alternative was a picture that could not lead the page.
+
+### Adding the field made an older mechanism redundant
+
+`poster.jpg` next to a project's assets used to be globbed by slug to feed card and tile thumbnails,
+which was right while nothing named a poster in front matter. With `poster` required, the glob became
+a **second source for one picture** — set a hero poster and the tile would still have shown whatever
+file happened to sit beside it. Both consumers (`projectThumb()` in `src/lib/content.ts` and
+`scripts/generate-og-images.mjs`) read the field now. `scripts/fetch-posters.mjs` still works and is
+now a way to look at what a video's own frame is, not a default source for a poster.
+
+**A poster and a thumbnail are allowed to be different pictures, and on Secret Garden they are.**
+Its poster is the gallery screenshot, because the video's own frame is a letterboxed 640x480
+`sddefault` and bars inside a mat read worse than an upscale does — but that screenshot is 221px and
+reads soft in a tile, where a crop hides the bars. So it carries a `thumbWide` override pointing at
+the frame, which is exactly the job `thumb`/`thumbWide` exist for. **`thumbWide`, not `thumb`: the
+archive tiles on `/projects` ask for the wide aspect**, and the square slot is the featured cards.
+
+**That was found by diffing the built site against `main`, not by reading the code**, and it is the
+argument for doing so on any change that touches a fallback chain. Removing the glob was reasoned to
+be behaviour-identical and was not: one `<img>` on `/projects` silently swapped a 640x480 source for
+a 221px one. With the override in place all 23 rendered pages are byte-identical to `main`, which is
+the real statement this change wanted to be able to make — everything it adds is a schema field and a
+capability, and nothing about the site today moves.
+
+**Detection is the half this does not do.** `npm run links:external` resolves embeds through oEmbed
+and is what finds a dead video; it cannot run from a Claude Code session, where the egress proxy
+answers 403 for every YouTube URL. Scheduled detection is #275.
+
 ## The gallery is one scrolling row (2026-08-30, closes #166)
 
 Every project gallery is a single horizontally scrolling row, replacing the wrapping grid Phase 5

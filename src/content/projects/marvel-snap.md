@@ -28,6 +28,19 @@ hero:
   title: MARVEL SNAP — Official Announcement & Gameplay First Look
   # Cued to Ali’s segment. This is the whole reason `start` exists in the schema.
   start: 256
+  # The still behind the embed while YouTube answers, and what the page would
+  # show instead of it if the video ever went away (#273). Not a YouTube
+  # thumbnail: `maxresdefault.jpg` carries Marvel’s licensing the way the
+  # trailer itself does. This is the frame from Ali’s own segment that the
+  # gallery below already carries, so it does appear twice on the page — the
+  # duplication is accepted rather than missed. A poster for a video cued to
+  # her segment should be her segment, and the gallery copy is the one place
+  # the appearance is captioned as a credit.
+  poster:
+    src: ../../assets/images/projects/marvel-snap/gallery-announcement-still.jpg
+    alt: >-
+      Ali Wallick speaking on camera in Marvel Snap’s official announcement
+      video, with an on-screen lower third reading her name and title
 # Two official screenshots from Marvel Snap’s Steam store page, picked by Ali
 # as the two that best cover the systems described in this page’s "What I
 # built": the collection/deckbuilding screen (search + filter) and the card

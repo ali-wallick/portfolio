@@ -20,6 +20,16 @@ hero:
   id: qVdAuJmO3oo
   title: Mini Mages demo
   start: 80
+  # A frame from the video itself — a 2011 capstone on a personal channel, so
+  # the licensing reason not to use one elsewhere does not apply (#273). It is
+  # also already the first image in the gallery below, which means it appears
+  # twice on a page whose video has died; accepted, since the two screenshots
+  # beside it are ~230px and cannot lead the page.
+  poster:
+    src: ../../assets/images/projects/mini-mages/poster.jpg
+    alt: >-
+      Four players’ hands holding iPhones around a shared iPad displaying the
+      Mini Mages title screen
 gallery:
   - type: image
     src: ../../assets/images/projects/mini-mages/poster.jpg

@@ -24,6 +24,16 @@ hero:
   type: youtube
   id: Erk81CCfc5A
   title: It Will Kill You gameplay
+  # A frame from the video itself, which is fine here and would not be on
+  # Marvel Snap or Firefall (#273): this is a 2010 class project on a personal
+  # channel, not a studio’s marketing asset. It is also the only candidate
+  # that can lead the page — the three gallery images top out at 183px. Same
+  # call Mini Mages makes below, and this is the highest-risk video on the site.
+  poster:
+    src: ../../assets/images/projects/it-will-kill-you/poster.jpg
+    alt: >-
+      A match in progress, the virus moving through a dark tunnel under the
+      surface, framed in red, with an infection progress bar along the bottom
 gallery:
   - type: image
     src: ../../assets/images/projects/it-will-kill-you/level.jpg

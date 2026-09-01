@@ -14,23 +14,20 @@
  * ## Why this doesn't fetch anything
  *
  * Every image it composites is already a local, committed asset — a project's
- * `hero` (if it's an image) or the poster frame `scripts/fetch-posters.mjs`
- * already pulled from YouTube and committed. That script's own header explains
- * why a *build-time* fetch is the wrong call (offline builds, a third-party
- * request in CI, breakage the day a video goes down); the same reasoning
- * applies here, for free, by reusing its output instead of hitting YouTube a
- * second time.
+ * `hero` (if it's an image) or the `poster` a video hero is required to carry.
+ * A *build-time* fetch would be the wrong call for the usual reasons (offline
+ * builds, a third-party request in CI, breakage the day a video goes down),
+ * and the poster field means there is nothing to fetch anyway.
  *
  * ## Why this doesn't reuse `projectThumb()` from src/lib/content.ts
  *
  * That function is the real source of truth for "which image represents this
  * project" and this script's resolution order deliberately mirrors it
- * (`thumb` override, then an image hero, then the poster frame) — but it's
- * built on Vite's `import.meta.glob`, which only exists inside Astro's build
- * graph. This script runs before `astro build` even starts (see `package.json`),
- * so it reads the same front matter and the same `poster.jpg` convention
- * directly off disk instead. If that resolution order ever changes, change it
- * in both places.
+ * (`thumb` override, then an image hero, then a video hero's `poster`) — but
+ * it's built on `astro:content`, which only exists inside Astro's build graph.
+ * This script runs before `astro build` even starts (see `package.json`), so it
+ * reads the same fields out of the same front matter directly off disk instead.
+ * If that resolution order ever changes, change it in both places.
  */
 
 import { readdir, readFile, mkdir } from 'node:fs/promises';
@@ -41,7 +38,6 @@ import sharp from 'sharp';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const CONTENT = path.join(ROOT, 'src/content/projects');
-const ASSETS = path.join(ROOT, 'src/assets/images/projects');
 const OUT = path.join(ROOT, 'public/og');
 const HEADSHOT = path.join(ROOT, 'src/assets/images/me.jpg');
 
@@ -184,12 +180,20 @@ async function buildFlatCard(title, outPath) {
     .toFile(outPath);
 }
 
-/** thumb override -> image hero -> poster.jpg, mirroring projectThumb() in src/lib/content.ts. */
-function resolveProjectImage(slug, data, contentDir) {
+/**
+ * thumb override -> image hero -> video hero's poster, mirroring projectThumb()
+ * in src/lib/content.ts.
+ *
+ * The last step used to look for a `poster.jpg` sitting next to the project's
+ * other assets, because nothing named the poster in front matter. `poster` is a
+ * required field on a video hero now (#273), so it is read like every other
+ * path here and the file no longer has to be found by convention.
+ */
+function resolveProjectImage(data, contentDir) {
   if (data.thumb) return path.resolve(contentDir, data.thumb);
   if (data.hero?.type === 'image') return path.resolve(contentDir, data.hero.src);
-  const poster = path.join(ASSETS, slug, 'poster.jpg');
-  return existsSync(poster) ? poster : undefined;
+  if (data.hero?.type === 'youtube') return path.resolve(contentDir, data.hero.poster.src);
+  return undefined;
 }
 
 async function main() {
@@ -207,7 +211,7 @@ async function main() {
     const raw = await readFile(path.join(CONTENT, file), 'utf8');
     const match = raw.match(/^---\n([\s\S]*?)\n---/);
     const data = parseYaml(match[1]);
-    const sourcePath = resolveProjectImage(slug, data, CONTENT);
+    const sourcePath = resolveProjectImage(data, CONTENT);
     if (sourcePath && existsSync(sourcePath)) {
       await buildProjectCard(sourcePath, path.join(OUT, 'projects', `${slug}.jpg`));
       ok++;
