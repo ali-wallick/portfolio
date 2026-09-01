@@ -18,6 +18,7 @@ possible in that window; where that matters, it says so.
 | `resources/WallickAli-Resume.pdf` | The 2019 resume                            | Carries a PO Box. See #109, #197.                         |
 | `v1-legacy` tag                   | The complete PHP source, 31 files          | Pushed to origin. Confirmed.                              |
 | `docs/before-after/`              | 32 paired screenshots, old vs new          | Old side captured from the live server.                   |
+| Ali's cold storage                | Source video for the 6 hero YouTube embeds | Outside this repo. See `docs/VIDEO-ARCHIVE.md`.           |
 
 ## Looking at it
 
@@ -78,6 +79,21 @@ copy exists anywhere in this repo.
 
 **`nightLight.unity3d`** (6.3 MB) was deleted at `ce4533e` as an unplayable artifact of a plugin
 discontinued in 2017. It is in git history if it is ever wanted; the Unity Web Player is not.
+
+## The hero videos are archived, outside this repo
+
+The three dead embeds above are the argument for [#272](https://github.com/ali-wallick/Portfolio/issues/272):
+`yt-dlp` cannot fetch a video after it has been made private, so the six YouTube videos the _current_
+site uses as project heroes were captured while they are all still up. 291 MB, with the uploader,
+channel and upload date recorded alongside each file.
+
+**The files are in Ali's own cold storage and the location is deliberately not recorded anywhere in
+this repo** — a repo that may go public is the wrong place for the path to someone's personal
+storage. What is committed is `docs/VIDEO-ARCHIVE.md`: what was captured, the sha256 of every file,
+how to verify a copy, and the two `yt-dlp` traps that made the first run silently drop two videos.
+
+The four Marvel Snap `press` videos are **not** archived. That was a scoping call, not an oversight,
+and `docs/VIDEO-ARCHIVE.md` says which one has the strongest case for revisiting.
 
 ## The resume PDF is redacted in the working tree
 

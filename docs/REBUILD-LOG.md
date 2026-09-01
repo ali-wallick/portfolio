@@ -3223,3 +3223,61 @@ that made that safe was that a second CI system was building the identical commi
 One piece of repo tooling was fixed in passing: `contact-sheet.mjs` was the only Chromium caller not
 going through `launchChromium`, so the skill's own contact sheet could not run in a Claude Code web
 session — the environment most of this work happens in.
+
+## #272 — archiving the source video behind every hero embed (2026-08-31)
+
+Every project hero on the site is a YouTube embed, which means six of the site's most prominent
+assets live on somebody else's server. Three videos embedded in the old blog posts are already gone
+— 403, deleted or made private — and `yt-dlp` cannot fetch a video after that has happened. So this
+was insurance with a deadline nobody can see coming.
+
+Six heroes captured, 291 MB, with uploader, channel and upload date recorded alongside each file.
+The four Marvel Snap `press` videos were scoped out: 1.9 GB between them, and `Rw1FWK1yhDk` alone is
+a 69-minute community show at 1.1 GB that CLAUDE.md already tiers as entertainment rather than
+source material.
+
+### The environment split was the whole reason this was a `needs-ali` issue
+
+A Claude Code web session cannot reach YouTube at all — the egress proxy answers
+`CONNECT tunnel failed, response 403` — and most of this project's work happens in one. A local
+session can. That is the same shape as [#245](https://github.com/ali-wallick/Portfolio/issues/245),
+where the web session's proxy blocked `cdn.playwright.dev` and broke `npm ci`. **Twice now the
+binding constraint on a piece of work has been which session type it runs in**, which is not a
+distinction the repo represents anywhere.
+
+### A quiet failure that a success message covered for
+
+The first run reported errors — but they were about _subtitles_, and they scrolled past under a
+`tail`. Two of the six videos never downloaded at all.
+
+The cause is worth writing down because the wrong option is the obvious one. `--sub-langs "en.*"`
+looks like "English subtitles"; it actually matches YouTube's auto-**translated** tracks too
+(`en-fr`, `en-de`, and so on), and the resulting burst of requests earns an `HTTP 429`. That error
+aborts the whole item, including the video download that had not started yet. `"en,en-orig"` plus
+`--ignore-errors` fixes it.
+
+**What caught it was a size and duration check, not the download's own output.** Re-probing every
+merged file with `ffprobe` for duration and stream presence turned up two missing videos and
+confirmed the other four matched their source durations exactly. A run that says `ERROR` about the
+thing you did not care about, while silently skipping the thing you did, is the failure mode to
+design checks against — the same lesson as the page-count assertion passing a resume that was 64px
+over budget ([#191](https://github.com/ali-wallick/Portfolio/issues/191)).
+
+### The location is the one fact deliberately not committed
+
+The archive is in Ali's own cold storage. `docs/VIDEO-ARCHIVE.md` records what was captured, the
+sha256 of every file, how to verify a copy, and both `yt-dlp` traps — but not where the files are,
+because a repo that may go public is the wrong place for the path to someone's personal storage.
+Hashes are the half a checkout can usefully hold: they let a future session prove an archive it has
+been pointed at is intact, without the archive being mounted. Same measurement-over-inspection move
+as verifying the old-site snapshot by sha256 against the live server.
+
+### Cost notes
+
+No subagents — serial work, each step depending on the last. One capability probe, one metadata-only
+probe to price the download before asking, one download, one repair, one verification.
+
+**The metadata probe was the useful bit of process.** `--skip-download -J` across all ten candidate
+IDs cost nothing and turned "roughly how big is this?" into an exact table, which is what let the
+scoping decision be made on real numbers — and 1.1 GB of the 2.2 GB total turned out to sit in a
+single video nobody had flagged as large.
