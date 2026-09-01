@@ -383,7 +383,7 @@ hr {
 }
 
 /* Cancels the first link's own left padding so "Projects" still starts flush
-   with the copyright line below, without giving `.nav-link` itself asymmetric
+   with the credit line below, without giving `.nav-link` itself asymmetric
    padding — see the note on `.site-footer .nav-link` for why that mattered. */
 .site-footer nav ul {
   margin-left: calc(-1 * var(--space-3));
