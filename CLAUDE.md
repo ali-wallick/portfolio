@@ -1612,13 +1612,86 @@ resume-density.ts`, which is in `build-pdf.mjs`'s `byteHashedFiles` for exactly 
   applied by a tiny `is:inline` script in `resume.astro` before first paint; the module only syncs
   the controls.
 - **The animation is `document.startViewTransition`**, feature-detected, skipped under
-  `prefers-reduced-motion` — checked in the script because no token can reach a view transition,
-  the same reasoning as the reticle's own fade curve. Firefox gets an instant flip. Per-element
-  `view-transition-name` polish was deliberately left for a later pass on a preview with Ali.
+  `prefers-reduced-motion` — checked in the script because no token can express a transition's
+  _absence_, the same reasoning as the reticle's own fade curve. (This used to say a token cannot
+  reach a view transition at all, which is wrong; see the correction under "The density toggle's
+  motion" below.) Per-element `view-transition-name` polish was deliberately left for a later pass
+  with Ali, and is settled now — same section.
 - **The print-geometry baseline now renumbers on every resume edit.** `nth-of-type` counts hidden
   siblings, so both routes' paths shift when a bullet is added anywhere, and hidden subtrees'
   children appear as zero-rect rows. The `update-resume` skill carries the how-to-read-it note;
   the check that matters is that visible rows' _values_ (y/height especially) didn't move.
+
+## The density toggle's motion: the document reflows, it doesn't dissolve (2026-09-01, closes #260)
+
+Settled with Ali on a live switcher, the eighth run of that loop. Ali's issue was two sentences —
+"could look cool if it slid over time into place" — and the toggle already ran inside
+`startViewTransition`, so what was missing was never the transition. It was that **nothing on the
+résumé carried a `view-transition-name`**, which makes the whole page one snapshot: the document
+cross-fades into its taller self and no part of it appears to move.
+
+Each `.resume-section` and `.resume-job` is named now, so every one gets its own group and tweens
+from its old rect to its new one. Skills and everything under it slide the 142px the revealed
+Summary pushes them; Summary fades into the gap that opened. Mechanism in
+`src/scripts/resume-density.ts` and `src/styles/resume.css`; both carry the reasoning beside the
+code.
+
+**The measurement reframed the issue before any candidate was built.** The résumé is 2.75x the
+viewport at concise and 4.32x at full on a 1280x800 desktop, 4.49x and 7.56x on a 390x844 phone. So
+at the top of the page, where you actually click the tabs, **the entire visible event is one 93px
+paragraph appearing and everything under it moving down 142px.** Personal Projects, the extra
+bullets and Education are all below the fold at the moment of the click. Anyone tempted to make this
+grander should know it is a small local event, not a document-wide reflow.
+
+**The names are written for the duration of the toggle and taken off again**, which is two decisions
+in one and both matter. At rest the DOM is untouched, so `build-pdf.mjs` and
+`check-resume-print.mjs` — which navigate `/resume` fresh and never toggle — measure exactly what
+they measured before this existed. And `base.css` opts the whole site into _cross_-document
+transitions, so a name left on an element would make navigating **away** from `/resume` animate that
+element separately from the page: a different feature nobody asked for. Transient names cannot leak
+into it.
+
+**An index is a safe key here and nowhere else.** Density hides nodes; it never adds, removes or
+reorders them, so the nth match is the same element in both states. If a future density difference
+ever changes the node list, this has to become a content-derived key — a name that moved between
+states would tween the wrong pair of rects.
+
+### Three candidates lost, and one of them should not be rediscovered
+
+- **A whole-page directional slide**, travelling the way the tab strip reads. It works and it is on
+  the wrong altitude: it animates the page rather than the change.
+- **The tab fill sliding between tabs**, which Ali rejected as too much motion on top of the
+  document already moving.
+- **The revealed sections arriving from above** rather than fading into the gap — the closest
+  literal reading of "slid into place", built as its own round, compared side by side, and not
+  taken. It is the one most likely to be proposed again as an obvious improvement. It was not
+  overlooked.
+
+### Four things measurement corrected, all of which had produced confident wrong answers
+
+- **A view transition's snapshot is not clipped to the viewport.** This was the stated risk that
+  nearly kept named elements off the table at all: the Experience section is 1215px against an
+  800px desktop viewport, and the Second Dinner entry is 1495px against a phone's 844px. Chromium
+  captures them at full height — `1215.44px` and `2562.31px`, read off the pseudo-elements
+  mid-flight. There was nothing to insure against.
+- **A custom property _does_ reach a view transition's animation.** The pseudo tree is anchored on
+  the root element and inherits from it, so `var(--duration)` resolves inside
+  `::view-transition-group(*)`. What no token can express is a transition's **absence**, which is
+  the real reason the reduced-motion opt-out is written as `animation: none`. Corrected in
+  `base.css` and in two places in this file.
+- **Firefox 144 shipped same-document view transitions** (October 2025), so the toggle has been
+  animating there for most of a year while `resume-density.ts` claimed it did not. Cross-document
+  transitions — `base.css`'s `@view-transition` — are still the half Firefox lacks.
+- **The tab strip does not "jump" when the density changes, it cross-fades.** `.resume-actions`
+  sits outside `article.resume` and is named by nothing, so it stays in the root snapshot for the
+  whole duration. The switcher's own label for the incumbent said "jumps" and was wrong; that is
+  plausibly why a sliding fill read as too much, since it was adding a slide on top of a cross-fade
+  rather than motion to a still control.
+
+**A headings-only variant was also built and cut before it ever went on the panel**, on the first of
+those corrections. Worth recording because the failure is general: naming only the headings detaches
+each from its own body text, which then cross-fades in place underneath — the old Skills rows print
+straight through the new Summary paragraph. **Name whole blocks, or name nothing.**
 
 ## The résumé's actions bar is document tabs on a panel (2026-08-30)
 
@@ -2121,10 +2194,14 @@ before. Same posture the résumé's density toggle takes with `document.startVie
 navigation** and stays put instead of dissolving under itself. Without that the sticky nav
 cross-fades on every click, which is more motion than the change earns — only the content changed.
 
-**Reduced motion is handled in CSS and cannot be a token.** No custom property can reach a view
-transition's animation, the same reason the reticle's fade carries its own written-in curve. The
-transition still runs with `animation: none`, which is the documented way to get an instant swap
-rather than a broken one.
+**Reduced motion is handled in CSS and cannot be a token — but for a narrower reason than this
+used to claim.** It said no custom property can reach a view transition's animation. That is false,
+measured on #260's switcher: the pseudo tree is anchored on the root element and inherits from it,
+so `var(--duration)` resolves inside `::view-transition-group(*)` exactly as it does anywhere else,
+and the density toggle's timing is driven that way today. **What no token can express is a
+transition's absence** — there is no value of `animation-duration` meaning "do not animate", and
+zero is not it. The transition still runs with `animation: none`, which is the documented way to
+get an instant swap rather than a broken one.
 
 ## The tab title and the share title are two strings (2026-09-01, closes #256)
 

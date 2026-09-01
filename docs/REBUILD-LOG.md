@@ -3368,3 +3368,82 @@ across all 333 elements, one to test the font flags, one to replay the old basel
 rules. **The integer-width count was the cheapest and by far the most valuable** — a few lines over
 five revisions of one JSON file, and it turned an open-ended "why does this machine differ" into a
 dated fact.
+
+## #260 — The density toggle's motion (2026-09-01)
+
+Ali's issue was two sentences: "Try Tweening Highlight -> Detailed. Could look cool if it slid over
+time into place." The eighth run of the switcher loop, and the shortest — two rounds, settled at
+**C + T0 + S1**: sections and jobs named so they tween to their new positions, the tab strip left
+alone, `--duration` at 320ms.
+
+### The diagnosis was not what the issue described
+
+The toggle already ran inside `document.startViewTransition`. What was missing was never the
+transition — it was that nothing on the résumé carried a `view-transition-name`, which makes the
+entire page one snapshot. So the document cross-faded into its taller self and no part of it
+appeared to move. The fix is naming, not animating.
+
+### Measuring first changed the shape of the answer
+
+The résumé is 2.75x the viewport at concise and 4.32x at full on a desktop; 4.49x and 7.56x on a
+phone. **At the top of the page, where you actually click the tabs, the whole visible event is a
+93px paragraph appearing and everything under it moving down 142px.** Everything else the toggle
+reveals is below the fold at the moment of the click.
+
+That is worth more than it sounds. It is the difference between designing a document-wide reflow
+and designing one small local event, and it is invisible until someone measures the fold.
+
+### The risk that nearly closed off the winning option was imaginary
+
+Round one was pitched to Ali with a warning attached to the named-elements candidate: view
+transitions snapshot the viewport, the Experience section is 1215px against an 800px viewport, so
+it would clip. **It does not.** Chromium captures those elements at full height — 1215.44px, and
+2562.31px for the phone's Second Dinner entry — read off the pseudo-elements mid-flight.
+
+A fourth candidate existed only as insurance against that clipping, and was cut before it ever went
+in front of Ali: it also looked worse, because naming only the headings detaches each from its own
+body text, which then cross-fades in place underneath and prints the old Skills rows through the new
+Summary paragraph. **The instrument got shorter because of measurement, not because of a round.**
+
+### Three claims in the repo were wrong, and one was wrong in three places
+
+- `CLAUDE.md` and `base.css` both said no custom property can reach a view transition's animation.
+  It can: the pseudo tree is anchored on the root and inherits from it. What no token can express is
+  a transition's **absence**, which is the actual reason the reduced-motion opt-out is
+  `animation: none`. Corrected in all three sites.
+- `resume-density.ts` said Firefox lacks `startViewTransition`. Firefox 144 shipped same-document
+  view transitions in October 2025 — the toggle had been animating there for most of a year.
+- The switcher's own label for the incumbent tab behaviour said "the fill jumps". It cross-fades:
+  `.resume-actions` sits outside `article.resume` and is named by nothing, so it rides the root
+  snapshot for the full duration. Caught by looking at a mid-transition screenshot rather than by
+  reading the CSS, and probably the reason a sliding fill read as too much motion — it was adding a
+  slide on top of a cross-fade, not motion to a still control.
+
+### What the reviewer settled, and the round that only existed because she asked
+
+Ali picked C on round one and asked for the option I had described but not built: keep C and let the
+revealed sections slide in rather than fade. Round two dropped the two losing candidates, added
+that, and she chose the fade anyway.
+
+**That is a good outcome for a round, not a wasted one.** The literal reading of "slid over time
+into place" was the thing the issue asked for, and it needed to be seen next to the alternative to
+be rejected. It is now recorded in `CLAUDE.md` as declined-on-purpose, because it is exactly the
+kind of thing a future session proposes as an obvious improvement.
+
+### One implementation decision worth keeping
+
+The names are written for the duration of the toggle and removed afterwards, rather than assigned
+once. Two reasons, and the second was not obvious: at rest the DOM is untouched, so the PDF build
+and the print-geometry baseline measure what they always did; and `base.css` opts the site into
+cross-document transitions, so a name left behind would make navigating _away_ from `/resume`
+animate that element separately from the page.
+
+### Cost notes
+
+No subagents — serial work, each round depending on the last, and the measuring was a handful of
+Playwright probes rather than anything that fans out. Two rounds, three pushes.
+
+Verification that earned its keep: comparing the regenerated PDFs byte-for-byte against the
+committed ones rather than trusting `check:pdf`. They differ only in `/CreationDate`, `/ModDate` —
+and, in the two-pager, an ephemeral localhost port inside two link annotations, which turned out to
+be a pre-existing defect in a file Ali attaches to job applications. Filed rather than fixed here.

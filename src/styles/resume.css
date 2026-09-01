@@ -183,6 +183,53 @@
     border-top-left-radius: 0;
   }
 
+  /* --- The density toggle's motion (#260) --------------------------------
+     Settled with Ali on 2026-09-01 against a live switcher, the eighth run of
+     that loop. The candidates were the incumbent whole-page cross-fade, a
+     whole-page directional slide, and this — each section and each job named,
+     so every one tweens from its old rect to its new one and the document
+     visibly reflows instead of dissolving into its taller self.
+
+     `src/scripts/resume-density.ts` owns the names and writes
+     `data-resume-transition` on the root for the duration of the toggle. These
+     rules are scoped to that attribute rather than written bare, because
+     `::view-transition-*` is a pseudo-tree on the ROOT: unscoped, they would
+     retime every cross-document navigation these two pages take part in via
+     base.css's `@view-transition`, which is a different feature and was not
+     what anyone reviewed.
+
+     TWO CURVES, NOT ONE, and this is the reticle's lesson again. `--ease`
+     overshoots by 2.6% (its 1.28 control point), which is the whole point of
+     it on a TRANSFORM and a trap on a clamped property: sent through opacity
+     the overshoot is spent sitting at zero rather than arriving. So the groups,
+     which travel, carry `--ease`; the images, which fade, carry a plain
+     ease-out.
+
+     320ms is `--duration`, chosen over 500ms and 700ms on the switcher. 500ms
+     is the curve's own recovered duration, retired in #33 for reading sluggish
+     on a hover and no better here on something this large.
+
+     A variant that also slid the REVEALED sections in — Summary and Personal
+     Projects arriving from above rather than fading into the gap that opened
+     for them — was built, measured and not taken. Don't rediscover it as an
+     improvement; it was compared side by side and lost.
+
+     Nothing here can reach paper: it is inside this file's `@media screen`
+     block, and a view transition has no print rendering to begin with. The
+     reduced-motion opt-out is base.css's `animation: none !important`, plus
+     the script's own check — a duration token cannot express a transition's
+     absence, which is why that opt-out is written the way it is. */
+  html[data-resume-transition]::view-transition-group(*) {
+    animation-duration: var(--duration);
+    animation-timing-function: var(--ease);
+  }
+
+  html[data-resume-transition]::view-transition-old(*),
+  html[data-resume-transition]::view-transition-new(*) {
+    animation-duration: var(--duration);
+    animation-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
   /* --- The download -----------------------------------------------------
      Inside the document's top right, level with the name.
 

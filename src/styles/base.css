@@ -93,9 +93,14 @@ html {
   }
 }
 
-/* Motion is opt-out, and it has to be done here rather than in a token: no
-   custom property can reach a view transition's animation, the same reason
-   the reticle's fade carries its own curve. `navigation: auto` still applies —
+/* Motion is opt-out, and it has to be done here rather than in a token — but
+   the reason is narrower than "tokens don't reach here", which is what this
+   said until #260 measured it. A custom property DOES inherit into the
+   view-transition pseudo tree, which is anchored on the root element, and
+   resume.css drives these animations' duration from `--duration` on exactly
+   that basis. What a token cannot express is a transition's ABSENCE: there is
+   no value of `animation-duration` that means "do not animate", and zero is
+   not it. `navigation: auto` still applies —
    the transition happens, it just has no duration, which is the documented way
    to get an instant swap rather than a broken one. */
 @media (prefers-reduced-motion: reduce) {
