@@ -971,7 +971,8 @@ hr {
      `.portrait`, which this replaced in #181.) */
   object-position: 60% 50%;
   border-radius: 50%;
-  border: 1px solid var(--color-border);
+  border: var(--frame-mat) solid var(--color-surface);
+  outline: 1px solid var(--color-frame);
 }
 
 /* Inline beside the name, Ali's call, and the size is what makes it possible
@@ -1212,7 +1213,8 @@ hr {
   display: block;
   width: 100%;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
+  border: var(--frame-mat-lead) solid var(--color-surface);
+  outline: 1px solid var(--color-frame);
 }
 .media figcaption {
   margin-top: var(--space-2);
@@ -1322,6 +1324,28 @@ hr {
   width: 100%;
   height: auto;
   max-width: none;
+  /* Back down to the narrow mat (#163). `.media img` carries
+     `--frame-mat-lead` because the common case for a bare `.media` is a
+     project's hero — the one image that LEADS a page. A gallery slide belongs
+     to a set instead, and images in a set share a frame weight: the row is
+     normalised on height, so letting each slide's mat vary would undo the
+     shared top-and-bottom line the row exists to produce. */
+  border-width: var(--frame-mat);
+  /* And the ratio has to apply to the BORDER box, or the mat breaks the one
+     thing the row exists to guarantee.
+
+     With `height: auto` the browser derives height from the CONTENT box, so a
+     slide's outer height is `(width - 2*border) / ratio + 2*border` — a
+     function of its own aspect ratio. Every slide then ends at a slightly
+     different y. Measured on /projects/i-fits-i-sits, whose five slides run
+     0.45 to 1.78: the bottom edges spread 3px on `main`'s 1px border, and the
+     mat widened that to 7px.
+
+     `aspect-ratio` resolves against the border box under `box-sizing:
+     border-box`, so height becomes exactly `width / ratio` whatever the mat
+     costs. Spread measured at 0 — the first time #166's shared bottom line is
+     exact rather than approximate. */
+  aspect-ratio: var(--media-ar);
 }
 
 /* --- Zoom (#166) ----------------------------------------------------------
@@ -1366,8 +1390,12 @@ hr {
 .gallery-zoom img {
   display: block;
 }
+/* The frame line, not the mat. Before #163 the border WAS the frame, so
+   recolouring it marked a hovered zoomable image; now the border is the mat and
+   recolouring it would paint the gap magenta while leaving the frame untouched.
+   The cue is the same, moved one ring out. */
 .gallery-zoom:hover img {
-  border-color: var(--color-accent);
+  outline-color: var(--color-accent);
 }
 
 /* The link's accessible name is the image's alt plus this, so a screen-reader
@@ -1583,7 +1611,8 @@ hr {
 .embed {
   aspect-ratio: 16 / 9;
   width: 100%;
-  border: 1px solid var(--color-border);
+  border: var(--frame-mat-lead) solid var(--color-surface);
+  outline: 1px solid var(--color-frame);
   border-radius: var(--radius-lg);
   display: block;
 }
@@ -1681,7 +1710,8 @@ hr {
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
-  border: 1px solid var(--color-border);
+  border: var(--frame-mat) solid var(--color-surface);
+  outline: 1px solid var(--color-frame);
   border-radius: var(--radius);
   background: var(--color-bg);
 }
@@ -1835,7 +1865,8 @@ hr {
      right edges disagree by ~30px against the text column they share. */
   margin-left: auto;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
+  border: var(--frame-mat) solid var(--color-surface);
+  outline: 1px solid var(--color-frame);
 }
 
 .aside-figure figcaption {

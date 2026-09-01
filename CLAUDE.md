@@ -1689,6 +1689,94 @@ than composited, so labels get real typography for free.
 emulate the media feature. Writing an attribute renders a light tile labelled "dark" — the exact
 shape of convincing wrong answer the skill's own traps section exists for.
 
+## Every picture is matted (2026-09-01, closes #163)
+
+Settled on a live switcher, the seventh run of that loop. Every image, video
+embed and photograph on the site now sits in a **mat**: a small inset of
+`--color-surface`, then a 1px `--color-frame` line outside it. Ali's pick from
+three crossed axes — version, line colour, line weight — plus the mat's own
+inset.
+
+**The measurement is the reason this issue was real, and it should survive the
+issue.** Edge-ring contrast of all 63 project assets against each theme's
+ground: **9 sit under 1.5:1 on the light ground and a _different_ 17 under
+1.5:1 on the dark one.** `marvel-snap/thumb-wide.jpg` is **1.03:1** and it is
+the homepage's headline card; `kaneva/thumb-logo-v2.png` is 1.16:1 because its
+matte is literally `--color-surface`. So a frame is load-bearing, on a
+different set of images per theme — and the old `--color-border` hairline was
+1.31:1 light / 1.43:1 dark, weakest exactly where it was needed.
+
+**Six surfaces, and finding them took two corrections from Ali.** `.thumb img`,
+`.card-art`, `.media img` (hero and gallery), `.aside-figure img` (/about's two
+photographs), `.hero-portrait img` (the homepage headshot) and `.embed` (the
+YouTube iframe). The last three were missing from the first round and were
+found by Ali asking why nothing changed on `/about`, then whether videos could
+take it too. All three already carried the identical `1px solid
+var(--color-border)`, so they were on the incumbent treatment and simply were
+not being offered the alternatives — **the failure mode is a surface list, not
+a rule**, and the list now lives in one place per stylesheet rather than being
+repeated.
+
+**Why 2.20:1 is enough for the line, when a flush border at 2.20:1 was
+rejected.** The mat does the separating: the gap lifts the picture off the
+page, so the line only has to read as a frame. Contrast ratio is not
+perceptual weight — the same ratio does far less work at 1px than it does on
+the 5px plate it was calibrated for. That is why the answer is a mat and not
+simply a bolder hairline.
+
+**`--color-frame` equals `--color-plate` today and is deliberately a separate
+token.** The plate's violet won on an argument about meaning: it is already
+"the colour under anything with height", so it is the colour this direction
+uses to say _this object has an edge_. Borrowing that hue is cheap **because
+the plate's meaning is carried by geometry** — an offset unblurred block —
+whereas magenta's is carried by hue alone across three different shapes (the
+reticle, the focus ring, the current-page pill). Magenta was on the switcher at
+Ali's request and its cost is concrete: `--color-focus` is the _same hex_ as
+`--color-accent`, so a magenta frame would put every image at rest in the focus
+colour, and `base.css`'s hover cue for a zoomable gallery image — which turns
+that border magenta — would stop marking anything at all. Separate tokens
+because the two roles can diverge; same reasoning that made `--color-index` its
+own token rather than an alias of `--color-text-muted`.
+
+**Two mat sizes, and the seam is "leads a page" vs "belongs to a set", not
+size.** `--frame-mat-lead` (4px) for a project hero, `--frame-mat` (2px) for
+gallery slides, thumbnails, the photographs and the headshot. **Scaling the mat
+by image width was measured and rejected**: the gallery row is normalised on
+height (#166), so a width-proportional mat gives a 115px portrait a thin frame
+and a 401px landscape a fat one _despite their being the same height_. Images
+in a set share a frame weight; the hero is the outlier. The step is
+deliberately shallow — at 2/6 the hero read as a differently framed object, at
+2/4 as the same system one size up.
+
+**The general rule, which outlives this pass: a frame is a constant.** A
+gallery hangs the same moulding on a small etching and a large canvas, and that
+is what makes them read as one collection. The hero's wider mat is the single
+sanctioned exception, and it is justified by role rather than by dimensions.
+
+### Three things that will bite whoever touches this next
+
+- **The hover cue is on the `outline`, not the `border`.** The border is the
+  mat now. Recolouring it paints the _gap_ magenta and leaves the frame alone.
+- **A gallery slide needs `aspect-ratio`, or the mat breaks the row.** With
+  `height: auto` the browser derives height from the CONTENT box, so a slide's
+  outer height becomes a function of its own ratio and every slide ends at a
+  different y. Measured on `/projects/i-fits-i-sits` (five slides, 0.45–1.78):
+  bottom edges spread **3px on the old 1px border**, which the mat widened to
+  **7px**. `aspect-ratio` resolves against the border box under `box-sizing:
+border-box`, so height becomes exactly `width / ratio` whatever the mat
+  costs — **spread 0, the first time #166's shared bottom line is exact rather
+  than approximate.** The 3px was pre-existing; nobody had measured it.
+- **`.embed` letterboxes slightly.** It sets `aspect-ratio: 16 / 9` on a
+  border box, so the mat makes the content box marginally off-ratio and the
+  player compensates — about 7px at 4px on an 864px hero. Known, accepted, not
+  worth engineering around.
+
+**Adding tokens to `tokens.css` regenerates the résumé PDFs**, because that
+file is a `byteHashedFiles` input. `check:resume-print` confirms the geometry
+did not move — the résumé renders none of these surfaces — so the regenerated
+PDFs differ only in Chromium's own metadata. Commit them with the change, per
+the standing rule.
+
 ## The gallery is one scrolling row (2026-08-30, closes #166)
 
 Every project gallery is a single horizontally scrolling row, replacing the wrapping grid Phase 5

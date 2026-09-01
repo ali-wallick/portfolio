@@ -48,5 +48,12 @@ src/assets/images/projects/it-fits-i-sits/paper-prototype.jpg
 src/assets/images/projects/it-fits-i-sits/level-43-screen.jpg
 src/assets/images/projects/it-fits-i-sits/peoples-choice-award.jpg
 
+# Contact-sheet renders (.claude/skills/design-switcher/scripts/contact-sheet.mjs
+# writes here by default). A sheet is an argument made once during a switcher
+# pass — you look at it, you decide, the pass ends and the scaffolding goes.
+# Committing them would leave binaries behind after the one thing that gave
+# them meaning has been deleted.
+docs/scratch/
+
 # Claude Code local overrides (project settings.json IS committed on purpose)
 .claude/settings.local.json

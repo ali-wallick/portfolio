@@ -94,6 +94,31 @@
      ratios (1.8/2.6/3.0/3.4) and 2.2:1 held. */
     --color-plate: #9e93c3;
 
+    /* --- The picture frame (#163) -----------------------------------------
+   * Every image, video embed and photograph on the site sits inside a mat:
+   * a small inset of `--color-surface`, then this 1px line outside it.
+   *
+   * EQUAL TO `--color-plate` TODAY AND DELIBERATELY NOT THE SAME TOKEN.
+   * Settled on a live switcher against four other line colours, and the
+   * plate's violet won on an argument about MEANING: `--color-plate` is
+   * "the colour under anything with height", so it is already the colour
+   * this direction uses to say *this object has an edge*. Reusing the hue
+   * is cheap in a way reusing magenta would not be, because the plate's
+   * meaning is carried by GEOMETRY -- an offset unblurred block -- while
+   * magenta's is carried by hue alone across three different shapes (the
+   * reticle, the focus ring, the current-page pill).
+   *
+   * It is its own token because the two roles can need to diverge: retune
+   * the plate for depth and every picture frame on the site would move with
+   * it. Same reasoning that made `--color-index` a token of its own rather
+   * than an alias of `--color-text-muted`.
+   *
+   * 2.20:1 against the ground. That is low for a line on its own, and it is
+   * enough here because THE MAT DOES THE SEPARATING: the gap is what lifts the
+   * picture off the page, and the line only has to read as a frame. A flush
+   * border at this ratio was measured and rejected for exactly that reason. */
+    --color-frame: #9e93c3;
+
     /* --- Colour: the interaction layer (magenta) ---------------------------
    * Where you *are*: the reticle, the focus ring, the current-page pill.
    * `--color-accent` is the stroke and is non-text; `--color-accent-ink` is
@@ -214,6 +239,26 @@
     --space-8: 2rem;
     --space-12: 3rem;
     --space-16: 4rem;
+
+    /* --- The picture mat (#163) -------------------------------------------
+   * The inset of `--color-surface` between an image and its frame line.
+   * Not on the space scale: these are frame hardware, sized against the
+   * 1px line rather than against the layout rhythm.
+   *
+   * TWO VALUES, and the seam is "leads a page" vs "belongs to a set", not
+   * size. A project hero gets the wider mat; gallery slides, card and tile
+   * thumbnails, /about's photographs and the homepage headshot all share
+   * the narrow one. Sizing it by image WIDTH was measured and rejected: the
+   * gallery row is normalised on height (#166), so a width-proportional mat
+   * would give a 115px portrait a thin frame and a 401px landscape a fat
+   * one despite their being the same height -- backwards for a row whose
+   * whole premise is that they line up. Images in a set should share a
+   * frame weight; the hero is the outlier.
+   *
+   * The step is deliberately shallow. At 2/6 the hero read as a differently
+   * framed object; at 2/4 it reads as the same system, one size up. */
+    --frame-mat: 2px;
+    --frame-mat-lead: 4px;
 
     /* --- The page title edge ----------------------------------------------
    *
@@ -419,6 +464,9 @@
        2.2:1, same hue, to match, and confirmed on the same #67 switcher as
        the light value. */
     --color-plate: #484180;
+
+    /* See the light value. Equal to the dark plate, independently settable. */
+    --color-frame: #484180;
 
     --color-accent: #ff2d95;
     --color-accent-ink: #ff6fb5;

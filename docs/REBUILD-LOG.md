@@ -3128,3 +3128,98 @@ two résumé routes. Every shipped file was byte-identical for the whole life of
 
 Chromium needed the same shim for a sixth consecutive session, and Lighthouse additionally needed
 `--no-sandbox` because the container runs as root. Worth automating if a seventh session wants it.
+
+---
+
+## #163 — Every picture is matted (2026-09-01)
+
+The seventh run of the live-switcher loop, and the first where the reviewer's questions found more
+of the answer than the instrument did.
+
+### The measurement came first, and it reframed the issue
+
+The issue was three words and a shrug: "Border / Shadow on Images? Thumb, hero, gallery?" Before
+building anything I measured the 1px edge ring of all 63 project assets against each theme's ground.
+**Nine images sit under 1.5:1 on the light ground; a _different_ seventeen sit under 1.5:1 on the
+dark one.** `marvel-snap/thumb-wide.jpg` — the homepage's headline card — measures **1.03:1**, and
+`kaneva/thumb-logo-v2.png` measures 1.16:1 because someone matted it to `--color-surface` by hand
+years ago.
+
+That turned "should images have a border?" into something answerable: a frame is load-bearing, on a
+different set of images in each theme, and the incumbent hairline was 1.31:1 / 1.43:1 — weakest
+exactly where it was needed. Every later round was judged against that number.
+
+### The reviewer found two whole surfaces the instrument had missed
+
+Round 1 covered thumbnails, hero and gallery — the three the issue named. Ali's first question was
+"does it only work on the home page right now?" It did not, but `/about` was inert, because its two
+photographs go through `.aside-figure` and the homepage headshot through `.hero-portrait` — a fourth
+and fifth surface nobody had listed. Her second question added a sixth: the YouTube `.embed`.
+
+**All three already carried the identical `1px solid var(--color-border)`.** They were on the
+incumbent treatment and simply were not being offered the alternatives. Had the pass settled after
+round 1, the site would have shipped every project image on a new frame and every photograph of Ali
+on the old one.
+
+The generalisable bit: **when a change is expressed as a list of selectors, the list is the bug
+surface, not the rule.** Rewriting the scaffolding to generate every rule from one array is what
+made the sixth surface a one-line addition — and it immediately caught a real defect, a dark-theme
+override still carrying the three-surface list.
+
+### One flat list became three crossed axes, and that was the reviewer's call too
+
+Round 1 shipped nine whole treatments. Ali kept three ("the others I'm not big about anyways") and
+asked for version, colour and weight to be separated.
+
+She was right, and the reason is worth keeping: **two candidates that differ on two dimensions
+cannot settle either.** C2 (plate violet) and C3 (bold neutral) differed in hue _and_ strength, so
+"C3 reads better in light, C2 in dark" — my own observation, offered confidently — was not
+attributable to either variable. Crossed axes move one thing at a time. 3 versions x 5 colours x
+3 weights x 7 mat insets is 315 treatments, which is unmaintainable as a matrix and about twenty
+lines as three custom properties.
+
+### What the reviewer picked, and why it is better than my recommendation
+
+I recommended a new colour: the plate's hue pushed to ~4:1, on the theory that 2.20:1 does too
+little work at 1px. Ali picked **plate violet at 2.20:1, with a mat**.
+
+That is the better answer and my reasoning had a hole in it. 2.20:1 is weak _for a flush border_,
+where the line is the only separation. **With a mat the gap does the separating and the line only
+has to read as a frame.** The analysis was right about the number and wrong about what the number
+had to accomplish.
+
+### The regression the visual check caught, and the pre-existing one under it
+
+Applying the mat, the gallery's bottom edges went out of alignment — the one thing #166 says the
+row exists to guarantee. Measured on `/projects/i-fits-i-sits`, whose five slides run 0.45 to 1.78:
+
+| Border on the slide image | Bottom-edge spread |
+| ------------------------- | ------------------ |
+| none                      | 1px                |
+| 1px (`main` today)        | **3px**            |
+| 2px mat                   | **7px**            |
+| 2px mat + `aspect-ratio`  | **0px**            |
+
+With `height: auto` the browser derives height from the _content_ box, so a slide's outer height is
+a function of its own aspect ratio. **The 3px was already on `main` and nobody had measured it** —
+the mat widened an existing defect rather than inventing one, and `aspect-ratio` (which resolves
+against the border box under `box-sizing: border-box`) makes the shared bottom line exact for the
+first time.
+
+Third time in this project's history that measuring something everyone had looked at overturned it.
+
+### Cost notes
+
+No subagents; the work was serial and each round depended on the last. Six rounds, five pushes.
+
+**GitHub Actions failed six consecutive times across five commits** with a zero-runner signature —
+`runner_id: 0`, ~3 seconds, no steps, log endpoint 404 — while Cloudflare built every one of the
+same commits successfully and `main` had been green half an hour earlier. Diagnosed as runner
+availability, one re-run spent, one comment posted, and then deliberately left alone through five
+further check-ins rather than pushing speculative fixes at it. It recovered on its own and the first
+real run passed in 55 seconds. **The discipline that mattered was not fixing it**, and the evidence
+that made that safe was that a second CI system was building the identical commits.
+
+One piece of repo tooling was fixed in passing: `contact-sheet.mjs` was the only Chromium caller not
+going through `launchChromium`, so the skill's own contact sheet could not run in a Claude Code web
+session — the environment most of this work happens in.

@@ -113,7 +113,18 @@ try {
   process.exit(1);
 }
 
-const browser = await chromium.launch();
+/* Not a bare `chromium.launch()`: in a Claude Code web session the egress
+   proxy blocks `cdn.playwright.dev`, so the pinned revision was never
+   downloaded and a direct launch throws (#245). `launchChromium` tries the
+   normal launch first — CI and Ali's machine are untouched — and falls back to
+   the session image's pre-installed binary only if that fails. `build-pdf.mjs`
+   and `check-resume-print.mjs` already went through it; this script was the
+   one Chromium caller that had not, which made the contact sheet unrunnable in
+   exactly the environment most of this work happens in. */
+const { launchChromium } = await import(
+  path.resolve(process.cwd(), 'scripts/lib/launch-chromium.mjs')
+);
+const browser = await launchChromium();
 const context = await browser.newContext({
   viewport: spec.viewport ?? { width: 1280, height: 900 },
   deviceScaleFactor: scale,
