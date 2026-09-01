@@ -36,6 +36,15 @@ interface Props {
   /** Omit the site name suffix — used by the homepage. */
   bareTitle?: boolean;
   /**
+   * Overrides the tab title on the share cards (`og:title`, `twitter:title`)
+   * only. Added for #256: a browser tab shows roughly twenty characters, and
+   * a link preview shows a sentence, so the two surfaces genuinely want
+   * different lengths — the homepage's role line is the payload of its title
+   * and is exactly what a tab cuts off. Defaults to the tab title, so every
+   * other route still emits one string on all three tags.
+   */
+  socialTitle?: string;
+  /**
    * Unfinished work. Draft pages only ever exist on preview deploys, but
    * `noindex` makes that explicit rather than relying on nobody finding the
    * URL, and `scripts/check-links.mjs` keys its stricter rules off it.
@@ -57,9 +66,24 @@ interface Props {
   jsonLd?: object;
 }
 
-const { title, description, bareTitle = false, noindex = false, image, jsonLd } = Astro.props;
+const {
+  title,
+  description,
+  bareTitle = false,
+  socialTitle,
+  noindex = false,
+  image,
+  jsonLd,
+} = Astro.props;
 
+/* Two titles, not one (#256). `fullTitle` is the tab, the bookmark and the
+   search result; `shareTitle` is the link preview, which has room to spare and
+   already carries the site name twice over — `og:site_name` below, and the name
+   rendered into the card image itself by `buildBrandCard()`. They are the same
+   string on every route but the homepage, and the fallback keeps it that way:
+   a page that doesn't care can't accidentally set only one of them. */
 const fullTitle = bareTitle ? title : `${title} — ${site.name}`;
+const shareTitle = socialTitle ?? fullTitle;
 
 /* `Astro.url.pathname` reflects the build's file path (`/about.html`,
    `/index.html`) under `astro.config.mjs`'s `build.format: 'file'`, not the
@@ -165,7 +189,7 @@ function navCurrent(href: string): 'page' | 'true' | undefined {
          iMessage, X) wants. */
     }
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={fullTitle} />
+    <meta property="og:title" content={shareTitle} />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={site.name} />
     {description && <meta property="og:description" content={description} />}
@@ -173,7 +197,7 @@ function navCurrent(href: string): 'page' | 'true' | undefined {
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:title" content={shareTitle} />
     {description && <meta name="twitter:description" content={description} />}
     <meta name="twitter:image" content={ogImage} />
     {

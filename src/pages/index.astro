@@ -14,10 +14,11 @@ const jsonLd = await personJsonLd();
 ---
 
 <BaseLayout
-  title={`${site.name} — ${site.role}`}
+  title={`${site.name} — ${site.roles[0]}`}
   description="Ali Wallick, game developer. Fifteen years in UI and systems engineering, five of them on Marvel Snap at Second Dinner."
   image="/og/home.jpg"
   bareTitle
+  socialTitle={`${site.name} — ${site.role}`}
   jsonLd={jsonLd}
 >
   {

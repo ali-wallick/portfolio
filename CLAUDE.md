@@ -2094,6 +2094,57 @@ transition's animation, the same reason the reticle's fade carries its own writt
 transition still runs with `animation: none`, which is the documented way to get an instant swap
 rather than a broken one.
 
+## The tab title and the share title are two strings (2026-09-01, closes #256)
+
+The homepage's `<title>` was `Ali Wallick — Game Developer · Software Engineer`, 48 characters into
+a browser tab that shows about 176px of text. Measured in a mock tab strip at Chrome's real metrics
+it wants 277px, so roughly the last two thirds were cut on every tab — and what got cut was the
+role, the only part of that string a visitor doesn't already have from the favicon and the name.
+
+**This was never an SEO problem.** Google truncates around 60 characters and nothing on the site
+reaches 51. Tabs, bookmarks and window titles only.
+
+**The order was already right on 22 of 23 routes**, which is why the fix is scoped to one page and
+why reversing the template was rejected rather than tried. Every page truncates in a tab; what
+matters is which end survives, and an inner page leads with its distinguishing word
+(`Prodigal: A Game…`). The homepage was the single route with the payload at the end.
+
+**`<title>` and `og:title`/`twitter:title` are separate strings now** — `socialTitle` on
+`BaseLayout`, defaulting to the tab title so no other route's output changed. A link preview has
+room for a sentence and already carries the name twice over (`og:site_name`, and the name rendered
+into the card by `buildBrandCard()`), so the card keeps the full role line the tab cannot hold.
+Ali's pick for the tab was the primary hat alone — 28 characters, fits a full-width tab with room
+to spare — over a bare `Ali Wallick`, which never truncates anywhere but leaves a search result
+saying nothing the site name doesn't.
+
+**`site.role` became `site.roles`, an array joined at the point of rendering**, so `Game Developer`
+is not written down in a second place. Same reasoning as a project's `role` in #152; `site.role`
+still exists, derived from it, so the homepage eyebrow and the résumé header are untouched.
+
+### The title's em dash stays, and the reason is sharper than #97's
+
+Reopened by Ali on this pass, so it is worth writing down properly. #97 kept it as "a structural
+separator, not prose" — true, and it does not explain why it should be an em dash rather than the
+`·` this site uses for every _other_ structural separator: the role hats, `{role} · {location}` in
+the résumé header, the skills lists, `Software Engineer · Kaneva`, the project meta strip.
+
+**The answer is that the homepage title is the one string carrying both levels at once.**
+`Ali Wallick · Game Developer · Software Engineer` has three identical separators and no way to
+tell which divides the name from the role. The em dash marks the outer level and `·` the inner one;
+collapsing them onto one glyph loses that. Exactly the trap #152 named when it kept `role`'s own
+join off the meta strip's `·`.
+
+**And it is not the AI tell.** That critique is about em dashes in running prose, at frequency,
+doing the job of a comma or a full stop. A delimiter between two labels is not a sentence and
+carries none of that signal. The zero-em-dash rule (#31) still holds where it was measured: the
+only two in rendered body text are inside quoted external titles (`Kaneva — Virtual Worlds Museum`,
+`"Welcome Ali!" — Second Dinner`), which are other people's names for things, not Ali's prose.
+
+**Ruled out, so they are not rediscovered.** A pipe is the most common title separator on the web
+and the most template-looking, which is the one thing this site's brief is against. A hyphen is a
+hyphen doing a dash's job, on a site with a build check that fails on a straight apostrophe. An en
+dash costs the same "it's the only dash on the site" asterisk while being less legible at tab size.
+
 ## Preserving the old site (2026-08-26)
 
 The old DreamHost site is preserved well enough that `snapshot/` can eventually be tagged and

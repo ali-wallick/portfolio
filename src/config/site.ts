@@ -5,14 +5,28 @@
  * layout change" rule matters.
  */
 
+/**
+ * What Ali does, one entry per hat, most-primary first.
+ *
+ * "Game Developer" alone was confirmed at the Phase 3 gate. "Software
+ * Engineer" added 2026-08-26, on Ali's call, to close the gap between this
+ * line and the homepage lede's own "I'm a software engineer" opener.
+ *
+ * An array rather than the hand-joined string this used to be, for the same
+ * reason a project's `role` became one in #152: it is the one multi-value
+ * field about Ali, and #256 gave it a second consumer that wants a subset —
+ * the homepage's tab title takes the primary hat only, where the eyebrow and
+ * the résumé header take all of them. The join belongs at the point of
+ * rendering rather than in the source, so there is still exactly one place a
+ * hat is written down.
+ */
+const roles = ['Game Developer', 'Software Engineer'] as const;
+
 export const site = {
   name: 'Ali Wallick',
-  /**
-   * "Game Developer" alone was confirmed at the Phase 3 gate. "Software
-   * Engineer" added 2026-08-26, on Ali's call, to close the gap between this
-   * line and the homepage lede's own "I'm a software engineer" opener.
-   */
-  role: 'Game Developer · Software Engineer',
+  roles,
+  /** Every hat, joined the way this site has always shown them. */
+  role: roles.join(' · '),
   url: 'https://aliwallick.com',
 
   /**
