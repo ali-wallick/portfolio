@@ -178,9 +178,12 @@ Use the skills — they encode the schema, the conventions, and the verification
 - `.claude/skills/update-resume/` — add, update, or rebalance resume content.
 - `.claude/skills/pre-launch-check/` — the full pre-merge / pre-launch sweep.
 
-One more skill is not about content at all and is listed here because this is where the skill list
-lives: `.claude/skills/design-switcher/` — the live-switcher review loop, for a look, motion or
-control decision that needs Ali's eye. See "The switcher loop is a skill now" under Design.
+Two more skills are not about content at all and are listed here because this is where the skill
+list lives. `.claude/skills/design-switcher/` — the live-switcher review loop, for a look, motion
+or control decision that needs Ali's eye. See "The switcher loop is a skill now" under Design. And
+`.claude/skills/steward/` — **not a skill anyone invokes**, but the file the Claude Code web
+harness reads before acting on a PR event, which is the only repo-side lever over how proactive a
+PR-watching session is. See "A green PR waiting on Ali is not work" below.
 
 `content-pass` is the method and `write-copy` is the voice; a session revisiting a page uses both.
 Adding something new starts one step earlier — `add-project` for front matter, `write-project-page`
@@ -2538,6 +2541,36 @@ branch name using the rule in `docs/CLOUDFLARE.md`'s "Using it" section: lowerca
 with `-`, then `-portfolio.ali-wallick.workers.dev` appended. If the sanitized name pushes the
 `<branch>-portfolio` label past 63 characters, don't guess at Cloudflare's truncation — say so and
 point to the bot's comment for the exact link instead of stating a wrong URL as fact.
+
+### A green PR waiting on Ali is not work (2026-09-02)
+
+Claude Code on the web subscribes a session to a PR's activity **and** re-arms a self check-in
+roughly hourly until the PR is merged or closed. On a `design-switcher` branch — parked on Ali's
+eye by design, sometimes for days — that second half runs forever and learns nothing. The check-in
+that prompted this said so in its own prompt: _"ninth consecutive quiet check since the rebase."_
+Nine full-context wakes, each re-sending the whole conversation, to confirm nothing had moved. That
+is this file's own "Context length dominates cost" note, paid once an hour.
+
+**Ali's call: a session stands down once CI is green, there is no merge conflict, and nothing is
+left for an agent to do.** It says so once — to Ali, not as a PR comment — stops re-arming, and
+ends. It does **not** unsubscribe: a push, a review, or CI going red still wakes it through the
+subscription, which costs nothing while nothing happens. **The subscription is the cheap half and
+the check-in loop is the redundant one**, so the loop is what goes.
+
+**A red or conflicted PR is untouched by this** and is still work now, at every event. Standing
+down is a statement about polling, not about the drive-to-green posture, and every "never" in the
+harness's rules still stands.
+
+**The lever is `.claude/skills/steward/SKILL.md`, and it is the only one there is.** The harness
+reads that path from the PR's head branch before acting on a CI or review event, and defers to it
+on _how proactive to be_. Nothing else in a checkout can reach this behaviour — the same shape as
+the `release` branch and `workers_dev` under "Deployed state drifts from the repo" below: the thing
+determining behaviour lives somewhere a checkout cannot show you.
+
+**Two consequences worth knowing.** The file governs only a PR whose **head branch carries it**, so
+a branch cut before this merged keeps the old behaviour until it picks up `main`. And a check-in
+already scheduled is a Routine on Ali's account, not a repo fact — an in-flight one is stopped by
+deleting the Routine, which is what closed out the two live loops on the day this landed.
 
 ### Merging to `main` does not deploy. `release` does. (2026-08-27)
 
