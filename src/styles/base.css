@@ -369,7 +369,13 @@ hr {
 
 .brand {
   font-family: var(--font-display);
-  font-size: var(--text-lg);
+  /* `--text-xl`, not `--text-lg` (#162). Settled on a live switcher: at
+     `--text-lg` the wordmark ties the homepage lede and loses to a project
+     card title (25px) — Ali's own name reading smaller than the name of any
+     project on the page. `--text-xl` adds 7px to the header's height (58 →
+     65px) because it's the one type mark on that switcher that was also a
+     height mark; every other candidate there shared the nav pill's 33px. */
+  font-size: var(--text-xl);
   font-weight: 700;
   letter-spacing: var(--tracking-display);
   color: var(--color-heading);
@@ -407,6 +413,16 @@ hr {
   transition:
     background-color var(--duration-fast) var(--ease),
     border-color var(--duration-fast) var(--ease);
+}
+/* `--text-base`, not `--text-sm`, in the header only (#162). Settled on the
+   same switcher as the wordmark above: at the control size the primary nav
+   tied the footer credit, the `← Projects` backlink and the page metadata —
+   ranked with incidental text and below body copy. The footer stays at
+   `--text-sm`, the site's control size, so the two remain comparable; this is
+   a header-specific promotion, not a change to what `.nav-link` means
+   sitewide. Grows the pill from 33px to 35.6px. */
+.site-header .nav-link {
+  font-size: var(--text-base);
 }
 .nav-link:visited {
   color: var(--color-text);
