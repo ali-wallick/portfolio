@@ -1271,6 +1271,11 @@ hr {
 .gallery {
   --gallery-h: 16rem;
   --gallery-fade: 3rem;
+  /* Room at the row's ends, settled at 8px (#268). ONE token drives the
+     scroller's padding, its negative margin and both fade offsets, because
+     writing the fade offset as its own number is exactly the drift #253 used a
+     `calc` to rule out — and here it was not hypothetical, it was the bug. */
+  --gallery-pad: var(--space-2);
   /* The edge fades hang off this rather than off the scroller, because a
      pseudo-element on a scroll container scrolls away with the content. */
   position: relative;
@@ -1292,6 +1297,28 @@ hr {
   /* :focus-visible is a 3px ring at 3px offset, and this box is focusable —
      leave it somewhere to draw that the scroll container will not clip. */
   padding-block: var(--space-2);
+  /* The inline half of the same idea, and the ring it leaves room for is the
+     one on a ZOOM LINK rather than on this box (#268). A focused link inside a
+     scroll container is clipped BY that container: at no padding the first
+     slide's ring was cut off by exactly 6px — the ring's whole width plus its
+     whole offset, measured — so a keyboard user tabbing into the row got no
+     visible focus on the slide they had landed on. 8px covers it with 2px to
+     spare, and the spare is Ali's, chosen by eye on the switcher.
+
+     This USED to be justified by the frame line as well, and that half is
+     gone: before #283 the line was an outline at offset 0, painting outside
+     the border box and so outside this box's clip, and it was cut off at rest
+     on every gallery. #283 pulled it inside (`outline-offset` is negative now,
+     base.css above), so it is fully visible at any padding. Re-measured rather
+     than carried forward — the padding survives on the ring, not on the frame.
+
+     The negative margin is what keeps the images on the page column edge,
+     which is #253's settled alignment: the scroll BOX widens, the pictures do
+     not move. `scroll-padding-inline` matches so a snapped slide lands against
+     the visual edge rather than the padding edge. */
+  padding-inline: var(--gallery-pad);
+  margin-inline: calc(var(--gallery-pad) * -1);
+  scroll-padding-inline: var(--gallery-pad);
 }
 
 .gallery-track {
@@ -1523,12 +1550,19 @@ hr {
   pointer-events: none;
   transition: opacity var(--duration) var(--ease);
 }
+/* Offset by the padding, because a fade has to start where the content is
+   CLIPPED — the scroller's own edge, not `.gallery`'s. These were the same
+   place until the scroller grew a negative margin; measured, the gap between
+   the cut and the start of the fade was exactly the padding, so a slide
+   appeared out of a hard edge and faded in AFTERWARDS. The width stays
+   `--gallery-fade`: the fade measures how long the softening takes FROM THE
+   CUT, so it belongs to the edge rather than to the column. */
 .gallery[data-overflow]::before {
-  left: 0;
+  left: calc(var(--gallery-pad) * -1);
   background: linear-gradient(to right, var(--color-bg), transparent);
 }
 .gallery[data-overflow]::after {
-  right: 0;
+  right: calc(var(--gallery-pad) * -1);
   background: linear-gradient(to left, var(--color-bg), transparent);
 }
 .gallery[data-at-start]::before,
@@ -1536,10 +1570,24 @@ hr {
   opacity: 0;
 }
 
+/* --- The control cluster (#268) -------------------------------------------
+ *
+ * Arrow, indicator, arrow, centred under the row. Deliberately the same shape
+ * as `.zoom-nav` on the project page, which has been two `.gallery-arrow`
+ * buttons flanking a centred `.zoom-count` since #166 — so the row and the
+ * lightbox read as one control rather than two inventions. Same `--space-4`
+ * between the parts.
+ *
+ * It replaces a right-aligned pair with no indicator. Ali's complaint about
+ * that pair was that it "seemed a little too just stuck on there", which is
+ * the same diagnosis as the résumé download button reading as an ad (#239): a
+ * control with nothing to belong to. Centred on the row, it belongs to it.
+ */
 .gallery-nav {
   display: flex;
-  justify-content: flex-end;
-  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
   margin-top: var(--space-4);
 }
 /* `display: flex` above beats the UA stylesheet's `[hidden] { display: none }`,
@@ -1570,65 +1618,59 @@ hr {
   border-color: var(--color-border);
 }
 
-/* --- The scrolled edges ---------------------------------------------------
+/* --- The indicator --------------------------------------------------------
  *
- * A gradient over the page ground, not a `mask-image` on the scroller: the
- * viewport now has a focus ring of its own, and a mask would clip it at exactly
- * the two edges being faded. `--color-bg` is a real token in both themes, so
- * nothing here is a hard-coded colour.
+ * PROPORTIONAL, which is the whole reason it is a bar and not pips or a
+ * counter. Two independent arguments, both measured (#268):
  *
- * `data-overflow` is set only by gallery-scroll.ts, which means a row that fits
- * — a one- or two-image gallery on a desktop — carries no fade at all, and
- * neither does a page whose script never ran.
+ * 1. It can tell 918px of travel from 11px. At critter-3's 11px overflow the
+ *    thumb reads 98.5% — "there is almost nothing more here" — where a pip row
+ *    claims two equal destinations in both cases.
+ * 2. It has no unreachable states. A discrete indicator assumes one
+ *    destination per slide, but this row shows two or three at once and stops
+ *    when the last is flush right, so on /projects/i-fits-i-sits at 1280 only
+ *    2 of 5 indices are ever reachable. "How much of the row have I seen" is
+ *    well defined at any number of visible slides; "which one am I on" is not.
+ *
+ * ## It is an indicator, not a control, and that is settled rather than lazy
+ *
+ * It looks like a scrollbar thumb, so the question is real: should it be
+ * draggable? No. The row itself is already the drag surface — a plain
+ * `overflow-x: auto` element scrolls by touch, trackpad and shift-wheel with
+ * no script — and the arrows are already the discrete control. A draggable bar
+ * would be a THIRD way to do what two existing affordances do, while adding a
+ * tab stop, `role="slider"` semantics and a pointer-capture path. On a phone,
+ * where the travel is longest, swiping the pictures beats dragging a 4px bar.
+ *
+ * So it is made unambiguous rather than left to read either way:
+ * `pointer-events: none` (it cannot be grabbed and the cursor never suggests
+ * it), no plate (the site's rule is "height means pressable", so a flat bar
+ * already says it is not), and `aria-hidden` in the markup — a screen-reader
+ * user learns the same fact from the arrows' disabled state, and an unlabelled
+ * slider would be worse than silence.
+ *
+ * Quiet on purpose, at `--color-frame`'s 2.2:1. It is furniture beside two
+ * plated buttons, not a peer of them.
  */
-.gallery[data-overflow]::before,
-.gallery[data-overflow]::after {
-  content: '';
+.gallery-rail {
+  flex: 1;
+  max-width: 8rem;
+  pointer-events: none;
+}
+
+.gallery-rail-track {
+  position: relative;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  outline: 1px solid var(--color-frame);
+}
+
+.gallery-rail-thumb {
   position: absolute;
   inset-block: 0;
-  width: var(--gallery-fade);
-  pointer-events: none;
-  transition: opacity var(--duration) var(--ease);
-}
-.gallery[data-overflow]::before {
-  left: 0;
-  background: linear-gradient(to right, var(--color-bg), transparent);
-}
-.gallery[data-overflow]::after {
-  right: 0;
-  background: linear-gradient(to left, var(--color-bg), transparent);
-}
-.gallery[data-at-start]::before,
-.gallery[data-at-end]::after {
-  opacity: 0;
-}
-
-.gallery-nav {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--space-2);
-  margin-top: var(--space-4);
-}
-
-/* `.button`'s padding is sized for a label beside an icon; these carry only the
-   icon, so the box would otherwise be a wide lozenge around a chevron. */
-.gallery-arrow {
-  padding: var(--space-2);
-}
-.gallery-arrow[disabled] {
-  opacity: 0.4;
-  /* A disabled control is not pressable, so it should not be sitting on a
-     plate claiming otherwise. */
-  box-shadow: var(--shadow-flat);
-  transform: translateY(var(--lift));
-  cursor: default;
-}
-.gallery-arrow[disabled]:hover {
-  border-color: var(--color-border);
-}
-.gallery-arrow .button-icon {
-  width: 1.25em;
-  height: 1.25em;
+  border-radius: var(--radius-pill);
+  background: var(--color-frame);
 }
 
 .embed {

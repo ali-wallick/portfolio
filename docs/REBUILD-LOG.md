@@ -3532,3 +3532,81 @@ wide aspect, which only the diff showed.
 No subagents. The work was serial and small. The expensive part was not the measurement — that cost
 one throwaway script — it was building the live poster at all, which is most of what was written and
 all of what was then deleted.
+
+## #268 — the gallery's ends and its controls (2026-09-02)
+
+Two axes on one switcher — how much room the row leaves at its ends, and what the scroll controls
+are — and two bugs found on the preview on the way. The decisions are in CLAUDE.md; what belongs
+here is how the pass went wrong and what that is worth.
+
+### The first diagnosis I offered was wrong, and Ali's own was right
+
+The issue said the bottom-right arrows felt "stuck on there," and I answered that they sat under a
+large dead gap. Measured, the gap is 24px, which is normal spacing. The emptiness Ali was seeing is
+caption line-count spread — 23px on marvel-snap against 69px on i-fits-i-sits — which is a content
+concern, not a layout one.
+
+The instinct to reach for was hers, not mine: the arrows are 78–124px below the pictures they
+scroll. **Distance was the real argument and I nearly buried it under a wrong one.** Worth writing
+down because the wrong version was more specific-sounding, which is exactly what makes a wrong
+diagnosis stick.
+
+### The pips were removed on correctness, not on taste
+
+Round one put pips between the arrows. Ali caught what I had not: "the pages/pips only go to 2." A
+row of variable-width slides has no page count. `scroll-snap-align: start` on slides running 160px
+to 630px means the number of distinct resting positions is a function of viewport width, so a fixed
+pip count either points at indices the row cannot reach or hides content behind the last pip.
+
+**That is not a bug in the pip implementation, it is a category error in the control**, and the
+proportional bar Ali proposed sidesteps it by reporting a ratio instead of an index. It degrades
+into "nearly all of this is visible" (98.5% on critter-3's 11px of overflow) rather than into a
+wrong number.
+
+### Two of my own measurements lied, in the same way
+
+Both were colour samples, and both went wrong by sampling geometry I had not looked at.
+
+- Sampling a button's contrast ring at a fixed inset crossed its 14px corner radius on two of the
+  four sides, so the sampler read the photograph behind it. Reported 1.39:1 for a ring that measures
+  15:1.
+- Sampling all four sides of an edge-positioned arrow mixed page ground into what was supposed to be
+  the image behind it.
+
+Both were fixed the same way: sample only the vertical middle band of one side, at
+`deviceScaleFactor: 3`. **A colour measurement is a geometry measurement first**, and a sampler that
+returns a plausible number is indistinguishable from one that returns a right number until you draw
+where it sampled.
+
+### A comment justified its value by someone else's bug, and that bug got fixed
+
+The 8px padding shipped with two reasons: the focus ring, and #163's frame line being clipped at
+rest. Five days later #283 pulled the frame line inside its own border box, which retired the second
+reason silently. Nothing failed — the padding is still right — and nothing in the repo would have
+told the next session that half its justification had expired.
+
+Caught only because bringing `origin/main` in meant reading what had landed. Re-measured both shapes by
+pixel rather than trusting either the old claim or the new arithmetic (my first pass at the new
+arithmetic had the sign of a negative `outline-offset` backwards, and would have "confirmed" the
+dead claim). The comment now says what stopped being true and why.
+
+**The general form: a justification that points at a bug elsewhere has a lifetime, and nothing
+enforces it.** A justification that points at a rule — here, the focus ring's 3px+3px — does not.
+
+### The contact sheet needed the lab state to be a pure function of an attribute
+
+`contact-sheet.mjs` applies its `hide` list before its `click` list, so any state reached by
+clicking a control inside the hidden panel is uncapturable. Rather than reorder the renderer, the
+lab was rewritten so its state is a pure function of `data-control` on the root, applied by a
+`MutationObserver` — which let the sheet drive it with `attrs` and no clicking at all.
+
+Worth keeping as a constraint on the next lab: **make the panel a view of the state, never the owner
+of it.**
+
+### Cost notes
+
+No subagents; the work was serial and every question was about this one component. The switcher was
+most of the spend and all of the deletion — five scaffolding files, gone in the settle commit, per
+the skill's own rule. The two throwaway measurement scripts were cheap and paid for themselves
+twice: once catching the fade misalignment's exact size, once catching that the frame claim had
+died.

@@ -108,6 +108,26 @@ if (dialog && zoomLinks.length > 0 && typeof dialog.showModal === 'function') {
     // memory for the rest of the visit.
     dialog.addEventListener('close', () => {
       image.removeAttribute('src');
+
+      /**
+       * Put focus back on the link explicitly, rather than trusting
+       * `close()`'s own restore.
+       *
+       * `showModal()` restores focus to whatever was focused when it opened,
+       * and on a browser where clicking a link does not focus it — Safari on
+       * macOS, by default — that was not the link. It was the nearest
+       * focusable ancestor, which is `.gallery-viewport`: a `tabindex="0"` box
+       * wrapping the WHOLE row. The site's `:focus-visible` rule then draws a
+       * 3px magenta ring around the entire gallery, which reads as "this
+       * region is selected" when magenta on this site means "you are on a
+       * control".
+       *
+       * The container's ring is right for a keyboard user who tabbed to the
+       * row deliberately (it is how they know arrow keys will work there), so
+       * the fix is to stop the zoom path landing on it rather than to remove
+       * it — see #278 for what that ring should look like.
+       */
+      zoomLinks[index]?.focus({ preventScroll: true });
     });
   }
 }

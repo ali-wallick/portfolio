@@ -41,18 +41,31 @@ const galleries = document.querySelectorAll<HTMLElement>('.gallery');
 /** Below this, a sub-pixel rounding difference reads as an overflow. */
 const EPSILON = 1;
 
+/**
+ * The scroller's CONTENT edge, which is what every slide is measured against.
+ *
+ * This used `getBoundingClientRect().left` directly until #268, on the stated
+ * grounds that "the row carries no inline padding". It carries 8px now — see
+ * `--gallery-pad` in `base.css` — so the arithmetic has to add it back. At
+ * zero padding this is identical to the old expression.
+ */
+function contentEdge(viewport: HTMLElement): number {
+  return viewport.getBoundingClientRect().left + parseFloat(getComputedStyle(viewport).paddingLeft);
+}
+
 for (const gallery of galleries) {
   const viewport = gallery.querySelector<HTMLElement>('.gallery-viewport');
   const track = gallery.querySelector<HTMLElement>('.gallery-track');
   const nav = gallery.querySelector<HTMLElement>('.gallery-nav');
-  if (!viewport || !track || !nav) continue;
+  const railThumb = gallery.querySelector<HTMLElement>('.gallery-rail-thumb');
+  if (!viewport || !track || !nav || !railThumb) continue;
 
   const arrows = [...nav.querySelectorAll<HTMLButtonElement>('.gallery-arrow')];
   let frame = 0;
 
   function sync(): void {
     frame = 0;
-    if (!viewport || !nav) return;
+    if (!viewport || !nav || !railThumb) return;
 
     const max = viewport.scrollWidth - viewport.clientWidth;
     const overflowing = max > EPSILON;
@@ -71,6 +84,15 @@ for (const gallery of galleries) {
     for (const arrow of arrows) {
       arrow.disabled = arrow.dataset.dir === '-1' ? atStart : atEnd;
     }
+
+    /* The indicator (#268). Width is how much of the row is on screen; offset
+       is how far through the remainder you are. Both are proportions, which is
+       the point — see the note in `base.css` for why a bar rather than pips or
+       a counter, and why it is not draggable. */
+    const ratio = viewport.clientWidth / viewport.scrollWidth;
+    const progress = max > 0 ? viewport.scrollLeft / max : 0;
+    railThumb.style.width = `${ratio * 100}%`;
+    railThumb.style.left = `${progress * (1 - ratio) * 100}%`;
   }
 
   /** One measurement per frame, however many sources ask. Same as `reticle.ts`. */
@@ -88,9 +110,7 @@ for (const gallery of galleries) {
    */
   function page(dir: number): void {
     if (!viewport || !track) return;
-    // The row carries no inline padding, so its border-box left edge IS the
-    // content edge every slide is measured against.
-    const edge = viewport.getBoundingClientRect().left;
+    const edge = contentEdge(viewport);
     const slides = [...track.children] as HTMLElement[];
     const candidates =
       dir > 0

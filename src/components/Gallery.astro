@@ -32,15 +32,25 @@ import type { Project } from '~/lib/content';
  *    Progressive enhancement, the same contract as `reticle.ts` and
  *    `resume-density.ts`: with no script the row still scrolls by touch,
  *    trackpad and keyboard, and the page carries no dead controls.
- * 3. **The arrows sit OUTSIDE the scroll region.** `reticle.ts` listens for
+ * 3. **The controls sit OUTSIDE the scroll region.** `reticle.ts` listens for
  *    scroll on `window`, and element-level scroll does not bubble there — so
  *    anything focusable inside a scroller slides out from under the brackets
- *    and leaves them parked. Keeping the only controls outside it means nothing
+ *    and leaves them parked. Keeping every control outside it means nothing
  *    focusable ever moves, and the reticle needs no change at all.
  *
- * They reuse `.button` rather than inventing a class, which is also what earns
- * them the plate: "height means pressable" (tokens.css), and unlike the images
- * beside them an arrow genuinely is.
+ * The arrows reuse `.button` rather than inventing a class, which is also what
+ * earns them the plate: "height means pressable" (tokens.css), and unlike the
+ * images beside them an arrow genuinely is.
+ *
+ * ## The cluster (#268)
+ *
+ * Arrow, indicator, arrow — the same shape `.zoom-nav` on the project page has
+ * used since #166, so the row and the lightbox read as one control.
+ *
+ * The rail is `aria-hidden` on purpose. It is a proportional indicator, not a
+ * control: a screen-reader user learns the same fact from the arrows' disabled
+ * state, and an unlabelled slider would be worse than silence. See
+ * `base.css`'s indicator note for why it is deliberately not draggable.
  */
 interface Props {
   items: Project['data']['gallery'];
@@ -78,6 +88,13 @@ const { items } = Astro.props;
             <path d="M14.7 5.3a1 1 0 0 1 0 1.4L9.4 12l5.3 5.3a1 1 0 1 1-1.4 1.4l-6-6a1 1 0 0 1 0-1.4l6-6a1 1 0 0 1 1.4 0z" />
           </svg>
         </button>
+
+        <div class="gallery-rail" aria-hidden="true">
+          <div class="gallery-rail-track">
+            <div class="gallery-rail-thumb" />
+          </div>
+        </div>
+
         <button
           type="button"
           class="button gallery-arrow"

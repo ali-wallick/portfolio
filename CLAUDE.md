@@ -2046,6 +2046,80 @@ element-level scroller dispatches `scroll` at itself only. That was latent while
 sat outside the row, and went live the moment zoom put focusable links inside it. One listener on the
 capture path covers the page and every scroller on it.
 
+### The row has ends, and its controls are a centred cluster (2026-09-02, closes #268)
+
+Settled on a live switcher, the eighth run of that loop. Two axes, decided separately: how much room
+the row leaves at its ends, and what the scroll controls are.
+
+**8px at the ends, driven by ONE token.** `--gallery-pad` on `.gallery` drives the scroller’s
+`padding-inline`, its negative `margin-inline` and both fade offsets. Writing the fade offset as its
+own number is exactly the drift #253 used a `calc` to rule out, and here it was not hypothetical --
+it was the bug Ali caught on the preview. Padding the scroller moved its clip edge while the fades
+stayed pinned to `.gallery`, so a slide emerged from a hard edge and then faded in **afterwards**,
+by exactly the padding. The negative margin is what keeps the pictures on the page column edge:
+**the scroll box widens, the pictures do not move** (measured 0px against the column at 1280/768/390).
+
+**What the padding is for is the FOCUS RING, and the reason it shipped with is already dead.** It was
+justified partly by #163’s frame line being cut off at rest — true when it was written, and retired
+five days later by [#283](https://github.com/ali-wallick/Portfolio/issues/283), which pulled the line
+inside its own border box. Pixel-sampled at 4x on both shapes: pre-#283 the strip at the clip edge
+carries no frame colour at all, post-#283 it reads ground / frame 1px / mat 2px / picture. **The
+surviving reason is stronger anyway**: a focused link inside a scroll container is clipped BY that
+container, and at 0 padding the first zoom link’s ring was cut off by exactly 6px — the ring’s whole
+3px width plus its whole 3px offset — so a keyboard user tabbing into the row saw no focus on the
+slide they had landed on. 8px covers it with 2px to spare, and the spare is Ali’s, by eye.
+
+**Worth generalising, because only pulling `main` in caught it: a comment that justifies a value by a bug
+elsewhere goes stale when someone else fixes that bug.** Nothing failed — the padding is still
+right, for one fewer reason — and nothing would have told the next session the claim had expired.
+
+#### The controls are two arrows around a proportional bar
+
+Ali’s read of the bottom-right arrows: "a little too just stuck on there." **The diagnosis I offered
+first was wrong and is recorded so it is not repeated** — I said they sat under a large dead gap, and
+the gap measured 24px, which is normal. The emptiness under a gallery is caption line-count spread
+(23px on marvel-snap against 69px on i-fits-i-sits), which is `content-pass`’s to hold rather than
+layout’s. The real argument for moving them is **distance**: bottom-right put them 78-124px below the
+pictures they scroll.
+
+So `.gallery-nav` is centred now, and the arrows sit either side of an indicator. **The indicator is
+a proportional bar, not pips, and that was decided on correctness rather than taste.** Pips were
+built and Ali spotted the defect on the preview: they only ever reached 2. A row of variable-width
+slides has no page count — `scroll-snap-align: start` on slides that are 160px to 630px wide means
+the number of distinct resting positions is a function of viewport width, so any fixed pip count
+either overshoots into indices the row cannot reach or undershoots the content. A bar sidesteps the
+question entirely by reporting a ratio: thumb width is `clientWidth / scrollWidth` and its offset is
+scroll progress across the remaining track. Measured from 19.97% (marvel-snap at 390) to 98.5%
+(critter-3’s 11px of overflow at 768) — it degrades to "nearly everything is visible" rather than to
+a wrong number.
+
+**And it is deliberately not draggable.** It is `aria-hidden` and `pointer-events: none`: an
+indicator, not a control. Three reasons, in order. The row is already draggable — by touch, trackpad,
+arrow key and the two arrows beside it — so a draggable bar is a fourth affordance for a thing that
+has three. A 4px target fails every pointer-size guideline worth following, so making it draggable
+means growing it into something that looks like a control and then IS one, which is a slider, which
+is the option Ali did not pick. And a real slider needs a role, a value, a label and keyboard
+semantics; an `aria-hidden` bar needs none of that because the scroll region it reports on is already
+focusable and already announces itself. **If it is ever made draggable, it stops being this element
+and becomes an `<input type="range">` — do not bolt a drag handler onto the bar.**
+
+#### Two bugs fixed on the way, both found by Ali on the preview
+
+- **Zooming an image drew the magenta focus ring around the WHOLE gallery.** `dialog.close()` restores
+  focus to whatever was focused when it opened, and on a browser where clicking a link does not focus
+  it — Safari on macOS, by default — that was `.gallery-viewport`, the `tabindex="0"` box wrapping
+  the entire row. `gallery-zoom.ts` now focuses the link explicitly on close. The container’s own ring
+  is right for someone who tabbed to the row deliberately, so the fix is to stop the zoom path landing
+  on it, not to remove it; what that ring should look like is
+  [#278](https://github.com/ali-wallick/Portfolio/issues/278).
+- **`base.css` carried the same 61-line block twice**, verbatim since 618ef66 (#241) --
+  [#277](https://github.com/ali-wallick/Portfolio/issues/277), closed here. Checked before deleting
+  that the removed copy was not the one carrying `.gallery-nav[hidden]`.
+
+**One measurement fix in `gallery-scroll.ts` follows from the padding**: `page()` computed its step
+from `getBoundingClientRect().left` under a comment asserting the row carried no inline padding. It
+does now, so `contentEdge()` adds `paddingLeft` and the arrows step to the right place.
+
 ### Archive pages may carry a short body (2026-08-24, from #97)
 
 **Ali's call, and it sets the pattern for all 11 archive entries, not just the one it came up on.**
