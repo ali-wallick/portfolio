@@ -43,8 +43,9 @@ description of anything that still exists. Scope note: "before" measured 5,743 w
 content; "now" measures 3,045 words of `src/content/{projects,jobs}` **body prose only** — front
 matter and `.astro` page copy are excluded, and the drop in total is real (the em-dash pass tightened
 prose, and `jobs[].summary` came out of the model entirely for #135/#141). **The exclamation row
-counts body prose only, so it reads 1** — the site's second one lives in `currentNote`, front matter
-rendered on two pages, and is outside this scope rather than missing from it.
+counts body prose only, so it reads 1** — the other two live outside that scope rather than missing
+from it: one in `currentNote`, front matter rendered on two pages, and one in `/contact`'s invitation
+sentence, `.astro` page copy (2026-09-03, #119).
 
 Re-measure with `copy-stats.mjs src/content/projects/*.md src/content/jobs/*.md`.
 
@@ -93,13 +94,16 @@ She reaches for something else every single time:
   the blog's rate across the site. **Settled 2026-08-26: the site's near-zero rate is correct and is
   not a gap to close.** Ali's own framing on reviewing the finished pass — "some warmth is good but
   I'm definitely wanting to veer more professional than the old site." The evidence agrees, and the
-  mechanism is the thing to carry forward: **both exclamations in the site's visible prose are there
-  because Ali asked for them directly.** "But we pulled it off!" (tilting-at-windmills) came from
+  mechanism is the thing to carry forward: **every exclamation in the site's visible prose is there
+  because Ali asked for it directly.** "But we pulled it off!" (tilting-at-windmills) came from
   [#99](https://github.com/ali-wallick/Portfolio/issues/99), and "the studio's first game in Godot!"
   (`currentNote`, rendered on the homepage and About) came from her review of the recalibration pass
   itself — she rejected a proposed warmth clause in the homepage lede and asked for the exclamation
-  instead, on the ground that the current work is the thing worth being glad about. **When she wants
-  one, she says so.** One earned exclamation where something genuinely great happened is in-voice; a
+  instead, on the ground that the current work is the thing worth being glad about. A third arrived
+  the same way on 2026-09-03: `/contact`'s invitation sentence closes on "are all welcome!", asked
+  for by Ali after reading the drafted line without one
+  ([#119](https://github.com/ali-wallick/Portfolio/issues/119)). **When she wants one, she says
+  so.** One earned exclamation where something genuinely great happened is in-voice; a
   pass that adds them to hit a rate is not.
 - **Question marks go the other way.** She uses them _more_ in adult writing than in the blog —
   see "Pressing with questions" below. The site has none.

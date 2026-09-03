@@ -283,6 +283,9 @@ Copied from her own sentences, not from a style guide:
    enthusiasm verb the right instrument for warmth at professional register — it costs nothing and
    doesn't turn a page into a blog, where an exclamation point would.
    **The site's settled dosage, measured 2026-08-26: exactly one beat, in the closing section.**
+   `/contact` is the one page outside that shape — microcopy, no closer, and its warmth beat is the
+   sentence itself. Ali asked for it (#119, 2026-09-03), which is the only way any of the site's
+   exclamations got there.
    Kaneva, Marvel Snap, Vegas Blvd Slots and About each carry one; the homepage carries one on its
    Currently line; Firefall and I Fits I Sits deliberately carry none (Firefall's flat closer was
    Ali's pick on #139); the archive tier carries none by design. Adding a second to a page that has
