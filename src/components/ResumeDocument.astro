@@ -250,7 +250,7 @@ function bulletBlocks(bullets: MergedBullet[], groups: BulletGroups) {
           <li>
             <b class="resume-bullet-label">
               {project.slug ? (
-                <a href={`/projects/${project.slug}`}>{project.label}</a>
+                <a href={`${site.url}/projects/${project.slug}`}>{project.label}</a>
               ) : (
                 project.label
               )}

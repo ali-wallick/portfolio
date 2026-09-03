@@ -266,6 +266,23 @@ function countPages(buffer) {
   return leaves > 0 ? leaves : null;
 }
 
+/**
+ * #286: a root-relative href on a printed page resolves against whatever
+ * origin Chromium navigated to — the ephemeral `127.0.0.1:<port>` this script
+ * serves `dist/` on — and Chromium bakes that absolute (and dead) URL into
+ * the PDF's link annotation. Every internal link this document renders must
+ * be written absolute (`site.url`-based) so there is nothing for the local
+ * server's origin to leak into. This is the backstop: it fails loudly if a
+ * future link regresses to root-relative instead of letting the ephemeral
+ * port ship silently into the PDF, as it did here.
+ */
+function findLocalhostAnnotations(buffer) {
+  const text = buffer.toString('latin1');
+  return [...text.matchAll(/\/URI\s*\(([^)]*)\)/g)]
+    .map((m) => m[1])
+    .filter((uri) => /127\.0\.0\.1|localhost/i.test(uri));
+}
+
 let browser;
 const problems = [];
 
@@ -304,6 +321,13 @@ try {
     // serving last build's copy until the next one.
     await writeFile(path.join(PUBLIC, out), buffer);
     await copyFile(path.join(PUBLIC, out), path.join(DIST, out));
+
+    const localhostLinks = findLocalhostAnnotations(buffer);
+    if (localhostLinks.length > 0) {
+      problems.push(
+        `${out} carries a link annotation pointing at the local dev server: ${localhostLinks.join(', ')} — write the source href absolute (site.url-based) instead of root-relative`,
+      );
+    }
 
     const pages = countPages(buffer);
     const size = (buffer.length / 1024).toFixed(0);
