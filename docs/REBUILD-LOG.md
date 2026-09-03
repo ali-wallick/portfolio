@@ -3610,3 +3610,52 @@ most of the spend and all of the deletion — five scaffolding files, gone in th
 the skill's own rule. The two throwaway measurement scripts were cheap and paid for themselves
 twice: once catching the fade misalignment's exact size, once catching that the frame claim had
 died.
+
+## #278 — the container's ring wasn't one thing (2026-09-02)
+
+The issue named a single mechanism — the CSS `:focus-visible` ring on `.gallery-viewport` reading as
+"this whole region is selected." The decision is in CLAUDE.md; what belongs here is that the first
+switcher answered a narrower question than the one Ali actually had.
+
+### The switcher's first round compared candidates for the wrong half of the bug
+
+Three candidates went up — colour, weight, and inset-vs-outside on the CSS ring — built directly
+from the issue's own "Options" list. Ali's first reaction to the preview: "I'm confused what this is
+testing out — my concern is this reticle that goes around the whole gallery." The screenshot she
+sent showed four corner brackets and no connecting line — `reticle.ts`'s own decoration, not the
+outline any of the three candidates touched.
+
+**The issue's diagnosis was accurate but incomplete, and I built the instrument from the issue
+rather than from the screenshot.** `reticle.ts`'s `FOCUS_SELECTOR` matches any `[tabindex]`, so it
+tracks `.gallery-viewport` independently of whatever the CSS ring does — a second mechanism with the
+same root cause (the container being the tab stop) but no shared code path with the first. Nothing
+in the filed issue mentioned it, because the issue was written before #268's fix landed and the
+zoom-path bug it was actually reporting made the reticle's role harder to isolate.
+
+**The general lesson: a switcher built to answer a filed issue's own framing can still miss what the
+reviewer reacts to, if the issue's framing was itself incomplete.** The fix wasn't to distrust the
+issue — the CSS ring genuinely did need the three candidates — it was to treat the first preview
+reaction as new information rather than confirmation, and add the axis that was actually missing
+rather than defending the one already built.
+
+### The reticle exclusion needed a debug listener, not a screenshot, to trust
+
+Verifying "skip" mode by eye was unreliable on its own: the reticle's `fade` idle mode holds its
+last target for 1.6s before fading, so a quick click-then-tab test in a scaffolding round showed
+stale brackets that looked like the exclusion had failed, when the real cause was leftover state
+from the _previous_ candidate's target still finishing its hold-and-fade. Confirmed correct instead
+by attaching a throwaway `document`-level `focusin` listener and checking it received zero events
+while "skip" was active — a direct test of the capture-phase interception rather than an inference
+from a screenshot taken at an arbitrary moment in a 1.6-second animation.
+
+**Worth keeping as a general habit for this reticle's idle modes**: `fade` and `linger` both keep
+displaying a stale target for up to `HOLD` after the thing that caused it changes, so a screenshot
+taken immediately after a state change can show either the new state or the tail of the old one, and
+they can look identical. Wait past `HOLD`, or verify the underlying event/state directly.
+
+### Cost notes
+
+No subagents. Serial, single-component work, same shape as #268. The scaffolding grew by one file's
+worth of logic (the reticle-intercept axis) mid-pass rather than needing a second branch — cheap
+because the panel and route were already built and only needed a third `data-*` axis and a few lines
+in the wiring script. Four scaffolding files deleted in the settle commit.

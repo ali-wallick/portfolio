@@ -1294,8 +1294,8 @@ hr {
      slide is wider than the viewport. This tidies a near-miss and otherwise
      stays out of the way. */
   scroll-snap-type: x proximity;
-  /* :focus-visible is a 3px ring at 3px offset, and this box is focusable —
-     leave it somewhere to draw that the scroll container will not clip. */
+  /* This box is focusable and its own `:focus-visible` ring (below) needs
+     somewhere to draw that the scroll container will not clip. */
   padding-block: var(--space-2);
   /* The inline half of the same idea, and the ring it leaves room for is the
      one on a ZOOM LINK rather than on this box (#268). A focused link inside a
@@ -1319,6 +1319,25 @@ hr {
   padding-inline: var(--gallery-pad);
   margin-inline: calc(var(--gallery-pad) * -1);
   scroll-padding-inline: var(--gallery-pad);
+}
+
+/* Settled on a live switcher (#278): the global `:focus-visible` ring — 3px
+   `--color-focus`, control weight — reads as "this whole region is selected"
+   on a box this size, when what a keyboard user needs to know is "arrow keys
+   work here." `--color-frame`/`--frame-line` is the mat-line recipe every
+   matted image on the site already uses for "this object has an edge" (#163),
+   reused here rather than invented, and it says the truer thing: this is a
+   region, not a control. Ali's pick was OUTSIDE the box, not inset — unlike
+   every mat line, which is pulled inside by its own width (#283) — so the
+   offset here is positive rather than `calc(-1 * var(--frame-line))`.
+   `data-reticle-skip` (Gallery.astro, reticle.ts) is the other half of this
+   decision: the reticle's own bracket decoration targeted this box too,
+   independent of this rule, and turned out to be the more visible cause of
+   the reported bug. */
+.gallery-viewport:focus-visible {
+  outline-color: var(--color-frame);
+  outline-width: var(--frame-line);
+  outline-offset: var(--frame-line);
 }
 
 .gallery-track {

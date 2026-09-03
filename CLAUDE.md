@@ -2120,6 +2120,43 @@ and becomes an `<input type="range">` — do not bolt a drag handler onto the ba
 from `getBoundingClientRect().left` under a comment asserting the row carried no inline padding. It
 does now, so `contentEdge()` adds `paddingLeft` and the arrows step to the right place.
 
+### The container's own ring is the frame recipe, and the reticle got scoped out of it (2026-09-02, closes #278)
+
+The question #268 left open, settled on a live switcher — the ninth run of that loop. Ali's pick:
+`--color-frame`, outside the box, and the reticle skips this tab stop entirely.
+
+**Two separate mechanisms were wrapping `.gallery-viewport`, and the switcher's first round only
+compared one of them.** The `:focus-visible` ring is CSS, styled by `base.css`; the reticle's
+corner brackets are a second, independent overlay, driven by `reticle.ts`'s own `FOCUS_SELECTOR`
+matching any `[tabindex]`. Ali's first look at the preview showed brackets with no visible ring at
+all — the reticle, not the outline the issue was filed about — which is what forced the switcher to
+grow a third axis mid-pass rather than ship a fix for half the bug. **A design-switcher pass that
+compares only what a filed issue names can still miss the dominant cause**; the fix was to look at
+what the reviewer actually reacted to, not to assume the issue's own diagnosis was complete.
+
+**The ring reuses the mat-line recipe (#163) rather than inventing a treatment.**
+`--color-frame`/`--frame-line` is already what every matted image on the site uses for "this object
+has an edge"; applying it here says the truer thing than the global control ring did — this is a
+region, not a button. **Outside the box, not inset** — the one place this diverges from every mat
+line, which is pulled inside by its own width (#283). Ali's pick, by eye on the switcher.
+
+**The reticle exclusion is a general mechanism, not a one-off carve-out.** `data-reticle-skip` on
+an element removes it from `reticle.ts`'s `FOCUS_SELECTOR` without touching the selector string
+itself for future cases — `.gallery-viewport` is the only element that carries it today, but the
+attribute names the concept (a required tab stop that isn't a control) rather than hard-coding one
+class name into the script. **Safe specifically because of `reticle.ts`'s own rule 1**: the reticle
+is decoration over a real focus ring, so an element the reticle ignores is still fully indicated by
+the native `:focus-visible` ring underneath. Excluding an element from the reticle is never itself
+an accessibility regression; it only removes a flourish that was overclaiming.
+
+**Implementation note for the next capture-phase intercept:** the switcher prototyped the exclusion
+by stopping `focusin`/`focusout` in the capture phase before they reached `reticle.ts`'s
+document-level bubble listener — the same technique `reticle.ts`'s own comments describe the panel
+using on itself. That worked for comparison purposes but was scaffolding-only; the shipped fix is
+the `:not([data-reticle-skip])` selector change, which is smaller, doesn't need a second script on
+every page that has a gallery, and is the same mechanism every other `FOCUS_SELECTOR` exclusion
+would use.
+
 ### Archive pages may carry a short body (2026-08-24, from #97)
 
 **Ali's call, and it sets the pattern for all 11 archive entries, not just the one it came up on.**

@@ -28,6 +28,11 @@ import type { Project } from '~/lib/content';
  *    scrollable region with no focusable children is unreachable by keyboard,
  *    which axe reports as `scrollable-region-focusable` and which would fail
  *    `lighthouserc.json`'s flat 1.0 accessibility bar on project pages.
+ *    `data-reticle-skip` goes with it (#278): the tab stop is required, but
+ *    the region isn't a control, and `reticle.ts`'s brackets sizing to the
+ *    whole row read as "this is selected." The native `:focus-visible` ring
+ *    (base.css) is what a keyboard user actually needs, and it isn't
+ *    conditional on this attribute.
  * 2. **The arrows render `hidden` and `gallery-scroll.ts` unhides them.**
  *    Progressive enhancement, the same contract as `reticle.ts` and
  *    `resume-density.ts`: with no script the row still scrolls by touch,
@@ -67,6 +72,7 @@ const { items } = Astro.props;
         tabindex="0"
         role="group"
         aria-label="Project gallery, scrollable"
+        data-reticle-skip
       >
         <ul class="gallery-track">
           {items.map((item) => (

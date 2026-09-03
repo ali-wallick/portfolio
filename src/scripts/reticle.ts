@@ -100,9 +100,18 @@ const SETTLE = 25;
 /** Controls. Pointing at one is an act of aiming; pointing at prose isn't. */
 const HOVER_SELECTOR = '.nav-link, .card, .tile, .button, .backlink, .brand, .gallery-zoom';
 
-/** Anything the keyboard can land on, because focus must always be visible. */
+/**
+ * Anything the keyboard can land on, because focus must always be visible —
+ * except `[data-reticle-skip]` (#278). That marks a tab stop that exists for
+ * scrollability rather than as a control (`.gallery-viewport`'s `tabindex="0"`
+ * is required so `scrollable-region-focusable` doesn't fail, not because the
+ * region is something to press). Bracketing the whole region reads as "this
+ * is selected," which the region isn't. Rule 1 above is what makes the
+ * exclusion safe: the real `:focus-visible` ring underneath still shows
+ * without this script's help, so nothing here is the only indicator.
+ */
 const FOCUS_SELECTOR =
-  'a[href], button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])';
+  'a[href], button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"]):not([data-reticle-skip])';
 
 const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
 
