@@ -47,7 +47,24 @@ counts body prose only, so it reads 1** — the other two live outside that scop
 from it: one in `currentNote`, front matter rendered on two pages, and one in `/contact`'s invitation
 sentence, `.astro` page copy (2026-09-03, #119).
 
-Re-measure with `copy-stats.mjs src/content/projects/*.md src/content/jobs/*.md`.
+Re-measure with `copy-stats.mjs src/content/projects/*.md src/content/jobs/*.md`. The column is the
+state at that date, not a live reading — re-run today and the words and the longest sentence have
+moved with the content.
+
+**The contraction row was unreproducible from 2026-08-26, and it is the reason to distrust a clean
+number rather than a flagged one.** #188 curled the apostrophes sitewide that day and prose mode
+counted only the straight form, so the tool returned **0 contractions per 1k for every file on the
+site** and flagged each one as far under the blog's 17 — an invitation to add contractions to prose
+that already had them, on a metric this reference says twice not to tune toward. Fixed 2026-09-03
+([#295](https://github.com/ali-wallick/Portfolio/issues/295)); re-measured the same day, the site
+reads **16.7 per 1k** across 3,177 words, so the 16.9 recorded above holds and nothing about the pass
+needs revisiting.
+
+**Every figure in this row counts possessive ’s alongside contracted ’s**, so all six columns read
+high by however much their corpus talks about other people's things. That is how they were measured
+and it is why they are comparable to each other; three of the corpora are not in this repo and can
+never be re-measured under a stricter rule. Read the row as a direction and not as a count — and
+never as evidence a page is short of contractions, which is the failure the fix above closed.
 
 ### The two findings that matter
 

@@ -44,14 +44,38 @@ const BASELINE = {
 //   node .claude/skills/write-copy/scripts/copy-stats.mjs src/content/jobs/*.md   # 13.2w
 //
 // Rounded to 13.5 rather than pinned at 13.2, because four jobs' bullets is a small
-// sample and the mark is a direction, not a target. The other three are zero *by
-// definition* of the register, not by measurement.
+// sample and the mark is a direction, not a target. Em dashes and first person are zero
+// *by definition* of the register, not by measurement.
+//
+// contractionsPer1k is the one mark here that is measured, and it has to be: CONTRACTION
+// below counts possessive ’s alongside contracted ’s, so a résumé that carries no
+// contractions at all still scores. The same command reports 10.1 for the 2019 resume
+// itself, whose only two hits are "Kaneva’s" and "People’s Choice". A definitional 0
+// is therefore a mark no real résumé can hit, which is a mark that always flags — and it
+// only ever read clean before #295 because the counter was returning 0 for everything.
+// The genre rule is unchanged and is enforced where it can be: the per-file 'contraction'
+// tell prints the hit, so a real contraction is visible rather than averaged away.
 const RESUME_BASELINE = {
   meanSentenceWords: 13.5,
   emDashPer1k: 0.0,
-  contractionsPer1k: 0.0,
+  contractionsPer1k: 10.1,
   firstPersonPer1k: 0.0,
 };
+
+// One pattern, two readers: the résumé formality tell below and the prose
+// contraction count in measure(). It used to be written out twice, and only one
+// copy learned that #188 curled the apostrophes sitewide — so prose mode reported
+// 0 contractions for every file on the site, and flagged every one of them as far
+// under Ali's baseline on a metric this skill says not to tune toward (#295).
+// Written once now, so the next apostrophe question gets answered in one place.
+//
+// Both forms are matched because the repo carries both: rendered prose and front
+// matter are curly, quoted source and code stay straight.
+//
+// Possessive ’s is counted as well as contracted ’s, which reads high. Telling
+// "Ali’s" from "she’s" needs a parser rather than a pattern, and the number is
+// advisory — read it as a direction, not a count.
+const CONTRACTION = /\w['\u2019](s|t|ll|ve|re|m|d)\b/g;
 
 // Formality tells. These are NOT general AI tells — they are the specific colloquialisms
 // that read fine in site prose and read casual in a resume bullet. Added 2026-08-26 for
@@ -65,7 +89,7 @@ const RESUME_TELLS = [
   ['"plus" as a conjunction', /\bplus\b/gi, 'Reads as a note to self. Use "and", or a colon list.'],
   [
     'contraction',
-    /\w\u2019(s|t|ll|ve|re|m|d)\b|\w'(s|t|ll|ve|re|m|d)\b/g,
+    CONTRACTION,
     'Résumé register carries none. (Possessive \u2019s is fine — check the hit.)',
   ],
   [
@@ -90,7 +114,7 @@ const TELLS = [
   ],
   [
     '"isn\'t about X, it\'s about Y"',
-    /\bis(n't| not) (about|just) [^.;]{2,40}?[,.] it'?s\b/gi,
+    /\bis(n['\u2019]t| not) (about|just) [^.;]{2,40}?[,.] it['\u2019]?s\b/gi,
     'Same shape as above.',
   ],
   ['"more than just"', /\bmore than (just|simply)\b/gi, ''],
@@ -99,13 +123,17 @@ const TELLS = [
     /\b(delve[sd]?|leverag(e|ed|ing)|robust|seamless(ly)?|myriad|plethora)\b/gi,
     'Words Ali has never once used.',
   ],
-  ['"it\'s worth noting"', /\b(it'?s worth (noting|mentioning)|notably|importantly),?\b/gi, ''],
+  [
+    '"it\'s worth noting"',
+    /\b(it['\u2019]?s worth (noting|mentioning)|notably|importantly),?\b/gi,
+    '',
+  ],
   ['"testament to"', /\b(a )?testament to\b/gi, ''],
   ['"deep dive" / "dive into"', /\b(deep[- ]div\w+|div(e|ed|ing) into)\b/gi, ''],
   ['"at the end of the day"', /\bat the end of the day\b/gi, ''],
   [
     '"in today\'s ... landscape"',
-    /\bin today'?s [^.]{0,30}(landscape|world|market|industry)\b/gi,
+    /\bin today['\u2019]?s [^.]{0,30}(landscape|world|market|industry)\b/gi,
     '',
   ],
   [
@@ -162,7 +190,7 @@ function measure(text) {
     longest: Math.max(0, ...lens),
     over35: lens.filter((l) => l > 35).length,
     emDashPer1k: per1k((text.match(/—/g) || []).length),
-    contractionsPer1k: per1k((text.match(/\w'(s|t|ll|ve|re|m|d)\b/g) || []).length),
+    contractionsPer1k: per1k((text.match(CONTRACTION) || []).length),
     firstPersonPer1k: per1k((text.match(/\b(I|my|me|I'm|I've|I'd|I'll)\b/g) || []).length),
   };
 }
