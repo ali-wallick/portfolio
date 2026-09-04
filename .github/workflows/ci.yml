@@ -87,12 +87,20 @@ jobs:
       - name: Link & markup checks
         run: npm run links
 
+      # Only the (non-draft-PR-gated) lighthouse job below ever downloads this,
+      # and it does so within the same workflow run — nobody reaches for a
+      # week-old dist artifact by hand. A draft PR never runs lighthouse, so
+      # skip the upload there entirely rather than paying for storage nothing
+      # will consume. Short retention on top: CI's artifact volume was eating
+      # the account's whole Actions storage quota (~200 runs/week here), and
+      # this handoff has no reason to outlive same-day use.
       - name: Upload build
+        if: github.event_name == 'push' || github.event.pull_request.draft == false
         uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist
-          retention-days: 7
+          retention-days: 1
 
   lighthouse:
     name: Lighthouse
@@ -183,4 +191,4 @@ jobs:
           name: lighthouse
           path: lighthouse-report/
           if-no-files-found: warn
-          retention-days: 7
+          retention-days: 1
