@@ -107,10 +107,12 @@ Four things no script catches, all of them found by a human looking at the built
   counts only tidies the bottom edge; it isn't a correctness fix
   ([#93](https://github.com/ali-wallick/Portfolio/issues/93)).
 
-**A shared, length-capped prose field can't carry a citation URL.** `jobs[].currentNote` is read
-verbatim by two pages and capped at 280 characters — link a word inside its rendered text in the
-`.astro` template instead of editing the field, and leave a comment noting the coupling, the way
-`about.astro` does.
+**A shared field holds facts; the page owns the sentence.** `jobs[].current` is `{ since, doing }`,
+and the homepage and About each compose their own sentence around it — the homepage names the
+studio and takes the exclamation, About says "the studio" and links the whole predicate to the W4
+announcement ([#207](https://github.com/ali-wallick/Portfolio/issues/207)). Edit the field to
+change the fact; edit the page to change its framing. Don't put a finished sentence back in the
+field: it used to be one, and About ended up splitting it on the word "Godot" to get a link in.
 
 ## 7. Verify
 

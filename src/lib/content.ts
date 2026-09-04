@@ -121,13 +121,15 @@ export function currentTitle(job: Job): string {
 }
 
 /**
- * The "currently" line for the current job (the one with no `end`) — the
- * single source for the homepage lede and the About intro paragraph.
+ * The current work, for the homepage "Currently" box and the About career
+ * paragraph: the facts (`since`, `doing`, and the employer) from the current
+ * job — the one with no `end`. Each page composes its own sentence from these;
+ * see `current` in `content.config.ts` for why this is not a shared string.
  */
-export async function getCurrentNote(): Promise<string> {
+export async function getCurrentWork(): Promise<{ since: string; doing: string; company: string }> {
   const jobs = await getJobs('site');
   const current = jobs.find((j) => j.data.end === undefined)!;
-  return current.data.currentNote!;
+  return { ...current.data.current!, company: current.data.company };
 }
 
 // ---------------------------------------------------------------------------

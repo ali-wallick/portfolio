@@ -44,8 +44,9 @@ content; "now" measures 3,045 words of `src/content/{projects,jobs}` **body pros
 matter and `.astro` page copy are excluded, and the drop in total is real (the em-dash pass tightened
 prose, and `jobs[].summary` came out of the model entirely for #135/#141). **The exclamation row
 counts body prose only, so it reads 1** — the other two live outside that scope rather than missing
-from it: one in `currentNote`, front matter rendered on two pages, and one in `/contact`'s invitation
-sentence, `.astro` page copy (2026-09-03, #119).
+from it: one on the homepage's composed "Currently" line (`index.astro`, since #207; About renders the
+same fact with a full stop), and one in `/contact`'s invitation sentence, `.astro` page copy
+(2026-09-03, #119).
 
 Re-measure with `copy-stats.mjs src/content/projects/*.md src/content/jobs/*.md`. The column is the
 state at that date, not a live reading — re-run today and the words and the longest sentence have
@@ -114,7 +115,7 @@ She reaches for something else every single time:
   mechanism is the thing to carry forward: **every exclamation in the site's visible prose is there
   because Ali asked for it directly.** "But we pulled it off!" (tilting-at-windmills) came from
   [#99](https://github.com/ali-wallick/Portfolio/issues/99), and "the studio's first game in Godot!"
-  (`currentNote`, rendered on the homepage and About) came from her review of the recalibration pass
+  (the homepage's Currently line; About carried the same sentence until #207) came from her review of the recalibration pass
   itself — she rejected a proposed warmth clause in the homepage lede and asked for the exclamation
   instead, on the ground that the current work is the thing worth being glad about. A third arrived
   the same way on 2026-09-03: `/contact`'s invitation sentence closes on "are all welcome!", asked
@@ -211,7 +212,7 @@ which is also deliberate: "it's so old it's more just for fun to show cool old p
 
 **The homepage carries one too, and how it got there is the useful part.** It had none, and a
 proposed warmth clause in the lede ("which is what drew me to it") was **rejected** in favour of a
-single exclamation on `currentNote`: "building the studio's first game in Godot!" Ali's reasoning —
+single exclamation on the Currently line: "building the studio's first game in Godot!" Ali's reasoning —
 the current work is the thing worth being glad about, so the warmth belongs on the Currently line
 rather than bolted onto #129's workshopped lede. **Prefer moving a warmth beat onto the thing that
 actually warrants it over adding a clause to copy that already works.**

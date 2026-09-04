@@ -255,33 +255,31 @@ highlightsExtended:
     text: >-
       Marvel Snap won Best Mobile Game at The Game Awards in 2022, and Mobile Game of the Year at
       the DICE Awards in 2023.
-# The exclamation is deliberate and is the site’s second one in visible prose
-# (see `write-copy`’s settled note on dosage). Ali’s call, 2026-08-26: the
-# homepage wanted a warmth beat, and the current work is the thing worth being
-# glad about. Read by both the homepage and About, so it lands on both.
+# The current work as facts, not a sentence (#207, 2026-09-04). This used to be
+# `currentNote`, one finished sentence rendered verbatim on the homepage and
+# About. Now each page writes its own sentence around these two values: the
+# homepage says "Since 2024, I’ve been on a new team at Second Dinner,
+# building our first game in Godot!" and About, having just named the studio,
+# says "at the studio" and drops the exclamation. See `content.config.ts` for
+# why the shared sentence was the wrong shape.
 #
-# LENGTH IS LOAD-BEARING NOW (#253, 2026-08-31). The homepage renders this in a
-# bordered box that fills the page column, and its text fills the box rather
-# than stopping at the reading measure — a two-line callout is not the
-# sustained reading `--measure` exists for. At the shipped column this is one
-# clean line down to a 900px viewport, and 90 characters is the ceiling: the
-# previous 96-character version wrapped to 89 + a 6-character orphan ("Godot!"
-# alone), which is what prompted the trim. Keep it at or under 90, or it
-# orphans again.
-#
-# Three things any rewording has to preserve: the word "Godot" (about.astro
-# splits this string on it to link the W4 announcement), the settled phrasing
-# "a new team at Second Dinner" (#129), and the closing exclamation above.
+# `since` is the year this work began, not the job’s `start` above. The Godot
+# group’s `dates` below carries the same year for the résumé; both are hand
+# written and must agree.
 #
 # "our first game in Godot" is Ali’s own wording, 2026-08-31, and "our" means
-# Second Dinner — named in the same clause — not the team. It is the same
-# claim CLAUDE.md records as "the studio’s first game in Godot" (#129,
-# confirmed with her); only the possessive is shorter, which is what buys the
-# single line. Don’t "clarify" it to "its", which genuinely is ambiguous
-# between the studio and the team.
-currentNote: >-
-  Since 2024, I’ve been on a new team at Second Dinner, building our first game
-  in Godot!
+# Second Dinner, which both pages name or point at in the same clause — not the
+# team. It is the same claim CLAUDE.md records as "the studio’s first game in
+# Godot" (#129, confirmed with her). Don’t "clarify" it to "its", which is
+# genuinely ambiguous between the studio and the team.
+#
+# The homepage renders this on one line in a bordered box and asserts the
+# composed sentence at build time (index.astro), so a longer predicate fails
+# the build there rather than orphaning a word. The exclamation and the length
+# ceiling are the homepage’s, and live in that file, not here.
+current:
+  since: '2024'
+  doing: building our first game in Godot
 ---
 
 ## Source material (2019 resume, verbatim — not current copy)

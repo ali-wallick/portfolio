@@ -1124,8 +1124,9 @@ hr {
    contains, which stays the single at-rest appearance of the interaction
    colour.
 
-   The text is `currentNote` on the current job, so this block and the About
-   intro read the same field and cannot drift apart. */
+   The text is composed in index.astro from `current` on the current job
+   (#207): the year and the claim are shared with the About paragraph, the
+   sentence around them is this page's. */
 .currently {
   /* Matches the featured cards below it rather than the lede above it. The two
      bordered blocks on this page now share a right edge; the lede stays at the
@@ -1146,14 +1147,13 @@ hr {
    cost 216px of visibly empty box beside a note that is the page's whole
    statement of current work.
 
-   Ali's call. Removing the cap alone was not enough and is the reason
-   `currentNote` now carries a length ceiling: at 96 characters it wrapped to
-   89 plus a 6-character orphan, which looked worse than the capped version.
+   Ali's call. Removing the cap alone was not enough and is the reason the
+   composed line carries a length ceiling: at 96 characters it wrapped to 89
+   plus a 6-character orphan, which looked worse than the capped version.
    `text-wrap: balance` was measured as the alternative and rejected — it
    evens the two lines but leaves the text ~400px wide inside an 814px box,
    which reads as emptier still. The fix that worked was fitting the sentence
-   to one line; see the note on `currentNote` in
-   src/content/jobs/second-dinner.md for the constraints that keeps. */
+   to one line; index.astro asserts the 90-character ceiling at build time. */
 .currently > p {
   max-width: none;
 }

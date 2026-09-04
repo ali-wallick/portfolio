@@ -420,13 +420,41 @@ const jobs = defineCollection({
         .nonempty('at least one role'),
 
       /**
-       * The "currently" line — required when `end` is omitted (the current
-       * job). Read by the homepage lede and the About intro via
-       * `getCurrentNote()`, so there is exactly one place to edit this fact.
-       * Self-dating by construction ("Since 2024, ...") rather than a
-       * separate "as of" field.
+       * The current work, as facts rather than a sentence. Required when `end`
+       * is omitted (the current job). Read by the homepage "Currently" box and
+       * the About career paragraph via `getCurrentWork()`, so the year and the
+       * claim live in exactly one place — and each page writes its own sentence
+       * around them (#207, 2026-09-04).
+       *
+       * This used to be `currentNote`, one finished sentence both pages rendered
+       * verbatim: "Since 2024, I’ve been on a new team at Second Dinner,
+       * building our first game in Godot!" That shared a *sentence*, not a
+       * fact, and the seam showed three ways: About split the string on the
+       * word "Godot" to inject a citation link; the homepage's one-line box
+       * put a 90-character ceiling on what About's paragraph could say (#253);
+       * and About named Second Dinner twice in twenty words because the
+       * homepage needs the studio named and About had just named it. The rule
+       * the two-page résumé pass wrote applies here too: restating a fact is
+       * the job; restating a sentence is a bug.
+       *
+       * `since` is the year the current work began — not the job's `start`,
+       * which for Second Dinner is five years earlier. `doing` is the
+       * predicate, verb first: "building our first game in Godot". The pages
+       * supply "Since {since}, I’ve been on a new team at {company/there},
+       * {doing}" and their own punctuation. The framing "a new team" is
+       * settled phrasing (#129) written in both pages; it is guarded by
+       * CLAUDE.md the same way the four other hand-written copies of this
+       * claim already are.
+       *
+       * `doing` names the engine and nothing else the Phase 3 ceiling fences
+       * off: no title, genre, features, or monetization.
        */
-      currentNote: z.string().min(1).max(280).optional(),
+      current: z
+        .object({
+          since: z.string().regex(/^\d{4}$/, 'Expected a year, YYYY'),
+          doing: z.string().min(1).max(80),
+        })
+        .optional(),
       /**
        * A company-level paragraph, rendered under the job head and above every
        * bullet, with no bullet marker of its own.
@@ -530,12 +558,19 @@ const jobs = defineCollection({
           });
         }
       }
-      if (data.end === undefined && data.currentNote === undefined) {
+      if (data.end === undefined && data.current === undefined) {
         ctx.addIssue({
           code: 'custom',
-          path: ['currentNote'],
+          path: ['current'],
           message:
-            'the current job (no `end`) requires `currentNote` for the homepage/About "currently" line',
+            'the current job (no `end`) requires `current` for the homepage/About "currently" line',
+        });
+      }
+      if (data.current !== undefined && data.current.since < data.start.slice(0, 4)) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['current', 'since'],
+          message: `current.since (${data.current.since}) is before the job start (${data.start})`,
         });
       }
 

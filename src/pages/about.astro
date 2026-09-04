@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import PageHead from '~/components/PageHead.astro';
-import { getCurrentNote } from '~/lib/content';
+import { getCurrentWork } from '~/lib/content';
 import { externalLinkProps } from '~/lib/links';
 import young from '~/assets/images/me-young.jpg';
 import cosplay from '~/assets/images/me-necrodancer.jpg';
@@ -16,19 +16,18 @@ import cosplay from '~/assets/images/me-necrodancer.jpg';
  * #39. The career paragraph below is now the only work overview on this page,
  * and links each era to its project page instead.
  */
-const currentNote = await getCurrentNote();
+/**
+ * The current work's facts (#207). This page writes its own sentence around
+ * them: the paragraph has just named Second Dinner, so it says "the studio"
+ * where the homepage names the company, and it ends on a full stop where the
+ * homepage's Currently box takes the site's exclamation. The W4 Games
+ * announcement is linked from the whole predicate, so the citation no longer
+ * depends on the field containing any particular word.
+ */
+const { since, doing } = await getCurrentWork();
 
 const w4GamesAnnouncement =
   'https://www.w4games.com/blog/w4-games-news-1/second-dinner-studios-becomes-a-strategic-investor-in-w4-games-and-plans-to-build-the-largest-game-in-godot-yet-37';
-/**
- * `currentNote` is shared, single-source prose (see `content.config.ts`) — it
- * can't carry a raw URL without breaking its own length cap and duplicating
- * `w4GamesAnnouncement` into content. Instead of appending a separate citation
- * sentence, this page links the word "Godot" within the field's own rendered
- * text. If `currentNote` is ever reworded without "Godot" in it, this split
- * silently drops the citation — update it alongside any such edit.
- */
-const [beforeGodot, afterGodot] = currentNote.split('Godot');
 const instagramUrl = 'https://www.instagram.com/aliwallick/';
 const synagogueUrl = 'https://www.universitysynagogue.org/';
 ---
@@ -82,9 +81,8 @@ const synagogueUrl = 'https://www.universitysynagogue.org/';
     shooter. After that, three years shipping casino mobile games at MobilityWare, mostly on{' '}
     <a href="/projects/vegas-blvd-slots">Vegas Blvd Slots</a>. In 2019 I joined Second Dinner as its
     11th employee. I spent five years on <a href="/projects/marvel-snap">Marvel Snap</a>, which
-    shipped in October 2022. {beforeGodot}
-    <a href={w4GamesAnnouncement} {...externalLinkProps(w4GamesAnnouncement)}>Godot</a>
-    {afterGodot}
+    shipped in October 2022. Since {since}, I’ve been on a new team at the studio,{' '}
+    <a href={w4GamesAnnouncement} {...externalLinkProps(w4GamesAnnouncement)}>{doing}</a>.
   </p>
 
   <p>

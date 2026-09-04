@@ -292,8 +292,8 @@ Copied from her own sentences, not from a style guide:
    one, or a first to an archive entry, is drift rather than warmth — see `references/ali-voice.md`
    for the full map.
    **When a page needs a beat, look for the thing that already warrants one before writing a new
-   clause.** The homepage's beat is a single exclamation on `currentNote` ("the studio's first game
-   in Godot!"), chosen by Ali over a proposed warmth clause in the lede — the current work was
+   clause.** The homepage's beat is a single exclamation on its composed "Currently" line
+   (`index.astro`, "building our first game in Godot!"), chosen by Ali over a proposed warmth clause in the lede — the current work was
    already the gladdest fact on the page, so it only needed the punctuation to say so.
 10. **Name the specific thing.** Blendoku, Carcassone, Castles of the Mad King Ludwig — not "board
     games". The same instinct as the undramatised numbers, applied to nouns, and the most reliable

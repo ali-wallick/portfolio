@@ -3659,3 +3659,43 @@ No subagents. Serial, single-component work, same shape as #268. The scaffolding
 worth of logic (the reticle-intercept axis) mid-pass rather than needing a second branch — cheap
 because the panel and route were already built and only needed a third `data-*` axis and a few lines
 in the wiring script. Four scaffolding files deleted in the settle commit.
+
+## #207 — the current-work line was a shared sentence wearing a shared fact's clothes (2026-09-04)
+
+Filed on 2026-08-27 as a `decision`: About's career paragraph named Second Dinner twice in twenty
+words because `currentNote` had to name the studio for the homepage, and Ali's framing was that she
+might want to rethink single-sourcing itself for this case rather than tweak the wording.
+
+### The code had already answered the question by the time anyone asked it
+
+The issue argued from the prose. What settled it was what had happened to the field in the eight
+days since it was filed. `about.astro` was splitting the string on the word "Godot" to inject a
+citation link, with a comment admitting a reword would silently drop it — the page wanted a fact and
+was parsing a sentence to get one. #253 had put a 90-character ceiling on the field for the
+homepage's one-line box, which is how "the studio's first game" became "our first game": a layout
+constraint on one surface rewriting copy on another. And the field's own comment listed three things
+any edit had to preserve. **A field with a three-clause contract for its consumers is a sentence
+with dependents.** The fix was to store `{ since, doing }` and let each page compose its own
+sentence; the decision record is in CLAUDE.md.
+
+### The guard moved to the page that owns the constraint
+
+The 90-character ceiling was a fact about the homepage's box, written as a comment in a content
+file. It is a build-time assertion in `index.astro` now — the page composes the line, so the page
+asserts it. Checked by lengthening `doing` and watching the build fail with the composed sentence in
+the error, which is the "expressed as a build error rather than a note in a document nobody reads"
+rule from the content model, applied to layout for once.
+
+### Counting the copies changed the framing
+
+Before touching anything, grepping for the claim found it hand-written in five places in four
+different wordings (the field, the résumé group `intro`, `resumeSummary`, LinkedIn's `ABOUT`, and
+the group label). Single-sourcing the _sentence_ between home and About was protecting two of six
+surfaces, and the guard on the other four was CLAUDE.md, not the schema. That is what made writing
+"a new team" in two page files an acceptable cost rather than a betrayal of the content model.
+
+### Cost notes
+
+No subagents; the whole change touches five source files and was cheaper to do inline than to brief.
+The PDFs regenerated because `content.config.ts` and the job file are hash inputs; `check:resume-print`
+confirmed nothing on paper moved.

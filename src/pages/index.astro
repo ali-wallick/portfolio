@@ -4,12 +4,39 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
 import ProjectMeta from '~/components/ProjectMeta.astro';
 import ProjectVisual from '~/components/ProjectVisual.astro';
 import { site } from '~/config/site';
-import { getFeaturedProjects, getCurrentNote } from '~/lib/content';
+import { getFeaturedProjects, getCurrentWork } from '~/lib/content';
 import { personJsonLd } from '~/lib/structured-data';
 import portrait from '~/assets/images/me.jpg';
 
 const featured = await getFeaturedProjects();
-const currentNote = await getCurrentNote();
+const { since, doing, company } = await getCurrentWork();
+/**
+ * The "Currently" line, composed here rather than stored as a sentence (#207).
+ * The facts come from the current job; the framing, the studio's name and the
+ * exclamation are this page's. "A new team", not "the studio's next team" —
+ * #129's correction, and About writes the same framing in its own sentence.
+ *
+ * The exclamation is deliberate and is the site's second one in visible prose
+ * (see `write-copy`'s settled note on dosage). Ali's call, 2026-08-26: the
+ * homepage wanted a warmth beat, and the current work is the thing worth
+ * being glad about.
+ *
+ * LENGTH IS LOAD-BEARING (#253, 2026-08-31). This renders in a bordered box
+ * that fills the page column, and its text fills the box rather than stopping
+ * at the reading measure. At the shipped column it is one clean line down to a
+ * 900px viewport, and 90 characters is the ceiling: a 96-character version
+ * wrapped to 89 + a 6-character orphan ("Godot!" alone). Asserted at build
+ * time so a longer `doing` fails here instead of orphaning a word in
+ * production.
+ */
+const CURRENTLY_MAX = 90;
+const currently = `Since ${since}, I’ve been on a new team at ${company}, ${doing}!`;
+if (currently.length > CURRENTLY_MAX) {
+  throw new Error(
+    `homepage "Currently" line is ${currently.length} characters (max ${CURRENTLY_MAX}); ` +
+      `shorten \`current.doing\` on the current job: "${currently}"`,
+  );
+}
 const jsonLd = await personJsonLd();
 ---
 
@@ -60,7 +87,7 @@ const jsonLd = await personJsonLd();
 
   <div class="currently">
     <p class="eyebrow">Currently</p>
-    <p>{currentNote}</p>
+    <p>{currently}</p>
   </div>
 
   <h2>Featured Work</h2>

@@ -2461,6 +2461,42 @@ and the most template-looking, which is the one thing this site's brief is again
 hyphen doing a dash's job, on a site with a build check that fails on a straight apostrophe. An en
 dash costs the same "it's the only dash on the site" asterisk while being less legible at tab size.
 
+## The current-work line is facts, and each page writes its own sentence (2026-09-04, closes #207)
+
+`jobs[].currentNote` — one finished sentence the homepage's "Currently" box and About's career
+paragraph both rendered verbatim — is now `jobs[].current: { since, doing }`, read through
+`getCurrentWork()`. The homepage composes "Since 2024, I’ve been on a new team at Second Dinner,
+building our first game in Godot!" and About, which has just named the studio, composes "Since
+2024, I’ve been on a new team at the studio, building our first game in Godot." with the W4 Games
+announcement linked from the whole predicate.
+
+**The distinction that decided it: single-sourcing guards facts, and this field was sharing a
+sentence.** The two-page résumé pass had already written the rule from the other side — restating
+a fact is the job; restating a sentence is a bug — and the shared sentence was showing its seams in
+code, not only in prose. About split the string on the word "Godot" to inject a citation, with a
+comment admitting a reword would silently drop it. #253 put a 90-character ceiling on the field for
+the homepage's one-line box, so a layout constraint on one page was rewriting the copy on another
+(it is why "the studio’s first game" became "our first game"). And the field's own comment had
+grown a three-clause contract for its consumers. A fact with a contract like that is a sentence.
+
+**What is single-sourced now: the year and the claim.** The framing "a new team" (#129) is
+written in both pages, and that is accepted rather than overlooked: it is settled phrasing guarded
+by this file, the same way the résumé group `intro`, `resumeSummary` and LinkedIn's `ABOUT` — the
+four other hand-written copies of this claim — already are. The schema protected the fact on two of
+six surfaces; it still does, and the sentences stopped fighting.
+
+**The 90-character ceiling moved to the page that has it.** `index.astro` composes the line and
+throws at build time if it exceeds 90 characters, so a longer `doing` fails the build instead of
+orphaning "Godot!" in production. The exclamation is the homepage’s too; About ends on a full stop.
+
+**About links the predicate, not the word.** "building our first game in Godot" now points at the
+W4 announcement, which is better link text than "Godot" was — a reader would expect that word to go
+to godotengine.org — and it removes the dependency on the field containing any particular word.
+
+Ruled out: About writing its own full sentence (a fifth hand-written copy with no shared data), and
+a templated string with a `{company}` slot ("on a new team at there" shows how fast it needs a
+second rule).
+
 ## Preserving the old site (2026-08-26)
 
 The old DreamHost site is preserved well enough that `snapshot/` can eventually be tagged and
