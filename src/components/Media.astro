@@ -160,10 +160,53 @@ const ZOOM_MIN_HEIGHT = 384;
 const zoomable = isPicture && surface === 'gallery' && still.src.height >= ZOOM_MIN_HEIGHT;
 
 /* Capped at 1600px: past that a "full size" view is serving megabytes to show
-   detail no screen resolves. Only Marvel Snap's 2048px photo is affected. */
-const zoomSrc = zoomable
-  ? (await getImage({ src: still.src, width: Math.min(still.src.width, 1600), format: 'webp' })).src
+   detail no screen resolves. Only Marvel Snap's 2048px photo is affected.
+
+   CANDIDATES, not one file (#249). The dialog used to be handed a single 1600px
+   `src`, which a 390px phone then downloaded in full to paint a 245px-wide
+   picture — 304kB measured, for a render the row had already solved responsively
+   one element away. The same clamp-against-the-source rule the row uses applies:
+   no upscale is ever requested, and a source smaller than every target yields
+   itself alone.
+
+   `href` stays the LARGEST of them, because the link is the no-script fallback
+   and "open the picture" should open the best one. The candidate list rides
+   along on a data attribute for the dialog, which is the only surface that can
+   pick between them. */
+const ZOOM_TARGETS = [768, 1200, 1600];
+const ZOOM_CEILING = ZOOM_TARGETS[ZOOM_TARGETS.length - 1];
+const zoomWidths = zoomable
+  ? [
+      ...new Set([
+        ...ZOOM_TARGETS.filter((w) => w < still.src.width),
+        Math.min(still.src.width, ZOOM_CEILING),
+      ]),
+    ].sort((a, b) => a - b)
+  : [];
+const zoomImage = zoomable
+  ? await getImage({ src: still.src, widths: zoomWidths, format: 'webp' })
   : undefined;
+
+/* The dialog's own `sizes`, which is a different box from the row's: the
+   picture fills the dialog, and the dialog is `min(92vw, 76rem)` wide. 82.6rem
+   is where those two cross. Erring large costs bytes and erring small costs
+   sharpness, so this rounds up — the same posture as the hero hint above. */
+const ZOOM_SIZES = '(max-width: 82.6rem) 92vw, 76rem';
+
+/* The dialog applies these BEFORE it assigns a src (#249). Without them the
+   swapped `<img>` has no intrinsic size between the assignment and the decode,
+   so the box collapses and then expands past where it started — two reflows per
+   step, in opposite directions, measured at 520 -> 442 -> 1067 on one click.
+
+   The width and height rather than the ratio, and the difference is not
+   cosmetic: `aspect-ratio` needs one definite side to resolve against, and an
+   unloaded image with `width: auto; height: auto` has neither, so a ratio alone
+   changes nothing. Intrinsic dimensions are what `<Image>` already gives every
+   picture in the row; this hands the dialog the same thing.
+
+   The SOURCE's dimensions, not a candidate's — the candidates are scales of the
+   same picture, and CSS scales the box down from the intrinsic size anyway. */
+const zoomIntrinsic = zoomable ? { w: still.src.width, h: still.src.height } : undefined;
 
 /* The hero hint tracks the page column, not a fixed width (#253). `.media`
    used to cap at 44rem and this said so; now it fills `.layout`, whose content
@@ -196,7 +239,15 @@ const sizes =
             which is the whole point of the control. */}
         <Fragment>
           {zoomable ? (
-            <a class="gallery-zoom" href={zoomSrc} data-caption={still.caption}>
+            <a
+              class="gallery-zoom"
+              href={zoomImage!.src}
+              data-caption={still.caption}
+              data-zoom-srcset={zoomImage!.srcSet.attribute || undefined}
+              data-zoom-sizes={ZOOM_SIZES}
+              data-zoom-w={zoomIntrinsic!.w}
+              data-zoom-h={zoomIntrinsic!.h}
+            >
               <Image
                 src={still.src}
                 alt={still.alt}

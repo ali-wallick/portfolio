@@ -65,6 +65,17 @@ html {
   html {
     scrollbar-gutter: stable;
   }
+  /* Set by gallery-zoom.ts while the lightbox is open (#249). `showModal()`
+     inerts the page but does not stop it scrolling, so a reader could scroll
+     the page out from under the picture and close into somewhere else — 600px
+     of it, measured on a phone.
+
+     This is why the gutter above is a precondition rather than a coincidence:
+     `overflow: hidden` is still a scroll container, so `scrollbar-gutter`
+     keeps its space reserved and locking costs no sideways jump. */
+  html.is-zoom-open {
+    overflow: hidden;
+  }
 }
 
 /* --- Between pages -------------------------------------------------------
@@ -1500,11 +1511,29 @@ hr {
 .zoom-dialog::backdrop {
   background: rgb(0 0 0 / 0.72);
 }
+/* The site resets `.media figure`, and THIS figure is not one — it is the bare
+   figure inside the dialog, so it kept the UA's `margin: 1em 40px` for the life
+   of the feature (#249). Invisible at 1178px. On a 390px phone it was 80px of a
+   358px dialog: 22% of the screen, spent on a default nobody chose. */
+.zoom-dialog figure {
+  margin: 0;
+}
 .zoom-dialog img {
   display: block;
   max-width: 100%;
-  /* Leave room for the caption and the close button inside the 92vh cap. */
-  max-height: calc(92vh - 8rem);
+  /* Room for the close button, the caption and the nav inside the 92vh cap.
+
+     MEASURED, not guessed (#249). This was `calc(92vh - 8rem)`, and 8rem was
+     wrong in both directions: the furniture is 63px on /projects/mini-mages,
+     where the nav is hidden and the picture was capped with 65px going spare,
+     and 167px on a two-line caption, where the dialog overflowed its own 92vh
+     and put the nav below its own fold. `gallery-zoom.ts` measures the real
+     amount and writes it here.
+
+     The fallback is the old constant, so a page whose script never runs gets
+     exactly the behaviour it got before — the same progressive-enhancement
+     contract as everything else in this feature. */
+  max-height: calc(92vh - var(--zoom-furniture, 8rem));
   width: auto;
   height: auto;
   margin: 0 auto;
