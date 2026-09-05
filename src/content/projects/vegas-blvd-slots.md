@@ -1,7 +1,7 @@
 ---
 title: Vegas Blvd Slots
 tier: featured
-featureOrder: 2
+featureOrder: 3
 startYear: 2017
 endYear: 2019
 status: shipped

@@ -22,12 +22,13 @@ field** — empty fields degrade gracefully in the templates, wrong ones ship.
 
 Required to create anything:
 
-| Field       | Notes                                                                                                                                                   |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `title`     | As the game is actually called.                                                                                                                         |
-| `tier`      | `featured` (a real write-up, ~5 total) or `archive` (one scannable line).                                                                               |
-| `startYear` | Plus `endYear` for multi-year work. Omit `endYear` for single-year projects.                                                                            |
-| `status`    | `shipped` / `prototype` / `jam` / `coursework` / `unannounced`. Honest framing is the point — a 48-hour jam entry should not read like a shipped title. |
+| Field       | Notes                                                                                                                                                                                                           |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`     | As the game is actually called.                                                                                                                                                                                 |
+| `tier`      | `featured` (a real write-up, ~5 total) or `archive` (one scannable line).                                                                                                                                       |
+| `startYear` | Plus `endYear` for multi-year work. Omit `endYear` for single-year projects.                                                                                                                                    |
+| `status`    | `shipped` / `prototype` / `jam` / `coursework` / `unannounced`. Honest framing is the point — a 48-hour jam entry should not read like a shipped title. **Required for a game; optional for any other `kind`.** |
+| `kind`      | `game` (the default — leave it off for a game) / `site` / `talk` / `tool`. What the thing IS, not what it was built in. See §3a.                                                                                |
 
 Strongly wanted, and **required before the entry can be published** (`draft: false`):
 
@@ -49,10 +50,36 @@ Strongly wanted, and **required before the entry can be published** (`draft: fal
   ([#93](https://github.com/ali-wallick/Portfolio/issues/93)). It renders comma-joined, which is
   what a single-item array gives you for free — one hat needs no special case
   ([#152](https://github.com/ali-wallick/Portfolio/issues/152)).
-- `hero` — an image or a YouTube video.
+- `hero` — an image or a YouTube video, or `{ type: art }` for the one case where no picture can
+  ever exist. See §3a.
 
 Optional but valuable: `engine`, `tech`, `platforms`, `collaborators`, `event`, `job`, `links`,
 `gallery`, `shortTitle`.
+
+## 3a. Entries that are not games ([#49](https://github.com/ali-wallick/Portfolio/issues/49), 2026-09-05)
+
+The collection was built as if every entry were a game with a picture of it. It isn't only that any
+more, and the two draft entries that opened it up are the reference for each case:
+
+- **`kind: site` / `talk` / `tool`** — a website, a talk, a plugin. Set `kind` and the meta strip
+  shows it as a chip ("Website", "Talk"), so a tile on `/projects` says what it is at a glance.
+  `status` is optional for these — a talk has no shipped/jam state to be honest about — but set one
+  where it is true (`aliwallick-com.md` is `kind: site` and `status: shipped`, and shows both chips).
+  `engine` stays empty; `tech` carries what it was built with. A talk's venue is its `event`, its
+  role is `[Speaker]`, and its deck is a link with `kind: slides`.
+- **`hero: { type: art }`** — the site's own generated typographic card, at hero size, for a page
+  whose subject **cannot** be pictured. Today that is exactly one page: `second-dinner-godot.md`,
+  the current unannounced work, which the Phase 3 ceiling in `CLAUDE.md` fences off entirely
+  (craft, not product — and a photo of that team is ruled out there by name). The completeness check
+  is unchanged and still requires a hero; `art` is the honest way to satisfy it when a picture is
+  not something Ali can supply later but something the page must not have. **Do not reach for it
+  because sourcing a picture is inconvenient.** A jam entry with no capture is a draft, not an art
+  hero.
+- **A draft can stay a draft for as long as it needs to.** Drafts render in `astro dev` and on
+  every branch preview, are excluded from production, the sitemap and the OG-image set, and are
+  `noindex` on previews. That is the mechanism for a page Ali wants to add to over time before
+  showing anyone: keep `draft: true`, push a branch to look at it, and flip the flag when it is
+  ready. Nothing else has to change on the day it goes live.
 
 ## 3. Rules that are easy to get wrong
 
@@ -98,6 +125,8 @@ Optional but valuable: `engine`, `tech`, `platforms`, `collaborators`, `event`, 
 - **Leave fields empty when the source doesn't support them.** Don't infer an engine from a
   platform.
 - **Start new entries at `draft: true`** unless summary, role, and hero are all genuinely ready.
+- **A game needs a `status`; nothing else does.** The build fails on a `kind: game` (or an entry
+  with no `kind`, which is the same thing) that omits it.
 
 ## 4. Media
 

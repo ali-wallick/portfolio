@@ -57,7 +57,12 @@ import type { Project } from '~/lib/content';
  * exactly the window it existed for until a script hid the player, which is a
  * second reason the idea is not as cheap as it looks.
  */
-type MediaItem = NonNullable<Project['data']['hero']>;
+/**
+ * A picture or a video. An `art` hero (#49) never comes through here — the
+ * project page renders that itself, from `ProjectCardArt`, because it has no
+ * image to size and nothing below would apply to it.
+ */
+type MediaItem = Exclude<NonNullable<Project['data']['hero']>, { type: 'art' }>;
 
 interface Props {
   item: MediaItem;

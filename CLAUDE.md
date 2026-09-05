@@ -156,6 +156,7 @@ A third rule follows: **make the old site's mistakes unrepresentable, not merely
 | `links[].dead: true`                         | firefall.com, kaneva.com and argamestudio.org linked as live calls to action for years after going dark. The credit is true; the link isn't. Those are two different facts. |
 | `status` enum on every project               | A 48-hour jam entry reading like a shipped commercial title.                                                                                                                |
 | `job:` as a collection reference             | A project and the resume disagreeing about who Ali worked for.                                                                                                              |
+| `hero: { type: art }` as an explicit variant | A page for work that cannot be pictured shipping with no lead image, or with a picture that misrepresents it. The stand-in is declared, not defaulted (#49).                |
 
 ### Drafts
 
@@ -2805,6 +2806,62 @@ not get its own radius.
 **`src/styles/base.css` is a `byteHashedFiles` input, so both résumé PDFs regenerated for a change
 the résumé renders nothing of.** `check:resume-print` reported the geometry unmoved, which is the
 check that means anything; the differing bytes say nothing. See "Working here" for why.
+
+## A project has a `kind`, and a hero may be a card (2026-09-05, closes #49, #60)
+
+Started as Ali reading #49 — a low-friction surface for Godot side projects — and saying it need not
+be Godot projects at all. Her list of what she actually wants to write up next: the current job,
+this website, possibly a grant-funded game with a child psychologist, other non-game projects, and
+talks. Two of those are the likeliest to exist soon, and she wanted them as **draft pages that never
+show on the production site but can be added to until she is ready.**
+
+**The draft half already existed and needed nothing.** `draft: true` renders in `astro dev` and on
+every non-`main` branch preview; production, the sitemap, the OG-image set and the completeness
+check all exclude it, and previews mark it `noindex`. A draft can sit in `main` indefinitely. That
+is the mechanism; it just had never been described as one.
+
+**What was missing was a `kind` axis on `projects`, not a second collection.** #49 proposed a
+separate, looser collection, which was right for the two-paragraph notes it described and wrong
+for what Ali listed: those are write-ups that happen not to be games, or cannot be pictured. Every
+consumer of a project — the index, the cards, the OG cards, the sitemap, `check-links`, the
+JSON-LD — reads `projects`, so a second collection is a second copy of all of it. What the schema
+assumed instead was that **every entry is a game with a picture of it**, and that assumption is the
+thing that moved:
+
+- **`kind: game | site | talk | tool`, defaulting to `game`.** The sixteen existing entries are
+  untouched. A non-game entry shows its kind as a chip on the meta strip ("Website", "Talk"), and
+  `status` is optional for it — a talk has no shipped/jam state to be honest about — but shown as a
+  second chip where one is true. Named for what the thing **is**, not what it was built in; #49's own
+  open question, and "Godot" would have duplicated `engine`.
+- **`hero: { type: art }` — the generated card at hero size**, for a page whose subject **cannot**
+  be pictured. The completeness check is exactly as strict as before; `art` is the honest way to
+  satisfy it when a picture is not something Ali can supply later but something the page must not
+  have. **Do not reach for it because sourcing a picture is inconvenient** — a jam entry with no
+  capture is a draft. It renders as a 3:1 band in the hero's own mat; 21:9 was built first and read
+  as a picture that failed to load.
+- **`links[].kind` gains `slides`.** Six characters, same as `source`, so the "See Also" gutter did
+  not move.
+
+**Two draft entries are the mock-ups, and both stay `draft: true` until Ali says otherwise.**
+`/projects/second-dinner-godot` is `kind: game`, `status: unannounced` (which had sat in the enum
+with its own colour pair and no user since Phase 5 — this is what it was reserved for), an `art`
+hero, `featureOrder: 1`, and a body built only from the two Godot résumé bullets; the Phase 3
+ceiling applies to every word Ali adds. `/projects/aliwallick-com` is `kind: site`, led by the old
+homepage from `docs/before-after/`, with a scaffold body drawn from the rebuild log. **Its `role` is
+deliberately empty**: the honest word for what Ali did on this site is hers to pick, and the
+completeness check will refuse to publish the page until she does.
+
+**This closes #60 by deciding it the other way.** #60 said "not a project page" because a thin page
+beside Marvel Snap would highlight the thinness. A draft that stays draft until there is enough to
+say is the answer to that objection, and a `kind` makes the comparison the page invites a fair one.
+The ceiling is unchanged and matters more on a dedicated page, not less.
+
+**The original low-friction idea is #323 now, and it is still the only thing that keeps a site
+alive.** Nothing on Ali's list needs it, so it was split out rather than absorbed. Its test is
+unchanged: whether Ali posts to it twice without an agent involved.
+
+**`src/styles/base.css` is a `byteHashedFiles` input, so this regenerated the résumé PDFs.**
+`check:resume-print` confirms the geometry did not move.
 
 ## A project page opens with a breadcrumb and closes with its neighbours (2026-09-05, closes #314)
 

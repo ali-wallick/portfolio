@@ -4058,6 +4058,53 @@ subset count was a symptom of the face never loading at all, fixed the load orde
 `/BaseFont` assertion to `--check`. Rebased, this branch's own regenerated PDFs embed Public Sans
 and pass that assertion, so there is nothing left to redo somewhere else.
 
+## #49 — the issue was about the wrong product, and the draft mechanism was already there (2026-09-05)
+
+Ali reopened #49 by saying it need not be Godot projects, and listing what she actually wants to
+write up: the current job, this site, maybe a grant-funded game, non-game projects, talks. She also
+wanted draft pages that never reach production but can be added to over time.
+
+### The two halves of the ask had opposite answers
+
+**The draft half needed no code.** `draft: true` has excluded a page from production, the sitemap,
+the OG set and the completeness check since Phase 2, and shown it on every branch preview. It had
+just never been described as a way to keep a page for months. The most useful sentence in the whole
+session was probably "that already exists."
+
+**The content half needed a schema change, and not the one the issue proposed.** #49 wanted a
+second, looser collection, which was right for the notes it described and wrong for what Ali
+listed. Everything on her list is a real write-up; what blocked each one was the `projects` schema
+assuming every entry is a game with a picture of it. `kind` is the axis that moved, and `art` is the
+hero for the one page whose subject cannot be pictured. The completeness check did not loosen at
+all, which is the part worth noticing: the fix for "the strictness blocks a true page" was to give
+the strictness an honest way to be satisfied, not to make it optional.
+
+### What the first render said that the reasoning did not
+
+The hero card was built at 21:9 with a confident comment about why. On the page it read as a
+picture that failed to load: 370px of neutral tint with a title in the corner. A 3:1 band reads as
+a title card. The comment was rewritten to say what was measured rather than what was intended,
+and the square featured card clipped "Unreleased" mid-word at `--text-xl`, which no production
+project had ever exercised because every featured project carries a thumbnail. **Two of the three
+visible defects in this change were in slots no existing content had ever rendered into**, which is
+the argument for looking at a mock-up rather than reasoning about it.
+
+### Issues moved rather than closed
+
+#49 was retitled to what it turned out to be. The original low-friction-posting idea is #323, with
+its test intact, because nothing Ali listed needs it and it is still the only thing that keeps a
+site alive. #60 closes with the decision going the other way from its own steer, on the argument
+that a draft answers its thinness objection.
+
+### Cost notes
+
+No subagents. One session, about forty tool calls, most of them reading: the content model, the
+three components that consume a hero, the OG generator and the draft plumbing, before writing
+anything. The two draft bodies are scaffolds from sourced material (the Godot résumé bullets, the
+rebuild log's own strongest-material list) with `TODO(#60)` and `TODO(#48)` markers where only Ali
+can write. The PDFs regenerated because `base.css` is a `byteHashedFiles` input;
+`check:resume-print` confirms the geometry did not move.
+
 ## #314 — the project backlink (2026-09-05)
 
 The twelfth run of the live-switcher loop, and the one where measuring reframed the issue twice

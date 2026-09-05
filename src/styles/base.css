@@ -1467,6 +1467,36 @@ hr {
   margin-top: var(--space-2);
 }
 
+/* The generated card at hero size (#49) — a project whose `hero` is
+   `{ type: art }`, which is the honest lead for a page whose subject cannot be
+   pictured (the current, unannounced Second Dinner work). It takes the same
+   mat as a hero picture so the two lead a page in one frame, and overrides the
+   square the card/tile rule above gives every `.card-art`.
+
+   3:1 rather than a picture's 16:9, on purpose. A block of tint as tall as a
+   trailer embed is a wall; this has one line of title and one of metadata to
+   carry, not a frame of gameplay. Rendered at 21:9 first and it read as a
+   picture that failed to load — 370px of neutral tint with a title in the
+   corner. A band reads as a made surface, a title card. The box still grows
+   past 3:1 wherever the title wraps, which is `aspect-ratio`'s automatic
+   minimum size doing the right thing on a phone. */
+.media .card-art {
+  aspect-ratio: 3 / 1;
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  border: calc(var(--frame-mat-lead) + var(--frame-line)) solid var(--color-surface);
+  outline: var(--frame-line) solid var(--color-frame);
+  outline-offset: calc(-1 * var(--frame-line));
+}
+.card-art[data-size='hero'] .card-art-title {
+  font-size: var(--text-2xl);
+}
+@media (max-width: 40em) {
+  .card-art[data-size='hero'] .card-art-title {
+    font-size: var(--text-xl);
+  }
+}
+
 /* --- The gallery scroller (#166) ------------------------------------------
  *
  * One horizontally-scrolling row, replacing the wrapping grid this used to be.
@@ -2306,6 +2336,14 @@ hr {
 
 .visual[data-size='tile'] .card-art-title {
   font-size: var(--text-base);
+}
+/* The square featured card is 9rem wide with 1rem of padding a side, and a
+   single ten-letter word ("Unreleased") does not fit that at `--text-xl` —
+   the clamp then cuts it mid-word, which no title should suffer. One step
+   down fits it. No production project has ever rendered art in this slot
+   (every featured project carries a thumbnail), so nothing else moves. */
+.visual[data-size='card'][data-aspect='square'] .card-art-title {
+  font-size: var(--text-lg);
 }
 
 /* --- The /about floats ---------------------------------------------------

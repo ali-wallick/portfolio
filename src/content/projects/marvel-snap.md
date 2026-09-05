@@ -1,7 +1,7 @@
 ---
 title: Marvel Snap
 tier: featured
-featureOrder: 1
+featureOrder: 2
 startYear: 2019
 # Ali’s involvement, not the product’s lifespan — Snap is still live, she moved to
 # Second Dinner’s Godot project in 2024.

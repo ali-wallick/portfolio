@@ -193,14 +193,31 @@ export function projectThumb(
   const override = aspect === 'wide' ? thumbWide : thumb;
   if (override) return override;
   if (hero?.type === 'image') return hero.src;
-  return hero?.poster.src;
+  if (hero?.type === 'youtube') return hero.poster.src;
+  // An `art` hero has no picture by design, so the card and tile fall back to
+  // the same generated art the hero itself renders (#49).
+  return undefined;
 }
 
 /** Human label for the honest-framing status field. */
-export const STATUS_LABEL: Record<Project['data']['status'], string> = {
+export const STATUS_LABEL: Record<NonNullable<Project['data']['status']>, string> = {
   shipped: 'Shipped',
   prototype: 'Prototype',
   jam: 'Game jam',
   coursework: 'Student project',
   unannounced: 'Unannounced',
+};
+
+/**
+ * Human label for `kind`, shown as a chip on every entry that is not a game
+ * (#49). `game` has a label so the record is total and the build fails if the
+ * enum grows without one, but `ProjectMeta.astro` never renders it: games are
+ * the default, and a chip saying "Game" on sixteen of eighteen tiles would say
+ * nothing.
+ */
+export const KIND_LABEL: Record<Project['data']['kind'], string> = {
+  game: 'Game',
+  site: 'Website',
+  talk: 'Talk',
+  tool: 'Tool',
 };

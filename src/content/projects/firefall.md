@@ -1,7 +1,7 @@
 ---
 title: Firefall
 tier: featured
-featureOrder: 4
+featureOrder: 5
 startYear: 2015
 endYear: 2016
 status: shipped

@@ -5,6 +5,7 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
 import PageHead from '~/components/PageHead.astro';
 import ProjectMeta from '~/components/ProjectMeta.astro';
 import Media from '~/components/Media.astro';
+import ProjectCardArt from '~/components/ProjectCardArt.astro';
 import Gallery from '~/components/Gallery.astro';
 import LinkList from '~/components/LinkList.astro';
 import { getAllProjects, type Project } from '~/lib/content';
@@ -74,7 +75,22 @@ const d = project.data;
     <ProjectMeta project={project} />
   </PageHead>
 
-  {d.hero && <Media item={d.hero} />}
+  {
+    /* An `art` hero is the generated card at page width (#49): the honest lead
+       for a page whose subject cannot be pictured. Same `.media` box as a
+       picture, so the mat, the margins and the column width are shared; see
+       `heroSchema` in src/content.config.ts for when this is the right call. */
+  }
+  {
+    d.hero &&
+      (d.hero.type === 'art' ? (
+        <div class="media">
+          <ProjectCardArt project={project} size="hero" />
+        </div>
+      ) : (
+        <Media item={d.hero} />
+      ))
+  }
   {d.summary && <p class="lede">{d.summary}</p>}
 
   <Content />

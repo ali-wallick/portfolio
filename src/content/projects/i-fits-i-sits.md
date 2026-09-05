@@ -7,7 +7,7 @@
 # directly from Ali, 2026-08-25 — see #138.
 title: I Fits I Sits
 tier: featured
-featureOrder: 3
+featureOrder: 4
 # Game Jam V, March 2018 — the award certificate is dated 03/23/18. One week, not
 # a two-year project: the old `endYear: 2019` conflated Ali’s jam entry with a
 # release she had no hand in.

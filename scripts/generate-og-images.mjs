@@ -191,6 +191,9 @@ async function buildFlatCard(title, outPath) {
  */
 function resolveProjectImage(data, contentDir) {
   if (data.thumb) return path.resolve(contentDir, data.thumb);
+  // An `art` hero has no picture by design (#49); the flat title card below is
+  // the share-image equivalent of the generated card the page itself leads with.
+  if (data.hero?.type === 'art') return undefined;
   if (data.hero?.type === 'image') return path.resolve(contentDir, data.hero.src);
   if (data.hero?.type === 'youtube') return path.resolve(contentDir, data.hero.poster.src);
   return undefined;

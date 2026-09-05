@@ -30,11 +30,17 @@ import { formatYears, type Project } from '~/lib/content';
  * — they mark *what a thing is*. Keying the art to them means a jam entry and a
  * shipped title are told apart at a glance across seventeen entries, which is
  * the archive tier's honest-framing rule rendered rather than written. A status
- * with no colour pair falls back to the neutral pair, exactly as the chips do.
+ * with no colour pair falls back to the neutral pair, exactly as the chips do —
+ * and so does an entry with no status at all, which a non-game `kind` may be.
  */
 interface Props {
   project: Project;
-  size?: 'card' | 'tile';
+  /**
+   * `hero` is the third surface (#49): a project whose `hero` is `{ type: art }`
+   * leads its own page with this, at page-column width. Same data, same
+   * colour, same texture — only the box and the type size change, in CSS.
+   */
+  size?: 'card' | 'tile' | 'hero';
 }
 
 const { project, size = 'card' } = Astro.props;

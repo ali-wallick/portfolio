@@ -64,7 +64,12 @@ const year = z
 const link = z.object({
   label: z.string().min(1),
   url: z.url(),
-  kind: z.enum(['store', 'play', 'video', 'source', 'press', 'jam', 'site']),
+  /**
+   * `slides` joined 2026-09-05 with `kind: talk` on projects (#49): a talk's
+   * one natural outbound link is its deck. Six characters, the same as
+   * `source`, so `LinkList.astro`'s gutter did not need re-measuring.
+   */
+  kind: z.enum(['store', 'play', 'video', 'source', 'press', 'jam', 'site', 'slides']),
   dead: z.boolean().default(false),
 });
 
@@ -81,8 +86,8 @@ const link = z.object({
  * validated at build time, so a renamed or missing file fails CI instead of
  * shipping a broken <img>. `alt` is required — not optional-with-a-lint-rule.
  */
-const mediaSchema = (image: SchemaContext['image']) =>
-  z.discriminatedUnion('type', [
+const mediaOptions = (image: SchemaContext['image']) =>
+  [
     z.object({
       type: z.literal('image'),
       src: image(),
@@ -145,7 +150,38 @@ const mediaSchema = (image: SchemaContext['image']) =>
        */
       dead: z.boolean().default(false),
     }),
-  ]);
+  ] as const;
+
+const mediaSchema = (image: SchemaContext['image']) =>
+  z.discriminatedUnion('type', [...mediaOptions(image)]);
+
+/**
+ * A hero is one of the media variants above, or `art`: the site's own
+ * generated typographic card, rendered at hero size (2026-09-05, #49, #60).
+ *
+ * This exists for exactly one shape of page: work that can never be shown.
+ * The current Second Dinner project is under the Phase 3 ceiling in CLAUDE.md
+ * (craft, not product: no title, genre, features, or imagery), so a picture of
+ * it is not a thing Ali can supply later — it is a thing the page must not
+ * have. Before this, that made "no hero" the honest answer, and the
+ * completeness check below treats no hero as unfinished, so the page could not
+ * exist. `art` lets it state the truth in front matter: *this page's picture is
+ * a stand-in, on purpose.* The completeness check stays exactly as strict; what
+ * changed is that the strictness has an honest way to be satisfied.
+ *
+ * It is a hero variant only, not a gallery one. A gallery of generated cards is
+ * a gallery of nothing; the field is `hero` because it leads a page, and
+ * leading with a made surface is a deliberate statement about the page in a
+ * way a slide would not be.
+ *
+ * `ProjectCardArt.astro` renders it, from the same data the card and tile
+ * thumbnails already fall back to when a project has no picture — so a project
+ * with an `art` hero gets a consistent card, tile, hero and (via the flat-card
+ * fallback in scripts/generate-og-images.mjs) share image, all from front
+ * matter it already has. No file to source, nothing to license.
+ */
+const heroSchema = (image: SchemaContext['image']) =>
+  z.discriminatedUnion('type', [...mediaOptions(image), z.object({ type: z.literal('art') })]);
 
 // ---------------------------------------------------------------------------
 // Projects
@@ -179,6 +215,41 @@ const projects = defineCollection({
         /** Manual ordering within the featured tier. Required for featured. */
         featureOrder: z.number().int().positive().optional(),
 
+        /**
+         * What sort of thing this is (2026-09-05, #49). The collection was
+         * built as if every entry were a game with a picture of it, and Ali's
+         * list of what she wants to write up next is mostly not that: the
+         * current job (a game that cannot be pictured), this website, talks,
+         * and non-game projects. Those are write-ups, not the two-paragraph
+         * notes #49 first described, so they belong in THIS collection — every
+         * consumer of a project (the index, the cards, the OG cards, the
+         * sitemap, the link checks, the JSON-LD) reads it, and a second
+         * collection would be a second copy of all of that.
+         *
+         * `kind` is the one axis that changes what the schema asks for and
+         * what the meta strip shows:
+         *
+         *   - `game`  — the default, so the sixteen existing entries are
+         *               untouched. `status` is required: honest framing about
+         *               a game is the archive tier's stated rule.
+         *   - `site`  — a website. This one, to begin with (#48).
+         *   - `talk`  — a talk or panel. `event` is the venue, `role` is
+         *               `[Speaker]`, and the deck is a `slides` link.
+         *   - `tool`  — a plugin, an addon, a tool. The Godot Asset Library
+         *               shape, which has no ceiling on it.
+         *
+         * For anything but a game, `status` is optional — a talk has no
+         * shipped/prototype/jam state to be honest about — and the meta strip
+         * shows the kind as a chip instead, so a tile on /projects still says
+         * what it is at a glance. A non-game entry MAY still carry a status
+         * where one is true (a shipped website), and then shows both.
+         *
+         * Named for what the thing IS, not what it was built in — #49's own
+         * open question. "Godot" would have made the field a fact about the
+         * engine, which `engine` already holds.
+         */
+        kind: z.enum(['game', 'site', 'talk', 'tool']).default('game'),
+
         startYear: year,
         /** Omit for single-year projects. */
         endYear: year.optional(),
@@ -186,8 +257,13 @@ const projects = defineCollection({
         /**
          * Honest framing is a stated goal for the archive tier — a 48-hour jam
          * entry and a shipped commercial title should not look alike.
+         *
+         * Required for `kind: game` (enforced in `superRefine` below), optional
+         * otherwise — see `kind`. `unannounced` sat in this enum with its own
+         * colour pair and no user from Phase 5 until 2026-09-05; the current
+         * Second Dinner project is what it was reserved for.
          */
-        status: z.enum(['shipped', 'prototype', 'jam', 'coursework', 'unannounced']),
+        status: z.enum(['shipped', 'prototype', 'jam', 'coursework', 'unannounced']).optional(),
 
         /** One line, used verbatim on cards and in the archive list. */
         summary: z.string().min(1).max(220).optional(),
@@ -233,7 +309,8 @@ const projects = defineCollection({
         event: z.string().min(1).optional(),
 
         links: z.array(link).default([]),
-        hero: mediaSchema(image).optional(),
+        /** A media item, or `art` — see `heroSchema` above for when that is right. */
+        hero: heroSchema(image).optional(),
         gallery: z.array(mediaSchema(image)).default([]),
 
         /**
@@ -276,6 +353,18 @@ const projects = defineCollection({
             code: 'custom',
             path: ['endYear'],
             message: `endYear (${data.endYear}) is before startYear (${data.startYear})`,
+          });
+        }
+
+        // A game without a status is the archive tier's honest-framing rule
+        // going unstated, which is the one thing the field exists to prevent.
+        // Other kinds have no such state to declare; see `kind`.
+        if (data.kind === 'game' && data.status === undefined) {
+          ctx.addIssue({
+            code: 'custom',
+            path: ['status'],
+            message:
+              'a game needs a `status` (shipped / prototype / jam / coursework / unannounced)',
           });
         }
 

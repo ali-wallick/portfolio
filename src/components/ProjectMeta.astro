@@ -1,5 +1,5 @@
 ---
-import { formatYears, STATUS_LABEL, type Project } from '~/lib/content';
+import { formatYears, STATUS_LABEL, KIND_LABEL, type Project } from '~/lib/content';
 import { getEntry } from 'astro:content';
 
 /**
@@ -17,6 +17,12 @@ import { getEntry } from 'astro:content';
  * word in the middle of a run-on metadata line does not. The remaining fields
  * stay a plain sequence in mono, which is the type role the gate settled for
  * technical metadata across every direction.
+ *
+ * A non-game entry (#49) gets a chip for its `kind` — "Website", "Talk" —
+ * because that is the fact a reader scanning the grid needs first about it.
+ * Its `status` chip follows only if the entry has one: a talk has no
+ * shipped/jam state to declare, a shipped website does. Games never get a
+ * kind chip; they are the default and the status chip is the whole story.
  */
 interface Props {
   project: Project;
@@ -45,7 +51,14 @@ const fields = [
 ---
 
 <p class="meta-strip">
-  <span class="chip" data-status={d.status}>{STATUS_LABEL[d.status]}</span>
+  {d.kind !== 'game' && <span class="chip">{KIND_LABEL[d.kind]}</span>}
+  {
+    d.status && (
+      <span class="chip" data-status={d.status}>
+        {STATUS_LABEL[d.status]}
+      </span>
+    )
+  }
   {fields.map((field) => <span class="meta-field">{field}</span>)}
   {d.draft && <span class="draft-flag">draft</span>}
 </p>

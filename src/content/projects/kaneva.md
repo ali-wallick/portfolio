@@ -1,7 +1,7 @@
 ---
 title: Kaneva
 tier: featured
-featureOrder: 5
+featureOrder: 6
 startYear: 2011
 endYear: 2015
 status: shipped
