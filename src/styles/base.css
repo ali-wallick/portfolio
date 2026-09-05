@@ -1221,6 +1221,50 @@ hr {
   text-decoration: underline;
 }
 
+/* --- A project's outbound links (#290) ------------------------------------
+ *
+ * No marker and no indent, which is the whole fix. The old bare `<ul>` was
+ * not merely plain: its computed style was identical to the body-copy lists
+ * above it on the same page, so a block of destinations rendered as prose.
+ *
+ * No plate either, deliberately. "Height means pressable" is the direction's
+ * rule and an outbound link IS pressable, but a plated row turns the label
+ * into a button's label — not link-coloured, not underlined — while every
+ * other outbound reference on a project page is both. One way of saying
+ * "outbound link" per page beats two.
+ */
+.link-stack {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-width: var(--measure-wide);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.link-stack li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+}
+
+/* The `kind` column. 3.5rem is sized to the longest value the schema allows
+   (`source`, six characters): DM Mono is 0.600em per character at every
+   weight, so at --text-xs that is 6 × 0.8rem × 0.6 = 2.88rem, plus
+   --tracking-label. Fixed rather than fitted per page, so the column lands in
+   the same place on every project — a trailing tag was built and rejected for
+   exactly this, since its tags ragged out at a different x on every row and
+   stopped being scannable. */
+.link-stack-kind {
+  flex: none;
+  width: 3.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
 /* Media gets a frame rather than a plate: it is not pressable, and the height
    rule only means one thing. */
 .media {

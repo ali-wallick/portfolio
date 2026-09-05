@@ -1978,6 +1978,93 @@ capability, and nothing about the site today moves.
 and is what finds a dead video; it cannot run from a Claude Code session, where the egress proxy
 answers 403 for every YouTube URL. Scheduled detection is #275.
 
+## A project's links are a "See Also" list, not a bullet list (2026-09-05, closes #290)
+
+Settled on a live switcher, the tenth run of that loop. Ali's question was whether there was a
+better way to show a project's outbound links than a bullet list, and whether the answer might be
+no. It was not no, and the reason is sharper than "plain".
+
+**The block was not merely unstyled, it was camouflaged as body copy.** Measured on
+`/projects/marvel-snap`, where three `<ul>`s render down the page, the links list's computed style
+was **identical** to the two prose lists above it: same family, size, line-height, `disc` marker,
+40px indent, 600px max-width. The only difference was the anchor's blue, which is what a link
+inside a paragraph gets too. It also carried **no heading at all**, while `Team` directly above it
+had an `<h2>`. So the one block on the page meaning _leave the site and go look at this_ was
+rendered exactly like prose and never introduced.
+
+**Shipped: an `h2` reading "See Also", then a marker-less stack with `kind` in a leading gutter.**
+Dropping the marker and the 40px indent is what separates it from the prose lists; the heading does
+the rest.
+
+**The plate lost, and the reason is not weight.** `/contact` renders outbound links as pressable
+pills and its own comment justifies that by the page being _a surface you act on, not one you
+read_. Ali ruled the plated version out for readability, and the mechanism underneath her instinct
+is this: **a plated row turns the label into a BUTTON's label, which is neither link-coloured nor
+underlined**, while every other outbound reference on a project page is both — `i-fits-i-sits`
+links Puzzle Cats in its body prose _and_ in this block, so a plate gives one destination two
+treatments on one page. One way of saying "outbound link" per page beats two. (It was also 306px
+against 160px for five links, and 434px against 211px on a phone, but that is the smaller argument.)
+
+**`kind` is rendered now, and it was live-but-invisible data before.** `store`/`play`/`video`/
+`source`/`press`/`jam`/`site` sits on every link and was read only by `structured-data.ts` and
+`build-linkedin.mjs`, both looking up the one `press` link. Surfacing it is the `card-index`
+argument for `featureOrder`: a fact the content model already holds. It is typed against the schema
+enum in `LinkList.astro`, so adding a `kind` fails the build rather than printing a raw value, and
+it is **not** `aria-hidden` — unlike `.card-index`, which is hidden because DOM order already
+conveys the ranking. This is the opposite case: the kind is available nowhere else on the page.
+
+**A leading gutter, not a trailing tag, and the trailing tag was mine and it underdelivered.**
+Measured, `kind` discriminates on two pages (kaneva: site + press; marvel-snap: press + four
+videos) and labels a lone link on the other seven — so the gutter's 72px indent is paid everywhere
+to inform in two places. A trailing tag was built to keep both the information and the page-column
+alignment. It does not work: the tags rag out at a different x on every row, so they stop being
+scannable, and scanning was the entire reason to want the aligned column. **The gutter is 3.5rem**,
+sized to the longest value the schema allows (`source`, six characters) at DM Mono's flat 0.600em
+per character; the first pass used 4.5rem and left ~26px of dead space.
+
+### The heading is "See Also", and getting there corrected a rule I invented
+
+**The wording was decided on Ali's frame, which is better than the one the switcher started with.**
+Her read: the block is _additional references for what the page does not contain_, since the hero,
+the screenshots and the description already carry the project itself. That makes the heading
+**relational** rather than a label for what the links are, and it survives the block changing
+composition later. It also holds against the data — the 14 links across 9 pages are 4 video, 3
+site, 3 press, 3 jam and 1 store, the game itself plus video and press _of_ it, so nothing is
+further reading.
+
+**It is also why `Elsewhere` and `Off the Page` lost.** Both name a **location**, and Ali wants the
+heading open to the block growing or one day holding an on-site cross-link. A heading promising
+off-site goes wrong the moment one points inward. `See Also` is at least as open as `More` and more
+precise, since it is the standard term for related pointers whether they sit on this site or off it.
+
+**`See Also` was excluded for a rule that does not exist, and that is the lesson worth keeping.**
+It was ruled out mid-pass for being grammatically imperative, on the observation that no heading on
+this site is one — `Team`, `Skills`, `Archive`, `Summary`, `What I Built`, `Off the Clock`. **The
+observation is true and the rule is not**: nothing in this file or the `write-copy` skill has ever
+said headings cannot be imperative. A pattern was measured, then cited back as a constraint, which
+is exactly the drift the content model's guard table exists to rule out — and it was applied twice
+before Ali named it as an accident rather than a decision. **An observed regularity is evidence,
+not a rule, until someone writes it down.** There is still no rule; `See Also` is simply the only
+imperative heading on the site.
+
+One measurement decided it in the end: **at n=1, `More` is the weakest option** — a heading
+promising more with a single item under it reads thin, and that is seven of the nine pages. `See
+Also` reads the same at one link or five.
+
+### Two things recorded rather than acted on
+
+- **An on-site cross-link is a content-model change, not a heading choice.** `links[].url` is
+  `z.url()`, which rejects `/projects/kaneva` (verified), and the `kind` enum has no value for an
+  on-site pointer. The heading is open to it; the schema is not, yet.
+- **The `dead: true` path is untouched and was invisible in review**, since no project carries one
+  today — all three formerly-dead domains resolved to Wayback snapshots instead. It still renders
+  as the same plain-text note.
+
+**`base.css` is a `byteHashedFiles` input, so this regenerated the résumé PDFs.**
+`check:resume-print` confirms the geometry did not move — the résumé renders none of these
+surfaces — so they differ only in Chromium's own metadata. Same shape as #163; commit them with the
+change, per the standing rule.
+
 ## The gallery is one scrolling row (2026-08-30, closes #166)
 
 Every project gallery is a single horizontally scrolling row, replacing the wrapping grid Phase 5

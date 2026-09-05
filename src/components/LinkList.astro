@@ -3,7 +3,23 @@ import type { Project } from '~/lib/content';
 import { externalLinkProps } from '~/lib/links';
 
 /**
- * Outbound links for a project.
+ * Outbound links for a project, under a "See Also" heading (#290).
+ *
+ * Through Phase 5 this was a bare `<ul>`, and "plain" undersold the problem:
+ * measured on /projects/marvel-snap, its computed style was IDENTICAL to the
+ * two body-copy lists above it — same family, size, line-height, disc marker,
+ * 40px indent, 600px max-width. The only difference was the anchor's blue,
+ * which is what a link inside a paragraph gets too. So the block meaning
+ * "leave the site and go look at this" was rendered as prose, and it carried
+ * no heading at all while `Team` directly above it had an `<h2>`.
+ *
+ * Dropping the marker and the indent is what separates it from the prose
+ * lists; the heading does the rest. Deliberately NOT the pressable treatment
+ * /contact uses for its social links: a plated row turns the label into a
+ * BUTTON's label, which is neither link-coloured nor underlined, and every
+ * other outbound reference on a project page is. i-fits-i-sits links Puzzle
+ * Cats in its body prose AND here, so a plate would have given one
+ * destination two different treatments on one page.
  *
  * Links flagged `dead: true` render as plain text with a note instead of as
  * anchors. The old site linked firefall.com, kaneva.com and argamestudio.org
@@ -17,15 +33,43 @@ interface Props {
 const { links } = Astro.props;
 const live = links.filter((l) => !l.dead);
 const dead = links.filter((l) => l.dead);
+
+/**
+ * `kind` is real schema data that no rendered surface showed until now — it
+ * was read only by `structured-data.ts` and `build-linkedin.mjs`, both looking
+ * up the one `press` link. Surfacing it is the same argument `.card-index`
+ * makes for `featureOrder`: a fact the content model already holds, not a
+ * label invented for the look.
+ *
+ * Typed against the schema's own enum rather than `Record<string, string>`, so
+ * adding a `kind` fails the build here instead of rendering the raw value.
+ */
+const kindLabel: Record<Project['data']['links'][number]['kind'], string> = {
+  store: 'Store',
+  play: 'Play',
+  video: 'Video',
+  source: 'Source',
+  press: 'Press',
+  jam: 'Jam',
+  site: 'Site',
+};
 ---
 
 {
   links.length > 0 && (
     <>
+      <h2>See Also</h2>
       {live.length > 0 && (
-        <ul>
+        <ul class="link-stack">
           {live.map((l) => (
             <li>
+              {/* Not `aria-hidden`, unlike `.card-index`. That one is hidden
+                  because DOM order already conveys the ranking, so reading
+                  "zero one" before every title is noise. This is the
+                  opposite: the kind is information available nowhere else on
+                  the page, and "Press" before a credit and "Video" before an
+                  interview is worth hearing. */}
+              <span class="link-stack-kind">{kindLabel[l.kind]}</span>
               <a href={l.url} {...externalLinkProps(l.url)}>
                 {l.label}
               </a>

@@ -3699,3 +3699,76 @@ surfaces, and the guard on the other four was CLAUDE.md, not the schema. That is
 No subagents; the whole change touches five source files and was cheaper to do inline than to brief.
 The PDFs regenerated because `content.config.ts` and the job file are hash inputs; `check:resume-print`
 confirmed nothing on paper moved.
+
+## #290 — the links were camouflaged as prose, and a rule got invented mid-pass (2026-09-05)
+
+Ali's question was open in the most useful way: "the links are pretty plain, is there a better way?
+Maybe the answer is no." The tenth run of the design-switcher loop, and four rounds.
+
+### Measuring turned a taste question into a defect
+
+The issue reads like a polish request. The measurement did not. On `/projects/marvel-snap` three
+`<ul>`s render down the page, and the outbound-links one had **every computed property identical**
+to the two body-copy lists above it — family, size, line-height, `disc` marker, 40px indent, 600px
+max-width. Only the anchor's blue differed, which is what a link inside a paragraph gets too. Add
+that it carried no heading while `Team` above it had an `<h2>`, and the block meaning "leave the
+site" was rendered as prose and never introduced.
+
+That reframed the whole pass. "Plain" is a preference; "indistinguishable from body copy" is a
+defect with a fix, and it is only visible if you read the computed styles rather than the source.
+
+### The reviewer's instinct was right and the stated reason was not the mechanism
+
+Ali ruled out the plated-rows candidate as "sacrifices readability, pretty heavyweight" and picked
+the quiet stack. Both true — 306px against 160px for five links — but the mechanism underneath is
+sharper: **a plated row turns the link's label into a button's label**, neither link-coloured nor
+underlined, while every other outbound reference on a project page is both. `i-fits-i-sits` links
+Puzzle Cats in its prose _and_ in that block, so the plate gave one destination two treatments on
+one page. Worth naming the mechanism rather than just agreeing, because the mechanism is what tells
+you the pills on `/contact` are still right there and wrong here.
+
+### A candidate I invented to dissolve a trade-off, which did not
+
+`kind` discriminates on two of nine pages and indents every link 72px on all nine to do it. A
+trailing tag looked like it kept the information and the page-column alignment. It does not: the
+tags rag out at a different x per row, so they stop being scannable, and scanning was the entire
+reason to want the aligned column. Built, rendered, rejected, and reported as underdelivering
+rather than quietly dropped — the contact sheet is what made it obvious in one look.
+
+### The rule I invented, and Ali catching it
+
+Nine of nine headings on this site are plain nouns or first-person phrases; none is imperative. I
+measured that, then cited it back as a **constraint** and used it to exclude "See Also" — the
+canonical phrase for exactly this block — across two rounds. Ali: "I think the lack of imperative
+headers is an accident rather than on purpose." She was right, and checking took one grep: nothing
+in CLAUDE.md or the `write-copy` skill has ever said it.
+
+**An observed regularity is evidence, not a rule, until someone writes it down.** The failure mode
+is specific to a repo like this one, where a lot of real rules _are_ written down — a measured
+pattern presented in the same register as a settled decision is hard for a reviewer to tell apart,
+and the person who can overrule it is the one least able to see it happening. It is the drift the
+content model's guard table exists to prevent, arriving through prose instead of through a second
+copy of a fact.
+
+### The frame that decided the wording was Ali's, not the switcher's
+
+Round 3 offered six labels for _what the links are_. Ali's counter was better: the block is
+additional references for **what the page does not contain**, since the hero, shots and description
+already carry the project. That is relational, it survives the block's composition changing, and it
+immediately killed `Elsewhere` and `Off the Page` for naming a location — she wants it open to an
+on-site cross-link one day. Which turned up a real constraint worth recording: `links[].url` is
+`z.url()` and rejects `/projects/kaneva`, so that openness is a schema change, not a heading choice.
+
+One number closed it: at n=1 `More` is the weakest option, a heading promising more above a single
+item, and that is seven of the nine pages.
+
+### Cost notes
+
+No subagents — nine content files and four scaffolding files, all cheaper inline than briefed. Two
+contact sheets per round did most of the work the switcher could not: "which of these is loudest"
+and "does this still hold at one link" are both simultaneous questions. The gate cost one real bug:
+`showDrafts` correctly kept the lab's markup and script out of production while a plain
+`import '~/styles/links-lab.css'` inlined the whole stylesheet into all 16 project pages, because
+**Astro bundles CSS off the module graph, not off what renders**. Found by grepping `dist/`, fixed
+with a `?raw` string import injected by the gated component. Worth knowing for the next switcher
+that needs a stylesheet on an existing route.
