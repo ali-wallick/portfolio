@@ -4163,3 +4163,88 @@ broken, which is the same shape as the traps the switcher skill already lists.
 sideways on `main`, because the visually-hidden zoom hint is absolutely positioned and the scroller
 is not, so the hints escape its clip. Found while checking whether the lab had introduced horizontal
 overflow — it had not, and the same number came back on the real page.
+
+## #318 — the zoom hint escaped the scroller (2026-09-05)
+
+Found while measuring for #314 and fixed on its own. Every project page with a gallery panned
+sideways, on `main`, at every viewport: `/projects/marvel-snap` reported a `scrollWidth` of 1384
+against a 390px window and really scrolled, and 1568 against 1280. The decision is in CLAUDE.md
+under the gallery section; what belongs here is that the one-line fix the issue proposed was right
+and incomplete, and only measurement said so.
+
+### The diagnosis was already in the issue, so the work was proving the fix
+
+`.gallery-zoom-hint` — the visually-hidden "opens larger" text that joins each zoom link's
+accessible name — is `position: absolute`, and `.gallery-viewport` was `position: static`. An
+absolutely-positioned box is clipped by an ancestor's `overflow` only when that ancestor sits
+between it and its containing block, and the scroller did not: the hints resolved against
+`.gallery`, so each was laid out at its slide's real x inside a track up to 1782px wide and handed
+that straight to the document. The last hint's right edge measured 1383.72 against a `scrollWidth`
+of 1384.
+
+That is why `overflow-x: clip` on the scroller changed nothing, which the issue had already
+measured. The escape is about which box the hint is laid out against, not about how hard the
+scroller clips.
+
+**The fix is the rule rather than the surface.** `position: relative` on the scroller contains
+anything absolutely positioned inside a slide; pinning the hint's own `inset` fixes the same
+symptom and leaves the class of bug live. #163 already paid for that lesson three surfaces at a
+time.
+
+### The obvious fix broke the left edge fade, and nothing would have said so
+
+The scroller joining the positioned paint layer is not free. `.gallery`'s two edge fades are
+`::before` and `::after` on it, both `position: absolute` with no `z-index`, and they used to paint
+over a static scroller for nothing. Positioned, the scroller lands between them in tree order — so
+`::after` still paints above it and `::before` does not.
+
+Measured on `/projects/marvel-snap` mid-scroll: the right fade was pixel-identical and the left one
+was simply gone, reading the raw image at 2,4,5 where it had been a gradient stepping 141 → 94 → 47
+across its 3rem. The build was green, `verify` was green, and the page still scrolled correctly.
+Only a screenshot showed it.
+
+`z-index: 1` on both fades restores it, and `1` is deliberate rather than arbitrary: the site's
+scale is header 40, reticle 50, skip link 100, so a fade still passes beneath a sticky header.
+
+### The residual pixel diff was Chromium, and one control proved it
+
+With the fade restored, `/projects/marvel-snap` at 390 still differed from `main` by 21,311 pixels,
+scattered across the whole page including sections far from the gallery. The top deltas were green
+and orange against neutral greys — subpixel text fringes against grayscale antialiasing.
+
+Four one-line variants on `main` settled it in one run:
+
+| Patch                                    | `scrollWidth` | Differing px vs `main` |
+| ---------------------------------------- | ------------- | ---------------------- |
+| `z-index` on the fades alone             | 1384          | **0**                  |
+| `position: relative` alone               | 375           | 31,533                 |
+| both (shipped)                           | 375           | 21,311                 |
+| `.gallery-zoom-hint { left: 0; top: 0 }` | 375           | **21,311**             |
+
+The arithmetic is the argument. The `z-index` rule is inert until the scroller is positioned, and
+adding it back recovers exactly the 10,222px the fade was worth. And a completely different fix,
+touching no positioning layer at all, produces the identical 21,311 — so the residue is Chromium
+re-rasterizing text once the document stops being horizontally scrollable, not anything this change
+chose. Any fix for #318 produces it.
+
+**Worth generalising: "the page is still 21k pixels different" is not a finding until you know what
+a different fix does.** The instinct is to hunt the diff; the cheaper move was to produce the same
+outcome another way and compare.
+
+### One stale comment retired with the bug
+
+`overscroll-behavior-x: contain` was justified by a swipe past the end not turning into a back
+gesture "or starting to scroll the page sideways behind it". The issue noticed that the second half
+described a property the page did not have. It has it now, so that half is gone — the same shape as
+the `--gallery-pad` comment #268 wrote and #283 quietly expired.
+
+### Cost notes
+
+No subagents, no switcher — this is a defect with a right answer, not a question for Ali, so the
+design-switcher loop would have been ceremony. One repo, one file, two rules.
+
+The expense was Playwright, and it bought three things a build could not: the repro across 7 pages
+at 3 viewports, the pixel proof that the gallery renders identically to `main` (0 differing pixels
+across 22 full-page captures and 10 interaction states — mid-scroll, under the sticky header,
+region focus, link focus, lightbox open), and the antialiasing control above. Two determinism
+controls were run first, capturing each build twice, so "0 px" means something.

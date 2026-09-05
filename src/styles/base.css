@@ -1537,10 +1537,31 @@ hr {
 }
 
 .gallery-viewport {
+  /* CONTAINING BLOCK, not a visual offset — nothing here is nudged (#318).
+     `overflow` only clips an absolutely-positioned box when the scroller sits
+     between that box and its containing block, and until this rule the
+     scroller did not: `.gallery-zoom-hint` (the visually-hidden "opens larger"
+     text) resolved against `.gallery`, OUTSIDE the clip, so each hint was laid
+     out at its slide's real x in the up-to-1782px track and contributed that
+     to the DOCUMENT's scrollable overflow. Every project page with a gallery
+     panned sideways at every viewport — `/projects/marvel-snap` measured 1384
+     against a 390px window, which is exactly the last hint's right edge.
+
+     Positioning the scroller is the fix rather than `overflow-x: clip` on it,
+     which measured no change at all: the escape is about which box the hint is
+     laid out against, not about how hard this one clips. It is also the rule
+     rather than the surface — a future absolutely-positioned thing inside a
+     slide is contained by this, where fixing the hint alone would leave the
+     class of bug live (#163's lesson). The cost is that this box joins the
+     positioned paint layer, which is why the edge fades below now carry a
+     `z-index`; see the note there. */
+  position: relative;
   overflow-x: auto;
   overflow-y: hidden;
-  /* Swiping past the end of the row must not turn into a browser back-gesture
-     or start scrolling the page sideways behind it. */
+  /* Swiping past the end of the row must not turn into a browser back-gesture.
+     It used to say "or start scrolling the page sideways behind it" as well,
+     and that half is retired with #318: the page has no horizontal overflow to
+     chain into any more. */
   overscroll-behavior-x: contain;
   /* `proximity`, not `mandatory`. Slide widths here run from ~160px (a 0.45
      ratio level shot) to ~630px (a 16:9 screenshot), and mandatory snapping on
@@ -1990,6 +2011,17 @@ hr {
   width: var(--gallery-fade);
   pointer-events: none;
   transition: opacity var(--duration) var(--ease);
+  /* Both fades used to paint over a STATIC scroller for free, at step 8 of the
+     paint order against its step 4. #318 made the scroller `position:
+     relative`, which moves it into that same layer — and tree order there puts
+     `::before` UNDER it while leaving `::after` above. Measured before this
+     line went in: the right fade was pixel-identical and the left one was
+     simply gone, reading the raw image at 2,4,5 where it had been a real
+     gradient (141 → 94 → 47 across its 3rem). One `z-index` on both, so the
+     pair stays symmetric rather than only the half that broke. `1` sits far
+     under the header's 40, so a fade still passes beneath a sticky header
+     rather than over it. */
+  z-index: 1;
 }
 /* Offset by the padding, because a fade has to start where the content is
    CLIPPED — the scroller's own edge, not `.gallery`'s. These were the same

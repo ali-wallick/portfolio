@@ -2355,6 +2355,37 @@ which is a swipe on the arithmetic), the outer 24px of the screen is left to the
 horizontal travel has to beat vertical by 1.5x. **Nothing animates, so there is no reduced-motion
 branch** -- the swipe ends in the same `show()` the arrows call.
 
+### The scroller is a containing block, and the fades pay for it (2026-09-05, closes #318)
+
+Every project page with a gallery scrolled sideways, on `main`, at every viewport —
+`/projects/marvel-snap` measured a `scrollWidth` of 1384 against a 390px window and really panned.
+`.gallery-zoom-hint`, the visually-hidden "opens larger" text, is `position: absolute` and
+`.gallery-viewport` was `position: static`, so each hint resolved against `.gallery` — **outside the
+scroller's clip** — and was laid out at its slide's real x inside a track up to 1782px wide. The
+last hint's right edge was 1383.72 against a `scrollWidth` of 1384.
+
+**`overflow` clips an absolutely-positioned box only when the scroller sits between it and its
+containing block**, which is why `overflow-x: clip` on the scroller measured no change at all. The
+fix is `position: relative` on `.gallery-viewport`, and it is deliberately the rule rather than the
+surface: pinning the hint's own `inset` fixes this symptom and leaves any future
+absolutely-positioned thing in a slide free to escape. #163's lesson, one component over.
+
+**The cost is paint order, and it is the part that will bite.** `.gallery`'s two edge fades are
+`::before`/`::after` on it, and they used to paint over a static scroller for free. Positioned, the
+scroller lands between them in tree order — so `::after` still paints above and **`::before` does
+not**. Measured before the repair: the right fade pixel-identical, the left one simply gone, reading
+the raw image where it had been a gradient stepping 141 → 94 → 47. `z-index: 1` on both fades
+restores it, `1` chosen against the site's existing scale (header 40, reticle 50, skip link 100) so
+a fade still passes beneath a sticky header. **Anything else added to `.gallery` that must paint
+over the row needs a `z-index` now; it will not get one for free.**
+
+**One control is worth copying rather than the finding.** With the fade restored the page still
+differed from `main` by 21,311 pixels, scattered site-wide. Reproducing the same outcome a
+completely different way — pinning the hint's `inset`, touching no positioning layer — produced the
+**identical** 21,311, which identifies it as Chromium re-rasterizing text once the document stops
+being horizontally scrollable rather than as anything this change chose. A large diff is not a
+finding until a second, independent fix says whether it is yours.
+
 ### A page under `src/pages/design/` ships unless it is gated
 
 `scripts/build-ci.mjs` has no prune step for that directory, and a production build emitted
