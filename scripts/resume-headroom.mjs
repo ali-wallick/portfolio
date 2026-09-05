@@ -36,7 +36,7 @@
  */
 
 import path from 'node:path';
-import { chromium } from 'playwright';
+import { launchChromium } from './lib/launch-chromium.mjs';
 import { serveDist } from './lib/serve-dist.mjs';
 
 /** Paper width and height budget in px. See the header — these are derived
@@ -133,7 +133,7 @@ function measure(tries) {
 }
 
 const { origin, close } = await serveDist(path.resolve('dist'));
-const browser = await chromium.launch();
+const browser = await launchChromium();
 try {
   const page = await browser.newPage({ viewport: { width: PAPER_WIDTH, height: 900 } });
   await page.emulateMedia({ media: 'print' });

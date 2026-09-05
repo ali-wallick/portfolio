@@ -483,14 +483,14 @@ console.log(`  size: ${totalSize}`);
 
 if (args.has('--check-selfcontained') || args.has('--serve')) {
   const { serveDist } = await import('./lib/serve-dist.mjs');
-  const { chromium } = await import('playwright');
+  const { launchChromium } = await import('./lib/launch-chromium.mjs');
   const { origin, close } = await serveDist(OUT);
 
   if (args.has('--serve') && !args.has('--check-selfcontained')) {
     console.log(`\nServing ${path.relative(ROOT, OUT)}/ at ${origin}`);
     console.log('Ctrl-C to stop.');
   } else {
-    const browser = await chromium.launch();
+    const browser = await launchChromium();
     const external = new Map();
     const failed = [];
 

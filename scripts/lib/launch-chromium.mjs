@@ -1,6 +1,9 @@
 /**
- * Launches Chromium for `build-pdf.mjs` and `check-resume-print.mjs`, with a
- * fallback for Claude Code web sessions. See issue #245.
+ * Launches Chromium for any script that needs a headless browser, with a
+ * fallback for Claude Code web sessions. See issue #245. Every script under
+ * `scripts/` that launches Chromium should go through this rather than
+ * calling `chromium.launch()` directly — see #309, where `resume-headroom.mjs`
+ * hadn't and couldn't run in a web session as a result.
  *
  * Those sessions' egress proxy blocks `cdn.playwright.dev`, so
  * `playwright install` (the package.json `postinstall`) can't fetch the

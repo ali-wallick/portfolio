@@ -140,8 +140,8 @@ async function capture(browser, spec, url, outFile, { tolerateErrors = false } =
   }
 }
 
-const { chromium } = await import('playwright');
-const browser = await chromium.launch();
+const { launchChromium } = await import('./lib/launch-chromium.mjs');
+const browser = await launchChromium();
 const results = [];
 
 try {
