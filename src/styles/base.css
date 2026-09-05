@@ -1665,6 +1665,24 @@ hr {
   align-items: center;
   justify-content: center;
 }
+/* The frame line, and the lightbox was simply missing from #163's surface list
+   — which is that pass's own stated failure mode, "a surface list, not a rule",
+   turning up a fourth time. The one place a picture is the CONTENT was the one
+   place it had no edge.
+
+   Measured on the 22 zoomable sources against the dialog's ground, which is
+   `--color-surface` rather than `--color-bg`: light mode is clear everywhere
+   (worst 2.16:1), and DARK MODE is where this bites — 8 of 22 sit under 1.5:1,
+   the dark-UI screenshots bottoming out at 1.05:1 on i-fits-i-sits' level
+   editor. Reviewing on a light theme cannot show it.
+
+   The line alone, no mat: the dialog's own padded field of `--color-surface` is
+   already a very large mat, and 2px more inside the picture would only spend
+   width the pinned box (#249) exists to protect. `--color-frame` reads 2.55:1
+   light / 2.01:1 dark against the surface, either side of the 2.2:1 it was
+   calibrated at against the ground, so the recipe transfers.
+
+   Inset, per #283, so it paints inside the picture rather than one pixel out. */
 .zoom-dialog img {
   display: block;
   min-height: 0;
@@ -1675,6 +1693,8 @@ hr {
   margin: 0 auto;
   border-radius: var(--radius);
   object-fit: contain;
+  outline: var(--frame-line) solid var(--color-frame);
+  outline-offset: calc(-1 * var(--frame-line));
 }
 /* The caption belongs to the picture, so it takes the picture's width and sits
    under it (#249). `--zoom-picture-w` is written by `gallery-zoom.ts` after
@@ -1752,6 +1772,13 @@ hr {
     height: 100%;
     max-width: none;
     max-height: none;
+    /* And the frame line comes off, because at this size the element's box is
+       no longer the picture. Filling the box means `object-fit: contain` does
+       real letterboxing inside it, so an outline here would draw around the
+       SCREEN and leave the picture's own top and bottom edges bare — the same
+       rect-is-not-the-painted-picture trap #249 recorded. The picture also runs
+       to both screen edges here, where a frame has the least to do. */
+    outline: 0;
   }
 }
 

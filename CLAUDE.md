@@ -1879,6 +1879,29 @@ border-box`, so height becomes exactly `width / ratio` whatever the mat
   player compensates — about 7px at 4px on an 864px hero. Known, accepted, not
   worth engineering around.
 
+### The surface list missed a seventh, and it was the lightbox (2026-09-05, closes #321)
+
+`.zoom-dialog img` was not in #163's six, so **the one place a picture is the
+CONTENT was the only place with no edge** — the surface-list failure mode
+above, a fourth time. Measured across the 22 zoomable sources against the
+dialog's ground, which is `--color-surface` and not `--color-bg`: light mode is
+clear everywhere at worst 2.16:1, and **8 of 22 sit under 1.5:1 in dark mode**,
+the dark-UI screenshots bottoming out at **1.05:1**. A light-theme review cannot
+show it, which is how it survived two passes over this dialog.
+
+**The line alone, no mat**, and that is not a weaker version of the recipe: the
+dialog's padded field of `--color-surface` already IS a very large mat, so 2px
+more inside the picture would only spend width the pinned box (#249) exists to
+protect. `--color-frame` reads 2.55:1 light / 2.01:1 dark against the surface,
+either side of the 2.2:1 it was calibrated at, so the recipe transfers.
+
+**Desktop only, and the phone half is a measurement rather than a shrug.**
+Below 48em the picture fills its box and `object-fit: contain` letterboxes for
+real — 390x685 box against a 390x602 picture, measured — so an outline there
+would draw around the SCREEN and leave the picture's own top and bottom bare.
+Same rect-is-not-the-painted-picture trap #249 recorded. The picture runs to
+both screen edges at that size anyway, which is where a frame has least to do.
+
 **Adding tokens to `tokens.css` regenerates the résumé PDFs**, because that
 file is a `byteHashedFiles` input. `check:resume-print` confirms the geometry
 did not move — the résumé renders none of these surfaces — so the regenerated
