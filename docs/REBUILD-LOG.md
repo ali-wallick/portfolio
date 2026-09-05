@@ -4003,3 +4003,57 @@ and fixed nothing. That is #306, and #308 landed on `main` while this branch was
 it and regenerating is what actually put Public Sans in these files. **The lesson is the cheap one:
 the PDF states its own `/BaseFont`, and reading it took one line where the inference took a
 paragraph and was wrong.**
+
+## #305 — the lightbox's three leftovers (2026-09-05)
+
+Split out of #249 after it closed: an accessible name that promised the wrong thing, a counter that
+could lie later, and swipe on touch. None blocking, none of them what #249 was about.
+
+### Two of the three were one decision wearing two hats
+
+The counter item read as a display bug and the stepping-set item read as a behaviour question, and
+they are the same question. Stepping through every slide — the option that makes the counter true by
+construction — loses to the pinned box #249 shipped: the box is sized to the widest picture in the
+row, so a slide under the zoom threshold lands in a box several times its width. That is #249's own
+8%-fill complaint, reintroduced one step in. Once stepping stays scoped, the counter's set is
+provably not the row, and the honest move is to state no position rather than a misreadable one.
+
+**The precedent that made the answer feel less arbitrary was already in the repo.** `Gallery.astro`
+argues the scroll rail can be `aria-hidden` because "a screen-reader user learns the same fact from
+the arrows' disabled state." The same sentence justifies suppressing a counter that cannot be
+phrased truthfully, so this is applying a rule rather than inventing one.
+
+### The case being guarded does not exist yet, so it had to be synthesized
+
+Every gallery on the site is either all-zoomable or has one zoomable image, which means no page can
+exercise the branch this change adds. Verified by serving `dist/` through a proxy that injected one
+extra non-zoomable `.gallery-slide` into `/projects/marvel-snap` before the script ran: 5 slides, 4
+zoomable, counter `display: none`, both arrows still rendered with the previous one correctly
+disabled at index 0. **A guard for a hypothetical is worth exactly as much as the test that
+hypothetical gets**, and route-rewriting the built HTML was cheaper than committing a fixture page.
+
+### The swipe's design is what it does NOT do
+
+No `preventDefault` anywhere and every listener `passive`, so the gesture is decided at `touchend`
+from two coordinates rather than claimed at `touchstart`. That is what keeps pinch-zoom, scrolling
+and the platform back gesture working while a swipe is in flight, and it means a swipe that turns
+out not to be one costs nothing. Measured in headless Chromium with synthesized `Touch` sequences at
+390x844 and 1280x800: left steps forward, right steps back, a vertical-dominant drag does not step,
+a 20px drag does not step, and one starting 8px from the edge does not step. A swipe past either end
+is a no-op because `show()` already clamps.
+
+Nothing animates, which is the whole reduced-motion story — there was no branch to write, only a
+comment saying why.
+
+### Cost notes
+
+No subagents; three small changes to two files and a stylesheet comment. The PDFs regenerated
+because `base.css` is a `byteHashedFiles` input and this touched a comment in it, and
+`check:resume-print` confirms the geometry did not move.
+
+**The rebase onto #306 is what makes that a non-event**, and it is worth recording as the first
+time that fix paid. This branch was opened saying the regenerated PDFs wanted redoing on Ali's
+machine, because a web session's fallback Chromium subsetted them differently. #306 found that the
+subset count was a symptom of the face never loading at all, fixed the load order, and added a
+`/BaseFont` assertion to `--check`. Rebased, this branch's own regenerated PDFs embed Public Sans
+and pass that assertion, so there is nothing left to redo somewhere else.

@@ -26,6 +26,12 @@
  * rule the row itself follows. The ends stop rather than wrap, matching the
  * row's own arrows; a reader who cannot tell whether they have seen everything
  * is the thing wrapping costs you.
+ *
+ * Stepping through EVERY slide instead was considered and rejected (#305). The
+ * box is pinned to the widest picture in the row, so a slide that is under the
+ * zoom threshold — one with nothing more to show — would land in a box sized
+ * for a picture several times its width. That is the 8%-fill complaint #249
+ * closed, reintroduced one step in.
  */
 
 const dialog = document.querySelector<HTMLDialogElement>('.zoom-dialog');
@@ -150,8 +156,8 @@ if (dialog && zoomLinks.length > 0 && typeof dialog.showModal === 'function') {
       const srcset = link.dataset.zoomSrcset ?? '';
       const sizes = link.dataset.zoomSizes ?? '';
       // The alt is the picture's meaning and does not change with its size. The
-      // visually-hidden "view full size" hint is the LINK's, not the image's,
-      // so it is deliberately not carried across.
+      // visually-hidden "open larger" hint is the LINK's, not the image's, so
+      // it is deliberately not carried across.
       const alt = link.querySelector('img')?.alt ?? '';
       const text = link.dataset.caption ?? '';
 
@@ -224,7 +230,7 @@ if (dialog && zoomLinks.length > 0 && typeof dialog.showModal === 'function') {
       // content, so they answer the click immediately.
       swapPicture(link);
 
-      count.textContent = `${index + 1} of ${zoomLinks.length}`;
+      if (!count.hidden) count.textContent = `${index + 1} of ${zoomLinks.length}`;
       for (const step of steps) {
         step.disabled =
           step.dataset.zoomStep === '-1' ? index === 0 : index === zoomLinks.length - 1;
@@ -232,6 +238,27 @@ if (dialog && zoomLinks.length > 0 && typeof dialog.showModal === 'function') {
     }
 
     nav.hidden = zoomLinks.length < 2;
+
+    /**
+     * The counter states a POSITION, and a position needs a set the reader can
+     * see (#305).
+     *
+     * It counts the set the arrows step, which is the zoomable images. On every
+     * gallery on this site today that IS the row, so "2 of 3" is true of both
+     * and there is nothing to disambiguate. The first gallery to mix two or
+     * more zoomable images with a non-zoomable one breaks that: the number
+     * would then disagree with the pictures the reader can see beside it, and
+     * there is no short phrasing that fixes it — microcopy here is "plain and a
+     * little dry", and "2 of 3 of the 5 that open" is neither.
+     *
+     * So the dialog states no position rather than a misreadable one. The
+     * arrows' disabled ends still say where you are, which is the same argument
+     * `Gallery.astro` already makes for the scroll rail being `aria-hidden`.
+     *
+     * Counting `.gallery-slide` rather than the gallery's data: the row is what
+     * the reader is comparing the number against.
+     */
+    count.hidden = document.querySelectorAll('.gallery-slide').length !== zoomLinks.length;
 
     /**
      * Lock the page behind the modal (#249).
@@ -291,6 +318,88 @@ if (dialog && zoomLinks.length > 0 && typeof dialog.showModal === 'function') {
       else return;
       event.preventDefault();
     });
+
+    /**
+     * Swipe to step, on touch (#305).
+     *
+     * On a phone the arrows were the only way through, on a lightbox that is
+     * edge to edge — which is the shape that invites a swipe in the first
+     * place.
+     *
+     * Four rules keep it from taking over gestures that are not it:
+     *
+     * 1. **Nothing is ever `preventDefault`ed**, and every listener is
+     *    `passive`. The gesture is decided at `touchend` from where the finger
+     *    started and ended, so pinch-zoom, scrolling and the browser's own
+     *    handling are untouched while it is in flight. A swipe that turns out
+     *    not to be one costs nothing.
+     * 2. **A second finger cancels it.** A pinch's two touches drift apart
+     *    horizontally, which is a swipe on the arithmetic below.
+     * 3. **The screen edges are left alone**, where the platform's back
+     *    gesture lives. 24px is the usual width of that strip, and the picture
+     *    keeps the other ~340px of a 390px phone.
+     * 4. **Horizontal has to dominate**, or a scroll-ish drag down the caption
+     *    would step the picture.
+     *
+     * Nothing animates, so there is no `prefers-reduced-motion` branch to
+     * write: the swipe ends in the same `show()` the arrows and the arrow keys
+     * call, and the picture is swapped once its bytes can paint.
+     */
+    const SWIPE_MIN = 40;
+    const SWIPE_DOMINANCE = 1.5;
+    const SWIPE_EDGE = 24;
+
+    let swipe: { x: number; y: number; id: number } | null = null;
+
+    dialog.addEventListener(
+      'touchstart',
+      (event) => {
+        swipe = null;
+        if (zoomLinks.length < 2 || event.touches.length !== 1) return;
+        const touch = event.touches[0];
+        const edge = touch.clientX < SWIPE_EDGE || touch.clientX > window.innerWidth - SWIPE_EDGE;
+        if (edge) return;
+        swipe = { x: touch.clientX, y: touch.clientY, id: touch.identifier };
+      },
+      { passive: true },
+    );
+
+    dialog.addEventListener(
+      'touchmove',
+      (event) => {
+        if (event.touches.length > 1) swipe = null;
+      },
+      { passive: true },
+    );
+
+    dialog.addEventListener(
+      'touchend',
+      (event) => {
+        const start = swipe;
+        swipe = null;
+        if (!start) return;
+        const touch = [...event.changedTouches].find((t) => t.identifier === start.id);
+        if (!touch) return;
+
+        const dx = touch.clientX - start.x;
+        const dy = touch.clientY - start.y;
+        if (Math.abs(dx) < SWIPE_MIN) return;
+        if (Math.abs(dx) < Math.abs(dy) * SWIPE_DOMINANCE) return;
+
+        // Swipe left to go forward: the picture follows the finger. `show()`
+        // clamps, so a swipe past either end is a no-op rather than a wrap.
+        show(index + (dx < 0 ? 1 : -1));
+      },
+      { passive: true },
+    );
+
+    dialog.addEventListener(
+      'touchcancel',
+      () => {
+        swipe = null;
+      },
+      { passive: true },
+    );
 
     // Every path measures once BEFORE the bytes arrive, off the intrinsic
     // width and height, which is close but not exact: the decoded box can land

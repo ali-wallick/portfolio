@@ -1569,7 +1569,14 @@ hr {
 
 /* The link's accessible name is the image's alt plus this, so a screen-reader
    user is told the picture opens. Visually hidden rather than `display: none`,
-   which would take it out of the name entirely. */
+   which would take it out of the name entirely.
+
+   It says "larger" rather than "full size" (#305). The dialog has never shown
+   the source at its own size and since #249 deliberately does not — it is a
+   pinned box that fits the picture to the space left, which measured 23-66% of
+   the file's width at 1280x800. "Larger" is also the one word true of BOTH
+   states: with the script dead the link still navigates to the full-size file,
+   which is larger too. */
 .gallery-zoom-hint {
   position: absolute;
   width: 1px;

@@ -2304,6 +2304,33 @@ Worth keeping loose from the issue, because none is specific to a lightbox.
   written as `dialog.width - image.width` is the EMPTY SPACE inside a pinned box, and computed a
   1900px box. Take padding and border from `getComputedStyle`.
 
+### The lightbox's three leftovers (2026-09-05, closes #305)
+
+Split out of #249 and each small, but two of them settle a rule rather than fix a line.
+
+**The zoom link says "open larger", not "view full size".** The dialog has never shown the source
+at its own size and since #249 deliberately does not, so the hidden hint inside every
+`.gallery-zoom` was promising something measurably untrue -- 23-66% of the file's width at
+1280x800. "Larger" is also the one word true of both states the link has: with the script dead it
+still navigates to the full-size file, which is larger too.
+
+**Stepping stays scoped to the zoomable images, and the counter is what gives way.** Stepping
+through every slide instead was the other option on the table and it loses to the pinned box: the
+box is sized to the widest picture in the row, so a slide under the zoom threshold would land in a
+box several times its width. That is #249's own 8%-fill complaint, reintroduced one step in. What
+follows is that the counter's set is not the row, so **the dialog states no position rather than a
+misreadable one** -- `2 of 3` renders only while the zoomable images ARE the row, which is every
+gallery on the site today. The arrows' disabled ends carry it otherwise, which is the argument
+`Gallery.astro` already makes for the scroll rail being `aria-hidden`.
+
+**Swipe steps the lightbox on touch, and it never calls `preventDefault`.** Every listener is
+passive and the gesture is decided at `touchend` from where the finger started and ended, so
+pinch-zoom, scrolling and the platform's own handling are untouched while it is in flight. Three
+guards keep it to itself: a second finger cancels it (a pinch's touches drift apart horizontally,
+which is a swipe on the arithmetic), the outer 24px of the screen is left to the back gesture, and
+horizontal travel has to beat vertical by 1.5x. **Nothing animates, so there is no reduced-motion
+branch** -- the swipe ends in the same `show()` the arrows call.
+
 ### A page under `src/pages/design/` ships unless it is gated
 
 `scripts/build-ci.mjs` has no prune step for that directory, and a production build emitted
