@@ -2688,6 +2688,74 @@ and would become a decision rather than a consequence. And on a phone the bracke
 are the whole of the reticle: below 40em there is no pointer, so a homeless reticle renders nothing
 at all until something takes focus.
 
+## The plate needs a flat bottom, so nothing pressable is a pill any more (2026-09-05, closes #299)
+
+Ali's report was that the drop shadow on the round buttons looked weird. It is a real geometric
+defect and not a matter of taste, and the diagnosis generalises past this one control.
+
+**The plate is a slab edge.** An unblurred copy of the shape, offset straight down — so it reads as
+thickness only where the silhouette has a **flat bottom for it to sit under**. Measured across the
+shipped components: `.card` has one across **97%** of its width, `.tile` **90%**, a labelled pill
+**61–81%**, and an icon-only button **0%**, because `.button`'s square padding plus `--radius-pill`
+is a circle. Under a circle the offset copy has no edge to be — it reads as a second disc peeking
+out from behind, ending in two cusps where the silhouettes cross. On a pill the same artifact curls
+up the two rounded ends as horns.
+
+**Shrinking `--lift` on small controls does not fix it, and that measurement is the useful one.**
+For any convex shape the visible plate is a band of constant _vertical_ thickness, so a circle's
+plate covers exactly the area a slab of the same width would. It is not too big. What falls to zero
+at the sides is its _perpendicular_ thickness. **The cure is a flat bottom, not a smaller plate** —
+which also means the fix cannot be bought by touching a shared token.
+
+Settled on a live switcher, the eleventh run of that loop: two axes, four marks each, spanning "keep
+it round" to "stop being round". Ali's pick, in two passes — A3 + B3 first, then A4 + B3 after the
+cohesion question below.
+
+|                                                       | Was                        | Is                                                             |
+| ----------------------------------------------------- | -------------------------- | -------------------------------------------------------------- |
+| Labelled `.button` (contact, CTA, résumé download)    | `--radius-pill`            | **`--radius-lg`**, the corner `.card` and `.tile` already have |
+| Icon-only `.button` (`.gallery-arrow`, `.zoom-close`) | `--radius-pill` → a circle | **`--radius`**                                                 |
+
+**The labelled half is a deletion, not a new value.** `base.css` already gave `.card`, `.tile` and
+`.button` one radius and `.button` alone overrode it; that override is gone.
+
+### One radius cannot make the site samey, and the reason is arithmetic
+
+Ali's question on seeing A3 + B3 was whether a shared corner would read as cohesive or as samey. It
+cannot read as samey, because **`border-radius` is absolute while these elements differ ~8× in
+size**, so one number is a visibly different corner on each. As a fraction of the largest radius the
+shape can take, 14px is **10%** on a `.tile`, **20%** on a `.card`, **25%** on `.currently`, **68%**
+on a labelled button and **78%** on a 36px arrow.
+
+**The site had already run the experiment.** `.card` and `.tile` have shared one radius since
+Phase 5 and have never read as one object, because size and content do that work. Radius was only
+ever separating `.button` from `.card`, and the closest those two come to each other is `/contact`,
+where an 864×112 card sits directly above 106×41 buttons — no viewport makes them confusable.
+
+**The real risk was the opposite of the one asked about, which is why the icon controls went to
+`--radius` rather than `--radius-lg`.** At 78% of its maximum the arrow was still nearly a circle:
+enough to fix the plate (0% → 22% flat bottom) and not enough to look chosen. `--radius` puts it at
+**67% flat**, which reads as a control rather than as a corrected circle — and it is the radius
+`.reticle` draws its corner brackets at, so a focused control now shares the corner of the thing
+framing it.
+
+### What this deliberately did not touch
+
+**`.chip`, `.draft-flag`, `.nav-link` and the gallery rail are still `--radius-pill`, and that is
+correct rather than an oversight.** None of them carries a plate, so none of them has the artifact —
+the token is still doing real work and is not now dead. **Pill is still the right shape for a label;
+it stopped being the right shape for something with height.**
+
+**One rule, not a copy per component.** The icon-only radius is a single `.gallery-arrow,
+.zoom-close` selector. [#163](https://github.com/ali-wallick/Portfolio/issues/163) learned that the
+failure mode here is a surface list rather than a rule — three surfaces were missed there because
+each carried its own copy of the same border. A new icon-only button joins that selector; it does
+not get its own radius.
+
+**`src/styles/base.css` is a `byteHashedFiles` input, so both résumé PDFs regenerated for a change
+the résumé renders nothing of.** `check:resume-print` reported the geometry unmoved, which is the
+check that means anything; the differing bytes say nothing. See "Working here" for why.
+
 ## Preserving the old site (2026-08-26)
 
 The old DreamHost site is preserved well enough that `snapshot/` can eventually be tagged and

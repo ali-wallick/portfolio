@@ -693,6 +693,25 @@ hr {
   margin: var(--space-2) 0 0;
 }
 
+/* No `border-radius` here on purpose — it takes `--radius-lg` from the rule
+   above, the same corner `.card` and `.tile` already have. This overrode to
+   `--radius-pill` until #299.
+
+   **The plate is a slab edge**, an unblurred copy of the shape offset straight
+   down, so it reads as thickness only where the silhouette has a flat bottom
+   for it to sit under. Measured across the shipped components: `.card` has one
+   across 97% of its width, `.tile` 90%, a pill 61-81%, and an icon-only button
+   **0%**, because square padding plus a pill radius is a circle. Under a circle
+   the offset copy has no edge to be — it reads as a second disc peeking out
+   from behind, ending in two cusps where the silhouettes cross. On a pill the
+   same artifact curls up the two rounded ends as horns.
+
+   **Shrinking `--lift` on small controls does not fix this**, which is worth
+   knowing before anyone tries it: for any convex shape the visible plate is a
+   band of constant VERTICAL thickness, so a circle's plate covers exactly the
+   area a slab of the same width would. It is not too big. What falls to zero at
+   the sides is its PERPENDICULAR thickness. The cure is a flat bottom, not a
+   smaller plate. */
 .button {
   display: inline-flex;
   align-items: center;
@@ -701,7 +720,33 @@ hr {
   font-weight: 600;
   font-size: var(--text-sm);
   padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-pill);
+}
+
+/* The icon-only buttons take `--radius`, one step tighter than the labelled
+   ones (#299, Ali's call on a live switcher).
+
+   **Two values rather than one, because `border-radius` is absolute and these
+   elements differ ~8x in size**, so the same number is a different corner on
+   each. As a fraction of the largest radius the shape can take, 14px is 10% on
+   a `.tile`, 20% on a `.card`, 25% on `.currently`, 68% on a labelled button
+   and 78% on a 36px arrow. That spread is also the answer to whether one
+   shared corner makes the site samey: it cannot, because a rule this cheap
+   still produces a visibly different corner at every size — which is why
+   `.card` and `.tile` have coexisted at one radius since Phase 5 without
+   reading as one object.
+
+   At 78% the arrow was still nearly a circle: enough to fix the plate
+   (0% -> 22% flat bottom) and not enough to look chosen. `--radius` puts it at
+   67% flat, which reads as a control rather than as a corrected circle, and it
+   is the radius `.reticle` draws its corner brackets at — so a focused control
+   shares the corner of the thing framing it.
+
+   One rule rather than a copy on each component. #163 learned that the failure
+   mode here is a surface list and not a rule: add an icon-only button to this
+   selector rather than giving it its own radius. */
+.gallery-arrow,
+.zoom-close {
+  border-radius: var(--radius);
 }
 
 .button-icon {

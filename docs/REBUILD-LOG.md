@@ -3929,3 +3929,77 @@ part was measurement rather than breadth — five probe scripts against a locall
 of which another agent could have run more cheaply than inline. The teardown left the diff at a single
 file: `git diff --stat origin/main` reports `src/scripts/reticle.ts` and nothing else, and `check:pdf`
 reported nothing to regenerate, confirming no `byteHashedFiles` input was ever touched.
+
+## #299 — the drop shadow was fine, the silhouette was not (2026-09-05)
+
+Ali's issue was two sentences: "The drop shadow on them looks weird. Maybe we do something other
+than round buttons?" The eleventh run of the switcher loop, and the first where the measurement
+mattered more than the candidates.
+
+### Measuring first turned a taste question into a geometry one
+
+The instinct on reading the issue is to reach for the shadow — soften it, shrink it, scale `--lift`
+down on small controls. Measuring the silhouettes instead said the shadow was never the variable.
+The plate is an unblurred copy offset straight down, so it reads as thickness only where there is a
+flat bottom under it: `.card` 97% of its width, `.tile` 90%, a pill 61–81%, an icon-only button
+**0%**, because square padding plus a pill radius is a circle.
+
+Then the measurement that actually shaped the candidate set: **for any convex shape the visible
+plate is a band of constant _vertical_ thickness**, so a circle's plate covers exactly the area a
+36px slab's would. It is not too big — what collapses at the sides is its _perpendicular_ thickness,
+which is why it ends in two cusps rather than two corners. That killed the whole "scale the lift"
+family before a line of the switcher was written, and it would have been a plausible, shippable,
+wrong fix that also broke a shared token.
+
+### The contact sheet found what the strip could not
+
+Twelve variants went onto a cloned arrow first, which was enough to rank the treatments and not
+enough to judge them. The contact sheet at rest / hover / dark is where A1 lost decisively: at hover
+the plate grows to 8px and the border turns magenta, so the incumbent is two misregistered
+concentric circles — the artifact at its worst, in the state nobody screenshots.
+
+### Ali narrowed twice, and the second question was the better one
+
+First pass: **A3 + B3**, one radius everywhere. Then the question worth recording — "would this make
+the site look more cohesive or too samey?" — which is answerable rather than a matter of feel.
+`border-radius` is absolute and these elements differ ~8× in size, so 14px is 10% of the maximum
+possible radius on a `.tile` and 78% on a 36px arrow. One rule, a visibly different corner at every
+size. And the site had already run the experiment: `.card` and `.tile` have shared a radius since
+Phase 5 without ever reading as one object.
+
+Answering it surfaced the opposite risk, which is what moved the pick to **A4 + B3**: at 78% the
+arrow was still nearly a circle, enough to fix the plate and not enough to look chosen. Two values
+rather than one, and the second is `--radius` because that is what `.reticle` draws its brackets at.
+
+### Two mistakes of mine, both caught before they shipped
+
+The contact sheet's caption formula clamped `border-radius` by half-width but not half-height, so it
+printed **"0% flat bottom"** for a pill — a confidently wrong number in the exact place the skill's
+own traps section warns about, on the axis it was measuring. And the first cohesion answer was going
+to be argued from the composite rather than computed; the ratio table is what made it a fact instead
+of a second opinion.
+
+### Cost notes
+
+No subagents — the whole pass is one component family and a stylesheet, and a delegated agent would
+have rebuilt the same context to measure the same five elements. One dev server, one Playwright
+process reused across every measurement, and the scaffolding never left the branch.
+
+The egress proxy 403s `*.workers.dev`, so the preview could not be opened from the session at all;
+the local branch build (24 pages against main's 23, `noindex`, absent from the sitemap) and
+Cloudflare's own green deploy stood in for it. Worth knowing for any future pass whose deliverable
+is a preview URL: **the session can build the thing it cannot look at.**
+
+`base.css` is a `byteHashedFiles` input, so both PDFs regenerated for a change the résumé renders
+nothing of. `check:resume-print` reported the geometry unmoved, which is the assertion that means
+something here.
+
+**One claim in this entry was falsified by the rebase that closed it, which is worth keeping.** It
+originally said the PDFs had been subset differently by the #245 fallback Chromium and wanted a real
+rebuild on Ali's machine. Checking the embedded face instead of trusting that reasoning showed
+`main` and this branch both carrying **Liberation Sans** — a platform fallback, not the Public Sans
+#191 self-hosted — so the advice would have swapped one fallback for another (Helvetica on a Mac)
+and fixed nothing. That is #306, and #308 landed on `main` while this branch was open. Rebasing onto
+it and regenerating is what actually put Public Sans in these files. **The lesson is the cheap one:
+the PDF states its own `/BaseFont`, and reading it took one line where the inference took a
+paragraph and was wrong.**
