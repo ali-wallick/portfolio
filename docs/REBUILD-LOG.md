@@ -3772,3 +3772,66 @@ and "does this still hold at one link" are both simultaneous questions. The gate
 **Astro bundles CSS off the module graph, not off what renders**. Found by grepping `dist/`, fixed
 with a `?raw` string import injected by the gated component. Worth knowing for the next switcher
 that needs a stylesheet on an existing route.
+
+## #306 — the résumé PDF was set in the wrong font for four months (2026-09-05)
+
+Filed as a small one: the committed PDFs drift by whoever last built them, 9 embedded font subsets
+on Ali's Mac against 3 in a Claude Code web session, identical geometry. The issue's own framing was
+"is the difference worth caring about at all?", with retiring a sentence in CLAUDE.md as the cheapest
+outcome.
+
+### The first measurement dissolved the question
+
+The issue is about a difference between two renders, so the obvious first move is to look at what
+each one embeds. Both were wrong. The web-session render is **Liberation Sans**, Ali's Mac is
+**Helvetica**, and the face the résumé is supposed to be set in — Public Sans, chosen on a
+comparison in #191 — appears in neither. The subset-count difference everyone was looking at was a
+side effect of two different fallbacks, not of two subsetting engines.
+
+That reframed it from a housekeeping question into the exact bug #191 believed it had closed:
+a distributed document set in whatever face the rendering machine happened to have, and on macOS a
+face not licensed for embedding.
+
+### Load order, not configuration
+
+`--font-body` named Public Sans correctly the whole time. `@fontsource` was installed and imported on
+both résumé routes. The face simply never loaded: a webfont is fetched when something uses it, and
+`--font-body` points at Public Sans only inside `resume.css`'s `@media print` block. On screen the
+résumé is Figtree, so nothing requested it, `document.fonts.ready` resolved without it, and
+`page.pdf()` — which emulates print internally — took its snapshot before the fetch it had just
+triggered could land. The fix is `page.emulateMedia({ media: 'print' })` one line earlier.
+
+### Why three green guards missed it
+
+`check-resume-print.mjs` does emulate print media, so it has always measured the real Public Sans
+layout, matched its baseline, and passed. `check:pdf` hashes inputs. The page-count assertion counts
+pages. **Nothing looked at the PDF's own bytes**, so the two guards were each internally consistent
+about a different document. The strongest tell was available and nobody was in a position to see it:
+the on-screen `/resume` page is Figtree, so **no human had ever seen the Public Sans rendering** —
+the face was picked on a switcher, measured, and then never shipped. Its content height is 927.92px
+against the 928px #191 recorded, which is how you can tell the geometry was right all along.
+
+### The guard that closed it is smaller than any option in the issue
+
+The issue listed regenerate-and-compare in CI (needs a tolerance), regenerate-and-commit (a bot
+pushing to `main`), and recording the subset count in the lock file. All three treat the PDF as
+something you compare against a reference render. It isn't: Chromium stamps a fresh `/CreationDate`
+and `/ID` into every render, and glyph IDs are indices into the embedded subset, so identical
+documents diff as thousands of meaningless changes — a trap this repo had already hit and written
+down. **The property that was drifting is one the file states about itself.** Reading `/BaseFont`
+needs no browser, no reference and no tolerance, so it runs in `--check` on Cloudflare next to the
+staleness hash, and it explicitly tolerates the subset-count difference the issue was filed about.
+
+### What generalises
+
+**A hash of the inputs is not a check on the output.** `check:pdf` proved the PDFs were built from
+today's résumé and said nothing about how they were built. Every guard here was watching an input or
+a derived measurement; the artifact itself was unexamined, which is how a wrong-face document shipped
+for four months with CI green.
+
+### Cost notes
+
+No subagents. The whole investigation was five Bash calls — enumerate `/BaseFont` in the committed
+PDFs, walk `git log` for the same field across twelve commits, probe what the browser requests under
+each media type, then an A/B render. Delegating any of it would have cost more than doing it, and the
+git-history walk is what turned one suspicious render into a four-month pattern.

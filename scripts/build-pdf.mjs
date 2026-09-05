@@ -38,6 +38,10 @@
  * a different document — but Cloudflare still can't produce one at all, which
  * is reason enough on its own.
  *
+ * That paragraph was aspirational until #306: naming the face was necessary
+ * and not sufficient, because nothing here loaded it. See the print-media
+ * emulation in the render loop and `assertPrintFace` below.
+ *
  * ## Two implementation choices worth not undoing
  *
  *   1. **It serves `dist/` over HTTP rather than loading `file://`.** Every
@@ -197,6 +201,64 @@ async function inputHash() {
   return hash.digest('hex');
 }
 
+/**
+ * The PostScript name prefix every font embedded in these PDFs must carry.
+ *
+ * It comes from the name table inside `@fontsource/public-sans`'s own file, so
+ * it is the same string on every platform — the whole reason #191 self-hosted
+ * the face rather than naming `system-ui`. (The file's internal name is
+ * `PublicSansThin-Regular`/`-Bold`, an upstream naming quirk in Public Sans's
+ * static instances. The `@font-face` rule declares weight 400/700 and that is
+ * what governs rendering, so the string is cosmetic — matched by prefix here
+ * so a future @fontsource metadata fix doesn't read as a substitution.)
+ */
+const PRINT_FACE = 'PublicSans';
+
+/**
+ * Every embedded font, by PostScript name with its subset tag stripped.
+ * Chromium writes `/BaseFont /AAAAAA+PublicSansThin-Regular`; the six-letter
+ * tag is per-subset and carries no meaning here.
+ */
+function embeddedFonts(buffer) {
+  return [
+    ...new Set(
+      [...buffer.toString('latin1').matchAll(/\/BaseFont\s*\/([A-Za-z0-9+#\-_,.]+)/g)].map((m) =>
+        m[1].replace(/^[A-Z]{6}\+/, ''),
+      ),
+    ),
+  ];
+}
+
+/**
+ * Fails on a PDF set in anything but the chosen face — the guard #306 found
+ * missing, and the one check here that reads the PDFs' actual bytes.
+ *
+ * Deliberately NOT a byte or content-stream comparison against a freshly
+ * rendered reference, which is where that issue's options started. Glyph IDs
+ * are indices into an embedded subset, so two renders of an identical document
+ * subset differently and diff as thousands of meaningless changes; and
+ * Chromium stamps a fresh `/CreationDate`, `/ModDate` and `/ID` into every
+ * render, so the bytes never match anyway. The property that was actually
+ * drifting is *which face got embedded*, and that is a fact the committed file
+ * states about itself — so this needs no browser, no reference render, and no
+ * tolerance, and runs identically here and under `--check` on Cloudflare.
+ *
+ * What it deliberately does not police is the subset count (9 on macOS, 3 on
+ * Linux, per #306). Two engines subsetting the same face differently is not a
+ * defect: same glyphs, same metrics, same rendering. Gating on it would fail a
+ * build for the platform it ran on.
+ */
+function assertPrintFace(label, buffer) {
+  const wrong = embeddedFonts(buffer).filter((name) => !name.startsWith(PRINT_FACE));
+  if (wrong.length === 0) return null;
+  return (
+    `${label} embeds ${wrong.join(', ')} instead of ${PRINT_FACE} — the print face fell back to a ` +
+    'platform font. Fonts used only under @media print are fetched lazily, so the page must be ' +
+    "switched to print media BEFORE awaiting document.fonts.ready (see the render loop). If you're " +
+    'checking a committed PDF, regenerate it: npm run build:pdf -- --force'
+  );
+}
+
 if (CHECK_ONLY) {
   const expected = await inputHash();
   const missing = ['resume.pdf', 'resume-full.pdf'].filter(
@@ -214,7 +276,23 @@ if (CHECK_ONLY) {
     console.error('  Run: npm run build:pdf   (then commit public/*.pdf and the lock file)');
     process.exit(1);
   }
-  console.log('✓ committed resume PDFs are current.');
+  // The one assertion here that reads the PDFs rather than hashing their
+  // inputs (#306). The hash above proves the committed files were built from
+  // today's resume; it says nothing about HOW they were built, which is how a
+  // pair of PDFs set in a platform fallback face passed CI for months. Cheap
+  // and browser-free, so it runs on Cloudflare alongside the staleness check.
+  const wrongFace = [];
+  for (const file of ['resume.pdf', 'resume-full.pdf']) {
+    const problem = assertPrintFace(file, await readFile(path.join(PUBLIC, file)));
+    if (problem) wrongFace.push(problem);
+  }
+  if (wrongFace.length > 0) {
+    console.error('✗ the committed resume PDFs are set in the wrong face.');
+    for (const problem of wrongFace) console.error(`  ${problem}`);
+    process.exit(1);
+  }
+
+  console.log(`✓ committed resume PDFs are current, and set in ${PRINT_FACE}.`);
   process.exit(0);
 }
 
@@ -303,6 +381,28 @@ try {
       continue;
     }
 
+    // Switch to print media BEFORE waiting on fonts, and the order is the
+    // whole point (#306). `page.pdf()` emulates print internally, so this
+    // looks redundant — it is not. A webfont is fetched lazily, when some
+    // element actually uses it, and `--font-body` only points at Public Sans
+    // inside `resume.css`'s `@media print` block. On screen the resume is set
+    // in Figtree, so nothing requests Public Sans, `document.fonts.ready`
+    // resolves happily without it, and the print snapshot `page.pdf()` takes
+    // is rendered before the fetch it just triggered can land. Chromium then
+    // falls through `--font-body`'s stack to a platform face.
+    //
+    // That shipped for months and is exactly the bug #191 believed it had
+    // closed: the committed PDFs were Helvetica when rendered on Ali's Mac and
+    // Liberation Sans when rendered on Linux — machine-dependent, and on macOS
+    // a face not licensed for embedding in a distributed document. It hid
+    // because the two guards measure different things. `check-resume-print.mjs`
+    // emulates print media (as here) and so has always measured the real Public
+    // Sans layout; nothing looked at the PDF's own embedded fonts, so #306 read
+    // as a subsetting curiosity. `assertPrintFace` below is that missing look.
+    //
+    // Emulating print first makes the font used, which starts the fetch, which
+    // `document.fonts.ready` then genuinely waits for.
+    await page.emulateMedia({ media: 'print' });
     // Chromium will happily paginate mid-glyph-load and give you a PDF with
     // fallback metrics.
     await page.evaluate(() => document.fonts.ready);
@@ -328,6 +428,9 @@ try {
         `${out} carries a link annotation pointing at the local dev server: ${localhostLinks.join(', ')} — write the source href absolute (site.url-based) instead of root-relative`,
       );
     }
+
+    const wrongFace = assertPrintFace(out, buffer);
+    if (wrongFace) problems.push(wrongFace);
 
     const pages = countPages(buffer);
     const size = (buffer.length / 1024).toFixed(0);
