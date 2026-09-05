@@ -121,5 +121,12 @@ const jsonLd = await personJsonLd();
     }
   </ul>
 
-  <p><a class="button button-accent" href="/projects">All projects</a></p>
+  {
+    /* Not `button-accent`: that fill is `--color-accent-block`, the same
+       token the nav's current-page pill uses, and tokens.css reserves magenta
+       for "where you are," never a link to somewhere else (#315). Plain
+       `.button` is the same treatment the contact page's social links and
+       the gallery arrows use. */
+  }
+  <p><a class="button" href="/projects">All projects</a></p>
 </BaseLayout>
