@@ -1499,7 +1499,33 @@ hr {
  * Escape, returns focus to the link that opened it, and inerts the page behind
  * it — all of which a div would have to reimplement, badly.
  */
+/* THE BOX IS PINNED, and pinned to the gallery rather than to the viewport
+   (#249, group C).
+   
+   "It changes size" was a complaint about the box moving WHILE STEPPING —
+   measured at 1280x800, today's box that hugged its picture swung 643px across
+   /projects/i-fits-i-sits' five slides. Pinning it to the viewport holds it
+   perfectly still and buys a box sized for a picture the gallery may not
+   contain: on a 1280x620 window the tall level shot ended up 160px wide in a
+   1178px box, filling 8% of it.
+   
+   Stepping never leaves the row you opened, so the box only has to hold still
+   within one gallery. `--zoom-box-w` is the width of THIS gallery's widest
+   picture at the height available, written by `gallery-zoom.ts`. Measured on
+   the same five slides: 36px of movement instead of 643, and the tall shot
+   fills 17-20% instead of 8-15%.
+   
+   Not zero, and the residue is honest: a picture's caption can take one more
+   line than its neighbour's, which changes the height available and so the
+   width derived from it. 36px is imperceptible next to 643px; closing it
+   entirely would mean reserving a constant caption height across a gallery,
+   which is a lot of machinery for a pixel count nobody can see.
+   
+   The fallback is the viewport cap, so a page whose script never runs gets a
+   pinned box rather than a broken one. */
 .zoom-dialog {
+  width: min(92vw, 76rem, var(--zoom-box-w, 76rem));
+  height: 92vh;
   max-width: min(92vw, 76rem);
   max-height: 92vh;
   padding: var(--space-4);
@@ -1507,6 +1533,13 @@ hr {
   color: var(--color-text);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
+}
+/* Scoped to `[open]`, and that is load-bearing rather than tidy: a bare
+   `display: flex` beats the UA's `dialog:not([open]) { display: none }` and the
+   lightbox would sit on every project page at rest. */
+.zoom-dialog[open] {
+  display: flex;
+  flex-direction: column;
 }
 .zoom-dialog::backdrop {
   background: rgb(0 0 0 / 0.72);
@@ -1517,32 +1550,115 @@ hr {
    358px dialog: 22% of the screen, spent on a default nobody chose. */
 .zoom-dialog figure {
   margin: 0;
+  /* `flex: 1 1 0` rather than `1 1 auto`, and the zero basis is the whole
+     mechanism. A flex item sized from `auto` keeps a content-derived height,
+     which is INDEFINITE — so `max-height: 100%` on the picture inside it
+     resolves to `none` and the box constrains nothing. Measured with `auto`:
+     the tall level shot overflowed its box by 918px and covered 335% of it. */
+  min-height: 0;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.zoom-frame {
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .zoom-dialog img {
   display: block;
+  min-height: 0;
   max-width: 100%;
-  /* Room for the close button, the caption and the nav inside the 92vh cap.
-
-     MEASURED, not guessed (#249). This was `calc(92vh - 8rem)`, and 8rem was
-     wrong in both directions: the furniture is 63px on /projects/mini-mages,
-     where the nav is hidden and the picture was capped with 65px going spare,
-     and 167px on a two-line caption, where the dialog overflowed its own 92vh
-     and put the nav below its own fold. `gallery-zoom.ts` measures the real
-     amount and writes it here.
-
-     The fallback is the old constant, so a page whose script never runs gets
-     exactly the behaviour it got before — the same progressive-enhancement
-     contract as everything else in this feature. */
-  max-height: calc(92vh - var(--zoom-furniture, 8rem));
+  max-height: 100%;
   width: auto;
   height: auto;
   margin: 0 auto;
   border-radius: var(--radius);
+  object-fit: contain;
 }
+/* The caption belongs to the picture, so it takes the picture's width and sits
+   under it (#249). `--zoom-picture-w` is written by `gallery-zoom.ts` after
+   every layout, because the painted width is not something CSS can know: it
+   depends on the source's ratio against the box.
+   
+   This was a defect in the hugging box too, not something pinning introduced —
+   measured at 1280x800, the caption sat 75px left of the tall level shot,
+   because the box was sized by the caption while the picture was centred in
+   it. `--measure` still caps it, so a wide picture does not produce a
+   100-character line. */
 .zoom-dialog figcaption {
   margin-top: var(--space-3);
-  max-width: var(--measure);
+  max-width: min(var(--measure), var(--zoom-picture-w, 100%));
+  margin-inline: auto;
 }
+
+/* --- The lightbox on a phone ---------------------------------------------
+ *
+ * Edge to edge (#249, group B). The frame is what costs the picture its width
+ * at this size: 92vw plus 1rem of padding a side plus the border is 65px of a
+ * 390px screen. Dropping all three takes the picture from 0.71x the size the
+ * ROW renders it at to 0.86x.
+ *
+ * Worth knowing why it cannot beat the row outright: the row is a horizontal
+ * scroller, so at `--gallery-h` it renders a 16:9 slide 455px wide on a 390px
+ * viewport. It is bigger there and CLIPPED — 79% of the slide is visible at
+ * 390px, 72% at 360px — where the lightbox shows all of it. The two answer
+ * different questions, and the ceiling for a dialog that fits the whole
+ * picture on screen is 0.86x.
+ */
+@media screen and (max-width: 47.999em) {
+  .zoom-dialog {
+    max-width: 100vw;
+    max-height: 100dvh;
+    width: 100vw;
+    height: 100dvh;
+    /* The PICTURE goes edge to edge; the furniture does not. Padding here would
+       cost the picture its width on both sides, which is the whole point, so
+       each control carries its own inset below. */
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    justify-content: center;
+    /* The flex column fits the content exactly — measured, the children sum to
+       the dialog's own client height. What is left is a few pixels of
+       sub-pixel rounding in a descendant, and a few pixels of scroll on a
+       full-screen lightbox is a bounce with nothing at the bottom of it. */
+    overflow: hidden;
+  }
+
+  .zoom-dialog .zoom-close {
+    margin: var(--space-3) var(--space-3) var(--space-2) auto;
+  }
+
+  /* Prose must not run to the screen edge either. */
+  .zoom-dialog figcaption {
+    padding-inline: var(--space-4);
+  }
+
+  .zoom-dialog .zoom-nav {
+    margin-bottom: var(--space-3);
+  }
+
+  /* FILL the box and letterbox inside it, rather than `auto` against a max.
+     `max-width`/`max-height` only cap a picture, they never stretch one — and
+     the intrinsic size of a `srcset` image is not the file's, it is the file's
+     DENSITY-CORRECTED size. With `w` descriptors and a 92vw `sizes`, a 1920px
+     candidate reports an intrinsic 358px, so `width: auto` rendered the picture
+     at 92% of a full-bleed box. That is why `ZOOM_SIZES` in `Media.astro` says
+     100vw at this width — the hint has to describe the box the picture is
+     actually in. */
+  .zoom-dialog img {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+  }
+}
+
 /* Icon-only, so it takes the same square padding the gallery arrows do rather
    than `.button`'s label-and-icon lozenge. Not `.gallery-arrow` itself: it does
    not scroll anything, and that class carries a disabled state it can never

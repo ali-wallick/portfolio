@@ -44,47 +44,85 @@ if (dialog && zoomLinks.length > 0 && typeof dialog.showModal === 'function') {
   if (image && caption && close && nav && count) {
     let index = 0;
 
+    const frame = dialog.querySelector<HTMLElement>('.zoom-frame');
+
     /**
-     * Cap the picture against the furniture that is actually there (#249).
+     * Publish the PAINTED picture's width, so the caption can align to the
+     * thing it describes (#249).
      *
-     * `max-height` used to be `calc(92vh - 8rem)`, a constant reserving 128px
-     * for the close button, the caption and the nav. It was wrong in both
-     * directions: measured, the furniture is 63px on /projects/mini-mages,
-     * where the nav is hidden and the picture was capped with 65px going
-     * spare — and 167px on a two-line caption, where the dialog overflowed its
-     * own 92vh and pushed the nav below its fold, so you had to scroll a
-     * lightbox to reach the arrows.
-     *
-     * Measured rather than expressed in CSS because the honest CSS version
-     * needs the dialog's height to be definite so flex can hand the remainder
-     * to the picture — and a definite height is a pinned box, which is a look
-     * rather than a fix and belongs with #249's group C. This changes what the
-     * picture is capped AT and leaves the box hugging it, exactly as before.
-     *
-     * Two passes, because the two quantities feed each other: a shorter
-     * picture is a narrower picture, a narrower dialog is a narrower caption,
-     * and a narrower caption can take one more line. It settles in one; the
-     * second is the check.
+     * The painted width is not the element's rect wherever `object-fit:
+     * contain` is letterboxing inside it — on a phone the picture fills its
+     * box and the letterboxing is real — so compute what `contain` produces
+     * rather than reading `getBoundingClientRect()`.
      */
-    function capToFurniture(): void {
+    function syncPictureWidth(): void {
       if (!image) return;
-      dialog!.style.removeProperty('--zoom-furniture');
-      let reserved = 0;
-      for (let pass = 0; pass < 2; pass += 1) {
-        const border = dialog!.offsetHeight - dialog!.clientHeight;
-        // `scrollHeight` is the full natural content height whether or not the
-        // box is currently capping it, which is what makes this independent of
-        // the cap it is about to set.
-        const furniture = dialog!.scrollHeight + border - image.offsetHeight;
-        reserved = Math.max(0, Math.ceil(furniture));
-        dialog!.style.setProperty('--zoom-furniture', `${reserved}px`);
+      const r = image.getBoundingClientRect();
+      const ratio = image.naturalWidth / image.naturalHeight || 1;
+      const painted = Math.min(r.width, r.height * ratio);
+      if (painted > 0) dialog!.style.setProperty('--zoom-picture-w', `${Math.round(painted)}px`);
+    }
+
+    /**
+     * Pin the box to the widest picture in THIS gallery (#249).
+     *
+     * The reasoning is in `base.css` beside the rule that consumes this. The
+     * mechanics worth knowing here:
+     *
+     * `.zoom-frame`'s height is the space left for the picture after the
+     * caption, so it is the right quantity to derive a width from — the
+     * CURRENT picture's own height is not, because a wide picture can be
+     * limited by the box's width instead and would under-report.
+     *
+     * "This gallery" is the row the opened link sits in, not every zoomable
+     * picture on the page. Stepping never leaves that row, so pooling a second
+     * gallery would size the box for a picture you cannot reach from here.
+     */
+    function pinToGallery(): void {
+      if (!frame) return;
+      const available = frame.getBoundingClientRect().height;
+      if (available <= 0) return;
+
+      const row = zoomLinks[index]?.closest('.gallery');
+      const siblings = row ? zoomLinks.filter((l) => l.closest('.gallery') === row) : zoomLinks;
+
+      let widest = 0;
+      for (const link of siblings) {
+        const w = Number(link.dataset.zoomW);
+        const h = Number(link.dataset.zoomH);
+        if (!(w > 0 && h > 0)) continue;
+        widest = Math.max(widest, available * (w / h));
       }
-      // Sub-pixel residue. The picture's own rounding can still leave the box
-      // a pixel over budget, and a pixel over budget on a lightbox is a
-      // scrollbar. Correct against the overflow itself rather than by rounding
-      // the estimate harder, which would cost every dialog a pixel to fix one.
-      const over = dialog!.scrollHeight - dialog!.clientHeight;
-      if (over > 0) dialog!.style.setProperty('--zoom-furniture', `${reserved + over}px`);
+      if (widest <= 0) return;
+
+      /* The dialog's own padding and border. NOT `dialog.width - image.width`,
+         which inside a pinned box is the EMPTY SPACE — it feeds itself back in
+         and runs away (measured: a 1900px box). */
+      const cs = getComputedStyle(dialog!);
+      const chrome =
+        dialog!.offsetWidth -
+        dialog!.clientWidth +
+        parseFloat(cs.paddingLeft) +
+        parseFloat(cs.paddingRight);
+      dialog!.style.setProperty('--zoom-box-w', `${Math.ceil(widest + chrome)}px`);
+    }
+
+    /**
+     * The two above are circular, so they run together and iterate.
+     *
+     * Aligning the caption to the picture makes the caption's width depend on
+     * the picture's width, which depends on the width of the box, which is
+     * derived from the height the caption left. Running them once in either
+     * order leaves one measuring a layout that no longer exists.
+     *
+     * Three passes, because it converges: a narrower caption is a taller
+     * caption is a shorter picture. It settles in two; the third is the check.
+     */
+    function relayout(): void {
+      for (let pass = 0; pass < 3; pass += 1) {
+        syncPictureWidth();
+        pinToGallery();
+      }
     }
 
     /**
@@ -149,7 +187,7 @@ if (dialog && zoomLinks.length > 0 && typeof dialog.showModal === 'function') {
         caption.textContent = text;
         caption.hidden = text === '';
 
-        capToFurniture();
+        relayout();
       };
 
       // Opening, rather than stepping: there is no old picture to hold, so
@@ -235,9 +273,9 @@ if (dialog && zoomLinks.length > 0 && typeof dialog.showModal === 'function') {
         show(i);
         dialog.showModal();
         lockScroll(true);
-        // The furniture cannot be measured until the dialog is in the top
-        // layer and laid out, so the open path measures again here.
-        capToFurniture();
+        // Neither value can be measured until the dialog is in the top layer
+        // and laid out, so the open path measures again here.
+        relayout();
       });
     }
 
@@ -256,18 +294,17 @@ if (dialog && zoomLinks.length > 0 && typeof dialog.showModal === 'function') {
 
     // Every path measures once BEFORE the bytes arrive, off the intrinsic
     // width and height, which is close but not exact: the decoded box can land
-    // a fraction off what the attributes implied, and a fraction over budget
-    // is a scrollbar on a lightbox. Measuring again on load is what makes the
-    // reservation right rather than nearly right.
+    // a fraction off what the attributes implied. Measuring again on load is
+    // what makes the box right rather than nearly right.
     image.addEventListener('load', () => {
-      if (dialog.open) capToFurniture();
+      if (dialog.open) relayout();
     });
 
-    // The reservation is a pixel value against a viewport-relative budget, so
-    // it stops being right the moment the viewport changes — a phone rotating
-    // is the case that matters.
+    // Both values are pixels derived from a viewport-relative box, so they
+    // stop being right the moment the viewport changes — a phone rotating is
+    // the case that matters.
     window.addEventListener('resize', () => {
-      if (dialog.open) capToFurniture();
+      if (dialog.open) relayout();
     });
 
     close.addEventListener('click', () => dialog.close());

@@ -92,7 +92,15 @@ const d = project.data;
           </svg>
         </button>
         <figure>
-          <img alt="" />
+          {/* The picture's own box, and it is load-bearing rather than a
+              wrapper for styling (#249). The dialog is a fixed-height flex
+              column at every width now, so `max-height: 100%` on the picture
+              has to resolve against the space left AFTER the caption. Against
+              the figure it resolves against the figure's whole height, and the
+              caption overflows the box by its own height. */}
+          <div class="zoom-frame">
+            <img alt="" />
+          </div>
           <figcaption class="meta" hidden />
         </figure>
         {/* Hidden until the script counts how many images this page can

@@ -64,6 +64,24 @@ Anything with a braced body of its own, nested inside a `{cond && (…)}` expres
 **Add the route to `src/pages/sitemap.xml.ts`? No.** It is a hand-written list; leaving it out is
 what keeps the instrument uncrawled, and `noindex` is the belt to that braces.
 
+**But uncrawled is not unserved, and a plain `.astro` page here SHIPS.** `scripts/build-ci.mjs` has
+no prune step for `src/pages/design/`, so a production build emits `dist/design/` — verified with
+`WORKERS_CI_BRANCH=main npm run build:ci` during #249, which is how this was found. A switcher
+branch stays open for as long as the review takes, so "it gets deleted before merging" is not the
+guarantee. **Make it a dynamic route returning no paths in production** — name the file
+`src/pages/design/[...lab].astro` and put this in its frontmatter:
+
+```ts
+import type { GetStaticPaths } from 'astro';
+import { showDrafts } from '~/lib/content';
+
+export const getStaticPaths = (() =>
+  showDrafts ? [{ params: { lab: 'my-subject' } }] : []) satisfies GetStaticPaths;
+```
+
+Then §7's leak check has something to pass: 23 pages and no
+`/design` on `main`, 24 with the lab on the branch.
+
 ---
 
 ## 2. The panel

@@ -187,11 +187,22 @@ const zoomImage = zoomable
   ? await getImage({ src: still.src, widths: zoomWidths, format: 'webp' })
   : undefined;
 
-/* The dialog's own `sizes`, which is a different box from the row's: the
-   picture fills the dialog, and the dialog is `min(92vw, 76rem)` wide. 82.6rem
-   is where those two cross. Erring large costs bytes and erring small costs
-   sharpness, so this rounds up — the same posture as the hero hint above. */
-const ZOOM_SIZES = '(max-width: 82.6rem) 92vw, 76rem';
+/* The dialog's own `sizes`, which is a different box from the row's, and
+   which has to describe the box PER WIDTH because the dialog changes shape
+   (#249).
+   
+   Under 48em the lightbox is edge to edge, so the picture's box is the whole
+   viewport. Saying 92vw there is not a rounding error but a sharpness bug:
+   `sizes` sets the density the browser resolves a `w` descriptor against, so
+   an understated hint makes the picture's own INTRINSIC width smaller, and
+   `width: auto` then renders it at 92% of the box it was given. Measured at
+   0.79x the row instead of 0.86x before this said 100vw.
+   
+   Above 48em the box is `min(92vw, 76rem)` and 82.6rem is where those cross.
+   The pinned box can be narrower than that, so the desktop half is an
+   over-estimate — which is the safe direction, since erring large costs bytes
+   and erring small costs pixels. */
+const ZOOM_SIZES = '(max-width: 47.999em) 100vw, (max-width: 82.6rem) 92vw, 76rem';
 
 /* The dialog applies these BEFORE it assigns a src (#249). Without them the
    swapped `<img>` has no intrinsic size between the assignment and the decode,

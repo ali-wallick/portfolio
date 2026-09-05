@@ -2157,6 +2157,74 @@ the `:not([data-reticle-skip])` selector change, which is smaller, doesn't need 
 every page that has a gallery, and is the same mechanism every other `FOCUS_SELECTOR` exclusion
 would use.
 
+### The lightbox is a pinned box, and the pin is the gallery (2026-09-04, closes #249)
+
+Settled on a live switcher, the tenth run of that loop. Ali's issue was two lines — "changes size",
+"too small on mobile" — and both turned out to be one axis each, on different devices.
+
+**The two complaints are not the same question, and measuring them said so.** On a 390px phone the
+dialog is 359px wide for every picture on the site: width spread **zero**. "Changes size" is a
+desktop phenomenon — the hugging box swung **643px** across `/projects/i-fits-i-sits`' five slides at
+1280x800. So the phone axis is how big the picture gets and the desktop axis is whether the frame
+holds still, and they were settled separately.
+
+**The box is pinned to the gallery's widest picture, not to the viewport.** Stepping never leaves the
+row you opened, so the box only has to hold still within one gallery — and pinning to the viewport
+buys a box sized for a picture the gallery may not contain. Measured on a 1280x620 window, a
+viewport-pinned box put the tall level shot at 160px wide in a 1178px box: **8% fill**. Pinning to
+the gallery gives 36px of movement instead of 643, and 17–20% fill instead of 8–15%.
+
+**36px is not zero and the residue is honest**: a caption can take one more line than its
+neighbour's, which changes the height available and so the width derived from it. Closing it would
+mean reserving a constant caption height per gallery, which is a lot of machinery for a pixel count
+nobody can see.
+
+**The furniture reservation is gone, and its own comment predicted this.** Group A measured the
+picture's cap against the furniture actually present, because the box hugged its picture. A pinned
+box has a definite height, so flex distributes it and the measurement becomes a second mechanism
+competing for one job — which is exactly what the Group A note said would happen if the box were ever
+pinned. `capToFurniture()` is deleted; `flex: 1 1 0` does it.
+
+**On a phone the lightbox is edge to edge**, which takes the picture from 0.71x to 0.86x of the size
+the ROW renders it at. **It cannot beat the row and that is structural**: the row is a horizontal
+scroller, so at `--gallery-h` a 16:9 slide renders 455px wide on a 390px viewport. It is bigger
+there and CLIPPED — 79% of the slide visible at 390px, 72% at 360px — where the lightbox shows all of
+it. They answer different questions, and 0.86x is the ceiling for a dialog that fits the whole
+picture on screen. Two candidates that could have beaten it lost: magnify-and-pan (a mode nobody
+asked for) and no-dialog-below-a-breakpoint (loses the caption, the stepping, and the page).
+
+**The caption takes the picture's width now, and that was a defect in the old box too** — measured at
+1280x800, the caption sat 75px left of the tall level shot, because the box was sized by the caption
+while the picture was centred in it. Pinning took it to 128–444px, which is what made it visible.
+
+### Four measurement traps from this pass, all of which returned a plausible number
+
+Worth keeping loose from the issue, because none is specific to a lightbox.
+
+- **`max-width`/`max-height` only CAP a picture; they never stretch one. And a `srcset` image's
+  intrinsic size is DENSITY-CORRECTED, not the file's.** With `w` descriptors and a 92vw `sizes`, a
+  1920px candidate reports an intrinsic 358px — so `width: auto` rendered the picture at 92% of a
+  full-bleed box. **`sizes` is therefore a layout input, not only a bandwidth hint**: understate it
+  and the picture renders small. `ZOOM_SIZES` in `Media.astro` is per-width for this reason.
+- **`flex: 1 1 auto` leaves a flex item's height content-derived, which is INDEFINITE**, so
+  `max-height: 100%` inside it resolves to `none`. The first pinned box constrained nothing: the tall
+  level shot overflowed it by 918px and covered 335% of it. A **zero basis** is what makes the used
+  height definite.
+- **`getBoundingClientRect()` is not the painted picture wherever `object-fit: contain` is
+  letterboxing inside it.** Compute what `contain` produces. Same family as the inline-box trap under
+  #284 — a rect is a fact about a box, not about what is in it.
+- **Deriving a box's size from something inside that box feeds itself back in.** A "chrome" term
+  written as `dialog.width - image.width` is the EMPTY SPACE inside a pinned box, and computed a
+  1900px box. Take padding and border from `getComputedStyle`.
+
+### A page under `src/pages/design/` ships unless it is gated
+
+`scripts/build-ci.mjs` has no prune step for that directory, and a production build emitted
+`dist/design/` — `noindex` and staying out of `sitemap.xml.ts` keep a lab route **uncrawled, not
+unserved**. A switcher branch stays open for as long as the review takes, so "we delete it before
+merging" is not the guarantee. Make it a dynamic route whose `getStaticPaths` returns `[]` unless
+`showDrafts`, and verify both ways. This is the switcher skill's own teardown check earning itself.
+
 ### Archive pages may carry a short body (2026-08-24, from #97)
 
 **Ali's call, and it sets the pattern for all 11 archive entries, not just the one it came up on.**
@@ -2610,6 +2678,30 @@ launch there while GitHub Actions builds the same commit fine. Details in
 regenerated `public/*.pdf` and `scripts/resume-pdf.lock.json` with it** — `npm run check:pdf` hashes
 every input and fails the deploy otherwise, so a stale resume can't ship, but it also can't fix
 itself.
+
+**"Resume content or layout" is wider than it sounds: `src/styles/base.css` is a hashed input**
+(2026-09-04, from [#249](https://github.com/ali-wallick/Portfolio/issues/249)). A change with
+nothing to do with the resume — a gallery rule, a lightbox rule — regenerates both PDFs, so read
+`byteHashedFiles()` in `scripts/build-pdf.mjs` rather than guessing from the filename. What proves
+the resume did not actually move is `check:resume-print`, which compares the rendered geometry
+against a committed baseline; the regenerated bytes differing is expected and says nothing.
+
+**And a Claude Code web session cannot regenerate them correctly**, which is the trap, because it
+regenerates them _plausibly_. The fallback Chromium that #245 falls back to is a different build
+from the pinned one, and it subsets fonts differently: 3 embedded subsets instead of 9, and roughly
+half the file size, for byte-identical page geometry. CI still passes, because `check:pdf` only
+compares the input hash to the lock. **Commit them anyway — a stale lock fails CI and blocks the
+branch — then say plainly in the PR that they want regenerating on a normal machine.** The command
+there is `npm run build:pdf -- --force`, and **the `--` is required**: without it npm eats the flag,
+prints a warning about its own protections, and the script reports "already current" because the
+lock it is checking already matches. Do the `npm run build` first, or it renders against a stale
+`dist/`.
+
+**Comparing two PDFs' content streams to check the resume is unchanged does not work.** Glyph IDs
+there are indices into the embedded subset, and two renders subset differently, so the same
+character gets a different ID and a diff reports thousands of changes that mean nothing. This was
+tried; it produced a confident wrong answer in both directions before `check:resume-print` settled
+it. That check, and the page-count assertion, are the guards — not the bytes.
 
 **And if you add a design token, add it to `resume.css`'s `@media print` block too.** That block
 pins paper to the Phase 4 palette and type scale by redefining tokens, and it only covers the ones
