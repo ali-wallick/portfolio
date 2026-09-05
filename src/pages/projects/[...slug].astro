@@ -23,13 +23,29 @@ import { getAllProjects, type Project } from '~/lib/content';
  */
 export const getStaticPaths = (async () => {
   const projects = await getAllProjects();
-  return projects.map((project) => ({
+  return projects.map((project, i) => ({
     params: { slug: project.id },
-    props: { project },
+    props: {
+      project,
+      /* The stepping order is `getAllProjects()` — featured by `featureOrder`,
+         then archive newest-first — which is exactly the reading order of
+         /projects, so this is the index's own sequence rather than a second
+         ordering invented for the control (#314).
+
+         Stops at the ends rather than wrapping, the same call #166 made for
+         the gallery arrows: a reader who cannot tell whether they have seen
+         everything is what wrapping costs. */
+      prev: projects[i - 1] ?? null,
+      next: projects[i + 1] ?? null,
+    },
   }));
 }) satisfies GetStaticPaths;
 
-const { project } = Astro.props as { project: Project };
+const { project, prev, next } = Astro.props as {
+  project: Project;
+  prev: Project | null;
+  next: Project | null;
+};
 const { Content } = await render(project);
 const d = project.data;
 ---
@@ -41,12 +57,20 @@ const d = project.data;
   noindex={d.draft}
 >
   {
-    /* The backlink sits INSIDE the title block now (#247), in its reserved
-       kicker slot. Loose above it, it was an extra element in `main` that
-       pushed this page's title 42px lower than every other page's. */
+    /* The kicker sits INSIDE the title block (#247), in its reserved slot.
+       Loose above it, it was an extra element in `main` that pushed this
+       page's title 42px lower than every other page's.
+
+       A breadcrumb rather than a `← Projects` link since #314 — see
+       `.breadcrumb` in base.css for why the slot names the SET instead of
+       repeating a destination the header and footer both already carry. */
   }
   <PageHead title={d.title}>
-    <a class="backlink" slot="kicker" href="/projects">← Projects</a>
+    <p class="breadcrumb" slot="kicker">
+      <a href="/projects">Projects</a>
+      <span aria-hidden="true">/</span>
+      <a href={`/projects#${d.tier}`}>{d.tier === 'featured' ? 'Featured' : 'Archive'}</a>
+    </p>
     <ProjectMeta project={project} />
   </PageHead>
 
@@ -72,6 +96,38 @@ const d = project.data;
   }
 
   <LinkList links={d.links} />
+
+  {
+    /* Stepping to the adjacent project (#314). Rendered at all only when
+       there is somewhere to go — every page has at least one neighbour today,
+       but a one-project collection should not print an empty rule.
+
+       The empty `<span>` on a missing end is load-bearing: without it the
+       surviving link slides to the middle on the first and last projects
+       instead of staying on its own side. */
+  }
+  {
+    (prev || next) && (
+      <nav class="project-nav" aria-label="Other projects">
+        {prev ? (
+          <a class="project-step" href={`/projects/${prev.id}`} rel="prev">
+            <span class="project-step-dir">← Previous</span>
+            <span class="project-step-title">{prev.data.title}</span>
+          </a>
+        ) : (
+          <span />
+        )}
+        {next ? (
+          <a class="project-step project-step-next" href={`/projects/${next.id}`} rel="next">
+            <span class="project-step-dir">Next →</span>
+            <span class="project-step-title">{next.data.title}</span>
+          </a>
+        ) : (
+          <span />
+        )}
+      </nav>
+    )
+  }
 
   {
     /* Progressive enhancement, strictly — the row is a plain `overflow-x: auto`

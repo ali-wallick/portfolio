@@ -2806,6 +2806,109 @@ not get its own radius.
 the résumé renders nothing of.** `check:resume-print` reported the geometry unmoved, which is the
 check that means anything; the differing bytes say nothing. See "Working here" for why.
 
+## A project page opens with a breadcrumb and closes with its neighbours (2026-09-05, closes #314)
+
+Settled on a live switcher, the twelfth run of that loop. Ali's issue was two lines — is a plain
+`← Projects` link the best call, and maybe make a picker of the options — and measuring moved the
+question before any candidate was built.
+
+**`Projects` was on a project page three times.** The backlink, the header nav pill (which already
+carries `aria-current`), and the footer nav. The header is `position: sticky` at >=40em, so on a
+desktop that destination is pinned at y=14 at every scroll position: the slot directly above the
+`<h1>` was spending prime space on a link you cannot lose.
+
+**And the phone inverts it exactly.** Below 40em the header is deliberately `position: static`, so
+at the bottom of `/projects/marvel-snap` on a 390px phone the nav's `Projects` link is **4,722px**
+behind you and so is the backlink. Pages run 1.8x to 6.0x the viewport. So the two platforms had
+opposite problems, and neither is answered by restyling the link.
+
+**Which is why "a back link at the bottom" was never a candidate.** The footer nav already carries
+`Projects` 64px after the article ends — a fourth copy of one destination, 64px above an existing
+one. What the footer cannot give you is another project, and that is what the foot of the page is
+for now.
+
+### The slot names the set; the foot states your position in it
+
+`.breadcrumb` replaces `.backlink`, and `.project-nav` is new. They are one decision: the page
+**opens** by naming a set (`Projects / Featured`, `Projects / Archive`, both crumbs linked) and
+**closes** with the adjacent entries of that same list.
+
+**Both crumbs are links because NEITHER is the current page** — the page is the `<h1>` directly
+below, so this is a breadcrumb with the final crumb elided. That is the form that avoids restating
+the title, and `/projects` carries `#featured` and `#archive` ids so the second crumb lands on the
+section this project is filed in. Ali's own reservation on the first round was that a tier crumb
+"doesn't really add anything unless I added sub project pages", and she was right about the version
+she was shown: it rendered as plain text, so it was a label wearing breadcrumb clothes. **A crumb
+you cannot click is not a location.**
+
+**`Projects / <title>` — the textbook breadcrumb — lost, and the reasoning generalises to any
+two-level site.** Its leaf carries no information and sits 20px above an `<h1>` saying the same
+words at 40px; a leaf earns its place where the title is ambiguous or truncated, and here it never
+is. It also overflowed the one-line kicker on 3 of 16 titles at 320px (KinoClue is 413px into a
+273px budget). The "what if project pages get children" argument favours the tier crumb too: a
+child's breadcrumb would be `Projects / Marvel Snap / Thing`, whose leaf still restates its own h1,
+so the title form is that shape minus a level — pre-building for a hierarchy that does not exist and
+paying a redundant line on all 16 pages now.
+
+**The tier is a fact no other surface of a project page shows.** `.meta-strip` carries `status`,
+which is a different claim. Worth knowing that they nearly partition the same way — every `shipped`
+project is featured, every `coursework` and `prototype` is archive, and only the four jam entries
+have a tier you cannot guess from the chip.
+
+### `Previous` / `Next`, and why not `Newer` / `Older`
+
+Ali asked about `Newer` / `Older` and then answered half of it herself (`featureOrder` is hand
+picked). Both halves are worth keeping, because the first is the one that is checkable today.
+
+**The order IS chronological right now** — sort year descends 2024 -> 2009 with no inversion, the
+featured->archive seam included — **but it has ties, and 6 of its 15 steps point at a project of the
+same year.** Four 2011s in a row, three 2010s, two 2009s. So "Older" would be false on 40% of steps,
+in front of a reader who can see both years in the meta strip on both pages.
+
+**The second reason outlives the first: `featureOrder` is a hand ranking, not a date.** It is
+chronological by coincidence. Reordering the featured five — which the field exists to allow — would
+make a chronological label wrong with no build error. That is the class of thing the content model's
+guard table exists to rule out.
+
+**`Previous` / `Next` is not a compromise on wording.** Ali's own doubt was that it reads oddly
+because "previous in what?", and that was true while the page named no sequence. The breadcrumb is
+what answers it: the set is named and linked at the top, and the pair states your position in it at
+the bottom. It also makes no claim that can be false, which is the whole reason the alternative
+lost. Two candidates that dropped the directional word entirely (arrows only) or replaced it with
+each neighbour's **year** were built and not taken.
+
+### The card lost on the tier's own rule
+
+A "Next Project" card with art was the other half of Ali's "picker of other options" reading, and
+the argument that decided it is a content one rather than a layout one. **The sequence crosses
+featured -> archive between Kaneva and Tilting at Windmills**, so a card headed "Next Project"
+presents a 2014 jam entry as the peer of a five-year job — the exact reading the two tiers exist to
+prevent ("honest framing in the archive tier: history, not a portfolio pitch"). A line of mono
+promises nothing about what is on the other end.
+
+Supporting, and smaller: the pair offers two destinations on 14 of 16 pages where the card offers
+one; the card needs a fallback to "Previous Project" on the last entry, which the pair does not
+because a missing end is simply an empty side; and it costs +115px at every width against the card's
++214 desktop and **+333 on a phone**, at the end of a page already 3.7x the viewport.
+
+**Scoping the pair to the tier was built and rejected (B8).** It would make the head and the foot
+describe the same list on all 16 pages — exactly one step crosses today — at the cost of dead-ending
+Kaneva and Tilting at Windmills, taking pages with a single neighbour from 2 to 4. Ali's call: one
+inconsistency on one page beats a dead end on the strongest page in the archive tier's neighbourhood.
+
+### Two things found on the way
+
+- **[#318](https://github.com/ali-wallick/Portfolio/issues/318): every project page with a gallery
+  scrolls sideways**, on `main`, at every viewport. `.gallery-zoom-hint` is `position: absolute`
+  while `.gallery-viewport` is `position: static`, so the hints take `.gallery` as their containing
+  block and escape the scroller's clip — the last hint's right edge is 1384px, exactly
+  `documentElement.scrollWidth` on a 390px phone. `overflow-x: hidden` on the scroller changes
+  nothing; `position: relative` on it fixes it completely. Filed rather than fixed, since it is
+  unrelated to this pass.
+- **A helper beside `getStaticPaths` in the frontmatter is not in scope inside it.** Astro hoists
+  that function into its own module and evaluates it in isolation, so it type-checks clean and dies
+  at "generating static routes" with "not defined". Declare it inside.
+
 ## Preserving the old site (2026-08-26)
 
 The old DreamHost site is preserved well enough that `snapshot/` can eventually be tagged and

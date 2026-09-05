@@ -129,7 +129,12 @@ const HOLD = 1600;
 const SETTLE = 25;
 
 /** Controls. Pointing at one is an act of aiming; pointing at prose isn't. */
-const HOVER_SELECTOR = '.nav-link, .card, .tile, .button, .backlink, .brand, .gallery-zoom';
+/* `.breadcrumb a` rather than `.breadcrumb` (#314): the crumb list is a `<p>`
+   and only its anchors are controls, so naming the container would park the
+   brackets around the separator too. Same shape as `.gallery-zoom` — the link,
+   not the figure it sits in. */
+const HOVER_SELECTOR =
+  '.nav-link, .card, .tile, .button, .breadcrumb a, .project-step, .brand, .gallery-zoom';
 
 /**
  * Anything the keyboard can land on, because focus must always be visible —

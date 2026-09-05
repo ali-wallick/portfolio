@@ -273,7 +273,7 @@
     /* --- The page title edge ----------------------------------------------
    *
    * The reserved height of the ONE line that may sit above a page's `<h1>` —
-   * an eyebrow, a backlink, nothing. It is reserved whether or not anything
+   * an eyebrow, a breadcrumb, nothing. It is reserved whether or not anything
    * fills it, which is the entire point: `#247` was that every route put a
    * different thing first, so the title landed at a different y on every page
    * and clicking through the nav made it dance.
@@ -283,7 +283,7 @@
    *   /contact  90   (nothing above it)
    *   /about    106  (a bare h1's own 16px margin)
    *   /projects 127  (an eyebrow)
-   *   /projects/* 132 (a backlink)
+   *   /projects/* 132 (a backlink, now a breadcrumb — #314)
    *   /         155  (the hero's own top padding)
    *   /resume   165  (the density tabs, then the panel's padding)
    *

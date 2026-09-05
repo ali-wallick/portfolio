@@ -3,7 +3,7 @@
  * The title block every route opens with (#247).
  *
  * One job: put the `<h1>` at the same y on every page. Before this, each route
- * put something different above its title — an eyebrow, a backlink, a bare
+ * put something different above its title — an eyebrow, a breadcrumb, a bare
  * margin, nothing at all — and the title landed anywhere from 90 to 165 on a
  * 1280 viewport. Clicking through the nav made it jump every time.
  *
@@ -21,7 +21,7 @@
  * old site's pages drifted because every page was free to be shaped its own
  * way.
  *
- * The `kicker` slot takes an eyebrow (`/`, `/projects`) or a backlink
+ * The `kicker` slot takes an eyebrow (`/`, `/projects`) or a breadcrumb
  * (project pages). It holds ONE line — it is a fixed-height slot, so a second
  * line overflows it rather than pushing the title down, which is the whole
  * property being bought here.

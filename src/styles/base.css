@@ -427,7 +427,7 @@ hr {
 }
 /* `--text-base`, not `--text-sm`, in the header only (#162). Settled on the
    same switcher as the wordmark above: at the control size the primary nav
-   tied the footer credit, the `← Projects` backlink and the page metadata —
+   tied the footer credit, the project breadcrumb and the page metadata —
    ranked with incidental text and below body copy. The footer stays at
    `--text-sm`, the site's control size, so the two remain comparable; this is
    a header-specific promotion, not a change to what `.nav-link` means
@@ -1217,7 +1217,7 @@ hr {
 }
 
 /* The reserved line above the title. A fixed height, not a min-height: the
-   point is that its occupant — an eyebrow, a backlink, or nothing — cannot
+   point is that its occupant — an eyebrow, a breadcrumb, or nothing — cannot
    move the heading.
 
    The occupant sits at the TOP of the slot, so the remainder of the slot is
@@ -1228,7 +1228,8 @@ hr {
 
    `min-height`, not `height`, and the difference is a failure mode rather
    than a preference. The slot holds one short line by contract — every
-   occupant today is an eyebrow or a backlink that fits at 320px — but a fixed
+   occupant today is an eyebrow or a breadcrumb that fits at 320px — but a
+   fixed
    height silently OVERLAPS the title if one ever wraps, where a min-height
    pushes it down. A title nudged 20px on one narrow viewport is a worse
    alignment; a title with a word sitting on top of it is a broken page. This
@@ -1245,7 +1246,7 @@ hr {
    what follows. Inside the slot that margin would push the slot's own content
    up off its baseline, and the slot already supplies the gap. */
 .page-kicker > .eyebrow,
-.page-kicker > .backlink {
+.page-kicker > .breadcrumb {
   margin-bottom: 0;
 }
 
@@ -1256,13 +1257,136 @@ hr {
   margin-top: 0;
 }
 
-.backlink {
-  display: inline-block;
+/* --- The breadcrumb above a project title (#314) --------------------------
+ *
+ * Replaces a plain `← Projects` link. The complaint that started #314 was
+ * that a regular link might not be the best call, and measuring said the
+ * destination was never the problem: `Projects` is on a project page THREE
+ * times — this, the header nav pill (which already carries `aria-current`,
+ * and which is `position: sticky` at >=40em), and the footer nav. The slot
+ * was spending prime space directly above the `<h1>` on a link you cannot
+ * lose.
+ *
+ * So the slot names the SET instead. `Featured` / `Archive` appears on no
+ * other surface of a project page — `.meta-strip` carries `status`, which is
+ * a different fact — and it pairs with `.project-nav` at the foot of the
+ * page, which states your position in that same list.
+ *
+ * BOTH crumbs are links because NEITHER is the current page: the page is the
+ * `<h1>` directly below, so this is a breadcrumb with the final crumb elided.
+ * That is what keeps it from restating the title 20px above itself, which is
+ * what the `Projects / <title>` form measured as doing — and that form also
+ * overflowed the one-line slot on 3 of 16 titles at 320px (KinoClue is 413px
+ * into a 273px budget). `/projects` carries `#featured` and `#archive` ids so
+ * the second crumb lands on the section this project is filed in.
+ *
+ * Fits the 36px kicker on one line at 320px: 162.8px on a featured page,
+ * 154.2px on an archive one, against a 273px budget. The `<h1>` lands at
+ * 133 / 176.6 / 220.2 at 1280 / 390 / 320 — identical to the plain backlink,
+ * so #247's shared title edge is untouched.
+ */
+.breadcrumb {
+  display: flex;
+  gap: var(--space-2);
+  align-items: baseline;
+  margin: 0;
+  max-width: none;
   font-family: var(--font-mono);
   font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* Neither crumb ever shrinks: both are destinations, and the slot holds one
+   line by contract. */
+.breadcrumb a,
+.breadcrumb span {
+  flex: none;
+}
+
+.breadcrumb a {
   text-decoration: none;
 }
-.backlink:hover {
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+/* The separator is `/` and not the site's `·`, deliberately. `·` separates
+   metadata CATEGORIES (#152) and does so 30px below this, in the meta strip;
+   ` / ` appears nowhere else in visible text on the site, which is exactly
+   what makes it read as a path rather than as another list. */
+.breadcrumb span[aria-hidden] {
+  color: var(--color-index);
+}
+
+/* --- Stepping between projects (#314) -------------------------------------
+ *
+ * The other half of the same issue, and it exists because of a measurement:
+ * the header is deliberately `position: static` below 40em, so at the bottom
+ * of /projects/marvel-snap on a 390px phone the nav's own `Projects` link is
+ * 4,722px behind you and so is the breadcrumb. Project pages run 1.8x to 6.0x
+ * the viewport.
+ *
+ * It is NOT a second way back to /projects — the footer nav already sits 64px
+ * after the article ends, so that would be a fourth copy of one destination.
+ * What the footer cannot give you is another project.
+ *
+ * A pair rather than a "next project" card, on the tier's own rule: the
+ * sequence crosses featured -> archive between Kaneva and Tilting at
+ * Windmills, and a card headed "Next Project" presents a 2014 jam entry as
+ * the peer of a five-year job. "Honest framing in the archive tier" is why
+ * the tier exists. A line of mono promises nothing about what is on the other
+ * end. It is also two destinations instead of one, on 14 of 16 pages, and
+ * +115px at every width against the card's +214 desktop / +333 on a phone.
+ *
+ * `Previous` / `Next` and not `Newer` / `Older`, which was measured and
+ * rejected: the order is chronological TODAY (2024 -> 2009, no inversion) but
+ * it has ties, so 6 of its 15 steps point at a project of the same year, in
+ * front of a reader who can see both years in the meta strip. And
+ * `featureOrder` is a hand ranking — reordering the featured five, which the
+ * field exists to allow, would make a chronological label wrong with no build
+ * error.
+ */
+.project-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  max-width: var(--measure-wide);
+  margin-top: var(--space-12);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+/* The end of the sequence renders an empty `<span>` rather than nothing, so
+   the surviving link stays on its own side instead of sliding to the middle
+   on the first and last projects. */
+.project-step {
+  display: grid;
+  gap: var(--space-1);
+  max-width: 50%;
+  text-decoration: none;
+}
+
+.project-step-next {
+  text-align: right;
+}
+
+.project-step-dir {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.project-step-title {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-link);
+}
+
+.project-step:hover .project-step-title {
   text-decoration: underline;
 }
 

@@ -23,7 +23,7 @@ const total = featured.length + archive.length;
     <p class="eyebrow" slot="kicker">{total} entries</p>
   </PageHead>
 
-  <h2>Featured</h2>
+  <h2 id="featured">Featured</h2>
   <ul class="card-grid">
     {
       featured.map((project, i) => (
@@ -54,7 +54,7 @@ const total = featured.length + archive.length;
       lets the tier be browsable at a glance without competing with the five
       featured write-ups above it. */
   }
-  <h2>Archive</h2>
+  <h2 id="archive">Archive</h2>
   <ul class="tile-grid">
     {
       archive.map((project) => (

@@ -4057,3 +4057,62 @@ machine, because a web session's fallback Chromium subsetted them differently. #
 subset count was a symptom of the face never loading at all, fixed the load order, and added a
 `/BaseFont` assertion to `--check`. Rebased, this branch's own regenerated PDFs embed Public Sans
 and pass that assertion, so there is nothing left to redo somewhere else.
+
+## #314 — the project backlink (2026-09-05)
+
+The twelfth run of the live-switcher loop, and the one where measuring reframed the issue twice
+before a candidate existed. The decisions are in CLAUDE.md under "A project page opens with a
+breadcrumb and closes with its neighbours"; what belongs here is how the pass went.
+
+**Ali's issue was two sentences and one of them was ambiguous.** "Just a regular link - is that the
+best call? Maybe make a picker of other options" reads either as "build a switcher" (which is how
+this repo has phrased it eleven times) or as "maybe the answer is a picker of other projects". Rather
+than ask, the instrument covered both: a switcher, with a literal `<details>` picker of all sixteen
+projects as one of its end-of-page candidates. That cost one radio and removed the question.
+
+**The measurement that mattered was not about the link.** `Projects` turned out to be on a project
+page three times, and the header is sticky on a desktop and deliberately static below 40em — so the
+backlink is redundant where the nav is pinned and unreachable where it is not (4,722px behind you at
+the bottom of Marvel Snap on a phone). That is what turned a one-axis question about a link's
+styling into two axes: what the slot above the title should hold, and whether anything belongs at
+the foot of the page.
+
+**Four rounds, and the switcher got shorter every time**, which is the loop working as documented.
+Five top candidates and four end ones; then Ali picked the breadcrumb, so the weight question came
+off and three variants of the crumb's _content_ went on; then she settled the crumb, so that axis
+came off entirely and the end-of-page axis grew label variants; then one more candidate (a
+tier-scoped pair) that only existed because settling the crumb created the seam it fixes.
+
+**Twice the reviewer's own instinct was right about the problem and wrong about the fix, and
+measuring is what separated them.** "Doesn't really add anything unless I added sub project pages"
+was pointing at a crumb rendered as plain text — not a location, so not a breadcrumb; the fix was two
+`id`s on `/projects` and an `href`, not a different candidate. And "maybe Newer / Older" was pointing
+at "Previous in _what_?" being unanswered — true before the breadcrumb named a set, and the labels
+themselves would have been false on 6 of 15 steps because the catalogue has year ties.
+
+**One candidate was put on the switcher specifically to be disproved.** `Newer / Older` went up with
+a panel note naming the page where it breaks, rather than being argued away in chat. That is cheaper
+than a paragraph and it is the thing a switcher is for.
+
+### Cost notes
+
+No subagents — this was one repo, one component, and a lot of measurement, which is exactly the
+"could do it inline in a few tool calls" case. The expensive part was Playwright measurement, not
+generation: page geometry at three viewports, string widths in the kicker's own font, the
+tier/status cross-tab, thumbnail sources, and the adjacency table that settled the labels.
+
+**The scaffolding was four files and never touched a shipped one** except two `id` attributes on
+`/projects`, which were part of a candidate rather than of the instrument. Production builds were
+checked at 23 pages with no `dist/design/` on every round, per the skill's own teardown check — the
+one that earned itself during #249.
+
+**A local dev-server bug produced one confidently wrong measurement.** `build.format` is `'file'`,
+so `/projects` is `dist/projects.html` — but `dist/projects/` also exists, holding the detail pages,
+and the throwaway static server resolved the directory first and 404'd. It reported "0 archive
+tiles" for a page with eleven. Worth remembering that a measurement harness can be the thing that is
+broken, which is the same shape as the traps the switcher skill already lists.
+
+**#318 came out of this pass and is unrelated to it**: every project page with a gallery scrolls
+sideways on `main`, because the visually-hidden zoom hint is absolutely positioned and the scroller
+is not, so the hints escape its clip. Found while checking whether the lab had introduced horizontal
+overflow — it had not, and the same number came back on the real page.
