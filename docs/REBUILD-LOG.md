@@ -3835,3 +3835,97 @@ No subagents. The whole investigation was five Bash calls — enumerate `/BaseFo
 PDFs, walk `git log` for the same field across twelve commits, probe what the browser requests under
 each media type, then an A/B render. Delegating any of it would have cost more than doing it, and the
 git-history walk is what turned one suspicious render into a four-month pattern.
+
+## #240 — the reticle was indicating what the browser had declined to indicate (2026-09-05)
+
+Two lines in the issue: _"a bit of bugginess where it can hang around"_ and _"do we want it to travel
+between the header and the body? Or just exist in only the body?"_. They turned out to be a bug and
+a preference, and separating them was most of the work.
+
+### The bug was one pseudo-class
+
+The temptation was to treat "hangs around" as a tuning question — lengthen `HOLD`, add a timeout to
+the focus path — and put it on the switcher with everything else. Probing it first is what stopped
+that. Five scenarios went into a Playwright harness before any code changed: hover a card and move to
+prose, click a card and move away, hover and wheel-scroll off, leave the document, blur the window.
+Three came back clean. One did not, and it named its own cause:
+
+```
+after MOUSE click     op=1  focus=A  :focus-visible=false
++2.2s pointer away    op=1  focus=A  :focus-visible=false
++3.5s pointer away    op=1  focus=A  :focus-visible=false
+```
+
+The reticle tracked `:focus`; the ring it exists to decorate is `:focus-visible`. So after any mouse
+click it drew a selection marker on a control the browser had specifically chosen not to mark, and
+then held it for the life of the page, because `retarget()` only starts the idle countdown when
+nothing is active and a focused element is active. Both halves had to be true for the hang: the wrong
+pseudo-class put it there, and the idle rule kept it there.
+
+**The first probe's scenario A was a false negative and nearly cost the diagnosis.** "Hover a card,
+move the pointer to prose" reported no fade — the reticle had simply moved to a _second card_,
+because the coordinate picked for "prose" was inside one. Re-run against a real paragraph found by
+querying the DOM rather than by guessing a coordinate, it faded correctly. A scenario that measures
+the wrong pixel returns a plausible failure, which is the same shape of convincing wrong answer the
+switcher skill's traps section is about, arriving before the switcher existed.
+
+### The measurement reframed the design question
+
+`fade` (#33) had already settled idle behaviour, so the obvious reading was that the long-diagonal
+problem was solved and this was about taste. Measuring said otherwise. On `/projects` the resting nav
+pill is 353px from the first card and 1515px from the furthest tile — against a 1509px viewport
+diagonal, so the header-to-body traverse is longer than the screen. And `fade` cannot reach it: the
+brackets are placed at home on every page load and are not dormant, so the traverse fires on the
+first acquisition of every navigation. **An idle behaviour settles what happens after a pause and
+says nothing about the first move after a page load.**
+
+That turned "should it travel between the header and the body" from a preference between two feels
+into a question with a number attached, and it is what made a four-mark instrument worth building
+rather than a two-way A/B.
+
+### The instrument
+
+Sitewide axis, so no lab route — the panel, its CSS and its `<head>` bootstrap were string constants
+in `BaseLayout.astro` injected with `<Fragment set:html>`, gated on `showDrafts` at the markup and at
+the script. `src/scripts/reticle-lab.ts` was a deliberate copy of `reticle.ts` rather than an import,
+so the shipped file stayed byte-identical for the life of the comparison.
+
+The candidates were verified distinct before Ali saw them, by sampling how far the brackets had got
+85ms after crossing from a nav link to a card:
+
+```
+h1  49% of the way there    (a flight — the incumbent)
+h2 100%                     (a cut)
+h3  61%                     (no home, still flies across)
+h4 100%                     (no home, header never targeted)
+```
+
+**One rule of the loop earned itself again here: the panel is the thing the subject would otherwise
+chase.** `FOCUS_SELECTOR` matches `input` and `summary`, so every click on a radio would have parked
+the brackets on the instrument while comparing exactly where the brackets go. Swallowing
+`pointerover`/`focusin` in the capture phase at the panel's root is what kept the comparison about
+the page.
+
+### Ali picked H2, and what it preserves is the point
+
+_"Feels like it balances the uniqueness and the usability."_ The resting pill stays, so the reticle is
+still a selection cursor that is on screen before you touch anything; chase-and-settle stays
+everywhere it was legible as a chase. The one move removed is the one that was never legible as a
+chase, because it spanned the page.
+
+Verified on the shipped build: nav→card 100% (cut), card→card 62% (travel), card→nav 100% (cut),
+nav→brand 49% (travel inside the header). The character is intact within each region and gone between
+them, which is a sharper outcome than "less motion".
+
+H3 and H4 both lost on costs invisible from a desktop, recorded in CLAUDE.md so they are not
+rediscovered: dropping the home retires the sticky header's stated justification, and on a phone —
+no pointer below 40em — the brackets on the nav pill are the entire reticle, so a homeless one renders
+nothing at all.
+
+### Cost notes
+
+No subagents. The whole pass is one script, one layout file and a probe harness, and the expensive
+part was measurement rather than breadth — five probe scripts against a locally-served `dist/`, none
+of which another agent could have run more cheaply than inline. The teardown left the diff at a single
+file: `git diff --stat origin/main` reports `src/scripts/reticle.ts` and nothing else, and `check:pdf`
+reported nothing to regenerate, confirming no `byteHashedFiles` input was ever touched.

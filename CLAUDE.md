@@ -2652,6 +2652,42 @@ Ruled out: About writing its own full sentence (a fifth hand-written copy with n
 a templated string with a `{company}` slot ("on a new team at there" shows how fast it needs a
 second rule).
 
+## Decoration tracks `:focus-visible`, and the reticle cuts between regions (2026-09-05, closes #240)
+
+Two findings from one issue, and only the second was a preference.
+
+**The rule that generalises: a decoration layered over a native indicator has to track the same
+pseudo-class that indicator does.** The reticle matched `:focus`; the ring underneath it is
+`:focus-visible`. A mouse click focuses a link and the browser then declines to paint a ring on it,
+so the brackets were indicating a control the browser had decided not to indicate — the exact
+inverse of `reticle.ts`'s own rule 1, which promises the script only decorates a real ring. It also
+never let go, because `retarget()` arms the idle timer only when nothing is active and a focused
+element is active. Measured on `/resume`: click a density tab, move the pointer away, brackets still
+on it 3.5s later. **Anything else that ever decorates focus on this site inherits this** — match the
+pseudo-class the browser is actually painting, not the one with the shorter name.
+
+**The reticle crosses between the header and the body by cutting, never by travelling.** Ali's pick
+from four homes on a live switcher, the eleventh run of that loop. It keeps the resting nav pill and
+keeps chase-and-settle _within_ each region; what goes is the one move that spanned the page. Her
+reasoning: it balances the uniqueness and the usability. The mechanism, the measurements and the
+three candidates that lost are in `src/scripts/reticle.ts`'s own header, which is where anyone
+changing this will be.
+
+**What is worth having here rather than there: `fade` (#33) did not close this, and the reason is a
+general one.** That pass measured the busyness between _body_ targets and fixed it. The brackets are
+placed at their home on every page load and are not dormant, so the launch out of the header was
+outside what it measured — and it is the longest travel the reticle makes, longer than the screen
+(1515px against a 1509px viewport diagonal on `/projects`). **An idle behaviour settles what happens
+after a pause; it says nothing about the first move after a page load**, and those are different
+questions on any site where something rests somewhere.
+
+**Two candidates lost on costs that only show up off the desktop, and both are worth knowing before
+anyone reopens this.** Dropping the home retires `base.css`'s stated reason for the sticky header
+("Sticky, because the reticle needs a home") — it survives on the second reason in that same comment
+and would become a decision rather than a consequence. And on a phone the brackets on the nav pill
+are the whole of the reticle: below 40em there is no pointer, so a homeless reticle renders nothing
+at all until something takes focus.
+
 ## Preserving the old site (2026-08-26)
 
 The old DreamHost site is preserved well enough that `snapshot/` can eventually be tagged and

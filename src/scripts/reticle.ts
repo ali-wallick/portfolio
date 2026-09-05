@@ -34,10 +34,12 @@
  *    base.css stays underneath. If this script is blocked, fails, or is simply
  *    slow, nothing about the site becomes unusable or unnavigable.
  * 2. **Hover and focus are targeted differently, on purpose.** Focus follows
- *    anything focusable, because a keyboard user needs it everywhere. Hover
- *    follows *controls only* — nav, cards, tiles, buttons. Letting it chase
- *    inline links would make it twitch across every paragraph of prose, which
- *    is noise rather than personality.
+ *    anything focusable *that the browser is itself indicating* — see the
+ *    `:focus-visible` note on the `focusin` listener — because a keyboard user
+ *    needs it everywhere and a pointer user has already been told where they
+ *    are by the pointer. Hover follows *controls only* — nav, cards, tiles,
+ *    buttons. Letting it chase inline links would make it twitch across every
+ *    paragraph of prose, which is noise rather than personality.
  * 3. **Reduced motion is not a disabled state.** `--duration` is already zeroed
  *    under `prefers-reduced-motion`, so the brackets cut to each target instead
  *    of travelling to it. The device survives; only the travel goes.
@@ -55,6 +57,35 @@
  * rather than flying to it. The long diagonal between distant targets is gone
  * entirely, which was the actual complaint. The other three, and the switcher,
  * are in this branch's history if the decision ever wants reopening.
+ *
+ * ## Crossing between the header and the body is a cut (#240, 2026-09-05)
+ *
+ * The traverse `fade` never covered. It killed the long diagonal *between body
+ * targets*, but the brackets are placed at their home on every page load and
+ * are not dormant — so the launch out of the header happened on the first
+ * acquisition of every navigation, and again whenever a nav link and a card
+ * were pointed at within `HOLD` of each other.
+ *
+ * It is also the longest travel the reticle ever makes, and it is longer than
+ * the screen. Measured on `/projects` at 1280x800: the resting nav pill is
+ * **353px** from the first card and **1515px** from the furthest tile, against
+ * a **1509px** viewport diagonal. Across routes the first acquisition after a
+ * page load ran 281px (`/resume`) to 703px (`/`).
+ *
+ * Four homes went on a live switcher and Ali picked this one: **keep the
+ * resting pill, and cut across the boundary rather than flying across it.**
+ * The reticle still travels *within* the header and *within* the body, so the
+ * chase-and-settle character is untouched everywhere it was legible; what goes
+ * is the one move that was never legible as a chase because it spanned the
+ * page. Her reasoning: it balances the uniqueness and the usability.
+ *
+ * The three that lost, so they are not rediscovered as improvements: flying
+ * across (the incumbent); dropping the home entirely so nothing rests
+ * anywhere; and dropping the home *and* taking the header out of both
+ * selectors. The last two both retire `base.css`'s stated reason for the
+ * header being sticky ("because the reticle needs a home"), and both render
+ * nothing at all on a phone, where there is no pointer and the brackets are
+ * the only thing the nav pill gets.
  */
 
 /** How far outside the target's box the brackets sit. */
@@ -125,6 +156,10 @@ document.body.appendChild(root);
     too, except when its own target lives inside the header. See `place()`. */
 const header = document.querySelector<HTMLElement>('.site-header');
 
+/** Which of the page's two regions an element is in. Used for the clip in
+    `place()` and for the boundary cut in `retarget()` — see both. */
+const inHeader = (el: Element | null): boolean => (el ? (header?.contains(el) ?? false) : false);
+
 /**
  * Where the reticle rests when nothing is hovered or focused: the current
  * page's nav pill, or the wordmark on the homepage, which has no nav entry.
@@ -182,8 +217,7 @@ function place(): void {
      so the brackets slide under it as the target scrolls rather than
      floating on top of its opaque background. Skipped for header-internal
      targets (the resting nav pill) so they stay fully visible. */
-  const inHeader = header?.contains(el) ?? false;
-  const headerBottom = inHeader ? 0 : (header?.getBoundingClientRect().bottom ?? 0);
+  const headerBottom = inHeader(el) ? 0 : (header?.getBoundingClientRect().bottom ?? 0);
   const covered = headerBottom - (box.top - PAD);
   root.style.clipPath = covered > 0 ? `inset(${covered}px 0 0 0)` : '';
 }
@@ -223,9 +257,20 @@ function retarget(): void {
   clearTimeout(idle);
 
   if (active) {
+    /* The header/body boundary is crossed by cutting, never by travelling
+       (#240). See "Crossing between the header and the body" above. Tested on
+       the pair rather than on whether the target happens to be home: pointing
+       at a nav link and then at a card is the same long diagonal as launching
+       out of the resting pill, and both are the thing being removed. */
+    const crossing = !dormant && current !== null && inHeader(current) !== inHeader(active);
+
     current = active;
     if (dormant) {
       dormant = false;
+      cut();
+      return;
+    }
+    if (crossing) {
       cut();
       return;
     }
@@ -286,8 +331,32 @@ document.addEventListener('pointerleave', () => {
   commit(true);
 });
 
+/**
+ * Focus is tracked through `:focus-visible`, not `:focus` — which is what rule 1
+ * above actually promises, and what it was failing to keep (#240).
+ *
+ * A mouse click focuses a link or a button, and the browser then declines to
+ * paint a focus ring on it, because a pointer user does not need one. The
+ * reticle had no such rule, so it bracketed a control the browser had decided
+ * not to indicate. Worse, it never stopped: `retarget()` only arms the idle
+ * timer when nothing is active, and a focused element is active — so the
+ * brackets sat on whatever was last clicked, pointer long gone, for the life of
+ * the page. Measured on `/resume`: click a density tab, move the pointer away,
+ * and the brackets are still on it 3.5s later with `:focus-visible` false the
+ * whole time. That is the hanging-around this issue was filed for.
+ *
+ * Reading the pseudo-class inside the handler is accurate — verified in
+ * Chromium, false for a click and true for a Tab on the same element — because
+ * focus-visible is settled at focus time rather than at first paint.
+ *
+ * Tested against `event.target` rather than the `closest()` match: the
+ * pseudo-class is on the element that actually took focus, and an ancestor
+ * standing in for it does not carry it.
+ */
 document.addEventListener('focusin', (event) => {
-  focused = match(event, FOCUS_SELECTOR);
+  const el = event.target;
+  const next = match(event, FOCUS_SELECTOR);
+  focused = next && el instanceof Element && el.matches(':focus-visible') ? next : null;
   commit(true);
 });
 
