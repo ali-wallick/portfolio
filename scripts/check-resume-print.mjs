@@ -200,7 +200,11 @@ try {
     try {
       page = await openPrintPage(context, `${origin}${route}`);
     } catch (err) {
-      console.error(`✗ ${route} returned ${err.status ?? 'no response'}`);
+      // Same split as build-pdf.mjs: a status if there was a response, the
+      // real error message if there was not.
+      console.error(
+        err.status ? `✗ ${route} returned ${err.status}` : `✗ ${route}: ${err.message}`,
+      );
       process.exit(1);
     }
 

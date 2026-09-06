@@ -403,7 +403,10 @@ try {
     try {
       page = await openPrintPage(context, `${origin}${route}`);
     } catch (err) {
-      problems.push(`${route} returned ${err.status ?? 'no response'}`);
+      // A non-OK response carries its status; anything else (Chromium died,
+      // the server went away) keeps its real message rather than being
+      // reported as "no response".
+      problems.push(err.status ? `${route} returned ${err.status}` : `${route}: ${err.message}`);
       continue;
     }
 

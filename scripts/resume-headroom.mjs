@@ -40,10 +40,9 @@ import { launchChromium } from './lib/launch-chromium.mjs';
 import { serveDist } from './lib/serve-dist.mjs';
 import { PRINT_VIEWPORT, PAGE_HEIGHT_BUDGET, PAGE_2_HEIGHT_BUDGET } from './lib/print-geometry.mjs';
 
-/** Paper width in px. See scripts/lib/print-geometry.mjs for the derivation —
- * it's the same geometry check-resume-print.mjs measures against. */
-const PAPER_WIDTH = PRINT_VIEWPORT.width;
-/* Page 2 onward carries a taller top margin for the running header (#235), so
+/* The browser page below opens at PRINT_VIEWPORT, the same paper geometry
+   check-resume-print.mjs measures against; see scripts/lib/print-geometry.mjs
+   for the derivation. Page 2 onward carries a taller top margin for the running header (#235), so
    the two-pager's budget is PAGE_HEIGHT_BUDGET + PAGE_2_HEIGHT_BUDGET, not
    PAGE_HEIGHT_BUDGET × 2. */
 const ROUTES = [
@@ -139,7 +138,7 @@ function measure(tries) {
 const { origin, close } = await serveDist(path.resolve('dist'));
 const browser = await launchChromium();
 try {
-  const page = await browser.newPage({ viewport: { width: PAPER_WIDTH, height: 900 } });
+  const page = await browser.newPage({ viewport: PRINT_VIEWPORT });
   await page.emulateMedia({ media: 'print' });
 
   for (const [route, budget] of ROUTES) {
