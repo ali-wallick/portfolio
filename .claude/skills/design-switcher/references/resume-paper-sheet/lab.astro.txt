@@ -1,0 +1,127 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import ResumeDocument from '~/components/ResumeDocument.astro';
+import { showDrafts } from '~/lib/content';
+import '~/styles/resume-print-lab.css';
+
+/* The paper face. Same two imports `resume.astro` makes, for the same reason:
+   the sheet below sets `--font-body` to Public Sans, and nothing else on the
+   site requests it. */
+import '@fontsource/public-sans/latin-400.css';
+import '@fontsource/public-sans/latin-700.css';
+/* Round 2 only: the italic subtitle candidate (I2). Would join the two
+   imports above in resume.astro / resume/full.astro if it wins. */
+import '@fontsource/public-sans/latin-400-italic.css';
+
+/**
+ * SCAFFOLDING — not shipped. Deleted before this branch merges.
+ *
+ * `/design/resume-print`: the résumé rendered AS THE PRINTED PAGE, on screen,
+ * behind a switcher — issue #235. A PDF is a still frame, so the comparison
+ * that carries information is flipping treatments on the same sheet, not
+ * opening N PDFs in N tabs.
+ *
+ * The sheet reproduces `resume.css`'s `@media print` cascade on screen:
+ * letter geometry (816px wide, 0.5in/0.6in margins, a 701px content column),
+ * the print block's token pins and rules transcribed under `.lab-sheet`, and
+ * a dashed line wherever a page boundary falls. The panel reports the content
+ * height against the 960px-per-page budget live, because the one-pager sits
+ * at 928px today (32px of slack — `npm run resume:headroom`) and a candidate
+ * that overflows is dead however it looks.
+ *
+ * `noindex`, absent from `src/pages/sitemap.xml.ts`, and a dynamic route
+ * returning no paths unless `showDrafts` — so a production build emits no
+ * `dist/design/` at all (see the design-switcher skill: uncrawled is not
+ * unserved).
+ *
+ * Nothing on this route is a `byteHashedFiles` input. `resume.css` is not
+ * imported here on purpose: its screen half would style the sheet as the
+ * panel, and its print half is what this stylesheet transcribes.
+ */
+export const getStaticPaths = (() =>
+  showDrafts ? [{ params: { lab: 'resume-print' } }] : []) satisfies GetStaticPaths;
+
+/* Every axis lists the incumbent first, as the labelled baseline. Labels
+   carry the measurement where there is one. */
+const axes = [
+  {
+    key: 'space',
+    legend: 'Space above a section heading',
+    options: [
+      { key: 'p4', label: '12pt (+11px)' },
+      { key: 'p2', label: '14pt (+19px)' },
+    ],
+  },
+  {
+    key: 'jobgap',
+    legend: 'Space between jobs',
+    options: [
+      { key: 'm1', label: '7.5pt (incumbent)' },
+      { key: 'm2', label: '10pt (+11px)' },
+    ],
+  },
+  {
+    key: 'density',
+    legend: 'Document',
+    options: [
+      { key: 'concise', label: 'One-pager' },
+      { key: 'full', label: 'Two-pager' },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Resume print — candidates"
+  description="Scaffolding: candidate print treatments for the résumé, on one sheet."
+  image="/og/resume.jpg"
+  noindex
+>
+  <div class="lab-stage">
+    <div class="lab-sheet" data-face="a1">
+      <div class="lab-bands" aria-hidden="true"></div>
+      <ResumeDocument density="concise" />
+    </div>
+  </div>
+
+  <aside class="lab-panel" aria-label="Print treatment switcher">
+    <details open>
+      <summary>Compare</summary>
+      <p class="lab-panel-budget">
+        <span class="lab-panel-height">…</span> of <span class="lab-panel-limit">960</span>
+        <span class="lab-panel-verdict"></span>
+      </p>
+      <p class="lab-panel-note">
+        Paginated the way the PDF is: a job never splits across pages and a heading never ends one,
+        so the break falls where Chromium puts it, not at a fixed line. Exact at 1× pixel ratio; a
+        2× or 3× screen reads about 1% short.
+      </p>
+      {
+        axes.map((axis) => (
+          <fieldset>
+            <legend>{axis.legend}</legend>
+            <div class="lab-panel-opts">
+              {axis.options.map((opt, i) => (
+                <label>
+                  <input type="radio" name={`lab-${axis.key}`} value={opt.key} checked={i === 0} />
+                  <span>
+                    <code>{opt.key.toUpperCase()}</code> {opt.label}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        ))
+      }
+      <label class="lab-panel-check">
+        <input type="checkbox" name="lab-actual" />
+        <span>Actual size (else fit to width)</span>
+      </label>
+      <p class="lab-panel-current">Showing <code>…</code></p>
+    </details>
+  </aside>
+  <script>
+    import '~/scripts/resume-print-lab';
+  </script>
+</BaseLayout>

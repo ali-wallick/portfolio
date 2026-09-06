@@ -212,7 +212,11 @@ async function inputHash() {
  * what governs rendering, so the string is cosmetic — matched by prefix here
  * so a future @fontsource metadata fix doesn't read as a substitution.)
  */
-const PRINT_FACE = 'PublicSans';
+const PRINT_FACES = ['PublicSans', 'Gabarito'];
+/* Gabarito joined on #235: the name is set in the site's display face on
+   paper, so its subset is embedded beside Public Sans. Both self-hosted
+   via @fontsource, both OFL. Anything else is a platform fallback. */
+const PRINT_FACE = PRINT_FACES.join(' + ');
 
 /**
  * Every embedded font, by PostScript name with its subset tag stripped.
@@ -222,9 +226,17 @@ const PRINT_FACE = 'PublicSans';
 function embeddedFonts(buffer) {
   return [
     ...new Set(
-      [...buffer.toString('latin1').matchAll(/\/BaseFont\s*\/([A-Za-z0-9+#\-_,.]+)/g)].map((m) =>
-        m[1].replace(/^[A-Z]{6}\+/, ''),
-      ),
+      [
+        ...buffer
+          .toString('latin1')
+          // `/FontName` as well as `/BaseFont`: a Type 3 font — which is how
+          // Chromium embeds a VARIABLE font's instance — has no BaseFont at
+          // all, so a BaseFont-only scan was blind to exactly the case #235
+          // hit: a name set in Gabarito Variable passed this guard while being
+          // Type 3, the one kind of PDF text ATS parsers most often cannot
+          // read. FontName sits in every embedded font's descriptor.
+          .matchAll(/\/(?:BaseFont|FontName)\s*\/([A-Za-z0-9+#\-_,.]+)/g),
+      ].map((m) => m[1].replace(/^[A-Z]{6}\+/, '')),
     ),
   ];
 }
@@ -249,7 +261,18 @@ function embeddedFonts(buffer) {
  * build for the platform it ran on.
  */
 function assertPrintFace(label, buffer) {
-  const wrong = embeddedFonts(buffer).filter((name) => !name.startsWith(PRINT_FACE));
+  const fonts = embeddedFonts(buffer);
+  const wrong = fonts.filter((name) => !PRINT_FACES.some((f) => name.startsWith(f)));
+  // Chromium names a variable instance `Gabarito-Regular_Bold` and embeds it
+  // as Type 3; the static file embeds as `Gabarito-Bold`, a real face. A
+  // `/Subtype /Type3` anywhere in the file is the direct test.
+  if (wrong.length === 0 && /\/Subtype\s*\/Type3/.test(buffer.toString('latin1'))) {
+    return (
+      `${label} embeds a Type 3 font (${fonts.filter((n) => n.includes('_')).join(', ') || 'unnamed'}) — ` +
+      'a variable font instance drawn as glyph procedures, which ATS parsers cannot read. Name the ' +
+      'static face; see the Gabarito import in src/pages/resume.astro.'
+    );
+  }
   if (wrong.length === 0) return null;
   return (
     `${label} embeds ${wrong.join(', ')} instead of ${PRINT_FACE} — the print face fell back to a ` +

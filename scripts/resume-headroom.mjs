@@ -42,9 +42,11 @@ import { serveDist } from './lib/serve-dist.mjs';
 /** Paper width and height budget in px. See the header — these are derived
  * from `@page` in `src/styles/resume.css`, not chosen. */
 const PAPER_WIDTH = 701;
+/* Page 2 onward carries a 1in top margin for the running header (#235), so
+   the two-pager's budget is 960 + 912, not 2 × 960. */
 const ROUTES = [
   ['/resume', 960],
-  ['/resume/full', 1920],
+  ['/resume/full', 1872],
 ];
 
 const tries = [];

@@ -54,6 +54,28 @@ const education = await getEducation();
 
 const linkedIn = socials.find((s) => s.label === 'LinkedIn' && s.status === 'active');
 
+/**
+ * The running header on every printed page after the first (#235): the name
+ * in the page's top margin, opposite a page count. The margin boxes' type
+ * and colour live in src/styles/resume.css with the rest of paper; only the
+ * one declaration that needs `site.name` is emitted here, so the name is
+ * not written down a second time in a stylesheet.
+ *
+ * A raw `<style>` via `set:html` rather than an Astro `<style>` block: Astro
+ * cannot interpolate into a style block, and `define:vars` cannot reach a
+ * margin box's `content`. Nothing prettier-plugin-astro has to parse.
+ *
+ * The `:first` exclusion is repeated here, AFTER the content rule, and it is
+ * not redundant with resume.css's copy: Chromium resolved these by source
+ * order rather than by `:first`'s higher specificity, and the first render
+ * printed the name twice on page 1 — once in the margin box, once in the
+ * header — because this style is emitted later in the document than the
+ * stylesheet's `:first`.
+ */
+const runningHeaderCss =
+  `<style>@media print { @page { @top-left { content: ${JSON.stringify(site.name)}; } } ` +
+  `@page :first { @top-left { content: none; } } }</style>`;
+
 /** `2011` from `2011-05`; the year alone is all a degree line needs. */
 const gradYear = (value: string) => value.slice(0, 4);
 
@@ -106,6 +128,7 @@ function bulletBlocks(bullets: MergedBullet[], groups: BulletGroups) {
 }
 ---
 
+<Fragment set:html={runningHeaderCss} />
 <article class="resume" data-density={density}>
   {
     /* The site header carries this on screen, but a printed page has no nav —
@@ -114,7 +137,14 @@ function bulletBlocks(bullets: MergedBullet[], groups: BulletGroups) {
   }
   <header class="resume-head">
     <h1>{site.name}</h1>
-    <p class="resume-role">{site.role} · {resumeLocation}</p>
+    {
+      /* The location on its own line under the role, on both surfaces
+         (#235 — settled on paper first, then Ali asked the screen to match).
+         Two paragraphs rather than one string with a hidden separator, since
+         nothing joins them anywhere any more. */
+    }
+    <p class="resume-role">{site.role}</p>
+    <p class="resume-location">{resumeLocation}</p>
     <ul class="resume-contact">
       <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
       <li><a href={site.url}>{site.url.replace(/^https?:\/\//, '')}</a></li>
@@ -176,8 +206,15 @@ function bulletBlocks(bullets: MergedBullet[], groups: BulletGroups) {
         return (
           <section class="resume-job">
             <div class="resume-job-head">
+              {/* Company first, and bold (#235, Ali's call). The title was
+                   first through Phase 4 — her 2019 résumé's order — but on
+                   this document the companies are the recognisable half and
+                   the titles are generic, so the weight moved to the
+                   employer. Same shape on the education entry below. */}
               <h3>
-                {currentTitle(job)} <span class="resume-company">· {job.data.company}</span>
+                <span class="resume-company">{job.data.company}</span>{' '}
+                <span class="resume-sep">·</span>{' '}
+                <span class="resume-title">{currentTitle(job)}</span>
               </h3>
               <p class="meta resume-dates">{formatSpanYears(job.data.start, job.data.end)}</p>
             </div>
@@ -270,8 +307,11 @@ function bulletBlocks(bullets: MergedBullet[], groups: BulletGroups) {
         <section class="resume-job">
           <div class="resume-job-head">
             <h3>
-              {entry.data.degree} {entry.data.field}{' '}
-              <span class="resume-company">· {entry.data.school}</span>
+              <span class="resume-company">{entry.data.school}</span>{' '}
+              <span class="resume-sep">·</span>{' '}
+              <span class="resume-title">
+                {entry.data.degree} {entry.data.field}
+              </span>
             </h3>
             <p class="meta resume-dates">{gradYear(entry.data.end)}</p>
           </div>

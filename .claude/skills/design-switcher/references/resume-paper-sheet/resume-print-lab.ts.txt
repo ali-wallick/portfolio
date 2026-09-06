@@ -1,0 +1,286 @@
+/**
+ * SCAFFOLDING — not shipped. Deleted before this branch merges.
+ *
+ * Drives `/design/resume-print` (#235): writes each axis onto the sheet as a
+ * `data-*` attribute, flips the document's density, reports the content
+ * height against the page budget, and fits the 816px sheet to the viewport.
+ *
+ * Nothing here touches `src/scripts/resume-density.ts`, which is a
+ * `byteHashedFiles` input; the density flip below is one attribute write.
+ */
+
+const sheet = document.querySelector<HTMLElement>('.lab-sheet');
+const article = sheet?.querySelector<HTMLElement>('article.resume');
+const stage = document.querySelector<HTMLElement>('.lab-stage');
+
+if (sheet && article && stage) {
+  const AXES: Array<[string, string]> = [
+    ['space', 'p2'],
+    ['jobgap', 'm1'],
+    ['density', 'concise'],
+  ];
+
+  /* The job line's two halves, so K can weight and order them. The shipped h3
+     is a text node then `<span class="resume-company">· Company</span>`; the
+     dot moves into its own span so it can sit between the halves either way. */
+  for (const h3 of sheet.querySelectorAll<HTMLElement>('.resume-job-head h3')) {
+    const company = h3.querySelector<HTMLElement>('.resume-company');
+    if (!company) continue;
+    const title = document.createElement('span');
+    title.className = 'lab-title';
+    title.textContent = (h3.firstChild?.nodeValue ?? '').trim();
+    const dot = document.createElement('span');
+    dot.className = 'lab-dot';
+    dot.textContent = '·';
+    company.textContent = (company.textContent ?? '').replace(/^\s*·\s*/, '');
+    h3.replaceChildren(title, dot, company);
+  }
+
+  /* The settled header (D4) puts the location on its own line. The shipped
+     role line is one text node, "{role} · {location}"; split at the last
+     separator, lab-only. */
+  const role = sheet.querySelector<HTMLElement>('.resume-role');
+  if (role) {
+    const text = role.textContent ?? '';
+    const at = text.lastIndexOf(' · ');
+    if (at > 0) {
+      const sep = document.createElement('span');
+      sep.className = 'lab-location-sep';
+      sep.textContent = ' · ';
+      const loc = document.createElement('span');
+      loc.className = 'lab-location';
+      loc.textContent = text.slice(at + 3);
+      role.replaceChildren(text.slice(0, at), sep, loc);
+    }
+  }
+
+  const store = {
+    read: (key: string, fallback: string) => {
+      try {
+        return localStorage.getItem(`resume-print-lab-${key}`) ?? fallback;
+      } catch {
+        return fallback;
+      }
+    },
+    write: (key: string, value: string) => {
+      try {
+        localStorage.setItem(`resume-print-lab-${key}`, value);
+      } catch {
+        /* Private mode. The panel still works for this page view. */
+      }
+    },
+  };
+
+  const current = document.querySelector<HTMLElement>('.lab-panel-current code');
+  const budget = document.querySelector<HTMLElement>('.lab-panel-budget');
+  const heightOut = document.querySelector<HTMLElement>('.lab-panel-height');
+  const limitOut = document.querySelector<HTMLElement>('.lab-panel-limit');
+  const verdictOut = document.querySelector<HTMLElement>('.lab-panel-verdict');
+
+  /**
+   * Paginate the way Chromium prints this document, and show it.
+   *
+   * The print block makes a `.resume-job` unbreakable (`break-inside: avoid`)
+   * and forbids a break after a section heading, a group heading or a group
+   * subtitle (`break-after: avoid`). So the break never falls where the 960px
+   * line does; it falls before the first block that would cross it, pulled
+   * back to before any heading that block must stay with. This walks the
+   * document's blocks in order, applies those two rules, and pushes each
+   * page-2 block down by a margin so the sheet shows the real break with the
+   * whitespace page 1 keeps, then a band for the margins, then page 2.
+   *
+   * Checked against the committed two-pager: both put MobilityWare at the top
+   * of page 2. A job taller than a page is broken inside as Chromium would;
+   * none is today.
+   */
+  const PAGE = 960;
+  const GUTTER = 96; /* 0.5in bottom margin + 0.5in top margin */
+  /* N3 gives the pages after the first a 1in top margin, so their content
+     area is 48px shorter and the band 48px taller. */
+  const extraTop = () => 48; /* N3, settled: 1in top margin after page 1 */
+  const bands = sheet.querySelector<HTMLElement>('.lab-bands');
+
+  const blocks = (): HTMLElement[] => {
+    const out: HTMLElement[] = [];
+    for (const child of article.children) {
+      const el = child as HTMLElement;
+      if (el.classList.contains('resume-section')) {
+        for (const inner of el.children) out.push(inner as HTMLElement);
+      } else out.push(el);
+    }
+    return out.filter((el) => el.offsetParent !== null);
+  };
+  const keepsWithNext = (el: HTMLElement) =>
+    el.tagName === 'H2' ||
+    el.classList.contains('resume-bullet-group') ||
+    el.classList.contains('resume-group-intro');
+
+  const measure = () => {
+    const density = article.dataset.density === 'full' ? 2 : 1;
+    const all = blocks();
+    for (const el of all) el.style.marginTop = '';
+    const top = article.getBoundingClientRect().top;
+    const rect = (el: HTMLElement) => {
+      const r = el.getBoundingClientRect();
+      return { top: r.top - top, bottom: r.bottom - top };
+    };
+
+    /* Walk once from a clean layout, inserting one margin per page break and
+       re-reading positions after each, since a margin moves everything below. */
+    const fills: number[] = [];
+    const breaksBefore: string[] = [];
+    let pageStart = 0;
+    let pageBudget = PAGE;
+    let i = 0;
+    while (i < all.length) {
+      const r = rect(all[i]);
+      if (r.bottom - pageStart > pageBudget && r.top > pageStart) {
+        let at = i;
+        while (at > 0 && keepsWithNext(all[at - 1]) && rect(all[at - 1]).top > pageStart) at--;
+        const prevBottom = rect(all[at - 1]).bottom;
+        fills.push(prevBottom - pageStart);
+        breaksBefore.push(
+          (all[at].querySelector('.resume-company') ?? all[at]).textContent?.trim().slice(0, 32) ??
+            '',
+        );
+        const target = pageStart + pageBudget + GUTTER + extraTop();
+        all[at].style.marginTop = `${target - prevBottom}px`;
+        pageStart = target;
+        pageBudget = PAGE - extraTop();
+        i = at + 1;
+        continue;
+      }
+      i++;
+    }
+    fills.push(rect(all[all.length - 1]).bottom - pageStart);
+    const pages = fills.length;
+
+    /* Draw the margin bands between pages and size the sheet to them. */
+    if (bands) {
+      bands.replaceChildren(
+        ...fills.slice(0, -1).map((_, n) => {
+          const band = document.createElement('div');
+          band.className = 'lab-band';
+          band.style.top = `${48 + PAGE + n * (PAGE + GUTTER + extraTop())}px`;
+          band.style.height = `${GUTTER + extraTop()}px`;
+          band.textContent = `page ${n + 2} · break falls before “${breaksBefore[n]}”`;
+          const name = article.querySelector('.resume-head h1')?.textContent?.trim() ?? '';
+          const head = document.createElement('span');
+          head.className = 'lab-runhead';
+          head.textContent = `${name} · page ${n + 2} of ${fills.length}`;
+          const big = document.createElement('span');
+          big.className = 'lab-runhead-big';
+          big.innerHTML = `<b>${name}</b><small>Page ${n + 2} of ${fills.length}</small>`;
+          band.append(head, big);
+          return band;
+        }),
+      );
+    }
+    sheet.style.minHeight = `${pages * (PAGE + GUTTER) + (pages - 1) * extraTop()}px`;
+
+    const over = pages > density;
+    if (heightOut)
+      heightOut.textContent = fills.map((f, n) => `p${n + 1} ${Math.round(f)}px`).join(' · ');
+    if (limitOut)
+      limitOut.textContent =
+        `${PAGE}px a page` +
+        (extraTop() ? ` (${PAGE - extraTop()} after the first)` : '') +
+        `, ${density} page${density > 1 ? 's' : ''}`;
+    if (verdictOut)
+      verdictOut.textContent = over
+        ? `— OVER: ${pages} pages`
+        : `— ${Math.round(pageBudget - fills[fills.length - 1])}px spare on the last page`;
+    if (budget) budget.toggleAttribute('data-over', over);
+  };
+
+  const report = () => {
+    if (current)
+      current.textContent = AXES.filter(([axis]) => axis !== 'density')
+        .map(([axis]) => sheet.dataset[axis]?.toUpperCase())
+        .join(' + ');
+    measure();
+  };
+
+  /**
+   * Options are authoritative; storage is a cache. A stored value matching no
+   * option snaps to the first and writes that through, so what is checked is
+   * always what is running.
+   */
+  const bind = (axis: string, fallback: string) => {
+    const inputs = document.querySelectorAll<HTMLInputElement>(`input[name="lab-${axis}"]`);
+    const apply = (key: string) => {
+      if (axis === 'density') article.dataset.density = key;
+      else sheet.dataset[axis] = key;
+      store.write(axis, key);
+      report();
+    };
+    for (const input of inputs) input.addEventListener('change', () => apply(input.value));
+
+    const stored = store.read(axis, fallback);
+    const match = document.querySelector<HTMLInputElement>(
+      `input[name="lab-${axis}"][value="${stored}"]`,
+    );
+    if (match) match.checked = true;
+    apply(match ? stored : fallback);
+  };
+
+  for (const [axis, fallback] of AXES) bind(axis, fallback);
+
+  /* --- Fit to width -------------------------------------------------------
+     The sheet is 816 CSS px wide whatever the viewport; below that it is
+     scaled with a transform, which leaves every measurement above in
+     unscaled px (offsetHeight ignores transforms). The stage's own height is
+     set to the scaled sheet so the page scrolls to the sheet's foot and no
+     further. */
+  const actual = document.querySelector<HTMLInputElement>('input[name="lab-actual"]');
+  const fit = () => {
+    const available = stage.clientWidth;
+    const scale = actual?.checked ? 1 : Math.min(1, available / sheet.offsetWidth);
+    sheet.style.setProperty('--lab-scale', String(scale));
+    stage.style.height = `${sheet.offsetHeight * scale}px`;
+    stage.style.overflowX = scale < 1 || !actual?.checked ? 'hidden' : 'auto';
+  };
+  actual?.addEventListener('change', () => {
+    try {
+      localStorage.setItem('resume-print-lab-actual', actual.checked ? '1' : '0');
+    } catch {
+      /* Private mode. */
+    }
+    fit();
+  });
+  if (actual) actual.checked = store.read('actual', '0') === '1';
+
+  /* Observe the ARTICLE, not the sheet: the sheet has a one-page min-height,
+     so content growing from 922 to 928px as Public Sans lands changes nothing
+     about the sheet's box and an observer on it never fires. */
+  const ro = new ResizeObserver(() => {
+    measure();
+    fit();
+  });
+  ro.observe(article);
+  ro.observe(sheet);
+  window.addEventListener('resize', fit);
+  document.fonts.ready.then(() => {
+    measure();
+    fit();
+  });
+  document.fonts.addEventListener('loadingdone', () => {
+    measure();
+    fit();
+  });
+  fit();
+
+  /* On a phone the open panel covers the sheet it compares. Start it closed
+     there; the summary is one tap. */
+  const details = document.querySelector<HTMLDetailsElement>('.lab-panel details');
+  if (details && matchMedia('(max-width: 48em)').matches) details.open = false;
+
+  /* Keep the reticle off the instrument: stop the events reticle.ts listens
+     for at the panel's own root, capture phase. reticle.ts stays untouched. */
+  const panel = document.querySelector<HTMLElement>('.lab-panel');
+  for (const type of ['pointerover', 'focusin']) {
+    panel?.addEventListener(type, (event) => event.stopPropagation(), true);
+  }
+}
+
+export {};

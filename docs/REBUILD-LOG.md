@@ -4248,3 +4248,75 @@ at 3 viewports, the pixel proof that the gallery renders identically to `main` (
 across 22 full-page captures and 10 interaction states — mid-scroll, under the sticky header,
 region focus, link focus, lightbox open), and the antialiasing control above. Two determinism
 controls were run first, capturing each build twice, so "0 px" means something.
+
+## The résumé's paper look, twelve rounds on a sheet (#235, 2026-09-05 → 06)
+
+The first design-switcher pass on paper. Ali's brief was two sentences — make the résumé a little
+less simple, and the PDF may diverge from the site where something looks good printed and would not
+on a webpage — and the answer was the thirteenth run of the review loop, on a new instrument.
+
+### The instrument
+
+A PDF is a still frame, so flipping treatments on the same sheet is the comparison that carries
+information, not opening N PDFs. The lab route rendered the résumé **as the printed page**: 816px
+wide at letter geometry, the print block's token pins on the sheet instead of `:root`, its rules
+transcribed under it, `resume.css` deliberately not imported so its screen half could not style
+the sheet as the panel. Before anything was judged on it, a script walked every element of
+`/resume` under real print emulation and diffed y, height, width, face, size, weight and colour
+against the sheet: **94 of 94 matched.**
+
+The panel opened with seven axes and 22 marks. Ali narrowed it round by round — face, size, ink,
+header, role line, skills, groups, subtitle, marker, page-2 header, bar colour, group dates, job
+line — and every round closed an axis or replaced it with a narrower one. The switcher's shorter
+each time, which the skill says is the loop working.
+
+### What measurement changed
+
+- **The one-pager had 32px of slack, not 102.** CLAUDE.md carried #32's number; bullets had landed
+  since. `resume:headroom` read 928 of 960 before the first candidate was built, and that number
+  put a live budget readout on the panel — every mark labelled with its cost, and a gutter layout
+  Ali would otherwise have liked labelled "over by 120px" instead of argued against.
+- **Ali could not tell where the two-pager broke.** The sheet's fixed line at 960px was never where
+  the break fell, because a job never splits and a heading never ends a page. The lab was taught
+  those two rules, split the sheet into real pages with a margin band, and reported each page's
+  fill. It matched the committed PDF: the break falls before MobilityWare, and page 1 keeps 128px
+  white as the price of never splitting a job.
+- **Her name on page 2.** Page margin boxes turned out to be supported in the Chromium `build-pdf`
+  runs, `:first` keeps them off page 1, and later pages can carry a taller top margin — so the
+  running header lives in the margin. She preferred the full-size version that takes 48px of page 2
+  over the free one, which was the right call: at fit-to-width on a phone the free one was invisible.
+- **The name was Type 3.** The first port set it in Gabarito Variable and the PDF looked right;
+  Chromium had embedded the instance as glyph procedures, invisible to the font guard and unreadable
+  to the parsers a résumé actually meets. Static Gabarito now, and the guard reads `FontName` and
+  fails on Type 3.
+
+### What Ali decided, and why it reads as one document
+
+Gabarito on the name only — two faces, one decision, the display face on nothing inside the text
+register. Magenta on the name, the section heads and their rules, and nowhere else. Company first
+and bold on the job line, against her own 2019 résumé's title-first, because on this document the
+studios are the recognisable half. A bar down each Second Dinner group and no other job: she asked
+whether uniformity was worth it and answered it herself — the bar means something under H2 and
+nothing under H4. Skills aligned, the subtitle italic, 14pt above each section heading chosen
+knowing it spent the slack to 13px.
+
+The screen took the structure and kept its own paint. The bars are in the frame colour there, not
+the accent, because on screen magenta means _where you are_. The contact block is hidden on the
+site, Ali's idea, since the download button wanted the slot and the links are three places already.
+
+### What the instrument is now
+
+Ali asked whether it should become a reusable preview. Same answer #246 gave the panel: a template
+in the skill, not code in `src/`. The sheet is a transcription of the print block and would drift
+from it the moment anyone edited paper; copied per pass, it is re-checked by the fidelity script
+before it is trusted. The three files and the checker live under the design-switcher skill's
+`references/resume-paper-sheet/`, with every trap this pass found written beside them.
+
+### Cost notes
+
+No subagents. One long session for the twelve rounds, which the loop's shape wants — each round
+was a reaction, an edit, a measurement and a push, and a cold session per round would have re-read
+the whole record every time. Playwright bought the fidelity check, the per-candidate height sweep
+(every mark measured alone against the incumbent, both densities), the pagination check against the
+committed PDF, and the three paper experiments (margin boxes, a fixed header, the Type 3 embed).
+Every one of those returned a confident wrong answer somewhere that the measurement corrected.

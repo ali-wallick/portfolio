@@ -313,27 +313,41 @@
     margin-bottom: var(--space-1);
   }
 
-  .resume-role {
+  .resume-role,
+  .resume-location {
     color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .resume-location {
     margin-bottom: var(--space-2);
   }
 
+  /* Hidden on screen, Ali's call (#235). Paper keeps the contact block —
+     a PDF that does not say whose it is gets separated from its filename
+     and lost — but on the site the header, the footer and /contact already
+     carry the same three links, and the slot the block sat in is where the
+     download button lives. */
   .resume-contact {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2) var(--space-4);
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    font-size: var(--text-sm);
-    max-width: none;
+    display: none;
   }
 
+  /* The rule runs from the heading's end to the right edge on the same line,
+     as it does on paper (#235, matched on Ali's ask). The colour stays the
+     site's border, not paper's magenta — on screen magenta means "where you
+     are". */
   .resume-section h2 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
     font-size: var(--text-lg);
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: var(--space-1);
     margin-bottom: var(--space-4);
+  }
+
+  .resume-section h2::after {
+    content: '';
+    flex: 1;
+    border-top: 1px solid var(--color-border);
   }
 
   .resume-job {
@@ -356,7 +370,10 @@
     margin: 0;
   }
 
-  .resume-company {
+  /* Company bold, title regular (#235). The h3 is bold by default, so only
+     the title and the separating dot step down. */
+  .resume-title,
+  .resume-sep {
     font-weight: normal;
   }
 
@@ -419,15 +436,29 @@
     align-items: baseline;
     gap: 0 var(--space-4);
     margin-top: var(--space-3);
-    /* A third of `.resume-bullets`' own padding-left, expressed against the
-       same token so the two stay in proportion if that indent ever moves.
-       Ali's call (#32), from a four-way comparison rendered at paper width:
-       a full-width indent aligned the heading to the bullet text and read as
-       more nesting than the block wants. This is a nudge, and it is the one
-       candidate that does not line up with an existing edge -- deliberately,
-       since the point is to separate the heading from the job title above it
-       rather than to bind it to the bullets below. */
-    padding-left: calc(var(--space-4) / 3);
+    padding-left: var(--space-3);
+  }
+
+  /* --- A body of work is a bar (#235) ------------------------------------
+     Each Second Dinner group — heading, subtitle, bullets — carries a line
+     down its left, so the two read as blocks under one employer rather than
+     as a run of bullets with bold labels in it. Settled on paper (in the
+     magenta ink) and transferred here in `--color-frame`, NOT the accent:
+     on screen magenta means "where you are" (reticle, focus, current page),
+     while the frame colour already means "this object has an edge" on every
+     matted picture. Same reasoning that kept the picture frames off the
+     accent in #163.
+
+     The three are siblings, so the bar is drawn on each and the gaps between
+     them become padding, which keeps it continuous. Only a job with
+     `bulletGroups` gets it — the bar means "one of several bodies of work
+     under this employer", which is why a bar on every job's bullets lost.
+     This replaced #32's one-third indent on the heading; the bar now does
+     the separating that nudge was for. */
+  .resume-bullet-group,
+  .resume-bullet-group + .resume-group-intro,
+  .resume-job:has(.resume-bullet-group) .resume-bullets {
+    border-left: 2px solid var(--color-frame);
   }
 
   .resume-bullet-group h4 {
@@ -439,9 +470,14 @@
      heading rather than to the bullet text, so it reads as a subtitle attached
      to the heading above it and not as a bullet missing its marker. */
   .resume-group-intro {
-    margin: var(--space-1) 0 0;
-    padding-left: calc(var(--space-4) / 3);
+    margin: 0;
+    padding: var(--space-1) 0 0 var(--space-3);
     max-width: none;
+    /* Italic and muted, as on paper (#235). Figtree's italic file is imported
+       by the two résumé routes, so this is a real italic, not a synthesised
+       slant. */
+    font-style: italic;
+    color: var(--color-text-muted);
   }
 
   /* Fills the panel, same as `.resume-job-intro` above — and this is the block
@@ -450,6 +486,13 @@
     margin: var(--space-2) 0 0;
     padding-left: var(--space-4);
     max-width: none;
+  }
+
+  /* Inside a bar the list's own top margin becomes padding, so the bar has
+     no gap in it, and the markers sit clear of the line. */
+  .resume-job:has(.resume-bullet-group) .resume-bullets {
+    margin-top: 0;
+    padding: var(--space-2) 0 var(--space-1) calc(var(--space-3) + var(--space-4));
   }
 
   .resume-bullets li {
@@ -482,18 +525,19 @@
   /* Three labelled rows (Engines & Tools / Languages / Platforms), not a
      single joined line — see CLAUDE.md and issue #39's decision comment for
      why the category grouping exists. */
+  /* One label column, sized by the widest label, so the three lists start
+     on one edge (#235). `display: contents` lifts dt/dd into the dl's grid
+     without touching the markup. */
   .resume-skills {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: var(--space-1) var(--space-3);
     margin: 0;
     max-width: none;
   }
 
   .resume-skills-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-1) var(--space-2);
+    display: contents;
   }
 
   .resume-skills-row dt {
@@ -514,9 +558,62 @@
  * what lands in the committed PDF.
  */
 
+/* Page 1 keeps the 0.5in top margin. Every page after it carries 1in, and
+   the extra half inch holds a running header: the name top-left, "Page 2 of
+   2" top-right (#235). Margin boxes cost the content area nothing on page
+   1 and 48px on the pages after — the two-pager's page 2 is 912px, not 960.
+
+   Measured before relying on any of it, in the Chromium build-pdf.mjs runs
+   (151): margin boxes print, `:first` keeps them off page 1, and the
+   counters resolve. Two limits found the same way. A webfont named in a
+   margin box does NOT resolve — the box fell back to the body face and only
+   Public Sans embedded — so the header is Public Sans bold, not Gabarito,
+   on purpose; naming Gabarito here would print Public Sans anyway. And a
+   `position: fixed` element is not an alternative: it printed once, on page
+   1, inside the content area.
+
+   The name itself is the one declaration not here: ResumeDocument.astro
+   emits `@top-left { content: … }` from `site.name`, so it is not a second
+   copy. Public Sans is named explicitly because the box does not inherit
+   the body's font, and a platform fallback would fail `assertPrintFace`. */
 @page {
   size: letter;
-  margin: 0.5in 0.6in;
+  margin: 1in 0.6in 0.5in;
+
+  @top-left {
+    font:
+      700 16pt 'Public Sans',
+      Helvetica,
+      Arial,
+      sans-serif;
+    color: #c4005f;
+    vertical-align: bottom;
+    padding-bottom: 10pt;
+  }
+
+  @top-right {
+    content: 'Page ' counter(page) ' of ' counter(pages);
+    font:
+      9pt 'Public Sans',
+      Helvetica,
+      Arial,
+      sans-serif;
+    color: #666666;
+    vertical-align: bottom;
+    padding-bottom: 12pt;
+  }
+}
+
+@page :first {
+  margin-top: 0.5in;
+
+  @top-left {
+    content: none;
+  }
+
+  @top-right {
+    content: none;
+  }
 }
 
 @media print {
@@ -791,34 +888,60 @@
     text-decoration: none;
   }
 
+  /* --- The header: name and role left, contact right (#235) --------------
+     Twelve rounds on a live switcher settled paper's look; the record is on
+     PR #326 and the rule that generalises is in CLAUDE.md. What is here is
+     the geometry, with the reasons beside the values that have one. */
   .resume-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 24pt;
+    align-items: center;
     margin-bottom: 10pt;
   }
 
+  /* The name: the site's display face, 24pt, in the site's accent. The one
+     place paper borrows the screen's palette — the section headings and
+     their rules take the same ink, nothing else does. Gabarito is already on
+     every page via BaseLayout, so the PDF embeds its subset beside Public
+     Sans (`assertPrintFace` in build-pdf.mjs allows both). */
   .resume-head h1 {
-    font-size: 20pt;
-    line-height: 1.1;
+    grid-column: 1;
+    /* `Gabarito`, the static 700 imported by the résumé routes, ahead of the
+       variable face the site loads everywhere: the variable one embeds as a
+       Type 3 font, which ATS parsers choke on. See resume.astro. */
+    font-family: 'Gabarito', 'Gabarito Variable', 'Trebuchet MS', system-ui, sans-serif;
+    font-size: 24pt;
+    line-height: 1.06;
     margin: 0 0 1pt;
-    letter-spacing: -0.01em;
+    letter-spacing: normal;
+    color: #c4005f;
   }
 
-  .resume-role {
+  /* The role, then the location on its own line under it (Ali's call,
+     #235). */
+  .resume-role,
+  .resume-location {
+    grid-column: 1;
     font-size: 10.5pt;
     color: #333333;
-    margin: 0 0 4pt;
+    margin: 0;
   }
 
-  /* Scoping the screen half inside @media screen (see the top of this file)
-     stopped this layout — flex row, no bullets, no list padding — from
-     reaching paper by cascade. Paper needs its own copy rather than an
-     implicit inherit; that's the whole point of the scoping. */
+  /* Stacked and right-aligned, beside the name. Scoping the screen half
+     inside @media screen (see the top of this file) means paper needs its
+     own copy of the list reset rather than an implicit inherit. */
   .resume-contact {
+    grid-column: 2;
+    grid-row: 1 / span 3;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
     list-style: none;
     padding: 0;
     font-size: 9pt;
-    gap: 0 12pt;
+    gap: 0;
     margin: 0;
   }
 
@@ -826,16 +949,36 @@
     margin-bottom: 9pt;
   }
 
-  /* A section heading alone at the foot of a page is the classic print bug. */
+  /* 14pt above a section heading, Ali's pick from 12 and 14 after 9 read as
+     too little and 18 as too much (#235). Written on the following section
+     so it collapses with the 9pt above: the effective gap is the larger. */
+  .resume-section + .resume-section {
+    margin-top: 14pt;
+  }
+
+  /* The heading in the accent, with the rule running from its end to the
+     right edge on the same line — Ali's pick over a hairline under, a short
+     bar, and a left gutter (#235). Public Sans, not the display face: the
+     display face goes on the name only, which is what keeps two faces from
+     reading as three registers. A section heading alone at the foot of a
+     page is the classic print bug, hence the break rule. */
   .resume-section h2 {
+    display: flex;
+    align-items: center;
+    gap: 8pt;
     font-size: 9.5pt;
     text-transform: uppercase;
     letter-spacing: 0.09em;
-    border-bottom: 0.5pt solid #666666;
-    padding-bottom: 2pt;
+    color: #c4005f;
     margin: 0 0 7pt;
     break-after: avoid;
     page-break-after: avoid;
+  }
+
+  .resume-section h2::after {
+    content: '';
+    flex: 1;
+    border-top: 0.5pt solid #c4005f;
   }
 
   /* Keep a job and its bullets together; splitting one across a page break is
@@ -863,10 +1006,10 @@
     margin: 0;
   }
 
-  /* Otherwise inherits font-weight: bold from the h1,h2,h3,h4 print rule
-     above, since it's a child of .resume-job-head h3 — the "· Company"
-     suffix is meant to stay de-emphasized next to the bolded title. */
-  .resume-company {
+  /* Company bold, title regular (#235). The h3 inherits bold from the
+     h1,h2,h3,h4 print rule above; the title and the dot step down. */
+  .resume-title,
+  .resume-sep {
     font-weight: normal;
   }
 
@@ -885,6 +1028,20 @@
   /* `break-after: avoid` is the load-bearing part on paper: a group heading
      that lands at the foot of page one with its bullets on page two is worse
      than no heading at all, and the page-count assertion cannot see it. */
+  /* --- A body of work is a bar (#235) ------------------------------------
+     Each Second Dinner group — heading, subtitle, bullets — carries a 1.5pt
+     line in the accent down its left. Only a job with `bulletGroups` gets
+     it: the bar means "one of several bodies of work under this employer",
+     and a bar on every job's bullets lost to that on the switcher. The
+     three are siblings, so the bar is drawn on each and their gaps become
+     padding, which keeps it continuous. See the screen rule for why the
+     screen's copy is in the frame colour rather than this ink. */
+  .resume-bullet-group,
+  .resume-bullet-group + .resume-group-intro,
+  .resume-job:has(.resume-bullet-group) .resume-bullets {
+    border-left: 1.5pt solid #c4005f;
+  }
+
   .resume-bullet-group {
     display: flex;
     flex-wrap: wrap;
@@ -892,8 +1049,7 @@
     align-items: baseline;
     gap: 0 12pt;
     margin: 5pt 0 0;
-    /* A third of .resume-bullets' 12pt below — see the screen rule. */
-    padding-left: 4pt;
+    padding: 0 0 0 7pt;
     break-after: avoid;
     page-break-after: avoid;
   }
@@ -910,9 +1066,11 @@
   /* Same break rule as the heading, and for the same reason: a subtitle
      separated from the bullets it introduces is worse than no subtitle. */
   .resume-group-intro {
-    margin: 2pt 0 0;
-    padding-left: 4pt;
+    margin: 0;
+    padding: 2pt 0 0 7pt;
     max-width: none;
+    font-style: italic;
+    color: #333333;
     break-after: avoid;
     page-break-after: avoid;
   }
@@ -921,6 +1079,13 @@
     margin: 3pt 0 0;
     padding-left: 12pt;
     max-width: none;
+  }
+
+  /* Inside a bar: the list's top margin becomes padding so the bar has no
+     gap in it, and the markers sit 7pt clear of the line. */
+  .resume-job:has(.resume-bullet-group) .resume-bullets {
+    margin-top: 0;
+    padding: 3pt 0 1pt 19pt;
   }
 
   .resume-bullets li {
@@ -946,19 +1111,20 @@
     max-width: none;
   }
 
+  /* One label column, sized by the widest label (#235). `display: contents`
+     lifts dt/dd into the dl's grid; the row's font-size moves to the dl. */
   .resume-skills {
-    display: flex;
-    flex-direction: column;
-    gap: 2pt;
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    column-gap: 8pt;
+    row-gap: 2pt;
     margin: 0;
     max-width: none;
+    font-size: 9.5pt;
   }
 
   .resume-skills-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 6pt;
-    font-size: 9.5pt;
+    display: contents;
   }
 
   .resume-skills-row dt {

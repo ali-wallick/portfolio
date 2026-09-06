@@ -1,0 +1,662 @@
+/*
+ * SCAFFOLDING — not shipped. Deleted before this branch merges.
+ *
+ * The résumé's printed page, reproduced on screen so its treatments can be
+ * compared live (#235). Two halves:
+ *
+ *   1. `.lab-sheet` — a transcription of `src/styles/resume.css`'s
+ *      `@media print` block: the same token pins, on the sheet instead of
+ *      `:root`, and the same rules, scoped under `.lab-sheet`. What base.css
+ *      contributes on paper it contributes here too, so the cascade is the
+ *      print cascade. (The one thing print sets on `body` — face, size,
+ *      leading, colour, `font-variant-numeric` — is set on the sheet
+ *      directly, since a variable re-pinned below `body` cannot reach a
+ *      property `body` already resolved.) The instrument's honesty is
+ *      measured, not assumed: the sheet's `.resume` height is checked against
+ *      `/resume` under real print emulation before anything is judged on it.
+ *
+ *   2. Candidate overrides keyed on `data-*` written to `.lab-sheet` by
+ *      `src/scripts/resume-print-lab.ts`. A settled axis is deleted by
+ *      removing its attribute selectors.
+ *
+ * Nothing here is a `byteHashedFiles` input, and `resume.css` is not
+ * imported by the route. Raw hex is unavoidable in the sheet half because
+ * paper's palette IS raw hex in the print block; the candidate inks are the
+ * thing under comparison and carry their contrast in the panel's labels.
+ */
+
+@media print {
+  .lab-stage,
+  .lab-panel {
+    display: none;
+  }
+}
+
+/* --- The stage: fits the sheet to the viewport ----------------------------
+   `--lab-scale` is written by the script (min(1, available / 816)); the
+   stage's height is set to the scaled sheet height so the page scrolls
+   correctly under a transformed child. */
+.lab-stage {
+  position: relative;
+  margin: var(--space-6) auto var(--space-12);
+  overflow: hidden;
+}
+
+/* --- The sheet -------------------------------------------------------------
+   Letter: 8.5in × 11in at 96dpi is 816 × 1056. `@page` margins 0.5in 0.6in
+   give a 701 × 960 content box per page — the numbers every résumé
+   measurement in this repo is taken at. */
+.lab-sheet {
+  --lab-page-w: 816px;
+  --lab-margin-y: 48px;
+  --lab-margin-x: 57.5px;
+  --lab-budget: 960px;
+
+  position: relative;
+  box-sizing: border-box;
+  width: var(--lab-page-w);
+  min-height: calc(var(--lab-budget) + 2 * var(--lab-margin-y));
+  padding: var(--lab-margin-y) var(--lab-margin-x);
+  transform: scale(var(--lab-scale, 1));
+  transform-origin: top left;
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.2),
+    0 8px 24px rgb(0 0 0 / 0.15);
+
+  /* body, on paper */
+  background: #ffffff;
+  color: #000000;
+  font-family: var(--font-body);
+  font-size: 9.4pt;
+  line-height: 1.35;
+  font-variant-numeric: normal;
+
+  /* --- :root pins, transcribed ------------------------------------------ */
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-text: #000000;
+  --color-text-muted: #333333;
+  --color-border: #999999;
+  --color-link: #000000;
+  --color-link-visited: #000000;
+  --color-heading: #000000;
+  --color-plate: #666666;
+  --color-accent-block: #ffffff;
+  --color-on-accent: #000000;
+  --color-on-accent-link: #000000;
+  --font-body: 'Public Sans', Helvetica, Arial, sans-serif;
+  --font-display: var(--font-body);
+  --font-heading: var(--font-body);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-body);
+  --text-xs: 0.8rem;
+  --text-sm: 0.9rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.563rem;
+  --text-2xl: 1.953rem;
+  --text-3xl: 2.441rem;
+  --text-4xl: 3.052rem;
+  --leading-tight: 1.2;
+  --leading-body: 1.6;
+  --tracking-display: normal;
+  --tracking-label: normal;
+  --measure: 68ch;
+  --measure-wide: 68ch;
+  --content-max: 60rem;
+  --color-accent: #000000;
+  --color-accent-ink: #000000;
+  --color-accent-soft: #ffffff;
+  --color-focus: #000000;
+  --color-index: #333333;
+  --chip-ink: #333333;
+  --chip-tint: #ffffff;
+  --chip-shipped-ink: #333333;
+  --chip-shipped-tint: #ffffff;
+  --chip-prototype-ink: #333333;
+  --chip-prototype-tint: #ffffff;
+  --chip-jam-ink: #333333;
+  --chip-jam-tint: #ffffff;
+  --chip-coursework-ink: #333333;
+  --chip-coursework-tint: #ffffff;
+  --chip-unannounced-ink: #333333;
+  --chip-unannounced-tint: #ffffff;
+  --radius: 0;
+  --radius-lg: 0;
+  --radius-pill: 0;
+  --lift: 0px;
+  --shadow-rest: none;
+  --shadow-high: none;
+  --shadow-flat: none;
+
+  /* --- The lab's own knobs, defaults = incumbent --------------------------
+     `--lab-ink` colours whatever a candidate says takes ink; `--lab-rule`
+     is the hairline; `--lab-display` is the face A2/A3 switch in. */
+  --lab-ink: #c4005f; /* B3, settled round 3: the site accent */
+  --lab-rule: #c4005f;
+  --lab-display: 'Gabarito Variable', 'Trebuchet MS', system-ui, sans-serif;
+  --lab-name-size: 24pt; /* G4, settled round 3 */
+  --lab-name-leading: 1.06;
+  --lab-rule-w: 0.5pt;
+  --lab-bar: var(--lab-ink);
+}
+
+/* The margin band between two pages: the lab script places one at each real
+   page break, 96px tall (page 1's bottom margin plus page 2's top margin), so
+   the sheet reads as stacked sheets rather than one long roll. */
+.lab-bands {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.lab-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 96px;
+  background: var(--color-bg);
+  box-shadow:
+    inset 0 6px 6px -6px rgb(0 0 0 / 0.35),
+    inset 0 -6px 6px -6px rgb(0 0 0 / 0.35);
+  font: 10px/96px var(--font-mono);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+/* --- The running header on the pages after the first (N3, settled round 10)
+   Drawn in the lower half of the band, which is page 2's top margin: that is
+   where Chromium puts an `@page { @top-right { … } }` margin box, measured on
+   the committed two-pager (y = 764pt of 792, inside the 36pt top margin),
+   with `@page :first` keeping it off page 1. Costs no content budget. */
+.lab-runhead {
+  position: absolute;
+  right: 57.5px;
+  bottom: 9px;
+  display: none;
+  font:
+    8pt/1 'Public Sans',
+    Helvetica,
+    Arial,
+    sans-serif;
+  color: #666666;
+  text-align: right;
+}
+
+/* N3 — pages after the first get a 1in top margin, and the name sits in it
+   at header size with the page count opposite: page 2 opens the way page 1
+   does. Costs page 2 48px of content area, none on the one-pager. */
+.lab-runhead-big {
+  position: absolute;
+  left: 57.5px;
+  right: 57.5px;
+  bottom: 10px;
+  display: none;
+  justify-content: space-between;
+  align-items: baseline;
+  line-height: 1;
+}
+
+/* Public Sans, not Gabarito, on purpose: measured in Chromium 151, a webfont
+   named in an @page margin box does not resolve — the box fell back to the
+   body face and the PDF embedded only Public Sans. So this is what the
+   mechanism can actually print. Gabarito up here would need the header
+   injected into the DOM at PDF-build time instead; see the PR. */
+.lab-runhead-big b {
+  font:
+    700 16pt/1 'Public Sans',
+    Helvetica,
+    Arial,
+    sans-serif;
+  color: var(--lab-ink);
+}
+
+.lab-runhead-big small {
+  font:
+    9pt/1 'Public Sans',
+    Helvetica,
+    Arial,
+    sans-serif;
+  color: #666666;
+}
+
+.lab-runhead-big {
+  display: flex;
+}
+
+/* --- Print rules, transcribed under the sheet ----------------------------- */
+
+.lab-sheet *,
+.lab-sheet *::before,
+.lab-sheet *::after {
+  transition: none !important;
+  animation: none !important;
+}
+
+.lab-sheet h1,
+.lab-sheet h2,
+.lab-sheet h3,
+.lab-sheet h4 {
+  font-weight: bold;
+  letter-spacing: normal;
+}
+
+.lab-sheet p {
+  text-wrap: auto;
+}
+
+.lab-sheet .meta {
+  line-height: inherit;
+  letter-spacing: normal;
+}
+
+.lab-sheet a,
+.lab-sheet a:visited {
+  color: #000000;
+  text-decoration: none;
+}
+
+.lab-sheet .resume[data-density='concise'] [data-full-only] {
+  display: none;
+}
+
+.lab-sheet .resume-head {
+  margin-bottom: 10pt;
+}
+
+.lab-sheet .resume-head h1 {
+  font-size: var(--lab-name-size);
+  line-height: var(--lab-name-leading);
+  margin: 0 0 1pt;
+  letter-spacing: -0.01em;
+  color: var(--lab-ink);
+}
+
+.lab-sheet .resume-role {
+  font-size: 10.5pt;
+  color: #333333;
+  margin: 0 0 4pt;
+}
+
+.lab-sheet .resume-contact {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  font-size: 9pt;
+  gap: 0 12pt;
+  margin: 0;
+}
+
+.lab-sheet .resume-section {
+  margin-bottom: 9pt;
+}
+
+.lab-sheet .resume-section h2 {
+  font-size: 9.5pt;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  border-bottom: 0.5pt solid var(--lab-rule);
+  padding-bottom: 2pt;
+  margin: 0 0 7pt;
+  color: var(--lab-ink);
+}
+
+.lab-sheet .resume-job {
+  margin-bottom: 7.5pt;
+}
+
+.lab-sheet .resume-job-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0 12pt;
+}
+
+.lab-sheet .resume-job-head h3 {
+  font-size: 10pt;
+  margin: 0;
+}
+
+.lab-sheet .resume-company {
+  font-weight: normal;
+}
+
+.lab-sheet .resume-dates,
+.lab-sheet .resume-job-meta {
+  font-size: 9pt;
+  color: #333333;
+  margin: 0;
+}
+
+.lab-sheet .resume-job-intro {
+  margin: 3pt 0 0;
+  max-width: none;
+}
+
+.lab-sheet .resume-bullet-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0 12pt;
+  margin: 5pt 0 0;
+  padding-left: 4pt;
+}
+
+.lab-sheet .resume-bullet-group h4 {
+  font-size: 9.4pt;
+  margin: 0;
+  color: #000000;
+}
+
+.lab-sheet .resume-group-intro {
+  margin: 2pt 0 0;
+  padding-left: 4pt;
+  max-width: none;
+}
+
+.lab-sheet .resume-bullets {
+  margin: 3pt 0 0;
+  padding-left: 12pt;
+  max-width: none;
+}
+
+.lab-sheet .resume-bullets li {
+  margin-bottom: 2.5pt;
+}
+
+.lab-sheet .resume-bullet-label {
+  font-weight: bold;
+  color: #000000;
+}
+
+.lab-sheet .resume-bullet-label a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.lab-sheet .resume-summary {
+  margin: 0;
+  max-width: none;
+}
+
+.lab-sheet .resume-skills {
+  display: flex;
+  flex-direction: column;
+  gap: 2pt;
+  margin: 0;
+  max-width: none;
+}
+
+.lab-sheet .resume-skills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 6pt;
+  font-size: 9.5pt;
+}
+
+.lab-sheet .resume-skills-row dt {
+  font-weight: bold;
+  margin: 0;
+}
+
+.lab-sheet .resume-skills-row dd {
+  margin: 0;
+  color: #333333;
+}
+
+/* =========================================================================
+ * Candidates, round 2. Incumbent = no attribute match, so every rule below
+ * is a deviation and deleting a settled axis is deleting its selectors.
+ *
+ * Settled in round 1 and gone from here as axes: the centred header (D3)
+ * and the violet ink (B2) got no reaction against their neighbours; the C2
+ * gutter was over budget; C4's bar lost. The section heading is SETTLED on
+ * C3 — the rule running from the heading's end to the right edge, on the
+ * same line — and is written below unconditionally, as the sheet's base.
+ * ========================================================================= */
+
+/* --- Section heading: rule beside, same line (settled, round 2) ----------- */
+.lab-sheet .resume-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 8pt;
+  border: 0;
+  padding: 0;
+}
+
+.lab-sheet .resume-section h2::after {
+  content: '';
+  flex: 1;
+  border-top: var(--lab-rule-w) solid var(--lab-rule);
+}
+
+/* --- Name: Gabarito, the name only (A2, settled round 3) ------------------ */
+.lab-sheet .resume-head h1 {
+  font-family: var(--lab-display);
+  letter-spacing: normal;
+}
+
+/* --- P: space above a section heading ------------------------------------
+   Ali's ask on the hairline: "a bit more spacing above it to break it up".
+   Written on the following section so it collapses with the previous one's
+   9pt bottom margin: the effective gap is the larger of the two. Two gaps on
+   the one-pager (Skills→Experience, Experience→Education). */
+.lab-sheet[data-space='p4'] .resume-section + .resume-section {
+  margin-top: 12pt;
+}
+
+.lab-sheet[data-space='p2'] .resume-section + .resume-section {
+  margin-top: 14pt;
+}
+
+/* --- Header (D4, settled round 4) -----------------------------------------
+   Name and role left, contact stacked and right-aligned, the location on its
+   own line under the role. The lab script wraps "Orange County, California"
+   in `.lab-location`; the shipped markup joins it into the role line and
+   would split it at port time. */
+.lab-sheet .resume-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 24pt;
+  align-items: center;
+}
+
+.lab-sheet .resume-head h1 {
+  grid-column: 1;
+}
+
+.lab-sheet .resume-role {
+  grid-column: 1;
+  margin-bottom: 0;
+}
+
+.lab-sheet .lab-location {
+  display: block;
+}
+
+.lab-sheet .lab-location-sep {
+  display: none;
+}
+
+.lab-sheet .resume-contact {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+  text-align: right;
+}
+
+/* --- Job title line: company first and bold (K3, settled round 8) ---------
+   The lab script splits the h3 into `.lab-title`, `.lab-dot` and the shipped
+   `.resume-company` (its own "· " removed); flex order puts the company
+   first with the dot between. At port time ResumeDocument renders the
+   company span first and the weights swap in resume.css. */
+.lab-sheet .resume-job-head h3 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.3em;
+}
+
+.lab-sheet .lab-dot {
+  font-weight: normal;
+}
+
+.lab-sheet .lab-title {
+  font-weight: normal;
+  order: 1;
+}
+
+.lab-sheet .resume-company {
+  font-weight: bold;
+  order: -1;
+}
+
+/* --- M: space between jobs ------------------------------------------------ */
+.lab-sheet[data-jobgap='m2'] .resume-job {
+  margin-bottom: 10pt;
+}
+
+/* --- Skills: one aligned label column (E2, settled round 7) --------------
+   Sized by the widest label, so the three value lists start on one edge.
+   `display: contents` lifts dt/dd into the dl's grid without changing the
+   markup; at port time this is a two-line change in resume.css's print
+   block and the same in its screen block if it transfers. */
+.lab-sheet .resume-skills {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: 8pt;
+  row-gap: 2pt;
+}
+
+.lab-sheet .resume-skills-row {
+  display: contents;
+}
+
+/* --- Bodies of work: a bar in ink down the left of each group (H2, settled
+   round 12). Heading, subtitle and bullets read as one block; they are
+   siblings, so the bar is drawn on each and their gaps become padding so
+   it stays continuous. Only a job with `bulletGroups` gets it — the bar
+   means "one of several bodies of work under this employer", which is why
+   H4 (a bar on every job's bullets) lost. */
+.lab-sheet .resume-bullet-group,
+.lab-sheet .resume-bullet-group + .resume-group-intro,
+.lab-sheet .resume-job:has(.resume-bullet-group) .resume-bullets {
+  border-left: 1.5pt solid var(--lab-bar);
+  margin-left: 0;
+}
+
+.lab-sheet .resume-bullet-group {
+  padding-left: 7pt;
+  padding-bottom: 0;
+}
+
+.lab-sheet .resume-bullet-group + .resume-group-intro {
+  margin-top: 0;
+  padding: 2pt 0 0 7pt;
+}
+
+.lab-sheet .resume-job:has(.resume-bullet-group) .resume-bullets {
+  margin-top: 0;
+  padding: 3pt 0 1pt 19pt;
+}
+
+/* =========================================================================
+ * The panel. Fixed, corner-anchored, capped both ways, own scroll.
+ * ========================================================================= */
+.lab-panel {
+  position: fixed;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  z-index: 50;
+  max-width: min(24rem, calc(100vw - var(--space-8)));
+  max-height: calc(100vh - var(--space-8));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-rest);
+  font-size: var(--text-sm);
+}
+
+.lab-panel summary {
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.lab-panel details[open] summary {
+  margin-bottom: var(--space-2);
+}
+
+.lab-panel fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0 0 var(--space-3);
+}
+
+.lab-panel legend {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  padding: 0;
+  margin-bottom: var(--space-1);
+}
+
+.lab-panel-opts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+
+.lab-panel label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 2px 0;
+  cursor: pointer;
+}
+
+.lab-panel-check {
+  margin-bottom: var(--space-2);
+}
+
+/* The budget readout. Red when the document does not fit its page count. */
+.lab-panel-budget {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  max-width: none;
+}
+
+.lab-panel-note {
+  margin: 0 0 var(--space-3);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  max-width: none;
+}
+
+.lab-panel-budget[data-over] {
+  color: #d0342c;
+  font-weight: 600;
+}
+
+.lab-panel-current {
+  margin: 0;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  max-width: none;
+}

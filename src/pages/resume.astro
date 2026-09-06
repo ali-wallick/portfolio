@@ -14,6 +14,18 @@ import '~/styles/resume.css';
    that renders it — see #191. */
 import '@fontsource/public-sans/latin-400.css';
 import '@fontsource/public-sans/latin-700.css';
+/* The group subtitle is italic on both surfaces (#235): Public Sans for
+   paper, and Figtree's own italic for the screen so it is not synthesised.
+   Route-scoped like the rest — nothing else on the site sets italic. */
+import '@fontsource/public-sans/latin-400-italic.css';
+import '@fontsource-variable/figtree/wght-italic.css';
+/* The name on paper is Gabarito (#235) — the STATIC 700, not the variable
+   face BaseLayout already loads. Chromium embeds a variable font's instance
+   as a Type 3 font (glyphs as drawing procedures, no BaseFont entry), which
+   is the one kind of PDF text applicant-tracking parsers most often fail to
+   read, and on a résumé the name is the worst place for that. The static
+   file embeds as an ordinary CIDFontType2 like Public Sans does. */
+import '@fontsource/gabarito/latin-700.css';
 
 /**
  * The one-page resume — the version you attach to an application.

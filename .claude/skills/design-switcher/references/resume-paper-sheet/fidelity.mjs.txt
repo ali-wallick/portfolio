@@ -1,0 +1,139 @@
+// Fidelity check for /design/resume-print against /resume under print emulation,
+// plus a height sweep of every candidate. Run against the dev server.
+import { launchChromium } from '/Users/awallick/repos/Portfolio/scripts/lib/launch-chromium.mjs';
+
+const ORIGIN = process.env.ORIGIN ?? 'http://localhost:4321';
+const SHOT_DIR = process.env.SHOT_DIR ?? '';
+
+function collect(rootSel) {
+  const root = document.querySelector(rootSel);
+  const top = root.getBoundingClientRect().top;
+  const rows = [];
+  const walk = (el, path) => {
+    const cs = getComputedStyle(el);
+    if (cs.display === 'none') return;
+    const r = el.getBoundingClientRect();
+    rows.push({
+      path,
+      y: +(r.top - top).toFixed(1),
+      h: +r.height.toFixed(1),
+      w: +r.width.toFixed(1),
+      font: cs.fontFamily.split(',')[0],
+      size: cs.fontSize,
+      weight: cs.fontWeight,
+      color: cs.color,
+      text: (el.childNodes[0]?.nodeValue ?? '').trim().slice(0, 24),
+    });
+    let i = 0;
+    for (const child of el.children) {
+      i++;
+      walk(child, `${path}>${child.tagName.toLowerCase()}:${i}`);
+    }
+  };
+  walk(root, 'resume');
+  return rows;
+}
+
+const browser = await launchChromium();
+try {
+  // 1. The real thing.
+  const real = await browser.newPage({ viewport: { width: 701, height: 900 } });
+  await real.emulateMedia({ media: 'print' });
+  await real.goto(`${ORIGIN}/resume`, { waitUntil: 'networkidle' });
+  await real.evaluate(() => document.fonts.ready);
+  const a = await real.evaluate(collect, 'article.resume');
+
+  // 2. The lab at incumbent.
+  const lab = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  await lab.goto(`${ORIGIN}/design/resume-print`, { waitUntil: 'networkidle' });
+  await lab.evaluate(() => localStorage.clear());
+  await lab.reload({ waitUntil: 'networkidle' });
+  await lab.evaluate(() => document.fonts.ready);
+  await lab.waitForTimeout(300);
+  const b = await lab.evaluate(collect, '.lab-sheet article.resume');
+
+  let diffs = 0;
+  const byPath = new Map(b.map((r) => [r.path, r]));
+  for (const ra of a) {
+    const rb = byPath.get(ra.path);
+    if (!rb) {
+      console.log('MISSING in lab:', ra.path);
+      diffs++;
+      continue;
+    }
+    const bad = [];
+    if (Math.abs(ra.y - rb.y) > 0.6) bad.push(`y ${ra.y}→${rb.y}`);
+    if (Math.abs(ra.h - rb.h) > 0.6) bad.push(`h ${ra.h}→${rb.h}`);
+    if (Math.abs(ra.w - rb.w) > 0.6) bad.push(`w ${ra.w}→${rb.w}`);
+    for (const k of ['font', 'size', 'weight', 'color'])
+      if (ra[k] !== rb[k]) bad.push(`${k} ${ra[k]}→${rb[k]}`);
+    if (bad.length) {
+      diffs++;
+      if (diffs <= 40) console.log(ra.path, ra.text, '|', bad.join(', '));
+    }
+  }
+  console.log(`\nfidelity: ${a.length} elements on /resume, ${diffs} differ from the lab\n`);
+
+  // 3. Height sweep: each candidate alone against the incumbent, both densities.
+  const axes = {
+    space: ['p1', 'p4', 'p2'],
+    jobgap: ['m1', 'm2'],
+    jobhead: ['k1', 'k2', 'k3'],
+    skills: ['e1', 'e2', 'e6', 'e7', 'e8'],
+    groups: ['h1', 'h2', 'h4', 'h3'],
+    subtitle: ['i1', 'i2'],
+    marker: ['f1', 'f2', 'f3'],
+  };
+  const setState = async (state, density) => {
+    await lab.evaluate(
+      ({ state, density }) => {
+        const sheet = document.querySelector('.lab-sheet');
+        for (const [k, v] of Object.entries(state)) sheet.dataset[k] = v;
+        document.querySelector('.lab-sheet article.resume').dataset.density = density;
+      },
+      { state, density },
+    );
+    await lab.waitForTimeout(50);
+    return lab.evaluate(() => document.querySelector('.lab-sheet article.resume').offsetHeight);
+  };
+  const base = Object.fromEntries(Object.entries(axes).map(([k, v]) => [k, v[0]]));
+  for (const density of ['concise', 'full']) {
+    const limit = density === 'concise' ? 960 : 1920;
+    const h0 = await setState(base, density);
+    console.log(`${density}: incumbent ${h0}px of ${limit}`);
+    for (const [axis, opts] of Object.entries(axes)) {
+      for (const opt of opts.slice(1)) {
+        const h = await setState({ ...base, [axis]: opt }, density);
+        const d = h - h0;
+        console.log(
+          `  ${opt}  ${h}px  (${d >= 0 ? '+' : ''}${d})${h > limit ? '  OVER by ' + (h - limit) : ''}`,
+        );
+      }
+    }
+  }
+  // A few plausible combinations.
+  const combos = {
+    'p2 m1 k3 e6 h4 i2 f1': { space: 'p2', jobgap: 'm1', jobhead: 'k3', skills: 'e6', groups: 'h4', subtitle: 'i2', marker: 'f1' },
+    'p4 m2 k2 e7 h1 i1 f1': { space: 'p4', jobgap: 'm2', jobhead: 'k2', skills: 'e7', groups: 'h1', subtitle: 'i1', marker: 'f1' },
+    'p2 m1 k1 e8 h3 i2 f3': { space: 'p2', jobgap: 'm1', jobhead: 'k1', skills: 'e8', groups: 'h3', subtitle: 'i2', marker: 'f3' },
+  };
+  console.log('\ncombinations, concise:');
+  for (const [name, state] of Object.entries(combos)) {
+    const h = await setState(state, 'concise');
+    console.log(`  ${name}: ${h}px${h > 960 ? '  OVER by ' + (h - 960) : ''}`);
+    if (SHOT_DIR) {
+      await lab.evaluate(() => {
+        document.querySelector('.lab-panel').style.display = 'none';
+      });
+      const el = await lab.$('.lab-sheet');
+      await el.screenshot({ path: `${SHOT_DIR}/${name.replace(/ /g, '-')}.png` });
+    }
+  }
+  if (SHOT_DIR) {
+    await setState(base, 'concise');
+    const el = await lab.$('.lab-sheet');
+    await el.screenshot({ path: `${SHOT_DIR}/incumbent.png` });
+  }
+} finally {
+  await browser.close();
+}

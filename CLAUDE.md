@@ -3382,3 +3382,78 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 | `infra/README.md`                     | The live zone, the DNS tooling, and Phase 1's record.                         |
 | GitHub issues                         | What's actually left. Milestones per phase; `decision` and `needs-ali`.       |
 | `snapshot/`                           | The old site as it stood. The reference for "what did the old page say?"      |
+
+## The résumé's paper look (2026-09-06, closes #235)
+
+Settled with Ali across twelve rounds on a live switcher — the thirteenth run of that loop, and the
+first on paper. The instrument rendered the printed page on screen, at letter geometry, with the
+print cascade transcribed and the real page breaks simulated; it is kept as a template in the
+`design-switcher` skill (`references/resume-paper-sheet/`) for the next pass, for the same reason
+#246 kept the panel out of `src/`. PR [#326](https://github.com/ali-wallick/Portfolio/pull/326)
+carries every round's measurements. What belongs here is what settled and the four rules that
+generalise.
+
+**What settled, all on paper.** The name in Gabarito at 24pt in the site's magenta (`#c4005f`),
+with the section headings and their rules in the same ink and nothing else — the ink stays on the
+things that name the document's structure. Two faces and no more: Gabarito on the name only, Public
+Sans for everything else including the section heads, because a display face on job titles or
+labels reads as a third register. Section headings carry the rule running from their end to the
+right edge on the same line, with 14pt above each. The header is two columns: name and role left,
+the location on its own line under the role, the three contact lines stacked right. The job line is
+company first and bold, then the title. Skills is one aligned label column. Each Second Dinner group
+carries a 1.5pt magenta bar down its left, with an italic subtitle, and no other job does: **the bar
+means "one of several bodies of work under this employer"**, which is why the uniform version lost.
+Page 2 of the two-pager opens with the name at 16pt and "Page 2 of 2" in a taller top margin.
+
+**What the screen took, and did not.** The site's résumé keeps its own type and colour. It took the
+structural half — company-first, the aligned skills column, the bars — and the bars are in
+`--color-frame`, not the accent: on screen magenta means _where you are_ and the frame colour
+already means _this object has an edge_. **The contact block is hidden on screen**, Ali's call: the
+header, the footer and `/contact` carry the same three links, and the slot is where the download
+button lives. Paper keeps it, because a PDF that does not say whose it is gets separated from its
+filename.
+
+**Ali's brief was that paper may diverge where something looks good printed and would not on a
+webpage, and the location line is the shape of that divergence**: one DOM string, a separator the
+print block hides and a span it makes a block. Nothing is written twice.
+
+### Four things measured, each of which overturned a plausible answer
+
+- **`@page` margin boxes work in Chromium 151, and they are how the page-2 header is done** —
+  `@page :first` keeps them off page 1, `counter(page)` and `counter(pages)` resolve, and pages
+  after the first can carry a different top margin. So the header costs page 1 nothing and page 2
+  48px: **the two-pager's budget is 960 + 912, not 2 × 960**, and `resume-headroom.mjs` reads it
+  that way. Two limits from the same experiment: a webfont named in a margin box does not resolve
+  (the box falls back to the body face, so the header is Public Sans and names it explicitly), and a
+  `position: fixed` element is not a repeating header (it printed once, on page 1, in the content
+  area). And cascade order beat `:first`'s specificity for the box's `content` — the first render
+  printed the name on page 1 as well, because `ResumeDocument.astro`'s inline rule came later in
+  the document than the stylesheet's exclusion. The exclusion is repeated after it, on purpose.
+- **A variable font embeds as a Type 3 font, and the guard could not see it.** The first PDFs set
+  the name in `Gabarito Variable`; Chromium embedded the instance as glyph procedures with no
+  `BaseFont`, which is the one kind of PDF text applicant-tracking parsers most often cannot read,
+  and on a résumé the name is the worst place for that. `assertPrintFace` scanned only `BaseFont`
+  and passed. Paper names the **static** Gabarito 700 now (`@fontsource/gabarito`, imported on the
+  two résumé routes beside Public Sans), and the guard reads `/FontName` too and fails on any
+  `/Subtype /Type3`.
+- **The one-pager had 32px of slack, not the 102 this file recorded from #32** — bullets landed in
+  between (#191 measured 928 of 960, and that was the truth this pass started from). It is at
+  **947 of 960** now, with 14pt section spacing chosen over 12pt knowing it spent most of the rest.
+  The next bullet added to the one-pager costs a page, and `update-resume`'s trim rule applies.
+- **A left-gutter layout — headings in a margin column, the textbook "designed résumé" — cannot fit
+  the one-pager.** It costs the content column 116px of its 701 and every bullet rewraps: 120px
+  over on its own, 88 over with every height-saving mark beside it. Measured, labelled as such on
+  the panel, and not taken. Don't rediscover it.
+
+### Two rules for the next pass on paper
+
+- **Measure the instrument before judging anything on it.** The sheet was checked against
+  `/resume` under real print emulation, element by element, and read 94 of 94 before any candidate
+  went up. A transcription of the print block that drifts by one rule is a convincing wrong
+  instrument.
+- **Show the break, not a line.** A job never splits across pages and a heading never ends one, so
+  the real break falls before the first block that would cross, pulled back past any heading it
+  must stay with. Ali could not tell where the two-pager broke until the sheet paginated that way.
+  It breaks before MobilityWare, leaving 128px white on page 1, and that is the cost of never
+  splitting a job. If the Second Dinner entry ever grows past a page it will split inside itself —
+  the case to watch.

@@ -59,6 +59,10 @@ one with fewer marks.** Do the measuring _before_ writing any of the switcher.
 
 ## 3. Build the instrument
 
+**For anything about how the printed résumé looks, start from
+`references/resume-paper-sheet/` instead** — the sheet that renders the PDF's page on screen with
+its real breaks, kept from #235 with its fidelity check and the paper traps it found.
+
 `references/scaffolding.md` carries the working shapes — the route, the panel, the script, the
 stylesheet — recovered from #239 and annotated with what each constraint is for. Read it before
 writing a file. The constraints, in short, because every one of them has bitten:
