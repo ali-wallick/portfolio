@@ -83,6 +83,26 @@
  * the note printed above any diff exist so that is visible in one line
  * instead of being re-derived.
  *
+ * ## A hidden subtree is one row asserting that it is hidden (#330)
+ *
+ * The capture used to drop any element whose own `display` computed to
+ * `none` — which drops a hidden block and keeps every descendant of it,
+ * because `getComputedStyle` on a child of a `display: none` element returns
+ * the *child's* own display. So the baseline carried full geometry rows for
+ * the four chrome blocks the print stylesheet hides, and #327 — which deleted
+ * 51 inert token pins and moved nothing at all on paper, bisected per pin —
+ * still reported 42 diff rows, every one of them chrome that never reaches
+ * the PDF. The signal-to-noise ran backwards on exactly the changes this
+ * guard should have been cheapest for.
+ *
+ * Dropping those rows outright would have given up something real, though: a
+ * chrome block *becoming* visible on paper is a genuine bug, and it is why
+ * `base.css` has an `@media print` rule for the reticle at all. So the root
+ * of each hidden subtree is recorded as a one-field row asserting
+ * `display: none`, and its descendants are skipped. That is a stronger
+ * assertion than the geometry of something invisible, and it is the whole
+ * comparison for those rows.
+ *
  * Usage:
  *   node scripts/check-resume-print.mjs            # diff against the baseline
  *   node scripts/check-resume-print.mjs --update    # regenerate the baseline
@@ -240,14 +260,43 @@ try {
       }
 
       const all = [document.body, ...document.body.querySelectorAll('*')];
+      /** Elements that never render in any medium. Asserting one is hidden
+       * says nothing, so they are dropped outright rather than recorded as
+       * hidden rows below. */
+      const NEVER_RENDERED = new Set(['SCRIPT', 'STYLE', 'LINK', 'META', 'TEMPLATE', 'NOSCRIPT']);
       const rows = [];
+      /** The nearest `display: none` element whose subtree we are still
+       * inside. `querySelectorAll('*')` is document order, so a hidden
+       * subtree is contiguous and one variable tracks it. */
+      let hiddenRoot = null;
       for (const el of all) {
+        if (NEVER_RENDERED.has(el.tagName)) continue;
+        if (hiddenRoot) {
+          if (hiddenRoot.contains(el)) continue;
+          hiddenRoot = null;
+        }
+
         const style = getComputedStyle(el);
-        // Drops <script>/<style> and anything the print stylesheet hides
-        // (.site-header, .site-footer, .skip-link, .resume-actions) — a
-        // computed-style filter rather than a hardcoded class list, so it
-        // stays correct if a future print rule hides something new.
-        if (style.display === 'none') continue;
+        // A hidden subtree is recorded as ONE row asserting `display: none` at
+        // its root, and its descendants are skipped (#330). The print block
+        // hides five things — .site-header, .site-footer, .skip-link,
+        // .page-head, .resume-actions — and `data-density='concise'` hides
+        // every `[data-full-only]` node; none of their geometry is a fact
+        // about paper. Capturing it meant a change that moved nothing on
+        // paper still produced a 42-row diff, which is backwards for a guard
+        // whose job is to make a real reflow loud. What IS worth asserting is
+        // that they are still hidden: a chrome block reaching the PDF is a
+        // real bug, and it flips this one field.
+        //
+        // The ancestor walk is the load-bearing part. `getComputedStyle` on a
+        // child of a `display: none` element returns the CHILD's own display,
+        // so a per-element check — what this was until #330 — keeps every
+        // descendant of everything it means to drop.
+        if (style.display === 'none') {
+          hiddenRoot = el;
+          rows.push({ path: elementPath(el), hidden: true });
+          continue;
+        }
 
         const round = (n) => Math.round(n * 100) / 100;
         const rect = el.getBoundingClientRect();
@@ -316,7 +365,10 @@ if (UPDATE) {
           '`node scripts/check-resume-print.mjs --update` after an intentional change to ' +
           'the resume, resume.css, or tokens.css, and commit the result. Rows with ' +
           '"inline": true assert "advance" (the summed width of the element\'s line boxes); ' +
-          'their "unionRect" and "lineBoxes" are informational only. See #284.',
+          'their "unionRect" and "lineBoxes" are informational only. See #284. Rows with ' +
+          '"hidden": true are the root of a subtree the print block (or the concise ' +
+          'density) hides; they assert only that it is still hidden, and their ' +
+          'descendants are not captured. See #330.',
         environment: { platform: process.platform, chromium: chromiumVersion },
         routes: captured,
       },
@@ -375,14 +427,32 @@ for (const route of ROUTES) {
 
   let elementsWithDiff = 0;
   let differingFields = 0;
-  const totalFields = matchedPaths.length * (STYLE_PROPS.length + 1); // +1 for rect
+  // A rendered row compares its geometry plus every captured style property; a
+  // hidden row compares one field, because `display: none` is its whole
+  // assertion (#330).
+  const totalFields = matchedPaths.reduce(
+    (n, p) => n + (baseByPath.get(p).hidden ? 1 : STYLE_PROPS.length + 1),
+    0,
+  );
 
   for (const p of matchedPaths) {
     const base = baseByPath.get(p);
     const cur = curByPath.get(p);
     const fieldDiffs = [];
 
-    if (!!base.inline !== !!cur.inline) {
+    if (!!base.hidden !== !!cur.hidden) {
+      // Something the print block hides has started rendering, or something it
+      // rendered has vanished. Either is loud on its own — and when a hidden
+      // block becomes visible its whole subtree shows up as added paths too.
+      fieldDiffs.push({
+        field: 'display',
+        from: base.hidden ? 'none' : 'rendered',
+        to: cur.hidden ? 'none' : 'rendered',
+      });
+    } else if (base.hidden) {
+      // Both hidden. There is no geometry or colour to compare, and none that
+      // would mean anything if there were.
+    } else if (!!base.inline !== !!cur.inline) {
       // An element changing between inline and block-level layout is a real
       // regression (and changes which geometry is even meaningful), so it is
       // reported rather than quietly switching comparison modes.
@@ -406,9 +476,11 @@ for (const route of ROUTES) {
     } else if (rectsDiffer(base.rect, cur.rect)) {
       fieldDiffs.push({ field: 'rect', from: base.rect, to: cur.rect });
     }
-    for (const prop of STYLE_PROPS) {
-      if (base[prop] !== cur[prop]) {
-        fieldDiffs.push({ field: prop, from: base[prop], to: cur[prop] });
+    if (!base.hidden && !cur.hidden) {
+      for (const prop of STYLE_PROPS) {
+        if (base[prop] !== cur[prop]) {
+          fieldDiffs.push({ field: prop, from: base[prop], to: cur[prop] });
+        }
       }
     }
 

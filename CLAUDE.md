@@ -1622,9 +1622,11 @@ resume-density.ts`, which is in `build-pdf.mjs`'s `byteHashedFiles` for exactly 
   motion" below.) Per-element `view-transition-name` polish was deliberately left for a later pass
   with Ali, and is settled now — same section.
 - **The print-geometry baseline now renumbers on every resume edit.** `nth-of-type` counts hidden
-  siblings, so both routes' paths shift when a bullet is added anywhere, and hidden subtrees'
-  children appear as zero-rect rows. The `update-resume` skill carries the how-to-read-it note;
-  the check that matters is that visible rows' _values_ (y/height especially) didn't move.
+  siblings, so both routes' paths shift when a bullet is added anywhere. (It also used to capture
+  those hidden subtrees' children as zero-rect rows; since
+  [#330](https://github.com/ali-wallick/Portfolio/issues/330) a hidden subtree is one row asserting
+  it is still hidden.) The `update-resume` skill carries the how-to-read-it note; the check that
+  matters is that visible rows' _values_ (y/height especially) didn't move.
 
 ## The density toggle's motion: the document reflows, it doesn't dissolve (2026-09-01, closes #260)
 
@@ -3546,10 +3548,12 @@ session, so the highest-leverage one), `base.css`'s reticle-timing comment, and
 it calls the block's _property_ rules a denylist, which is still true and is now the only live half
 of the hazard.
 
-**The re-baseline is 42 rows and all of them are hidden chrome.** `check:resume-print` captures
+**The re-baseline was 42 rows and all of them were hidden chrome.** `check:resume-print` captured
 `.site-header`, `.site-footer`, `.page-head` and `.resume-actions`, which the print block hides —
-so a change that moves nothing on paper still shows up as 42 diff rows. That is a property of the
-guard, not of this change, and it is [#330](https://github.com/ali-wallick/Portfolio/issues/330).
+so a change that moved nothing on paper still showed up as 42 diff rows. That was a property of the
+guard, not of this change, and it was
+[#330](https://github.com/ali-wallick/Portfolio/issues/330), fixed the same day — see the section
+below.
 
 **Shared script logic lives in `scripts/lib/`, and the list is the rule.** Chromium launch,
 serving `dist/`, front matter, the directory walker, the 701×960 print geometry, and the
@@ -3642,3 +3646,51 @@ flag parsing, and converting the two `new Set(argv.slice(2))` sites is _behaviou
 site genuinely wins. **None of it is shared state, so none of it can drift**, which is the entire
 subject of #328 — and `scripts/lib/`'s own rule already settles it: a helper _two scripts need_ goes
 there. One script's parser is not shared logic.
+
+## A hidden subtree is one row asserting it is hidden (2026-09-06, closes #330)
+
+Split out of #327, and it is the same trap that issue recorded, one file over.
+`scripts/check-resume-print.mjs` dropped any element whose own `display` computed to `none` —
+which drops a hidden block and **keeps every descendant of it**, because `getComputedStyle` on a
+child of a `display: none` element returns the _child's_ own display. The filter had to be an
+ancestor walk, not a per-element check. That is the same distinction #327's spike got wrong in the
+other direction: a naive filter there reported 21 unpinned-token consumers on paper when the real
+number was 3.
+
+**The cost was measured rather than assumed, which is the reason this was worth doing.** #327 moved
+nothing at all on paper — bisected per pin, 51 of 54 changed zero rendered elements — and
+`check:resume-print` reported **42 diff rows** anyway, every one of them chrome that never reaches
+the PDF. So the guard's signal-to-noise ran backwards on exactly the changes it should have been
+cheapest for.
+
+**The fix is not to drop those rows, and that distinction is the decision.** A chrome block
+_becoming_ visible on paper is a real bug — it is why `base.css` has an `@media print` rule for the
+reticle at all. So the root of each hidden subtree is recorded as a one-field row asserting
+`display: none`, and its descendants are not captured. **A row asserting that something is hidden
+is a better guard than a row asserting the geometry of something invisible**, and it is a cheaper
+one: flipping it is one named field on one named element rather than a scatter of rects.
+
+**Verified by injecting each failure it has to catch**, since a guard that got quieter is exactly
+the change that needs proving it did not get blinder:
+
+| Injected into the print block            | Rows reported                                                                       |
+| ---------------------------------------- | ----------------------------------------------------------------------------------- |
+| `.site-footer` no longer hidden          | `display: "none" → "rendered"` on the footer, plus its whole subtree as added paths |
+| A list indent (`padding-left` on a `ul`) | 21                                                                                  |
+| A colour leak, costing no height         | 45                                                                                  |
+| A font-size leak                         | 195                                                                                 |
+| The #330 change itself                   | **0 changed rows** — 92 removed, 37 added, no geometry or style moved               |
+
+That last line is the whole point: the structural churn is a one-time re-baseline, and every
+rendered row's values came out identical.
+
+**Two things the pass swept up.** `<script>`/`<style>` are dropped by tag rather than by being
+hidden — asserting a script is invisible says nothing — and the reticle's four `<i>` children were
+being captured on both routes, since the reticle itself is `display: none` on paper and the naive
+filter kept its children. **And the `[data-full-only]` nodes are the same shape**: the concise
+document hides them, so `/resume` now carries one hidden row per full-only node instead of a
+zero-rect row per descendant, and that row is a real assertion that the density mechanism still
+holds on paper.
+
+Row counts: **165/190 → 139/161**, of which 37 are hidden roots. The `environment` block still
+reads `linux`, unchanged and matching CI.

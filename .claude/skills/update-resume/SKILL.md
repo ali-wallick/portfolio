@@ -188,9 +188,15 @@ a baseline update to wave through.
 **Since the density toggle (both densities in one DOM, full-only nodes hidden by
 `data-full-only`), every resume edit renumbers paths on BOTH routes.** The baseline's
 `nth-of-type` counts hidden siblings, so adding a `highlightsExtended` bullet shifts the
-one-pager's visible `li` paths too, and hidden subtrees' children appear as zero-rect rows.
-Expect noisier `--update` diffs than the edit alone suggests; what matters is that the
-_values_ (y/height especially) of visible rows didn't move, not that paths were renamed.
+one-pager's visible `li` paths too. Expect noisier `--update` diffs than the edit alone suggests;
+what matters is that the _values_ (y/height especially) of visible rows didn't move, not that
+paths were renamed.
+
+**A row with `"hidden": true` is the root of a subtree the print block, or the concise density,
+hides (#330).** It asserts only that it is still hidden — no geometry, no colour — and its
+descendants are not captured at all. So a full-only bullet reads as one hidden row on `/resume`
+and a full set of rendered rows on `/resume/full`, and a `display: none → rendered` diff on one of
+those rows means something that should never reach paper just did.
 
 **Two signatures worth being able to read, because both look alarming and neither is:**
 
