@@ -221,3 +221,20 @@ export const KIND_LABEL: Record<Project['data']['kind'], string> = {
   talk: 'Talk',
   tool: 'Tool',
 };
+
+/**
+ * Human label for a link's `kind` (#290), shown in the "See Also" list's
+ * leading gutter. Typed against the schema's own enum rather than
+ * `Record<string, string>`, so adding a `kind` fails the build here instead
+ * of rendering the raw value.
+ */
+export const LINK_KIND_LABEL: Record<Project['data']['links'][number]['kind'], string> = {
+  store: 'Store',
+  play: 'Play',
+  video: 'Video',
+  source: 'Source',
+  press: 'Press',
+  jam: 'Jam',
+  site: 'Site',
+  slides: 'Slides',
+};

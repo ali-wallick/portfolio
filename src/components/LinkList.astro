@@ -1,5 +1,5 @@
 ---
-import type { Project } from '~/lib/content';
+import { LINK_KIND_LABEL, type Project } from '~/lib/content';
 import { externalLinkProps } from '~/lib/links';
 
 /**
@@ -34,26 +34,11 @@ const { links } = Astro.props;
 const live = links.filter((l) => !l.dead);
 const dead = links.filter((l) => l.dead);
 
-/**
- * `kind` is real schema data that no rendered surface showed until now — it
- * was read only by `structured-data.ts` and `build-linkedin.mjs`, both looking
- * up the one `press` link. Surfacing it is the same argument `.card-index`
- * makes for `featureOrder`: a fact the content model already holds, not a
- * label invented for the look.
- *
- * Typed against the schema's own enum rather than `Record<string, string>`, so
- * adding a `kind` fails the build here instead of rendering the raw value.
- */
-const kindLabel: Record<Project['data']['links'][number]['kind'], string> = {
-  store: 'Store',
-  play: 'Play',
-  video: 'Video',
-  source: 'Source',
-  press: 'Press',
-  jam: 'Jam',
-  site: 'Site',
-  slides: 'Slides',
-};
+// `kind` is real schema data that no rendered surface showed until now — it
+// was read only by `structured-data.ts` and `build-linkedin.mjs`, both looking
+// up the one `press` link. Surfacing it is the same argument `.card-index`
+// makes for `featureOrder`: a fact the content model already holds, not a
+// label invented for the look.
 ---
 
 {
@@ -70,7 +55,7 @@ const kindLabel: Record<Project['data']['links'][number]['kind'], string> = {
                   opposite: the kind is information available nowhere else on
                   the page, and "Press" before a credit and "Video" before an
                   interview is worth hearing. */}
-              <span class="link-stack-kind">{kindLabel[l.kind]}</span>
+              <span class="link-stack-kind">{LINK_KIND_LABEL[l.kind]}</span>
               <a href={l.url} {...externalLinkProps(l.url)}>
                 {l.label}
               </a>
