@@ -187,6 +187,18 @@ export function projectThumb(
   return undefined;
 }
 
+/**
+ * What a project was built in: `engine`, falling back to `tech`, falling back
+ * to `platforms`, so a project with an empty earlier field doesn't render as
+ * blank. This is the metadata strip's own fallback chain — `ProjectMeta.astro`
+ * and `ProjectCardArt.astro` both call it, so they can never disagree about
+ * what a project was built in.
+ */
+export function projectBuilt(project: Project): string[] {
+  const { engine, tech, platforms } = project.data;
+  return engine.length ? engine : tech.length ? tech : platforms;
+}
+
 /** Human label for the honest-framing status field. */
 export const STATUS_LABEL: Record<NonNullable<Project['data']['status']>, string> = {
   shipped: 'Shipped',

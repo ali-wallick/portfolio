@@ -1,5 +1,5 @@
 ---
-import { formatYears, STATUS_LABEL, KIND_LABEL, type Project } from '~/lib/content';
+import { formatYears, projectBuilt, STATUS_LABEL, KIND_LABEL, type Project } from '~/lib/content';
 import { getEntry } from 'astro:content';
 
 /**
@@ -36,7 +36,7 @@ const where = job?.data.company ?? d.event;
 
 // `engine` is empty for bare-metal targets (Atari 2600, GBA), so fall back
 // through tech and then platform rather than printing an empty field.
-const built = d.engine.length ? d.engine : d.tech.length ? d.tech : d.platforms;
+const built = projectBuilt(project);
 
 // `role` joins with `, `, matching `built` above and NOT the meta strip's `·`
 // separator (#152). `·` separates metadata categories; using it inside one

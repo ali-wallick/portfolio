@@ -1,5 +1,5 @@
 ---
-import { formatYears, type Project } from '~/lib/content';
+import { formatYears, projectBuilt, type Project } from '~/lib/content';
 
 /**
  * A generated, typographic stand-in for a project thumbnail — no photography.
@@ -46,9 +46,7 @@ interface Props {
 const { project, size = 'card' } = Astro.props;
 const d = project.data;
 
-// Same fallback chain the metadata strip uses, so the two never disagree about
-// what a project was built in.
-const built = d.engine.length ? d.engine : d.tech.length ? d.tech : d.platforms;
+const built = projectBuilt(project);
 ---
 
 <div class="card-art" data-status={d.status} data-size={size} aria-hidden="true">
