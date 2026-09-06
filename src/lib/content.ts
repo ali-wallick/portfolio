@@ -83,14 +83,9 @@ export function formatYears(startYear: number, endYear?: number): string {
   return endYear && endYear !== startYear ? `${startYear}–${endYear}` : String(startYear);
 }
 
-/** `2016 – 2019`, `2019 – Present`. Accepts mixed `YYYY` / `YYYY-MM` precision. */
-export function formatSpan(start: string, end?: string): string {
-  return `${formatDatePart(start)} – ${end ? formatDatePart(end) : 'Present'}`;
-}
-
 /**
- * `2015 – 2016`, `2019 – Present`. Same as `formatSpan` but drops any stored
- * month.
+ * `2015 – 2016`, `2019 – Present`. Formats a job or education span as
+ * year-only, dropping any stored month precision.
  *
  * The resume prints years only, settled with Ali 2026-08-26 (#32). Red 5's
  * start is sourced to the month (`2015-06`, from about.php) and Second Dinner's
@@ -106,13 +101,6 @@ export function formatSpan(start: string, end?: string): string {
 export function formatSpanYears(start: string, end?: string): string {
   const year = (value: string) => value.split('-')[0]!;
   return `${year(start)} – ${end ? year(end) : 'Present'}`;
-}
-
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-function formatDatePart(value: string): string {
-  const [year, month] = value.split('-');
-  return month ? `${MONTHS[Number(month) - 1]} ${year}` : year!;
 }
 
 /** The title to show for a job: the most recent entry in its role progression. */
