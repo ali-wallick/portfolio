@@ -23,28 +23,15 @@
  * Usage: node scripts/strip-lighthouse-beacon.mjs [dist-dir]
  */
 
-import { readdirSync, readFileSync, writeFileSync, statSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { walkFiles } from './lib/walk-files.mjs';
 
 const DIR = path.resolve(process.argv[2] ?? 'dist');
 const BEACON_TAG =
   /<script[^>]*\bsrc="https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js"[^>]*><\/script>/g;
 
-/** @param {string} dir @return {string[]} */
-function findHtmlFiles(dir) {
-  const files = [];
-  for (const entry of readdirSync(dir)) {
-    const full = path.join(dir, entry);
-    if (statSync(full).isDirectory()) {
-      files.push(...findHtmlFiles(full));
-    } else if (entry.endsWith('.html')) {
-      files.push(full);
-    }
-  }
-  return files;
-}
-
-const htmlFiles = findHtmlFiles(DIR);
+const htmlFiles = (await walkFiles(DIR)).filter((f) => f.endsWith('.html'));
 let stripped = 0;
 
 for (const file of htmlFiles) {

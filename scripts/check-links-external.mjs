@@ -55,9 +55,10 @@
  * Usage: node scripts/check-links-external.mjs [dist-dir]
  */
 
-import { readdir, readFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { walkFiles } from './lib/walk-files.mjs';
 
 const DIST = path.resolve(process.argv[2] ?? 'dist');
 const SITE_HOST = 'aliwallick.com';
@@ -72,17 +73,6 @@ if (!existsSync(DIST)) {
   process.exit(1);
 }
 
-async function walk(dir) {
-  /** @type {string[]} */
-  const files = [];
-  for (const entry of await readdir(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) files.push(...(await walk(full)));
-    else files.push(full);
-  }
-  return files;
-}
-
 // --- Collect every outbound URL, and remember where each one came from -----
 // A URL that appears on six pages is fetched once and reported once, but the
 // report still has to say where to go and fix it.
@@ -90,7 +80,7 @@ async function walk(dir) {
 /** @type {Map<string, Set<string>>} url -> pages it appears on */
 const urls = new Map();
 
-for (const file of (await walk(DIST)).filter((f) => f.endsWith('.html'))) {
+for (const file of (await walkFiles(DIST)).filter((f) => f.endsWith('.html'))) {
   const rel = path.relative(DIST, file);
   const html = await readFile(file, 'utf8');
   for (const [, raw] of html.matchAll(/(?:href|src)\s*=\s*"(https?:\/\/[^"]+)"/gi)) {

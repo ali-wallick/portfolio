@@ -27,9 +27,10 @@
  * Usage: node scripts/check-links.mjs [dist-dir]
  */
 
-import { readdir, readFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { walkFiles } from './lib/walk-files.mjs';
 
 const DIST = path.resolve(process.argv[2] ?? 'dist');
 
@@ -42,18 +43,7 @@ if (!existsSync(DIST)) {
 const problems = [];
 const report = (file, message) => problems.push({ file, message });
 
-async function walk(dir) {
-  /** @type {string[]} */
-  const files = [];
-  for (const entry of await readdir(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) files.push(...(await walk(full)));
-    else files.push(full);
-  }
-  return files;
-}
-
-const allFiles = await walk(DIST);
+const allFiles = await walkFiles(DIST);
 const htmlFiles = allFiles.filter((f) => f.endsWith('.html'));
 const distPaths = new Set(
   allFiles.map((f) => '/' + path.relative(DIST, f).split(path.sep).join('/')),
