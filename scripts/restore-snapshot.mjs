@@ -58,7 +58,6 @@
  * Usage:
  *   node scripts/restore-snapshot.mjs                # rebuild snapshot/rendered/
  *   node scripts/restore-snapshot.mjs --serve        # rebuild, then serve it
- *   node scripts/restore-snapshot.mjs --verify-live  # also diff against the live site
  */
 
 import { mkdir, writeFile, readFile, readdir, rm, stat } from 'node:fs/promises';
