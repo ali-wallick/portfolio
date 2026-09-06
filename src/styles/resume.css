@@ -617,114 +617,79 @@
 }
 
 @media print {
-  /* Dark mode is a screen affordance. Force the paper palette explicitly
-     rather than hoping the print pipeline ignores the media query. */
+  /* Paper's ENTIRE token vocabulary — three pins, and nothing else.
+   *
+   * Not a filter over `tokens.css`. Every `:root` block there sits inside
+   * `@media screen` (#62), so on paper an unpinned token is *undefined*: a
+   * declaration using one is invalid at computed-value time and drops to its
+   * initial value. It does not pick up a screen value. That is the whole
+   * reason this block is short.
+   *
+   * This used to carry 54 pins and an instruction to add every new token to
+   * it, on the pre-#62 theory that anything nobody enumerated reached the
+   * PDF. Measured for #327 (bisected per pin, twice, by two methods): 51 of
+   * the 54 moved *zero* rendered elements on either route. They were
+   * insurance against a hazard that stopped existing — an unpinned token
+   * cannot print a surprise, because it prints nothing. Deleted rather than
+   * kept as decoration; #327 has the measurements.
+   *
+   * The three below are the ones the résumé actually reads, each via a
+   * top-level rule in `base.css` that reaches paper because it is outside
+   * `@media screen`. They are pins rather than literals on purpose: a pin
+   * tracks `base.css`'s selector, while a literal copy of that selector here
+   * is a second copy free to desync the moment the selector changes.
+   *
+   * ## If you write a print rule that wants a token
+   *
+   * Pin it here, then, and say why — do not pre-pin against a future that
+   * may not arrive. Two things worth knowing before you do:
+   *
+   * - Phase 5's interaction layer has nothing to say on paper by nature. A
+   *   reticle cannot exist on a sheet and a printed résumé states its own
+   *   dates, so the accent and chip tokens are not merely unused here, they
+   *   are meaningless here.
+   * - A height device that reaches paper is a page-count hazard. `--lift`
+   *   and its shadows are the direction's "height means pressable"; an
+   *   unblurred 4px shadow under a heading rule costs a few points per
+   *   section and surfaces as a build failure several bullets later, not as
+   *   anything you can see. That is why it is worth a deliberate pin rather
+   *   than a reflex one.
+   *
+   * Whatever you add, `npm run check:resume-print` is the guard that will
+   * tell you what it moved.
+   */
   :root {
-    --color-bg: #ffffff;
-    --color-surface: #ffffff;
-    --color-text: #000000;
-    --color-text-muted: #333333;
-    --color-border: #999999;
-    --color-link: #000000;
-    --color-link-visited: #000000;
+    /* Read by `body { font-family }` in base.css. Removing it: 109/109 and
+       156/156 rendered elements change and the stack falls through to Times
+       New Roman — the machine-dependent-face problem #191 closed, by another
+       door.
 
-    /* The list above is a denylist pretending to be a design system: it pins
-       the tokens that existed when it was written, and silently lets through
-       any token added later. Phase 5 is about to add several, and this file
-       drives a PDF with a hard page-count assertion in scripts/build-pdf.mjs —
-       so a token that slips through does not fail loudly, it reflows the
-       resume and fails the build one bullet later, or worse, doesn't.
-       Everything below pins a role that base.css can reach. Phase 4's values,
-       verbatim, so this is a no-op today by construction.
+       Public Sans, not `system-ui` (#191). `system-ui` resolved to SF Pro by
+       accident of whichever Mac last rendered the PDF — a face not licensed
+       for embedding in a distributed document — and to whatever fontconfig
+       picks on Linux (DejaVu Sans, measured, which overflows the one-pager).
+       Public Sans is self-hosted via @fontsource (see resume.astro /
+       resume/full.astro), OFL-licensed, and purpose-built as a free
+       Helvetica substitute for exactly this kind of document. That is what
+       makes the PDF reproducible on any machine, CI included.
 
-       IF YOU ADD A TOKEN, ADD IT HERE. */
-    --color-heading: #000000;
-    --color-plate: #666666;
-    --color-accent-block: #ffffff;
-    --color-on-accent: #000000;
-
-    /* Public Sans, not system-ui (#191). system-ui is machine-dependent — it
-       resolved to SF Pro by accident of whichever Mac last rendered the PDF,
-       a face not licensed for embedding in a distributed document, and to
-       whatever fontconfig picks on Linux (DejaVu Sans, measured, which
-       overflows the one-pager). Public Sans is self-hosted via @fontsource
-       (see resume.astro / resume/full.astro), OFL-licensed, and purpose-built
-       as a free Helvetica substitute for exactly this kind of document —
-       USWDS uses it for the same reason. That makes the PDF reproducible on
-       any machine, CI included, and makes scripts/resume-print-baseline.json
-       portable off macOS for the first time. */
+       The name is the one exception and it does not come through this token:
+       `.resume-head h1` below names static Gabarito literally (#235), so
+       paper is set in two faces, not one. */
     --font-body: 'Public Sans', Helvetica, Arial, sans-serif;
-    --font-display: var(--font-body);
-    --font-heading: var(--font-body);
-    /* Deliberately not a mono stack. Paper is set in one face; a design that
-       gives `.meta` a monospace would otherwise embed it in the PDF, because
-       the resume's dates and locations carry that class. */
-    --font-mono: var(--font-body);
 
-    --text-xs: 0.8rem;
-    --text-sm: 0.9rem;
-    --text-base: 1rem;
-    --text-lg: 1.25rem;
-    --text-xl: 1.563rem;
-    --text-2xl: 1.953rem;
-    --text-3xl: 2.441rem;
-    --text-4xl: 3.052rem;
+    /* Read by `h1,h2,h3,h4 { line-height }` in base.css. Removing it costs
+       +13.41px, which puts the one-pager at 960.27px of its 960px budget —
+       over, and a page-count failure. The single most load-bearing pin here
+       by consequence. */
     --leading-tight: 1.2;
-    --leading-body: 1.6;
-    --tracking-display: normal;
-    --tracking-label: normal;
+
+    /* Read by `p,ul,ol { max-width }` in base.css. Note the inversion: this
+       pin does not protect paper from a screen value, it is what makes a
+       screen-authored rule apply on paper at all. Unpinned, `max-width`
+       becomes `none` and five paragraphs on /resume/full unclamp from
+       499.4px. Zero height cost, so no other guard would catch it. */
     --measure: 68ch;
-    /* Pinned per the rule at the top of tokens.css, not because paper reaches
-       it — nothing on either resume route uses `--measure-wide` today; it is a
-       homepage block width. "No rule reaches it yet" is a fact about this week
-       rather than a property of the stylesheet, and this block's whole history
-       is tokens nobody thought would reach it. */
-    --measure-wide: 68ch;
-    --content-max: 60rem;
-
-    /* Added by Phase 5's playful direction. Colour first: the interaction
-       layer (coral) and the content layer (status chips) are both screen
-       ideas — a reticle cannot exist on paper and a printed resume states its
-       own dates, so neither has anything to say here. Flattened to the Phase 4
-       palette rather than dropped, so that a resume rule which *does* pick one
-       up later prints black instead of printing a surprise. */
-    --color-accent: #000000;
-    --color-accent-ink: #000000;
-    --color-accent-soft: #ffffff;
-    --color-focus: #000000;
-
-    /* Nothing on either resume route uses `--color-index` today — it is the
-       featured list's ranking number and the resume has no featured list. It is
-       pinned anyway, per the rule at the top of tokens.css, because "no rule
-       reaches it yet" is a fact about this week rather than a property of the
-       stylesheet. */
-    --color-index: #333333;
-
-    --chip-ink: #333333;
-    --chip-tint: #ffffff;
-    --chip-shipped-ink: #333333;
-    --chip-shipped-tint: #ffffff;
-    --chip-prototype-ink: #333333;
-    --chip-prototype-tint: #ffffff;
-    --chip-jam-ink: #333333;
-    --chip-jam-tint: #ffffff;
-    --chip-coursework-ink: #333333;
-    --chip-coursework-tint: #ffffff;
-    --chip-unannounced-ink: #333333;
-    --chip-unannounced-tint: #ffffff;
-
-    /* Then geometry. `--lift` and its three shadows are the direction's
-       "height means pressable" device; paper presses nothing, and an unblurred
-       4px shadow under a heading rule is exactly the sort of thing that costs
-       a few points of height per section and shows up as a page-count failure
-       several bullets later. Zeroed rather than enumerated away. */
-    --radius: 0;
-    --radius-lg: 0;
-    --radius-pill: 0;
-    --lift: 0px;
-    --shadow-rest: none;
-    --shadow-high: none;
-    --shadow-flat: none;
   }
 
   /*
@@ -740,10 +705,11 @@
    * a leak has one wrong value, a race has a new one every time.
    *
    * Deliberately a universal selector rather than a list, and it is the only
-   * rule in this block that is. Every other pin here is a denylist that a later
-   * design can walk around by using a property nobody enumerated — the failure
-   * mode the comment above already admits to. This one cannot be walked around,
-   * because animation on paper is never correct regardless of the design.
+   * rule in this block that is. Every other rule here enumerates properties,
+   * so a later design can walk around it by setting one nobody listed — the
+   * live hazard, now that the token half is measured shut (#327). This one
+   * cannot be walked around, because animation on paper is never correct
+   * regardless of the design.
    *
    * A no-op on master by construction: nothing outside this file sets a
    * transition or an animation today.

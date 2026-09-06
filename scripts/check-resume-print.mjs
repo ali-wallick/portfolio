@@ -4,15 +4,19 @@
  * committed baseline. See issue #35 and CLAUDE.md's "The print block can be
  * beaten on specificity, not just on omission."
  *
- * `src/styles/resume.css`'s `@media print` block pins the paper palette by
- * redefining design tokens — and it only pins the tokens that existed when it
- * was written, so it's a denylist wearing a design system's clothes. It has
- * already been beaten twice: once by a token nobody had enumerated yet (19pt
- * of silent reflow, saved only by luck against the page-count assertion), and
- * once on pure CSS specificity (a screen selector outranked the print block's
- * bare `:root`, putting 28 elements in the wrong colour with no build signal
- * at all — colour costs no height, and the page-count assertion is the only
- * other guard that exists).
+ * `src/styles/resume.css`'s `@media print` block is paper's entire token
+ * vocabulary — three pins since #327, everything else stated literally on the
+ * rule. Paper has been got wrong twice: once by a token nobody had enumerated
+ * yet (19pt of silent reflow, saved only by luck against the page-count
+ * assertion), and once on pure CSS specificity (a screen selector outranked
+ * the print block's bare `:root`, putting 28 elements in the wrong colour with
+ * no build signal at all — colour costs no height, and the page-count
+ * assertion is the only other guard that exists).
+ *
+ * The first of those cannot recur: since #62 every `:root` in `tokens.css` is
+ * inside `@media screen`, so an unpinned token is undefined on paper rather
+ * than leaking a screen value. What remains, and what this script is now for,
+ * is a *rule* outside `@media screen` reaching paper — 226 of them today.
  *
  * This script is what actually found both. For every element on `/resume`
  * and `/resume/full`, under `page.emulateMedia({ media: 'print' })`, it

@@ -207,8 +207,9 @@ The teardown is part of the pass, not cleanup after it.
 3. Confirm a production build carries none of it: `WORKERS_CI_BRANCH=main npm run build:ci`, then
    grep `dist/` for the panel's class name and expect zero.
 4. `npm run verify`. If the pass touched anything the resume renders, `npm run check:resume-print`
-   and `npm run check:pdf` too — and remember the print block is a denylist beatable on specificity,
-   so a new token or a selector outranking bare `:root` reaches paper.
+   and `npm run check:pdf` too. A new token does _not_ reach paper — since #62 an unpinned token is
+   undefined there, measured on #327 — but a rule outside `@media screen`, or a selector outranking
+   the print block's bare `:root`, still does.
 5. **Put the decision where the next person editing that value will look** — the comment beside it
    in `tokens.css` or the component, with the measurement that chose it. `CLAUDE.md` gets the rule
    that generalises; `docs/REBUILD-LOG.md` gets the narrative. Pointing all three at each other is

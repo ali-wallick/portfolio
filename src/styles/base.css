@@ -516,12 +516,13 @@ hr {
    landing 33ms from this one and 22ms from Expo: a duplicate mark on the
    instrument rather than an option. (#33)
 
-   The 500ms is written in rather than tokenised for the same reason: CLAUDE.md's
-   standing rule is that a new design token has to be added to `resume.css`'s
-   `@media print` block too, because that block is a denylist and anything nobody
-   enumerated reaches the PDF. Neither of these two values is used anywhere else,
-   and the reticle is `display: none` on paper regardless, so a token would be a
-   liability with no reuse to justify it. */
+   The 500ms is written in rather than tokenised because neither of these two
+   values is used anywhere else, and the reticle is `display: none` on paper
+   regardless — a token would be indirection with no reuse to justify it.
+   (This used to cite a second reason: that every new token had to be pinned in
+   `resume.css`'s `@media print` block, that block being a denylist. Measured
+   false for #327 — an unpinned token is undefined on paper, not leaked — so
+   only the no-reuse half survives.) */
 
 /* A move with no travel, for the `fade` idle mode (#33): geometry snaps, opacity
    still eases. That split is the mode's entire argument — what reads as busy is

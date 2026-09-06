@@ -3482,7 +3482,72 @@ of the 56 pins do any work (`--font-body`, `--leading-tight`, `--measure`). The 
 built for has moved: it is now a rule in `base.css` outside `@media screen` reaching paper. The
 "denylist" passages under Phase 4 and Phase 5 describe the pre-#62 cascade and are left as the
 record of why the block exists; `tokens.css`'s header carries the corrected rule. What to do with
-the 53 inert pins is #327, with the measurement attached.
+the 53 inert pins was #327 — settled below.
+
+## Paper's token vocabulary is three pins (2026-09-06, closes #327)
+
+The `@media print` block's `:root` carried 54 pins and an instruction to add every new token to it.
+It carries **three** now — `--font-body`, `--leading-tight`, `--measure` — and no instruction.
+
+**The 51 that went were insurance against a hazard that stopped existing.** Bisected per pin at
+HEAD, by two independent methods (deleting each pin from the served CSS, and injecting
+`--pin: initial`, the guaranteed-invalid value): 51 of 54 move **zero rendered elements** on either
+route. Since #62 an unpinned token on paper is _undefined_, so a declaration using one drops to its
+initial value — **an unpinned token cannot print a surprise, because it prints nothing.** Every one
+of the 51 was justified by some version of "pin it so a future rule that picks it up prints
+something sane rather than a surprise," and that is the sentence the measurement retired.
+
+**The criterion that settled it was Ali's: keep the pins with a connected decision. It collapses to
+the same three** — and the two best-documented pins turned out to be the clearest deletes.
+`--measure-wide` and `--color-index` were the only pins carrying a comment written to justify their
+own existence, and both said "pinned per the rule at the top of `tokens.css`" — a rule #108 had
+already corrected to "decide whether paper needs it." Their connected decision had been overturned
+in the file they cited. **A pin justified only by a rule is worth exactly what the rule is worth.**
+
+**They are pins rather than literals, and that is the reason Shape B lost.** `p, ul, ol { max-width:
+var(--measure) }` is a top-level `base.css` rule. A pin tracks that selector automatically; a
+literal `p,ul,ol { max-width: 68ch }` in the print block is a second copy of the selector, free to
+desync the moment the selector changes — the drift the content model's guard table exists to rule
+out. Replacing 51 inert lines with a real coupling is a bad trade.
+
+**Two observations were rescued as prose rather than as 19 pins**, because they are true and would
+otherwise have been orphaned: Phase 5's interaction layer has nothing to say on paper _by nature_ (a
+reticle cannot exist on a sheet; a printed résumé states its own dates), and a height device that
+reaches paper is a page-count hazard that surfaces as a build failure several bullets later rather
+than as anything visible. Both are in the block's header now, addressed to whoever writes the next
+print rule.
+
+### The guard question, and why no new guard was built
+
+The spike proposed a check enumerating print-reachable `var()` consumers. Measured, it would be
+mostly redundant. Injecting a print-reaching rule into `base.css` both ways:
+
+| Rule consumes         | On paper                | `check:resume-print`                  |
+| --------------------- | ----------------------- | ------------------------------------- |
+| a **pinned** token    | applies, geometry moves | **fails loudly**, dozens of rows      |
+| an **unpinned** token | silently no-ops         | **passes** — correctly, nothing moved |
+
+So the PDF's correctness is already guarded. The only gap left is _"an author wrote a print rule
+that silently does nothing"_ — a dead-rule linter, not a wrong-PDF guard. Worth building if that is
+ever the stated goal; it is not what #327 was for.
+
+**#235 had left a stale claim inside the block, and the prune caught it.** `--font-mono`'s comment
+said "Paper is set in one face" — false since the paper-look pass. `.resume-head h1` names static
+Gabarito **literally**, so `--font-display` was bypassed entirely rather than being the mechanism.
+Paper is two faces, and the surviving `--font-body` comment says so.
+
+**Four stale "denylist" sites were corrected and one was kept.** `resume.css`'s in-block comment
+(which contradicted `tokens.css`'s corrected header outright — two files giving opposite
+instructions for the same act), `.claude/skills/design-switcher/SKILL.md` (instruction to a future
+session, so the highest-leverage one), `base.css`'s reticle-timing comment, and
+`check-resume-print.mjs`'s own header. **`resume.css`'s universal-`transition` comment was kept**:
+it calls the block's _property_ rules a denylist, which is still true and is now the only live half
+of the hazard.
+
+**The re-baseline is 42 rows and all of them are hidden chrome.** `check:resume-print` captures
+`.site-header`, `.site-footer`, `.page-head` and `.resume-actions`, which the print block hides —
+so a change that moves nothing on paper still shows up as 42 diff rows. That is a property of the
+guard, not of this change, and it is [#330](https://github.com/ali-wallick/Portfolio/issues/330).
 
 **Shared script logic lives in `scripts/lib/`, and the list is the rule.** Chromium launch,
 serving `dist/`, front matter, the directory walker, the 701×960 print geometry, and the

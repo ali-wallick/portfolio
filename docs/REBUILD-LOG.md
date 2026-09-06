@@ -4418,3 +4418,85 @@ are build output rather than tracked files and its brief pointed it at a hash li
 four lines. Closed by hashing all 18 against the frozen baseline `dist/` afterwards, which is where
 the "18 + 4" figure above comes from. Worth generalising: a verification step is only as wide as the
 baseline handed to it.
+
+## #327 — the print block's 51 inert pins (2026-09-06)
+
+The decision #108's spike deferred. The spike had measured it thoroughly and recommended leaving the
+pins alone; Ali's answer reframed it — she is trying to get the site into a state she can call
+shipped, does not mind churn, and asked whether the pins with a connected decision could be kept.
+
+**Applying that criterion is what settled it, because it collapses to the three that were already
+load-bearing.** Every one of the 51 inert pins was justified by one argument — pin it so a future
+rule that picks it up prints something sane rather than a surprise — and that argument is exactly
+what #62 retired: an unpinned token on paper is undefined, so it prints nothing rather than
+something wrong. There was no second criterion left to separate them by.
+
+The pleasing part: **the two best-documented pins were the clearest deletes.** `--measure-wide` and
+`--color-index` were the only two carrying a comment written specifically to justify their own
+existence, and both said "pinned per the rule at the top of `tokens.css`" — a rule #108 had already
+corrected out from under them. A pin justified only by a rule is worth what the rule is worth.
+
+### Verification
+
+The session re-measured rather than trusting the spike, which was the right call twice over. The
+spike's baseline `783f51f` turned out to _be_ the paper-look commit, so #235 was already priced in
+and the numbers held — but two commits had landed since, and the live counts (54/70/16, not 56/72/16)
+had to be confirmed before anything could be deleted.
+
+Three methods, agreeing:
+
+- **Static.** 54 pins, 70 tokens, 16 unpinned — matching #108's updated live counts exactly.
+- **Dynamic, per pin.** Injecting `--pin: initial` — the guaranteed-invalid value, i.e. genuinely
+  "undefined" — one pin at a time under print emulation, diffing rendered elements only with an
+  ancestor walk for `display: none`. Result: 3 load-bearing, 51 inert. A different mechanism from the
+  spike's served-CSS rewrite, same answer.
+- **All at once.** Pruning to 3 and running the real guard: zero elements under `article.resume`, and
+  the page-count assertion still 1/1 and 2/2.
+
+**Two findings the spike did not have**, both from running things rather than reading them:
+
+`check:resume-print` reports **42 diff rows** for a change that moves nothing on paper, because its
+baseline captures the four chrome blocks the print block hides. The spike had noted the shape and
+called it harmless; it is the difference between a zero-row change and a 42-row one, and it is #330
+now.
+
+And the proposed inverted guard is mostly redundant. Injecting a print-reaching rule both ways: with
+a **pinned** token it applies, moves geometry, and the guard fails loudly; with an **unpinned** token
+it silently no-ops and the guard passes, correctly, because nothing moved. So the PDF is already
+guarded and the only uncovered case is "your print rule is dead," which is a linter for authors
+rather than a guard for paper. Dropped from the change.
+
+**#235 had left a stale claim inside the block and the prune surfaced it**: `--font-mono`'s comment
+said "Paper is set in one face," false since `.resume-head h1` started naming static Gabarito
+literally. Paper is two faces, and `--font-display` was being bypassed rather than being the
+mechanism.
+
+### The shape that shipped
+
+Three pins, each annotated with its consumer and the measured cost of removing it, plus a header
+saying paper's vocabulary _is_ this list and that a print rule wanting a token should pin it then and
+say why. Two real observations were rescued as prose rather than as 19 pins — that Phase 5's
+interaction layer has nothing to say on paper by nature, and that a height device reaching paper is a
+page-count hazard visible only as a build failure several bullets later.
+
+Literalising instead (the spike's Shape B, 3 declarations replacing 56 pins) was rejected on a cost
+the spike had understated: `p, ul, ol { max-width: var(--measure) }` is a top-level `base.css` rule,
+so a pin tracks that selector while a literal copy of it in the print block is a second copy free to
+desync. Trading 51 inert lines for a real coupling is the wrong direction on a site whose content
+model exists to rule that out.
+
+Four stale "denylist" sites corrected — `resume.css`'s in-block comment (which contradicted
+`tokens.css`'s corrected header outright, two files giving opposite instructions for the same act),
+the `design-switcher` skill (instruction to a future session, so the one most likely to cause harm),
+`base.css`'s reticle-timing comment, and `check-resume-print.mjs`'s own header. One deliberately
+kept: the universal-`transition` comment calls the block's _property_ rules a denylist, which is
+still true and is now the only live half of the hazard.
+
+### Cost notes
+
+One session, no subagents. The work was measurement against a known question with the traps already
+written down in #327's body, which is the case where delegating costs more than it saves — a
+subagent would have started cold on the one thing the issue was already carrying. The expensive step
+was builds: five full `npm run build` runs, four of them only to put a modified stylesheet in front
+of the guard. The per-pin bisect avoided a sixth through fifty-ninth by patching the live CSSOM
+instead of rebuilding, which took 54 pins from roughly an hour of builds to about a minute.
