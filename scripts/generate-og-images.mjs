@@ -28,13 +28,17 @@
  * This script runs before `astro build` even starts (see `package.json`), so it
  * reads the same fields out of the same front matter directly off disk instead.
  * If that resolution order ever changes, change it in both places.
+ *
+ * Front matter itself is read through `scripts/lib/frontmatter.mjs`, the same
+ * helper `build-linkedin.mjs` and `build-pdf.mjs` use, rather than a third
+ * hand-rolled YAML-block parser.
  */
 
-import { readdir, readFile, mkdir } from 'node:fs/promises';
+import { readFile, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
-import { parse as parseYaml } from 'yaml';
 import sharp from 'sharp';
+import { readEntries } from './lib/frontmatter.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const CONTENT = path.join(ROOT, 'src/content/projects');
@@ -207,13 +211,9 @@ async function main() {
   await buildBrandCard('Contact', path.join(OUT, 'contact.jpg'));
   await buildBrandCard('Projects', path.join(OUT, 'projects.jpg'));
 
-  const files = (await readdir(CONTENT)).filter((f) => f.endsWith('.md'));
+  const entries = await readEntries(CONTENT);
   let ok = 0;
-  for (const file of files) {
-    const slug = file.replace(/\.md$/, '');
-    const raw = await readFile(path.join(CONTENT, file), 'utf8');
-    const match = raw.match(/^---\n([\s\S]*?)\n---/);
-    const data = parseYaml(match[1]);
+  for (const { slug, data } of entries) {
     const sourcePath = resolveProjectImage(data, CONTENT);
     if (sourcePath && existsSync(sourcePath)) {
       await buildProjectCard(sourcePath, path.join(OUT, 'projects', `${slug}.jpg`));
@@ -229,7 +229,9 @@ async function main() {
     }
   }
 
-  console.log(`✓ ${ok}/${files.length} project cards built from local images, 4 brand cards built`);
+  console.log(
+    `✓ ${ok}/${entries.length} project cards built from local images, 4 brand cards built`,
+  );
 }
 
 await main();
