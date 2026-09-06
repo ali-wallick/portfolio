@@ -2176,18 +2176,6 @@ hr {
   text-decoration: underline;
 }
 
-/* Legacy list class from Phases 2–4, still used by the About timeline. */
-.project-list {
-  list-style: none;
-  padding: 0;
-  max-width: none;
-}
-.project-list > li {
-  border-bottom: 1px solid var(--color-border);
-  padding: var(--space-4) 0;
-  max-width: var(--measure);
-}
-
 /* --- Paper ---------------------------------------------------------------
  *
  * The reticle is created by a script, and `scripts/build-pdf.mjs` prints with
