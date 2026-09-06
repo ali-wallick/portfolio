@@ -38,15 +38,17 @@
 import path from 'node:path';
 import { launchChromium } from './lib/launch-chromium.mjs';
 import { serveDist } from './lib/serve-dist.mjs';
+import { PRINT_VIEWPORT, PAGE_HEIGHT_BUDGET, PAGE_2_HEIGHT_BUDGET } from './lib/print-geometry.mjs';
 
-/** Paper width and height budget in px. See the header — these are derived
- * from `@page` in `src/styles/resume.css`, not chosen. */
-const PAPER_WIDTH = 701;
-/* Page 2 onward carries a 1in top margin for the running header (#235), so
-   the two-pager's budget is 960 + 912, not 2 × 960. */
+/** Paper width in px. See scripts/lib/print-geometry.mjs for the derivation —
+ * it's the same geometry check-resume-print.mjs measures against. */
+const PAPER_WIDTH = PRINT_VIEWPORT.width;
+/* Page 2 onward carries a taller top margin for the running header (#235), so
+   the two-pager's budget is PAGE_HEIGHT_BUDGET + PAGE_2_HEIGHT_BUDGET, not
+   PAGE_HEIGHT_BUDGET × 2. */
 const ROUTES = [
-  ['/resume', 960],
-  ['/resume/full', 1872],
+  ['/resume', PAGE_HEIGHT_BUDGET],
+  ['/resume/full', PAGE_HEIGHT_BUDGET + PAGE_2_HEIGHT_BUDGET],
 ];
 
 const tries = [];
