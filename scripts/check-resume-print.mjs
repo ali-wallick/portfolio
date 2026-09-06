@@ -90,6 +90,7 @@ import path from 'node:path';
 import { serveDist } from './lib/serve-dist.mjs';
 import { launchChromium } from './lib/launch-chromium.mjs';
 import { PRINT_VIEWPORT } from './lib/print-geometry.mjs';
+import { openPrintPage } from './lib/print-page.mjs';
 
 const UPDATE = process.argv.includes('--update');
 const DIST = path.resolve('dist');
@@ -191,17 +192,17 @@ try {
   });
 
   for (const route of ROUTES) {
-    const page = await context.newPage();
-    const response = await page.goto(`${origin}${route}`, { waitUntil: 'networkidle' });
-    if (!response || !response.ok()) {
-      console.error(`✗ ${route} returned ${response ? response.status() : 'no response'}`);
+    // Navigates, waits for the print stylesheet's fonts to actually load, and
+    // returns a page under print media — see scripts/lib/print-page.mjs for
+    // why the ordering matters (#306), the same hazard build-pdf.mjs guards
+    // against.
+    let page;
+    try {
+      page = await openPrintPage(context, `${origin}${route}`);
+    } catch (err) {
+      console.error(`✗ ${route} returned ${err.status ?? 'no response'}`);
       process.exit(1);
     }
-
-    await page.emulateMedia({ media: 'print' });
-    // Chromium will happily lay out mid-glyph-load and hand back fallback
-    // metrics — same hazard scripts/build-pdf.mjs guards against.
-    await page.evaluate(() => document.fonts.ready);
 
     captured[route] = await page.evaluate((styleProps) => {
       /** A DOM path from <body>, e.g.

@@ -89,6 +89,7 @@ import path from 'node:path';
 import { serveDist } from './lib/serve-dist.mjs';
 import { readEntries } from './lib/frontmatter.mjs';
 import { launchChromium } from './lib/launch-chromium.mjs';
+import { openPrintPage } from './lib/print-page.mjs';
 
 const CHECK_ONLY = process.argv.includes('--check');
 const DIST = path.resolve('dist');
@@ -395,40 +396,16 @@ try {
   const context = await browser.newContext({ colorScheme: 'light' });
 
   for (const { route, out, maxPages } of TARGETS) {
-    const page = await context.newPage();
-    const response = await page.goto(`${origin}${route}`, { waitUntil: 'networkidle' });
-
-    if (!response || !response.ok()) {
-      problems.push(`${route} returned ${response ? response.status() : 'no response'}`);
-      await page.close();
+    // Navigates, waits for the print stylesheet's fonts to actually load, and
+    // returns a page under print media — see scripts/lib/print-page.mjs for
+    // why the ordering matters (#306) and what assertPrintFace below is for.
+    let page;
+    try {
+      page = await openPrintPage(context, `${origin}${route}`);
+    } catch (err) {
+      problems.push(`${route} returned ${err.status ?? 'no response'}`);
       continue;
     }
-
-    // Switch to print media BEFORE waiting on fonts, and the order is the
-    // whole point (#306). `page.pdf()` emulates print internally, so this
-    // looks redundant — it is not. A webfont is fetched lazily, when some
-    // element actually uses it, and `--font-body` only points at Public Sans
-    // inside `resume.css`'s `@media print` block. On screen the resume is set
-    // in Figtree, so nothing requests Public Sans, `document.fonts.ready`
-    // resolves happily without it, and the print snapshot `page.pdf()` takes
-    // is rendered before the fetch it just triggered can land. Chromium then
-    // falls through `--font-body`'s stack to a platform face.
-    //
-    // That shipped for months and is exactly the bug #191 believed it had
-    // closed: the committed PDFs were Helvetica when rendered on Ali's Mac and
-    // Liberation Sans when rendered on Linux — machine-dependent, and on macOS
-    // a face not licensed for embedding in a distributed document. It hid
-    // because the two guards measure different things. `check-resume-print.mjs`
-    // emulates print media (as here) and so has always measured the real Public
-    // Sans layout; nothing looked at the PDF's own embedded fonts, so #306 read
-    // as a subsetting curiosity. `assertPrintFace` below is that missing look.
-    //
-    // Emulating print first makes the font used, which starts the fetch, which
-    // `document.fonts.ready` then genuinely waits for.
-    await page.emulateMedia({ media: 'print' });
-    // Chromium will happily paginate mid-glyph-load and give you a PDF with
-    // fallback metrics.
-    await page.evaluate(() => document.fonts.ready);
 
     const buffer = await page.pdf({
       // `@page` in src/styles/resume.css owns size and margins, so the print
