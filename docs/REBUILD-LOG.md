@@ -4320,3 +4320,101 @@ the whole record every time. Playwright bought the fidelity check, the per-candi
 (every mark measured alone against the incumbent, both densities), the pagination check against the
 committed PDF, and the three paper experiments (margin boxes, a fixed header, the Type 3 embed).
 Every one of those returned a confident wrong answer somewhere that the measurement corrected.
+
+## #108 — the architecture read (2026-09-06)
+
+The issue asked for `src/` and `scripts/` to be read as a whole once, after roughly forty
+post-launch passes had each touched their own corner without anyone looking at the result as one
+codebase. Scope was set before any code moved: read, do the fixes that are safe by construction in
+one PR, and open an issue for anything that is a decision rather than a cleanup. Eleven findings
+were small enough to fix directly. Two were not, and became issues instead of edits.
+
+### What shipped and what didn't
+
+Eleven items went in: a dead `.project-list` rule in `base.css` whose comment claimed a consumer
+that no longer exists, a zero-caller `formatSpan()` (and the `formatDatePart`/`MONTHS` helpers that
+existed only to serve it), an unimplemented `--verify-live` flag left in a usage banner, three
+duplicated helpers consolidated into `scripts/lib/` (a directory walker, the print viewport and
+page-height budgets, and the `goto` then `emulateMedia('print')` then `fonts.ready` sequence the
+#306 fix depends on), a hand-rolled front-matter parser replaced with the shared `readEntries`, two
+duplicated fallback chains merged into `content.ts`, a doc-block gap in `reticle.ts` closed with one
+sentence, and two unread tokens (`--font-sans`, an alias with no `var()` consumer, and
+`--color-on-accent-link`) deleted along with the print pins that existed only for them. The `src/`
+agent went one step past its literal brief, removing `formatDatePart` and `MONTHS` once `formatSpan`
+was gone rather than leaving them as newly dead code; correct, and flagged rather than done quietly.
+`scripts/fetch-posters.mjs` and `capture-comparison.mjs` got rows in CLAUDE.md's "Where things are"
+table instead of a code change, since both are real manual tools that were discoverable only by
+`ls`.
+
+Everything above was checked against a baseline `dist/` built from the unmodified tree. All 23
+pages are byte-identical once stylesheet hashes are normalised, the built CSS differs by exactly two
+removed tokens and one dead rule, and the 18 project OG cards plus 4 brand cards hash identical.
+`check:resume-print` matches its committed baseline. The PDFs were regenerated exactly once, at the
+end, and pass at 1/1 and 2/2 pages with the print face asserted as Public Sans.
+
+### The print block was already an allowlist
+
+The headline finding, and it corrects something `tokens.css` and this repo's own notes had said
+since #62. Every one of `tokens.css`'s `:root` blocks sits inside `@media screen`, so a token the
+print block never pins is not leaking onto paper; it is undefined there and the declaration falls to
+its initial value. Of the 56 tokens the print block pins, three do anything: `--font-body`,
+`--leading-tight` and `--measure`. Deleting the other 53 moved zero of 108 rendered elements on the
+one-pager and zero of 155 on the two-pager. `tokens.css`'s header is corrected on this branch.
+Whether to delete the 53 inert pins is deferred to Ali as
+[#327](https://github.com/ali-wallick/Portfolio/issues/327), with the measurement attached rather
+than argued in prose. `resume.css` is otherwise untouched; its only change is losing the two pins
+that went with the deleted tokens.
+
+### Two more questions, and one survey miss
+
+[#328](https://github.com/ali-wallick/Portfolio/issues/328) tracks the `src/` to `scripts/`
+boundary: five pieces of content logic (a job sort, an education sort, the current-title derivation,
+the résumé bullet grouping, and the thumbnail fallback order) are written twice because
+`content.ts` imports `astro:content` and no script can. The fix is a mechanism question, not a
+rewrite: Node 22 needs `--experimental-strip-types` to import `.ts` directly, so the choice is
+between a `.mjs` module both sides can import, a Node bump, or a check that fails when the copies
+disagree.
+
+One survey claim did not survive verification. An Explore agent reported `fetch-posters.mjs` as
+referenced by nothing; its grep set had not included CLAUDE.md, which names the script. Caught
+before it became a deletion, and it is why every deletion-driving claim in this pass was re-grepped
+by the planning session rather than taken from the survey as given. The non-findings are recorded in
+CLAUDE.md's new section so nobody re-derives them: component boundaries sound, no dead props, no
+`variant` branching, no verbatim duplicate CSS, zero raw px font sizes, no scoped `<style>` blocks,
+`reticle.ts` matching its own header, Chromium launch and `serve-dist` already consolidated.
+
+### The model allocation is the finding worth keeping
+
+Three Sonnet Explore subagents ran the survey in parallel, one each on styles, on components plus
+lib plus the content model, and on scripts plus client code: 354k tokens combined, 48, 54 and 58
+tool uses, three to four and a half minutes apiece. Cheap, fast, and wrong often enough (the
+`fetch-posters.mjs` miss) that nothing they reported drove a deletion without a second grep.
+Execution ran as two sequential Sonnet implementation agents rather than parallel ones, because both
+needed a build in the same checkout: `src/` first (5 commits, ~202k tokens, 106 tool uses), then
+`scripts/` (7 commits, ~210k tokens, 110 tool uses). Each carried a brief that named every item
+with a file and line and the exact verification command, which is what made Sonnet the right model:
+the judgment had already been spent in the plan.
+
+The print-block spike ran on Opus, in parallel with the `src/` agent against a frozen copy of the
+baseline `dist/`, because it was measurement whose plausible wrong answers this repo has documented
+at length (a hidden ancestor's `display` inflating a count from 3 to 21; a large diff meaning nothing
+until a second method agrees). It ran 44 tool uses over 13 minutes and its traps are in #327's body.
+A Sonnet agent drafted this entry from the plan; a `code-review` pass at medium effort found three
+real things (an error message discarded in the new print-page helper's callers, a viewport height the
+geometry extraction had left hand-written, a CLAUDE.md table row the same PR had made false), all
+fixed before push. Fable planned, verified the surveys, made the token and header edits, regenerated
+the PDFs once, triaged the review, opened the issues and edited this record.
+
+### Cost notes
+
+Seven agent sessions and one review fork, around 1.4M subagent tokens in total, against a Fable
+session that stayed short because it never read a stylesheet end to end. The one place parallelism
+was rejected on purpose was `src/` against `scripts/` execution, both of which wanted a build in the
+same checkout. The spike was the expensive agent and the one that changed a conclusion; the surveys
+were the cheap ones and the ones that needed checking.
+
+The `scripts/` agent's OG verification covered only the 4 brand cards, because the 18 project cards
+are build output rather than tracked files and its brief pointed it at a hash list that only had
+four lines. Closed by hashing all 18 against the frozen baseline `dist/` afterwards, which is where
+the "18 + 4" figure above comes from. Worth generalising: a verification step is only as wide as the
+baseline handed to it.

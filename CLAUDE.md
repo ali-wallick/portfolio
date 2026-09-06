@@ -3365,25 +3365,25 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 
 **Where things are:**
 
-| Path                                  | What                                                                                                                                       |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `src/content.config.ts`               | The content model. Start here.                                                                                                             |
-| `src/lib/content.ts`                  | Collection queries and the only date/year formatting in the codebase.                                                                      |
-| `src/config/site.ts`                  | Name, email, nav, social links (all `pending` until Phase 3 audits them).                                                                  |
-| `src/config/resume.ts`                | The resume's Skills section — settled, hand-curated, not derived from `tech`.                                                              |
-| `scripts/check-links.mjs`             | Post-build checks. Every rule is a regression guard for a real old bug.                                                                    |
-| `scripts/check-links-external.mjs`    | Outbound link liveness. **Manual (`npm run links:external`), never in CI.**                                                                |
-| `scripts/build-pdf.mjs`               | Renders the resume routes to PDF and asserts their page counts.                                                                            |
-| `src/components/ResumeDocument.astro` | The resume, both densities. `variant` is the only difference.                                                                              |
-| `scripts/build-linkedin.mjs`          | Generates `docs/LINKEDIN.md` from the `jobs`/`education` collections.                                                                      |
-| `docs/LINKEDIN.md`                    | Paste-ready LinkedIn copy. Generated — a handoff for Ali, never a sync.                                                                    |
-| `scripts/fetch-posters.mjs`           | Manual: looks up a YouTube video's own poster frame — not a default source for a `poster`, see the #273 section.                           |
-| `scripts/capture-comparison.mjs`      | Manual: before/after screenshots of the old and new site, into `docs/before-after/`. Referenced by nothing else, which is why it's listed. |
-| `docs/LAUNCH.md`                      | **The cutover runbook.** One ordered procedure; start here to launch.                                                                      |
-| `docs/REBUILD-LOG.md`                 | Running record. Phase 7's source material.                                                                                                 |
-| `infra/README.md`                     | The live zone, the DNS tooling, and Phase 1's record.                                                                                      |
-| GitHub issues                         | What's actually left. Milestones per phase; `decision` and `needs-ali`.                                                                    |
-| `snapshot/`                           | The old site as it stood. The reference for "what did the old page say?"                                                                   |
+| Path                                  | What                                                                                                                                                |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/content.config.ts`               | The content model. Start here.                                                                                                                      |
+| `src/lib/content.ts`                  | Collection queries and the site's year-only date formatting. Month precision lives in `scripts/build-linkedin.mjs`, the only surface that shows it. |
+| `src/config/site.ts`                  | Name, email, nav, social links (audited in Phase 3: LinkedIn `active`, the rest `retired`).                                                         |
+| `src/config/resume.ts`                | The resume's Skills section — settled, hand-curated, not derived from `tech`.                                                                       |
+| `scripts/check-links.mjs`             | Post-build checks. Every rule is a regression guard for a real old bug.                                                                             |
+| `scripts/check-links-external.mjs`    | Outbound link liveness. **Manual (`npm run links:external`), never in CI.**                                                                         |
+| `scripts/build-pdf.mjs`               | Renders the resume routes to PDF and asserts their page counts.                                                                                     |
+| `src/components/ResumeDocument.astro` | The resume. One DOM for both densities; `density` only seeds `data-density`, and CSS hides `[data-full-only]`.                                      |
+| `scripts/build-linkedin.mjs`          | Generates `docs/LINKEDIN.md` from the `jobs`/`education` collections.                                                                               |
+| `docs/LINKEDIN.md`                    | Paste-ready LinkedIn copy. Generated — a handoff for Ali, never a sync.                                                                             |
+| `scripts/fetch-posters.mjs`           | Manual: looks up a YouTube video's own poster frame — not a default source for a `poster`, see the #273 section.                                    |
+| `scripts/capture-comparison.mjs`      | Manual: before/after screenshots of the old and new site, into `docs/before-after/`. Referenced by nothing else, which is why it's listed.          |
+| `docs/LAUNCH.md`                      | **The cutover runbook.** One ordered procedure; start here to launch.                                                                               |
+| `docs/REBUILD-LOG.md`                 | Running record. Phase 7's source material.                                                                                                          |
+| `infra/README.md`                     | The live zone, the DNS tooling, and Phase 1's record.                                                                                               |
+| GitHub issues                         | What's actually left. Milestones per phase; `decision` and `needs-ali`.                                                                             |
+| `snapshot/`                           | The old site as it stood. The reference for "what did the old page say?"                                                                            |
 
 ## The résumé's paper look (2026-09-06, closes #235)
 
@@ -3459,3 +3459,49 @@ print block hides and a span it makes a block. Nothing is written twice.
   It breaks before MobilityWare, leaving 128px white on page 1, and that is the cost of never
   splitting a job. If the Second Dinner entry ever grows past a page it will split inside itself —
   the case to watch.
+
+## The architecture read (2026-09-06, closes #108)
+
+`src/` and `scripts/` were read as a whole once, which #108 defined as done. Three survey agents
+read, the planning session re-grepped every claim that would drive a deletion, eleven fixes shipped
+on one PR, and the two questions that were decisions rather than cleanups became
+[#327](https://github.com/ali-wallick/Portfolio/issues/327) and
+[#328](https://github.com/ali-wallick/Portfolio/issues/328). What belongs here is what a future
+session would otherwise re-derive.
+
+**The test for a refactor on this site is a diff of the built output, not a reading of the diff.**
+Build the unmodified tree into a scratch copy, make the change, build again, and compare all 23
+pages with stylesheet hashes normalised, the built CSS, and the OG cards. Every fix on #108 was
+held to byte-identical output by that check, and `check:resume-print` covers the one surface HTML
+cannot. It is the same check #273 established for a fallback-chain change; it is the general one.
+
+**The print block is an allowlist, and this file's older prose calling it a denylist is
+historical.** Since #62 every `:root` in `tokens.css` sits inside `@media screen`, so on paper an
+unpinned token is undefined and its declaration drops to the initial value; nothing leaks. Only three
+of the 56 pins do any work (`--font-body`, `--leading-tight`, `--measure`). The hazard the block was
+built for has moved: it is now a rule in `base.css` outside `@media screen` reaching paper. The
+"denylist" passages under Phase 4 and Phase 5 describe the pre-#62 cascade and are left as the
+record of why the block exists; `tokens.css`'s header carries the corrected rule. What to do with
+the 53 inert pins is #327, with the measurement attached.
+
+**Shared script logic lives in `scripts/lib/`, and the list is the rule.** Chromium launch,
+serving `dist/`, front matter, the directory walker, the 701×960 print geometry, and the
+print-page setup whose ordering is the #306 fix are all there now. A helper two scripts need goes
+there; a second hand-written copy is how the #306 ordering would regress unnoticed.
+
+**Five pieces of content logic are still written twice across the `src/`/`scripts/` boundary**,
+each with a comment naming its twin, because `content.ts` imports `astro:content`. That is #328
+and a mechanism decision. Do not add a sixth; do not "fix" one by hand-syncing it.
+
+**Non-findings, so they are not re-derived.** Component boundaries are sound and no component has a
+dead prop; the single-consumer components each carry a written reason. `variant` branching no longer
+exists. `base.css` has no verbatim duplicate blocks (its four split selectors are documented,
+differently scoped pairs), no raw `px` font sizes, and one raw colour, the lightbox scrim, which is
+now commented. No component carries a scoped `<style>` block. `reticle.ts` matches its own header;
+its `home` and `linger` branches are unreachable under `MODE='fade'` and are kept on purpose as the
+switcher's other candidates. The trailing narrow-viewport block at the end of `base.css` is
+deliberately one place to look for phone overrides, not scattered per component.
+
+**A survey's "referenced by nothing" must include this file in the grep.** One agent reported
+`scripts/fetch-posters.mjs` as orphaned; CLAUDE.md names it. Re-grep every deletion-driving claim
+from a survey before acting on it.
