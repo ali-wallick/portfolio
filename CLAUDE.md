@@ -3086,7 +3086,9 @@ It buckets results three ways rather than two: a host that answers 403 or 999 to
 always does) is reported **unverifiable**, not dead, and only genuinely-gone links fail the run.
 
 Node is pinned by `.nvmrc` (22). Local dev on a newer Node is fine; CI and Cloudflare both read the
-file.
+file. **`package.json`'s `engines.node` is a real floor, not a version bump for its own sake**:
+`>=22.18.0` is where unflagged TypeScript type stripping landed, which is what lets the `.mjs`
+scripts import `src/lib/content-rules.ts` (#328). Don't relax it as a cleanup.
 
 `npm run build` also regenerates the resume PDFs into `public/`, which needs Chromium — installed by
 a `postinstall` line in `package.json` (~95 MB, headless shell only). `npm run dev` doesn't touch it.
@@ -3554,9 +3556,8 @@ serving `dist/`, front matter, the directory walker, the 701×960 print geometry
 print-page setup whose ordering is the #306 fix are all there now. A helper two scripts need goes
 there; a second hand-written copy is how the #306 ordering would regress unnoticed.
 
-**Five pieces of content logic are still written twice across the `src/`/`scripts/` boundary**,
-each with a comment naming its twin, because `content.ts` imports `astro:content`. That is #328
-and a mechanism decision. Do not add a sixth; do not "fix" one by hand-syncing it.
+**Five pieces of content logic were written twice across the `src/`/`scripts/` boundary. They are
+one module now** — see the section below.
 
 **Non-findings, so they are not re-derived.** Component boundaries are sound and no component has a
 dead prop; the single-consumer components each carry a written reason. `variant` branching no longer
@@ -3570,3 +3571,74 @@ deliberately one place to look for phone overrides, not scattered per component.
 **A survey's "referenced by nothing" must include this file in the grep.** One agent reported
 `scripts/fetch-posters.mjs` as orphaned; CLAUDE.md names it. Re-grep every deletion-driving claim
 from a survey before acting on it.
+
+## The rules cross the `src/` ↔ `scripts/` boundary; the fetching does not (2026-09-06, closes #328)
+
+The five pieces of content logic #108 found written twice are one file:
+**`src/lib/content-rules.ts`** — `selectJobs`, `selectEducation`, `currentTitle`, `bulletBlocks`,
+`thumbSource`. `src/lib/content.ts` and `ResumeDocument.astro` import it by alias; the `.mjs`
+scripts import it **relative and with the extension** (`'../src/lib/content-rules.ts'`), because
+`~/*` is a TS/Vite alias plain `node` cannot resolve.
+
+**The seam is rules vs. fetching, and that is the whole design.** `content.ts` stays the query
+layer (`getCollection`, `astro:content`); a script stays a raw-YAML reader
+(`scripts/lib/frontmatter.mjs`). What both need is the _ordering, grouping and fallback_, and that
+is what moved. `getJobs`, `getEducation`, `currentTitle` and `projectThumb` keep their names and
+signatures and are thin delegates, so nothing that imported them changed — and there are **no
+re-exports**, since a symbol reachable by two import paths is the next session's coin flip.
+
+**The issue's own stated blocker was out of date, and that is what unlocked collapsing rather than
+merely checking.** #328 costed a `.ts` under `src/lib/` at "a Node bump or a flag on every npm
+script". Unflagged type stripping landed in **Node 22.18.0**, so it costs a floor in `engines.node`
+and nothing else. A check that two copies agree is a hedge against having two copies.
+
+**Two rules keep it loadable, and both are enforced rather than remembered.** The module **imports
+nothing at runtime** — not even `import type` from `astro:content`, because that guarantee would
+rest on one keyword nothing in `npm run verify` fails fast on; its twelve structural interfaces are
+hand-written instead, and `astro check` still type-checks the real `CollectionEntry` at each
+`content.ts` call site. And it is **erasable-syntax-only** — no `enum`, `namespace`, parameter
+properties or `import x = require()` — which `erasableSyntaxOnly: true` in `tsconfig.json` turns
+into a compiler error on the `npm run check` every PR already runs. **No new sync check and no test
+framework**: a runtime import or a sub-22.18 Node throws inside `npm run build` and inside
+Cloudflare's `build:ci`, and a fixture of the jobs collection would be a fourth copy of résumé
+facts, which is the failure this content model exists to prevent.
+
+**`npm run check:linkedin` is load-bearing for more than `docs/LINKEDIN.md`'s freshness now.** It
+is the one thing in `verify` that exercises the cross-boundary import under plain `node`.
+
+**`scripts/build-pdf.mjs`'s `byteHashedFiles()` gained the module.** Four things visible on the
+printed page moved out of two hashed files into one the list didn't know about. That is the #32 miss
+exactly, and it is the step a refactor forgets: **logic moving between files moves out of that list
+silently.**
+
+### Three divergences the copies had, all fixed rather than pinned to today's output
+
+Ali's call: fix them here. None was previously known.
+
+- **`onResume` on jobs.** `content.ts` filtered truthy; the script filtered `!== false`. Equivalent
+  only because Zod's `.default(true)` runs in Astro and not in `readEntries`. The shared helper
+  types the field optional and uses `!== false`, correct on both. No output change.
+- **`onResume` on education.** `getEducation()` applied no filter at all, so `/resume` was quietly
+  ignoring a field the schema declares — the dead-data shape the guard table rules out. It honours
+  it now. `georgia-tech.md` is the only entry and doesn't set it, so **the build diff cannot be the
+  evidence for this one; this line is.**
+- **OG cards and `thumbWide`.** The OG script only ever read `data.thumb`, so **six share cards
+  changed on purpose**: firefall, i-fits-i-sits, kaneva, marvel-snap, secret-garden,
+  vegas-blvd-slots. Four of those were **logo art cover-cropped to a 1.9:1 band** while the same
+  front matter already named a 16:9 capture for exactly that shape. A card is 1200×630, so the OG
+  script asks for `'wide'` and says so out loud — `thumbSource` takes **no `aspect` default**.
+
+**Two behavioural notes worth keeping.** `renderEducationSection` read `entry.data.honors.length`
+with no `??`, so an entry omitting a `.default([])` field would have crashed `check:linkedin` —
+same class as the first divergence, fixed while here. And the OG script's
+`if (data.hero?.type === 'art') return undefined` early return is gone: it was behaviourally dead,
+since an `art` hero matches neither remaining test and both functions already returned `undefined`.
+
+**Declined, with the measurement: the CLI-flag parsing does not get folded in, and does not become
+its own issue.** The "five ways" is mostly one idiom counted several times — `argv.includes('--flag')`
+in five scripts is one idiom used six times, `argv[2] ?? 'dist'` is a positional operand rather than
+flag parsing, and converting the two `new Set(argv.slice(2))` sites is _behaviour-changing_
+(`parseArgs` is strict and throws on an unknown argument where the Set form ignores it). Exactly one
+site genuinely wins. **None of it is shared state, so none of it can drift**, which is the entire
+subject of #328 — and `scripts/lib/`'s own rule already settles it: a helper _two scripts need_ goes
+there. One script's parser is not shared logic.

@@ -114,6 +114,13 @@ function byteHashedFiles() {
     'src/styles/tokens.css',
     'src/styles/base.css',
     'src/config/site.ts',
+    // Added 2026-09-06 (#328). The job ordering, the education ordering, the
+    // current-title derivation and the bullet grouping all moved OUT of
+    // ResumeDocument.astro and content.ts — both listed here — and into this
+    // one file, and all four are visible on the printed page. A refactor that
+    // moves logic between files moves it out of this list too, silently, which
+    // is the same shape as the #32 miss recorded below.
+    'src/lib/content-rules.ts',
     // Added 2026-08-26 (#32) after it shipped a stale PDF. This file has been
     // a PDF input since #39 put the Skills section in it, and was never listed
     // — so `check:pdf` passed on a resume whose Skills row had changed. #32

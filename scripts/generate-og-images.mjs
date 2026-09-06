@@ -19,15 +19,18 @@
  * builds, a third-party request in CI, breakage the day a video goes down),
  * and the poster field means there is nothing to fetch anyway.
  *
- * ## Why this doesn't reuse `projectThumb()` from src/lib/content.ts
+ * ## Where "which image represents this project" comes from
  *
- * That function is the real source of truth for "which image represents this
- * project" and this script's resolution order deliberately mirrors it
- * (`thumb` override, then an image hero, then a video hero's `poster`) — but
- * it's built on `astro:content`, which only exists inside Astro's build graph.
- * This script runs before `astro build` even starts (see `package.json`), so it
- * reads the same fields out of the same front matter directly off disk instead.
- * If that resolution order ever changes, change it in both places.
+ * `thumbSource()` in `src/lib/content-rules.ts` — the same function
+ * `projectThumb()` in src/lib/content.ts calls, so a share card and the site's
+ * own tile for a project can never disagree (#328). It used to be a second
+ * hand-written copy here, because `content.ts` is built on `astro:content` and
+ * this script runs before `astro build` even starts (see `package.json`); the
+ * rules now live in a module with no imports at all, which both sides can load.
+ *
+ * That copy had also silently diverged: it never read `thumbWide`, so four
+ * cards were logo art cropped to a widescreen band while the same front matter
+ * already named a 16:9 capture for exactly that shape.
  *
  * Front matter itself is read through `scripts/lib/frontmatter.mjs`, the same
  * helper `build-linkedin.mjs` and `build-pdf.mjs` use, rather than a third
@@ -39,6 +42,9 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
 import { readEntries } from './lib/frontmatter.mjs';
+// Relative and with the extension — see the note on the same import in
+// build-linkedin.mjs.
+import { thumbSource } from '../src/lib/content-rules.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const CONTENT = path.join(ROOT, 'src/content/projects');
@@ -193,16 +199,6 @@ async function buildFlatCard(title, outPath) {
  * required field on a video hero now (#273), so it is read like every other
  * path here and the file no longer has to be found by convention.
  */
-function resolveProjectImage(data, contentDir) {
-  if (data.thumb) return path.resolve(contentDir, data.thumb);
-  // An `art` hero has no picture by design (#49); the flat title card below is
-  // the share-image equivalent of the generated card the page itself leads with.
-  if (data.hero?.type === 'art') return undefined;
-  if (data.hero?.type === 'image') return path.resolve(contentDir, data.hero.src);
-  if (data.hero?.type === 'youtube') return path.resolve(contentDir, data.hero.poster.src);
-  return undefined;
-}
-
 async function main() {
   await mkdir(path.join(OUT, 'projects'), { recursive: true });
 
@@ -214,7 +210,14 @@ async function main() {
   const entries = await readEntries(CONTENT);
   let ok = 0;
   for (const { slug, data } of entries) {
-    const sourcePath = resolveProjectImage(data, CONTENT);
+    // `'wide'`: a card is 1200x630, and `buildProjectCard()` cover-crops
+    // whatever it resolves to that 1.9:1 letterbox — so it wants the same
+    // override the homepage's wide featured cards do, not the square one.
+    // An `art` hero resolves to `undefined` (#49) and takes the flat title
+    // card below, which is the share-image equivalent of the generated card
+    // the page itself leads with.
+    const source = thumbSource(data, 'wide');
+    const sourcePath = source ? path.resolve(CONTENT, source) : undefined;
     if (sourcePath && existsSync(sourcePath)) {
       await buildProjectCard(sourcePath, path.join(OUT, 'projects', `${slug}.jpg`));
       ok++;

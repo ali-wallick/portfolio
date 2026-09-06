@@ -4500,3 +4500,68 @@ subagent would have started cold on the one thing the issue was already carrying
 was builds: five full `npm run build` runs, four of them only to put a modified stylesheet in front
 of the guard. The per-pin bisect avoided a sixth through fifty-ninth by patching the live CSSOM
 instead of rebuilding, which took 54 pins from roughly an hour of builds to about a minute.
+
+---
+
+## #328 — the `src/` ↔ `scripts/` boundary (2026-09-06)
+
+Split out of #108's read, and the one finding there that was a mechanism decision rather than a
+cleanup. Five pieces of content logic — the résumé job filter and sort, the education sort,
+`currentTitle`, `bulletBlocks`, and `projectThumb`'s fallback chain — were written twice, once in
+`src/` and once in a `.mjs` script, each second copy carrying a "keep in sync with …" comment. The
+content model's own failure mode, applied to code.
+
+### The blocker the issue named had expired
+
+#328's body costed the good answer — one pure module both sides import — at "a Node bump or a flag
+on every npm script", because Node 22 was documented as having `--experimental-strip-types` behind a
+flag. Unflagged stripping landed in **22.18.0**. Verified in a session container on 22.22.2: a
+`.mjs` importing `./shared.ts` runs with no flag, and the only requirement is that the specifier
+carry the extension. That turns the cost into one line of `engines.node`, which is what made the
+copies collapsible instead of merely checkable — and a check that two copies agree is a hedge
+against having two copies.
+
+The module imports **nothing at runtime**, not even `import type` from `astro:content`. That import
+does work, but the guarantee would then rest on one keyword nothing in `verify` fails fast on, and
+on a file `astro sync` generates; twelve hand-written structural interfaces cost less and are not
+weaker, since `astro check` still type-checks the real `CollectionEntry` at each `content.ts` call
+site. Its other constraint — erasable syntax only — became `erasableSyntaxOnly: true` in
+`tsconfig.json`, which is the answer to "should this get a check too": a compiler error on the
+`npm run check` every PR already runs, at zero new code.
+
+### Three divergences, found while planning and fixed rather than pinned
+
+Ali's call to fix them here. Two are invisible today and one is not.
+
+`onResume` on jobs was `truthy` on one side and `!== false` on the other, equivalent only because
+Zod's default runs inside Astro and not in `readEntries`. `onResume` on **education** was filtered
+by LinkedIn and not by `/resume`, so the site was ignoring a field its own schema declares — the
+build diff cannot show that one, which is why it is written down instead. And the OG script never
+read `thumbWide`, so **six share cards changed on purpose**; four of them were logo art
+cover-cropped to a 1.9:1 band while the front matter already named a 16:9 capture for that exact
+shape.
+
+A latent crash went with them: `renderEducationSection` read `.honors.length` with no `??` on a
+field that is `.default([])`, so an entry omitting it would have failed `check:linkedin`. Same class
+as the first divergence — it worked only because the one committed entry happens to declare it.
+
+### What the verification could and couldn't prove
+
+The built-output diff (#108/#273's test — build `main` in a worktree, build the branch, compare all
+23 pages with stylesheet hashes normalised) came back with exactly the six predicted OG hashes
+differing and **nothing else**: same file list, byte-identical HTML and CSS. `check:linkedin` is a
+byte comparison against a committed artifact, so it is simultaneously the proof for four of the five
+duplications and the proof the module loads under plain `node`. `check:resume-print` reported the
+geometry unmoved.
+
+What no check can vouch for is whether the six new cards are better, which is why they need an eye
+on the preview. That is the honest cost of fixing a divergence rather than pinning it, and the
+reason it's worth paying is on the page.
+
+### Cost notes
+
+One session, no subagents — the plan was already written and approved on the issue, and the work was
+following it. Step 0 was a throwaway probe push, before any real code, to learn what Cloudflare's
+build image resolves `.nvmrc`'s bare `22` to; the container's egress proxy blocks `workers.dev`, so
+the answer had to come from the branch's own build rather than from polling the preview URL. Two
+full builds (baseline and branch) plus one forced PDF regeneration were the expensive part.

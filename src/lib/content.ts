@@ -1,4 +1,10 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import {
+  currentTitle as currentTitleRule,
+  selectEducation,
+  selectJobs,
+  thumbSource,
+} from '~/lib/content-rules';
 
 export type Project = CollectionEntry<'projects'>;
 export type Job = CollectionEntry<'jobs'>;
@@ -63,15 +69,12 @@ export async function getIndexableProjects(): Promise<Project[]> {
 
 /** Jobs, most recent first. A missing `end` means "current", which sorts top. */
 export async function getJobs(surface: 'site' | 'resume'): Promise<Job[]> {
-  const all = await getCollection('jobs');
-  return all
-    .filter((j) => (surface === 'resume' ? j.data.onResume : j.data.onSite))
-    .sort((a, b) => (b.data.end ?? '9999').localeCompare(a.data.end ?? '9999'));
+  return selectJobs(await getCollection('jobs'), surface);
 }
 
+/** Education entries, most recent first, honouring `onResume`. */
 export async function getEducation(): Promise<Education[]> {
-  const all = await getCollection('education');
-  return all.sort((a, b) => b.data.end.localeCompare(a.data.end));
+  return selectEducation(await getCollection('education'));
 }
 
 // ---------------------------------------------------------------------------
@@ -105,7 +108,7 @@ export function formatSpanYears(start: string, end?: string): string {
 
 /** The title to show for a job: the most recent entry in its role progression. */
 export function currentTitle(job: Job): string {
-  return job.data.roles[job.data.roles.length - 1]!.title;
+  return currentTitleRule(job);
 }
 
 /**
@@ -128,29 +131,10 @@ export async function getCurrentWork(): Promise<{ since: string; doing: string; 
  * The image to show for a project on a card or tile, or `undefined` when there
  * isn't one.
  *
- * `aspect` picks which override wins — `thumb` for a square context, `thumbWide`
- * for a 16:9 one (#64: the featured cards read better wide on the homepage,
- * where there's no summary paragraph beside them, and square on /projects and
- * the archive tiles). Whichever one is unset falls through to the same shared
- * source, so a project with no `thumbWide` isn't missing an image — it gets
- * the general-purpose one instead:
- *
- *   1. `thumb` / `thumbWide` in front matter — an explicit override, normally
- *      absent, and the only step that differs by `aspect`.
- *   2. An image `hero` — already a still of the work, so it is its own thumbnail.
- *   3. A video `hero`'s `poster` — the still it shows when YouTube is slow or
- *      gone, which is the same picture a card wants.
- *
- * That fallback is why I Fits I Sits and Kaneva need no `thumbWide` at all —
- * their `hero` is already an image suited to either shape.
- *
- * Step 3 used to glob `poster.jpg` off disk by slug, which was the right answer
- * while nothing named the poster in front matter — *"adding a project is one
- * Markdown file"*. `poster` is a required field on a video hero now (#273), so
- * the glob became a SECOND source for one picture: set a hero poster and the
- * tile would still have shown whatever `poster.jpg` happened to be sitting
- * beside it. That is the drift this model exists to rule out, so the glob is
- * gone and both read the same field.
+ * The resolution order — which override `aspect` picks, and what it falls
+ * through to — is `thumbSource()` in `~/lib/content-rules`, shared with
+ * `scripts/generate-og-images.mjs` so the share cards and the site's own tiles
+ * can never disagree about which picture represents a project (#328).
  *
  * ## Why there is no `alt` here
  *
@@ -177,14 +161,9 @@ export function projectThumb(
   project: Project,
   aspect: 'square' | 'wide' = 'square',
 ): ImageMetadata | undefined {
-  const { thumb, thumbWide, hero } = project.data;
-  const override = aspect === 'wide' ? thumbWide : thumb;
-  if (override) return override;
-  if (hero?.type === 'image') return hero.src;
-  if (hero?.type === 'youtube') return hero.poster.src;
-  // An `art` hero has no picture by design, so the card and tile fall back to
-  // the same generated art the hero itself renders (#49).
-  return undefined;
+  // An `art` hero resolves to `undefined`; the card and tile fall back to the
+  // same generated art the hero itself renders (#49).
+  return thumbSource<ImageMetadata>(project.data, aspect);
 }
 
 /**

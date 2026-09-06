@@ -1,5 +1,6 @@
 ---
-import { getJobs, getEducation, formatSpanYears, currentTitle } from '~/lib/content';
+import { getJobs, getEducation, formatSpanYears } from '~/lib/content';
+import { bulletBlocks, currentTitle } from '~/lib/content-rules';
 import { site, socials } from '~/config/site';
 import {
   RESUME_TOOL_CATEGORIES,
@@ -80,52 +81,9 @@ const runningHeaderCss =
 const gradYear = (value: string) => value.slice(0, 4);
 
 type Bullet = (typeof jobs)[number]['data']['highlights'][number];
-type BulletGroups = (typeof jobs)[number]['data']['bulletGroups'];
 /** A bullet plus where it came from — `highlightsExtended` bullets render on
  * both routes now and are hidden at concise density by `data-full-only`. */
 type MergedBullet = Bullet & { fullOnly: boolean };
-
-/**
- * Split a job's bullets into the blocks that render under it.
- *
- * Order comes from the bullets, not from `bulletGroups`' declaration order, so
- * resequencing the resume means moving bullets and nothing else. A job whose
- * bullets carry no `group` yields exactly one headingless block, which is every
- * job but Second Dinner and is byte-identical to what rendered before groups
- * existed.
- *
- * This is also what keeps a `highlightsExtended` bullet inside its own group
- * rather than stranded after every group -- the superset invariant is about
- * content, and appending the long-version bullets to the end of a grouped job
- * would have printed "Marvel Snap" as a heading twice.
- *
- * A block whose items are ALL extended is itself full-only: its heading,
- * subtitle and `<ul>` must hide at concise density or the one-pager shows an
- * empty group. No group is shaped that way today, and a whole JOB can't be
- * (every job carries a 1-bullet `highlights` floor — CLAUDE.md's weighting
- * rule), so this guard is for the group case only.
- */
-function bulletBlocks(bullets: MergedBullet[], groups: BulletGroups) {
-  const order: string[] = [];
-  const byKey = new Map<string, MergedBullet[]>();
-  for (const bullet of bullets) {
-    const key = bullet.group ?? '';
-    if (!byKey.has(key)) {
-      byKey.set(key, []);
-      order.push(key);
-    }
-    byKey.get(key)!.push(bullet);
-  }
-  return order.map((key) => {
-    const items = byKey.get(key)!;
-    return {
-      key,
-      heading: key ? groups[key] : undefined,
-      items,
-      fullOnly: items.every((item) => item.fullOnly),
-    };
-  });
-}
 ---
 
 <Fragment set:html={runningHeaderCss} />
@@ -232,47 +190,60 @@ function bulletBlocks(bullets: MergedBullet[], groups: BulletGroups) {
                  belongs to the employer shouldn't be riding on the front of a
                  bullet about one of its games. */}
             {job.data.intro && <p class="resume-job-intro">{job.data.intro}</p>}
-            {bulletBlocks(bullets, job.data.bulletGroups).map((block) => (
-              <>
-                {block.heading && (
-                  <div class="resume-bullet-group" data-full-only={fullOnly(block.fullOnly)}>
-                    <h4>{block.heading.label}</h4>
-                    {/* Two-pager only, Ali's call (#32) -- same shape as the
+            {bulletBlocks(bullets, job.data.bulletGroups).map((block) => {
+              /* A block whose items are ALL extended is itself full-only: its
+                 heading, subtitle and `<ul>` must hide at concise density or
+                 the one-pager shows an empty group. No group is shaped that way
+                 today, and a whole JOB can't be (every job carries a 1-bullet
+                 `highlights` floor -- CLAUDE.md's weighting rule), so this
+                 guard is for the group case only.
+
+                 Derived here rather than in `bulletBlocks` (#328): print
+                 density is a fact about the résumé's two documents and means
+                 nothing on LinkedIn, which shares the grouping and not this. */
+              const blockFullOnly = block.items.every((item) => item.fullOnly);
+              return (
+                <>
+                  {block.heading && (
+                    <div class="resume-bullet-group" data-full-only={fullOnly(blockFullOnly)}>
+                      <h4>{block.heading.label}</h4>
+                      {/* Two-pager only, Ali's call (#32) -- same shape as the
                          per-entry locations above. The job's own span sits
                          directly overhead on the one-pager, and a second date
                          column under it reads as clutter at that density. */}
-                    {block.heading.dates && (
-                      <p class="meta resume-dates" data-full-only>
-                        {block.heading.dates}
-                      </p>
-                    )}
-                  </div>
-                )}
-                {/* Group-level prose, the same idea as the job's `intro` one
+                      {block.heading.dates && (
+                        <p class="meta resume-dates" data-full-only>
+                          {block.heading.dates}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                  {/* Group-level prose, the same idea as the job's `intro` one
                      level down. Renders on both densities -- it is a fact about
                      the whole span rather than extra detail. */}
-                {block.heading?.intro && (
-                  <p class="resume-group-intro" data-full-only={fullOnly(block.fullOnly)}>
-                    {block.heading.intro}
-                  </p>
-                )}
-                <ul class="resume-bullets" data-full-only={fullOnly(block.fullOnly)}>
-                  {block.items.map((h) => (
-                    <li data-full-only={fullOnly(h.fullOnly)}>
-                      <b class="resume-bullet-label">{h.label}:</b> {h.text}
-                      {/* The space lives INSIDE the span, so hiding the span
+                  {block.heading?.intro && (
+                    <p class="resume-group-intro" data-full-only={fullOnly(blockFullOnly)}>
+                      {block.heading.intro}
+                    </p>
+                  )}
+                  <ul class="resume-bullets" data-full-only={fullOnly(blockFullOnly)}>
+                    {block.items.map((h) => (
+                      <li data-full-only={fullOnly(h.fullOnly)}>
+                        <b class="resume-bullet-label">{h.label}:</b> {h.text}
+                        {/* The space lives INSIDE the span, so hiding the span
                            removes it too and the concise sentence ends clean.
                            Don't "simplify" it to a space between the nodes:
                            Astro strips whitespace between a text node and an
                            element when a newline separates them (the 404 page's
                            missing-space bug — see CLAUDE.md, the wording
                            pass). */}
-                      {h.extended && <span data-full-only> {h.extended}</span>}
-                    </li>
-                  ))}
-                </ul>
-              </>
-            ))}
+                        {h.extended && <span data-full-only> {h.extended}</span>}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              );
+            })}
           </section>
         );
       })

@@ -23,13 +23,25 @@
  * collections on every run. See `HEADLINE_OPTIONS`, `ABOUT`, and
  * `WHAT_NOT_TO_DO` below.
  *
- * ## Why this isn't rendered with Astro/Vite content APIs
+ * ## What it shares with the site, and what it doesn't
  *
- * `astro:content` only resolves inside Astro's own build graph. This script
- * runs standalone, so — like `scripts/generate-og-images.mjs` — it reads the
- * same YAML front matter directly off disk instead. If the jobs/education
- * schema in `src/content.config.ts` changes shape, update the parsing below
- * too.
+ * The *rules* — which jobs go on the résumé and in what order, which education
+ * entries, the current title, how bullets group — are `src/lib/content-rules.ts`,
+ * imported directly (#328). They used to be a second hand-written copy here
+ * with a "keep in sync" comment on each, which is the content model's own
+ * failure mode applied to code.
+ *
+ * What stays separate is *loading*: `astro:content` only resolves inside
+ * Astro's own build graph, and this script runs standalone, so — like
+ * `scripts/generate-og-images.mjs` — it reads the same YAML front matter
+ * directly off disk through `./lib/frontmatter.mjs`. That parser applies no
+ * Zod defaults, which is why anything it hands to a shared rule has to tolerate
+ * an absent field. If the jobs/education schema in `src/content.config.ts`
+ * changes shape, update the parsing below too.
+ *
+ * Note that `npm run check:linkedin` is therefore load-bearing for more than
+ * this file's freshness: it is what exercises that cross-boundary import under
+ * plain `node` on every PR.
  *
  * ## Why the output is committed, unlike `public/og/`
  *
@@ -54,6 +66,15 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { readEntries, readFrontmatter } from './lib/frontmatter.mjs';
+// Relative, and with the `.ts` extension: `~/*` is a TS/Vite alias plain `node`
+// cannot resolve, and Node's type stripping (>=22.18, `engines.node`) needs the
+// extension to know what it is looking at.
+import {
+  bulletBlocks,
+  currentTitle,
+  selectEducation,
+  selectJobs,
+} from '../src/lib/content-rules.ts';
 
 const CHECK_ONLY = process.argv.includes('--check');
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -68,19 +89,13 @@ const OUT_FILE = path.join(ROOT, 'docs/LINKEDIN.md');
 // parsed data to decide whether the committed PDFs are stale (#114).
 // ---------------------------------------------------------------------------
 
-/** Mirrors `getJobs('resume')` in src/lib/content.ts: onResume jobs, most recent first. */
+/** The same jobs, in the same order, as `/resume` — `selectJobs` is shared. */
 async function loadResumeJobs() {
-  const all = await readEntries(JOBS_DIR);
-  return all
-    .filter((j) => j.data.onResume !== false)
-    .sort((a, b) => (b.data.end ?? '9999').localeCompare(a.data.end ?? '9999'));
+  return selectJobs(await readEntries(JOBS_DIR), 'resume');
 }
 
 async function loadEducation() {
-  const all = await readEntries(EDUCATION_DIR);
-  return all
-    .filter((e) => e.data.onResume !== false)
-    .sort((a, b) => b.data.end.localeCompare(a.data.end));
+  return selectEducation(await readEntries(EDUCATION_DIR));
 }
 
 /** The official Marvel Snap credit link, read off the project rather than retyped here. */
@@ -92,13 +107,7 @@ async function loadMarvelSnapCreditUrl() {
 }
 
 // ---------------------------------------------------------------------------
-// Formatting. currentTitle() mirrors the function of the same name in
-// src/lib/content.ts, duplicated for the same reason resolveProjectImage()
-// duplicates projectThumb() in generate-og-images.mjs: that module imports
-// 'astro:content' and can't be loaded from a standalone script. Keep the two
-// currentTitle()s in sync if the title-formatting rule ever changes.
-//
-// MONTHS/formatDatePart/formatSpan are NOT mirroring anything — content.ts
+// Formatting. MONTHS/formatDatePart/formatSpan are NOT mirroring anything — content.ts
 // dropped its own month-precision formatSpan()/formatDatePart()/MONTHS as
 // dead code once nothing on the site rendered a month (see CLAUDE.md's
 // "Promotion years" section). This script is the one surface that still
@@ -116,10 +125,6 @@ function formatDatePart(value) {
 
 function formatSpan(start, end) {
   return `${formatDatePart(start)} – ${end ? formatDatePart(end) : 'Present'}`;
-}
-
-function currentTitle(job) {
-  return job.data.roles.at(-1).title;
 }
 
 /**
@@ -243,33 +248,25 @@ function renderJobSection(job) {
     //
     // Groups (#32) become a plain-text heading with their dates in parens,
     // which is as much structure as a LinkedIn role description can hold. The
-    // grouping walk below is a second copy of `bulletBlocks` in
-    // ResumeDocument.astro, for the same reason `formatSpan` and
-    // `currentTitle` are duplicated here: this script parses the YAML itself
-    // and cannot import a `.ts` module that pulls in `astro:content`.
-    const groups = job.data.bulletGroups ?? {};
-    const order = [];
-    const byKey = new Map();
-    for (const bullet of bullets) {
-      const key = bullet.group ?? '';
-      if (!byKey.has(key)) {
-        byKey.set(key, []);
-        order.push(key);
-      }
-      byKey.get(key).push(bullet);
-    }
-
+    // grouping itself is `bulletBlocks` from src/lib/content-rules.ts — the
+    // same function ResumeDocument.astro renders /resume/full with, so the two
+    // documents cannot disagree about which bullet sits under which heading
+    // (#328). What is local here is only how a block prints as plain text.
     const body = [];
-    for (const key of order) {
-      const heading = key ? groups[key] : undefined;
-      if (heading) {
+    for (const block of bulletBlocks(bullets, job.data.bulletGroups)) {
+      if (block.heading) {
+        // A blank line between groups, but never one leading the code fence.
         if (body.length > 0) body.push('');
-        body.push(heading.dates ? `${heading.label} (${heading.dates})` : heading.label);
+        body.push(
+          block.heading.dates
+            ? `${block.heading.label} (${block.heading.dates})`
+            : block.heading.label,
+        );
         // The group's `intro` renders on both resume densities, so it renders
         // here too — this file mirrors /resume/full exactly.
-        if (heading.intro) body.push(heading.intro);
+        if (block.heading.intro) body.push(block.heading.intro);
       }
-      for (const b of byKey.get(key)) {
+      for (const b of block.items) {
         body.push(`• ${b.label}: ${[b.text, b.extended].filter(Boolean).join(' ')}`);
       }
     }
@@ -289,7 +286,11 @@ function renderEducationSection(education) {
     lines.push(
       `**${entry.data.school}** · ${entry.data.degree}, ${entry.data.field} · ${entry.data.end.slice(0, 4)}`,
     );
-    if (entry.data.honors.length > 0) {
+    // `?? []`, because `honors` is `.default([])` in the schema and
+    // `readEntries` applies no Zod defaults — an entry omitting it would crash
+    // `check:linkedin`. Same class as the `onResume` divergence #328 fixed;
+    // it works today only because georgia-tech.md happens to declare it.
+    if ((entry.data.honors ?? []).length > 0) {
       lines.push(
         '',
         `The ${entry.data.end.slice(0, 4)} GPA and Dean’s List entries are recorded in ` +

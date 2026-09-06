@@ -6,6 +6,16 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"]
-    }
+    },
+    // `src/lib/content-rules.ts` is imported from `.mjs` scripts with its
+    // extension, which is what Node's type stripping needs to resolve it.
+    "allowImportingTsExtensions": true,
+    // The `.mjs` scripts load that module through Node's type STRIPPING, which
+    // replaces types with whitespace rather than compiling. Anything that emits
+    // JavaScript of its own — `enum`, `namespace`, parameter properties,
+    // `import x = require()` — throws there. This turns that from a comment in
+    // the module's header into a compiler error on the `npm run check` every PR
+    // already runs (#328). It passed on the tree as it stood.
+    "erasableSyntaxOnly": true
   }
 }
