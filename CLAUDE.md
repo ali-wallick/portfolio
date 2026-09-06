@@ -3365,23 +3365,25 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 
 **Where things are:**
 
-| Path                                  | What                                                                          |
-| ------------------------------------- | ----------------------------------------------------------------------------- |
-| `src/content.config.ts`               | The content model. Start here.                                                |
-| `src/lib/content.ts`                  | Collection queries and the only date/year formatting in the codebase.         |
-| `src/config/site.ts`                  | Name, email, nav, social links (all `pending` until Phase 3 audits them).     |
-| `src/config/resume.ts`                | The resume's Skills section — settled, hand-curated, not derived from `tech`. |
-| `scripts/check-links.mjs`             | Post-build checks. Every rule is a regression guard for a real old bug.       |
-| `scripts/check-links-external.mjs`    | Outbound link liveness. **Manual (`npm run links:external`), never in CI.**   |
-| `scripts/build-pdf.mjs`               | Renders the resume routes to PDF and asserts their page counts.               |
-| `src/components/ResumeDocument.astro` | The resume, both densities. `variant` is the only difference.                 |
-| `scripts/build-linkedin.mjs`          | Generates `docs/LINKEDIN.md` from the `jobs`/`education` collections.         |
-| `docs/LINKEDIN.md`                    | Paste-ready LinkedIn copy. Generated — a handoff for Ali, never a sync.       |
-| `docs/LAUNCH.md`                      | **The cutover runbook.** One ordered procedure; start here to launch.         |
-| `docs/REBUILD-LOG.md`                 | Running record. Phase 7's source material.                                    |
-| `infra/README.md`                     | The live zone, the DNS tooling, and Phase 1's record.                         |
-| GitHub issues                         | What's actually left. Milestones per phase; `decision` and `needs-ali`.       |
-| `snapshot/`                           | The old site as it stood. The reference for "what did the old page say?"      |
+| Path                                  | What                                                                                                                                       |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `src/content.config.ts`               | The content model. Start here.                                                                                                             |
+| `src/lib/content.ts`                  | Collection queries and the only date/year formatting in the codebase.                                                                      |
+| `src/config/site.ts`                  | Name, email, nav, social links (all `pending` until Phase 3 audits them).                                                                  |
+| `src/config/resume.ts`                | The resume's Skills section — settled, hand-curated, not derived from `tech`.                                                              |
+| `scripts/check-links.mjs`             | Post-build checks. Every rule is a regression guard for a real old bug.                                                                    |
+| `scripts/check-links-external.mjs`    | Outbound link liveness. **Manual (`npm run links:external`), never in CI.**                                                                |
+| `scripts/build-pdf.mjs`               | Renders the resume routes to PDF and asserts their page counts.                                                                            |
+| `src/components/ResumeDocument.astro` | The resume, both densities. `variant` is the only difference.                                                                              |
+| `scripts/build-linkedin.mjs`          | Generates `docs/LINKEDIN.md` from the `jobs`/`education` collections.                                                                      |
+| `docs/LINKEDIN.md`                    | Paste-ready LinkedIn copy. Generated — a handoff for Ali, never a sync.                                                                    |
+| `scripts/fetch-posters.mjs`           | Manual: looks up a YouTube video's own poster frame — not a default source for a `poster`, see the #273 section.                           |
+| `scripts/capture-comparison.mjs`      | Manual: before/after screenshots of the old and new site, into `docs/before-after/`. Referenced by nothing else, which is why it's listed. |
+| `docs/LAUNCH.md`                      | **The cutover runbook.** One ordered procedure; start here to launch.                                                                      |
+| `docs/REBUILD-LOG.md`                 | Running record. Phase 7's source material.                                                                                                 |
+| `infra/README.md`                     | The live zone, the DNS tooling, and Phase 1's record.                                                                                      |
+| GitHub issues                         | What's actually left. Milestones per phase; `decision` and `needs-ali`.                                                                    |
+| `snapshot/`                           | The old site as it stood. The reference for "what did the old page say?"                                                                   |
 
 ## The résumé's paper look (2026-09-06, closes #235)
 
