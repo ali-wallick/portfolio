@@ -642,7 +642,6 @@
     --color-plate: #666666;
     --color-accent-block: #ffffff;
     --color-on-accent: #000000;
-    --color-on-accent-link: #000000;
 
     /* Public Sans, not system-ui (#191). system-ui is machine-dependent — it
        resolved to SF Pro by accident of whichever Mac last rendered the PDF,
@@ -657,7 +656,6 @@
     --font-body: 'Public Sans', Helvetica, Arial, sans-serif;
     --font-display: var(--font-body);
     --font-heading: var(--font-body);
-    --font-sans: var(--font-body);
     /* Deliberately not a mono stack. Paper is set in one face; a design that
        gives `.meta` a monospace would otherwise embed it in the PDF, because
        the resume's dates and locations carry that class. */

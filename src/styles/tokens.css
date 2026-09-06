@@ -51,10 +51,17 @@
  * Rule, unchanged since Phase 2: use these variables. Never write a raw colour
  * or a raw px font size in a component.
  *
- * IF YOU ADD A TOKEN HERE, ADD IT TO `resume.css`'s `@media print` BLOCK TOO.
- * That block pins paper to Phase 4's palette by redefining tokens, and it only
- * covers the ones named in it — anything new reaches the PDF, which carries a
- * hard page-count assertion in `scripts/build-pdf.mjs`.
+ * IF YOU ADD A TOKEN HERE, DECIDE WHETHER PAPER NEEDS IT, and if so pin it in
+ * `resume.css`'s `@media print` block. That block is paper's ENTIRE token
+ * vocabulary, not a filter over this one: everything below sits inside
+ * `@media screen`, so on paper an unpinned token is *undefined* — a declaration
+ * that uses one drops to its initial value; it does not pick up a screen value.
+ * (This used to say "anything new reaches the PDF". Measured for #108 and
+ * wrong since #62: 16 tokens here were unpinned, none of them reached a
+ * rendered element on paper, and only three pins do any work at all —
+ * `--font-body`, `--leading-tight`, `--measure`. The hazard is a rule in
+ * `base.css` outside `@media screen` reaching paper, not a token nobody
+ * pinned. What to do about the 53 inert pins is #327.)
  *
  * The whole `:root` block below is scoped inside `@media screen` (#62). Before
  * this, it and `resume.css`'s `@media print :root` block both matched `:root`
@@ -130,7 +137,6 @@
     --color-accent-soft: #fbdcec;
     --color-accent-block: #a80052;
     --color-on-accent: #ffffff;
-    --color-on-accent-link: #ffffff;
 
     /* --- Colour: the navigation layer (blue) ------------------------------
    * Where you can *go*: links, and only links.
@@ -203,13 +209,13 @@
    * and none of these three are on that list. See the Phase 6 entry in
    * `docs/REBUILD-LOG.md` for the full measurement and the sourcing.
    *
-   * `--font-heading` and `--font-sans` are aliases kept so that `base.css` and
-   * the print block can each name the role they mean.
+   * `--font-heading` is an alias kept so that `base.css` and the print block
+   * can each name the role they mean. (`--font-sans` was a second alias of
+   * `--font-body` that nothing ever read; removed for #108.)
    */
     --font-body:
       'Figtree Variable', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
       sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
-    --font-sans: var(--font-body);
     --font-display: 'Gabarito Variable', 'Trebuchet MS', system-ui, sans-serif;
     --font-heading: var(--font-display);
     --font-mono: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -483,7 +489,6 @@
     --color-accent-soft: #2e0a20;
     --color-accent-block: #ff2d95;
     --color-on-accent: #0a0a12;
-    --color-on-accent-link: #0a0a12;
 
     --color-link: #22d3ee;
     --color-link-visited: #c084fc;

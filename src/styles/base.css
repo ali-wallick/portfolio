@@ -1812,6 +1812,10 @@ hr {
   display: flex;
   flex-direction: column;
 }
+/* The one raw colour in this file, on purpose: a scrim is black at partial
+   opacity in both themes, so there is no light/dark pair for a token to hold,
+   and it sits behind a native <dialog> where nothing else on the page is
+   painted. Not a violation of tokens.css's rule so much as outside it. */
 .zoom-dialog::backdrop {
   background: rgb(0 0 0 / 0.72);
 }
