@@ -104,6 +104,10 @@ const PAD = 6;
  * - `fade`   hold in place, then fade out after `HOLD`, and *cut* to the next
  *            target rather than travelling to it. Kills the long diagonal
  *            traverse entirely — the brackets acquire rather than fly.
+ *
+ * Two more pieces of state sit alongside the mode: `dormant`, fade's
+ * faded-out state, and the crossing cut between header and body (#240),
+ * documented above.
  */
 type Mode = 'home' | 'stay' | 'linger' | 'fade';
 
