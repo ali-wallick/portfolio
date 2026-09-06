@@ -92,11 +92,19 @@ async function loadMarvelSnapCreditUrl() {
 }
 
 // ---------------------------------------------------------------------------
-// Formatting — mirrors formatSpan()/currentTitle() in src/lib/content.ts.
-// Duplicated for the same reason resolveProjectImage() duplicates
-// projectThumb() in generate-og-images.mjs: that module imports
-// 'astro:content' and can't be loaded from a standalone script. Keep both in
-// sync if the date/title formatting rules ever change.
+// Formatting. currentTitle() mirrors the function of the same name in
+// src/lib/content.ts, duplicated for the same reason resolveProjectImage()
+// duplicates projectThumb() in generate-og-images.mjs: that module imports
+// 'astro:content' and can't be loaded from a standalone script. Keep the two
+// currentTitle()s in sync if the title-formatting rule ever changes.
+//
+// MONTHS/formatDatePart/formatSpan are NOT mirroring anything — content.ts
+// dropped its own month-precision formatSpan()/formatDatePart()/MONTHS as
+// dead code once nothing on the site rendered a month (see CLAUDE.md's
+// "Promotion years" section). This script is the one surface that still
+// shows month precision, since docs/LINKEDIN.md is where the progression and
+// its exact month are meant to be read — so it owns this formatting outright
+// rather than mirroring a since-deleted original.
 // ---------------------------------------------------------------------------
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
