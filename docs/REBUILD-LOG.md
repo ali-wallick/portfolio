@@ -4565,3 +4565,78 @@ following it. Step 0 was a throwaway probe push, before any real code, to learn 
 build image resolves `.nvmrc`'s bare `22` to; the container's egress proxy blocks `workers.dev`, so
 the answer had to come from the branch's own build rather than from polling the preview URL. Two
 full builds (baseline and branch) plus one forced PDF regeneration were the expensive part.
+
+## #107 — the agentic layer, read as a whole (2026-09-07)
+
+Filed 2026-08-23 as three stale Phase 2 skills, corrected 2026-09-05 to the real scope: ten skills,
+two hooks, `settings.json` and `launch.json`, sequenced after #108 so it could reuse that pass's
+model rather than re-derive one. Ali's lens carried the whole thing: the site is live and
+maintained, so a file is judged by what a cold session six months out needs from it to do a routine
+job, not by whether every sentence in it is still accurate. The plan went up as a page and onto the
+issue before any file moved, and her four calls came back on it: grow the hook, rename
+pre-launch-check, keep content-pass and write-copy as they stand, keep launch.json.
+
+### What shipped
+
+`guard-preserved.sh` covered two of CLAUDE.md's five Don't-touch paths going in; it covers all five
+now, tested by piping the harness's own block payload for eleven paths and checking each landed as
+expected. One exemption survived the addition on purpose: `infra/README.md` is already treated as a
+live document in `.prettierignore`, so blocking `infra/` wholesale would have contradicted a
+decision three lines from the one that named it. `settings.json` went from five of nineteen npm
+scripts allowed to the whole résumé and LinkedIn family, minus `dig *` (intercepted on Ali's own
+machine per `infra/README.md`) and `npx astro build` (nothing invokes it); `update:resume-print`
+stays prompting on purpose, since it is the one script that can rewrite a guard's own baseline. Two
+prose rules became schema guards rather than sentences a skill has to remember to repeat: `draft` is
+required on a project instead of defaulting to `false`, and the per-job bullet floor CLAUDE.md
+settled on 2026-08-23 is a `superRefine` on `jobs` now. Both were proven the same way, by writing
+the mistake and watching `astro sync` fail naming the rule. `pre-launch-check` is `pre-merge-check`
+now, its launch half cut to the three checks that are actually periodic after a release, its dead
+`TODO(phase-3-revisit)` grep swapped for the live `TODO(#n)` convention. Six more skills picked up
+smaller corrections. `content.config.ts` is a `byteHashedFiles` input, so both PDFs regenerated for
+the schema change and `check:resume-print` matched its baseline.
+
+### What the surveys got wrong
+
+Survey 2 called the Homebrew `PATH` line in both hooks stale, "a no-op on every environment this
+hook runs in," wrong on the one fact that mattered: Ali runs Claude Code locally on a Mac where the
+hooks actually fire. It also proposed blocking `infra/` wholesale, which is the exemption above
+working backward, and would have broken a decision `.prettierignore` had already made. Survey 1 ran
+`SHOW_DRAFTS=true npm run build` despite a read-only brief; it changed nothing and reported having
+done it, which is the only reason it is a note here rather than an incident. Every claim behind a
+rename or a deletion was re-grepped before it reached a brief, the same rule #108 set, and this is
+the run that shows why: two claims that would have shipped wrong went into a plan instead.
+
+### The surveys' best findings
+
+`add-project`'s own template was handing out a `youtube` hero with no `poster`, a field the schema
+has required since #273, so a session following the skill literally would have failed its own
+build. Two skills, `write-copy` and `update-resume`, still said the Second Dinner ceiling meant "no
+platform," the exact phrasing #32 corrected on 2026-08-26 on Ali's own statement that mobile is
+sayable; the correction had never propagated past this file. And `content-pass` enumerated
+`build-pdf.mjs`'s hashed inputs by hand, one file behind after #328 landed the day before. Survey
+3's table carried several more guards past these three: title-cased labels, kebab-case filenames, a
+stale-content grep run against `dist/`, and each was judged rather than built, since every one needs
+a heuristic with false positives on today's content, or catches a mistake nobody has actually made.
+
+### The model allocation
+
+Three Sonnet Explore surveys ran in parallel: five content skills (187k tokens, 48 tool uses, 6.5
+min), the process skills plus both hooks plus settings (113k, 43, 3.3 min), and every imperative
+sentence in all ten skills checked against whatever guard enforces it (171k, 39, 5.2 min). Two
+Sonnet general-purpose executors then ran in parallel on disjoint files, since neither needed the
+other's output: the hook, settings.json and .prettierignore (142k, 13 tool uses, 1.2 min), and the
+skill text edits plus the rename (201k, 68, 4.6 min). A Sonnet agent drafted this entry from the
+plan. Fable wrote every brief, re-grepped each claim that would rename or delete something, made the
+two schema edits by hand, ran the build, wrote CLAUDE.md's record, and ran a medium `code-review` before push, which found nothing. Subagent
+tokens ran to about 815k before that review.
+
+### Cost notes
+
+One process slip is worth recording plainly. Executor B's rename staged with `git mv`, and the
+planning session's first commit of the hook work swept the staged rename in along with it, caught on
+`git show --stat` before push, undone, and redone as two commits with `git commit -o` against named
+paths. Ten skills turned out not to be "too many to load," a non-finding worth keeping: only
+descriptions load at session start, about a thousand tokens for all ten combined, so the real
+question this pass answered was routing rather than count. CLAUDE.md's own size came out of scope
+rather than being trimmed here: 3,507 lines at the start of this pass, read in full by every session
+that opens it, filed as #335, a decision, with a proposed cut line rather than a cut.

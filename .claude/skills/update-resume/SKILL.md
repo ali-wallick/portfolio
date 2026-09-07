@@ -36,15 +36,8 @@ capped at 28 characters by the schema so it stays a topic rather than growing in
 how the words should sound, the `write-copy` skill's §2.1 is the authority; this file only says where
 they live.
 
-**Labels are title case** (2026-08-26, #32). `UI Programming`, `Live-Ops Content`,
-`Cross-Cutting Work` -- AP/Chicago rules, small function words lowercase unless first or last. This
-is recovered like the format itself: every label in the four job files' "Source material (2019
-resume, verbatim)" sections is title case, `Unreleased Casino` included, which is the exact label
-this repo had been rendering as `Unreleased casino`. **Sentence case was never actually consistent**
--- proper-noun labels (`Vegas Blvd Slots`, `Hot Streak Slots`) are title case regardless, so a
-sentence-case sibling beside them reads as a fragment rather than the name of a thing. Note this is
-a different rule from #182, which title-cased _headers_; a run-in `<b>` inside an `<li>` is not a
-header, which is why #182 never reached these.
+**Labels are title case** (2026-08-26, #32). `write-copy` §2.1 carries the reasoning and the
+AP/Chicago rules.
 
 **Second Dinner renders as grouped blocks, and which tier renders on which density is not
 symmetric.** `bulletGroups` gives a job a heading per body of work. The group's `label` and `intro`
@@ -101,8 +94,9 @@ exclamations, and it is deliberately different from the site's prose voice. `wri
 authority on the labelled format.
 
 **Craft, not product, for anything from the 2024–present Second Dinner era.** Godot, "a new team at
-Second Dinner", and nothing else — no title, platform, genre, feature, or monetization detail. Read
-CLAUDE.md's Phase 3 gate outcome if this ceiling is unfamiliar.
+Second Dinner", and nothing else — no title, genre, feature, or monetization detail; "mobile" is
+sayable on Ali's own statement (2026-08-26, #32). Read CLAUDE.md's Phase 3 gate outcome if this
+ceiling is unfamiliar.
 
 ## 3. Fitting the budget: per-job floor, recency-weighted
 
@@ -234,7 +228,10 @@ npm run verify
 **Commit together:** the content file(s), `public/resume.pdf`, `public/resume-full.pdf`,
 `scripts/resume-pdf.lock.json`, `scripts/resume-print-baseline.json` (if it changed), and
 `docs/LINKEDIN.md`. `npm run check:pdf` hashes every input and fails CI if the PDFs are stale, and it
-cannot fix itself — a partial commit here is a broken deploy, not a lint warning.
+cannot fix itself — a partial commit here is a broken deploy, not a lint warning. `check:pdf` also
+asserts the embedded print face (`assertPrintFace` in `scripts/build-pdf.mjs`, Public Sans and
+static Gabarito, no Type 3), so a `check:pdf` failure after anything font-related is that check, not
+staleness.
 
 ## 5. Guardrails that will bite silently otherwise
 

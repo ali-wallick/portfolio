@@ -1,6 +1,6 @@
 ---
 name: write-copy
-description: Write or edit any prose on aliwallick.com in Ali's voice — About page, homepage, project write-ups, resume bullets, microcopy, alt text, meta descriptions. Use when the user wants copy written, reworded, tightened, or toned; asks for a wording or tone pass; says something "reads like AI" or "doesn't sound like me"; or is working issue #31 and its sub-issues. For the structure and front matter of a project entry, use add-project or write-project-page — this skill governs how the words sound, wherever they live.
+description: Write or edit any prose on aliwallick.com in Ali's voice — About page, homepage, project write-ups, resume bullets, microcopy, alt text, meta descriptions. Use when the user wants copy written, reworded, tightened, or toned; asks for a wording or tone pass; or says something "reads like AI" or "doesn't sound like me". For the structure and front matter of a project entry, use add-project or write-project-page — this skill governs how the words sound, wherever they live.
 ---
 
 # Write copy in Ali's voice
@@ -84,7 +84,9 @@ Rules that come with it:
 - **Don't restate the label in the sentence.** "Localization: Owned localization end to end" wastes
   the device. "Owned the feature end to end" says the same thing once.
 - **No contractions, no exclamations, no first person.** These bullets are subject-dropped, which is
-  why `--resume` scores them against a résumé baseline of zero for all three rather than the blog's.
+  why `--resume` scores them against a résumé baseline: zero for first person and em dashes, 10.1
+  per 1k for contractions (the counter can't tell a possessive `'s` from a contracted one, so it
+  never reads zero), and no measurement of exclamations at all.
 - **Verbs are formal, not conversational.** The #32 pass removed: "hands the ticket to", "brought
   teammates onto", "took it to release", "let us author", "keeping the team moving quickly", and
   "plus" used as a conjunction. Each reads fine in site prose and casual in a bullet.
@@ -377,7 +379,8 @@ in, because a punchier sentence often wants a detail the source doesn't have.
   of how much of the work it actually was. **Compression promotes whatever survives it.** Check with
   the source whether a technically-true detail deserves that promotion, not just whether it's true.
 - **The Second Dinner ceiling holds absolutely: craft, not product.** The 7 August 2024 W4 Games
-  statement is the limit — Godot, next game, no title, platform, or genre.
+  statement is the limit — Godot, next game, no title or genre; "mobile" is sayable on Ali's own
+  statement (2026-08-26, #32; the correction is recorded under CLAUDE.md's Phase 3 gate outcome).
 - **I Fits I Sits: never imply Ali worked on a shipped release.** She pitched and prototyped it,
   under that name — both public names it shipped under later (It Fits I Sits, then Puzzle Cats)
   were other teams' renames, not her work. **A body's credit-scope caveat does not reach the
@@ -446,8 +449,7 @@ If resume copy changed, `npm run build:pdf` and commit the regenerated `public/*
 
 Copy is Ali's, and a tone pass is the one kind of change where "it builds" proves nothing.
 
-- Work on a branch, push, and give her the preview URL. Reading it in the real design is the point —
-  it's why #31 waited for Phase 5.
+- Work on a branch, push, and give her the preview URL. Reading it in the real design is the point.
 - **Show what changed and why, per page**, not just a diff. One line each: what you cut and what the
   sentence was doing wrong.
 - **Offer options on lines that carry weight, not just a single rewrite.** For a sentence doing real

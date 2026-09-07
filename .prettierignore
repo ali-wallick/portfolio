@@ -3,7 +3,8 @@
 snapshot/
 content/archive/
 
-# Legacy assets awaiting the Phase 3 cleanup pass.
+# The old site's stylesheet, scroll handler and 2019 résumé PDF. Kept as
+# primary sources (CLAUDE.md, "Don't touch"), never reformatted.
 resources/
 
 # Phase 1 infrastructure record. The captured zone is a faithful artifact;

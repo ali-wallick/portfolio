@@ -1,6 +1,6 @@
 ---
 name: content-pass
-description: Revisit and update a page that already exists on aliwallick.com — a project write-up, About, the homepage, microcopy. Use when the user wants to refresh a project after new work on it, asks for a wording or content pass on a named page, says a page reads thin or stale, or wants an existing entry reworked. Handles the method and the audit; write-copy governs how the sentences sound, and a brand-new entry starts with add-project instead.
+description: Revisit and update a page that already exists on aliwallick.com — a project write-up, About, the homepage, microcopy. Use when the user wants to refresh a project after new work on it, asks for a content pass on a named page, says a page reads thin or stale, or wants an existing entry reworked. Handles the method and the audit; write-copy governs how the sentences sound, and a brand-new entry starts with add-project instead.
 ---
 
 # Revisit a page
@@ -56,7 +56,9 @@ The audit measures what's on the page. It can't tell you what isn't.
 
 - **Source material lives in more places than the page itself.** `write-project-page` §1 has the
   full table — the blog in `content/archive/`, the 2019 resume bullets preserved in
-  `src/content/jobs/`, `src/assets/images/`, the Wayback Machine, and Ali.
+  `src/content/jobs/`, `src/assets/images/`, the Wayback Machine, and Ali. `content/archive/` and
+  `snapshot/` — the old site's own pages, the reference for "what did the old page say?" — are both
+  read-only; `.claude/hooks/guard-preserved.sh` refuses a Write or Edit to either.
 - **Interview Ali when the page's premise has aged out, not just one fact on it.** If the ask itself
   says "rethink this," don't spend the first round mining written sources for something that isn't
   in them. `/about` ([#141](https://github.com/ali-wallick/Portfolio/issues/141)) got its richest
@@ -121,9 +123,9 @@ npm run verify
 ```
 
 **Any of `build-pdf.mjs`'s hashed inputs invalidates the resume PDFs, and that list is wider than a
-page's own content file** — `src/styles/base.css` and `tokens.css` are on it, alongside `site.ts`,
-`content.ts`, `content.config.ts` and the resume components (see `inputFiles()` in
-`scripts/build-pdf.mjs`). Adding icon markup to `.button` in `base.css` — a change with nothing to do
+page's own content file.** Read `byteHashedFiles()` in `scripts/build-pdf.mjs` for the current list
+— it includes `base.css`, `tokens.css`, `site.ts`, `content.ts`, `content-rules.ts`, and the resume
+components. Adding icon markup to `.button` in `base.css` — a change with nothing to do
 with the resume — still changed `scripts/resume-pdf.lock.json`
 ([#184](https://github.com/ali-wallick/Portfolio/pull/184)). `npm run build` regenerates them; commit
 `public/*.pdf` and the lock with your change, even when the PDFs render pixel-identical, or

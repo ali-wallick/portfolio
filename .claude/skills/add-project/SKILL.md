@@ -124,7 +124,8 @@ more, and the two draft entries that opened it up are the reference for each cas
 - **`featured` requires `featureOrder`** (a positive integer) to place it on the projects page.
 - **Leave fields empty when the source doesn't support them.** Don't infer an engine from a
   platform.
-- **Start new entries at `draft: true`** unless summary, role, and hero are all genuinely ready.
+- **`draft` is required and never defaulted**, so every entry says which it is. Set `draft: true`
+  until summary, role, and hero are ready, and the build refuses to publish before then.
 - **A game needs a `status`; nothing else does.** The build fails on a `kind: game` (or an entry
   with no `kind`, which is the same thing) that omits it.
 
@@ -177,8 +178,11 @@ project page.
 deliberately does not fetch external links (for CI speed; see its header comment), and neither does
 the content-pass audit script, so a dead outbound link only gets caught when a human clicks it —
 which is how Tilting at Windmills shipped a 403'ing Global Game Jam link through an earlier pass
-([#99](https://github.com/ali-wallick/Portfolio/issues/99)). A `curl -sIL <url>` per link takes
-seconds. Once you find one, the `dead: true` guidance in §3 applies.
+([#99](https://github.com/ali-wallick/Portfolio/issues/99)). Run `npm run links:external` — it
+buckets results as ok / unverifiable (a host like LinkedIn that answers 403, 999, or 406 to a
+script) / dead, and only fails on dead. **It cannot run from a Claude Code web session**, where the
+egress proxy answers 403 for every YouTube URL — a web session should say so rather than reporting
+the links as checked. Once you find a dead one, the `dead: true` guidance in §3 applies.
 
 Then tell the user the page's URL path so they can look at it on the preview deploy.
 
@@ -204,6 +208,9 @@ hero:
   type: youtube
   id: xxxxxxxxxxx
   title: Game Name trailer
+  poster: # required since #273: what a dead video degrades to, and the tile thumbnail
+    src: ./game-name/poster.jpg
+    alt: What the picture shows, not what the video is
 draft: true
 ---
 

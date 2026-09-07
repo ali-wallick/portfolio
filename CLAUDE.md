@@ -58,9 +58,11 @@ Godot detail, the resume's tooling line, the Kaneva title, the DreamHost handoff
 **If you find a follow-up, open an issue.** Don't append it to a doc and don't leave it only
 in a `TODO(...)` comment — the comments mark _where in the code_ later work lands, the issues are
 what actually gets worked. **Every `TODO(...)` cites its issue number**; keep it that way, so a
-marker in the source is never a dead end. Historical markers stay numbered (`TODO(phase-3-revisit)`);
-current ones use the stage name (`TODO(launch)`, `TODO(pre-launch)`) since phases stopped being
-numbered after Phase 5 — see "Phases" below.
+marker in the source is never a dead end. The marker is `TODO(#n)`, the issue number and nothing
+else — the stage-name form this file prescribed until 2026-09-07 (`TODO(launch)`) was never used,
+and the phase-numbered form (`TODO(phase-3-revisit)`) is history with zero markers left.
+`grep -rn 'TODO(' src/` is the whole sweep; a marker whose issue is closed goes with the change
+that closed it.
 
 **And keep status out of this file.** The rule, which is why the phase sections below carry
 conventions and constraints but no worklists: _if a sentence here would need editing when an issue
@@ -177,14 +179,20 @@ Use the skills — they encode the schema, the conventions, and the verification
 - `.claude/skills/write-copy/` — write or edit any prose on the site in Ali's voice.
 - `.claude/skills/content-pass/` — revisit or update a page that already exists.
 - `.claude/skills/update-resume/` — add, update, or rebalance resume content.
-- `.claude/skills/pre-launch-check/` — the full pre-merge / pre-launch sweep.
+- `.claude/skills/pre-merge-check/` — the pre-merge sweep, plus three short after-release checks.
+  (It was `pre-launch-check` until 2026-09-07; the cutover half it carried is `docs/LAUNCH.md`'s
+  record now.)
 
-Two more skills are not about content at all and are listed here because this is where the skill
+Four more skills are not about content at all and are listed here because this is where the skill
 list lives. `.claude/skills/design-switcher/` — the live-switcher review loop, for a look, motion
-or control decision that needs Ali's eye. See "The switcher loop is a skill now" under Design. And
-`.claude/skills/steward/` — **not a skill anyone invokes**, but the file the Claude Code web
-harness reads before acting on a PR event, which is the only repo-side lever over how proactive a
-PR-watching session is. See "A green PR waiting on Ali is not work" below.
+or control decision that needs Ali's eye. See "The switcher loop is a skill now" under Design.
+`.claude/skills/release/` — `main` → `release`, the push that actually deploys. See "Merging to
+`main` does not deploy" below. `.claude/skills/cleanup-branches/` — stale local branches and
+worktrees. And `.claude/skills/steward/` — **not a skill anyone invokes**, but the file the Claude
+Code web harness reads before acting on a PR event, which is the only repo-side lever over how
+proactive a PR-watching session is. See "A green PR waiting on Ali is not work" below. Both of the
+last two live beside the content skills because `.claude/skills/` is the only path the harness
+reads; there is no second directory to sort them into (#107).
 
 `content-pass` is the method and `write-copy` is the voice; a session revisiting a page uses both.
 Adding something new starts one step earlier — `add-project` for front matter, `write-project-page`
@@ -3329,8 +3337,12 @@ Domain) precisely for this reason, and the residue is what these notes are for.
 
 - **DNS, the registrar, email.** Phase 1 is closed. None of it is back in scope.
 - **`content/archive/`, `snapshot/`, `infra/`.** Preservation records from Phases 0–1. Their value is
-  being faithful, so reformatting or "improving" them destroys the point. A `PreToolUse` hook blocks
-  writes to the first two.
+  being faithful, so reformatting or "improving" them destroys the point. **A `PreToolUse` hook
+  (`.claude/hooks/guard-preserved.sh`) refuses a Write or Edit to every path in this list** —
+  these three and the three `resources/` entries below — with two exemptions: `snapshot/rendered/`,
+  which is derived, and `infra/README.md`, which is the DNS tooling's own live notes and is
+  formatted with everything else. Until 2026-09-07 the hook covered only the first two, on exactly
+  the paths where an accidental write was least recoverable (#107).
 - **`resources/css/` and `resources/js/`** — the old site's stylesheet and scroll handler. Mined in
   Phase 5 and **the only copy**; `snapshot/` has `colors.css` and nothing else. The findings are
   recorded under "What the gate corrected", and the recovered curve was re-examined and retuned in
@@ -3369,25 +3381,28 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 
 **Where things are:**
 
-| Path                                  | What                                                                                                                                                |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/content.config.ts`               | The content model. Start here.                                                                                                                      |
-| `src/lib/content.ts`                  | Collection queries and the site's year-only date formatting. Month precision lives in `scripts/build-linkedin.mjs`, the only surface that shows it. |
-| `src/config/site.ts`                  | Name, email, nav, social links (audited in Phase 3: LinkedIn `active`, the rest `retired`).                                                         |
-| `src/config/resume.ts`                | The resume's Skills section — settled, hand-curated, not derived from `tech`.                                                                       |
-| `scripts/check-links.mjs`             | Post-build checks. Every rule is a regression guard for a real old bug.                                                                             |
-| `scripts/check-links-external.mjs`    | Outbound link liveness. **Manual (`npm run links:external`), never in CI.**                                                                         |
-| `scripts/build-pdf.mjs`               | Renders the resume routes to PDF and asserts their page counts.                                                                                     |
-| `src/components/ResumeDocument.astro` | The resume. One DOM for both densities; `density` only seeds `data-density`, and CSS hides `[data-full-only]`.                                      |
-| `scripts/build-linkedin.mjs`          | Generates `docs/LINKEDIN.md` from the `jobs`/`education` collections.                                                                               |
-| `docs/LINKEDIN.md`                    | Paste-ready LinkedIn copy. Generated — a handoff for Ali, never a sync.                                                                             |
-| `scripts/fetch-posters.mjs`           | Manual: looks up a YouTube video's own poster frame — not a default source for a `poster`, see the #273 section.                                    |
-| `scripts/capture-comparison.mjs`      | Manual: before/after screenshots of the old and new site, into `docs/before-after/`. Referenced by nothing else, which is why it's listed.          |
-| `docs/LAUNCH.md`                      | **The cutover runbook.** One ordered procedure; start here to launch.                                                                               |
-| `docs/REBUILD-LOG.md`                 | Running record. Phase 7's source material.                                                                                                          |
-| `infra/README.md`                     | The live zone, the DNS tooling, and Phase 1's record.                                                                                               |
-| GitHub issues                         | What's actually left. Milestones per phase; `decision` and `needs-ali`.                                                                             |
-| `snapshot/`                           | The old site as it stood. The reference for "what did the old page say?"                                                                            |
+| Path                                  | What                                                                                                                                                       |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/content.config.ts`               | The content model. Start here.                                                                                                                             |
+| `src/lib/content.ts`                  | Collection queries and the site's year-only date formatting. Month precision lives in `scripts/build-linkedin.mjs`, the only surface that shows it.        |
+| `src/config/site.ts`                  | Name, email, nav, social links (audited in Phase 3: LinkedIn `active`, the rest `retired`).                                                                |
+| `src/config/resume.ts`                | The resume's Skills section — settled, hand-curated, not derived from `tech`.                                                                              |
+| `scripts/check-links.mjs`             | Post-build checks. Every rule is a regression guard for a real old bug.                                                                                    |
+| `scripts/check-links-external.mjs`    | Outbound link liveness. **Manual (`npm run links:external`), never in CI.**                                                                                |
+| `scripts/build-pdf.mjs`               | Renders the resume routes to PDF and asserts their page counts.                                                                                            |
+| `src/components/ResumeDocument.astro` | The resume. One DOM for both densities; `density` only seeds `data-density`, and CSS hides `[data-full-only]`.                                             |
+| `scripts/build-linkedin.mjs`          | Generates `docs/LINKEDIN.md` from the `jobs`/`education` collections.                                                                                      |
+| `docs/LINKEDIN.md`                    | Paste-ready LinkedIn copy. Generated — a handoff for Ali, never a sync.                                                                                    |
+| `scripts/fetch-posters.mjs`           | Manual: looks up a YouTube video's own poster frame — not a default source for a `poster`, see the #273 section.                                           |
+| `scripts/capture-comparison.mjs`      | Manual: before/after screenshots of the old and new site, into `docs/before-after/`. Referenced by nothing else, which is why it's listed.                 |
+| `docs/LAUNCH.md`                      | The cutover runbook, executed 2026-08-27 and kept as the record. Routine deploys are the `release` skill.                                                  |
+| `docs/REBUILD-LOG.md`                 | Running record. The build-in-public page's (#48) source material.                                                                                          |
+| `infra/README.md`                     | The live zone, the DNS tooling, and Phase 1's record.                                                                                                      |
+| `.claude/settings.json`               | The permission allow-list (every npm script a routine job runs, except `update:resume-print`, which rewrites a guard and should prompt) and the two hooks. |
+| `.claude/hooks/`                      | `guard-preserved.sh` refuses writes to the Don't-touch paths; `format-on-write.sh` runs Prettier on every file a session writes.                           |
+| `.claude/launch.json`                 | Claude Code's dev-server launcher: `npm run dev` on 4321, Astro's default. Referenced by nothing in the repo; kept (#107).                                 |
+| GitHub issues                         | What's actually left. `Deferred` and the DreamHost deadline are the only milestones; `decision` and `needs-ali` do the real work.                          |
+| `snapshot/`                           | The old site as it stood. The reference for "what did the old page say?"                                                                                   |
 
 ## The résumé's paper look (2026-09-06, closes #235)
 
@@ -3694,3 +3709,66 @@ holds on paper.
 
 Row counts: **165/190 → 139/161**, of which 37 are hidden roots. The `environment` block still
 reads `linux`, unchanged and matching CI.
+
+## The agentic layer, read as a whole (2026-09-07, closes #107)
+
+Ten skills, two hooks, `settings.json` and `launch.json`, read against the codebase once, under the
+lens Ali set for it: **the site is live and being maintained, so each file is judged by what a
+cold session six months from now needs from it to do a routine job**, not by whether it is still
+accurate. Run the way #108 was: three Sonnet surveys in parallel, every deletion- or rename-driving
+claim re-grepped here before it entered a brief, two Sonnet executors on disjoint files, one PR.
+What belongs here is what changed and the four things a future session would otherwise re-derive.
+
+**Two prose rules became guards, and that is the pass's real output.** `draft` is required on a
+project, not defaulted to `false`: the default never fired during the build, when every entry was
+seeded `draft: true` by hand, and in maintenance the failure it allows is a new file with no
+`draft:` line publishing silently the moment its metadata happens to be complete. And the per-job
+bullet floor settled on 2026-08-23 (one in `highlights`, two across both densities) is a
+`superRefine` on `jobs` now — until this pass it was a sentence in `update-resume`, so the trim the
+recency rule asks for could empty an old job with no build error. Both were proven by injecting the
+mistake: a project with no `draft` and a job cut to one bullet each fail `astro sync` with the
+message that names the rule. **The rest of survey 3's table — every imperative in the ten skills
+against the guard that enforces it — was judged, not built.** Title-cased labels, kebab-case
+filenames and the stale-content grep were all cheap to guard and were left as prose, because each
+would either need a heuristic with false positives on today's content or protects against a
+mistake nobody has made.
+
+**The hook covers the whole Don't-touch list now, and one path needed an exemption the doc had
+already made.** `infra/README.md` is formatted with everything else per `.prettierignore` and is
+the DNS tooling's own notes, so blocking `infra/` wholesale would have contradicted a decision
+recorded three lines from the one that said to block it. It is exempt, the way `snapshot/rendered/`
+is. **The Homebrew `PATH` line in both hooks is not stale** — a survey called it so, and it is
+there because Ali runs Claude Code on a Mac where the hooks fire locally.
+
+**A correction recorded in this file had leaked into two skills, in the wrong direction.**
+`write-copy` and `update-resume` both still said the Second Dinner ceiling meant "no platform",
+which #32 corrected on 2026-08-26 (mobile is sayable, on Ali's own statement) and which the résumé
+itself has said since. Same class of miss as `ABOUT` under "The resume formality pass": a
+correction to this file does not propagate to a skill, and no generator catches it. **When a
+ceiling or a convention changes here, grep the skills for the old wording in the same commit.**
+
+**`pre-launch-check` is `pre-merge-check`**, and the rename is the point rather than the edits
+inside it: its description was the trigger text, and "launch readiness" and "before a DNS cutover"
+are phrases nobody will type again. It keeps the pre-merge sweep and three after-release checks
+(`links:external`, the `www` 301, the served `robots.txt`); the cutover it also carried is
+`docs/LAUNCH.md`'s record. Its stale `TODO(phase-3-revisit)` grep became the live convention,
+recorded under "What this is" above.
+
+**`settings.json` allows every npm script a routine job runs, with one deliberate omission.**
+`update:resume-print` rewrites the print-geometry baseline and is the one command that can weaken
+a guard silently, so it keeps prompting. `dig *` came off (intercepted on Ali's machine, per
+`infra/README.md`) and so did `npx astro build` (nothing invokes it).
+
+**Non-findings, so nobody re-derives them.** Ten skills are not "too many to load": only the
+descriptions load at session start, about a thousand tokens for all ten, and the bodies load on
+invocation. The real question was routing, and it resolved to one word — `content-pass` no longer
+claims "wording pass", so that phrase routes to `write-copy` while the two still name each other.
+`steward` and `release` stay beside the content skills because `.claude/skills/` is the only path
+the harness reads. `launch.json` is eleven lines that make `/run` work and was simply never
+listed. `add-project`'s own template was handing out a `youtube` hero with no `poster`, a field
+the schema has required since #273; it failed the build on the first `SHOW_DRAFTS=true` run, which
+is the guard doing its job and the skill not keeping up. `content-pass` enumerated
+`byteHashedFiles()`'s inputs and had already drifted from the list by one file (#328); it points
+at the function now, so it cannot drift again.
+
+**Out of scope, filed:** this file's own size is #335, a `decision`, with a proposed cut line.

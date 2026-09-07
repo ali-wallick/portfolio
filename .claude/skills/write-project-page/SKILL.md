@@ -33,8 +33,11 @@ Almost everything needed already exists in this repo. Look, in this order:
 | `content/archive/`          | 20 blog posts, 2010–2019. **First-person detail the project pages never had.**                                    |
 | The Wayback Machine         | Not just a dead-link fix — archived pages carry credits and descriptions the site's own old page compressed away. |
 | `src/content/jobs/<job>.md` | The 2019 resume bullets, preserved verbatim under "Source material".                                              |
-| `src/assets/images/`        | Screenshots and banners, migrated from the old site in Phase 3.                                                   |
+| `src/assets/images/`        | Screenshots and banners.                                                                                          |
 | The user                    | Anything from after 2019, and anything the old site got wrong.                                                    |
+
+`snapshot/` and `content/archive/` are both read-only — `.claude/hooks/guard-preserved.sh` refuses a
+Write or Edit to either — so read them and write the project page elsewhere.
 
 The blog archive is the highest-value and most-overlooked source. The GGJ 2013, GDC 2013, "My First
 2 Panels", MobilityWare, and It Fits I Sits posts contain material that can't be templated. Fold it
@@ -117,7 +120,8 @@ A write-up is only publishable when its front matter is complete. Once the prose
 1. Fill in `summary`, `role`, and `hero` if they aren't already there.
 2. Flip `draft: true` → `draft: false`. The build enforces those three fields on publish, so this
    step will fail loudly if something is missing.
-3. Delete any `TODO(phase-3):` comment the entry was carrying, if you actually resolved it.
+3. Delete any `TODO(#n)` comment whose question you actually resolved; a marker with no issue
+   number needs one.
 
 ```bash
 SHOW_DRAFTS=true npm run build && npm run links

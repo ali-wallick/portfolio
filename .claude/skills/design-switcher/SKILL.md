@@ -6,14 +6,11 @@ description: Run the live-switcher review loop on aliwallick.com — put design 
 # The live-switcher review loop
 
 The most effective thing this project does, and the reason the old DreamHost setup could not have
-produced this site. Four passes have run it — the motion values ([#33]), the faces ([#66]), the
-colour calibration ([#67]) and the resume actions bar ([#239]) — and each rebuilt the scaffolding
-from scratch, so this file is the method rather than the code.
+produced this site. It has run repeatedly since the motion values ([#33]), and CLAUDE.md's dated
+pass sections are the record of each — every one rebuilt the scaffolding from scratch, so this file
+is the method rather than the code.
 
 [#33]: https://github.com/ali-wallick/Portfolio/issues/33
-[#66]: https://github.com/ali-wallick/Portfolio/issues/66
-[#67]: https://github.com/ali-wallick/Portfolio/issues/67
-[#239]: https://github.com/ali-wallick/Portfolio/pull/239
 
 **The shape:** every candidate ships in one DOM on one preview route, a panel flips between them
 live, Ali reacts on a phone against the real content, and the whole instrument is deleted in the
@@ -202,14 +199,15 @@ The teardown is part of the pass, not cleanup after it.
    guard that existed only for the instrument.
 2. **Assert byte-identity** against `main` for every file that should not have changed —
    `git diff --stat main -- src/layouts/BaseLayout.astro src/styles/` and expect nothing. #66 and
-   #67 both ended with `BaseLayout.astro` byte-identical to master, and that was checked, not
+   #67 both ended with `BaseLayout.astro` byte-identical to main, and that was checked, not
    assumed.
 3. Confirm a production build carries none of it: `WORKERS_CI_BRANCH=main npm run build:ci`, then
    grep `dist/` for the panel's class name and expect zero.
-4. `npm run verify`. If the pass touched anything the resume renders, `npm run check:resume-print`
-   and `npm run check:pdf` too. A new token does _not_ reach paper — since #62 an unpinned token is
-   undefined there, measured on #327 — but a rule outside `@media screen`, or a selector outranking
-   the print block's bare `:root`, still does.
+4. `npm run verify` already runs `check:pdf` and `check:resume-print` as two of its own steps. If
+   the pass touched anything the resume renders, don't take a green verify as the answer — read
+   those two steps' output specifically. A new token does _not_ reach paper — since #62 an unpinned
+   token is undefined there, measured on #327 — but a rule outside `@media screen`, or a selector
+   outranking the print block's bare `:root`, still does.
 5. **Put the decision where the next person editing that value will look** — the comment beside it
    in `tokens.css` or the component, with the measurement that chose it. `CLAUDE.md` gets the rule
    that generalises; `docs/REBUILD-LOG.md` gets the narrative. Pointing all three at each other is

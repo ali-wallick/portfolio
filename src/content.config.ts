@@ -342,10 +342,17 @@ const projects = defineCollection({
 
         /**
          * Draft entries render in `astro dev` and on preview deploys, and are
-         * excluded from the production build. Every project seeded in Phase 2
-         * is a draft: the metadata is real, the prose is Phase 3's job.
+         * excluded from the production build.
+         *
+         * Required, not defaulted (2026-09-07, #107). It defaulted to `false`
+         * through the build, when every entry was seeded `draft: true` by hand
+         * and the default never fired. In maintenance the failure it allows is
+         * the quiet one: a new file with no `draft:` line at all is a
+         * PUBLISHED entry, and if its metadata happens to be complete nothing
+         * says so until it is on the production site. Same rule as
+         * `hero: { type: art }` — the state is declared, never inferred.
          */
-        draft: z.boolean().default(false),
+        draft: z.boolean(),
       })
       .superRefine((data, ctx) => {
         if (data.endYear !== undefined && data.endYear < data.startYear) {
@@ -647,6 +654,30 @@ const jobs = defineCollection({
           });
         }
       }
+      // The per-job floor CLAUDE.md settled on 2026-08-23 (#37): at least one
+      // bullet on the one-pager and two across both densities. Until #107 it
+      // was prose in the update-resume skill, so trimming an old job to make
+      // room for a new one — the exact move the recency rule asks for — could
+      // silently empty it. Only jobs on the résumé carry the floor.
+      if (data.onResume) {
+        const total = data.highlights.length + data.highlightsExtended.length;
+        if (data.highlights.length < 1) {
+          ctx.addIssue({
+            code: 'custom',
+            path: ['highlights'],
+            message:
+              'a job on the résumé needs at least one bullet in `highlights` (the one-pager floor)',
+          });
+        }
+        if (total < 2) {
+          ctx.addIssue({
+            code: 'custom',
+            path: ['highlightsExtended'],
+            message: `a job on the résumé needs at least two bullets across \`highlights\` and \`highlightsExtended\` (have ${total})`,
+          });
+        }
+      }
+
       if (data.end === undefined && data.current === undefined) {
         ctx.addIssue({
           code: 'custom',
