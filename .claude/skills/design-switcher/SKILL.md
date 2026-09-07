@@ -6,8 +6,8 @@ description: Run the live-switcher review loop on aliwallick.com — put design 
 # The live-switcher review loop
 
 The most effective thing this project does, and the reason the old DreamHost setup could not have
-produced this site. It has run repeatedly since the motion values ([#33]), and CLAUDE.md's dated
-pass sections are the record of each — every one rebuilt the scaffolding from scratch, so this file
+produced this site. It has run repeatedly since the motion values ([#33]), and
+`docs/decisions/design.md`'s dated pass sections are the record of each — every one rebuilt the scaffolding from scratch, so this file
 is the method rather than the code.
 
 [#33]: https://github.com/ali-wallick/Portfolio/issues/33
@@ -209,9 +209,10 @@ The teardown is part of the pass, not cleanup after it.
    token is undefined there, measured on #327 — but a rule outside `@media screen`, or a selector
    outranking the print block's bare `:root`, still does.
 5. **Put the decision where the next person editing that value will look** — the comment beside it
-   in `tokens.css` or the component, with the measurement that chose it. `CLAUDE.md` gets the rule
-   that generalises; `docs/REBUILD-LOG.md` gets the narrative. Pointing all three at each other is
-   how the guard table's drift problem starts.
+   in `tokens.css` or the component, with the measurement that chose it. `docs/decisions/design.md`
+   gets the decision and the measurement; `docs/REBUILD-LOG.md` gets the narrative; `CLAUDE.md` gets
+   the rule only if no build guard would catch someone breaking it. Pointing them all at each other
+   is how the guard table's drift problem starts.
 6. **A no-change outcome is a real answer.** #66 confirmed all three faces against eleven
    alternatives and changed nothing. Record it as confirmed, with what it was confirmed against.
 7. A follow-up found mid-pass is an issue, not a quiet edit and not a doc note. #66 found

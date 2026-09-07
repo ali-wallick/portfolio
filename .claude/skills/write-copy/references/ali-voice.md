@@ -169,7 +169,8 @@ Study the rhythm, not the topic.
 ## The 2017 interview: her voice when asked directly about her work
 
 MobilityWare's "Meet Ali Wallick" Q&A. First-party — her employer publishing her answers — so it is
-on the record and quotable, the same tier as the Marvel and Second Dinner videos in `CLAUDE.md`.
+on the record and quotable, the same tier as the Marvel and Second Dinner videos in
+`docs/decisions/content.md`.
 Three things in it are directly usable.
 
 ### "Logic and creativity" is her own thesis about her work, stated twice

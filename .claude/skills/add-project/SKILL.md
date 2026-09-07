@@ -69,7 +69,7 @@ more, and the two draft entries that opened it up are the reference for each cas
   role is `[Speaker]`, and its deck is a link with `kind: slides`.
 - **`hero: { type: art }`** — the site's own generated typographic card, at hero size, for a page
   whose subject **cannot** be pictured. Today that is exactly one page: `second-dinner-godot.md`,
-  the current unannounced work, which the Phase 3 ceiling in `CLAUDE.md` fences off entirely
+  the current unannounced work, which the Second Dinner ceiling in `CLAUDE.md` fences off entirely
   (craft, not product — and a photo of that team is ruled out there by name). The completeness check
   is unchanged and still requires a hero; `art` is the honest way to satisfy it when a picture is
   not something Ali can supply later but something the page must not have. **Do not reach for it

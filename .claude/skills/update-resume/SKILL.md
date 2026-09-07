@@ -1,6 +1,6 @@
 ---
 name: update-resume
-description: Add, update, or rebalance resume content on aliwallick.com — job bullets, the Skills section, or education. Use when the user wants to add a resume bullet, detail a job's work in more depth, trim or rebalance highlights across jobs to make room for new content, or update the Skills/education sections. Handles the mechanics and the regeneration pipeline; for the settled rationale behind why the resume is built this way, see CLAUDE.md's Phase 4 section instead.
+description: Add, update, or rebalance resume content on aliwallick.com — job bullets, the Skills section, or education. Use when the user wants to add a resume bullet, detail a job's work in more depth, trim or rebalance highlights across jobs to make room for new content, or update the Skills/education sections. Handles the mechanics and the regeneration pipeline; for the settled rationale behind why the resume is built this way, see docs/decisions/resume.md instead.
 ---
 
 # Update resume content
@@ -8,8 +8,8 @@ description: Add, update, or rebalance resume content on aliwallick.com — job 
 The resume has one source: the `jobs` and `education` content collections. `/resume`, `/resume/full`,
 the generated PDFs, and `docs/LINKEDIN.md` all render from it — there is no second place to edit.
 
-**For why the resume is built this way, read CLAUDE.md's "Phase 4 gate outcome" section and its
-follow-ups first.** This skill is the how; that section is the why, and duplicating it here would
+**For why the resume is built this way, read `docs/decisions/resume.md`, which opens with the
+Phase 4 gate outcome and runs through every pass since.** This skill is the how; that file is the why, and duplicating it here would
 recreate the two-copies-drift problem the content model exists to prevent.
 
 ## 1. The model
@@ -24,7 +24,8 @@ recreate the two-copies-drift problem the content model exists to prevent.
   - **`resumeSummary`**, settled 2026-08-26 (#32). Three sentences, **`/resume/full` only**.
   - **`resumeLocation`**, settled 2026-08-26 (#32). The header's region line, on both variants. It
     replaced the per-entry location lines on the one-pager rather than joining them — see the
-    supersession note in CLAUDE.md's Phase 4 section, which used to say "no home address at all".
+    supersession note in `docs/decisions/resume.md`'s Phase 4 section, which used to say "no home
+    address at all".
   - **`resumePersonalProjects`**, settled 2026-08-26 (#32). Three entries, **`/resume/full` only**.
     Hand-curated rather than derived from the `projects` collection, because the achievements live
     in those files' prose bodies and there is no `award` field. Game Over Ever After was a fourth
@@ -45,7 +46,7 @@ render on **both** densities; its `dates` render on `/resume/full` only. The pra
 which already changed a decision: **a group `intro` is not a free place to park a two-pager fact.**
 Marvel Snap's sits at four characters of headroom, so anything appended to it costs a one-pager
 line. When something belongs to the long version only, the mechanism is a `highlightsExtended`
-bullet. Full rationale in CLAUDE.md's "Second Dinner renders as grouped blocks".
+bullet. Full rationale in `docs/decisions/resume.md`'s "Second Dinner renders as grouped blocks".
 
 **`extended` is a continuation, not an override.** It is appended to `text` on `/resume/full` and in
 `docs/LINKEDIN.md`, and omitted on the one-pager. Reach for it when one topic wants a short form on
@@ -95,8 +96,8 @@ authority on the labelled format.
 
 **Craft, not product, for anything from the 2024–present Second Dinner era.** Godot, "a new team at
 Second Dinner", and nothing else — no title, genre, feature, or monetization detail; "mobile" is
-sayable on Ali's own statement (2026-08-26, #32). Read CLAUDE.md's Phase 3 gate outcome if this
-ceiling is unfamiliar.
+sayable on Ali's own statement (2026-08-26, #32). Read CLAUDE.md's "What is safe to say about
+Second Dinner" if this ceiling is unfamiliar.
 
 ## 3. Fitting the budget: per-job floor, recency-weighted
 

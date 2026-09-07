@@ -73,8 +73,8 @@ The audit measures what's on the page. It can't tell you what isn't.
 `write-project-page` for what each tier's body may carry.
 
 **If the shape changes, that is a decision, not an edit.** Stop and get Ali's call, because it sets
-a pattern across a tier rather than fixing one page. Then record it in `CLAUDE.md` _and_ in
-`content.config.ts`'s tier comment, since a decision recorded in one place drifts.
+a pattern across a tier rather than fixing one page. Then record it in `docs/decisions/content.md`
+_and_ in `content.config.ts`'s tier comment, since a decision recorded in one place drifts.
 
 ## 5. Write it
 
@@ -163,8 +163,9 @@ can be missing a fix a sibling pass already shipped.
 A per-page pass keeps surfacing cross-page problems. **Open an issue** rather than appending to a
 doc or leaving it in a `TODO(...)` comment, per `CLAUDE.md`.
 
-**And correct `CLAUDE.md` when the pass disproves something in it.** It's the file every session
-reads first, which makes a false line there more expensive than anywhere else.
+**And correct the record when the pass disproves something in it** — `docs/decisions/content.md`
+for the reasoning, `CLAUDE.md` for a rule it states. CLAUDE.md is the file every session reads
+first, which makes a false line there more expensive than anywhere else.
 
 ## 10. Pass the skills themselves
 

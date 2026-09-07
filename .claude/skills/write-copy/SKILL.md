@@ -380,7 +380,8 @@ in, because a punchier sentence often wants a detail the source doesn't have.
   the source whether a technically-true detail deserves that promotion, not just whether it's true.
 - **The Second Dinner ceiling holds absolutely: craft, not product.** The 7 August 2024 W4 Games
   statement is the limit — Godot, next game, no title or genre; "mobile" is sayable on Ali's own
-  statement (2026-08-26, #32; the correction is recorded under CLAUDE.md's Phase 3 gate outcome).
+  statement (2026-08-26, #32; the correction is recorded under CLAUDE.md's "What is safe to say
+  about Second Dinner").
 - **I Fits I Sits: never imply Ali worked on a shipped release.** She pitched and prototyped it,
   under that name — both public names it shipped under later (It Fits I Sits, then Puzzle Cats)
   were other teams' renames, not her work. **A body's credit-scope caveat does not reach the
