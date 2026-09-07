@@ -52,15 +52,37 @@
  * YouTube's oEmbed endpoint answers 404 for an unavailable video, so embeds
  * are resolved through that instead of by fetching the embed URL.
  *
- * Usage: node scripts/check-links-external.mjs [dist-dir]
+ * ## `--report <path>` writes the buckets as JSON
+ *
+ * Added for the monthly scheduled run (#275), which needs to decide whether to
+ * file an issue and what to say in it. Everything below prints for a person;
+ * the report is the same three buckets as data, so that
+ * `scripts/report-link-rot.mjs` never has to parse prose written to be read.
+ * Prose drifts, and a format nobody declared is a contract nobody can see.
+ *
+ * The flag is purely additive: stdout and the exit code are identical with and
+ * without it, because the hand-run tool is still the primary use.
+ *
+ * Usage: node scripts/check-links-external.mjs [dist-dir] [--report <path>]
  */
 
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { walkFiles } from './lib/walk-files.mjs';
 
-const DIST = path.resolve(process.argv[2] ?? 'dist');
+const argv = process.argv.slice(2);
+const reportFlag = argv.indexOf('--report');
+const REPORT = reportFlag === -1 ? undefined : argv[reportFlag + 1];
+if (reportFlag !== -1 && !REPORT) {
+  console.error('✗ --report needs a path.');
+  process.exit(1);
+}
+const positional = argv.filter(
+  (arg, i) => i !== reportFlag && i !== reportFlag + 1 && !arg.startsWith('--'),
+);
+
+const DIST = path.resolve(positional[0] ?? 'dist');
 const SITE_HOST = 'aliwallick.com';
 const CONCURRENCY = 6;
 const TIMEOUT_MS = 20_000;
@@ -198,7 +220,29 @@ const ok = by('OK');
 const unverifiable = by('UNVERIFIABLE');
 const dead = by('DEAD');
 
-const where = (url) => [...urls.get(url)].sort().join(', ');
+const pagesFor = (url) => [...urls.get(url)].sort();
+const where = (url) => pagesFor(url).join(', ');
+
+if (REPORT) {
+  const entry = (r) => ({ url: r.url, detail: r.detail, note: r.note, pages: pagesFor(r.url) });
+  await writeFile(
+    path.resolve(REPORT),
+    JSON.stringify(
+      {
+        generatedAt: new Date().toISOString(),
+        checked: targets.length,
+        counts: { ok: ok.length, unverifiable: unverifiable.length, dead: dead.length },
+        // OK is a count and not a list on purpose: the report exists to decide
+        // what to file, and nothing is ever filed about a link that resolves.
+        dead: dead.map(entry),
+        unverifiable: unverifiable.map(entry),
+      },
+      null,
+      2,
+    ) + '\n',
+  );
+  console.log(`Report written to ${path.relative(process.cwd(), path.resolve(REPORT))}\n`);
+}
 
 for (const r of dead) {
   console.error(

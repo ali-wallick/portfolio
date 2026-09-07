@@ -365,3 +365,55 @@ is the guard doing its job and the skill not keeping up. `content-pass` enumerat
 at the function now, so it cannot drift again.
 
 **Out of scope, filed:** CLAUDE.md's own size is #335, a `decision`, with a proposed cut line.
+
+## The link check runs itself, and notices without gating (2026-09-07, closes #275)
+
+`npm run links:external` was run by hand and nothing ran it on a cadence, so the first notice of a
+dead hero video was whenever somebody thought to check — which on a portfolio nobody is actively
+working could be months. `.github/workflows/link-check.yml` runs it monthly now (Ali's call on
+cadence) and hands the report to `scripts/report-link-rot.mjs`, which opens an issue.
+
+**This does not reverse the rule that keeps the check out of `verify`.** That rule — a deploy
+failing over somebody else's downtime is worse than the rot it catches — **is an argument against
+gating, not against noticing.** A job that opens an issue instead of failing a build changes nothing
+about whether a deploy succeeds; it is the missing half of the same reasoning. Nothing the workflow
+does can reach a deploy.
+
+**Only the dead bucket may file.** The check already buckets three ways because LinkedIn answers
+HTTP 999 to anything that is not a browser and a datacenter IP collects 403s from several more
+hosts; a job filing on those would be ignored by its third run, which is worse than not having one.
+Unverifiable reaches an issue as a count, inside an issue a dead link already justified. This
+session's own run is the demonstration: **29 outbound links, 28 unverifiable, 0 dead**, because the
+Claude Code egress proxy 403s essentially everything. A two-bucket version would have filed 28 false
+alarms on its first run.
+
+**One issue at a time, and the anti-noise mechanism runs the other way too.** The body carries a
+fingerprint of the sorted dead URLs in an HTML comment. A rerun finding the same set rewrites the
+body quietly — an edit does not notify — and only a _changed_ set comments. A monthly "still dead"
+note on an issue Ali has not got to yet is the same crying-wolf wearing different clothes.
+
+**Closing on a clean run is safe structurally, not hopefully.** The obvious objection is that a
+clean run might mean the far end came back rather than that anyone fixed anything. It cannot: every
+remediation this site offers **removes the URL from the built HTML.** `dead: true` renders a link as
+plain text with no `href` (`LinkList.astro`), and a dead video hero renders its `poster` instead of
+the iframe (`Media.astro`). **If that ever stops being true, the job has to stop closing** — the
+script's header says so where someone changing it will be.
+
+**The report is data because the alternative was parsing prose.** `--report <path>` emits the three
+buckets as JSON; stdout and the exit code are byte-identical with and without it, because the
+hand-run tool is still the primary use. Parsing the pretty output would turn prose written to be
+read by a person into a contract nobody declared — the drift the content model's guard table exists
+to rule out, one directory over.
+
+### Two facts about `schedule`, both in the workflow's own header
+
+**It only fires from the default branch**, and `workflow_dispatch` will not run off one either — so
+there is no way to exercise this on a feature branch. Hence the reporter's `--dry-run` and its
+dry-run-only `--simulate-open <fingerprint|none>`: all four transitions were proven locally against
+synthetic reports, and the build-and-report half was run for real.
+
+**GitHub disables a scheduled workflow after 60 days with no commit activity in the repository.**
+That is exactly the quiet-portfolio case this job exists for, so a guard against neglect is itself
+switched off by neglect. GitHub emails Ali when it happens, so the failure is loud rather than
+silent, and `workflow_dispatch` is the manual fallback — but it is worth knowing before trusting the
+cadence.

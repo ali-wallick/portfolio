@@ -1,0 +1,88 @@
+name: Link check
+
+# The scheduled half of `npm run links:external` (#275).
+#
+# CLAUDE.md is explicit that this check stays out of `verify`, because a deploy
+# that fails when somebody else's server is down is worse than the rot it
+# catches. That is an argument against GATING, not against NOTICING. Nothing
+# here can fail a deploy; the worst it does is open an issue.
+#
+# Two facts about `schedule` that matter more than usual for this job:
+#
+#   - It only ever fires from the DEFAULT branch. This workflow does nothing at
+#     all until it is on `main`, and neither trigger below can be exercised from
+#     a feature branch — which is why scripts/report-link-rot.mjs carries a
+#     `--dry-run` mode that proves its four transitions without GitHub.
+#   - GitHub disables a scheduled workflow after 60 days with no commit activity
+#     in the repository, and emails the owner. That is exactly the "portfolio
+#     nobody is actively working on" case this job exists for, so its own
+#     reliability degrades when it is most needed. `workflow_dispatch` is the
+#     manual fallback, and the disabling is at least loud rather than silent.
+#
+# Monthly, on the 1st, off the :00 mark — everyone's cron lands on the hour.
+on:
+  schedule:
+    - cron: '17 9 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  links:
+    name: Outbound links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # Same cache key as ci.yml. It will usually MISS on a monthly cadence —
+      # Actions evicts a cache not read for 7 days — so this mostly pays off
+      # when a manual dispatch happens to follow a CI run. The ~95 MB download
+      # is worth a few seconds rather than a bespoke browserless build path.
+      - name: Cache Playwright browser
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - run: npm ci
+
+      # Deliberately the same build the `build` job in ci.yml runs, drafts
+      # excluded: the links worth watching are the ones on the published site.
+      # Reusing it is also why this job introduces no new environment problem —
+      # Chromium and the resume PDFs are already known to work on this runner.
+      - name: Build
+        run: npm run build
+
+      # `continue-on-error`, because a non-zero exit here is the entire point:
+      # the script exits 1 when it finds a dead link, and the reporting step
+      # below is what has to run next. A build failure above still fails the
+      # workflow normally.
+      - name: Check outbound links
+        id: check
+        continue-on-error: true
+        run: npm run links:external -- --report link-report.json
+
+      # Only the DEAD bucket can file anything — see the script's header for why
+      # unverifiable results must not.
+      - name: Open, update or close the link-rot issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/report-link-rot.mjs link-report.json
+
+      # The run log carries the full three-bucket listing, but it ages out.
+      # The report is small and is what the issue was written from.
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: link-report
+          path: link-report.json
+          if-no-files-found: warn
+          retention-days: 30

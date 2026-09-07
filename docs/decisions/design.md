@@ -539,8 +539,10 @@ the real statement this change wanted to be able to make — everything it adds 
 capability, and nothing about the site today moves.
 
 **Detection is the half this does not do.** `npm run links:external` resolves embeds through oEmbed
-and is what finds a dead video; it cannot run from a Claude Code session, where the egress proxy
-answers 403 for every YouTube URL. Scheduled detection is #275.
+and is what finds a dead video; it cannot run usefully from a Claude Code session, where the egress
+proxy answers 403 for every YouTube URL — which the three-bucket split handles correctly, reporting
+all 28 outbound links as **unverifiable** rather than dead. It runs monthly on GitHub Actions as of
+#275 and files an issue; see [`tooling.md`](tooling.md).
 
 ## A project's links are a "See Also" list, not a bullet list (2026-09-05, closes #290)
 

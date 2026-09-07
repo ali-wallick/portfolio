@@ -467,17 +467,23 @@ npm run dev                        # localhost:4321, drafts visible
 npm run verify                     # everything CI runs
 npm run build:pdf                  # just the resume PDFs, against an existing dist/
 SHOW_DRAFTS=true npm run build     # what a Cloudflare preview serves
-npm run links:external             # outbound link liveness — by hand, not in CI
+npm run links:external             # outbound link liveness — never gates a deploy
 ```
 
 **`links:external` is deliberately outside `verify`, and that is not an oversight to correct.**
 `check-links.mjs` never fetches an outbound URL, which keeps the gating check fast, offline and
 deterministic — but it leaves link rot unwatched on a site whose content model has a `links[].dead`
 field precisely because the old one linked three domains for years after they went dark. This is
-that missing half, run by hand before a launch and periodically after one. Wiring it into CI would
-make a deploy fail because somebody else's server is down, which is worse than the rot it catches.
-It buckets results three ways rather than two: a host that answers 403 or 999 to a script (LinkedIn
-always does) is reported **unverifiable**, not dead, and only genuinely-gone links fail the run.
+that missing half. Wiring it into `verify` would make a deploy fail because somebody else's server
+is down, which is worse than the rot it catches. It buckets results three ways rather than two: a
+host that answers 403 or 999 to a script (LinkedIn always does) is reported **unverifiable**, not
+dead, and only genuinely-gone links fail the run.
+
+**It also runs monthly, and that is not a reversal of the rule above**: the rule is an argument
+against _gating_, not against _noticing_, so `.github/workflows/link-check.yml` opens an issue and
+can never fail a deploy. **Only the dead bucket may file**, and a clean run closes the issue. Both
+have reasons that are easy to get wrong from the code alone —
+[`docs/decisions/tooling.md`](docs/decisions/tooling.md).
 
 Node is pinned by `.nvmrc` (22). Local dev on a newer Node is fine; CI and Cloudflare both read the
 file. **`package.json`'s `engines.node` is a real floor, not a version bump for its own sake**:
@@ -675,7 +681,8 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 | `src/config/site.ts`                  | Name, email, nav, social links (audited in Phase 3: LinkedIn `active`, the rest `retired`).                                                                |
 | `src/config/resume.ts`                | The resume's Skills section — settled, hand-curated, not derived from `tech`.                                                                              |
 | `scripts/check-links.mjs`             | Post-build checks. Every rule is a regression guard for a real old bug.                                                                                    |
-| `scripts/check-links-external.mjs`    | Outbound link liveness. **Manual (`npm run links:external`), never in CI.**                                                                                |
+| `scripts/check-links-external.mjs`    | Outbound link liveness. By hand, and monthly via `.github/workflows/link-check.yml`. **Never in `verify` — it files an issue, it never gates a deploy.**   |
+| `scripts/report-link-rot.mjs`         | Turns that check's `--report` JSON into exactly one `link-rot` issue. `--dry-run` proves its four transitions without GitHub.                              |
 | `scripts/build-pdf.mjs`               | Renders the resume routes to PDF and asserts their page counts.                                                                                            |
 | `src/components/ResumeDocument.astro` | The resume. One DOM for both densities; `density` only seeds `data-density`, and CSS hides `[data-full-only]`.                                             |
 | `scripts/build-linkedin.mjs`          | Generates `docs/LINKEDIN.md` from the `jobs`/`education` collections.                                                                                      |

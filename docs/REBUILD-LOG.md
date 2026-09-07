@@ -4640,3 +4640,71 @@ descriptions load at session start, about a thousand tokens for all ten combined
 question this pass answered was routing rather than count. CLAUDE.md's own size came out of scope
 rather than being trimmed here: 3,507 lines at the start of this pass, read in full by every session
 that opens it, filed as #335, a decision, with a proposed cut line rather than a cut.
+
+---
+
+## #275 — the link check runs itself now (2026-09-07)
+
+`npm run links:external` has always been the half of link-checking that fetches, and it has always
+been run by hand. Nothing ran it on a cadence, so the first notice of a dead hero video was whenever
+somebody thought to check — which on a portfolio nobody is actively working could be months. Now a
+monthly Action runs it and opens an issue.
+
+The interesting part is that this had to argue against a rule the repo already had. CLAUDE.md is
+explicit that this check stays out of CI, because a deploy failing over somebody else's downtime is
+worse than the rot it catches. The issue's own framing is what unlocked it: **that is an argument
+against gating, not against noticing.** A job that opens an issue instead of failing a build changes
+nothing about whether a deploy succeeds — it is the missing half of the same reasoning rather than a
+reversal of it. The workflow cannot reach a deploy at all.
+
+Ali's call on cadence was monthly, and on a clean run the job closes the issue rather than leaving it
+for her.
+
+### Auto-closing is safe for a structural reason, and it is worth being explicit about why
+
+The obvious objection to a bot closing its own issue is that a clean run might mean the far end came
+back rather than that anyone fixed anything. That cannot happen here, and not by luck: every
+remediation this site offers **removes the URL from the built HTML.** `dead: true` renders a link as
+plain text with no `href`, and a dead video hero renders its `poster` instead of the iframe. So a
+fixed link genuinely leaves the checker's input, and a clean run means the fix shipped. The property
+is load-bearing enough that the script's header says the job has to stop closing if it ever stops
+being true.
+
+### Two things the shape is defending against
+
+**Crying wolf.** The check buckets three ways rather than two precisely because LinkedIn answers HTTP
+999 to anything that is not a browser, and a datacenter IP collects 403s from several more hosts. A
+job that filed on those would be ignored by its third run. Only the dead bucket can file; unverifiable
+reaches an issue as a count, inside an issue a dead link already justified. This session's own run is
+the demonstration: 29 outbound links, **28 unverifiable and 0 dead**, because the Claude Code egress
+proxy 403s essentially everything. A two-bucket version would have filed 28 false alarms.
+
+**Notification noise in the other direction.** One issue exists at a time. Its body carries a
+fingerprint of the sorted dead URLs in an HTML comment, so a rerun finding the same set edits the
+body quietly — an edit does not notify — and only a _changed_ set comments. A monthly "still dead"
+comment on an issue Ali has not got to yet is the same crying-wolf wearing different clothes.
+
+### The report is data because the alternative was parsing prose
+
+`check-links-external.mjs` prints for a person, in a format written to be read. The reporter needed
+the same three buckets, so the flag added is `--report <path>`, emitting JSON; stdout and the exit
+code are byte-identical with and without it, because the hand-run tool is still the primary use.
+Parsing the pretty output would have made prose into a contract nobody declared — the drift the
+content model's guard table exists to rule out, one directory over.
+
+### Proving it without being able to run it
+
+`schedule` and `workflow_dispatch` both refuse to run a workflow that is not on the default branch,
+so there is no way to exercise this on a feature branch. The reporter therefore carries a `--dry-run`
+mode with a dry-run-only `--simulate-open <fingerprint|none>`, and all four transitions plus the
+no-op and the flag guard were proven locally against synthetic reports. The build-and-check half was
+run for real: `npm run build`, then the check with `--report`, then the reporter against the actual
+output.
+
+### The fact most likely to bite later
+
+**GitHub disables a scheduled workflow after 60 days with no commit activity in the repository.**
+That is exactly the quiet-portfolio case this job exists for, so its reliability degrades when it is
+most needed. GitHub emails the owner when it happens, so the failure is loud rather than silent, and
+`workflow_dispatch` is the manual fallback — but it is worth knowing that a guard against neglect is
+itself switched off by neglect. It is in the workflow's own header for whoever meets it first.
