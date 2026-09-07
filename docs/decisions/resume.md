@@ -5,9 +5,9 @@ the guards around them. **Everything here is settled: do not relitigate it.**
 [`CLAUDE.md`](../../CLAUDE.md) is the standing brief; this file carries the reasoning.
 
 For the _mechanics_ of adding or changing résumé content — which files to touch, what to
-regenerate, what to commit together — use the `update-resume` skill instead. Keeping the how-to out
-of here is deliberate: a second copy of the mechanism is exactly the drift the content model's
-guard table exists to rule out.
+regenerate, what to commit together, the gotchas — use the `update-resume` skill
+(`.claude/skills/update-resume/SKILL.md`) instead. Keeping the how-to out of here is deliberate: a
+second copy of the mechanism is exactly the drift the content model's guard table exists to rule out.
 
 Sections are in the order they were decided. Append a new pass at the end.
 
@@ -15,12 +15,7 @@ Sections are in the order they were decided. Append a new pass at the end.
 
 ## Phase 4 gate outcome (2026-08-17)
 
-Four questions, settled. Do not relitigate. **This section is the decision record — the rationale for
-why the resume works the way it does.** For the mechanics of actually adding or updating resume
-content (which files to touch, what to regenerate, what to commit together, the gotchas), use the
-`update-resume` skill (`.claude/skills/update-resume/SKILL.md`) instead of re-deriving it here.
-Keeping the how-to out of this file is deliberate: a second copy of the mechanism is exactly the kind
-of drift the content model's guard table exists to rule out.
+Four questions, settled.
 
 ### 1. Single source, with real PDF files
 
@@ -914,29 +909,8 @@ of the hazard.
 `.site-header`, `.site-footer`, `.page-head` and `.resume-actions`, which the print block hides —
 so a change that moved nothing on paper still showed up as 42 diff rows. That was a property of the
 guard, not of this change, and it was
-[#330](https://github.com/ali-wallick/Portfolio/issues/330), fixed the same day — see the section
-below.
-
-**Shared script logic lives in `scripts/lib/`, and the list is the rule.** Chromium launch,
-serving `dist/`, front matter, the directory walker, the 701×960 print geometry, and the
-print-page setup whose ordering is the #306 fix are all there now. A helper two scripts need goes
-there; a second hand-written copy is how the #306 ordering would regress unnoticed.
-
-**Five pieces of content logic were written twice across the `src/`/`scripts/` boundary. They are
-one module now** — see the section below.
-
-**Non-findings, so they are not re-derived.** Component boundaries are sound and no component has a
-dead prop; the single-consumer components each carry a written reason. `variant` branching no longer
-exists. `base.css` has no verbatim duplicate blocks (its four split selectors are documented,
-differently scoped pairs), no raw `px` font sizes, and one raw colour, the lightbox scrim, which is
-now commented. No component carries a scoped `<style>` block. `reticle.ts` matches its own header;
-its `home` and `linger` branches are unreachable under `MODE='fade'` and are kept on purpose as the
-switcher's other candidates. The trailing narrow-viewport block at the end of `base.css` is
-deliberately one place to look for phone overrides, not scattered per component.
-
-**A survey's "referenced by nothing" must include CLAUDE.md in the grep.** One agent reported
-`scripts/fetch-posters.mjs` as orphaned; CLAUDE.md names it. Re-grep every deletion-driving claim
-from a survey before acting on it.
+[#330](https://github.com/ali-wallick/Portfolio/issues/330), fixed the same day — see
+"A hidden subtree is one row asserting it is hidden".
 
 ## A hidden subtree is one row asserting it is hidden (2026-09-06, closes #330)
 

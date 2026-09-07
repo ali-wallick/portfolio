@@ -11,6 +11,12 @@ Sections are in the order they were decided. Append a new pass at the end.
 
 ---
 
+## Phase 3 gate outcome (2026-08-16)
+
+Four questions, settled. The first — what is safe to say about Second Dinner — stays in
+[`CLAUDE.md`](../../CLAUDE.md), because breaking that one is a disclosure rather than a bug. The
+other three are here, keeping their original numbers.
+
 ### 2. Framing the Marvel Snap credit
 
 Two sections. A short narrative opener (joining as ~11th employee, helping build a company as well as
@@ -144,8 +150,8 @@ turn up. Phase 3 is content-complete; what's left before merge is Ali's final lo
 **New decision: a wording/tone/verbosity pass is deferred to Phase 6, not done here.** Phase 3's job
 was correctness — every fact true, every page publishable — not final prose polish. Tone and
 verbosity should be judged once Phase 5's design exists to read the copy in context, not while
-chasing accuracy against old PHP pages and a decade of blog posts. See Phase 6's row above and the
-plan file's Phase 6 section. This is not a license to leave rough prose now — the Phase 3 write-ups
+chasing accuracy against old PHP pages and a decade of blog posts. It ran as #31 and #32 — see
+"The wording pass" below. This is not a license to leave rough prose now — the Phase 3 write-ups
 are meant to be genuinely publishable as written — it's an acknowledgment that a dedicated read-through
 pass still happens once, later, with fresh eyes and real styling.
 
@@ -266,7 +272,8 @@ page argues, and it would have put a minor on a public site — a call for Ali, 
 A **Zion Narrows hiking shot**, which lost to the cosplay because a costume is something she _made_
 and a hike is a place she went; that slot is the only image on the site of her making something with
 her hands outside work, which is the non-work register of the "logic of programming and creativity
-of design" thesis recorded above. The honest cost, since it is a real one: every image on the site
+of design" thesis recorded in [`CLAUDE.md`](../../CLAUDE.md). The honest cost, since it is a real
+one: every image on the site
 is now games-adjacent.
 
 **The Kerbal shot (`me2.jpg`) is unreferenced and kept on purpose.** It is the costume the award
@@ -315,8 +322,9 @@ archive tier, and doesn't want that to mean losing much of its existing detail**
 fifteen-year-old job is squarely "older," but Kaneva's write-up is a real one, not a compressed
 summary, and demoting it shouldn't force cutting it down to match what a 2009 class project needs.
 **Deliberately not solved now** — Ali's call is to revisit the actual shape when that move happens,
-not to pre-design a migration policy for one entry years ahead of it. What CLAUDE.md records today is
-narrower: the guideline is calibrated to small/early projects, not a ceiling on richer ones.
+not to pre-design a migration policy for one entry years ahead of it. The guideline above is
+narrower than it can be read: it is calibrated to small/early projects, not a ceiling on richer
+ones.
 
 **This is permission, not a quota.** An entry with nothing more to say stays summary-only, and that
 is a correct outcome rather than an unfinished one. Prodigal earned a body because the old page had

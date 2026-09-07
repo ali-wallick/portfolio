@@ -4851,3 +4851,62 @@ prose and carry the two curly-apostrophe headings the title-case tokeniser had t
 PDFs regenerated for a one-line comment change, because `base.css` is a `byteHashedFiles` input —
 `check:resume-print` matching its baseline is what proves the résumé did not actually move, not the
 bytes being identical.
+
+## #340 — thinning the decision records (2026-09-07)
+
+The cleanup half of #335, deliberately deferred out of PR #337 because rewriting in the same pass
+would have destroyed the check that proved the move was safe. #337's verification was 3,065 of 3,074
+non-blank lines preserved byte-for-byte, and that number only means something if nothing was
+reworded.
+
+### What the deferral actually bought
+
+A clean instrument. Because the move was verbatim, every oddity found in this pass is
+_unambiguously_ a split artifact rather than something that was always slightly off — there is no
+third possibility to rule out. That turned the read from "is this prose good?" into "does this
+sentence still point at something?", which is a question with an answer.
+
+The same check ran again here, one level finer: a **token multiset** against the pre-thinning tree
+rather than a line count, since this pass was allowed to reword. 96 tokens removed, 88 added, net
+−8 words across 3,414 lines — and the removal list is short enough to read in full, which is the
+whole point of choosing that check. Every entry on it traces to one of six edits.
+
+### The find rate
+
+Six broken prose pointers, four misfiled paragraphs, and two structural scars, in a document set
+that had passed review two commits earlier. **None of them are catchable by a build guard**, and
+that is not a gap to close: `check-links.mjs` reads `dist/`, and these are cross-references in
+Markdown that never ships. A `"see X below"` whose target moved to a sibling file is still a
+grammatical English sentence pointing at a real heading — just not one in the same document.
+
+The highest-yield grep, in hindsight, was `\b(above|below)\b` across the split files, then reading
+each hit for which document it assumed. 41 hits, 6 wrong. Second was `"this file"`: 8 hits, 1
+wrong, and that one — `design.md` saying "This file and the plan both described \[a thing that was
+wrong\]" — was the most misleading of the lot, because it turned `CLAUDE.md`'s confession into a
+false claim about `design.md`'s own history.
+
+### The overlap check came back clean, and the method is reusable
+
+The issue asked for one read of the `docs/REBUILD-LOG.md` overlap to confirm it was a seam and not
+a second copy. Rather than read 4,800 lines, I shingled every ≥10-word sentence in the records
+against every sentence in the log and sorted by Jaccard similarity. About thirty pairs came back
+over 0.6, and reading those thirty settled the question: the log explains how a pass ran, the record
+states what it decided, and where they share a sentence they are using it for different work.
+
+The same script found the two things worth acting on — `resume.md`'s duplicated header framing at
+0.83 internal similarity, which was the issue's own first bullet, and the record-to-record header
+formula at 0.81, which turned out to be deliberate consistency and was left alone. **Cheap enough to
+be worth re-running after any future document split.**
+
+### Model allocation and cost
+
+Opus, inline, no subagents. The work was one thread — every finding came from a grep whose next
+grep depended on reading the hit — and the fan-out shape this repo uses subagents for (independent
+surveys of unknown territory) does not apply to reading four documents you have to hold in your head
+at once anyway. Two throwaway Python scripts did the mechanical parts: the near-duplicate shingler
+and the token-multiset differ.
+
+One process note. The pre-split `CLAUDE.md` at `9490e32^` was the single most useful artifact in the
+pass — `git show 9490e32^:CLAUDE.md | grep -n '^#'` gave the original heading tree in one command,
+which is what turned "these headings look odd" into "the `## Phase 3 gate outcome` parent stayed
+behind." **After a split, the parent commit is the map.**

@@ -9,18 +9,18 @@ sections are the live-switcher loop's output, and the `design-switcher` skill po
 
 Sections are in the order they were decided. Append a new pass at the end.
 
-`docs/REBUILD-LOG.md` carries the _narrative_ of how each pass was run and what it cost; this file
-carries what it decided. They are not two copies of one thing.
+[`docs/REBUILD-LOG.md`](../REBUILD-LOG.md) carries the _narrative_ of how each pass was run and
+what it cost; this file carries what it decided. They are not two copies of one thing.
 
 ---
 
-### Phase 5 gate outcome (2026-08-17)
+## Phase 5 gate outcome (2026-08-17)
 
 Four questions, settled. Do not relitigate. The gate's verification step also corrected two facts
 that both CLAUDE.md and the plan had been asserting since Phase 2 — see "What the gate corrected"
 below, because one of them changes what the phase's signature piece of work actually is.
 
-#### 1. Three directions — two invented, one revival
+### 1. Three directions — two invented, one revival
 
 The plan's suggested spread was playful/toy-like, dense/craft-forward, and editorial. **Editorial is
 dropped and replaced by a modern reinterpretation of the old site's own palette.** The remaining
@@ -43,7 +43,7 @@ argue its way to "not a template." A direction derived from a palette Ali chose 
 not-a-template **by construction** — there is no template it could be mistaken for, because the
 source is her. See "The old palette is real" below for the actual values and their measured contrast.
 
-#### 2. Type is settled globally; color varies per direction
+### 2. Type is settled globally; color varies per direction
 
 These are not in tension, and the split is deliberate.
 
@@ -57,7 +57,7 @@ These are not in tension, and the split is deliberate.
   to react to rather than be presented with, and making it vary is what extracts the most information
   from three previews.
 
-#### 3. Motion: shared baseline in tokens, per-direction expression
+### 3. Motion: shared baseline in tokens, per-direction expression
 
 `--ease` and `--duration` carried the old site's real curve and duration (see the correction below)
 on `master` through Phase 5, so **every direction inherited the chase-and-settle character** whether
@@ -70,13 +70,13 @@ Ruled out: a literal port. A JavaScript scroll handler reimplementing `position:
 nostalgia, not reinterpretation, and the old implementation's return trip is a bug (below) rather
 than an idea worth carrying.
 
-### What the gate corrected
+## What the gate corrected
 
 Both corrections came from reading primary sources rather than CLAUDE.md. Both were load-bearing.
 
-#### `nav.js` contains no easing — the personality is four lines of CSS
+### `nav.js` contains no easing — the personality is four lines of CSS
 
-This file and the plan both described "a hand-rolled easing sticky sidebar built before
+CLAUDE.md and the plan both described "a hand-rolled easing sticky sidebar built before
 `position: sticky` existed." That is wrong in a way that matters. `resources/js/nav.js` does no
 interpolation at all — no lerp, no `requestAnimationFrame`. Its `onScrolled()` reads `#MainContent`'s
 bounding rect and assigns `quickInfo.style.top` **directly**, on every scroll event.
@@ -111,7 +111,7 @@ What follows from that:
 - **Nothing else in `nav.js` needs preserving.** The rest is breadcrumbs and nav highlighting, which
   Astro already does natively — `BaseLayout.astro` sets `aria-current` today.
 
-#### The old palette is real, and Phase 3 filed it as cruft
+### The old palette is real, and Phase 3 filed it as cruft
 
 Phase 3 listed `palette.html` and "the unlinked `colors.css`" under dead ends to kill. Correct as
 _served files_ — but `snapshot/misc/colors.css` is a Paletton export documenting a color system the
@@ -133,7 +133,7 @@ mint is 7.65:1 (AAA) and links on cream are 6.96:1. The only failures are accent
 retuning.** That is a palette to reinterpret, not to discard, and it is why the revival direction
 exists.
 
-### Phase 5 execution outcome (2026-08-20)
+## Phase 5 execution outcome (2026-08-20)
 
 **Direction 03, playful / toy, in the arcade-dimmed palette.** Merged via
 [PR #19](https://github.com/ali-wallick/Portfolio/pull/19) at `255d582`. Directions 01 (palette
@@ -159,7 +159,7 @@ page), blue marks _where you can go_ (links, and only links), and five status hu
 thing is_, one per `status` enum value. Adding a status without adding a colour pair falls back to
 the neutral pair, which is legible but says nothing. Add both.
 
-#### Two things that were decided twice, and the second answer is the one that stuck
+### Two things that were decided twice, and the second answer is the one that stuck
 
 - **The direction was chosen before its colour was.** Ali picked 03 on behaviour while explicitly
   disliking the lilac-and-coral it happened to be built in. Rather than guess, four candidate
@@ -171,11 +171,11 @@ the neutral pair, which is legible but says nothing. Add both.
   shipped ground is off white with a violet cast lifted from the dark theme — the first version
   where the two themes read as the same site.
 
-#### The print block can be beaten on specificity, not just on omission
+### The print block can be beaten on specificity, not just on omission
 
 **This is a correction to what CLAUDE.md already says**, and it is worth reading before touching
-`resume.css` or `tokens.css`. The Phase 4 note below warns that the print block is a denylist which
-silently passes any token nobody enumerated. True, and incomplete.
+`resume.css` or `tokens.css`. The Phase 4 note in [`resume.md`](resume.md) warns that the print
+block is a denylist which silently passes any token nobody enumerated. True, and incomplete.
 
 Making a palette the default put **28 elements of the résumé PDF in the wrong colour** — a token the
 print block _does_ pin. The block pins on `:root`, specificity (0,1,0); the palette rules were
@@ -189,7 +189,7 @@ inside `@media screen` so screen rules cannot reach paper. **That is the fix to 
 is one half of [#35](https://github.com/ali-wallick/Portfolio/issues/35); the other half is a differ that names the offending element rather
 than reporting that a number moved.
 
-#### Three soft decisions, deliberately left soft
+### Three soft decisions, deliberately left soft
 
 Ali's framing at the close: _"this is good enough to move on for now."_ **Nothing about them is
 wrong** — they are the choices most likely to read differently after living with the site rather
@@ -200,7 +200,7 @@ they were deferred in the same conversation, not because they were one activity.
 out to be a state-machine change driven by a usability complaint, the faces are a comparison with a
 CLS hazard attached, and the calibration is three hand-fitted contrast values. Nothing about doing
 one informs doing another. Split on 2026-08-21 — **the tweening, the faces, and the colour
-calibration are all settled and closed** (see below). They are the design-scoped
+calibration are all settled and closed** — the next three sections. They are the design-scoped
 siblings of the wording pass ([#31](https://github.com/ali-wallick/Portfolio/issues/31)) and the
 resume tone pass ([#32](https://github.com/ali-wallick/Portfolio/issues/32)); sequencing them is
 [#23](https://github.com/ali-wallick/Portfolio/issues/23).
@@ -210,7 +210,7 @@ _old site's_ recovered curve and duration, adopted as a shared baseline across a
 and never tuned to this one. **Inheriting a character is not the same as choosing it** — which is
 what the section below is the resolution of.
 
-### The motion values are tuned now, not recovered (2026-08-21)
+## The motion values are tuned now, not recovered (2026-08-21)
 
 Settled on a live switcher, closing [#33](https://github.com/ali-wallick/Portfolio/issues/33), which
 was rescoped to just this. The faces and the colour calibration are separate now, both closed below.
@@ -227,7 +227,7 @@ was rescoped to just this. The faces and the colour calibration are separate now
 what makes the curve safe on the clamped colour transitions in `base.css` (3–6 RGB units for a few
 milliseconds). It was _not_ safe on opacity, which is why the reticle's fade has its own curve.
 
-### The faces are confirmed, not changed (2026-08-22)
+## The faces are confirmed, not changed (2026-08-22)
 
 Closes [#66](https://github.com/ali-wallick/Portfolio/issues/66). Unlike the motion values above,
 this is a **no-change decision** — Gabarito, Figtree and DM Mono all held against eleven alternatives
@@ -262,7 +262,7 @@ The switcher — `scripts/preview-fonts.mjs`, the panel in `BaseLayout.astro`, t
 byte-identical to master again. See the Phase 6 log entry for how it was built and the three bugs
 caught while building it.
 
-### The colour calibration is settled (2026-08-22)
+## The colour calibration is settled (2026-08-22)
 
 Closes [#67](https://github.com/ali-wallick/Portfolio/issues/67). Same review-loop pattern as the
 motion values and the faces — a live switcher on one preview, candidates chosen by computing the
@@ -459,7 +459,8 @@ considered complete. Flipping one boolean is now the entire remediation, the sam
 **`poster` is required even though a live page never renders it**, which is worth stating plainly
 because it looks like an unused field. It has two jobs: it is what a dead video degrades to, and it
 is where a card or tile thumbnail comes from. A video hero that is alive still shows nothing until
-YouTube answers — see below, that is a decision rather than an omission.
+YouTube answers — see "A live video still paints nothing", that is a decision rather than an
+omission.
 
 **A dead video renders through the same branch an `image` item takes**, not a third rendering — same
 frame, same widths, same caption slot. The caption lives in `Media.astro` rather than in front

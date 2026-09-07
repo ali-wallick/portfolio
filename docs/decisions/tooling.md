@@ -10,8 +10,8 @@ Sections are in the order they were decided. Append a new pass at the end.
 
 ## Phase 6 gate outcome (2026-08-23)
 
-Two questions, settled together. The second is the reason the "Phases" table above no longer counts
-past 5.
+Two questions, settled together. The second is the reason [`CLAUDE.md`](../../CLAUDE.md)'s "Phases"
+table no longer counts past 5.
 
 ### The DNS cutover is its own moment, not the end of a phase
 
@@ -199,8 +199,9 @@ harness's rules still stands.
 **The lever is `.claude/skills/steward/SKILL.md`, and it is the only one there is.** The harness
 reads that path from the PR's head branch before acting on a CI or review event, and defers to it
 on _how proactive to be_. Nothing else in a checkout can reach this behaviour — the same shape as
-the `release` branch and `workers_dev` under "Deployed state drifts from the repo" below: the thing
-determining behaviour lives somewhere a checkout cannot show you.
+the `release` branch and `workers_dev` under "Deployed state drifts from the repo" in
+[`CLAUDE.md`](../../CLAUDE.md): the thing determining behaviour lives somewhere a checkout cannot
+show you.
 
 **Two consequences worth knowing.** The file governs only a PR whose **head branch carries it**, so
 a branch cut before this merged keeps the old behaviour until it picks up `main`. And a check-in
@@ -231,6 +232,27 @@ built for has moved: it is now a rule in `base.css` outside `@media screen` reac
 describe the pre-#62 cascade and are left as the
 record of why the block exists; `tokens.css`'s header carries the corrected rule. What to do with
 the 53 inert pins was #327 — settled below.
+
+**Shared script logic lives in `scripts/lib/`, and the list is the rule.** Chromium launch,
+serving `dist/`, front matter, the directory walker, the 701×960 print geometry, and the
+print-page setup whose ordering is the #306 fix are all there now. A helper two scripts need goes
+there; a second hand-written copy is how the #306 ordering would regress unnoticed.
+
+**Five pieces of content logic were written twice across the `src/`/`scripts/` boundary. They are
+one module now** — see "The rules cross the `src/` ↔ `scripts/` boundary" below.
+
+**Non-findings, so they are not re-derived.** Component boundaries are sound and no component has a
+dead prop; the single-consumer components each carry a written reason. `variant` branching no longer
+exists. `base.css` has no verbatim duplicate blocks (its four split selectors are documented,
+differently scoped pairs), no raw `px` font sizes, and one raw colour, the lightbox scrim, which is
+now commented. No component carries a scoped `<style>` block. `reticle.ts` matches its own header;
+its `home` and `linger` branches are unreachable under `MODE='fade'` and are kept on purpose as the
+switcher's other candidates. The trailing narrow-viewport block at the end of `base.css` is
+deliberately one place to look for phone overrides, not scattered per component.
+
+**A survey's "referenced by nothing" must include CLAUDE.md in the grep.** One agent reported
+`scripts/fetch-posters.mjs` as orphaned; CLAUDE.md names it. Re-grep every deletion-driving claim
+from a survey before acting on it.
 
 ## The rules cross the `src/` ↔ `scripts/` boundary; the fetching does not (2026-09-06, closes #328)
 
@@ -345,7 +367,7 @@ inside it: its description was the trigger text, and "launch readiness" and "bef
 are phrases nobody will type again. It keeps the pre-merge sweep and three after-release checks
 (`links:external`, the `www` 301, the served `robots.txt`); the cutover it also carried is
 `docs/LAUNCH.md`'s record. Its stale `TODO(phase-3-revisit)` grep became the live convention,
-recorded under "What this is" above.
+recorded under "What this is" in [`CLAUDE.md`](../../CLAUDE.md).
 
 **`settings.json` allows every npm script a routine job runs, with one deliberate omission.**
 `update:resume-print` rewrites the print-geometry baseline and is the one command that can weaken
@@ -476,3 +498,47 @@ because the constant was already centralised in `scripts/lib/print-geometry.mjs`
 consumers import. **The brief was restating an arithmetic that a module already owned** — so the
 entry shrank to a pointer, which is a brief-line win with no code written. Worth checking for before
 building anything: the rule may already have a home.
+
+## The split's scars, and the log/record seam measured (2026-09-07, closes #340)
+
+[#337](https://github.com/ali-wallick/Portfolio/pull/337) moved 3,100 lines verbatim so that a
+token count could prove nothing was lost. That check is what made the move safe, and it is also
+what left the residue this pass cleaned up: text that read correctly inside one document and reads
+oddly split across five. **Held to the same check — a token multiset against the pre-thinning tree
+— which came back 96 words removed and 88 added, every one of them enumerated.**
+
+**A pointer that survived the move can still be wrong, and `check-links.mjs` cannot see it.** The
+guard checks links in `dist/`; these are prose pointers in Markdown that never ships. Six were
+broken by position rather than by target: `"the Phases table above"`, `"Deployed state drifts from
+the repo below"` and `"What this is above"` all named `CLAUDE.md` headings; `"the Phase 4 note
+below"` named `resume.md` from inside `design.md`; and `design.md`'s `"This file and the plan both
+described"` was `CLAUDE.md` confessing an error, which now reads as `design.md` confessing one it
+never made. **The failure mode is that every one of them is a true sentence in the wrong document**,
+so nothing but reading finds them.
+
+**Four paragraphs were filed by position instead of by subject.** #108's architecture-read findings
+sat physically after #327's section in the pre-split file, so they went to `resume.md` while their
+`"see the section below"` target (#328) went to `tooling.md`. They are back under
+"The architecture read" here. **When a move is mechanical, the misfilings are wherever two topics
+were adjacent** — worth grepping a split for cross-file `"below"` before trusting it.
+
+**A heading is orientation, not decoration.** `content.md` opened on `### 2.` with no 1 and no
+parent, because the `## Phase 3 gate outcome` heading and its first question stayed in the brief;
+`design.md`'s first 300 lines dangled at `###` under a `## Design` that had gone. Both are repaired,
+and the convention across all four records is now uniform: **`##` is a dated gate or pass, `###` a
+subsection of one**, in the order they were decided.
+
+### The overlap with `docs/REBUILD-LOG.md` is a seam, and it was measured
+
+Shingled every sentence of the four records against the log. **The overlap is real and it is
+correct.** #163's measurement — 63 assets, 1.03:1 on the homepage card — is in both because the log
+uses it to explain how a three-word issue got reframed and the record uses it to justify why the
+frame is load-bearing. Same number, two different jobs. Where sentences are near-verbatim (#273's
+"blank to video reads as loading" is a 1.00 match) the log still surrounds it with the round-by-round
+narrative and the record with the rule that came out.
+
+**Nothing was deleted from either side, and the rule is that nothing should be.** The log is #48's
+source material; deleting from it to tidy a record trades a page's raw material for a readability
+win nobody asked for. **This was a readability pass, not a cost pass** — the records are not read at
+session start, so a merely-slightly-redundant passage costs nothing and was left alone. That is the
+standard to judge the next one by too.
