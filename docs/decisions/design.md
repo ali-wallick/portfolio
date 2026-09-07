@@ -1382,3 +1382,72 @@ inconsistency on one page beats a dead end on the strongest page in the archive 
 - **A helper beside `getStaticPaths` in the frontmatter is not in scope inside it.** Astro hoists
   that function into its own module and evaluates it in isolation, so it type-checks clean and dies
   at "generating static routes" with "not defined". Declare it inside.
+
+## Two design rules became build guards (2026-09-07, closes #338 in part)
+
+#335 settled the cut line between the brief and these records as one test: is the rule enforced by
+a build guard? #338 took the next step and asked which of the unenforced rules could become one.
+Two of them were design rules, and both are now in `npm run verify`.
+
+### Raw colours and raw `px` font sizes
+
+**The rule is unchanged and now lives in `scripts/check-source.mjs`**: `tokens.css` holds the
+palette and the type scale, and a component uses the variables. The reason is the same one Phase 5
+gave — a palette change should be a token swap, not a hunt through every file — and it is worth
+keeping here because the guard states the rule but not the argument for it.
+
+**The tree was already clean, which is what made it buildable.** No `.astro` file carries a scoped
+`<style>` block at all; `base.css` had zero raw hex, zero raw `px` font sizes, and one raw colour.
+So the check starts green and is purely a regression guard, the shape every rule in
+`check-links.mjs` already has.
+
+Three things it does deliberately, each of which would otherwise have made it useless:
+
+- **Comments are blanked before matching.** This repo's stylesheets carry 136 issue references
+  (`#247`, `#327`) against a single real raw colour, and `#327` matches any hex pattern anyone would
+  write. Anchoring to the value side of a declaration cuts most of it and not a comment that wraps a
+  `#nnn` mid-sentence.
+- **Paper is exempt by scope, not by line.** `resume.css`'s `@media print` block pins three tokens
+  and leaves every other one undefined, so a `var()` inside it falls back to the property's initial
+  value rather than to the palette. Its raw values are correct and its font sizes are `pt`, which a
+  `px` rule never had an opinion about.
+- **`transparent` and `currentColor` are not matched at all.** Neither is paint: they have no
+  light/dark pair a token could hold, so there is nothing for them to be a token _of_. Seven sites
+  use them correctly, and a pattern that never had an opinion beats seven allowlist entries.
+
+**The lightbox scrim is the one exemption, and it is declared on the line it exempts** rather than
+listed inside the script — the same move as the content model's explicit `hero: { type: art }`.
+
+### Line length is a ratchet, not a ceiling
+
+The rule from "One page column" above — _never reason about line length in `ch`; measure the
+output_ — is now `scripts/check-line-length.mjs`, diffed against a committed baseline.
+
+**It deliberately does not assert 80 characters, and that is the whole design.** 80 is WCAG 2.1
+SC 1.4.8, **Level AAA**; the baselines actually required reference AA, which has no line-length
+criterion. Narrowing `--measure` was a readability call, not a compliance fix, and at today's
+37.5rem `/about` still runs 83 average. A ceiling would have been red on merge and would have
+relitigated a decision settled on a switcher. So the guard records what the site measures — 76.5
+average across 300 full lines of prose — and fails when that _moves_.
+
+**It asserts average and maximum, never the number of lines.** Line count is a property of how much
+prose a page has, and this repo's content model turns on _adding a project is one Markdown file_. A
+guard that made a new write-up fail the build until someone re-baselined it would be fighting the
+rule the whole content model rests on. A route missing from the baseline is reported and passes, for
+the same reason. Average is a property of the **column**, so it holds still when prose is added and
+moves when a width or a type size does — which is the only sensitivity worth having.
+
+**The scope took three passes, and the first two were wrong in the same way.** A naive
+`main p, main li` put the homepage at 6.4 average characters and `/projects` at 12.6, because both
+were reading the card and tile grids, where every `<li>` is a link tile holding a title. That is not
+a wrong measurement of line length; it is an accurate measurement of something else, and averaged in
+it dragged the site's figure from 76.5 to 63. **A selector that looks like prose is not the same as
+prose**, and the site's own metadata paragraphs — the breadcrumb, the meta strip, the eyebrows,
+captions — are shaped exactly like it.
+
+**The instrument was checked against a known quantity before it was trusted**, because #253's run
+produced two confidently wrong numbers (a `getClientRects()` line count over a flex container that
+returned one rect per item, and an assertion built from a right-edge coordinate that failed six
+times against correct code). `/about`'s paragraphs render at exactly 600px — 37.5rem, as the token
+says — and 83 average agrees with #253's own probe table for that width. Only then was the baseline
+committed.

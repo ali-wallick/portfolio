@@ -341,9 +341,16 @@ Copied from her own sentences, not from a style guide:
 
 ## 5. Headers are title case
 
-Multi-word headers ("Featured Work", "What I Built") are title case, not sentence case — see
-`CLAUDE.md`'s "Voice and content conventions" for the rule and the AP/Chicago casing it follows.
-Applies to any header you write or touch, not just project write-ups.
+Multi-word headers ("Featured Work", "What I Built") are title case, not sentence case, by
+AP/Chicago rules — small function words lowercase unless first or last, so "Off the Clock" and not
+"Off The Clock". Applies to any header you write or touch, not just project write-ups.
+
+**`npm run links` fails the build on a sentence-case `<h2>`** (#338), so a slip is a CI failure and
+not something to catch by eye. It checks `<h2>` only, which is every hand-authored heading on the
+site; `<h1>` and `<h3>` are project and job titles, and those are proper nouns that get whatever
+casing they actually have — `aliwallick.com` stays lowercase. See
+[`docs/decisions/content.md`](../../../docs/decisions/content.md) for why the guard stops where it
+does.
 
 **And the apostrophe is `’`, everywhere** — front matter, Markdown bodies, `.astro` prose, and the
 hand-authored strings in `src/config/` and `scripts/build-linkedin.mjs`. `CLAUDE.md` is the

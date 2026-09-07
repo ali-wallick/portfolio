@@ -23,9 +23,12 @@
     "check": "astro check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "check:source": "node scripts/check-source.mjs",
+    "check:lines": "node scripts/check-line-length.mjs",
+    "update:line-length": "node scripts/check-line-length.mjs --update",
     "links": "node scripts/check-links.mjs",
     "links:external": "node scripts/check-links-external.mjs",
-    "verify": "npm run format:check && npm run check && npm run build && npm run check:pdf && npm run check:resume-print && npm run check:linkedin && npm run links"
+    "verify": "npm run format:check && npm run check && npm run check:source && npm run build && npm run check:pdf && npm run check:resume-print && npm run check:linkedin && npm run links && npm run check:lines"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.0",

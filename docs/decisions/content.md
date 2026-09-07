@@ -446,3 +446,51 @@ unchanged: whether Ali posts to it twice without an agent involved.
 
 **`src/styles/base.css` is a `byteHashedFiles` input, so this regenerated the résumé PDFs.**
 `check:resume-print` confirms the geometry did not move.
+
+## The whitespace rule and title case became build guards (2026-09-07, closes #338 in part)
+
+Two content conventions that were prose in the brief are rules 6 and 7 in `scripts/check-links.mjs`
+now. Both are checked on the **output**, the move #188 made for apostrophes and for the same reason:
+that is the only place `.astro` prose, Markdown bodies and front matter meet.
+
+### A word welded to an inline element
+
+The rule from "The wording pass" above — Astro strips the whitespace between a text node and a
+following element when a newline separates them, which shipped `or head<a href="/">home</a>` on the
+404 — now fails the build.
+
+**Two narrowings, both measured rather than reasoned about, and both worth not undoing.**
+
+**Only the open side.** `</a>` followed by text is the same shape in reverse, and it is also how
+correct markup looks: `</a>.` and `</a>,` appear about ten times in `about.astro` and `404.astro`
+alone, and Markdown run-in labels render `<strong>HUD:</strong> Player…` with the colon inside the
+tag. The content record says the bug happens "in either direction" — **that is a statement about the
+bug, not about what is worth checking.** A close-side rule would be all noise.
+
+**Only inside `<p>` and `<li>`.** Outside prose, a missing space is routinely supplied by layout:
+the résumé's download button is an `inline-flex` with a `gap`, so `Download PDF` abuts
+`<span class="resume-pages">` in the HTML and still renders with a space between them. Unscoped, the
+rule reports those two buttons and nothing else — **2 hits, 0 of them bugs.** Scoped to prose it
+reports nothing, which is the rate a guard has to hit to be worth more than the sentence it replaces.
+
+That button was flagged as a likely live instance of the bug when this pass started, and checking it
+against a real build is what found the flex gap. **It was never broken.**
+
+### Multi-word headings are title case
+
+#182's rule, enforced on rendered `<h2>`.
+
+**The scope is what makes it buildable, and #107 was right to decline the general version.** A
+generic AP/Chicago checker cannot reach zero false positives on this site: `Dead Booty: An Atari
+2600 Game` and `KinoClue: A Tangible Tabletop Mystery` are correct precisely because both styles
+capitalise after a colon, `aliwallick.com` is deliberately lowercase, `Critter³` carries a
+superscript mid-word, and `What I’m Building` breaks any tokeniser that splits on `’`.
+
+**Every one of those is a data-driven `<h3>`** — a project title, a job title, a school. Those are
+proper nouns, they are exactly what #182's carve-out excludes, and they are the entire false-positive
+population. Every `<h2>` on the site is hand-authored: six in `.astro`, five in the résumé, and the
+`##` headings in project write-ups. Thirteen distinct strings, all clean.
+
+**So do not extend this to `<h3>`.** That it is clean on `<h2>` is not evidence it would be clean
+anywhere else, and the brief's own standing warning is that an observed regularity about this site's
+headings was cited back as a settled rule twice before Ali named it an accident.

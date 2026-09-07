@@ -42,6 +42,12 @@ jobs:
       - name: Types & Astro diagnostics
         run: npm run check
 
+      # Source-tree rules: raw colours, raw px font sizes, TODO(#n). Needs no
+      # dist/, so it runs before the build and fails in seconds rather than
+      # after a full render.
+      - name: Source checks
+        run: npm run check:source
+
       # Production settings: drafts excluded, exactly as aliwallick.com will be
       # built. Cloudflare's non-production branches build WITH drafts via
       # scripts/build-ci.mjs; CI deliberately does not, so what gets gated here
@@ -86,6 +92,11 @@ jobs:
 
       - name: Link & markup checks
         run: npm run links
+
+      # The rendered-prose line-length ratchet (#338). Needs a browser, like
+      # check:resume-print, and runs against the same built dist/.
+      - name: Prose line length
+        run: npm run check:lines
 
       # Only the (non-draft-PR-gated) lighthouse job below ever downloads this,
       # and it does so within the same workflow run — nobody reaches for a

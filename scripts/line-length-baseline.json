@@ -1,0 +1,125 @@
+{
+  "note": "Rendered characters per full line of body prose. Regenerate with `npm run update:line-length`. See scripts/check-line-length.mjs — this is a ratchet, not an 80-character ceiling.",
+  "viewport": {
+    "width": 1280,
+    "height": 900
+  },
+  "selector": "main p, main li",
+  "excluded": {
+    "self": ".lede, .eyebrow, .breadcrumb, .meta-strip, .meta, figcaption",
+    "ancestor": ".card-grid, .tile-grid, .page-head, .site-header, .site-footer, nav, figcaption"
+  },
+  "measure": "src/styles/tokens.css --measure",
+  "overallAvg": 76.5,
+  "environment": {
+    "platform": "linux",
+    "chromium": "141.0.7390.37"
+  },
+  "routes": {
+    "/404": {
+      "lines": 1,
+      "avg": 84,
+      "max": 84
+    },
+    "/about": {
+      "lines": 23,
+      "avg": 83,
+      "max": 90
+    },
+    "/contact": {
+      "lines": 1,
+      "avg": 84,
+      "max": 84
+    },
+    "/projects/art-of-rescue": {
+      "lines": 8,
+      "avg": 68.1,
+      "max": 82
+    },
+    "/projects/cor-ex-machina": {
+      "lines": 11,
+      "avg": 73.2,
+      "max": 86
+    },
+    "/projects/critter-3": {
+      "lines": 13,
+      "avg": 76.8,
+      "max": 85
+    },
+    "/projects/dead-booty": {
+      "lines": 1,
+      "avg": 85,
+      "max": 85
+    },
+    "/projects/firefall": {
+      "lines": 14,
+      "avg": 77.1,
+      "max": 87
+    },
+    "/projects/i-fits-i-sits": {
+      "lines": 35,
+      "avg": 59.7,
+      "max": 91
+    },
+    "/projects/it-will-kill-you": {
+      "lines": 8,
+      "avg": 51.8,
+      "max": 84
+    },
+    "/projects/kaneva": {
+      "lines": 20,
+      "avg": 63.5,
+      "max": 88
+    },
+    "/projects/kinoclue": {
+      "lines": 6,
+      "avg": 81.5,
+      "max": 87
+    },
+    "/projects/marvel-snap": {
+      "lines": 60,
+      "avg": 71.3,
+      "max": 90
+    },
+    "/projects/mini-mages": {
+      "lines": 9,
+      "avg": 65.6,
+      "max": 82
+    },
+    "/projects/night-light": {
+      "lines": 6,
+      "avg": 66.3,
+      "max": 87
+    },
+    "/projects/prodigal": {
+      "lines": 2,
+      "avg": 80,
+      "max": 82
+    },
+    "/projects/secret-garden": {
+      "lines": 8,
+      "avg": 65.1,
+      "max": 82
+    },
+    "/projects/tilting-at-windmills": {
+      "lines": 8,
+      "avg": 77.6,
+      "max": 89
+    },
+    "/projects/vegas-blvd-slots": {
+      "lines": 18,
+      "avg": 81,
+      "max": 87
+    },
+    "/resume": {
+      "lines": 14,
+      "avg": 106.1,
+      "max": 112
+    },
+    "/resume/full": {
+      "lines": 34,
+      "avg": 105.6,
+      "max": 114
+    }
+  }
+}

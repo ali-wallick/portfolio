@@ -417,3 +417,62 @@ That is exactly the quiet-portfolio case this job exists for, so a guard against
 switched off by neglect. GitHub emails Ali when it happens, so the failure is loud rather than
 silent, and `workflow_dispatch` is the manual fallback — but it is worth knowing before trusting the
 cadence.
+
+## Guards are how the brief shrinks, and the list should not reach zero (2026-09-07, closes #338)
+
+#335 made the cut line between `CLAUDE.md` and these records mechanical: **is the rule enforced by a
+build guard?** If it is, the guard is the reminder and the reasoning lives here at no per-session
+cost. If it is not, the rule stays in the brief, where every session pays for it.
+
+#338 is the other half of that. **Every guard built lets its rule leave the brief**, which turns
+"add a check" from tidiness into the only lever that shrinks the one document every session reads in
+full. Six rules shipped: three source-tree (`scripts/check-source.mjs`), two output
+(`check-links.mjs` rules 6 and 7), one baseline diff (`check-line-length.mjs`). The brief lost two
+of its five no-guard entries, the "Use the variables" standing rule and the title-case convention,
+and its 701×960 entry shrank to a pointer.
+
+### The counter-pressure is the load-bearing part
+
+#107 declined four candidates because **a guard with false positives on today's content is worse
+than the prose it replaces**, and that rule decided the shape of every rule here. Three were
+narrowed by measurement rather than by taste:
+
+| Candidate   | Naive form                   | What measuring found                                        | Shipped as                     |
+| ----------- | ---------------------------- | ----------------------------------------------------------- | ------------------------------ |
+| Welded word | any text abutting an element | 2 hits, 0 bugs — a flex `gap` supplies the space            | open side, inside `<p>`/`<li>` |
+| Title case  | all headings                 | colon subtitles, `aliwallick.com`, `Critter³` all correct   | `<h2>` only                    |
+| Line length | an 80-character ceiling      | red on merge; 80 is AAA, not the AA baseline the site meets | a ratchet against a baseline   |
+
+**In each case the naive version was not slightly wrong, it was measuring the wrong population.**
+That is the generalisable finding: before building a guard, run its naive form over the real tree
+and read every hit. Two of these three would have shipped as false-positive machines otherwise, and
+the third would have failed on its first CI run.
+
+### Where a new check goes
+
+`check-source.mjs` reads `src/` and runs **before** the build, so it fails in seconds rather than
+after a full render — the right home for anything invisible in `dist/` (a raw colour renders as a
+colour; a `TODO(` marker never ships at all). `check-links.mjs` owns anything that is a property of
+the render. `check-line-length.mjs` is separate because it needs a browser, like
+`check-resume-print.mjs`, and pairs `launch-chromium.mjs` with `serve-dist.mjs` the same way.
+
+Check-only logic stays in `scripts/`. `src/lib/content-rules.ts` is for logic `src/` and `scripts/`
+must **share**, under hard no-runtime-import and erasable-syntax constraints; a check with no `src/`
+consumer does not belong there.
+
+`update:line-length` is deliberately **not** in the settings allow-list, for the same reason
+`update:resume-print` is not: it rewrites a guard's own baseline and should prompt.
+
+### The list should not reach zero
+
+Three entries stay under "Rules with no guard behind them", and #338 measured each and declined:
+the frame-is-a-constant rule and the `--ease`-on-a-clamped-property rule are judgment about how to
+express a change rather than properties of any output, and the observed-regularity rule is about how
+to reason. **A guard for any of them would need a heuristic that fires on correct code**, which is
+the thing #107 established is worse than the sentence.
+
+The résumé's 701×960 came off the list for a different reason worth separating: it needed no guard
+because the constant was already centralised in `scripts/lib/print-geometry.mjs`, which both
+consumers import. **The brief was restating an arithmetic that a module already owned** — so the
+entry shrank to a pointer, which is a brief-line win with no code written. Worth checking for before
+building anything: the rule may already have a home.

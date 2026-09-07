@@ -4708,3 +4708,146 @@ That is exactly the quiet-portfolio case this job exists for, so its reliability
 most needed. GitHub emails the owner when it happens, so the failure is loud rather than silent, and
 `workflow_dispatch` is the manual fallback — but it is worth knowing that a guard against neglect is
 itself switched off by neglect. It is in the workflow's own header for whoever meets it first.
+
+## #338 — build guards for the rules that have none (2026-09-07)
+
+Filed by Ali off the back of #335's split: "wondering if it makes sense to do a pass to add more
+things to guards so we can reduce what's in context." #335 had made the cut line between the brief
+and `docs/decisions/` mechanical — is the rule enforced by a build guard? — which turns adding a
+check into the only lever that shrinks the one document every session reads in full.
+
+### What shipped
+
+Six rules. Three source-tree in a new `scripts/check-source.mjs` (raw colours, raw `px` font sizes,
+`TODO(#n)`), two output rules in `check-links.mjs` (a word welded to an inline element, title case
+on `<h2>`), and one baseline diff in a new `check-line-length.mjs`. Two of five "no guard behind
+them" entries are gone, so is the "Use the variables" standing rule and the title-case convention,
+and the 701×960 entry shrank to a pointer at the module that already owns the constant. Each guard
+was proven the way #107 proved its two — write the mistake, watch the build name the rule, revert —
+and the whole `verify` chain is green at eight steps.
+
+**The brief went 693 → 686 lines, and that number is worth stating plainly rather than dressing
+up.** Twenty-two lines of rules came out; six went back as a note on why the remaining three are
+staying, and four more as pointers to the new scripts. A net seven lines is a thin return if lines
+were the point. **They are not** — the return is that four rules are now enforced instead of
+remembered, and a rule a session cannot violate silently costs nothing per session whether or not
+its sentence is still in the file. The line count is the visible proxy for that, not the thing
+itself, and a pass that optimised the proxy would have skipped the note that keeps the next session
+from mechanically guarding the last three.
+
+### The finding worth carrying: the naive form of a guard measures the wrong population
+
+Three of the four candidates were narrowed by measurement, and in none of them was the obvious
+version _slightly_ wrong. It was measuring something else entirely.
+
+The welded-word rule, unscoped, reported two hits and both were correct code — the résumé's download
+button is an `inline-flex` with a `gap`, so `Download PDF` abuts a `<span>` in the HTML and renders
+with a space anyway. That button had been flagged going in as a _likely live instance of the bug_,
+which is what a source-level read of it looks like; checking it against a real build is the only
+thing that found the gap. Scoped to `<p>` and `<li>` the rule reports nothing.
+
+The title-case checker, run over all headings, breaks on four strings that are all correct:
+`Dead Booty: An Atari 2600 Game` and `KinoClue: A Tangible Tabletop Mystery` (both styles capitalise
+after a colon), `aliwallick.com`, and `Critter³`. Every one is a data-driven `<h3>`. Every `<h2>` is
+hand-authored, and all thirteen are clean. #107 declined this candidate as "too heuristic" and was
+right about the general case and wrong about the scoped one.
+
+The line-length ceiling would have been **red on merge**: 80 is WCAG AAA, the site is held to AA,
+and `/about` runs 83 average at today's 37.5rem. It shipped as a ratchet against a committed
+baseline instead — Ali's call, asked before anything was built.
+
+The line-length scope itself took three passes and the first two were the same mistake in a
+different costume: `main p, main li` put the homepage at 6.4 average characters, because card and
+tile grids are lists of `<li>` link tiles. An accurate measurement of a card, averaged into a
+statistic about prose, moved the site's figure from 76.5 to 63.
+
+**So the method, stated once: before building a guard, run its naive form over the real tree and
+read every hit.** Two of these would have shipped as false-positive machines otherwise.
+
+### The instrument got checked before it was trusted
+
+#253's own run produced two confidently wrong numbers — a `getClientRects()` line count over a flex
+container that returned one rect per item, and an assertion built from a right-edge coordinate that
+failed six times against correct code. So the new measurement was validated against a known
+quantity before its baseline was committed: `/about`'s paragraphs render at exactly 600px, which is
+37.5rem as the token says, and 83 average agrees with #253's probe table for that width. The
+baseline was also run twice to confirm it does not drift between identical runs.
+
+### What did not get built, and one that needed nothing
+
+Three entries stay in "Rules with no guard behind them" and should. The frame-is-a-constant rule and
+the `--ease`-on-a-clamped-property rule are judgment about how to express a change; the
+observed-regularity rule is about how to reason. Each would need a heuristic that fires on correct
+code, which #107 established is worse than the sentence it would replace. **The list reaching zero
+is not the goal.**
+
+The résumé's 701×960 entry came off for a different reason, and it is the cheapest result of the
+pass: it needed no guard at all, because `scripts/lib/print-geometry.mjs` already exports the
+constant and both consumers import it. The brief was restating arithmetic a module already owned.
+Worth checking for before building anything.
+
+### The guard's own first CI run found a defect in the guard
+
+Worth recording because it is the pass's best evidence for its own thesis. The line-length ratchet
+went red on its first CI run, and the site was fine — the guard was wrong. Two routes moved past a
+flat ±1.5 tolerance: `it-will-kill-you` 51.8 → 58.7 on **8** full lines, `mini-mages` 65.6 → 69.9 on
+**9**. The sitewide figure moved **0.7**.
+
+That spread is the entire diagnosis. Text rasterization differs between browser builds, and this
+baseline was recorded in a Claude Code web session, which falls back to the session image's Chromium
+(#245) rather than the pinned revision CI and Ali's machine both run — verified directly, not
+assumed. A different build moves a word across a line break, and where that happens two lines' counts
+change: everything on an 8-line page, nothing across 300. **The standard error of a mean falls as
+1/√n, so one flat tolerance could never have fitted both**, and the number was never the bug.
+
+So the sitewide average became the real assertion, with per-route bands that widen as a route
+shortens (`1.0 + 20/√lines`). Per-route maximum is recorded and no longer asserted — one unlucky long
+word either way, carrying no signal the average does not. The fix was checked against **both** real
+datasets rather than tuned until the failing one passed: the cross-environment deltas are absorbed
+(6.9 vs ±8.1, 4.3 vs ±7.7, 0.7 vs ±1.5) and narrowing `--measure` to 34rem is still caught
+decisively — sitewide 76.5 → 71.3 against ±1.5, plus five named routes.
+
+**The lesson is the one this pass already wrote down, turned on itself.** Every other candidate was
+narrowed by measuring its naive form against the real tree; this one was measured against the real
+tree _in one environment_ and shipped as though that were the tree. A guard is only validated in the
+environments it will run in, and there were three here rather than one.
+
+Two smaller notes from the same round. The baseline now records its platform and Chromium version and
+prints a mismatch as the first line of any failure — `check-resume-print.mjs` added exactly that line
+after #284, where its absence cost an hour, and this run cost the same hour for want of it. And the
+GitHub Actions steps API lagged badly throughout: it reported "Build in progress" for tens of minutes
+on a job that had already finished in 87 seconds. **The job log is authoritative; the steps view is
+not** — reading the log is what turned a suspected hang into a diagnosis.
+
+### A 43-fold edit, caught by reading the diffstat
+
+The commit that first added the section above inserted it **43 times**. `str.replace` in Python
+replaces every occurrence, the anchor chosen (`### Cost notes`) was a heading from #107's entry
+rather than this one, and it appears 43 times across the log. 1,419 insertions for a 30-line
+addition.
+
+Nothing caught it: it is a Markdown document, so no guard in `verify` has an opinion, and Prettier
+formatted all 43 copies happily. What caught it was reading `git diff --stat` and finding a number
+that made no sense for the change described. **The habit is the guard here** — and the fix is to
+assert the anchor is unique before replacing on it, which is what the script that finally landed
+this section does.
+
+### Model allocation and cost
+
+Three Sonnet Explore surveys ran in parallel against a read-only brief: the check infrastructure and
+where a new rule is wired (59k tokens, 15 tool uses, 1.5 min), an exhaustive raw-colour and
+font-size inventory (56k, 27, 2.7 min), and the whitespace/line-length/heading evidence (87k, 47,
+4.6 min). The third could not sample `dist/` — no build existed and its brief was read-only — so it
+reported from source and flagged the `ResumeActions` case as unresolvable without one, which is
+exactly the right failure and is what made checking it the first execution step.
+
+Opus wrote the plan, put the three genuine calls to Ali before any file moved (ratchet vs. ceiling,
+scoped title case vs. dropping it, and how to handle the live suspect), and did all the
+implementation, measurement and record-writing inline — no executor subagents, because the work was
+one connected thread where every step depended on the last measurement rather than fanning out.
+
+Two process notes. The drafts build was run as well as the production one, since drafts render more
+prose and carry the two curly-apostrophe headings the title-case tokeniser had to survive. And the
+PDFs regenerated for a one-line comment change, because `base.css` is a `byteHashedFiles` input —
+`check:resume-print` matching its baseline is what proves the résumé did not actually move, not the
+bytes being identical.

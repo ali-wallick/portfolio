@@ -49,15 +49,13 @@ than waving it through.
 ### Source-level markers the `dist/` grep cannot see
 
 The grep above reads built output, which is right for stale _content_ — but YAML front-matter
-comments never reach `dist/`, so deferred-decision markers are invisible to it. Every `TODO(...)` in
-`src/` cites an issue number (`TODO(#48)`, `TODO(#60)`); check the source directly:
+comments never reach `dist/`, so deferred-decision markers are invisible to it.
 
-```bash
-grep -rn 'TODO(' src/
-```
-
-A marker whose issue is closed is stale and should go with the change that closed it; a marker with
-no issue number is a dead end and needs one.
+**`npm run check:source` covers this now** (#338): a `TODO(` that cites no issue number fails the
+build, so the manual sweep this section used to carry is gone. What is still worth a human eye is
+the half a guard cannot judge — **a marker whose issue is already closed** is stale and should have
+gone with the change that closed it. `grep -rn 'TODO(' src/` lists them; check each number against
+its issue.
 
 Then check for drafts that leaked into production. Note the quotes — they match the rendered
 `class="draft-flag"` attribute and not the `.draft-flag{` rule in the inlined stylesheet, which is

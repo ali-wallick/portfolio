@@ -259,11 +259,6 @@ Settled now:
   a fact. Empty fields degrade gracefully; wrong ones don't.
 - **Tone target:** modern, a bit irreverent. It should be obvious a game developer made this and not
   obvious which template they used.
-- **Multi-word headers are title case, not sentence case** (2026-08-26,
-  [#182](https://github.com/ali-wallick/Portfolio/issues/182)) — "Featured Work", "What I Built", not
-  "Featured work". Use AP/Chicago rules (small function words lowercase unless first/last), not
-  every-word-capitalized. Single-word headers and proper-noun `<h1>`s (site name, project titles, job
-  titles) are unaffected either way.
 - **The apostrophe is `’`, and it is typed, not generated** (2026-08-26,
   [#188](https://github.com/ali-wallick/Portfolio/issues/188)). Ali's call. Front matter, Markdown
   bodies, `.astro` prose, `src/config/*.ts` strings, and `scripts/build-linkedin.mjs`'s hand-authored
@@ -429,8 +424,6 @@ change to any component, whether or not it is a design pass.
 
 - `src/styles/tokens.css` holds the **shipped** palette and type scale as of Phase 5. Nothing in it
   is a placeholder any more.
-- **Use the variables.** Never write a raw color or a raw `px` font size in a component. Phase 5
-  should be a palette-and-type swap, not a hunt through every file.
 - Responsive from the start. The old site had no viewport meta and rendered zoomed out on every
   phone ever made.
 - **`--ease` is shared across _properties_, not only across components, and clamping is a
@@ -468,6 +461,7 @@ npm run verify                     # everything CI runs
 npm run build:pdf                  # just the resume PDFs, against an existing dist/
 SHOW_DRAFTS=true npm run build     # what a Cloudflare preview serves
 npm run links:external             # outbound link liveness — never gates a deploy
+npm run update:line-length         # re-baseline prose line length after a width or type change
 ```
 
 **`links:external` is deliberately outside `verify`, and that is not an oversight to correct.**
@@ -632,19 +626,16 @@ Everything else settled in this repo is caught by something in `npm run verify` 
 it wrong. **These are not.** They are here because breaking one is silent — that is the entire
 criterion — and each links to the section that explains it.
 
-- **When a line has to wrap between text and an inline element, use `{' '}`, never a bare line
-  break.** Astro strips the whitespace between a text node and a following element when a newline
-  separates them, which is how the 404 shipped `or head<a href="/">home</a>` as one word. This is
-  why `about.astro` is full of `{' '}`. →
-  [content record, the wording pass](docs/decisions/content.md)
-- **Never reason about line length in `ch`. Measure the rendered output.** `1ch` is the width of
-  the `0` glyph and systematically understates real line length — running prose averages about
-  1.38× the `ch` count, so the "63ch" everyone had in mind was ~87 characters. →
-  [design record, one page column](docs/decisions/design.md)
-- **Anything measured about the résumé is measured at 701×960** — letter's 8.5in less `@page`'s
-  0.6in side margins, times 96, against a 960px height budget. A density probe, the skill's own
-  guidance and the print-geometry differ each got this wrong and each returned a confident wrong
-  answer. → [résumé record](docs/decisions/resume.md)
+**This list was five entries until 2026-09-07, and shrinking it is the point of adding a guard**
+([#338](https://github.com/ali-wallick/Portfolio/issues/338)). Two left because they now have one:
+the `{' '}` whitespace rule and the line-length rule. **It should not reach zero.** The three below
+are judgment about how to reason or how to express a change, not properties of any output, and each
+would need a heuristic that fires on correct code — #338 measured that and declined to build them,
+the same call #107 made about four of its own candidates.
+
+- **Anything measured about the résumé is measured at 701×960** — import `PRINT_VIEWPORT` from
+  `scripts/lib/print-geometry.mjs` rather than deriving it. Three separate passes derived it by
+  hand and each returned a confident wrong answer. → [résumé record](docs/decisions/resume.md)
 - **A frame is a constant, and the failure mode is a surface list rather than a rule.** Four
   separate passes missed a surface because the treatment was written as a list of selectors
   instead of one rule; a new surface joins the existing selector rather than getting its own copy.
@@ -680,7 +671,9 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 | `src/lib/content.ts`                  | Collection queries and the site's year-only date formatting. Month precision lives in `scripts/build-linkedin.mjs`, the only surface that shows it.        |
 | `src/config/site.ts`                  | Name, email, nav, social links (audited in Phase 3: LinkedIn `active`, the rest `retired`).                                                                |
 | `src/config/resume.ts`                | The resume's Skills section — settled, hand-curated, not derived from `tech`.                                                                              |
-| `scripts/check-links.mjs`             | Post-build checks. Every rule is a regression guard for a real old bug.                                                                                    |
+| `scripts/check-links.mjs`             | Post-build checks on `dist/`. Every rule is a regression guard for a real old bug.                                                                         |
+| `scripts/check-source.mjs`            | The source-tree half: raw colours, raw `px` font sizes, `TODO(#n)`. Needs no build, so it runs before one (#338).                                          |
+| `scripts/check-line-length.mjs`       | Rendered prose line length against `line-length-baseline.json`. A ratchet, **not** an 80-character ceiling — see its header (#338).                        |
 | `scripts/check-links-external.mjs`    | Outbound link liveness. By hand, and monthly via `.github/workflows/link-check.yml`. **Never in `verify` — it files an issue, it never gates a deploy.**   |
 | `scripts/report-link-rot.mjs`         | Turns that check's `--report` JSON into exactly one `link-rot` issue. `--dry-run` proves its four transitions without GitHub.                              |
 | `scripts/build-pdf.mjs`               | Renders the resume routes to PDF and asserts their page counts.                                                                                            |
