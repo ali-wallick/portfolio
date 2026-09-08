@@ -542,3 +542,66 @@ source material; deleting from it to tidy a record trades a page's raw material 
 win nobody asked for. **This was a readability pass, not a cost pass** — the records are not read at
 session start, so a merely-slightly-redundant passage costs nothing and was left alone. That is the
 standard to judge the next one by too.
+
+## `--check-selfcontained` destroyed the thing it verified (2026-09-08, #344)
+
+`scripts/restore-snapshot.mjs --check-selfcontained` read as a read-only assertion. [#201] cited it
+that way, `snapshot/rendered/README.md` said so, and `docs/PRESERVATION.md` listed it under
+"rebuild and verify" without anyone noticing those were two different claims. It was a full
+destructive rebuild that happened to end in a check.
+
+Two facts combined. The `rm(OUT, …)` ran at module top level; the flag check sat 245 lines below it,
+so every invocation deleted `snapshot/rendered/` before reading its own arguments. And asset
+recovery does `git cat-file blob ce4533e~1:<ref>`, which does not resolve in a shallow clone. **A
+Claude Code web session gets a shallow clone** — 50 commits, `is-shallow-repository` true — so the
+run died partway through writing pages and left the archive at **27 of its 102 files**.
+`git checkout -- snapshot/rendered` restored all 102, which is the script header's own argument for
+committing the artifact holding up under exactly the failure it was written against.
+
+### The environment breaks more of the rebuild than the shallow clone does
+
+The issue found the commit. Measuring the rest of the archive found the shape of the fix: **only 28
+of the 102 files are derived from `snapshot/`** — 26 pages, `archive.css`, and the README. The other
+74 come from somewhere the process may not be able to reach: 54 asset blobs at `ce4533e~1`, 14 blog
+images off the old host, 6 poster frames off i.ytimg.com. The same web session that cannot resolve
+the commit also cannot reach either host.
+
+That is why the fix is a preflight rather than only a commit check. It is also why
+`docs/PRESERVATION.md` was wrong in a way worth recording: it said the committed blog images meant a
+post-cutover rebuild "will report them as failures but still produce a correct archive from what is
+on disk." They are committed **inside** `snapshot/rendered/`, so the `rm` takes them first. The same
+`rm` is why the poster loop's `existsSync(dest)` skip has never once been true.
+
+### What shipped
+
+- **Every mode is a flag and there is no default.** `--check-selfcontained` and `--serve` read the
+  archive on disk and write nothing; `--rebuild` is the only destructive mode. A bare invocation
+  prints usage and exits 2 rather than rebuilding, and an unrecognised flag exits rather than
+  falling through — `--check-self-contained` is an easy thing to type.
+- **The check asserts against `snapshot/rendered/`, not against its inputs.** The page list comes
+  from `htmlPages(OUT)` in the read-only modes. The two sets are identical, verified: the rebuild
+  writes one output page per source page, and the 26 relative paths diff clean.
+- **A rebuild proves it can reach every source before deleting anything.** It resolves
+  `ASSET_COMMIT`, then HEADs every committed remote-sourced file. `--allow-missing-remote` overrides
+  the remote half and deliberately not the commit half: the blog going dark is permanent, a shallow
+  clone is one `git fetch --unshallow` away.
+
+**The preflight probes the committed files rather than the source references, and that is the whole
+design.** "Is the host up" cannot be answered from a status code — the session's egress proxy
+answers 403 to every CONNECT, and three of the nine videos are genuinely gone and answer 403 too. So
+the question is asked per file and only about files the `rm` would take: can this exact byte range
+be fetched back? The three dead videos have no poster committed, so they are never asked about, and
+a first build with no `snapshot/rendered/` on disk has nothing to lose and is not blocked. An
+earlier draft of this preflight tested one representative URL per host and treated any HTTP response
+as proof of reachability; the sandbox's blanket 403 passed it cleanly while all 20 files were in
+fact unfetchable.
+
+### Not promoted to the brief
+
+The rule this fixes — a command whose name asserts must not write — has no build guard, which is the
+brief's test for promotion. It stays here anyway. The three entries under "Rules with no guard
+behind them" are judgment that applies to work a session might do next; this one is a defect in one
+script, now enforced by that script, in a mode structure that makes the old shape unwritable. A
+fourth entry would cost every future session a read to prevent nothing.
+
+[#201]: https://github.com/ali-wallick/Portfolio/issues/201

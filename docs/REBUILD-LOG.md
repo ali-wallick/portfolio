@@ -4910,3 +4910,64 @@ One process note. The pre-split `CLAUDE.md` at `9490e32^` was the single most us
 pass — `git show 9490e32^:CLAUDE.md | grep -n '^#'` gave the original heading tree in one command,
 which is what turned "these headings look odd" into "the `## Phase 3 gate outcome` parent stayed
 behind." **After a split, the parent commit is the map.**
+
+## #344 — the verify command was a rebuild (2026-09-08)
+
+The issue arrived well-diagnosed: `restore-snapshot.mjs --check-selfcontained` deletes
+`snapshot/rendered/` at module top level, 245 lines before it reads its own flags, and the asset
+recovery it then attempts needs a commit a shallow clone cannot resolve. The archive had already
+been observed going from 102 files to 27 and recovered with `git checkout`.
+
+The issue proposed three fixes in order of value: a real verify-only path, a preflight on
+`ASSET_COMMIT` before the `rm`, and a temp-directory rebuild that swaps on success. The session
+delivered the first two and argued the third down to a follow-up, on the grounds that a temp-dir
+swap **without** a completeness assertion is a regression — it converts a loud crash into a clean
+swap that silently drops files. That argument came out of the one measurement the issue did not
+have.
+
+### Counting the archive is what reframed the fix
+
+102 committed files. 26 pages, `archive.css`, README — 28 derived from `snapshot/`. The remaining 74
+split 54 / 14 / 6 across a git commit, the old blog host, and i.ytimg.com. So the shallow clone is
+half the problem: this session could reach none of the three, and a preflight on the commit alone
+would still have deleted 20 irreplaceable files and reported it as a `console.log`.
+
+The count also falsified a sentence in `docs/PRESERVATION.md` that had been written specifically to
+reassure a future rebuilder — the blog images are committed, so a post-cutover rebuild "will still
+produce a correct archive from what is on disk". They are committed _inside_ the directory the `rm`
+takes. That the doc was wrong about the same script's same first line is the strongest evidence the
+`rm`'s reach was genuinely non-obvious, and it is now recorded as a correction rather than a
+deletion.
+
+### The first preflight passed while everything was unreachable
+
+Worth keeping, because it was a plausible design that a weaker test would have shipped. The first
+version probed one representative URL per host and treated _any_ HTTP response as proof the host was
+up, on the reasoning that three of the nine videos are gone and answer 403, so a status cannot be
+read as a verdict about i.ytimg.com. Sound reasoning, wrong conclusion: the session's egress proxy
+answers **403 to every CONNECT**, so the probe read "host is up" while all 20 remote files were
+unfetchable. It only surfaced because the probe was tested against the two hosts directly rather
+than trusted from the preflight's own output.
+
+The rewrite asks a narrower question with no heuristic in it — per file, and only about files
+already committed: can this exact byte range be fetched back? The dead videos have no poster
+committed, so they are never asked about. 20 of 20 came back unfetchable here, which is correct.
+
+### Verification, in an environment that cannot run the thing being fixed
+
+A rebuild is unrunnable in this session, so the fix was verified from the other direction. The two
+authored files (`archive.css`, the generated README) were hoisted to module scope so the 190-line
+build region could be indented into `if (REBUILD)` without a template literal's own content being
+re-indented; the indenter refused to run if it found a multi-line literal in the region, and the
+hoisted `ARCHIVE_CSS` was then evaluated and compared byte-for-byte against the committed file.
+`--check-selfcontained` was run for real — 26 pages through Chromium, zero external requests, zero
+broken refs — and the archive hashed identically before and after, which is the actual claim the
+issue makes.
+
+### Model allocation and cost
+
+Opus, inline, no subagents. Same shape as #340: one thread where each step depended on reading the
+last, and the two candidates for fan-out were both cheaper inline — the archive census is one `find`
+plus arithmetic, and the doc sweep is one grep across three files. Three throwaway Python scripts
+did the mechanical edits, each asserting its anchor matched exactly once before writing, which is
+what made a 353-line restructure of a 530-line file safe to do without reading the whole diff twice.

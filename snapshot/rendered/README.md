@@ -4,7 +4,8 @@
 byte-faithful pages in `snapshot/` plus the images recovered from git at
 `ce4533e~1`. If you want the untouched record, read `snapshot/` — not this.
 
-Open `index.html` in a browser, or run:
+Open `index.html` in a browser, or serve it. Both read this directory and
+neither writes to it:
 
     node scripts/restore-snapshot.mjs --serve
 
@@ -19,4 +20,9 @@ Open `index.html` in a browser, or run:
 
 Everything else — markup, copy, CSS, `nav.js`, outbound links — is as captured.
 This directory makes **zero external network requests**; that is asserted by
-`node scripts/restore-snapshot.mjs --check-selfcontained`.
+`node scripts/restore-snapshot.mjs --check-selfcontained`, which reads these
+files and never writes them.
+
+Regenerating is a separate, destructive command: `--rebuild`. Only 28 of these
+102 files come from `snapshot/`; the rest come from a commit and two remote
+hosts, so a rebuild refuses to start unless it can reach all three.

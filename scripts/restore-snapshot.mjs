@@ -55,9 +55,22 @@
  * — that matters only if this archive is ever *published*, which is a separate
  * decision. See docs/PRESERVATION.md.
  *
- * Usage:
- *   node scripts/restore-snapshot.mjs                # rebuild snapshot/rendered/
- *   node scripts/restore-snapshot.mjs --serve        # rebuild, then serve it
+ * ## The read-only modes really are read-only (#344)
+ *
+ * `--serve` and `--check-selfcontained` used to rebuild first. The build ran at
+ * module top level and the flag check sat 245 lines below it, so a name that
+ * reads as an assertion was a destructive rebuild that happened to end in one.
+ * In a shallow clone — which is what a Claude Code web session gets — that
+ * rebuild died partway through and left the archive at 27 of its 102 files.
+ *
+ * Only 28 of those 102 files are derived from `snapshot/`. The other 74 come
+ * from somewhere this process may not be able to reach: 54 asset blobs at
+ * ASSET_COMMIT, 14 blog images off the old host, 6 poster frames off
+ * i.ytimg.com. So a rebuild proves it can reach all three *before* it deletes
+ * anything — see `preflight()`.
+ *
+ * Every mode is named by a flag and there is no default one, so no invocation
+ * of this script deletes anything by accident. See USAGE below.
  */
 
 import { mkdir, writeFile, readFile, readdir, rm, stat } from 'node:fs/promises';
@@ -70,8 +83,43 @@ const SRC = path.join(ROOT, 'snapshot');
 const OUT = path.join(SRC, 'rendered');
 const ASSET_COMMIT = 'ce4533e~1';
 const LIVE_ORIGIN = 'https://www.aliwallick.com';
+const BLOG_DIR = 'resources/blog-uploads';
+const POSTER_DIR = 'resources/video-posters';
 
+/* ------------------------------------------------------------------ *
+ * 0. Modes
+ *
+ * Which mode is running is decided here, before the first line of code that
+ * writes anything, rather than at the bottom of the file. There is no default
+ * mode and an unrecognised flag exits rather than being ignored: a bare
+ * invocation used to delete the archive, and `--check-self-contained` is an
+ * easy thing to type.
+ * ------------------------------------------------------------------ */
+
+const USAGE = `Usage:
+  node scripts/restore-snapshot.mjs --check-selfcontained  verify; writes nothing
+  node scripts/restore-snapshot.mjs --serve                browse; writes nothing
+  node scripts/restore-snapshot.mjs --rebuild              regenerate; destructive
+  node scripts/restore-snapshot.mjs --rebuild --check-selfcontained
+
+  --allow-missing-remote  rebuild even though files fetched from a remote host
+                          cannot be fetched back. They will be lost.`;
+
+const KNOWN_FLAGS = ['--rebuild', '--serve', '--check-selfcontained', '--allow-missing-remote'];
 const args = new Set(process.argv.slice(2));
+const unknown = [...args].filter((a) => !KNOWN_FLAGS.includes(a));
+if (unknown.length) {
+  console.error(`Unknown flag: ${unknown.join(', ')}\n\n${USAGE}`);
+  process.exit(2);
+}
+
+const CHECK = args.has('--check-selfcontained');
+const SERVE = args.has('--serve');
+const REBUILD = args.has('--rebuild');
+if (!CHECK && !SERVE && !REBUILD) {
+  console.error(`${USAGE}\n\nPick a mode. There is no default one.`);
+  process.exit(2);
+}
 
 /* ------------------------------------------------------------------ *
  * 1. Collect the source pages (everything but the derived output)
@@ -231,221 +279,128 @@ function rewritePage(pageRel, html, posterFor) {
 }
 
 /* ------------------------------------------------------------------ *
- * 3. Build
+ * 2b. Preflight
+ *
+ * A rebuild opens by deleting `snapshot/rendered/`, and it can only put back
+ * the 28 files it derives from `snapshot/`. The other 74 come from a commit and
+ * two remote hosts, none of which are guaranteed to be here: a shallow clone
+ * cannot resolve ASSET_COMMIT, and a session behind an egress proxy reaches
+ * neither host. Both were true at once when this was found (#344), which is how
+ * the archive ended up at 27 of 102 files.
+ *
+ * So every source is proved reachable here, while the archive is still whole.
+ * A rebuild that cannot finish does not start.
  * ------------------------------------------------------------------ */
 
-console.log(`Rebuilding ${path.relative(ROOT, OUT)}/ ...\n`);
-await rm(OUT, { recursive: true, force: true });
-await mkdir(OUT, { recursive: true });
-
-// --- 3a. assets out of git ------------------------------------------------
-const pages = await htmlPages(SRC);
-const refs = new Set();
-for (const p of pages) {
-  const html = await readFile(path.join(SRC, p), 'utf8');
-  for (const m of html.matchAll(/(?:src|href)="\/(resources\/[^"]+)"/g)) refs.add(m[1]);
+/** True if that exact URL can be fetched right now. A throw and a 403 are the same answer. */
+async function fetchable(url) {
+  try {
+    const res = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(10_000) });
+    return res.ok;
+  } catch {
+    return false;
+  }
 }
 
-/**
- * Paths where the *current* working-tree file supersedes the historical blob.
- *
- * Only one entry, and it is not an aesthetic preference — it is a privacy one.
- * The old resume carries a PO Box. Restoring it from `ce4533e~1` is faithful
- * and also silently manufactures a second copy of an exposure the repo is
- * actively trying to reduce (#197, #200); the first run of this script did
- * exactly that, and it got committed before anyone noticed.
- *
- * The working-tree copy has that one line removed from its content stream —
- * see the redaction note in docs/PRESERVATION.md. Reading from disk here means
- * a rebuild can never reintroduce the address. The original is untouched in
- * history and in `v1-legacy` if it is ever genuinely needed.
- */
-const PREFER_WORKTREE = new Set(['resources/WallickAli-Resume.pdf']);
+async function preflight(blogRefs) {
+  const fatal = [];
+  const remote = [];
 
-let restored = 0;
-let restoredBytes = 0;
-let superseded = 0;
-const missing = [];
-for (const ref of [...refs].sort()) {
-  let buf;
-  if (PREFER_WORKTREE.has(ref) && existsSync(path.join(ROOT, ref))) {
-    buf = await readFile(path.join(ROOT, ref));
-    superseded++;
-    const dest = path.join(OUT, ref);
-    await mkdir(path.dirname(dest), { recursive: true });
-    await writeFile(dest, buf);
-    restored++;
-    restoredBytes += buf.length;
-    continue;
-  }
   try {
-    buf = execFileSync('git', ['cat-file', 'blob', `${ASSET_COMMIT}:${ref}`], {
-      maxBuffer: 64 * 1024 * 1024,
+    execFileSync('git', ['rev-parse', '--verify', '--quiet', `${ASSET_COMMIT}^{commit}`], {
+      stdio: 'ignore',
     });
   } catch {
-    missing.push(ref);
-    continue;
+    fatal.push(
+      `${ASSET_COMMIT} does not resolve, so the 54 assets under resources/ cannot be
+    restored. That is what a shallow clone looks like — run \`git fetch --unshallow\`.`,
+    );
   }
-  const dest = path.join(OUT, ref);
-  await mkdir(path.dirname(dest), { recursive: true });
-  await writeFile(dest, buf);
-  restored++;
-  restoredBytes += buf.length;
-}
-console.log(
-  `  assets   ${restored}/${refs.size} restored (${(restoredBytes / 1048576).toFixed(2)} MB) — ` +
-    `${restored - superseded} from ${ASSET_COMMIT}, ${superseded} from the working tree`,
-);
-if (missing.length) {
-  console.log(`  MISSING  ${missing.length}:`);
-  for (const m of missing) console.log(`    ${m}`);
-}
 
-/* --- 3b0. blog images, straight off the live host -------------------------
- *
- * These are the one class of asset that is in neither `snapshot/` nor git:
- * the blog's pagination pages reference them by absolute URL against
- * aliwallick.com, so Phase 0's `/resources/` sweep never saw them.
- *
- * Phase 0 *did* download them for `content/archive/`, but under semantic names
- * (`Cards.jpg` became `2011-05-cards.jpg`), so they cannot be mapped back by
- * path. Rather than couple this archive to another directory's naming
- * convention — which would break the moment either is reorganised — they are
- * fetched once and stored under their original paths. The copies are then
- * hash-compared against `content/archive/images/` and the result reported,
- * which doubles as the spot-check #51 wants before retiring WordPress.
- *
- * This is the only step that *requires* the old host to still be up.
- */
-const BLOG_DIR = 'resources/blog-uploads';
-const POSTER_DIR = 'resources/video-posters';
+  /*
+   * The remote half asks one question per file: can this exact byte range be
+   * fetched back? Not "is the host up" — a proxy that refuses every CONNECT
+   * still answers 403, and three of the nine videos are genuinely gone and
+   * answer 403 too, so a status cannot be read as a verdict about a host.
+   *
+   * Which is why this probes the *committed* files rather than the source
+   * references. Those are the ones the `rm` would take, and the three dead
+   * videos have no poster committed, so they are never asked about.
+   *
+   * A first build has nothing to lose and is therefore not blocked here.
+   */
+  if (existsSync(OUT)) {
+    const atRisk = [];
+    for (const rel of [...blogRefs].sort()) {
+      if (existsSync(path.join(OUT, BLOG_DIR, rel))) {
+        atRisk.push([`${BLOG_DIR}/${rel}`, `${LIVE_ORIGIN}/blog/wp-content/uploads/${rel}`]);
+      }
+    }
+    const posterDir = path.join(OUT, POSTER_DIR);
+    if (existsSync(posterDir)) {
+      for (const file of (await readdir(posterDir)).sort()) {
+        const id = path.basename(file, '.jpg');
+        // hqdefault is the size the build falls back to and always exists
+        // while the video does, so it is the one that decides.
+        atRisk.push([`${POSTER_DIR}/${file}`, `https://i.ytimg.com/vi/${id}/hqdefault.jpg`]);
+      }
+    }
 
-const blogRefs = new Set();
-for (const p of pages) {
-  const html = await readFile(path.join(SRC, p), 'utf8');
-  for (const m of html.matchAll(
-    /(?:src|href)="https?:\/\/(?:www\.)?aliwallick\.com\/blog\/wp-content\/uploads\/([^"]+)"/g,
-  )) {
-    blogRefs.add(m[1]);
-  }
-}
-
-const { createHash } = await import('node:crypto');
-const archiveHashes = new Map();
-const ARCHIVE_IMAGES = path.join(ROOT, 'content/archive/images');
-if (existsSync(ARCHIVE_IMAGES)) {
-  for (const f of await readdir(ARCHIVE_IMAGES)) {
-    const buf = await readFile(path.join(ARCHIVE_IMAGES, f));
-    archiveHashes.set(createHash('sha256').update(buf).digest('hex'), f);
-  }
-}
-
-let blogOk = 0;
-const blogFailed = [];
-const blogMatched = [];
-for (const rel of [...blogRefs].sort()) {
-  const dest = path.join(OUT, BLOG_DIR, rel);
-  try {
-    const res = await fetch(`${LIVE_ORIGIN}/blog/wp-content/uploads/${rel}`);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const buf = Buffer.from(await res.arrayBuffer());
-    await mkdir(path.dirname(dest), { recursive: true });
-    await writeFile(dest, buf);
-    blogOk++;
-    const hit = archiveHashes.get(createHash('sha256').update(buf).digest('hex'));
-    if (hit) blogMatched.push(`${rel} == content/archive/images/${hit}`);
-  } catch (error) {
-    blogFailed.push(`${rel} (${String(error).split('\n')[0]})`);
-  }
-}
-console.log(`  blog img ${blogOk}/${blogRefs.size} fetched into ${BLOG_DIR}/`);
-console.log(`           ${blogMatched.length}/${blogOk} byte-identical to content/archive/images/`);
-if (blogFailed.length) {
-  console.log(`  FAILED   ${blogFailed.length} — is the old host still up?`);
-  for (const f of blogFailed) console.log(`    ${f}`);
-}
-
-// --- 3b. YouTube poster frames -------------------------------------------
-const ids = new Set();
-for (const p of pages) {
-  const html = await readFile(path.join(SRC, p), 'utf8');
-  for (const m of html.matchAll(/youtube\.com\/(?:embed|v)\/([A-Za-z0-9_-]{11})/g)) ids.add(m[1]);
-}
-
-await mkdir(path.join(OUT, POSTER_DIR), { recursive: true });
-let posters = 0;
-const posterMissing = [];
-for (const id of [...ids].sort()) {
-  const dest = path.join(OUT, POSTER_DIR, `${id}.jpg`);
-  if (existsSync(dest)) {
-    posters++;
-    continue;
-  }
-  let ok = false;
-  // hqdefault always exists; maxresdefault often doesn't. Try the good one first.
-  for (const name of ['maxresdefault', 'hqdefault']) {
-    try {
-      const res = await fetch(`https://i.ytimg.com/vi/${id}/${name}.jpg`);
-      if (!res.ok) continue;
-      const buf = Buffer.from(await res.arrayBuffer());
-      // YouTube serves a 120x90 grey placeholder for missing sizes.
-      if (buf.length < 4000) continue;
-      await writeFile(dest, buf);
-      ok = true;
-      break;
-    } catch {
-      /* try next */
+    const results = await Promise.all(atRisk.map(([, url]) => fetchable(url)));
+    const lost = atRisk.filter((_, i) => !results[i]).map(([rel]) => rel);
+    if (lost.length) {
+      remote.push(
+        `${lost.length} of the ${atRisk.length} committed files fetched from a remote cannot be
+    fetched back, so a rebuild would delete them for good. They are in neither
+    snapshot/ nor git:
+      ${lost.slice(0, 5).join('\n      ')}${lost.length > 5 ? `\n      ... and ${lost.length - 5} more` : ''}`,
+      );
     }
   }
-  ok ? posters++ : posterMissing.push(id);
-}
-console.log(`  posters  ${posters}/${ids.size} fetched into ${POSTER_DIR}/`);
-if (posterMissing.length) console.log(`  no poster for: ${posterMissing.join(', ')}`);
 
-/** Relative path to a committed poster frame, or null if the video is gone. */
-function posterFor(id, pageRel) {
-  const target = `${POSTER_DIR}/${id}.jpg`;
-  return existsSync(path.join(OUT, target)) ? relativize(pageRel, target) : null;
+  if (!fatal.length && !remote.length) return;
+
+  console.error('\nPreflight found sources this rebuild cannot reach:\n');
+  for (const problem of [...fatal, ...remote]) console.error(`  - ${problem}\n`);
+
+  // --allow-missing-remote covers the case that is permanent: once the old blog
+  // is gone it is gone, and no later rebuild can be complete either. It
+  // deliberately does not cover ASSET_COMMIT, which is one fetch away.
+  if (fatal.length || !args.has('--allow-missing-remote')) {
+    if (!fatal.length) {
+      console.error('  Rebuild anyway with --allow-missing-remote. Those files will be lost;');
+      console.error('  `git checkout -- snapshot/rendered` is how you get them back.\n');
+    }
+    console.error('✗ nothing was deleted. The archive is intact.');
+    process.exit(1);
+  }
+
+  console.error('  --allow-missing-remote given; rebuilding without them.\n');
 }
 
-// --- 3c. pages ------------------------------------------------------------
-for (const p of pages) {
-  const html = await readFile(path.join(SRC, p), 'utf8');
-  const { html: rewritten } = rewritePage(p, html, posterFor);
-  const dest = path.join(OUT, p);
-  await mkdir(path.dirname(dest), { recursive: true });
-  await writeFile(dest, rewritten);
-}
-console.log(`  pages    ${pages.length} rewritten`);
+/* ------------------------------------------------------------------ *
+ * 2c. The two files this script authors rather than derives
+ *
+ * They live out here, at module scope, because everything under section 3 is
+ * inside `if (REBUILD)` and a template literal's own indentation is its
+ * content.
+ * ------------------------------------------------------------------ */
 
-// --- 3d. a small stylesheet for the two elements this script introduces ---
-await writeFile(
-  path.join(OUT, 'resources/css/archive.css'),
-  `/* Added by scripts/restore-snapshot.mjs — not part of the original site.
+const ARCHIVE_CSS = `/* Added by scripts/restore-snapshot.mjs — not part of the original site.
    Styles the poster frames that replaced dead YouTube iframes. */
 .archived-video { display: inline-block; max-width: 100%; }
 .archived-video img { max-width: 100%; height: auto; border: 2px solid #4aa17a; }
 .archived-video-missing { color: #9f2b00; font-style: italic; }
-`,
-);
-for (const p of pages) {
-  const dest = path.join(OUT, p);
-  let html = await readFile(dest, 'utf8');
-  const href = relativize(p, 'resources/css/archive.css');
-  html = html.replace(/<\/head>/i, `  <link rel="stylesheet" href="${href}">\n</head>`);
-  await writeFile(dest, html);
-}
+`;
 
-// --- 3e. a README so the directory explains itself ------------------------
-await writeFile(
-  path.join(OUT, 'README.md'),
-  `# snapshot/rendered — the old site, made browsable
+const RENDERED_README = `# snapshot/rendered — the old site, made browsable
 
 **Derived, not captured.** Generated by \`scripts/restore-snapshot.mjs\` from the
 byte-faithful pages in \`snapshot/\` plus the images recovered from git at
 \`${ASSET_COMMIT}\`. If you want the untouched record, read \`snapshot/\` — not this.
 
-Open \`index.html\` in a browser, or run:
+Open \`index.html\` in a browser, or serve it. Both read this directory and
+neither writes to it:
 
     node scripts/restore-snapshot.mjs --serve
 
@@ -460,13 +415,222 @@ Open \`index.html\` in a browser, or run:
 
 Everything else — markup, copy, CSS, \`nav.js\`, outbound links — is as captured.
 This directory makes **zero external network requests**; that is asserted by
-\`node scripts/restore-snapshot.mjs --check-selfcontained\`.
-`,
-);
+\`node scripts/restore-snapshot.mjs --check-selfcontained\`, which reads these
+files and never writes them.
 
-console.log(`\n✓ ${path.relative(ROOT, OUT)}/ rebuilt.`);
-const totalSize = execFileSync('du', ['-sh', OUT]).toString().split('\t')[0];
-console.log(`  size: ${totalSize}`);
+Regenerating is a separate, destructive command: \`--rebuild\`. Only 28 of these
+102 files come from \`snapshot/\`; the rest come from a commit and two remote
+hosts, so a rebuild refuses to start unless it can reach all three.
+`;
+
+/* ------------------------------------------------------------------ *
+ * 3. Build — destructive, and skipped entirely by the read-only modes
+ * ------------------------------------------------------------------ */
+
+/**
+ * The archive's 26 pages. Assigned from `snapshot/` when rebuilding and from
+ * the rendered copy otherwise; the two sets are identical, because the rebuild
+ * writes exactly one output page per source page.
+ */
+let pages;
+
+if (REBUILD) {
+  // --- 3a. everything the rebuild needs, read before anything is deleted ---
+  pages = await htmlPages(SRC);
+  const refs = new Set();
+  const blogRefs = new Set();
+  const videoIds = new Set();
+  for (const p of pages) {
+    const html = await readFile(path.join(SRC, p), 'utf8');
+    for (const m of html.matchAll(/(?:src|href)="\/(resources\/[^"]+)"/g)) refs.add(m[1]);
+    for (const m of html.matchAll(
+      /(?:src|href)="https?:\/\/(?:www\.)?aliwallick\.com\/blog\/wp-content\/uploads\/([^"]+)"/g,
+    )) {
+      blogRefs.add(m[1]);
+    }
+    for (const m of html.matchAll(/youtube\.com\/(?:embed|v)\/([A-Za-z0-9_-]{11})/g)) {
+      videoIds.add(m[1]);
+    }
+  }
+
+  await preflight(blogRefs);
+
+  console.log(`Rebuilding ${path.relative(ROOT, OUT)}/ ...\n`);
+  await rm(OUT, { recursive: true, force: true });
+  await mkdir(OUT, { recursive: true });
+
+  /**
+   * Paths where the *current* working-tree file supersedes the historical blob.
+   *
+   * Only one entry, and it is not an aesthetic preference — it is a privacy one.
+   * The old resume carries a PO Box. Restoring it from `ce4533e~1` is faithful
+   * and also silently manufactures a second copy of an exposure the repo is
+   * actively trying to reduce (#197, #200); the first run of this script did
+   * exactly that, and it got committed before anyone noticed.
+   *
+   * The working-tree copy has that one line removed from its content stream —
+   * see the redaction note in docs/PRESERVATION.md. Reading from disk here means
+   * a rebuild can never reintroduce the address. The original is untouched in
+   * history and in `v1-legacy` if it is ever genuinely needed.
+   */
+  const PREFER_WORKTREE = new Set(['resources/WallickAli-Resume.pdf']);
+
+  let restored = 0;
+  let restoredBytes = 0;
+  let superseded = 0;
+  const missing = [];
+  for (const ref of [...refs].sort()) {
+    let buf;
+    if (PREFER_WORKTREE.has(ref) && existsSync(path.join(ROOT, ref))) {
+      buf = await readFile(path.join(ROOT, ref));
+      superseded++;
+      const dest = path.join(OUT, ref);
+      await mkdir(path.dirname(dest), { recursive: true });
+      await writeFile(dest, buf);
+      restored++;
+      restoredBytes += buf.length;
+      continue;
+    }
+    try {
+      buf = execFileSync('git', ['cat-file', 'blob', `${ASSET_COMMIT}:${ref}`], {
+        maxBuffer: 64 * 1024 * 1024,
+      });
+    } catch {
+      missing.push(ref);
+      continue;
+    }
+    const dest = path.join(OUT, ref);
+    await mkdir(path.dirname(dest), { recursive: true });
+    await writeFile(dest, buf);
+    restored++;
+    restoredBytes += buf.length;
+  }
+  console.log(
+    `  assets   ${restored}/${refs.size} restored (${(restoredBytes / 1048576).toFixed(2)} MB) — ` +
+      `${restored - superseded} from ${ASSET_COMMIT}, ${superseded} from the working tree`,
+  );
+  if (missing.length) {
+    console.log(`  MISSING  ${missing.length}:`);
+    for (const m of missing) console.log(`    ${m}`);
+  }
+
+  /* --- 3b0. blog images, straight off the live host -------------------------
+   *
+   * These are the one class of asset that is in neither `snapshot/` nor git:
+   * the blog's pagination pages reference them by absolute URL against
+   * aliwallick.com, so Phase 0's `/resources/` sweep never saw them.
+   *
+   * Phase 0 *did* download them for `content/archive/`, but under semantic names
+   * (`Cards.jpg` became `2011-05-cards.jpg`), so they cannot be mapped back by
+   * path. Rather than couple this archive to another directory's naming
+   * convention — which would break the moment either is reorganised — they are
+   * fetched once and stored under their original paths. The copies are then
+   * hash-compared against `content/archive/images/` and the result reported,
+   * which doubles as the spot-check #51 wants before retiring WordPress.
+   *
+   * This is the only step that *requires* the old host to still be up.
+   */
+  const { createHash } = await import('node:crypto');
+  const archiveHashes = new Map();
+  const ARCHIVE_IMAGES = path.join(ROOT, 'content/archive/images');
+  if (existsSync(ARCHIVE_IMAGES)) {
+    for (const f of await readdir(ARCHIVE_IMAGES)) {
+      const buf = await readFile(path.join(ARCHIVE_IMAGES, f));
+      archiveHashes.set(createHash('sha256').update(buf).digest('hex'), f);
+    }
+  }
+
+  let blogOk = 0;
+  const blogFailed = [];
+  const blogMatched = [];
+  for (const rel of [...blogRefs].sort()) {
+    const dest = path.join(OUT, BLOG_DIR, rel);
+    try {
+      const res = await fetch(`${LIVE_ORIGIN}/blog/wp-content/uploads/${rel}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const buf = Buffer.from(await res.arrayBuffer());
+      await mkdir(path.dirname(dest), { recursive: true });
+      await writeFile(dest, buf);
+      blogOk++;
+      const hit = archiveHashes.get(createHash('sha256').update(buf).digest('hex'));
+      if (hit) blogMatched.push(`${rel} == content/archive/images/${hit}`);
+    } catch (error) {
+      blogFailed.push(`${rel} (${String(error).split('\n')[0]})`);
+    }
+  }
+  console.log(`  blog img ${blogOk}/${blogRefs.size} fetched into ${BLOG_DIR}/`);
+  console.log(
+    `           ${blogMatched.length}/${blogOk} byte-identical to content/archive/images/`,
+  );
+  if (blogFailed.length) {
+    console.log(`  FAILED   ${blogFailed.length} — is the old host still up?`);
+    for (const f of blogFailed) console.log(`    ${f}`);
+  }
+
+  // --- 3b. YouTube poster frames -------------------------------------------
+  await mkdir(path.join(OUT, POSTER_DIR), { recursive: true });
+  let posters = 0;
+  const posterMissing = [];
+  for (const id of [...videoIds].sort()) {
+    const dest = path.join(OUT, POSTER_DIR, `${id}.jpg`);
+    if (existsSync(dest)) {
+      posters++;
+      continue;
+    }
+    let ok = false;
+    // hqdefault always exists; maxresdefault often doesn't. Try the good one first.
+    for (const name of ['maxresdefault', 'hqdefault']) {
+      try {
+        const res = await fetch(`https://i.ytimg.com/vi/${id}/${name}.jpg`);
+        if (!res.ok) continue;
+        const buf = Buffer.from(await res.arrayBuffer());
+        // YouTube serves a 120x90 grey placeholder for missing sizes.
+        if (buf.length < 4000) continue;
+        await writeFile(dest, buf);
+        ok = true;
+        break;
+      } catch {
+        /* try next */
+      }
+    }
+    ok ? posters++ : posterMissing.push(id);
+  }
+  console.log(`  posters  ${posters}/${videoIds.size} fetched into ${POSTER_DIR}/`);
+  if (posterMissing.length) console.log(`  no poster for: ${posterMissing.join(', ')}`);
+
+  /** Relative path to a committed poster frame, or null if the video is gone. */
+  function posterFor(id, pageRel) {
+    const target = `${POSTER_DIR}/${id}.jpg`;
+    return existsSync(path.join(OUT, target)) ? relativize(pageRel, target) : null;
+  }
+
+  // --- 3c. pages ------------------------------------------------------------
+  for (const p of pages) {
+    const html = await readFile(path.join(SRC, p), 'utf8');
+    const { html: rewritten } = rewritePage(p, html, posterFor);
+    const dest = path.join(OUT, p);
+    await mkdir(path.dirname(dest), { recursive: true });
+    await writeFile(dest, rewritten);
+  }
+  console.log(`  pages    ${pages.length} rewritten`);
+
+  // --- 3d. a small stylesheet for the two elements this script introduces ---
+  await writeFile(path.join(OUT, 'resources/css/archive.css'), ARCHIVE_CSS);
+  for (const p of pages) {
+    const dest = path.join(OUT, p);
+    let html = await readFile(dest, 'utf8');
+    const href = relativize(p, 'resources/css/archive.css');
+    html = html.replace(/<\/head>/i, `  <link rel="stylesheet" href="${href}">\n</head>`);
+    await writeFile(dest, html);
+  }
+
+  // --- 3e. a README so the directory explains itself ------------------------
+  await writeFile(path.join(OUT, 'README.md'), RENDERED_README);
+
+  console.log(`\n✓ ${path.relative(ROOT, OUT)}/ rebuilt.`);
+  const totalSize = execFileSync('du', ['-sh', OUT]).toString().split('\t')[0];
+  console.log(`  size: ${totalSize}`);
+}
 
 /* ------------------------------------------------------------------ *
  * 4. Verify — the archive must be self-contained and complete
@@ -478,14 +642,26 @@ console.log(`  size: ${totalSize}`);
  * nobody noticed for a decade.
  *
  * Same spirit as scripts/check-links.mjs, where every rule guards a real bug.
+ *
+ * This asserts against `snapshot/rendered/` as it stands on disk, which is the
+ * whole contract `--check-selfcontained` implies and did not honour until #344.
+ * Reading the page list from the archive rather than from `snapshot/` is what
+ * makes it a check on the artifact instead of on the artifact's inputs.
  * ------------------------------------------------------------------ */
 
-if (args.has('--check-selfcontained') || args.has('--serve')) {
+if (CHECK || SERVE) {
+  if (!existsSync(OUT)) {
+    console.error(`✗ ${path.relative(ROOT, OUT)}/ does not exist — rebuild it first:`);
+    console.error('    node scripts/restore-snapshot.mjs --rebuild');
+    process.exit(1);
+  }
+  pages ??= await htmlPages(OUT);
+
   const { serveDist } = await import('./lib/serve-dist.mjs');
   const { launchChromium } = await import('./lib/launch-chromium.mjs');
   const { origin, close } = await serveDist(OUT);
 
-  if (args.has('--serve') && !args.has('--check-selfcontained')) {
+  if (SERVE && !CHECK) {
     console.log(`\nServing ${path.relative(ROOT, OUT)}/ at ${origin}`);
     console.log('Ctrl-C to stop.');
   } else {

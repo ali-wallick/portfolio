@@ -13,10 +13,12 @@
 # handler. `resources/WallickAli-Resume.pdf` is the redacted 2019 résumé, kept
 # deliberately.
 #
-# Two exceptions. `snapshot/rendered/` is *derived*, not captured: it is
-# regenerated wholesale by `scripts/restore-snapshot.mjs` from the faithful
-# pages beside it, so hand-editing it is pointless rather than destructive —
-# the next run overwrites it. It sits under snapshot/ deliberately, so the whole
+# Two exceptions. `snapshot/rendered/` is *derived*, not captured: it is written
+# by `scripts/restore-snapshot.mjs --rebuild` from the faithful pages beside it,
+# so hand-editing it is pointless rather than destructive — the next rebuild
+# overwrites it. Note that only 28 of its 102 files come from those pages; the
+# rest are recovered from a commit and two remote hosts, which is why a rebuild
+# preflights before it deletes (#344). It sits under snapshot/ deliberately, so the whole
 # archive stays one directory to tag and remove later (see #45). And
 # `infra/README.md` is a live document (the DNS tooling's own notes), not part
 # of the captured record.
@@ -62,8 +64,8 @@ If you need the material, read it and write somewhere else. If you genuinely
 need to change it, ask the user first.
 
 Looking for a version that renders? That is snapshot/rendered/ — derived,
-writable, and rebuilt by \`node scripts/restore-snapshot.mjs\`. Change the
-script, not its output.
+writable, and rebuilt by \`node scripts/restore-snapshot.mjs --rebuild\`. Change
+the script, not its output.
 EOF
     exit 2
     ;;
