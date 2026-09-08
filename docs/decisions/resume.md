@@ -1005,3 +1005,70 @@ reports `suggestedFilename()` as `AliWallick-Resume.pdf` at rest and `AliWallick
 after toggling to the two-pager. `ResumeActions.astro` and `resume-density.ts` are both in
 `build-pdf.mjs`'s `byteHashedFiles`, so the PDFs regenerated; `check:resume-print` confirmed the
 geometry is unmoved, which is the guard that matters — the changed bytes say nothing.
+
+## A PDF that declares no title lets Google write one (2026-09-08, closes #197)
+
+For years Google's result for `resources/WallickAli-Resume.pdf` carried Ali's PO Box in the result
+**title**, and #40, #132 and #197 all reasoned about it as a fact about the file's _contents_. It is
+really a fact about its _metadata_. The 2019 PDF declares **no `/Title`, no `/Creator` and no
+`/Producer` at all** — checked directly, not inferred — and a PDF with no declared title leaves
+Google to synthesise one from the first line of visible text. On that document the first line was
+the name, the email and the address.
+
+**The generated PDFs cannot have that shape, and nobody guarded against it.** `build-pdf.mjs`
+renders the real `/resume` and `/resume/full` routes through headless Chromium, so each PDF inherits
+the `<title>` `BaseLayout` already emits for every route — `Resume — Ali Wallick`, from #256's
+`fullTitle`. Chromium writes that to `/Title` and sets `/DisplayDocTitle true`, so a viewer shows the
+declared title rather than the filename. **This is a second-order benefit of Phase 4's "single
+source, with real PDF files" decision**: a document that is a render of a route cannot lack a title,
+because the route it renders from cannot.
+
+Measured on the served bytes, when #197's URL Inspection returned the live file:
+
+| Field              | `resources/WallickAli-Resume.pdf` (2019) | The generated PDFs         |
+| ------------------ | ---------------------------------------- | -------------------------- |
+| `/Title`           | absent                                   | `Resume — Ali Wallick`     |
+| `/Creator`         | absent                                   | names the rendering engine |
+| `/Producer`        | absent                                   | names the rendering engine |
+| `/DisplayDocTitle` | absent                                   | `true`                     |
+
+**The right-hand column is deliberately not the literal strings, and that is the correction worth
+keeping.** An earlier draft of this section pinned `Chromium` and `Skia/PDF m151` under a column
+headed `public/resume.pdf` — values read off the _deployed_ file. The committed one said
+`HeadlessChrome/141.0.0.0` and `Skia/PDF m141` at the same moment, because a web session's fallback
+Chromium had rendered it. Per #306 that variance is expected and not a defect, so pinning either
+string here only guarantees the record goes stale on the next regeneration. **What is structural is
+that all four fields are declared at all**, and on the 2019 PDF not one of them is.
+
+### What closed #197
+
+The question the issue held open was whether the #132 redirect alone would retire the indexed result,
+or whether a Search Console removal had to be spent. It was the redirect. URL Inspection returned
+**"URL is not on Google"**, last crawled 2026-09-07, and the live test resolved the `www` → apex →
+`/resume.pdf` chain to the current one-page résumé: `/Count 1`, three link annotations
+(`contact@aliwallick.com`, the apex, LinkedIn), no address. The producer fingerprint matched
+`origin/release`'s committed `public/resume.pdf` byte for byte, which is also a rare positive result
+against "deployed state drifts from the repo".
+
+**One method note worth keeping, because it produced a confident wrong answer first.** A web search
+run from a session here reported the old result still ranked and still titled with the address, and
+that was posted to #197 as evidence before Search Console contradicted it. Third-party search indexes
+carry their own pre-cutover snapshots. **For "what does Google hold?", Search Console is the source
+and a search tool is not.**
+
+[#200](https://github.com/ali-wallick/Portfolio/issues/200) is untouched by any of this and stands on
+its own facts — archive.org preserves by design, and its 2010 capture carries a home street address
+and a mobile number rather than the PO Box.
+
+### The guard question, and why the answer is weaker than it looks
+
+`countPages()` already parses these bytes to assert the one-pager is one page, so asserting a
+non-empty `/Title` beside it would be a few lines in a file that is already the right home — no new
+script, no heuristic, and it cannot fire on correct output. Cheap.
+
+**What it would protect is no longer the leak, though.** The current résumé carries no address at
+all, so a PDF shipping without a title would cost an ugly synthesised result title built from a line
+that is now just the name and the public contact links. That is a cosmetic regression, not a
+disclosure. Recorded here rather than built, on the same reasoning #327 and #338 used when they
+measured a candidate guard and declined it: the mechanism is worth knowing, and the failure it
+prevents has to earn the check.
