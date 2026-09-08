@@ -5086,3 +5086,88 @@ depended on reading the last, and the two things that looked like fan-out were o
 loop over four commits and one `grep` across ten skill files. The whole investigation was cheaper
 than the analysis it produced would suggest, because the decisive evidence was four line counts and
 one merged PR's stated rationale.
+
+## #352 — a bug with no repro, found by reading the bail-out rather than the motion (2026-09-07)
+
+The report was a description of motion: no reticle on any header, then brackets travelling in from
+the corner on the first hover, and no idea when it happens. The instinct that motion is where the
+bug is would have been wrong — nothing about the travel was broken. What was broken is a
+**measurement that declined to happen**, three states earlier, and the travel was the only place it
+became visible.
+
+### The environment reproduced it before the reasoning got there
+
+Three candidate triggers were on the table from reading `place()`'s bail-out — a null home, a
+zero-width target, and an off-screen home — and all three looked impossible on a site whose header
+is sticky and whose layout always renders a wordmark. Then the preview pane loaded `/projects` and
+the reticle came up unplaced, with the nav pill measuring a real rect and `window.innerHeight`
+reporting 0. **The browser pane is a hidden document, which is the same thing as a background tab.**
+The unfalsifiable-looking condition was the one the tooling was already sitting in.
+
+Worth keeping as a method note rather than a fact about this bug: an agent verifying visual
+behaviour in a hidden preview is testing a page-visibility state a foreground browser never
+occupies, which is a source of both false alarms and — here — a free reproduction of a bug a human
+could not trigger on purpose.
+
+### The fix was two generalisations, not two patches
+
+Both halves already existed as special cases that had been added one at a time — `dormant` (#33),
+then `crossing` (#240) — and the new state (never placed) would have been a third `if`. Replacing
+them with `shown` costs a line and removes the class. Same shape as the "every picture is matted"
+note: a treatment written as a list of surfaces misses the next surface, and `reticle.ts` had a list
+of reasons-to-cut with the same failure mode. The reasoning is in
+[`docs/decisions/design.md`](decisions/design.md).
+
+### Verification
+
+Instrumented rather than eyeballed, because the whole bug is an ordering: a `MutationObserver` on
+the reticle recorded that geometry is now assigned first and `is-armed` lands 9ms later, where
+before the class went on over an unplaced element. The three behaviours that had to survive were
+each checked separately — a header→header hover still travels (no `is-cutting`), an acquisition from
+an off-screen target now cuts, and a normal foreground load still rests on the wordmark and arms.
+
+### The fix shipped, and the report came back — which is the argument for shipping to a preview
+
+Ali retested the preview and still had a fly-in, with a repro this time: refresh with the pointer
+over the wordmark. It was a **second** cause with the same appearance — the first acquisition after
+a page load, travelling the width of the header — and no amount of further reasoning about the first
+one would have found it, because the first one was genuinely fixed.
+
+Two method notes fell out of that round:
+
+- **The verification environment could not see it.** The preview pane is a hidden document, so it
+  never dispatches the load-time `pointerover` a stationary cursor produces in a foreground tab.
+  The bug's whole trigger is a foreground behaviour. The pane reproduced cause one for free and was
+  structurally blind to cause two; the tell was reaching for a real browser and finding the Chrome
+  extension unavailable, at which point the honest move was to reproduce the _decision_ — dispatch
+  the event by hand and watch which branch `retarget()` took — rather than the frame timing.
+- **"Did the fix reach the thing being tested?" is a question to answer with a timestamp, not an
+  assumption.** Before treating the second report as a second bug, the Workers build check said
+  02:53 against a test some fourteen minutes later. Had it been the other way round the whole
+  investigation would have been chasing a stale bundle.
+
+### The third round was a wrong fix, and it was wrong in a way worth recording
+
+The second cause was diagnosed correctly and answered badly: the load-time move was made a cut
+instead of a travel, which Ali rejected immediately — _"that actually seems worse. I see the
+movement always on reload now."_ A teleport is still the brackets appearing somewhere they never
+belonged.
+
+**Both attempts were arguments about the 500ms when the complaint was about the two positions.**
+Having a fix in hand for one symptom made the next symptom look like the same kind of question, and
+it wasn't. The move existed because a stationary pointer's target is not knowable until after first
+paint, so the answer was to stop painting a provisional position at all rather than to restyle the
+correction — which also has the property the cut version lacked of leaving #240's settled travel
+untouched.
+
+Three rounds on one issue, each shipped to a preview and each caught by Ali in under fifteen
+minutes. That loop is the thing CLAUDE.md's review-loop section is actually for, and it is worth
+noting that **none of the three would have been caught by `npm run verify`**, which was green
+throughout — including for the version she rejected.
+
+### Model allocation and cost
+
+Opus, inline, no subagents. The whole investigation is one file and its stylesheet, and every step
+was a consequence of the last — the fan-out test in CLAUDE.md's "Notes for agents" says don't, and
+the cheapest step (loading the page in the pane) settled the question the reasoning was still
+circling.

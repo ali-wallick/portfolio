@@ -1455,3 +1455,81 @@ returned one rect per item, and an assertion built from a right-edge coordinate 
 times against correct code). `/about`'s paragraphs render at exactly 600px — 37.5rem, as the token
 says — and 83 average agrees with #253's own probe table for that width. Only then was the baseline
 committed.
+
+## Appearing is always a cut, and arming waits for a real placement (2026-09-07, closes #352)
+
+Ali on `main`: _"sometimes I am on a page there's no reticle on any header. Then I mouse over a
+header link you can see the reticle traveling from the corner to it."_ No repro, because the trigger
+is not on the page — it is the state of the tab the page loaded into.
+
+**`place()` bails without assigning geometry when its target measures off screen, and a document
+that has never been presented reports a zero-height viewport.** So the test that exists to hide the
+brackets when their target scrolls away also hides them from a page that nobody has looked at yet,
+including a resting nav pill the sticky header would otherwise keep on screen forever. Measured in a
+hidden tab on `/projects`: the pill's own rect is real — top 100, width 83.7 — while
+`window.innerHeight` is 0. Load the site into a background tab (a ⌘-click, a session restore, a
+prerender) and that is the state the page starts in.
+
+Two more things then had to be true for it to be visible as a fly-in, and both were:
+
+- **`arm()` counted frames rather than placements.** It added `is-armed` two frames after load
+  whether or not the measurement succeeded, so the transition went live over an element still at its
+  CSS origin: 0×0 at `translate(0, 0)`, the top-left corner.
+- **The first acquisition travelled.** #240's cut fires for `dormant` or for a header/body crossing,
+  and hovering a header link out of a header home is neither. Reproduced: from the unplaced state a
+  `pointerover` on a nav link left the brackets mid-flight at `translate(238, 2)` on their way to
+  `translate(905, 8)`.
+
+**The general rule, and the reason this belongs here rather than only in the file's own header:
+travel is only legible if the brackets were visible where the travel started.** That is what #240
+argued about the page-spanning diagonal and what #33 argued about the return trip, each time as a
+special case — `dormant`, then `crossing`. There is a third state neither named (off screen), a
+fourth this issue added (never placed), and no reason to expect a fifth not to turn up. So the
+condition is now the union rather than the members: `shown`, set by every path through `place()`,
+and **acquiring while not shown cuts**. `dormant` stopped being tested at the call site in the same
+change, which is the tell that it was standing in for this all along.
+
+The second rule is the same move applied to arming: a frame count was a **proxy** for "geometry has
+been assigned", so `arm()` is called from the bottom of `place()` and from nowhere else. Every early
+return skips it, and the brackets stay unarmed — and invisible — until there is a real box to be
+unarmed at. **A proxy that is right in every case you tested is still a proxy**, and this one was
+wrong in exactly the case where its own guarantee mattered.
+
+`visibilitychange` re-measures on top of both, because neither rule puts the reticle back on the
+pill — they only stop it flying. Without it the brackets are absent until the pointer moves, which
+is the half of the report that was about absence rather than about motion.
+
+### Nothing paints until the first target has settled
+
+The rest of the same report, found only because Ali kept testing after the first fix shipped:
+refresh with the pointer already over the wordmark, and the brackets rest on the nav pill and then
+relocate the whole width of the header to reach it. **522px on `/projects` at 1280 wide** — pill at
+x=724, wordmark at x=202. Nothing was broken; that is what the rules said to do.
+
+**Cutting that move instead of travelling it was tried, shipped, and rejected on sight** — _"that
+actually seems worse. I see the movement always on reload now."_ It trades a slide for a teleport,
+and the viewer still watches the brackets sit somewhere they never belonged. That is the finding
+worth keeping: **when a move itself is the artifact, changing how it is animated cannot help.** Both
+treatments were arguments about the 500ms; the complaint was about the two positions.
+
+The move exists because **a stationary pointer already has a target at load and the page does not
+know it yet.** Chrome dispatches that pointer's `pointerover` once there is a painted frame to
+hit-test, which is after the reticle has already been placed at its home. Everything painted in
+between is a guess being corrected in public.
+
+So the brackets are measured at load and **held invisible** until the target settles: the first
+acquisition wins if one arrives, an 80ms window decides if none does, and either way the reveal is a
+placement rather than a move. Verified three ways on `/projects` — a pointer parked on the wordmark
+before the first frame produces exactly one painted state, the wordmark, with the pill never
+bracketed; no pointer target lands on the pill at rest; and a move made afterwards still
+interpolates (mid-flight at x=277 of a move to x=411).
+
+**This deliberately leaves #240 alone**, which the rejected version did not. A pointer that arrives
+later — reload, look, then move to a nav link — still travels within a region and still cuts across
+the boundary, exactly as the switcher settled. What goes is only the move nobody made.
+
+**The general shape, and the reason this is the second entry in one issue: a rule about motion
+written in terms of _where_ keeps finding new cases.** `dormant`, then `crossing`, then off screen,
+then never placed — four conditions and one question, which is whether the viewer watched the
+brackets arrive at the place the travel starts from. The load-time case is the same question with a
+different answer: there, the honest move is not to have painted a starting place at all.

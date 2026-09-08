@@ -86,6 +86,69 @@
  * header being sticky ("because the reticle needs a home"), and both render
  * nothing at all on a phone, where there is no pointer and the brackets are
  * the only thing the nav pill gets.
+ *
+ * ## Appearing is always a cut, and arming waits for a real placement (#352)
+ *
+ * Both halves of one bug: the reticle could load *unplaced*, and then fly in
+ * from the top-left corner on the first thing the pointer touched.
+ *
+ * `place()` bails without assigning geometry when its target measures off
+ * screen — and **a document that has never been presented reports a zero-height
+ * viewport**, so that test fails for everything on the page, including a
+ * resting nav pill the sticky header would otherwise keep visible forever.
+ * Measured in a hidden tab on `/projects`: the pill's own rect is real (top
+ * 100, width 83.7) while `window.innerHeight` is 0. Load the site into a
+ * background tab and that is the state the page starts in.
+ *
+ * `arm()` then armed the transition two frames later regardless, over an
+ * element still at its CSS origin, and `retarget()` cut only for `dormant` or
+ * for a crossing — neither of which a header target coming out of the header
+ * home is. So the brackets travelled, 0,0 to wherever the pointer was.
+ *
+ * The two rules that replace it are each a generalisation of something already
+ * settled rather than a new behaviour:
+ *
+ * 1. **Arm on the first placement that actually happened.** The two-frame dance
+ *    was a proxy for "geometry has been assigned"; it is now the real
+ *    condition, so a bailed measurement cannot leave a live transition sitting
+ *    over the origin.
+ * 2. **Acquiring while invisible is a cut**, whatever made it invisible —
+ *    dormant, scrolled off screen, or never placed. This is #240's argument
+ *    with the special case taken out of it: travel is only legible if the
+ *    brackets were visible where the travel *started*, and none of these three
+ *    states is somewhere a viewer watched them leave.
+ *
+ * `visibilitychange` re-measures on top of that, which fixes the absence at its
+ * source instead of only making its consequence prettier — the brackets are on
+ * the pill when you first look at the tab, rather than when you first move the
+ * pointer.
+ *
+ * ## Nothing paints until the first target has settled (#352)
+ *
+ * The rest of the same report, and the half that was not a bug at all: refresh
+ * with the pointer already over the wordmark and the brackets rest on the nav
+ * pill, then relocate to it. **522px across the header on `/projects` at 1280
+ * wide** — pill at x=724, wordmark at x=202. Correct by the rules as written,
+ * and it reads as the reticle having been lost and coming back.
+ *
+ * **Cutting that move instead of travelling it was the wrong answer, tried and
+ * rejected: it trades a slide for a teleport and the viewer still sees the
+ * brackets in a place they never belonged.** The move itself is the artifact.
+ * A stationary pointer already has a target at load — the page just doesn't
+ * know it yet, because Chrome dispatches that pointer's `pointerover` after the
+ * first paint rather than before it. Everything painted in between is a guess
+ * being corrected in public.
+ *
+ * So the brackets are measured at load and **held invisible** until the target
+ * has settled: the first acquisition wins if one arrives, `LAND` decides if
+ * none does, and either way the reveal is a placement rather than a move. On a
+ * reload with the pointer parked anywhere, the brackets simply appear where
+ * they belong.
+ *
+ * **This deliberately leaves #240 alone.** A pointer that arrives *later* — you
+ * reload, look, then move to a nav link — still travels within a region and
+ * still cuts across the boundary, which is what the switcher settled. What goes
+ * is only the move nobody made.
  */
 
 /** How far outside the target's box the brackets sit. */
@@ -131,6 +194,19 @@ const HOLD = 1600;
  * pass-through registers as an aim.
  */
 const SETTLE = 25;
+
+/**
+ * How long after the first frame to give up waiting for a load-time target, in
+ * ms. A stationary pointer's `pointerover` is dispatched once there is a
+ * painted frame to hit-test, so the window has to cover that dispatch plus
+ * `SETTLE` — 80ms is comfortably past both without being long enough for the
+ * delay itself to read as the reticle being slow to arrive.
+ *
+ * Erring long is the safe direction: overshoot and the brackets appear a frame
+ * or two later than they could have, undershoot and the relocation this exists
+ * to prevent is back.
+ */
+const LAND = 80;
 
 /** Controls. Pointing at one is an act of aiming; pointing at prose isn't. */
 /* `.breadcrumb a` rather than `.breadcrumb` (#314): the crumb list is a `<p>`
@@ -201,6 +277,21 @@ let current: HTMLElement | null = home;
     `place()`, which is about geometry rather than about idling. */
 let dormant = false;
 
+/**
+ * Whether the last `place()` left the brackets actually visible — the union of
+ * every reason they might not be, which is exactly what rule 2 above needs and
+ * what `dormant` alone was standing in for. Starts false because nothing has
+ * been placed yet, which is the state the whole fix is about (#352).
+ */
+let shown = false;
+
+/**
+ * Whether the brackets have been revealed yet. Until they have, `place()`
+ * measures and positions but paints nothing, so the load-time target can be
+ * corrected without anyone watching it happen (#352).
+ */
+let landed = false;
+
 let frame = 0;
 let idle = 0;
 let settling = 0;
@@ -209,13 +300,17 @@ function place(): void {
   frame = 0;
   const el = current;
   if (!el || !el.isConnected || dormant) {
+    shown = false;
     root.style.opacity = '0';
     return;
   }
 
   const box = el.getBoundingClientRect();
   const onScreen = box.width > 0 && box.bottom > 0 && box.top < window.innerHeight;
-  root.style.opacity = onScreen ? '1' : '0';
+  /* Geometry is still assigned while unlanded, so that revealing is a paint
+     and never a move. Only the opacity waits. */
+  shown = onScreen && landed;
+  root.style.opacity = shown ? '1' : '0';
   if (!onScreen) return;
 
   root.style.width = `${box.width + PAD * 2}px`;
@@ -229,6 +324,11 @@ function place(): void {
   const headerBottom = inHeader(el) ? 0 : (header?.getBoundingClientRect().bottom ?? 0);
   const covered = headerBottom - (box.top - PAD);
   root.style.clipPath = covered > 0 ? `inset(${covered}px 0 0 0)` : '';
+
+  /* Geometry now exists, so the transition is safe to turn on. Every early
+     return above skips this deliberately — see `arm()`. Held until the reveal
+     as well: an unlanded reticle has a target that is still provisional. */
+  if (landed) arm();
 }
 
 /**
@@ -271,15 +371,21 @@ function retarget(): void {
        the pair rather than on whether the target happens to be home: pointing
        at a nav link and then at a card is the same long diagonal as launching
        out of the resting pill, and both are the thing being removed. */
-    const crossing = !dormant && current !== null && inHeader(current) !== inHeader(active);
+    const crossing = current !== null && inHeader(current) !== inHeader(active);
 
     current = active;
-    if (dormant) {
-      dormant = false;
-      cut();
+    dormant = false;
+    /* A target that arrives before the reveal *is* the load-time placement, not
+       a move away from one — so it lands here rather than travelling or
+       cutting from a home nobody saw (#352). */
+    if (!landed) {
+      land();
       return;
     }
-    if (crossing) {
+    /* `!shown` covers dormant, scrolled off screen, and never placed — three
+       states with one thing in common, which is that nobody saw the brackets
+       where the travel would start (#352). */
+    if (!shown || crossing) {
       cut();
       return;
     }
@@ -412,15 +518,47 @@ document.addEventListener('transitionend', (event) => {
  * Two frames: one for the style assignment to be committed, one for it to have
  * been painted before the transition is allowed to apply.
  *
- * Waiting on `fonts.ready` as well because the resting target is a nav pill,
- * and a pill set in a webfont is a different size before and after the face
- * arrives. Measuring once, early, would park the reticle at the fallback's
- * dimensions and leave it there.
+ * **Called from the bottom of `place()`, and only from there (#352).** It used
+ * to arm on a frame count taken at load, which is a proxy for "geometry has
+ * been assigned" that is wrong in precisely the case that matters: a
+ * measurement that bailed left the transition live over an element still at
+ * `translate(0, 0)`, so the next acquisition flew in from the corner. Every
+ * early return in `place()` therefore skips this, and the brackets stay
+ * unarmed — and invisible — until there is a real box to be unarmed *at*.
+ *
+ * Waiting on `fonts.ready` below as well because the resting target is a nav
+ * pill, and a pill set in a webfont is a different size before and after the
+ * face arrives. Measuring once, early, would park the reticle at the
+ * fallback's dimensions and leave it there.
  */
+let armed = false;
 function arm(): void {
-  place();
+  if (armed) return;
+  armed = true;
   requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-armed')));
 }
 
-arm();
+/**
+ * Reveal, once. Called by whichever comes first: an acquisition that arrives
+ * before the reticle has painted, or `LAND` after the first frame if nothing
+ * does. The placement is already measured either way, so this paints rather
+ * than moves — which is the whole point (#352).
+ */
+function land(): void {
+  if (landed) return;
+  landed = true;
+  place();
+}
+
+place();
+
+/* Two frames, then the window: the first frame is what gives a stationary
+   pointer something to hit-test, and its `pointerover` follows. */
+requestAnimationFrame(() => requestAnimationFrame(() => window.setTimeout(land, LAND)));
+
 document.fonts?.ready.then(schedule);
+
+/* A tab that loads in the background has no viewport to measure against, so
+   the placement above bailed and the brackets are nowhere. Re-measure when the
+   document is first shown rather than waiting for the pointer to arrive (#352). */
+document.addEventListener('visibilitychange', schedule);
