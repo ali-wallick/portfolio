@@ -16,6 +16,11 @@ sentences are judged against.
 For a project that doesn't exist yet, start with `add-project` (front matter) and
 `write-project-page` (the prose body). Come back here when it's time to revisit what shipped.
 
+**Read `docs/decisions/content.md` before the audit.** It carries the Phase 3 gate, the wording
+pass, and every content-model decision since — including patterns an earlier pass already found
+and settled across a tier. Steps 4 and 9 write findings back into it, so read it first and a
+finding is actually new.
+
 ## 1. Know what's being asked
 
 If the ask is an issue, **read its comments, not just its body** — bodies go stale, and a correction

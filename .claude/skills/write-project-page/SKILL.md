@@ -69,7 +69,8 @@ a college class and a Girl Scout troop, a synagogue board seat — had no trace 
 ## 2. Voice
 
 Read the "Voice and content conventions" section of `CLAUDE.md` — it is the authority and it may
-have moved on since this file was written. The short version:
+have moved on since this file was written, and `docs/decisions/content.md` for the reasoning
+behind it. The short version:
 
 - **First person, past tense.** The single biggest factual problem with the old site was present
   tense that stopped being true in 2019 and sat on the page for seven years. Anything that finished

@@ -6,6 +6,9 @@ carries the runbook and the deploy rules; this file carries the reasoning.
 
 Sections are in the order they were decided. Append a new pass at the end.
 
+**`grep '^## ' docs/decisions/tooling.md` is the index.** A heading here states the decision it
+settled rather than its topic, so scanning the headings beats scrolling the file.
+
 ---
 
 ## Phase 6 gate outcome (2026-08-23)

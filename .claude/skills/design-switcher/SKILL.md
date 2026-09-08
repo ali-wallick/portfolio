@@ -12,6 +12,11 @@ is the method rather than the code.
 
 [#33]: https://github.com/ali-wallick/Portfolio/issues/33
 
+**Read `docs/decisions/design.md` before choosing what to compare.** It is every look, motion,
+spacing, colour and control decision already settled, each with the measurement behind it.
+Section 1 below turns on knowing which axes are still open, and that file is where that is
+written down. This skill is the how; that file is the why.
+
 **The shape:** every candidate ships in one DOM on one preview route, a panel flips between them
 live, Ali reacts on a phone against the real content, and the whole instrument is deleted in the
 commit that settles the last axis.

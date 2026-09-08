@@ -15,7 +15,9 @@ blog, her old site, her 2019 resume, and a set of documents she supplied in 2026
 of all of it against the site's current copy.
 
 Then read the "Voice and content conventions" section of `CLAUDE.md`, which is the authority and may
-have moved on since this file was written.
+have moved on since this file was written. **And read `docs/decisions/content.md`**, which carries
+the reasoning those conventions were compressed out of — the wording pass, the gate, and what each
+measurement was taken against.
 
 Four independent corpora underpin it: her blog (2010–2019), a set of adult documents (2016–2024),
 MobilityWare's 2017 "Meet Ali Wallick" Q&A, and her own chat messages from 2026. The numbers worth

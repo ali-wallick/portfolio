@@ -15,6 +15,10 @@ Read `src/content.config.ts`. It is heavily commented and it is the contract. Do
 memory or from another entry's shape alone — the schema has real constraints and useful error
 messages, and a few fields exist specifically to prevent bugs the old site had.
 
+**Then read `docs/decisions/content.md` for why a field exists**, which the schema comments state
+but do not argue. A field that looks redundant usually settled a real question — `hero.type`,
+`links[].dead` and the `status` enum each closed one.
+
 ## 2. Gather what you need
 
 Ask the user for anything missing rather than guessing. **A wrong fact is much worse than an empty

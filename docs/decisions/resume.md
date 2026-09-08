@@ -11,6 +11,9 @@ second copy of the mechanism is exactly the drift the content model's guard tabl
 
 Sections are in the order they were decided. Append a new pass at the end.
 
+**`grep '^## ' docs/decisions/resume.md` is the index.** A heading here states the decision it
+settled rather than its topic, so scanning the headings beats scrolling the file.
+
 ---
 
 ## Phase 4 gate outcome (2026-08-17)

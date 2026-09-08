@@ -9,6 +9,9 @@ The `write-copy`, `write-project-page` and `content-pass` skills point here.
 
 Sections are in the order they were decided. Append a new pass at the end.
 
+**`grep '^## ' docs/decisions/content.md` is the index.** A heading here states the decision it
+settled rather than its topic, so scanning the headings beats scrolling the file.
+
 ---
 
 ## Phase 3 gate outcome (2026-08-16)

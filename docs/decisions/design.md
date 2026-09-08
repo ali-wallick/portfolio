@@ -9,6 +9,9 @@ sections are the live-switcher loop's output, and the `design-switcher` skill po
 
 Sections are in the order they were decided. Append a new pass at the end.
 
+**`grep '^## ' docs/decisions/design.md` is the index.** A heading here states the decision it
+settled rather than its topic, so scanning the headings beats scrolling the file.
+
 [`docs/REBUILD-LOG.md`](../REBUILD-LOG.md) carries the _narrative_ of how each pass was run and
 what it cost; this file carries what it decided. They are not two copies of one thing.
 
