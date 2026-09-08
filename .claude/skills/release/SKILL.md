@@ -10,6 +10,14 @@ Routine production deploys, not the one-time DNS cutover. That was `docs/LAUNCH.
 of what it left behind: **`main` → `release` is the production deploy**, per CLAUDE.md's "Merging to
 `main` does not deploy. `release` does." Nothing about DNS, mail, or the domain is touched here.
 
+**This skill's record is `docs/CLOUDFLARE.md`, not `docs/decisions/tooling.md`** — unusually, and
+worth stating so nobody re-files it. CLAUDE.md's skill table routes `release` to the tooling
+record, but the reasoning a release actually needs is not there: the mechanism is CLOUDFLARE.md's
+"release is production", and "Deployed state drifts from the repo, and it has now happened three
+times" — the failure the preconditions below exist to catch — is a section of `CLAUDE.md`, which
+every session has already read. tooling.md carries one relevant section, the Phase 6 gate that
+made the cutover its own moment rather than the end of a phase.
+
 ## What actually happens
 
 Workers Builds is configured with `release` as its production branch (`docs/CLOUDFLARE.md`, "release

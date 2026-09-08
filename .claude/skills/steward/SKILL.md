@@ -17,6 +17,13 @@ once an hour for a week.
 The harness's own rules defer to this file on **how proactive to be**. That is the one thing this
 file changes.
 
+The reasoning is in `docs/decisions/tooling.md`, under "A green PR waiting on Ali is not work"
+(2026-09-02) — Ali's call, the check-in that prompted it, and why the subscription stays. **That
+is a citation and deliberately not an instruction to go read it.** Every other skill here says
+read the record; this one is loaded by the harness on every PR event, so a read-the-record line
+would spend the budget this file exists to protect, once per wake. Follow the pointer when the
+rule below is being changed — not when it is being applied.
+
 ## The stand-down test
 
 On every PR event and every check-in, look at the whole PR on its current head. If **all three**

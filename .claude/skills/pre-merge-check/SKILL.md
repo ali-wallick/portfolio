@@ -14,9 +14,16 @@ including anything skipped and why. A check that silently didn't run is worse th
 npm run verify
 ```
 
-That is `format:check` → `astro check` (`check`) → `build` → `check:pdf` → `check:resume-print` →
-`check:linkedin` → `links`, exactly the seven steps `.github/workflows/ci.yml` runs. If it fails,
-stop and fix; nothing below matters until it passes.
+That is `format:check` → `astro check` (`check`) → `check:source` → `build` → `check:pdf` →
+`check:resume-print` → `check:linkedin` → `links` → `check:lines`, exactly the nine steps
+`.github/workflows/ci.yml` runs. If it fails, stop and fix; nothing below matters until it
+passes.
+
+**Read `docs/decisions/tooling.md` for why a check exists**, and before adding one. Its #338
+section is the test a new guard has to pass: measure the naive form against the content it would
+run on first. Three guards shipped narrower than proposed because measuring found them red on
+correct pages, and #107 declined four candidates outright on the same grounds. A sweep step here
+that could survive that test belongs in `verify` instead of in this file.
 
 `.claude/hooks/format-on-write.sh` runs Prettier on every file a session writes, so a
 `format:check` failure in a session-only branch usually means a file that was written some other

@@ -4971,3 +4971,118 @@ last, and the two candidates for fan-out were both cheaper inline — the archiv
 plus arithmetic, and the doc sweep is one grep across three files. Three throwaway Python scripts
 did the mechanical edits, each asserting its anchor matched exactly once before writing, which is
 what made a 353-line restructure of a 530-line file safe to do without reading the whole diff twice.
+
+## #339 — what makes a session read the record, measured rather than solved (2026-09-08)
+
+The #335 split named a risk and left it open: `CLAUDE.md` is read in full at session start,
+`docs/decisions/*.md` is read when something says to read it, and the session that skips the skill
+gets neither. The issue listed four options and asked for a call. **It is still open** — the
+recommendation below is a recommendation, and the decision is Ali's. What shipped is the part that
+is true either way.
+
+### The issue was two days stale, and both stale facts pointed the same direction
+
+#342 (#338) had merged in between, and it answered this question one level down. It took four
+unguarded rules, built guards for two, and declined the other three because a guard for them
+_"would need a heuristic that fires on correct code."_ That is exactly what a `SessionStart` hook or
+a path-triggered pointer does — it fires on every résumé edit, and almost all of them are correct.
+**The repo's own most recent precedent for this class of decision says don't build it**, which is a
+stronger argument than the one the issue made for itself.
+
+The same PR raised the guard floor the risk sits on: `verify` gained `check:source` and
+`check:lines`, and the "rules with no guard" list went 5 → 3. The issue's "the failure mode is waste,
+not breakage" paragraph got more true while the issue sat there.
+
+### The growth prediction was right about the rate and wrong about the location
+
+The issue measured ~190 lines/day of `CLAUDE.md` growth pre-split and worried design.md would face
+#335's problem on its own timescale. The rate held — the records went 3,184 → 3,463 in the first day
+— but the distribution inverted: **tooling +177, design +72, content +56, resume −26.**
+
+The mechanism is worth keeping because it retires the metric. **A record grows when its domain is
+worked, and a pass that tidies a record is itself a pass on that domain.** #343 — the _thinning_ PR,
+whose entire purpose was to remove redundant prose — net-added 49 lines, because recording the
+thinning in tooling.md cost more than the thinning saved in resume.md. Growth tracks what is being
+built that week, not which file it lands in. One day is not a trend, and that day was unusually
+tooling-heavy.
+
+### design.md does not need splitting, and the reason is not its size
+
+1,457 lines, but the comparison to #335 does not hold: that was 3,774 lines read _unconditionally at
+session start_, and these are read _conditionally, by the session that needs them_. Different
+problem, not the same one at a smaller scale.
+
+It is also already navigable, which is what the shipped change makes explicit. 18 `##` headings,
+each stating the decision it settled rather than its topic, so `grep '^## '` is a usable index and a
+split would replace descriptive headings with a directory listing that says less. One section (the
+gallery, #166) is 304 lines; the other 17 average 68. **The trigger to watch is a session reading it
+for one question and finding most of it irrelevant** — observable when it happens, and not
+observable one day in.
+
+### A fifth option, rejected on a timing argument
+
+Not in the issue: a `PreToolUse` pointer keyed on the edited path, reusing `guard-preserved.sh`'s
+mechanism, which already exists and is already wired to `Write|Edit`. It fires precisely in the
+uncovered case and costs nothing otherwise, which made it the most attractive option on the list.
+
+**It fires at the write, which is after the reasoning.** The waste #339 describes happens while
+reading and thinking, before the `Edit` call is made. It would convert "wrote something contradicting
+a settled decision" into "told at the last moment" — but the guards already cover that half, and the
+half they don't cover is the half a write-time hook cannot reach. Recorded so it is not reinvented.
+
+### The pointer pass found a stale fact, which is the argument for doing passes
+
+`update-resume` was the only skill carrying an imperative "read the record". The rest were passing
+mentions, one footnote at line 352, or nothing. Bringing seven up to that one was cheap and does
+**not** close the gap #339 names — a session that skips the skill still skips the pointer — but it
+stops one skill being the sole one that instructs.
+
+Reading `pre-merge-check` closely enough to place a pointer turned up an unrelated error: it
+described `verify` as "exactly the seven steps" and listed seven, when #338 had made it nine.
+#338 edited that same file — it updated the `TODO(` section that `check:source` replaced — and left
+the chain enumeration beside it stale. **A stale enumeration of the gate is worse than no
+enumeration**, because it reads as authoritative. Corrected here.
+
+### Two skills turned out not to want the pointer they were listed for
+
+`release` is routed to the tooling record by CLAUDE.md's skill table, and writing the pointer is
+what exposed that the content does not back it. The mechanism a release needs is
+`docs/CLOUDFLARE.md`'s "release is production"; the failure its preconditions defend against —
+"Deployed state drifts from the repo, and it has now happened three times" — is a section of
+`CLAUDE.md`, which every session has already read. tooling.md carries one relevant section, the
+Phase 6 gate. **A pointer added for uniformity would have sent a session to a 610-line file that
+does not answer its question**, so the skill now says where its record actually is. The routing
+table is left alone; the correction lives where it is read.
+
+The first draft of that pointer also asserted tooling.md carried the drift record. It does not — it
+cites it, in CLAUDE.md. Checking a claim about a file against the file is cheap, and this pass
+produced two wrong ones (the other credited #338 with declining three candidates, when #338 narrowed
+three and #107 declined four).
+
+### `steward` is the one skill where the pointer must not be an imperative
+
+Every other skill got "read `docs/decisions/<x>.md`". `steward` got a citation instead, and the
+asymmetry is the point: the harness loads that file from the PR's head branch **on every PR event**,
+and the file exists to stop a session spending a full-context wake on a PR that has not moved. A
+read-the-record line there would spend the budget it protects, once per wake. It says to follow the
+pointer when the rule is being _changed_, not when it is being _applied_.
+
+The same session then exercised that rule live. It stood down on #348 once CI was green with no
+conflict and nothing open, was woken by `ready_for_review` rather than by a check-in, re-applied the
+test, and stood down again — which is the shape the #275 link-check argument and the #339
+recommendation both land on independently: **subscribe to what changes, don't poll for it.**
+
+### Verification
+
+The index claim was measured before it was written, and then narrowed twice. The first draft said
+every heading names its decision _and the issue that closed it_; 27 of 42 cite an issue. The second
+added "and carries the date"; 41 of 42 do. Both clauses were dropped rather than hedged, leaving the
+one property that holds for all 42 and is the one that makes the file navigable anyway.
+
+### Model allocation and cost
+
+Opus, inline, no subagents — the same call as #340 and #344, for the same reason: every step
+depended on reading the last, and the two things that looked like fan-out were one `git ls-tree`
+loop over four commits and one `grep` across ten skill files. The whole investigation was cheaper
+than the analysis it produced would suggest, because the decisive evidence was four line counts and
+one merged PR's stated rationale.
