@@ -40,19 +40,26 @@ milestone at all — milestones here mark a genuine distinction, not a status la
 `Pre-launch` and `Launch` closed at the cutover, `Post-launch` stopped discriminating anything (every
 open issue is trivially "after launch" once the domain has moved) and was closed too
 (2026-08-28), the same call the Phase 6 gate made when it deleted the stage labels for being a 1:1
-echo of their milestone. Two milestones are still active because they mark something a plain issue
-list can't: [`Deferred`](https://github.com/ali-wallick/Portfolio/milestone/5) for a `decision` that
-isn't ripe yet — blocked on a future event or on there being enough to act on, not simply
-deprioritized — and
+echo of their milestone. **`Deferred` followed the same way on 2026-09-08**: once everything
+non-deferred was done, every open issue left in it was, by definition, deferred, so the milestone
+had stopped discriminating too and was retired — the same call, not a new one. What it grouped is
+now the `blocked` label, carried on the issue itself rather than a milestone tag, so it shows up in
+a plain issue list instead of requiring a milestone filter. One milestone is still active because it
+marks something a plain issue list can't:
 [`DreamHost renewal deadline`](https://github.com/ali-wallick/Portfolio/milestone/4), a
 single-issue milestone tracking the one piece of this project that depends on someone else's
-timeline (#52). Each issue carries its source, why it was deferred, and what unblocks it, so a cold
+timeline (#52). Each issue carries its source, why it's blocked, and what unblocks it, so a cold
 session can pick one up without reading scrollback.
 
-Two labels do real work. **`decision`** marks the four things that block work rather than being work
-— they need a call from Ali, not a commit, and several issues are explicitly blocked on them.
+Three labels do real work. **`decision`** marks the four things that block work rather than being
+work — they need a call from Ali, not a commit, and several issues are explicitly blocked on them.
 **`needs-ali`** marks everything an agent cannot do because Ali is the only source: the 2024–present
-Godot detail, the resume's tooling line, the Kaneva title, the DreamHost handoff.
+Godot detail, the resume's tooling line, the Kaneva title, the DreamHost handoff. **`blocked`**
+(added 2026-09-08, replacing the `Deferred` milestone) marks an issue Ali can't move forward on
+right now because it's waiting on someone or something outside her control — a person's reply, an
+external system, a future date — as distinct from `needs-ali`, which she could sit down and act on
+today. The two aren't mutually exclusive: #52 carries both, since closing out DreamHost needs Ali as
+the decider _and_ is waiting on Robert's migration.
 
 **If you find a follow-up, open an issue.** Don't append it to a doc and don't leave it only
 in a `TODO(...)` comment — the comments mark _where in the code_ later work lands, the issues are
@@ -689,5 +696,5 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 | `.claude/settings.json`               | The permission allow-list (every npm script a routine job runs, except `update:resume-print`, which rewrites a guard and should prompt) and the two hooks. |
 | `.claude/hooks/`                      | `guard-preserved.sh` refuses writes to the Don't-touch paths; `format-on-write.sh` runs Prettier on every file a session writes.                           |
 | `.claude/launch.json`                 | Claude Code's dev-server launcher: `npm run dev` on 4321, Astro's default. Referenced by nothing in the repo; kept (#107).                                 |
-| GitHub issues                         | What's actually left. `Deferred` and the DreamHost deadline are the only milestones; `decision` and `needs-ali` do the real work.                          |
+| GitHub issues                         | What's actually left. The DreamHost deadline is the only milestone; `decision`, `needs-ali` and `blocked` do the real work.                                |
 | `snapshot/`                           | The old site as it stood. The reference for "what did the old page say?"                                                                                   |
