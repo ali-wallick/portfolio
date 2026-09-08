@@ -25,6 +25,15 @@
  *                                          between text and an element (#338).
  *   7. Headings are title case           — "Featured Work", not "Featured work"
  *                                          (#182), enforceable since #338.
+ *   8. One canonical, naming its own URL — Search Console dropped a page as a
+ *                                          duplicate with no canonical
+ *                                          detected, on a site where every
+ *                                          page emits one (#345).
+ *   9. Sitemap entries canonicalise to   — the same report, filtered to URLs
+ *      themselves                          the site actively submits. An entry
+ *                                          that points elsewhere asks Google
+ *                                          to index a page and then tells it
+ *                                          not to (#345).
  *
  * External links are NOT fetched. That makes the check fast, offline, and
  * deterministic in CI; genuinely dead outbound links are tracked in the content
@@ -37,6 +46,9 @@ import { readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { walkFiles } from './lib/walk-files.mjs';
+import { site, live } from '../src/config/site.ts';
+
+const ORIGIN = new URL(site.url).origin;
 
 const DIST = path.resolve(process.argv[2] ?? 'dist');
 
@@ -67,6 +79,37 @@ function resolvesInDist(pathname) {
       ? ['/index.html']
       : [clean, `${clean}.html`, `${clean}/index.html`, decodeURIComponent(`${clean}.html`)];
   return candidates.some((c) => distPaths.has(c));
+}
+
+/**
+ * The built HTML file a clean route is served from, or `undefined`.
+ *
+ * The sibling of `resolvesInDist` and deliberately not folded into it: that
+ * one answers "does this href go anywhere", including at non-HTML assets like
+ * `/resume.pdf`, and returns a boolean. This one has to hand back the file so
+ * its canonical can be read, and only ever matches HTML.
+ */
+function htmlFileFor(pathname) {
+  const clean = pathname.replace(/\/+$/, '') || '/';
+  const candidates = clean === '/' ? ['/index.html'] : [`${clean}.html`, `${clean}/index.html`];
+  const hit = candidates.find((c) => distPaths.has(c));
+  return hit ? path.join(DIST, hit.slice(1)) : undefined;
+}
+
+/**
+ * The clean, extensionless route a built file is served at.
+ *
+ * The two replaces are copied verbatim from `BaseLayout.astro`'s `cleanPath`,
+ * which derives the canonical from `Astro.url.pathname` — same transform, one
+ * applied to the route Astro knows and one to the path the file actually
+ * landed at. That is the whole point: this cannot catch a bug *in* the
+ * transform, because it shares it. What it catches is the two drifting, which
+ * is what a page canonicalising at a URL it is not served from means.
+ */
+function servedRoute(file) {
+  return ('/' + path.relative(DIST, file).split(path.sep).join('/'))
+    .replace(/(^|\/)index\.html$/, '$1')
+    .replace(/\.html$/, '');
 }
 
 const attr = (tag, name) => {
@@ -159,6 +202,9 @@ function miscased(text) {
   }
   return undefined;
 }
+
+/** Dist path (`/about.html`) -> what rule 9 found there, for rule 10 to read. */
+const pages = new Map();
 
 for (const file of htmlFiles) {
   const rel = path.relative(DIST, file);
@@ -330,12 +376,133 @@ for (const file of htmlFiles) {
     const bad = miscased(text);
     if (bad) report(rel, `heading is not title case (#182): "${text}" — ${bad}`);
   }
+
+  // --- 9. One canonical, and it names the URL the page is served at ---------
+  //
+  // Search Console reported pages on this site as "Duplicate without
+  // user-selected canonical" — i.e. it crawled them and found no canonical at
+  // all — while `BaseLayout.astro` emits one on every page it builds (#345).
+  // Nothing asserted the two agreed, which is what put the canonical rule on
+  // the brief's list of rules with no guard behind them.
+  //
+  // Three separate failures, because they fail differently. A MISSING one
+  // leaves Google to pick a URL; a SECOND one is ignored wholesale, so a page
+  // with two has effectively none; and a RELATIVE one resolves against
+  // whatever host served the page, which on this site means every branch
+  // preview canonicalising to itself instead of to the apex — the one thing
+  // `cleanPath` exists to prevent.
+  /** Left undefined unless exactly one usable tag was found — rule 10 skips those. */
+  let canonical;
+  const canonicals = [...html.matchAll(/<link\b[^>]*>/gi)]
+    .map(([tag]) => tag)
+    .filter((tag) => (attr(tag, 'rel') ?? '').trim().toLowerCase() === 'canonical');
+
+  if (canonicals.length === 0) {
+    report(rel, 'no <link rel="canonical"> (#345)');
+  } else if (canonicals.length > 1) {
+    report(
+      rel,
+      `${canonicals.length} <link rel="canonical"> tags — a page with two has none (#345)`,
+    );
+  } else {
+    const href = attr(canonicals[0], 'href');
+    const expected = `${ORIGIN}${servedRoute(file)}`;
+    if (!href) {
+      report(rel, '<link rel="canonical"> with no href (#345)');
+    } else if (!href.startsWith(`${ORIGIN}/`) && href !== ORIGIN) {
+      report(rel, `canonical is not an absolute ${ORIGIN} URL: ${href} (#345)`);
+    } else if (href !== expected) {
+      report(rel, `canonical says ${href} but the file is served at ${expected} (#345)`);
+    }
+    canonical = href;
+  }
+
+  pages.set('/' + rel.split(path.sep).join('/'), { canonical, isDraft, route: servedRoute(file) });
+}
+
+// --- 10. Every sitemap entry canonicalises to itself ------------------------
+//
+// The second half of #345, and the one that matches the email Google actually
+// sent about pages *in a sitemap*: a submitted URL that points its canonical
+// somewhere else asks Google to index a page and then tells it not to. Same
+// contradiction if the page carries `noindex`.
+//
+// `sitemap.xml.ts` generates its entries from the collections, so a project
+// can't drift out of it — but `STATIC_ROUTES` in that file is hand-maintained,
+// which is the one place this site still has the kind of hand-kept index the
+// content model exists to forbid. This is what watches it.
+const sitemapFile = path.join(DIST, 'sitemap.xml');
+if (!existsSync(sitemapFile)) {
+  report('sitemap.xml', 'not generated — every page on the site is unsubmitted (#345)');
+} else {
+  const xml = await readFile(sitemapFile, 'utf8');
+  const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/gi)].map((m) => m[1].trim());
+  if (locs.length === 0) report('sitemap.xml', 'contains no <loc> entries (#345)');
+
+  /** The routes the sitemap actually submits, for rule 11. */
+  const submitted = new Set();
+
+  for (const loc of locs) {
+    if (!loc.startsWith(`${ORIGIN}/`) && loc !== ORIGIN) {
+      report('sitemap.xml', `entry is not on ${ORIGIN}: ${loc} (#345)`);
+      continue;
+    }
+    const pathname = new URL(loc).pathname;
+    submitted.add(pathname);
+    const file = htmlFileFor(pathname);
+    if (!file) {
+      report('sitemap.xml', `entry has no page in dist: ${loc} (#345)`);
+      continue;
+    }
+    const page = pages.get('/' + path.relative(DIST, file).split(path.sep).join('/'));
+    if (!page?.canonical) continue; // rule 9 already reported why it has none
+
+    if (page.canonical !== loc) {
+      report('sitemap.xml', `entry ${loc} canonicalises to ${page.canonical} (#345)`);
+    }
+
+    // Only meaningful once the site is live. Before the cutover `live` is
+    // false and BaseLayout noindexes EVERY page sitewide, so this would fail
+    // on all of them for being correct — and robots.txt says Disallow in that
+    // state anyway, so nothing is being submitted to contradict.
+    if (live && page.isDraft) {
+      report('sitemap.xml', `entry ${loc} is in the sitemap but carries noindex (#345)`);
+    }
+  }
+
+  // --- 11. Every indexable page is in the sitemap ---------------------------
+  //
+  // The other direction, and the likelier one. Rule 10 catches a STATIC_ROUTES
+  // entry left behind by a rename or a deletion; this catches a new page that
+  // never got added to it. `sitemap.xml.ts` derives project routes from the
+  // collections, so those cannot drift — but STATIC_ROUTES is hand-kept, and
+  // it is the one list on this site that the content model's "never a second
+  // place to update" rule does not reach. A page that ships unlisted is
+  // invisible to Google and nothing says so; #48's build-in-public page is
+  // exactly that shape.
+  //
+  // TWO exclusions, and only two. `/404` is not a page anyone submits. And a
+  // `noindex` page is by definition not for the index — which covers draft
+  // project pages on preview deploys, and makes the rule vacuous before the
+  // cutover, when `live` is false and BaseLayout noindexes the whole site.
+  // That is the same reasoning behind rule 10's `live` gate, reached from the
+  // other side, so it needs no gate of its own.
+  //
+  // Measured before building, as #338 requires: the naive form — every built
+  // page must appear — reports exactly one page against a production build,
+  // `/404`, and that one is correct. One carve-out, not a list.
+  for (const page of pages.values()) {
+    if (page.isDraft || page.route === '/404') continue;
+    if (!submitted.has(page.route)) {
+      report('sitemap.xml', `${page.route} is built and indexable but not submitted (#345)`);
+    }
+  }
 }
 
 const pageWord = htmlFiles.length === 1 ? 'page' : 'pages';
 if (problems.length === 0) {
   console.log(
-    `✓ ${htmlFiles.length} ${pageWord} checked — links resolve, no http://, alt text present, apostrophes curly, no welded words, headings title case.`,
+    `✓ ${htmlFiles.length} ${pageWord} checked — links resolve, no http://, alt text present, apostrophes curly, no welded words, headings title case, canonicals self-consistent.`,
   );
   process.exit(0);
 }

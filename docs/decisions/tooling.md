@@ -608,3 +608,98 @@ script, now enforced by that script, in a mode structure that makes the old shap
 fourth entry would cost every future session a read to prevent nothing.
 
 [#201]: https://github.com/ali-wallick/Portfolio/issues/201
+
+## Canonicals are checked in the build, because Google found them first (2026-09-08, #345)
+
+Two Search Console emails on 2026-09-06 reported pages on the live site as **"Duplicate without
+user-selected canonical"** — crawled, and no canonical found — on a site where `BaseLayout.astro`
+emits one on every page it builds. The second email was the sitemap-filtered variant, so at least
+one URL the site actively submits was affected.
+
+**The invariant was never written down anywhere, which is why nothing enforced it.** #338's frame is
+that a guard lets its rule leave the brief; this is the case that frame doesn't cover. The brief's
+"Rules with no guard behind them" list is still three entries and still correct — canonical
+correctness was not on it, and not in the records either. It was an assumption load-bearing enough
+that the Settled table's canonical-hostname row asserts it in passing ("this is what `site.url`,
+every `canonical`, every `og:url` and all 22 sitemap entries already say") and thin enough that no
+document ever stated it as a rule. **An unstated invariant costs nothing per session and fails
+silently, which is the worst of both halves of the cut line.**
+
+`check-links.mjs` is the home by #338's own routing: canonical correctness is a property of the
+render, not of `src/`. Two rules, and the second is the one that matches the email Google sent.
+
+### Rule 9 splits three failures because they fail differently
+
+A **missing** canonical leaves Google to pick a URL. A **second** one is ignored wholesale, so a
+page with two has effectively none. A **relative** one resolves against whatever host served the
+page — which on this site means every branch preview canonicalising to itself instead of to the
+apex, the exact bug `cleanPath` exists to prevent. Then the value has to name the route the file is
+actually served at.
+
+**The route transform is copied verbatim from `BaseLayout.astro`'s `cleanPath`, and sharing it is
+deliberate rather than sloppy.** One application runs against the route Astro knows, the other
+against the path the file landed at. That means the guard cannot catch a bug _in_ the transform —
+it can only catch the two drifting, which is what a page canonicalising at a URL it is not served
+from means. Rule 10 covers the other side.
+
+### Rules 10 and 11 watch the one hand-maintained index left, in both directions
+
+`sitemap.xml.ts` generates project entries from the collections, so a project cannot drift out of
+it. `STATIC_ROUTES` in that same file is a hand-kept list — the one place this site still has the
+shape the content model exists to forbid, and the only one "never a second place to update" does not
+reach.
+
+**Rule 10 is the removal direction**: an entry whose page canonicalises elsewhere, carries
+`noindex`, or no longer exists asks Google to index a page and then tells it not to. That is what a
+rename leaves behind.
+
+**Rule 11 is the addition direction, and it is the likelier failure.** A new page in `src/pages/`
+that nobody adds to `STATIC_ROUTES` ships unlisted, is invisible to Google, and nothing says so —
+[#48](https://github.com/ali-wallick/Portfolio/issues/48)'s build-in-public page is exactly that
+shape. **It was not in the first cut of this guard**, which checked only that every entry had a
+page. Ali asking whether the PR was worth keeping at all is what surfaced the gap, which is an
+argument for the question being asked rather than against it.
+
+Rule 11 has **two exclusions and only two**. `/404` is not a page anyone submits. A `noindex` page
+is by definition not for the index, which covers draft project pages on preview deploys and makes
+the rule vacuous before the cutover, when `live` is `false` and `BaseLayout` noindexes the whole
+site — the same reasoning behind rule 10's `live` gate, reached from the other side, so rule 11
+needs no gate of its own.
+
+**The `noindex` half is gated on `live`, and that gate is not optional.** Before the cutover `live`
+is `false` and `BaseLayout` noindexes every page sitewide, so an ungated check would fail on all 22
+entries for being correct. `robots.txt` says `Disallow` in that state anyway, so there is nothing
+being submitted to contradict.
+
+### Measured the way #338 requires
+
+The naive form ran over the real tree first. Rules 9 and 10: **0 hits on 23 pages**. Rule 11's
+naive form — every built page must appear in the sitemap — reported **exactly one**, `/404`, and
+that one was correct, so it took a single carve-out rather than a list. No exemption for correct
+output was invented anywhere.
+
+Then nine faults were injected into a copy of `dist/`: missing canonical, duplicate canonical, a
+preview-host canonical, a canonical naming another page, a sitemap entry with no page, a sitemap
+entry carrying `noindex`, a deleted `sitemap.xml`, an offsite `<loc>`, and a page dropped from the
+sitemap. All nine reported, each naming the URL and what it disagreed with.
+
+**The two negative cases were checked too**, because a guard that fires on correct output is the
+thing #107 established is worse than the prose it replaces: `/404` absent from the sitemap and a
+`noindex` draft absent from it both stay silent.
+
+### The emails turned out to be about a site that no longer exists
+
+Worth recording, because it is the outcome that justifies the guard rather than the one that
+prompted it. **There was no bug.** Search Console's index was a pre-cutover crawl of the old PHP
+site: six of the eight indexed URLs were last crawled between June 2 and August 22, three of them on
+`www`, and one with a trailing slash. The old site had no canonical tags anywhere, so every one of
+those URLs was a duplicate with nothing to break the tie — which is the reported reason, verbatim.
+Ali confirmed the `www` → apex 301 from LAUNCH.md step 6 is live, ruling out the one candidate for a
+live defect.
+
+**So this guard would not have caught the thing that produced it, and that is the honest reading.**
+What it protects is the invariant the incident made visible: nothing asserted that a page's
+canonical named the URL it is served at, or that the sitemap and the built site agreed, and a break
+in either surfaces as a Search Console email weeks later. That feedback loop cost several rounds
+here and ended in "nothing was wrong". The next one will not be free either. #345 carries the
+triage and the re-check criteria.
