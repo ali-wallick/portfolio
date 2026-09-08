@@ -962,3 +962,46 @@ holds on paper.
 
 Row counts: **165/190 → 139/161**, of which 37 are hidden roots. The `environment` block still
 reads `linux`, unchanged and matching CI.
+
+## The résumé downloads carry Ali's name (2026-09-08)
+
+The download button's `download` attribute was bare, so both PDFs saved as whatever the URL was
+called — `resume.pdf` and `resume-full.pdf`. Ali's point, which is the whole reason this is worth a
+change: a recruiter downloading three candidates' résumés gets three files named `resume.pdf`, and
+the one with a name on it is the one that stays findable. The attribute now carries a value:
+`AliWallick-Resume.pdf` and `AliWallick-Resume-Detailed.pdf`.
+
+**The URL deliberately did not change to match, and renaming the built files would be a
+regression.** `/resume.pdf` is the 301 target for the old site's `/resources/WallickAli-Resume.pdf`
+(`public/_redirects`), which Google has indexed, and it is the address `docs/LINKEDIN.md` hands out.
+`download` renames the saved copy without touching any of that, which is why it is the right lever
+and a file rename is not.
+
+**There is no standard here, and the search for one is a dead end.** ATS systems parse a PDF's
+contents, not its filename, so nothing machine-readable depends on the string — it is read only by a
+person looking at a folder. The convention that exists is career advice rather than a spec: name
+first, then the word "Resume", no dates or `v2` suffixes that make the file look stale six months
+on. `Detailed` matches the tab label so the file names what was clicked, and hyphens keep it intact
+through mail clients that mangle spaces.
+
+**The mixed case is deliberate and is not the lowercase-hyphen convention every path on this site
+follows.** That convention is about strings a server resolves — case-sensitivity between a
+case-insensitive macOS checkout and a case-sensitive Linux origin, tidiness in a URL. None of it
+applies, because **this string is never resolved by anything**: no redirect, no `check-links` run,
+no build step reads it, since the browser only writes it to disk. It is a document title, so it is
+cased like one. A future session tempted to "fix" it to `aliwallick-resume.pdf` for consistency
+would be applying a URL rule to something that is not a URL.
+
+**Two things follow that are easy to miss.** The name has to move with the href in
+`src/scripts/resume-density.ts`, for the same reason the page count does — after an in-place toggle
+the button points at the other file, and a download named for the density you switched away from is
+worse than no name. And the rename **only covers this button**: anyone who opens `/resume.pdf`
+directly, from LinkedIn or from that old indexed redirect, still saves `resume.pdf`. Fixing that
+half would need a `content-disposition` header on the asset, which is a Cloudflare `_headers`
+change and was not made — the button is the path nearly everyone takes.
+
+Verified by driving the built site rather than by reading the bundle: Playwright's `download` event
+reports `suggestedFilename()` as `AliWallick-Resume.pdf` at rest and `AliWallick-Resume-Detailed.pdf`
+after toggling to the two-pager. `ResumeActions.astro` and `resume-density.ts` are both in
+`build-pdf.mjs`'s `byteHashedFiles`, so the PDFs regenerated; `check:resume-print` confirmed the
+geometry is unmoved, which is the guard that matters — the changed bytes say nothing.

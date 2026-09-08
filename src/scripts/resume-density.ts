@@ -44,6 +44,16 @@ const pdfPages = document.querySelector<HTMLElement>('[data-pdf-pages]');
 
 const PDF: Record<Density, string> = { concise: '/resume.pdf', full: '/resume-full.pdf' };
 
+/* The saved filename, a different string from the href — see the "saved
+   filename is not the URL" note in ResumeActions.astro. It moves with the href
+   for the same reason PAGES does: after a toggle the button points at the other
+   file, and a download named for the density you switched away from is worse
+   than no name at all. */
+const FILE: Record<Density, string> = {
+  concise: 'AliWallick-Resume.pdf',
+  full: 'AliWallick-Resume-Detailed.pdf',
+};
+
 /* The page count inside the download. It names the FILE, not the view, so it
    has to move with the href rather than with the article — and its box is
    reserved in resume.css for the longer string, so swapping it cannot shift
@@ -56,7 +66,10 @@ if (article && links.length > 0) {
       if (link.dataset.densityLink === density) link.setAttribute('aria-current', 'page');
       else link.removeAttribute('aria-current');
     }
-    if (pdfLink) pdfLink.href = PDF[density];
+    if (pdfLink) {
+      pdfLink.href = PDF[density];
+      pdfLink.download = FILE[density];
+    }
     if (pdfPages) pdfPages.textContent = PAGES[density];
   };
 

@@ -27,6 +27,16 @@
  * - **The résumé sits on a panel** at the page's own column, so the tab is the
  *   front edge of something rather than a floating patch of colour.
  *
+ * ## The saved filename is not the URL
+ *
+ * `download` carries a value, so `file` below is a different string from `pdf`
+ * and neither derives from the other: the URL is the 301 target the old site's
+ * indexed résumé points at, and the filename is a document title a person reads
+ * in a downloads folder. The mixed case is deliberate rather than an escape
+ * from the site's lowercase-hyphen paths — nothing ever resolves this string.
+ * Reasoning, and the two things it is easy to get wrong, in
+ * docs/decisions/resume.md.
+ *
  * ## The progressive-enhancement contract
  *
  * The tabs are two real links, not `<button role="tab">`. Without JS they are
@@ -55,12 +65,20 @@ const { current } = Astro.props;
    density and a genuinely useful fact about a file you are about to attach to
    an application. */
 const versions = [
-  { key: 'concise', label: 'Highlights', href: '/resume', pdf: '/resume.pdf', pages: '1 page' },
+  {
+    key: 'concise',
+    label: 'Highlights',
+    href: '/resume',
+    pdf: '/resume.pdf',
+    file: 'AliWallick-Resume.pdf',
+    pages: '1 page',
+  },
   {
     key: 'full',
     label: 'Detailed',
     href: '/resume/full',
     pdf: '/resume-full.pdf',
+    file: 'AliWallick-Resume-Detailed.pdf',
     pages: '2 pages',
   },
 ] as const;
@@ -96,7 +114,7 @@ const DOWNLOAD_ICON =
        there is nothing behind this link until the site is built. Not a bug to
        chase — `npm run links` checks the built output, which is what ships. */
   }
-  <a class="button button-accent" href={active.pdf} download data-pdf-link>
+  <a class="button button-accent" href={active.pdf} download={active.file} data-pdf-link>
     <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       <path d={DOWNLOAD_ICON}></path>
     </svg>
