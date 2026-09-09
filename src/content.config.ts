@@ -207,9 +207,12 @@ const projects = defineCollection({
          * 2026-08-24 (#97): an archive entry may carry a short body and a
          * `gallery` where there is material worth having. This is a guideline
          * calibrated to what most archive entries are — early student and jam
-         * work that doesn't need much — not a hard cap. See CLAUDE.md: a
-         * richer entry demoted into this tier later (Kaneva, eventually)
-         * isn't meant to be trimmed to fit it.
+         * work that doesn't need much — not a hard cap. A richer entry
+         * demoted into this tier later isn't meant to be trimmed to fit it,
+         * which stopped being hypothetical on 2026-09-09 when Firefall moved
+         * here with its body untouched (#358). The reasoning is in
+         * docs/decisions/content.md, "Archive pages may carry a short body";
+         * this comment said "see CLAUDE.md" until #335 moved it there.
          */
         tier: z.enum(['featured', 'archive']),
         /** Manual ordering within the featured tier. Required for featured. */

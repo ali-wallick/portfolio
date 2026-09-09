@@ -13,13 +13,12 @@ status: shipped
 engine: []
 tech: [Astro, TypeScript, Claude Code]
 platforms: [Web]
-# TODO(#48): `role` is Ali’s to name. She is the only person on this project,
-# but the honest word for what she did (directed, reviewed, decided, built with
-# agents) is hers to pick, not an agent’s to guess. The page cannot publish
-# without one, which is the completeness check doing its job.
+# Ali’s call, 2026-09-09. The plain craft word, matching the register every
+# other entry uses. What she actually did (directing agents, reviewing,
+# deciding) is the body’s job to describe, not a role chip’s.
+role: [Developer]
 summary: >-
-  This site, rebuilt in 2026 from a hand-written PHP relic as a hands-on study of agentic
-  workflows at small scale.
+  This site, rebuilt in 2026 as a way to practice small-scale agentic workflows from scratch.
 # The old homepage, captured from the live DreamHost site before the cutover
 # (docs/before-after/, from #196). It leads the page rather than the new site
 # because the new site is what you are looking at; the old one is the thing
@@ -28,12 +27,13 @@ hero:
   type: image
   src: ../../assets/images/projects/aliwallick-com/old-home-desktop.webp
   alt: >-
-    The old aliwallick.com homepage in 2026, a peach and mint layout with a photo sidebar and a
-    blank space where a YouTube embed no longer loads
+    The old aliwallick.com homepage in 2026, a peach and mint layout with a strip of project art,
+    a welcome paragraph, and a Quick Info sidebar giving a headshot and a “Client Engineer” title
   caption: The old site as it stood in 2026, right before the cutover.
 # Desktop captures only. The mobile ones are honest (the old site had no
 # viewport meta, so they render zoomed out) but at 390 x 844 full-page they
-# become slivers in a height-normalised gallery row.
+# become slivers in a height-normalised gallery row. Three pairs, in the
+# order a visitor meets them: home, About, Projects.
 gallery:
   - type: image
     src: ../../assets/images/projects/aliwallick-com/new-home-desktop.webp
@@ -44,68 +44,100 @@ gallery:
   - type: image
     src: ../../assets/images/projects/aliwallick-com/old-about-desktop.webp
     alt: >-
-      The old About page, a long single column of text with a photo of a Kerbal costume
+      The old About page, a long single column of text with a hiking photo and a Kerbal costume
+      photo set into it
     caption: About, before.
   - type: image
     src: ../../assets/images/projects/aliwallick-com/new-about-desktop.webp
     alt: >-
-      The new About page, with a childhood photo floated beside the origin paragraph
+      The new About page, a headshot beside the opening paragraph and the Kerbal costume beside
+      “Off the Clock”
     caption: About, after.
-# A draft on purpose (#48). The page is the build-in-public write-up, and its
-# source material (docs/REBUILD-LOG.md, CLAUDE.md) keeps growing; it publishes
-# when Ali says it is the page she wants, not when the scaffold is filled.
-draft: true
+  - type: image
+    src: ../../assets/images/projects/aliwallick-com/old-projects-desktop.webp
+    alt: >-
+      The old Projects page, two Spotlight banners for Vegas Blvd Slots and Firefall above a
+      list of projects by year that files Critter³ under 2013
+    caption: Projects, before.
+  - type: image
+    src: ../../assets/images/projects/aliwallick-com/new-projects-desktop.webp
+    alt: >-
+      The new Projects page, five numbered featured cards led by Marvel Snap above a
+      three-column grid of archive tiles
+    caption: Projects, after.
+# Published 2026-09-09, Ali's call, after the copy pass in #355. It was a draft
+# on purpose until then: the page is the build-in-public write-up and its source
+# material keeps growing, so it shipped when Ali said it was the page she wanted
+# rather than when the scaffold was filled. The one marker left in the body is
+# hers to fill in later, and #48 stays open for it.
+draft: false
 ---
 
-<!-- TODO(#48): This body is a scaffold. The outline follows the issue’s own list of the strongest
-material in docs/REBUILD-LOG.md; every claim below is drawn from the log or from CLAUDE.md, and the
-sections are where Ali’s own account goes. The failures are the content: a page that only reports
-wins is a marketing page. -->
-
-This site is a project in its own right. The one it replaced was hand-written PHP from college. Its
-content froze in April 2016 and it kept saying “Present” about a job I left in 2019. It never
-mentioned Marvel Snap at all. The biggest credit on this site did not exist on the old one.
-
-I rebuilt it in 2026 for two reasons. The first was to have a portfolio that was true. The second
-was to use the rebuild as a hands-on study of agentic workflows at small scale, on a project where I
-could afford to over-invest in tooling and process and see what that bought.
+The site is not the interesting part of this project. The old one was hand-written PHP from college
+that had not been meaningfully updated since 2016. Replacing it was overdue. What I wanted from the
+rebuild was to practice agentic workflows from scratch. At work the agents and skills are
+established, built by a team I contribute to. Here there was no preexisting brief, no skills, no
+guards, and one person to decide everything. So the tooling was over-built on purpose, and the site
+was the excuse. The rebuild took twelve days.
 
 ## What I Built
 
-The site is Astro, with every project and job as a Markdown file and one schema that all of them
-share. The resume, the About page and the project pages read the same collections, so a fact cannot
-drift between them the way it did on the old site. The old site’s mistakes are unrepresentable here
-rather than fixed. A YouTube embed is stored as a bare video ID, so there is no protocol to get
-wrong. A published project fails the build without a summary, a role and a hero.
+The site itself is small. Five deep project write-ups, a compact archive for the rest, and a résumé
+that renders to PDF in two densities from one source. It is Astro with a Markdown content model, and
+the model is the first agentic decision in the project. Every fact lives in one file, and the old
+site’s mistakes are unrepresentable rather than fixed. A YouTube embed is a bare video ID, a
+published project fails the build without a summary and a hero, and a link can be marked dead while
+its credit stays. An agent cannot get those wrong, and neither can I.
 
-The résumé is generated from the same content, as a one-pager and a two-pager that is a strict
-superset of it. A page-count check fails the build if either overflows.
+- **Brief:** A standing document every session reads before its first tool call, so it starts
+  informed instead of re-deriving context from scrollback.
+- **Gates:** A conversation before each phase, with the same five questions every time. Scope,
+  verification, handoff, model, cost.
+- **Log:** Kept as the work happened. This page is written from it.
+- **Skills:** For adding a project, writing in my voice, running a design comparison, and cutting a
+  release.
+- **Guards:** A hook that refuses edits to the archived old site, and a build check for every rule I
+  could express as one.
+- **Review loop:** Push a branch, get a preview URL, look at it on my phone.
 
-Most of the work was not the site. It was the process around it: a standing brief every session
-reads before doing anything, phase gates with a conversation at each one, a running log kept as the
-work happened, and a set of skills that encode how to add a project or write in my voice. The
-review loop was the thing that made visual work possible at all. Push a branch, get a preview URL,
-look at it on my phone, react.
+## What Went Wrong
 
-<!-- TODO(#48): Ali to add what the tooling actually cost, in money and in time, and which of the
-process pieces she would keep for a day job. The log has the numbers. -->
+- **The brief went stale:** It is a cache of what I knew when I wrote it. One phase gate checked it
+  against primary sources and found five facts wrong, my own job title among them. Every gate since
+  has started with that check.
+- **The copy did not sound like me:** Sentences ran 32 words against my natural 17, with 91 em
+  dashes to my zero. Describing my voice to an agent had not worked, so I measured it from my own
+  writing instead and built the voice skill and its checker from the numbers.
+- **Rules got skipped:** The brief hit 3,774 lines, read in full by every session, and a rule in
+  prose is a rule someone forgets. The reasoning moved to a decision record, and every rule the
+  build could enforce became a guard.
+- **Design got argued instead of compared:** Separate branches produced opinions about different
+  pages. Putting the options on one preview behind a switcher, flipped on a phone, settled each
+  question in a round. After four runs it became a skill.
+- **Two documents drifted apart:** The plan and the brief held the same decisions, and one went
+  stale on the most sensitive fact in the project. The backlog moved to issues, and a decision is
+  now written down exactly once.
+- **Watching a PR cost more than the PR:** The harness re-checked a parked branch every hour,
+  re-sending the whole conversation each time. A steward skill tells it that green and waiting on me
+  is not work.
 
 ## What I Learned
 
-The brief and the plan are a cache, and caches go stale between phases. Checking primary sources at
-each gate produced five factual corrections at one of them. Four would have shipped as confident,
-wrong prose.
+Measuring narrows, looking decides. Nineteen faces were measured before any of them went on a
+preview, and the color candidates were computed rather than picked by eye. None of it settled until
+I saw it in context on a phone, which is the whole reason I built the loop.
 
-Building four palettes found three bugs that building one palette hid, all of which had passed CI.
-A value that only works for the current inputs is not a decision.
+Write the side quest down and keep going. Every stray idea and bug became an issue with enough
+context to pick it up cold, so the main work never stopped for it. That is why the site was accurate
+before it was pretty, and launched before it was finished.
 
-The live switcher was the highest-leverage tool of the design phase. The only comparison that
-matters is flipping between options on the same page. Separate branches produce opinions about
-different pages.
+A skill is worth what it currently describes. Each one here started as something I had already done
+by hand two or three times, and each has been edited since, as the way I work moved. One lost a step
+once it had been run on every page. A skill describing how I used to work is worse than none,
+because the next session will follow it.
 
-Measure the output, not the source. A font-dependent unit looked perfect locally and scored 0.197
-CLS in CI. A page-count check passed a résumé that was 64px over budget. Line length reasoned about
-in `ch` was 38% longer in characters than anyone thought.
-
-<!-- TODO(#48): Ali to write the parts that are hers: what surprised her about working this way,
-what she would not do again, and what it changed about how she works at Second Dinner. -->
+At work the tooling already exists, so nobody sees the mistake each piece was made to prevent.
+Building it from nothing is what made that visible, and the habit is what I am taking with me. I
+want skills for writing skills, for checking a plan says what I meant before anything gets built,
+and for debriefing work after it ships. Every project should leave my own tooling better than it
+found it. That is the part I enjoyed most, and the part I want to keep getting better at.

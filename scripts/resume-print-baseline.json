@@ -1857,7 +1857,7 @@
           "x": 0,
           "y": 0,
           "width": 701,
-          "height": 1709
+          "height": 1746.14
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
         "fontSize": "12.5333px",
@@ -1876,7 +1876,7 @@
           "x": 0,
           "y": 0,
           "width": 701,
-          "height": 1709
+          "height": 1746.14
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
         "fontSize": "12.5333px",
@@ -1895,7 +1895,7 @@
           "x": 0,
           "y": 0,
           "width": 701,
-          "height": 1709
+          "height": 1746.14
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
         "fontSize": "12.5333px",
@@ -1918,7 +1918,7 @@
           "x": 0,
           "y": 0,
           "width": 701,
-          "height": 1709
+          "height": 1746.14
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
         "fontSize": "12.5333px",
@@ -4021,7 +4021,7 @@
           "x": 0,
           "y": 1499.81,
           "width": 701,
-          "height": 132.63
+          "height": 169.77
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
         "fontSize": "12.5333px",
@@ -4051,7 +4051,7 @@
           "x": 0,
           "y": 1524.34,
           "width": 701,
-          "height": 108.09
+          "height": 145.23
         },
         "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
         "fontSize": "12.5333px",
@@ -4180,11 +4180,62 @@
       {
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(3) > b.resume-bullet-label:nth-of-type(1)",
         "inline": true,
-        "advance": 59.83,
+        "advance": 88.59,
+        "lineBoxes": 2,
+        "unionRect": {
+          "x": 16,
+          "y": 1598.63,
+          "width": 88.59,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(3) > b.resume-bullet-label:nth-of-type(1) > a:nth-of-type(1)",
+        "inline": true,
+        "advance": 85.22,
         "lineBoxes": 1,
         "unionRect": {
           "x": 16,
           "y": 1598.63,
+          "width": 85.22,
+          "height": 15
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "700",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(4)",
+        "rect": {
+          "x": 16,
+          "y": 1635.77,
+          "width": 685,
+          "height": 33.81
+        },
+        "fontFamily": "\"Public Sans\", Helvetica, Arial, sans-serif",
+        "fontSize": "12.5333px",
+        "fontWeight": "400",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(4) > ul.resume-bullets.resume-personal:nth-of-type(1) > li:nth-of-type(4) > b.resume-bullet-label:nth-of-type(1)",
+        "inline": true,
+        "advance": 59.83,
+        "lineBoxes": 1,
+        "unionRect": {
+          "x": 16,
+          "y": 1635.77,
           "width": 59.83,
           "height": 15
         },
@@ -4199,7 +4250,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5)",
         "rect": {
           "x": 0,
-          "y": 1651.09,
+          "y": 1688.23,
           "width": 701,
           "height": 57.91
         },
@@ -4214,7 +4265,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > h2:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1651.09,
+          "y": 1688.23,
           "width": 701,
           "height": 15.2
         },
@@ -4229,7 +4280,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1675.63,
+          "y": 1712.77,
           "width": 701,
           "height": 33.38
         },
@@ -4244,7 +4295,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1675.63,
+          "y": 1712.77,
           "width": 701,
           "height": 17.19
         },
@@ -4259,7 +4310,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > h3:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1675.63,
+          "y": 1712.77,
           "width": 367.86,
           "height": 15.98
         },
@@ -4277,7 +4328,7 @@
         "lineBoxes": 1,
         "unionRect": {
           "x": 0,
-          "y": 1675.63,
+          "y": 1712.77,
           "width": 199.55,
           "height": 16
         },
@@ -4295,7 +4346,7 @@
         "lineBoxes": 1,
         "unionRect": {
           "x": 202.56,
-          "y": 1675.63,
+          "y": 1712.77,
           "width": 3.06,
           "height": 16
         },
@@ -4313,7 +4364,7 @@
         "lineBoxes": 1,
         "unionRect": {
           "x": 208.64,
-          "y": 1675.63,
+          "y": 1712.77,
           "width": 159.22,
           "height": 16
         },
@@ -4328,7 +4379,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1) > div.resume-job-head:nth-of-type(1) > p.meta.resume-dates:nth-of-type(1)",
         "rect": {
           "x": 676.73,
-          "y": 1676.63,
+          "y": 1713.77,
           "width": 24.27,
           "height": 16.19
         },
@@ -4343,7 +4394,7 @@
         "path": "body > div.layout:nth-of-type(1) > main:nth-of-type(1) > article.resume:nth-of-type(1) > section.resume-section:nth-of-type(5) > section.resume-job:nth-of-type(1) > p.meta.resume-job-meta:nth-of-type(1)",
         "rect": {
           "x": 0,
-          "y": 1692.81,
+          "y": 1729.95,
           "width": 499.39,
           "height": 16.19
         },

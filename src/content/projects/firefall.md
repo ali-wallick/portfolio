@@ -1,7 +1,11 @@
 ---
 title: Firefall
-tier: featured
-featureOrder: 5
+# Demoted from `featured` 2026-09-09 (#358), to keep that tier at the five
+# CLAUDE.md settled while /projects/aliwallick-com publishes into it. The body
+# is untouched, which is #97's rule rather than an exception to it: the archive
+# guideline is calibrated to early student and jam work, and is explicitly not
+# a ceiling on a richer entry demoted into the tier later.
+tier: archive
 startYear: 2015
 endYear: 2016
 status: shipped

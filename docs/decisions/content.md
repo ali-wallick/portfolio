@@ -329,6 +329,27 @@ not to pre-design a migration policy for one entry years ahead of it. The guidel
 narrower than it can be read: it is calibrated to small/early projects, not a ceiling on richer
 ones.
 
+**The moment arrived on 2026-09-09, for Firefall rather than Kaneva (#358).** The trigger was not
+age: `/projects/aliwallick-com` needed a featured slot and Ali wanted the tier held at five, so one
+entry had to move. Firefall went instead of Kaneva on the merits — it was the thinnest featured page
+by a distance (211 body words against Kaneva's 306, no gallery, one archived link, one year against
+four), and Kaneva carries the origin of Ali's UI specialty and the menu-animation-system story the
+voice reference cites as the exemplar of her writing.
+
+**The body moved untouched, and that is this section's rule doing its job rather than a shortcut.**
+Ali's framing, and it is worth stating as the general form: _leave a demoted entry as it is unless
+you actually want to adjust it._ Demotion is a statement about which five entries lead `/projects`,
+not a judgment that the writing was too long. Nothing about the page changed except which tier it
+sorts into, and `featureOrder` came off because that field means nothing outside the featured tier.
+
+**One repair went with it.** `src/content.config.ts`'s tier comment pointed at CLAUDE.md for this
+rule, and [#335](https://github.com/ali-wallick/Portfolio/issues/335) had moved it here — so the
+contract every session reads cited a document that no longer said it. That is why a session in this
+pass read CLAUDE.md, concluded a demotion required rewriting the body to archive register, and told
+Ali so. **A cross-reference that survives the move but stops being true is the failure the split was
+supposed to avoid**, and it is invisible to every guard in `verify`. The comment now names the file
+and the section.
+
 **This is permission, not a quota.** An entry with nothing more to say stays summary-only, and that
 is a correct outcome rather than an unfinished one. Prodigal earned a body because the old page had
 three things the summary had dropped: the biblical parable the game is named for, the two-mode

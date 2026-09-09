@@ -5171,3 +5171,74 @@ Opus, inline, no subagents. The whole investigation is one file and its styleshe
 was a consequence of the last — the fan-out test in CLAUDE.md's "Notes for agents" says don't, and
 the cheapest step (loading the page in the pane) settled the question the reasoning was still
 circling.
+
+## #48 — the build-in-public page, drafted from the log it describes (2026-09-08)
+
+Ali's ask was a copy and content pass on the draft #49 left at `/projects/aliwallick-com`. The page
+stays `draft: true`, its `role` stays empty (the completeness check is what holds it back, on
+purpose), and the two TODOs that survive mark what only Ali can write: what the tooling cost in
+money and time, and what she would keep or not do again.
+
+### The scaffold's first sentence was wrong about the old site
+
+The scaffold said the old site "kept saying 'Present' about a job I left in 2019." `snapshot/`
+says no such thing — the 2020 straggler commit had already corrected Firefall's dates, and what the
+old About page actually said in 2026 was "our upcoming mobile Marvel game," nearly four years after
+the game shipped. The fix was to quote the page rather than characterise it, which is what the
+issue's own comments already recommended. The hero's alt text was wrong in the same way: it
+described a blank YouTube embed on a homepage whose lead image is a strip of project art, and the
+new About alt said "childhood photo" for a headshot. **Neither matched its image**, and both were
+caught by reading the `.webp` files directly, the same habit the Phase 3 gate recorded for the
+KinoClue poster.
+
+### Length is the open question, and it was measured rather than guessed
+
+The first full draft rendered at 1,574 words, against 947 on the Marvel Snap page, the longest on
+the site. Two failure entries and a preservation paragraph came out; it renders at 1,318 now, mean
+sentence 15.7 words, zero em dashes, no sentence over 31 words. Still the longest page on the site,
+and flagged on the PR as a call for Ali rather than trimmed to a number: the issue's own brief is
+that the failures are the content, and the "What Went Wrong" list is two thirds of the length.
+
+That section is a third `##` heading, which no other featured page has. Recorded here rather than
+in `docs/decisions/content.md` because it is not settled — the PR offers folding it into "What I
+Learned" as the alternative.
+
+### The second round cut it by a third, on one sentence of direction
+
+Ali's read of the first draft: "a bit more concise, especially What Went Wrong," and keep the
+focus on learning agentic workflows from scratch against her work setup, where the agents and
+skills are established and team-driven. The from-scratch framing was the thing the first draft had
+not said out loud, and it is what the page is for. Each failure bullet went from four or five
+sentences to two; the preservation paragraph became one sentence; the probe paragraph went. 1,318
+rendered words became 960, mean sentence 16.8, longest 32 in source. The two TODOs and the empty
+`role` are unchanged.
+
+### Round three: the lens was wrong, not the length
+
+Ali's second read: still too long, and "the wrong focus - if we're talking about things that went
+wrong it should be focused on cases where I improved on the agentic workflow to avoid it in the
+future. The lens shouldn't be on building and releasing a website (that is not my job), but on
+learning agentic workflows. This applies to the whole page."
+
+That reframes the whole draft, and it is worth recording why the first two rounds missed it. The
+issue body's "strongest material" list is mostly engineering failures (the `ch` unit, the wrong CI,
+the wrong font), and the log is written from the agent's side, so a page drafted from those sources
+inherits their lens: a site being built. Ali's lens is a study being run. **The failures worth
+listing are the ones that changed the workflow**, and by that test six of the eight bullets went:
+the stale brief (which added the gate's verification step), the copy not sounding like her (which
+produced the voice skill), rules skipped in a 3,774-line brief (the records split and the guards),
+design argued across branches (the switcher, then its skill), the plan drifting from the brief (the
+move to issues), and the hourly PR check-in (the steward skill). "What I Built" became one paragraph
+on the content model and a labelled list of the agentic layer; the summary now says "learn
+small-scale agentic workflows from scratch." 960 rendered words became 804.
+
+**The general form: a page's source material carries its own lens, and the audit cannot see that.**
+Every measurement passed on all three rounds. What was wrong was which failures counted, and only
+the person whose page it is could say.
+
+### Model allocation and cost
+
+Fable, inline, no subagents. The source material was the log itself (5,000-odd lines) plus the content
+record and the issue's comments, read directly because the specific wording of each failure is
+what the page is made of — the Phase 2 rule about fan-out losing when you need the material itself,
+applied to the document that states it. Four builds, four audits, one screenshot pass, three verify runs.

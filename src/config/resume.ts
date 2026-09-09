@@ -142,6 +142,16 @@ export const resumePersonalProjects: ResumePersonalProject[] = [
     text: 'Programmed and designed a herding game at Global Game Jam 2013. Placed second at Atlanta, the largest jam site in the country that year.',
   },
   {
+    label: 'aliwallick.com',
+    // Slug added 2026-09-09, in the commit that published the page. It was
+    // held back while that page was `draft: true`, since a draft is excluded
+    // from production and the link would have 404'd for exactly the reader
+    // this section serves. Every project entry here links again, which is the
+    // property #32 bought back.
+    slug: 'aliwallick-com',
+    text: 'Rebuilt this portfolio in 2026 to practice agentic workflows at small scale. Wrote the brief, skills and build guards it runs on.',
+  },
+  {
     label: 'Speaking',
     text: 'Spoke on panels at the Museum of Design Atlanta and SIEGE in 2013. Gave talks for a Girl Scout troop in 2020 and a college class on the work itself in 2023.',
   },
