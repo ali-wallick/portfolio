@@ -7,6 +7,7 @@
       "Bash(npm run build:linkedin)",
       "Bash(npm run build:pdf)",
       "Bash(npm run check)",
+      "Bash(npm run check:blobs)",
       "Bash(npm run check:lines)",
       "Bash(npm run check:linkedin)",
       "Bash(npm run check:pdf)",

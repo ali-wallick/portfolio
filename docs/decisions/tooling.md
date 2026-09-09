@@ -70,7 +70,7 @@ What belongs here is only the decisions.
 
 **`snapshot/` did not render, and that was a defect rather than a property.** `snapshot/README.md`
 says its assets "are already committed under `resources/`" — true when Phase 0 wrote it, false since
-`ce4533e` deleted `resources/images/`. **50 of 54 asset references were dead**, so the snapshot
+the Phase 3 cleanup commit deleted `resources/images/`. **50 of 54 asset references were dead**, so the snapshot
 preserved what the old site _said_ and not what it _looked like_. `scripts/restore-snapshot.mjs`
 repairs that into **`snapshot/rendered/`**.
 
@@ -555,7 +555,7 @@ destructive rebuild that happened to end in a check.
 
 Two facts combined. The `rm(OUT, …)` ran at module top level; the flag check sat 245 lines below it,
 so every invocation deleted `snapshot/rendered/` before reading its own arguments. And asset
-recovery does `git cat-file blob ce4533e~1:<ref>`, which does not resolve in a shallow clone. **A
+recovery does `git cat-file blob <asset commit>:<ref>`, which does not resolve in a shallow clone. **A
 Claude Code web session gets a shallow clone** — 50 commits, `is-shallow-repository` true — so the
 run died partway through writing pages and left the archive at **27 of its 102 files**.
 `git checkout -- snapshot/rendered` restored all 102, which is the script header's own argument for
@@ -565,7 +565,7 @@ committing the artifact holding up under exactly the failure it was written agai
 
 The issue found the commit. Measuring the rest of the archive found the shape of the fix: **only 28
 of the 102 files are derived from `snapshot/`** — 26 pages, `archive.css`, and the README. The other
-74 come from somewhere the process may not be able to reach: 54 asset blobs at `ce4533e~1`, 14 blog
+74 come from somewhere the process may not be able to reach: 54 asset blobs at the asset commit, 14 blog
 images off the old host, 6 poster frames off i.ytimg.com. The same web session that cannot resolve
 the commit also cannot reach either host.
 
@@ -703,3 +703,115 @@ canonical named the URL it is served at, or that the sitemap and the built site 
 in either surfaces as a Search Console email weeks later. That feedback loop cost several rounds
 here and ended in "nothing was wrong". The next one will not be free either. #345 carries the
 triage and the re-check criteria.
+
+## The address was in HEAD the whole time, and the first fix is why (2026-09-09, #360)
+
+The 2019 résumé's PO Box was redacted out of `resources/WallickAli-Resume.pdf` on 2026-08-26, and
+[#109](https://github.com/ali-wallick/Portfolio/issues/109) has been tracking the harder half —
+purging it from git history. Both of those looked at the same place. **Nobody looked at HEAD**,
+where three files rendered the address in plain sight:
+`snapshot/rendered/resources/images/resume.png` (a 1700×2200 render of the unredacted résumé,
+restored from the asset commit by a rebuild), and the two `docs/before-after/old/` résumé captures,
+which photographed the old résumé page — a page that embedded that exact PNG.
+
+### The lesson: the first fix guarded a path when the risk was a class
+
+This is the second occurrence, and the first one produced the bug.
+
+`restore-snapshot.mjs`'s first run faithfully restored the **unredacted PDF** into
+`snapshot/rendered/` and it was committed before anyone noticed. The fix was `PREFER_WORKTREE`, a
+`Set` with one path in it. The next rebuild then did the identical thing one file over. The risk was
+never "this path" — it was "any historical asset that pictures the résumé", and a set of paths
+cannot express that. `docs/PRESERVATION.md`'s claim that "a rebuild can no longer do that" was false
+from the moment it was written, for exactly that reason, and is corrected there now.
+
+**So the shape of the fix matters more than the fix.** `SUPERSEDE` is still a path map, because a
+rebuild needs to know which file to substitute — that part is irreducibly path-shaped. What closes
+the class is `scripts/check-preserved-blobs.mjs`, which hashes every tracked file and fails the
+build on any match against a committed denylist. Content, not paths: it fires wherever the blob
+lands, under whatever name, whether a script or a person put it there. The demonstration is the
+proof it works — the three pre-fix blobs were dropped into a scratch directory, two of them renamed
+and one moved into a subdirectory, and all three were caught.
+
+**Hashes are safe to commit and the denylist says so.** SHA-256 is preimage-resistant; the digest of
+an image is not the image. That is what makes a committed denylist a better artifact than a
+regex or an OCR pass over every tracked byte.
+
+### What the guard deliberately does not do
+
+It is not an address detector. Re-encode one of these images — a different compressor, a WebP
+round-trip, one pixel — and the address is just as legible and the hash is gone. That is stated in
+the script's header rather than left to be discovered.
+
+The alternative was rejected on #338's own test: a recogniser over every tracked byte is slow,
+non-deterministic, and fires on correct files. What is left is narrow and exact, aimed at the
+failure that has actually happened twice — a script faithfully restoring a known historical blob.
+A narrow guard for a demonstrated bug beats a broad one for an imagined one.
+
+It runs beside `check:source` and before `build` in `verify`, for the reason `check-source.mjs`'s
+header gives: it needs no build, so making it wait for one only delays the failure.
+
+### Two techniques, because they are two different problems
+
+**The PNG was replaced, not patched.** `resources/resume-redacted.png` is a 200-DPI render of the
+already-redacted PDF (612 × 200/72 = 1700, 792 × 200/72 = 2200 — the original's geometry exactly),
+rendered with `pdfjs-dist` and `@napi-rs/canvas` installed outside the repo, on the same precedent
+as the PDF redaction: `package.json` stays untouched for something that runs once. It lives at
+`resources/resume-redacted.png` rather than under `resources/images/`, which nothing should ever
+recreate.
+
+**A downsampled pixel diff is what proved the render honest.** At full resolution 2.0% of pixels
+differ, which says nothing — two rasterisers antialias differently. Downsampled to 425×550 the
+difference collapses to 0.23%, and it is the address line plus a scatter of list-bullet glyphs.
+Same layout, same content, one line gone. **The full-resolution number would have been read as a
+problem and the downsampled one is the measurement**, which is the same trap as comparing two PDFs'
+content streams (see the résumé record): a confident wrong answer from the more precise-looking
+comparison.
+
+**The two captures got a composited bar**, Ali's call. They cannot be re-captured —
+`capture-comparison.mjs`'s header is explicit that the "before" side comes from the _live_ old site,
+gone since the 2026-08-27 cutover — and deleting them to remove one line throws away the only
+photograph of a site that no longer exists. A bar is a genuine redaction on a raster: PRESERVATION's
+warning about filled rectangles is a fact about PDFs, which keep a text layer under their
+appearance. A raster has nothing under the pixels once compositing happens before encoding.
+
+The bar rectangles came from the measured ink bounding box of the address line — every pixel below
+luminance 150 inside a band containing only that line — then padded. **Measured, not eyeballed**,
+which is the standing rule the résumé record already carries for a different geometry.
+`docs/before-after/README.md` is new and says the captures are modified, because a modified capture
+that does not say so is worse than either alternative.
+
+### `ASSET_COMMIT` is a tag now, which un-blocks #109 rather than adding to it
+
+`restore-snapshot.mjs` hardcoded `ce4533e~1`. #109 rewrites history, which invalidates it, and #109
+asks for that to be fixed "in the same change" — but the replacement SHA does not exist until the
+rewrite has run, so a SHA can only ever be fixed afterwards. That is the follow-up nobody remembers.
+
+Naming the commit `assets-pre-cleanup` removes the follow-up entirely: `git filter-repo` re-points
+tags automatically. The tag needs a full clone to push, so it could not be created in the session
+that wrote the code — hence a resolve-with-fallback rather than an assumption. **Ali pushed it the
+same day**, at `090f1ce`, verified as the pre-cleanup tree by its 144 files under
+`resources/images/`. `verify` never runs `restore-snapshot.mjs`, confirmed rather than assumed, so
+CI is unaffected either way.
+
+**Pushing the tag also closed the denylist's one gap, which is the part worth noticing.** The
+unredacted PDF's blob was unreachable from a shallow clone, so the guard shipped without it and said
+so. The tag made it reachable in one fetch: `3216da67…`, 98,088 bytes, all four address probes
+present against zero in the committed copy. **The thing that was supposed to be a durable
+_name_ turned out to also be a durable _handle_** — a rewrite-proof way to reach the pre-cleanup
+tree at all, which is what let the gap close in the same PR rather than waiting on #109. The
+fallback's own justification shifted underneath it at the same moment: it was sequencing, and it is
+now clone shape, since a shallow clone fetched without tags still cannot see it.
+
+### Not promoted to the brief
+
+The measurement technique (downsample before diffing two renders) stayed here. It is a specific
+instance of a rule the résumé record already carries — the bytes are not the guard — and CLAUDE.md's
+cut test asks whether a rule is caught by a build guard, not whether it is interesting.
+
+### Model allocation and cost
+
+Opus, inline, no subagents. Sequential by construction: hashes had to be recorded before anything
+changed, the PNG render had to exist before the snapshot copy could be replaced, and the guard had
+to be written after the hashes. Nothing to fan out. One `npm ci`, one out-of-repo dependency install
+for the render, and roughly a dozen `sharp` measurement passes over three images.

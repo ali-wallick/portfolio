@@ -2191,7 +2191,7 @@ defect that made the preservation less useful than it looked.
 ### The archive recorded what the site said, not what it looked like
 
 `snapshot/` held 30 pages of faithful markup. It also held **50 dead asset references out of 54**,
-because Phase 3 deleted `resources/images/` at `ce4533e` after migrating the keep-list into
+because Phase 3 deleted `resources/images/` at the cleanup commit (tagged `assets-pre-cleanup` since #360) after migrating the keep-list into
 `src/assets/`. `snapshot/README.md` still asserted the assets were "already committed under
 `resources/`" — true when written, quietly false for months.
 
@@ -2283,7 +2283,7 @@ and an issue, and was caught only when Ali asked a casual follow-up about it.
 
 One session, no subagents past the initial survey. The survey was worth delegating — it swept
 `snapshot/`, `content/archive/`, `resources/`, the docs and the issue list in parallel, and returned
-the `ce4533e` fact that reframed the whole task. Everything after it was sequential work on known
+the asset-commit fact that reframed the whole task. Everything after it was sequential work on known
 files, where a cold subagent would have cost more than it saved.
 
 The expensive part was iterating the self-containment check, and it was expensive in the right way:
@@ -5340,3 +5340,69 @@ archaeology on a single history — sequential by nature, each step reading the 
 there was nothing to fan out. One `--unshallow` fetch, one `npm ci`, five builds, and a scripted
 per-commit scan across 260 commits (the slowest part, ~4 minutes, and the thing that turned a
 plausible story about training data into a measurement).
+
+## #360 — the copy in HEAD nobody had looked at (2026-09-09)
+
+**The finding was in the issue, not in this session**, which is worth recording because it is the
+first time that has been true: the issue arrived with the three files, their sizes, their hashes and
+their provenance already established. The session's work was the fix, the guard, and the
+demonstration.
+
+What made the finding possible was a question nobody had asked. The PO Box has been tracked since
+#40, redacted out of the PDF in #197, and is the subject of #109's history rewrite. **Every one of
+those looked at git history.** Three files in HEAD rendered the address as pixels, where no grep for
+a string would ever find it and no examination of history would think to look.
+
+### The number that would have been read wrong
+
+Comparing the new 200-DPI render against the historical PNG at full resolution: **2.0% of pixels
+differ**, spread over a bounding box covering most of the page. Read literally that is a different
+document.
+
+Downsampled to 425×550 first, the same comparison gives **0.23%**, and the diff image is the address
+line plus a scatter of single-pixel marks in the bullet column. The 2.0% was two rasterisers
+antialiasing the same glyphs differently — real, and meaningless.
+
+**The more precise comparison was the more misleading one.** That is the same trap the résumé record
+already carries about diffing two PDFs' content streams, arriving by a different route, and it is
+now twice that a confident wrong answer came from the higher-resolution measurement. The general
+form: when comparing two renders of the same thing, the question is whether the _content_ moved, and
+the comparison has to be run at a resolution where rendering noise cannot answer it.
+
+### What the guard cost, and what it is worth
+
+`scripts/check-preserved-blobs.mjs` is 180 lines of which maybe 30 do anything: hash 437 tracked
+files, compare against three constants. Most of it is the header explaining what it does not catch.
+
+That ratio is right. The guard's value is not the hashing, which is trivial — it is that the next
+session to reintroduce one of these blobs gets a build failure naming the file and its redacted
+replacement, instead of a commit that nobody notices for three weeks. And the honest limits belong
+next to the code, because the failure mode of a security-shaped guard is someone trusting it past
+what it checks. Re-encode any of these images and it is blind.
+
+**The demonstration was worth more than the check.** Pointing it at the three real pre-fix blobs —
+two renamed, one moved into a subdirectory — is what proved it matches content rather than paths,
+which is the entire claim. A guard nobody has watched fail is a guard nobody has tested; this repo
+learned that in #357, where two drafts of a wordlist would have failed the build on correct copy.
+
+### The reusable lesson
+
+**A path is not a class.** The first fix for this named one path, in a `Set`, with a comment saying
+the problem was solved. The next rebuild reintroduced the address one file over. Nothing about that
+fix was wrong except its shape — and the document recording it repeated the shape, asserting "a
+rebuild can no longer do that", which stayed on the page as a false statement for two weeks.
+
+The tell is available in advance: **if a fix enumerates instances, ask what the instances have in
+common and whether anything checks for that.** Here the common property was "renders the 2019
+résumé", and nothing checked it until now.
+
+### Model allocation and cost
+
+Opus, inline, no subagents — and the honest note is that this was never a fan-out candidate. The
+steps are a chain: record the hashes before anything changes, render the PNG, replace the snapshot
+copy, measure the webps, redact them, then write a guard whose denylist is the hashes from step one.
+Every step reads the previous step's output. One `npm ci`, one out-of-repo install of `pdfjs-dist`
+and `@napi-rs/canvas`, and about a dozen `sharp` passes measuring and re-measuring three images.
+
+The one thing that would have been worth delegating — sweeping the repo for other rasterised copies
+of the résumé — was already done, in the issue.

@@ -620,12 +620,22 @@ Domain) precisely for this reason, and the residue is what these notes are for.
   `docs/PRESERVATION.md`. **History is untouched**: four blobs across four commits, plus
   `v1-legacy`, still carry it, which is what
   [#109](https://github.com/ali-wallick/Portfolio/issues/109) is actually about.
+- **The address was in HEAD anyway until 2026-09-09, in three files nobody had looked at**
+  ([#360](https://github.com/ali-wallick/Portfolio/issues/360)). Redacting the PDF closed one copy;
+  a rendered PNG of the same résumé in `snapshot/rendered/`, and the two `docs/before-after/old/`
+  résumé captures that photographed the page embedding it, carried it in plain sight while every
+  pass looked only at git history. All three are closed — the PNG replaced by a render of the
+  redacted PDF, the captures given a labelled bar — and `npm run check:blobs` now fails the build
+  on the content of any of the pre-fix blobs, wherever in the tree it lands.
+  **The lesson is the reusable part: the first fix for this named a path when the risk was a
+  class**, and the very next rebuild reintroduced the address one file over. A path rule is
+  necessary and never sufficient; the guard is what closes a class.
 
 _The Phase 0 asset keep/drop list was **acted on in Phase 3**: the 50 keep-listed files moved to
 `src/assets/images/`, and the drop list — 86 unused social icons, 6 orphaned logos, and the 6.3 MB
-unplayable `nightLight.unity3d` — was deleted at `ce4533e`. **Nothing under `resources/images/`
+unplayable `nightLight.unity3d` — was deleted at the Phase 3 cleanup commit. **Nothing under `resources/images/`
 should ever exist again.** The audit's conclusions are preserved in [#45](https://github.com/ali-wallick/Portfolio/issues/45); the full text is
-`git show ce4533e~1:resources/images/ASSET_INVENTORY.md`._
+`git show assets-pre-cleanup:resources/images/ASSET_INVENTORY.md`._
 
 ## Rules with no guard behind them
 
@@ -680,6 +690,7 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 | `src/config/resume.ts`                | The resume's Skills section — settled, hand-curated, not derived from `tech`.                                                                              |
 | `scripts/check-links.mjs`             | Post-build checks on `dist/`. Every rule is a regression guard for a real old bug.                                                                         |
 | `scripts/check-source.mjs`            | The source-tree half: raw colors, raw `px` font sizes, `TODO(#n)`. Needs no build, so it runs before one (#338).                                           |
+| `scripts/check-preserved-blobs.mjs`   | Hashes every tracked file against a denylist of the résumé blobs that show a home address (#360). Content, not paths — a path rule is what failed twice.   |
 | `scripts/check-line-length.mjs`       | Rendered prose line length against `line-length-baseline.json`. A ratchet, **not** an 80-character ceiling — see its header (#338).                        |
 | `scripts/check-links-external.mjs`    | Outbound link liveness. By hand, and monthly via `.github/workflows/link-check.yml`. **Never in `verify` — it files an issue, it never gates a deploy.**   |
 | `scripts/report-link-rot.mjs`         | Turns that check's `--report` JSON into exactly one `link-rot` issue. `--dry-run` proves its four transitions without GitHub.                              |
@@ -691,6 +702,7 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 | `scripts/capture-comparison.mjs`      | Manual: before/after screenshots of the old and new site, into `docs/before-after/`. Referenced by nothing else, which is why it's listed.                 |
 | `docs/LAUNCH.md`                      | The cutover runbook, executed 2026-08-27 and kept as the record. Routine deploys are the `release` skill.                                                  |
 | `docs/decisions/`                     | The reasoning behind every settled decision, in four files by domain. This file carries the rules; that carries the why (#335).                            |
+| `docs/before-after/`                  | 32 paired old/new screenshots, plus the README saying which two are redacted and why (#360).                                                               |
 | `docs/REBUILD-LOG.md`                 | Running record. The build-in-public page's (#48) source material. The _narrative_, where `docs/decisions/` is the _decision_.                              |
 | `infra/README.md`                     | The live zone, the DNS tooling, and Phase 1's record.                                                                                                      |
 | `.claude/settings.json`               | The permission allow-list (every npm script a routine job runs, except `update:resume-print`, which rewrites a guard and should prompt) and the two hooks. |

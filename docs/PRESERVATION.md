@@ -58,19 +58,35 @@ node scripts/restore-snapshot.mjs --rebuild --check-selfcontained
 every invocation did, `--check-selfcontained` and `--serve` included, because the build ran at
 module top level and the flag check sat 245 lines below it. So the command this page gave for
 verifying the archive rebuilt it instead — and in a shallow clone, which is what a Claude Code web
-session gets, that rebuild cannot resolve `ce4533e~1`. It died partway through writing pages and
+session gets, that rebuild cannot resolve the asset commit. It died partway through writing pages and
 left the archive at **27 of its 102 files**. `git checkout -- snapshot/rendered` restored all 102
 cleanly, which is the committed-artifact argument holding up under exactly the failure it was
 written against.
 
+**"The asset commit" is named by a tag, not a SHA** (2026-09-09,
+[#360](https://github.com/ali-wallick/Portfolio/issues/360)). It is the commit before Phase 3
+deleted `resources/images/`, and `scripts/restore-snapshot.mjs` resolves it as
+**`assets-pre-cleanup`**, which Ali pushed the same day. It points at `090f1ce`, whose tree still
+carries all 144 files under `resources/images/` including `ASSET_INVENTORY.md`. This is the fix for
+a trap [#109](https://github.com/ali-wallick/Portfolio/issues/109) names: a history rewrite
+invalidates every SHA, and the replacement SHA does not exist until the rewrite has already run — so
+a SHA in the source can only ever be fixed afterwards, which is the follow-up nobody remembers.
+`git filter-repo` re-points tags automatically, so the rewrite needs no code change here at all.
+
+The script still falls back to the literal `ce4533e~1`, and the reason changed once the tag landed.
+It was written for sequencing — the tag did not exist yet. **What keeps it is clone shape:** `git
+clone` fetches tags, but a shallow clone fetched without them does not have it, and that is what a
+Claude Code web session gets. `git fetch origin tag assets-pre-cleanup` is the one-line fix there.
+The `TODO(#109)` on the fallback is keyed to the rewrite running, not to the tag existing.
+
 **A rebuild now proves it can reach every source before it deletes anything.** Only 28 of those 102
-files are derived from `snapshot/`; the other 74 are the 54 blobs at `ce4533e~1`, the 14 blog images
+files are derived from `snapshot/`; the other 74 are the 54 blobs at the asset commit, the 14 blog images
 below, and 6 poster frames from i.ytimg.com. The preflight resolves the commit and HEADs every
 committed remote-sourced file, and refuses to start if any of them cannot be fetched back.
 `--allow-missing-remote` overrides that for the remote half only, because the blog going dark is
 permanent and a shallow clone is one `git fetch --unshallow` away.
 
-The script restores 54 assets from git at `ce4533e~1`, relativizes the old site's root-absolute and
+The script restores 54 assets from git at the asset commit, relativizes the old site's root-absolute and
 extensionless mod_rewrite URLs, and removes four dead external dependencies. See its header for why
 each one goes rather than gets vendored.
 
@@ -104,7 +120,7 @@ decade. An archive that loads nothing from anywhere cannot rot that way.
 say so explicitly rather than showing a broken frame. These bytes were never Ali's to keep, and no
 copy exists anywhere in this repo.
 
-**`nightLight.unity3d`** (6.3 MB) was deleted at `ce4533e` as an unplayable artifact of a plugin
+**`nightLight.unity3d`** (6.3 MB) was deleted at the cleanup commit as an unplayable artifact of a plugin
 discontinued in 2017. It is in git history if it is ever wanted; the Unity Web Player is not.
 
 ## The hero videos are archived, outside this repo
@@ -131,12 +147,20 @@ longer does, as of 2026-08-26.
 underneath, which is the classic redaction failure. Instead the whole `BT…ET` text-showing block was
 deleted from the page's content stream, so the glyphs are not in the file at all. Verified four ways:
 
-| Check                                             | Result                                                        |
-| ------------------------------------------------- | ------------------------------------------------------------- |
-| Text extraction (pdfjs)                           | 102 items to 101 — exactly one removed, and it is the address |
-| Probes for the address strings                    | all absent                                                    |
-| Raw byte grep                                     | not found                                                     |
-| Pixel diff against the original                   | 0.126% of pixels, all inside the address bounding box         |
+| Check                           | Result                                                        |
+| ------------------------------- | ------------------------------------------------------------- |
+| Text extraction (pdfjs)         | 102 items to 101 — exactly one removed, and it is the address |
+| Probes for each address token   | all absent                                                    |
+| Raw byte grep                   | not found                                                     |
+| Pixel diff against the original | 0.126% of pixels, all inside the address bounding box         |
+
+**The probe strings are not written down here, and that is deliberate**
+(2026-09-09, [#360](https://github.com/ali-wallick/Portfolio/issues/360)). This table used to name
+all four, which meant a public reader could reassemble the address from the very document
+explaining that it had been removed. The probes are the address's own words: read them off the
+original blob in history — which is what #109 is about — or ask Ali. A repo that may go public
+([#48](https://github.com/ali-wallick/Portfolio/issues/48)) is the wrong place to keep a
+reassemblable copy of the thing it is redacting.
 
 Everything else is untouched and still selectable: name, email, website, and the other 101 text
 items. 100.5 KB against the original's 98 KB.
@@ -145,16 +169,78 @@ items. 100.5 KB against the original's 98 KB.
 one. Nothing here is a substitute for #109's question about history — this only improves the copy a
 reader would actually open.
 
-**`scripts/restore-snapshot.mjs` reads this file from the working tree rather than from
-`ce4533e~1`** — see its `PREFER_WORKTREE` set. This matters: the script's first run faithfully
-restored the _unredacted_ PDF into `snapshot/rendered/`, manufacturing a second copy of the very
-exposure the repo is trying to reduce, and it was committed before anyone noticed. A rebuild can no
-longer do that.
+**`scripts/restore-snapshot.mjs` reads this file from the working tree rather than from the asset
+commit** — see its `SUPERSEDE` map. This matters: the script's first run faithfully restored the
+_unredacted_ PDF into `snapshot/rendered/`, manufacturing a second copy of the very exposure the
+repo is trying to reduce, and it was committed before anyone noticed.
+
+**This paragraph used to end "A rebuild can no longer do that", and that was false as written**
+(corrected 2026-09-09, [#360](https://github.com/ali-wallick/Portfolio/issues/360)). The fix it was
+describing was `PREFER_WORKTREE`, a `Set` with one path in it — so the very next rebuild did the
+identical thing one file over, restoring `resources/images/resume.png`, a full-page render of the
+same résumé. **The fix guarded a path when the risk was a class.** What can now honestly be said:
+the map names both files, and `scripts/check-preserved-blobs.mjs` fails the build on the _content_
+of the known-bad blobs wherever they land, which is the part that does not depend on someone having
+listed the right path.
 
 The redaction was produced with `pdfjs-dist`, `pdf-lib` and `@napi-rs/canvas` installed **outside the
 repo**, deliberately — three dependencies is a poor trade for something that runs once.
 `package.json` is untouched. To redo it, locate the text block by its computed device position
 (x 208.7, y 690.5 on a 612x792 page) rather than by byte offset.
+
+## The résumé's _pictures_ were redacted too — 2026-09-09, #360
+
+Redacting the PDF in 2026-08-26 closed one copy of the address. **Three others were legible in HEAD
+the whole time**, because every prior pass looked at git history and none looked at the working
+tree ([#360](https://github.com/ali-wallick/Portfolio/issues/360)):
+
+| File                                            | How it got there                                                                     |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `snapshot/rendered/resources/images/resume.png` | A rebuild restored the historical blob — a 1700×2200 render of the unredacted résumé |
+| `docs/before-after/old/resume-desktop.webp`     | Captured from the live old résumé page, which embedded that PNG                      |
+| `docs/before-after/old/resume-mobile.webp`      | Same                                                                                 |
+
+All three are closed now, by two different techniques, because they are two different problems.
+
+**The PNG was replaced, not patched.** `resources/resume-redacted.png` is a fresh 200-DPI render of
+the already-redacted PDF — 612 × 200/72 = 1700 and 792 × 200/72 = 2200, matching the original's
+geometry exactly — and `snapshot/rendered/` now carries that instead of the historical blob. A
+downsampled pixel diff against the original shows the address line as the only substantive
+difference; everything else lines up, which is what proves it is the same document rather than a
+different-looking one. It lives at `resources/resume-redacted.png` rather than under
+`resources/images/`, because nothing should ever exist there again (CLAUDE.md).
+
+Rendered with `pdfjs-dist` and `@napi-rs/canvas` installed **outside the repo**, on the same
+reasoning as the PDF redaction above: `package.json` is untouched for something that runs once.
+
+**The two captures got a composited bar**, and that is a real redaction here rather than the failure
+mode warned about above. The warning is specific to PDFs, which keep a text layer beneath their
+appearance. A raster has nothing under the pixels — the bar was composited before encoding, so the
+covered pixels are not in the file. They could not be re-captured in any case: the "before" side
+comes from the _live_ old site, which stopped serving at the 2026-08-27 cutover.
+`docs/before-after/README.md` records the measured geometry and says the captures are modified,
+which is the part that matters — a modified capture that does not say so is worse than either
+alternative.
+
+**And the class is guarded now, not just the paths.** `scripts/check-preserved-blobs.mjs` hashes
+every tracked file and fails the build on any match against a committed denylist of the pre-fix
+blobs. It runs in `npm run verify` beside `check:source`, before the build, since it needs no build.
+Hashes are not the address, so the denylist is safe to commit. It is deliberately not an address
+detector: re-encode one of these images and the hash is gone. It fires on exactly the recurrence
+that has now happened twice — a script faithfully restoring a known historical blob — which is a
+narrow guard for a demonstrated bug rather than a heuristic that fires on correct files.
+
+**Four entries, and the fourth arrived with the tag.** Three are the images above. The fourth is the
+unredacted PDF itself, which shipped absent from the first version of the guard because its blob is
+unreachable from a shallow clone — the guard said so rather than carrying a guessed hash. Pushing
+`assets-pre-cleanup` made it reachable in one fetch, and it was verified before being listed: all
+four address probes present in the tagged blob, zero in the committed one. That file is the one
+occurrence a path rule already covers (`SUPERSEDE`), so it is now covered twice, which is the right
+number for the copy that started all of this.
+
+None of this touches history. Stripping the blobs from history is
+[#109](https://github.com/ali-wallick/Portfolio/issues/109), and it was blocked on this: purging
+history while HEAD ships the same image is theatre.
 
 ## What archive.org has
 
