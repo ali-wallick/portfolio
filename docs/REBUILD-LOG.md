@@ -5406,3 +5406,49 @@ and `@napi-rs/canvas`, and about a dozen `sharp` passes measuring and re-measuri
 
 The one thing that would have been worth delegating — sweeping the repo for other rasterised copies
 of the résumé — was already done, in the issue.
+
+## #45 / #109 — the pre-rewrite half, and an issue body that had gone stale (2026-09-09)
+
+Straight after #362 merged. #109's checklist made the next step unambiguous — its item 2 — which is
+worth noting on its own: **an ordered checklist in an issue removed the "what now?" question
+entirely**, where the same information spread across three issue bodies would not have.
+
+### Half the named work did not exist
+
+#45 listed four things. `.DS_Store` was already untracked and already in `.gitignore`. `infra/` was
+labelled a historical record and is a live one — two `docs/LAUNCH.md` commands run out of it.
+
+Both claims were true when #45 was written on 2026-08-20. **The issue was accurate and stale, which
+is not a contradiction**, and it is the same failure mode CLAUDE.md's "keep status out of this file"
+rule guards against, arriving one level down in an issue rather than in the brief. There is no fix
+that scales — you cannot re-verify every open issue continuously — so the working defense is the
+cheap one: **check each claim against the tree before acting on it.** That cost about four commands
+here and avoided a move that would have broken two runbook commands.
+
+The one real item, the root `.htaccess`, took one `git rm` and a paragraph saying where to read it.
+
+### The runbook, and what a machine is actually for
+
+The rest of the pass was preparing #109 item 3 for Ali to run. The judgment in it is hers; what a
+session is genuinely better at is the enumeration, so that is what went in: every blob reachable from
+every ref — 1,868 — hashed and matched against the guard's denylist. Four matched, and the useful
+detail is that `f485f41` is **one blob that lived at two paths**. A path-based rewrite would have had
+to know both. That is #360's lesson showing up again one step later, which is a decent sign it was
+the right lesson.
+
+Also enumerated, because none of it was written down: the 8 branches and 3 tags still carrying the
+blobs, and the consequence that `v1-legacy` stops being a byte-complete capture of the old site. That
+last one is a real cost and it belongs in front of the person deciding, not discovered afterwards.
+
+**A false alarm worth recording.** The first ref sweep reported `refs/heads/main` still carrying three
+bad blobs, minutes after the merge that removed them. That was the _local_ `main`, stale from the
+original clone; `origin/main` was clean. Caught by checking both SHAs instead of reporting the
+finding. In a shallow, agent-run clone, `main` is very often not what `main` means — and the sweep
+had listed a ref-name column without a SHA column, which is what made it possible to misread.
+
+### Model allocation and cost
+
+Opus, inline, no subagents. The unshallow was the only expensive step (262 commits), and the blob
+sweep is 1,868 `git cat-file` calls, which is ~30 seconds and not something to delegate. Sequential
+again: the enumeration cannot start until the clone is full, and the runbook cannot be written until
+the enumeration is done.

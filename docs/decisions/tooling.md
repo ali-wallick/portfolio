@@ -815,3 +815,52 @@ Opus, inline, no subagents. Sequential by construction: hashes had to be recorde
 changed, the PNG render had to exist before the snapshot copy could be replaced, and the guard had
 to be written after the hashes. Nothing to fan out. One `npm ci`, one out-of-repo dependency install
 for the render, and roughly a dozen `sharp` measurement passes over three images.
+
+## The pre-rewrite cleanup, and one premise that was wrong (2026-09-09, #45, #109)
+
+#109's checklist put [#360](https://github.com/ali-wallick/Portfolio/issues/360) first and #45's
+pre-rewrite half second. That half named four things. **Two of them turned out not to be work.**
+
+**`.DS_Store` was already done.** #45 says it is "currently tracked at the repo root despite
+`.gitignore` existing". It is not tracked, and `.gitignore` line 33 covers it. Something cleaned it up
+without updating the issue — the exact staleness CLAUDE.md's "keep status out of this file" rule is
+about, arriving in an issue instead.
+
+**`infra/` is not a historical record, and #45's premise was wrong.** The issue calls it "Phase 1's
+DNS baseline, verify script, BIND zone file, runbook. Historical record; not load-bearing for the
+build." The last clause is true and the label is not: `docs/LAUNCH.md` runs `./infra/verify-dns.sh`
+in two places, `infra/README.md` documents the zone **as it stands** (re-verified after the cutover),
+CLAUDE.md's own map calls it "the live zone", and `guard-preserved.sh` exempts that README from the
+preservation hook precisely because it is a live document. Moving it would have broken two runbook
+commands to tidy a top level that has nine entries. **Ali's call, 2026-09-09: leave it, correct the
+issue.**
+
+The general form is worth keeping, because this repo keeps rediscovering it: **an issue written
+months before it is worked describes the repo as it was.** #45 was opened 2026-08-20 and both wrong
+items were true then. The cheap defense is the one that worked here — check each claim against the
+tree before acting on it, rather than treating the issue body as the specification.
+
+**What was actually work: the root `.htaccess`.** Removed. It was #25's source material and #25
+closed 2026-08-23, which is the gate #45 named. Removing it is lossless — `v1-legacy`'s copy is
+byte-identical, verified by sha256 first — and it was never served, since it sat at the repo root
+rather than in `public/`. Five files cite it and **none reads it**; they describe how the old site
+behaved, which stays true. `docs/PRESERVATION.md` now says where to read it.
+
+### The runbook is a document, not a checklist item
+
+`docs/HISTORY-REWRITE.md` is new, and it takes the shape `docs/LAUNCH.md` already established: the
+issue holds the decision and the ordering, the document holds the procedure. Writing the procedure
+into #109 would have made a second source for the same thing, which is the drift this project has
+caught itself in more than once.
+
+**What only a machine should produce is in it.** The four blob ids were found by hashing every one of
+the 1,868 blobs reachable from every ref and matching against the guard's denylist — content, not
+paths. Exactly four matched, one per denylist entry, and `f485f41` is a single blob that appeared at
+two different paths, which is the concrete vindication of keying the denylist on content. Also
+recorded: the 8 branches and 3 tags that still carry them, and the consequence nobody had written
+down — **`v1-legacy` stops being a byte-complete capture of the old site**, since it carries two of
+the four.
+
+**Ali runs it.** It needs a full clone, force-push on every ref, a GitHub support purge request, and
+it lands a production deploy because `release` is the production branch. None of that is an agent's
+to do unsupervised, and the runbook says so at the top rather than leaving it implied.

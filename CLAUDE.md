@@ -700,6 +700,7 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 | `docs/LINKEDIN.md`                    | Paste-ready LinkedIn copy. Generated — a handoff for Ali, never a sync.                                                                                    |
 | `scripts/fetch-posters.mjs`           | Manual: looks up a YouTube video's own poster frame — not a default source for a `poster`, see the #273 section.                                           |
 | `scripts/capture-comparison.mjs`      | Manual: before/after screenshots of the old and new site, into `docs/before-after/`. Referenced by nothing else, which is why it's listed.                 |
+| `docs/HISTORY-REWRITE.md`             | The #109 history-rewrite runbook: the four blob ids, what still carries them, and the three verifications. Ali runs it, not an agent.                      |
 | `docs/LAUNCH.md`                      | The cutover runbook, executed 2026-08-27 and kept as the record. Routine deploys are the `release` skill.                                                  |
 | `docs/decisions/`                     | The reasoning behind every settled decision, in four files by domain. This file carries the rules; that carries the why (#335).                            |
 | `docs/before-after/`                  | 32 paired old/new screenshots, plus the README saying which two are redacted and why (#360).                                                               |
