@@ -42,21 +42,21 @@ assuming either has slipped, and read the "Site (now)" column, not "before."
 
 One voice, three settings. Getting this wrong reads worse than any individual bad sentence.
 
-| Surface                                | Register                                                                           |
-| -------------------------------------- | ---------------------------------------------------------------------------------- |
-| Blog-derived prose, About              | Warmest. Contractions, parentheticals, a rare earned exclamation.                  |
-| Project write-ups                      | Composed. First person, past tense, specifics forward, one warmth beat at close.   |
-| Archive-tier entries                   | Composed and lower-key. No warmth beat; "cool old projects", not a pitch.          |
-| `highlights` / `highlightsExtended`    | Résumé register, and **labelled** — see §2.1. The most formal surface on the site. |
-| Microcopy — nav, 404, contact, buttons | Shortest. Plain and a little dry. A joke only if it's actually funny.              |
-| Alt text, meta descriptions            | Descriptive, not voiced. Say what's in the image.                                  |
+| Surface                                | Register                                                                          |
+| -------------------------------------- | --------------------------------------------------------------------------------- |
+| Blog-derived prose, About              | Warmest. Contractions, parentheticals, a rare earned exclamation.                 |
+| Project write-ups                      | Composed. First person, past tense, specifics forward, one warmth beat at close.  |
+| Archive-tier entries                   | Composed and lower-key. No warmth beat; "cool old projects", not a pitch.         |
+| `highlights` / `highlightsExtended`    | Résumé register, and **labeled** — see §2.1. The most formal surface on the site. |
+| Microcopy — nav, 404, contact, buttons | Shortest. Plain and a little dry. A joke only if it's actually funny.             |
+| Alt text, meta descriptions            | Descriptive, not voiced. Say what's in the image.                                 |
 
 **For resume work, this skill is half the job.** It governs how a bullet reads; the `update-resume`
 skill governs where it lives, the per-job bullet budget, and the regeneration pipeline (PDFs,
 `docs/LINKEDIN.md`, the print-geometry baseline). Changing resume wording without reading that one
 will fail `npm run check:pdf` at deploy time.
 
-### 2.1 Résumé register is labelled, and it is deliberately not the site's prose voice
+### 2.1 Résumé register is labeled, and it is deliberately not the site's prose voice
 
 Settled with Ali 2026-08-26 ([#32](https://github.com/ali-wallick/Portfolio/issues/32)). A bullet is
 `{ label, text }` in the schema, and renders as **`Label:`** followed by a clipped formal clause:
@@ -267,9 +267,9 @@ Things to cut on sight, because they aren't hers at any dosage:
 Copied from her own sentences, not from a style guide:
 
 1. **State the motive in plain words.** "after being frustrated at having to hand-code any
-   animation." Why she built it is the humanising detail, and it's usually the missing one.
+   animation." Why she built it is the humanizing detail, and it's usually the missing one.
 2. **Use a parenthetical aside** where you were about to use an em dash.
-3. **Put concrete numbers in undramatised.** 61 levels, 188K DAU, 48 hours, four years.
+3. **Put concrete numbers in undramatized.** 61 levels, 188K DAU, 48 hours, four years.
 4. **Be interested in the thing, not in yourself.** "the crazy amount of depth that goes into these
    machines from every aspect."
 5. **Credit teammates by what they did.** "Our level designers worked really hard on the intro
@@ -300,7 +300,7 @@ Copied from her own sentences, not from a style guide:
    (`index.astro`, "building our first game in Godot!"), chosen by Ali over a proposed warmth clause in the lede — the current work was
    already the gladdest fact on the page, so it only needed the punctuation to say so.
 10. **Name the specific thing.** Blendoku, Carcassone, Castles of the Mad King Ludwig — not "board
-    games". The same instinct as the undramatised numbers, applied to nouns, and the most reliable
+    games". The same instinct as the undramatized numbers, applied to nouns, and the most reliable
     single marker of her writing.
 11. **Label a section, then explain it plainly.** Bolded label, colon, ordinary prose. Both her
     escalation letter and her volunteer synthesis doc are built this way — independent confirmation
@@ -312,7 +312,7 @@ Copied from her own sentences, not from a style guide:
     ([#95](https://github.com/ali-wallick/Portfolio/issues/95)); extended to a featured body on
     kaneva, whose eight menu categories were buried in two comma-heavy sentences
     ([#140](https://github.com/ali-wallick/Portfolio/issues/140)). Reach for it when the alternative
-    is a prose list of parallel items — not as a general licence for lists.
+    is a prose list of parallel items — not as a general license for lists.
 12. **Earn a success claim with the obstacle first — don't reach for "the first X that actually
     worked."** That construction passes every other check here (no em dash, in-range length, no
     banned vocabulary) and still reads as a flex, and the mechanism is specific: "first X that
@@ -361,6 +361,19 @@ a body). A straight apostrophe inside backticks is quoting source and stays. `np
 the build on a straight one in rendered prose, alt text, or a meta description, so a slip is a CI
 failure rather than something to catch by eye.
 
+**And the spelling is American** (#357). `color`, `behavior`, `labeled`, `traveling`, `centered`,
+`gray`, `defense`, `normalized`. Ali's own writing is American throughout — zero British spellings
+in 42,000 words of her blog posts and the old site — so this is her habit, not a house style
+imposed on her. `npm run links` fails the build on a British spelling in rendered prose, alt text
+or a meta description, same surfaces and same reason as the apostrophe.
+
+**Expect to see British spellings in what you read on the way here, and do not copy them.** The
+docs, the decision records and the code comments still carry ~430 of them, deliberately left
+(#357): they have no reader, and sweeping them would churn the résumé PDFs for nothing. But they
+are what you are primed on. A session that reads `colour` in four documents and then writes
+`colours` in a caption is the exact mechanism that put "the colours" on a published page — that is
+where this rule came from, and the guard is downstream of you, not a substitute for noticing.
+
 ## 6. Never let a tone pass change a fact
 
 An edit pass is not a re-reporting pass. Tightening prose is exactly where invented specifics slip
@@ -405,7 +418,7 @@ in, because a punchier sentence often wants a detail the source doesn't have.
 
 ## 7. Measure, then read
 
-The repo settled its colours, fonts and motion on measurement rather than taste. Copy gets the same
+The repo settled its colors, fonts and motion on measurement rather than taste. Copy gets the same
 treatment.
 
 ```bash

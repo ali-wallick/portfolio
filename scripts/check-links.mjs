@@ -34,6 +34,10 @@
  *                                          that points elsewhere asks Google
  *                                          to index a page and then tells it
  *                                          not to (#345).
+ *  12. One spelling variant, everywhere  — a published page said "the colours".
+ *                                          Nothing had ever stated which
+ *                                          variant the site uses, so agents
+ *                                          picked one per sentence (#357).
  *
  * External links are NOT fetched. That makes the check fast, offline, and
  * deterministic in CI; genuinely dead outbound links are tracked in the content
@@ -166,6 +170,86 @@ const SMALL_WORDS = new Set([
  * demanding an exemption for correct copy.
  */
 const intrinsicallyLowercase = (w) => /[A-Z]/.test(w.slice(1)) || /[./@]/.test(w.slice(0, -1));
+
+/**
+ * British spellings that rule 12 fails the build on. Specific forms only — see
+ * the rationale at the check itself for why this is not an `-our`/`-ise`
+ * pattern, and which forms are deliberately absent.
+ *
+ * Word-boundary anchored on purpose: `aria-labelledby` is a real HTML attribute
+ * and appears five times in the built résumé, so a substring match would fail
+ * the build on correct markup.
+ */
+const BRITISH = new RegExp(
+  '\\b(' +
+    [
+      // -our
+      'colours?|colour(?:ed|ing|ful)|recolouring',
+      'behaviours?|behavioural',
+      'favourite|favours?|favoured|flavours?|humour|labour|rumour|armour|endeavour|harbour',
+      'honours?|honoured|honouring|neighbours?|neighbouring',
+      'odour|parlour|saviour|splendour|vapour',
+      // -ise / -isation. Stem + `is` + suffix, so `emphasis`, `analysis`,
+      // `capitalism` and `specialist` never match — only the inflected verb
+      // forms do, which is the whole difference between a variant and a word.
+      '(?:normal|optim|organ|recogn|unrecogn|real|priorit|minim|maxim|summar|categor|custom|visual)' +
+        'is(?:e|es|ed|ing|ation)',
+      '(?:initial|serial|util|apolog|emphas|standard|character|special|memor|familiar|sanit|synthes)' +
+        'is(?:e|es|ed|ing|ation)',
+      '(?:item|capital|central|general|final|stabil|local|global|social|author|canonical|equal)' +
+        'is(?:e|es|ed|ing|ation)',
+      '(?:human|hypothes|literal|moral|parallel|token|econom|reorgan|undramat)' +
+        'is(?:e|es|ed|ing|ation)',
+      '(?:recogn|custom|general)isable|organisational|(?:sanit|token)iser',
+      // -lled / -lling
+      'labelled|labelling|unlabelled|relabelled|cancelled|cancelling|modelled|modelling',
+      'travelled|travelling|traveller|fuelled|signalled|totalled|totalling',
+      'levelled|marvelled|counsellor|jeweller',
+      // -re
+      'centres?|centred|centring|metres?|theatres?|fibres?|litres?|calibre|sombre|lustre',
+      // -ce and the one-offs
+      'greys?|greyed|greyish|greyscale|defence|offences?|pretence|licence',
+      'practise|practised|practising|programmes?|storeys?|judgement|acknowledgements?',
+      'aluminium|aeroplane|draught|plough|moulded|moulding|smoulder|mould',
+      'sceptical|scepticism|sceptic|specialit(?:y|ies)|cheques?|kerb|tyres?',
+      'enrolment|fulfilment|instalment|skilful|wilful|manoeuvre|foetus|paediatric|mediaeval',
+      'anaesthetic',
+    ].join('|') +
+    ')\\b',
+  'i',
+);
+
+/**
+ * The wordlist above has one failure mode that matters, and it is silent in the
+ * dangerous direction: a form that also matches the AMERICAN spelling fails the
+ * build on correct copy, everywhere, at once. Two drafts of it did exactly that
+ * — `colou?rs?` matched "color" and `honou?red` matched "honored" — and the
+ * only reason it was caught is that the site already says "color" on two pages.
+ * A wordlist edit that broke a word the site does not happen to use yet would
+ * have shipped.
+ *
+ * So the list is asserted against a sample of correct forms before it is used:
+ * the same-stem American spellings, plus the words that merely look like
+ * variants (`analysis` and `emphasis` are not `-ise` verbs, `dialog`/`catalog`
+ * are standard, `aria-labelledby` is markup). Extending the list above without
+ * extending this is the mistake this is here to make loud.
+ */
+for (const word of [
+  'color colors colored coloring favorite honored neighbors odor vapor',
+  'normalized optimize organization recognizable authorization canonicalizes',
+  'labeled unlabeled traveling totaling centered meter theater gray grayscale',
+  'defense license practicing program judgment molding skeptical specialty',
+  'analysis emphasis synthesis hypothesis capitalism socialism specialist generalist',
+  'dialog dialogue catalog catalogue analogue aria-labelledby scroll-behavior',
+].flatMap((line) => line.split(' '))) {
+  if (BRITISH.test(word)) {
+    console.error(
+      `✗ check-links.mjs bug: the rule 12 wordlist matches "${word}", which is correct ` +
+        `American English. Fix the pattern — as written it would fail the build on valid copy.`,
+    );
+    process.exit(1);
+  }
+}
 
 /**
  * Why `text` is not title case, or `undefined` if it is.
@@ -306,6 +390,51 @@ for (const file of htmlFiles) {
       if (value && straight.test(value)) {
         report(rel, `straight apostrophe in ${name}="…" (use ’, #188): ${value.slice(0, 60)}…`);
       }
+    }
+  }
+
+  // --- 12. One spelling variant, everywhere ---------------------------------
+  //
+  // Settled #357: the site is American, and until that issue nothing had ever
+  // said so. Ali's own writing is American throughout — zero British spellings
+  // in 42,000 words across `snapshot/` and `content/archive/` — but the docs,
+  // skills and code comments an agent reads before its first tool call had
+  // accumulated 452 British ones, and prose written under that priming matched
+  // it. "The colours" reached a published page that way.
+  //
+  // The sweep deliberately stopped at reader-facing prose, so this guard is
+  // what makes that scope safe: the leak upstream is allowed to continue, and
+  // is caught here at the only boundary with a reader behind it.
+  //
+  // Numbered 12 (the next free number) but placed beside rule 6 rather than in
+  // numeric order, because it reuses that rule's `prose` and its alt/meta pass
+  // and is the same shape of rule — one variant everywhere, checked on the
+  // OUTPUT because that is the only place the three prose sources meet. Rules
+  // 9–11 are cross-referenced by number from `docs/decisions/`, so renumbering
+  // to put this in sequence would invalidate them.
+  //
+  // A wordlist of specific forms, never an `-our`/`-ise` pattern: `analyse`
+  // and `analysis` are different words, `precise` and `otherwise` are not
+  // variants of anything, and `--color-*` token names are American already.
+  // `dialogue` and `catalogue` are left out on purpose — both are standard in
+  // American English, and `dialog` means the UI element rather than the
+  // conversation. Code is exempt for free, since `prose` already strips
+  // <code>/<pre>: a write-up quoting a British source is quoting, not writing.
+  // The residual false positive is a proper noun — a game actually titled
+  // *Centre*. Exempt that form here when it happens rather than loosening the
+  // list; no such title exists today, so the hook for it is deliberately not
+  // built (the call #338 made about its own candidates).
+  for (const [text, where] of [
+    [prose, 'rendered prose'],
+    ...[...html.matchAll(/<(?:img|meta)\b[^>]*>/gi)].flatMap(([tag]) =>
+      ['alt', 'content']
+        .map((name) => [attr(tag, name), `${name}="…"`])
+        .filter(([value]) => Boolean(value)),
+    ),
+  ]) {
+    const found = text.match(BRITISH);
+    if (found) {
+      report(rel, `British spelling "${found[0]}" in ${where} — the site is American (#357)`);
     }
   }
 
@@ -502,7 +631,7 @@ if (!existsSync(sitemapFile)) {
 const pageWord = htmlFiles.length === 1 ? 'page' : 'pages';
 if (problems.length === 0) {
   console.log(
-    `✓ ${htmlFiles.length} ${pageWord} checked — links resolve, no http://, alt text present, apostrophes curly, no welded words, headings title case, canonicals self-consistent.`,
+    `✓ ${htmlFiles.length} ${pageWord} checked — links resolve, no http://, alt text present, apostrophes curly, spelling American, no welded words, headings title case, canonicals self-consistent.`,
   );
   process.exit(0);
 }

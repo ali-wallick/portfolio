@@ -5242,3 +5242,101 @@ Fable, inline, no subagents. The source material was the log itself (5,000-odd l
 record and the issue's comments, read directly because the specific wording of each failure is
 what the page is made of — the Phase 2 rule about fan-out losing when you need the material itself,
 applied to the document that states it. Four builds, four audits, one screenshot pass, three verify runs.
+
+## #357 — a spelling leak, and the first measured feedback loop in the workflow (2026-09-09)
+
+The #355 copy review found a published page saying "the colours". The reader-facing fix is one
+word. **The interesting part is where it came from, and it is the clearest instance so far of an
+agentic workflow feeding its own output back into itself.**
+
+### The control was already in the repo
+
+Ali's own primary sources — `snapshot/` and `content/archive/`, ~42,000 words of her writing across
+2013–2019 — carry **zero** British spellings. The old site's stylesheet is literally `css/colors.css`.
+So the variant did not come from her, and this is a rebuild-era artifact end to end.
+
+That control existing at all is a Phase 0 dividend nobody planned. **The preservation work was done
+to keep the old site honest, and it turned out to double as a baseline for what Ali's writing looks
+like** — which is also what made the voice reference (2026-08-24) measurable rather than asserted.
+Two separate passes now depend on `snapshot/` being a faithful copy rather than an improved one.
+
+### Patient zero, and what it says about the mechanism
+
+The clone this ran in was shallow (50 commits), which produced a confident wrong answer first: every
+British form appeared to enter on 2026-09-03, in one commit. That was the shallow boundary, not a
+finding. `git fetch --unshallow` gave the real history, 260 commits back to 2016.
+
+The first instance is `totalling`, in `docs/REBUILD-LOG.md` — **this file** — in commit `3a16736`,
+_"Add the agentic layer: CLAUDE.md, three skills, settings, and hooks"_. The document that spreads
+the leak and the leak itself were added together.
+
+### The curve
+
+British spellings in `docs/`, `src/`, `scripts/`, `.claude/` and CLAUDE.md, per commit:
+
+| Date       | Count | Commit                                      |
+| ---------- | ----: | ------------------------------------------- |
+| 2026-08-16 |     1 | the agentic layer                           |
+| 2026-08-19 |    52 | Phase 5 — direction 03 (+34)                |
+| 2026-08-21 |   116 | reticle idle behaviour (+28)                |
+| 2026-08-29 |   242 | the design-switcher skill (+30)             |
+| 2026-09-05 |   363 | the résumé paper look (+26)                 |
+| 2026-09-07 |   413 | #338's guards, moved out of the brief (+39) |
+| 2026-09-09 |   452 | today                                       |
+
+Monotonic. The count fell exactly five times, always by one, always incidental to a deleted line.
+**In 260 commits nobody ever corrected one deliberately** — there was no negative term in the loop
+until the issue was opened.
+
+Density is the better measure, since the docs were growing the whole time. Per 1,000 words of docs
+prose it ramps **0.41 → 2.2 over the first week**, then sits flat at **~1.8** for the next six.
+Seeded, amplified, saturated — the shape of a feedback loop reaching equilibrium, not a constant
+author bias, which would have been flat at ~2 from day one. (Caveat: the earliest docs were shorter
+and more list-shaped, so some of the initial ramp may be register rather than feedback.)
+
+### The finding worth carrying forward: the leak is register-selective
+
+Same model, same sessions, same repo. Rendered user-facing copy: **1 instance**. Docs, records,
+skills, comments: **451**.
+
+Writing _as Ali_ — first person, through `write-copy`, against a voice reference — the American
+default held across 25 pages. Writing _as an engineer explaining a decision_, British forms appeared
+at ~1.8 per 1,000 words, in a specific vocabulary: `behaviour`, `normalised`, `generalises`,
+`centred`, `labelled`. **So "the model writes British English" is the wrong shape of explanation.**
+Something register-shaped is doing the work, and the skill that pins a voice is evidently strong
+enough to suppress it while the surrounding documents are not.
+
+The practical read for this project: **the documents an agent reads before its first tool call are
+not neutral context, they are style input.** That is not a spelling observation. Anything consistent
+in CLAUDE.md, the records or the skills — sentence length, hedging, em dashes — is being taught the
+same way, and the em-dash and sentence-length gaps the wording pass chased (2026-08-24) look
+different in that light. Worth a measurement of its own; not made here.
+
+### What was decided
+
+The sweep stops at the reader: the one rendered word, two comments in shipped files, and the ~20 in
+CLAUDE.md and `write-copy/`. **~430 left in place deliberately** — 80 of them are byte-hashed inputs
+to `build-pdf.mjs`, so a comment edit would churn both résumé PDFs for nothing, and most of the rest
+is this file and the decision records, which are records. Rule 12 in `check-links.mjs` makes the
+narrow scope safe by catching the leak at the boundary that has a reader behind it. Reasoning in
+[`docs/decisions/content.md`](decisions/content.md).
+
+### The guard nearly shipped a much worse bug than the one it fixes
+
+Two drafts of the wordlist matched the **American** spellings: `colou?rs?` matches "color",
+`favou?rite` matches "favorite", `honou?red` matches "honored". A guard that fires on correct copy
+fails the build on every page at once. Both were caught only because the site happens to use those
+words — a broken entry for a word the site does not use yet would have shipped green.
+
+So the list is now asserted against ~40 correct forms before it runs. **The lesson generalises past
+this guard: a check whose failure mode is "rejects valid input" needs a negative test, because its
+own green run is not evidence.** The existing guards are all shaped the other way — they assert a
+property of real output — which is why none of them needed one before.
+
+### Model allocation and cost
+
+Opus, inline, no subagents. The work was one grep refined against its own false positives, then git
+archaeology on a single history — sequential by nature, each step reading the last step's output, so
+there was nothing to fan out. One `--unshallow` fetch, one `npm ci`, five builds, and a scripted
+per-commit scan across 260 commits (the slowest part, ~4 minutes, and the thing that turned a
+plausible story about training data into a measurement).

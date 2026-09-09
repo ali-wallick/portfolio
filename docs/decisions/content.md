@@ -526,3 +526,89 @@ population. Every `<h2>` on the site is hand-authored: six in `.astro`, five in 
 **So do not extend this to `<h3>`.** That it is clean on `<h2>` is not evidence it would be clean
 anywhere else, and the brief's own standing warning is that an observed regularity about this site's
 headings was cited back as a settled rule twice before Ali named it an accident.
+
+## The site is American, and the sweep stops at the reader (2026-09-09, closes #357)
+
+Nothing in the repo had ever stated which variant the site uses, so agents picked one per sentence.
+The #355 copy review found a published page saying "the colours".
+
+### Ali writes American, measured rather than assumed
+
+The control was sitting in the repo the whole time. Her own primary sources — `snapshot/` (the old
+site, ~36,700 words) and `content/archive/` (her blog posts, 2013–2019, ~5,400 words) — carry
+**zero** British spellings between them. The old stylesheet is named `css/colors.css`. So this is
+not a house style being imposed on her; it is her habit, and the site had drifted off it.
+
+### It was seeded once and compounded, and the curve says so
+
+Patient zero is `totalling`, in `docs/REBUILD-LOG.md`, in commit `3a16736` — **the commit that added
+the agentic layer**: CLAUDE.md, the first three skills, the settings and the hooks. The vector and
+the payload shipped together.
+
+From there it climbed monotonically to 452 across 260 commits. The count fell exactly five times,
+always by one, always because a line was deleted for an unrelated reason. **Nobody ever corrected one
+on purpose.** Density in docs prose ramps 0.41 → 2.2 per 1,000 words over the first week and then
+sits flat at ~1.8 for six more: seeded, amplified, saturated. The full measurement is in
+[`REBUILD-LOG.md`](../REBUILD-LOG.md).
+
+### The leak is register-selective, which is the finding worth keeping
+
+Same model, same sessions, same repo:
+
+| Surface                                       | Instances |
+| --------------------------------------------- | --------: |
+| Rendered user-facing copy                     |     **1** |
+| Docs, decision records, skills, code comments |   **451** |
+
+Writing _as Ali_ — first person, through `write-copy` — the American default held across 25 pages.
+Turning around to write _as an engineer explaining why_, British forms appeared at ~1.8 per 1,000
+words, and in a specific vocabulary: `behaviour`, `normalised`, `generalises`, `centred`, `labelled`.
+So "the model writes British English" is the wrong shape of explanation. Register is doing the work.
+
+### Only the reader-facing surface was swept
+
+**Fixed:** the one rendered instance (`grey` in the /about cosplay alt text), two comments in shipped
+files (`public/favicon.svg`, `public/_headers`), and the ~20 in `CLAUDE.md` and
+`.claude/skills/write-copy/` — the priming a copy-writing session actually gets before its first
+tool call.
+
+**Left alone: ~430**, in `docs/`, `scripts/`, `src/` comments and the other skills. Two reasons, both
+measured. **80 of them sit in files that are byte-hashed inputs to `build-pdf.mjs`** — `base.css`
+(38), `tokens.css` (23), `resume.css` (11) and six others — so a pure comment change there fails
+`check:pdf` until both résumé PDFs are regenerated and committed, which is exactly the churn #249
+warned about. And most of the rest is `REBUILD-LOG.md` and `docs/decisions/`, which are records of
+what happened; rewriting their prose after the fact is revisionist for no reader's benefit.
+
+### Why that is not the shape #188 rejected
+
+The issue argued the #188 precedent points at sweeping everything: _"a rule with an exception in it
+is a rule someone has to remember which surface they are on."_ **That does not transfer here, and the
+difference is the reader.** #188's bug was _visible_ — `didn't` rendering beside `didn’t` on the same
+page. A code comment saying `colour` next to rendered copy saying `color` is invisible to every
+reader, permanently. And nobody has to remember which surface they are on, because rule 12 fails the
+build. The exception is carried by the guard, not by a person.
+
+**The guard is what makes the narrow sweep safe**, and without it the issue's objection would be
+right: fixing the words while leaving the mechanism intact would just re-run the same leak. Instead
+the leak is allowed to continue where it has no reader, and is caught at the boundary where it does.
+
+### The wordlist is specific forms, and it is asserted against correct English
+
+`scripts/check-links.mjs` rule 12, beside the apostrophe check and checked on `dist/` for the same
+reason: the output is the only place the three prose sources meet.
+
+Never an `-our`/`-ise` pattern. `analysis` and `emphasis` are not `-ise` verbs, `capitalism` and
+`specialist` are not variants, `dialogue` and `catalogue` are standard American, `--color-*` token
+names are already American, and `aria-labelledby` is markup that appears five times in the built
+résumé. The pattern is stem + `is` + suffix, so the noun forms never match.
+
+**The dangerous failure mode is a form that matches the American spelling**, because it fails the
+build on correct copy everywhere at once. Two drafts did exactly that — `colou?rs?` matched "color",
+`honou?red` matched "honored" — and both were caught only because the site happens to use those
+words. A wordlist edit breaking a word the site does not use yet would have shipped. So the list is
+asserted against a sample of correct forms before it runs, and extending it without extending that
+sample is meant to be loud.
+
+The one residual false positive is a proper noun — a game actually titled _Centre_, a quoted source
+outside backticks. No such title exists, so the exemption hook is deliberately not built; that is the
+call #338 made about its own candidates.

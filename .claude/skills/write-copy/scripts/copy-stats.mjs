@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Advisory copy metrics for aliwallick.com. NOT a CI gate — tone isn't gateable,
 // and every number here has a legitimate reason to be exceeded. It exists so a
-// wording pass argues from measurement instead of vibes, the same way the colour
+// wording pass argues from measurement instead of vibes, the same way the color
 // and font passes did.
 //
 //   node .claude/skills/write-copy/scripts/copy-stats.mjs src/content/projects/*.md
@@ -110,7 +110,7 @@ const TELLS = [
   [
     '"not just X, but Y"',
     /\bnot (just|only|merely) [^.;]{2,40}?,? but\b/gi,
-    'The single most recognisable LLM cadence. Rewrite as a plain claim.',
+    'The single most recognizable LLM cadence. Rewrite as a plain claim.',
   ],
   [
     '"isn\'t about X, it\'s about Y"',
@@ -223,7 +223,7 @@ function resumeBullets(md) {
     //
     // `extended` is included because it is real shipped copy — it is what
     // /resume/full and docs/LINKEDIN.md render after `text`. Note the key list
-    // in the two regexes above has to name it: an unrecognised `extended:` line
+    // in the two regexes above has to name it: an unrecognized `extended:` line
     // does not start a new field, it gets appended to whatever field was open,
     // which silently measured the literal string "extended: >-" as part of the
     // bullet. Add any future key to both regexes.

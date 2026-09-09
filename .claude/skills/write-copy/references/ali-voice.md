@@ -157,7 +157,7 @@ Study the rhythm, not the topic.
    multiplayer which is always a ridiculous game jam choice)"_.
 3. **The motive is stated plainly.** "after being frustrated at having to hand-code any animation."
    She says _why_ she built something, in ordinary words, and that's what makes it read as a person.
-4. **Concrete numbers, undramatised.** 61 levels, 188K DAU, four years, 48 hours. Stated and moved
+4. **Concrete numbers, undramatized.** 61 levels, 188K DAU, four years, 48 hours. Stated and moved
    past — never "an impressive 188K."
 5. **Enthusiasm about the craft, not about herself.** "the crazy amount of depth that goes into
    these machines." She is interested in things.
@@ -212,7 +212,7 @@ reflective closer from that page and Ali picked the flat ending. The 11 archive 
 which is also deliberate: "it's so old it's more just for fun to show cool old projects" (#92).
 
 **The homepage carries one too, and how it got there is the useful part.** It had none, and a
-proposed warmth clause in the lede ("which is what drew me to it") was **rejected** in favour of a
+proposed warmth clause in the lede ("which is what drew me to it") was **rejected** in favor of a
 single exclamation on the Currently line: "building the studio's first game in Godot!" Ali's reasoning —
 the current work is the thing worth being glad about, so the warmth belongs on the Currently line
 rather than bolted onto #129's workshopped lede. **Prefer moving a warmth beat onto the thing that
@@ -224,7 +224,7 @@ shape. Adding a second to a page that has one, or a first to the archive tier, i
 ### She names specific things instead of gesturing at categories
 
 Blendoku, Carcassone, Ticket to Ride, Castles of the Mad King Ludwig, Hobbiton, the Aurora Borealis.
-Not "board games" or "puzzle games." This is the same instinct as the undramatised numbers, applied
+Not "board games" or "puzzle games." This is the same instinct as the undramatized numbers, applied
 to nouns, and it is the most reliable single marker of her writing.
 
 Also note the register: **"challenges that make our games tick"** is how she describes engineering
@@ -267,9 +267,9 @@ Sixteen question marks in 4,200 words, and in the escalation letter they arrive 
 Rhetorical questions are a real device of hers and the site uses none. Sparingly — one, to open the
 problem a piece of work solved, is very much in voice.
 
-### Labelled lead-ins
+### Labeled lead-ins
 
-Both the escalation letter and the synthesis doc are organised as a bolded label, a colon, then plain
+Both the escalation letter and the synthesis doc are organized as a bolded label, a colon, then plain
 explanation — `Plumbing Issues:`, `Window Issues:`, `Missing Stabilizer:`. The synthesis doc does the
 same with bolded opening sentences under each heading.
 

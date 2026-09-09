@@ -381,7 +381,7 @@ build ["the most ambitious Godot game yet"](https://www.w4games.com/blog/w4-game
 Ben Brode and Matt Wyble both on the record. No title, platform, or genre named. So the site can say
 Ali moved to the studio's next team in 2024 and that it is a Godot project, and **cite the
 announcement**, which is stronger and more honest than the old hedge. It must not name or
-characterise the game.
+characterize the game.
 
 **Corrected 2026-08-26 (#129): "the studio's next team" is itself the wrong framing, not just a
 hedge.** It implies succession — that the Marvel Snap team wound down and this replaced it. Neither
@@ -456,7 +456,7 @@ that all three directions get them rather than only the one that merges. Same re
   deliberately still `ch` — the right rem value depends on the face you pick. See `tokens.css`.
 - **Print kills transitions now, and you should not undo it.** Switching to print media _starts_ any
   transition on a property the print block changes, and `build-pdf.mjs` prints inside that window —
-  so a `transition: color` on `a` puts a different colour in the PDF on every build. `resume.css`
+  so a `transition: color` on `a` puts a different color in the PDF on every build. `resume.css`
   has a universal `transition: none !important` for paper. It is the one rule in that block that is
   not a denylist, on purpose.
 
@@ -572,7 +572,7 @@ public can see. Only `release` takes the `wrangler deploy` path. This is written
 URL rule, and the deploy half was not noticed.
 
 Merging six PRs and then watching the apex for half an hour is the cost of getting this wrong.
-**Deploying is also its own decision** — merging a PR is not authorisation to push `release`.
+**Deploying is also its own decision** — merging a PR is not authorization to push `release`.
 
 Two diagnostics that wasted most of that half hour, worth keeping so nobody repeats them:
 `cf-cache-status: HIT` came back on a URL that had **never been requested**, so on this zone that
@@ -595,7 +595,7 @@ a checkout implies, suspect dashboard or zone state before suspecting the build.
   all — which is exactly why it was possible to read `wrangler.jsonc` closely and still be wrong
   about what deploys.
 
-The pattern is the same each time: **the thing that determines behaviour lives somewhere a
+The pattern is the same each time: **the thing that determines behavior lives somewhere a
 checkout cannot show you.** `wrangler.jsonc` codifies what it can (`workers_dev`, the apex Custom
 Domain) precisely for this reason, and the residue is what these notes are for.
 
@@ -679,7 +679,7 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 | `src/config/site.ts`                  | Name, email, nav, social links (audited in Phase 3: LinkedIn `active`, the rest `retired`).                                                                |
 | `src/config/resume.ts`                | The resume's Skills section — settled, hand-curated, not derived from `tech`.                                                                              |
 | `scripts/check-links.mjs`             | Post-build checks on `dist/`. Every rule is a regression guard for a real old bug.                                                                         |
-| `scripts/check-source.mjs`            | The source-tree half: raw colours, raw `px` font sizes, `TODO(#n)`. Needs no build, so it runs before one (#338).                                          |
+| `scripts/check-source.mjs`            | The source-tree half: raw colors, raw `px` font sizes, `TODO(#n)`. Needs no build, so it runs before one (#338).                                           |
 | `scripts/check-line-length.mjs`       | Rendered prose line length against `line-length-baseline.json`. A ratchet, **not** an 80-character ceiling — see its header (#338).                        |
 | `scripts/check-links-external.mjs`    | Outbound link liveness. By hand, and monthly via `.github/workflows/link-check.yml`. **Never in `verify` — it files an issue, it never gates a deploy.**   |
 | `scripts/report-link-rot.mjs`         | Turns that check's `--report` JSON into exactly one `link-rot` issue. `--dry-run` proves its four transitions without GitHub.                              |

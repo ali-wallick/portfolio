@@ -5,7 +5,7 @@
     Decided in #24 (reticle based, provisional per Ali; can be replaced
     wholesale later without touching the markup that references it).
 
-    Colour follows prefers color scheme rather than a fixed value, same
+    Color follows prefers color scheme rather than a fixed value, same
     split as the accent token in src/styles/tokens.css: the light theme
     magenta reads muddy on a dark tab strip and vice versa.
   -->

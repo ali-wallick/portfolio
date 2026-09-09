@@ -4,7 +4,7 @@
 # The stakes here are genuinely low and that is why this is a short file rather
 # than a thorough one: static site, no auth, no forms, no cookies, no user
 # input, no secrets in the client. The old site's one real attack surface, the
-# PHP contact form, is gone by decision. This is hygiene and defence in depth,
+# PHP contact form, is gone by decision. This is hygiene and defense in depth,
 # not a hole being closed.
 #
 # ## Two things are deliberately absent
