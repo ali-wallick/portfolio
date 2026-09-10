@@ -864,3 +864,62 @@ the four.
 **Ali runs it.** It needs a full clone, force-push on every ref, a GitHub support purge request, and
 it lands a production deploy because `release` is the production branch. None of that is an agent's
 to do unsupervised, and the runbook says so at the top rather than leaving it implied.
+
+## The rewrite runbook became executable, and one claim was walked back (2026-09-10, #109)
+
+`docs/HISTORY-REWRITE.md` shipped on 2026-09-09 as prose with the blob ids in it. Ali's question —
+"is asking GitHub support to purge the old objects a common thing to do?" — turned out to be worth
+more than the answer, because checking it produced two corrections and a much better document.
+
+### "A rewrite without this request is theatre" was overstated
+
+That was the original wording of step 6. **It is not theatre.** The accurate statement: force-pushed
+commits stay fetchable through `refs/pull/N/head`, which are server-side refs a push does not touch
+and the repo owner cannot delete — so without the support request the blobs are _retrievable by
+anyone who knows the SHA_. That is a real gap and it is not the same as still-published. The step
+still matters; the sentence claiming the rest of the rewrite was worthless without it did not
+survive contact.
+
+**The other "theatre" in `docs/PRESERVATION.md` is correct and stays** — purging history while
+`HEAD` ships the same image genuinely does accomplish nothing, which is what #360 was about. Two
+sentences with the same word, one right and one wrong, is a decent argument for checking a rhetorical
+flourish the second time you reach for it.
+
+### The step is GitHub's own, and the docs specify the ticket contents
+
+Confirmed against GitHub's _Removing sensitive data from a repository_: contacting Support is the
+documented final step, and on the ticket they dereference or delete affected PRs, run a server-side
+`gc`, and drop cached views. The docs also name what the ticket should carry — the affected-PR count,
+the first changed commit from `git-filter-repo`, and any orphaned LFS objects — none of which the
+runbook had. All three are in it now, with the commands that produce them.
+
+**Calibration worth keeping**, because it is the part that generalizes: for a leaked _credential_ the
+purge is secondary, since rotation is the real remedy. **An address cannot be rotated**, so here the
+purge is the only lever on the GitHub copy. Cutting the other way, #109 already establishes this is
+the _least_-exposed copy — public in nine archive.org captures and Google's index. Worth doing
+because it is cheap and the window is now, not because it is what protects anything.
+
+### Every command is tested, and the numbers are measured
+
+The rule the rest of this repo follows, applied to a document: a runbook that is pasted under stress
+should not contain a command nobody has run. Four were executed verbatim against the live repo
+before shipping — the blob enumeration (10 seconds, returns exactly 4), the hash extraction from the
+guard, the ref sweep, and the post-rewrite verification.
+
+**That last one was run in its failing direction on purpose**, which is the only thing that makes a
+silent pass meaningful later: against the un-rewritten repo it printed all four blobs. Its expected
+output is now in the document, so a clean run reads as evidence rather than as a command that might
+be broken. Testing also caught two defects a read-through would not: the hash-extraction step was
+written _after_ the check that consumes its file, and the verification pipeline exits non-zero on a
+normal run, which a careful operator would have read as failure.
+
+Measured rather than left as placeholders: **240 of 263 commits rewritten**, first changed commit
+`b541155` (2020-09-01) — which predates every pull request in the repo, and is therefore why the
+affected-PR count is **all 202** rather than a subset.
+
+### The stale-branch list is computed, not listed
+
+The 2026-09-09 version hardcoded eight branch names. By the next day there were ten — a new
+Dependabot branch, plus the branch that shipped the runbook itself. **A hardcoded list in a document
+that runs once, months later, is the #45 staleness lesson with the serial numbers filed off**, so it
+is a `git ls-remote` one-liner now.

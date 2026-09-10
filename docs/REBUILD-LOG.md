@@ -5452,3 +5452,53 @@ Opus, inline, no subagents. The unshallow was the only expensive step (262 commi
 sweep is 1,868 `git cat-file` calls, which is ~30 seconds and not something to delegate. Sequential
 again: the enumeration cannot start until the clone is full, and the runbook cannot be written until
 the enumeration is done.
+
+## #109 — a question that improved the artifact more than the answer did (2026-09-10)
+
+Ali read the runbook and asked whether contacting GitHub Support is a common thing to do. It is —
+GitHub documents it as the final step of removing sensitive data — but checking rather than asserting
+turned up three things the document was missing and one it got wrong.
+
+**The wrong one was mine.** "A rewrite without this request is theatre" is too strong. What is true
+is narrower: the blobs stay fetchable through `refs/pull/N/head`, which the owner cannot delete, so
+they are retrievable by anyone holding the SHA. Not published, not gone. The same word is used
+correctly one document over — purging history while `HEAD` ships the image really is theatre — which
+is a small lesson about reusing a phrase that landed well the first time.
+
+**The missing ones were in GitHub's docs all along**: the ticket wants an affected-PR count, the
+first changed commit from `filter-repo`, and any orphaned LFS objects.
+
+### Testing a document
+
+The interesting part was writing it. A runbook is pasted under stress, months after it was written,
+by someone who will not debug it — so the standard has to be the one the rest of this repo already
+applies to guards: **run it before shipping it.**
+
+Four commands were executed verbatim against the live repo. Two defects fell out that no amount of
+re-reading would have caught:
+
+- The hash-extraction step was written **after** the check that consumes its output file. Pasted in
+  order, step (a) reads a file that does not exist yet and silently reports nothing wrong.
+- The verification pipeline **exits non-zero on a completely normal run**, because the last blob it
+  examines is usually not a match. An operator watching exit codes would read a clean result as a
+  failure.
+
+Both are the kind of thing that only appears when a human — or a shell — actually runs the thing.
+
+**And the check was run in its failing direction deliberately.** Against the un-rewritten repo it
+printed all four blob ids. That output is now quoted in the runbook, which is what converts a silent
+run afterwards from "probably fine" into evidence. Same reasoning as #360's guard demonstration and
+#357's negative test; three passes in a row have now landed on it, so it is starting to look like a
+house rule rather than a habit.
+
+### The list that was already stale
+
+The 2026-09-09 runbook hardcoded eight stale branch names. Twenty-four hours later there were ten.
+The document that had just recorded #45's "an issue can be accurate and stale at once" lesson
+contained a fresh instance of it. It computes the list now.
+
+### Model allocation and cost
+
+Opus, inline. One web search to check GitHub's current process, since the answer feeds a step Ali
+executes and the training cutoff is months back. The rest was running the runbook's own commands —
+which is cheap, and was the whole value of the pass.
