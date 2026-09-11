@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Fails the build if any tracked file is one of the known-bad historical blobs
- * — the ones that picture the 2019 résumé's PO Box.
+ * — the ones that picture the 2019 résumé's PO Box, and the 2016 résumé's
+ * street address and phone number before it.
  *
  * ## The recurrence this exists for
  *
@@ -108,6 +109,51 @@ const DENYLIST = [
     what: 'the unredacted resources/WallickAli-Resume.pdf — the 2019 résumé with its address line still in the content stream',
     instead:
       'the committed resources/WallickAli-Resume.pdf, whose address block was deleted from the content stream (not covered) on 2026-08-26',
+  },
+  /* The 2016 résumé, in three revisions plus a 1700×2200 render of each — the
+     versions that sat at these same two paths before the 2020-09-01 commit
+     replaced them with the 2019 material above. Found 2026-09-11 while
+     rehearsing the history rewrite (#109): every pass before it had checked the
+     2019 files and nothing older, and the list was declared complete at four.
+     These carry a full street address and a phone number, not a PO Box, so they
+     are the worse exposure. Nothing in HEAD needs them and nothing supersedes
+     them: the 2019 résumé is the one the site preserves. */
+  {
+    sha256: '9a522547f1f6acb0ac38abc26b3ddeb5e1a0b6d7b0591114610dcb5c58f35a15',
+    bytes: 202036,
+    what: 'the January 2016 resources/WallickAli-Resume.pdf — street address and phone number in the header',
+    instead:
+      'no file: delete it. The 2019 résumé is the preserved one; no 2016 revision belongs in the tree',
+  },
+  {
+    sha256: 'c381ba41c333baa18ce334a3f1f49d0f07ea59d069b1808b4a58f25eb88bfd3c',
+    bytes: 203242,
+    what: 'the April 2016 resources/WallickAli-Resume.pdf (the "New job" revision) — same header',
+    instead: 'no file: delete it, as above',
+  },
+  {
+    sha256: '655d5657c254bce4f72592dcd9ebe5cfb20a6795010a271c686e2470aff9de22',
+    bytes: 202927,
+    what: 'the April 2016 resources/WallickAli-Resume.pdf (the "typo" revision) — same header',
+    instead: 'no file: delete it, as above',
+  },
+  {
+    sha256: 'ffdfffeb599b734b993db365f8a0e7d8b2846ce4e985c84e9c3f8db120f05546',
+    bytes: 285422,
+    what: 'the January 2016 images/resume.png, later resources/images/resume.png — a 1700×2200 render of the first 2016 résumé',
+    instead: 'no file: delete it, as above',
+  },
+  {
+    sha256: '251a75b470d795482a33bd202bfe94bfd6ac67fb453bfdceb59b71011d6b6dbb',
+    bytes: 282144,
+    what: 'the April 2016 resources/images/resume.png — a render of the "New job" revision',
+    instead: 'no file: delete it, as above',
+  },
+  {
+    sha256: 'da2446a699f335f3fc5f61d4994fd9c8f13f3f2e224b1cbf2ed29103956f0a8e',
+    bytes: 282864,
+    what: 'the April 2016 resources/images/resume.png — a render of the "typo" revision',
+    instead: 'no file: delete it, as above',
   },
 ];
 

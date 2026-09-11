@@ -984,3 +984,81 @@ The measured fact that makes the whole thing low-urgency, and that was not writt
 before: **the repo is private with 0 forks** (verified 2026-09-11). Nobody without repo access can
 reach those PR refs today, so there is no clock on any of this. The deadline is the public flip, not
 a date.
+
+## The list was declared complete at four, and a rehearsal found ten (2026-09-11, #109)
+
+Ali asked for a read-through of `docs/HISTORY-REWRITE.md` before running it, on the grounds that it
+is irreversible. The read-through was done by running it: a `--no-local` mirror in a scratch
+directory, the stale branches deleted, `filter-repo` run for real, and every verification step
+executed against the result. That is the only kind of review an irreversible procedure can have,
+and it is different from what the 2026-09-10 pass did. That pass ran each command _against the live
+repo_ and recorded its output, which tests that the commands work. It does not test what the
+procedure produces, and the two failures below were both in the product, not the commands.
+
+### The 2016 résumé was in history the whole time, with a street address
+
+The denylist in `scripts/check-preserved-blobs.mjs` had four entries, all 2019 material, because it
+was built from what had leaked into `HEAD` (#360) and everything in `HEAD` was 2019. Nobody had
+listed what the same two paths held _before_ 2019. `resources/WallickAli-Resume.pdf` had three 2016
+revisions and `resources/images/resume.png` had a 1700×2200 render of each, from the initial
+checkin onward, and all six carry a **full street address and a phone number** in the header. The
+2019 PO Box was the smaller exposure. #109's survey states that the résumé with the home address
+and phone number "is not in git anywhere"; it was thinking of the 2010 one, and it was wrong about
+the class.
+
+**#360's lesson was applied one step short.** It moved the guard from paths to content, which is
+right, but the content it guarded was only the content that had already surfaced. A denylist built
+from incidents is a list of incidents. The runbook now carries the check that would have caught
+this on day one: enumerate every blob the two paths ever held, and account for each one by name.
+
+### `--strip-blobs-with-ids` reverts a path, it does not delete it
+
+The second finding is the one that turned "incomplete" into "harmful". Stripping a blob drops that
+commit's change to the path, so the file falls back to whatever the parent commit had. With only the
+2019 PDF on the list, the `b541155` commit that `v1-legacy` points at reverts its résumé to the
+April 2016 revision. The rewrite as written would have removed the PO Box from the tag and put the
+street address in its place, in the one tree the runbook promised to leave clean apart from two
+deletions. The post-rewrite tree listing showed both résumé files still present; the runbook's own
+section 3 said they would be gone.
+
+With all ten on the list, the paths have no revision left to fall back to and disappear from every
+tree, which is what section 3 claimed all along. **266 of 267 commits** are rewritten, not 240 of
+263, and the oldest changed commit is the initial checkin rather than 2020's `b541155`.
+
+### Four steps that would have failed at the keyboard
+
+None of these is a judgment call, and none was visible from reading the document.
+
+- **`git push --mirror` against GitHub.** A mirror clone from GitHub fetches `refs/pull/*` (206
+  here), and a mirror push then tries to update every one; GitHub rejects each as a hidden ref. The
+  branch and tag updates go through, but they are buried in 200 rejection lines and a non-zero
+  exit, at the exact moment the operator most needs a clean signal. The dry run does not show it,
+  because the rejections are server-side. Explicit `refs/heads/*` and `refs/tags/*` refspecs with
+  `--prune` do the same job and touch nothing else.
+- **`release` was 8 commits behind `main` and still carried three bad blobs.** The force-push
+  deploys `release`, and the rewrite deletes files from any tree that still holds one, so the deploy
+  would have shipped a tree no commit ever had. Now a preflight: `release` must be at `main` first,
+  which also makes "the content is identical" true rather than asserted.
+- **Step 7's plain `git fetch` would not have moved the tags.** Git refuses to clobber an existing
+  tag without `--force`, so the everyday checkout would have kept the old `assets-pre-cleanup`, and
+  `restore-snapshot.mjs` would have silently read pre-rewrite history through it — the exact trap
+  #360 introduced the tag to close.
+- **The "first changed commit" command read the wrong line.** `filter-repo`'s commit map is in
+  processing order, not date order, so the first differing line was a 2026 commit. The runbook now
+  looks the initial checkin up by id.
+
+Two smaller ones: the `v1-legacy` grep was case-sensitive and the PDF is capitalised, so it showed
+one file where two would go; and deleting the stale branches closes any open pull request whose head
+is among them (one was, the Dependabot bump), which is now a preflight rather than a surprise.
+
+### What generalises
+
+**Testing the commands is not testing the procedure.** Every command in the 2026-09-10 runbook was
+run and its output recorded, and the document was still wrong about what it would do, because the
+commands were run against the input and never against the output. For anything irreversible the
+rehearsal on a throwaway copy is the test, and a runbook that has not had one has not been reviewed.
+
+**A denylist built from what leaked is a list of what leaked.** The guard is still the right shape
+(content, not paths, exact hashes, no OCR) and it is now ten entries; the reusable part is the
+enumeration step in the runbook, which asks "what else has ever lived at this path?" instead of
+"which files have bitten us?".

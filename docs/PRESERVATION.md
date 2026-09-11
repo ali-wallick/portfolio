@@ -174,7 +174,9 @@ Everything else is untouched and still selectable: name, email, website, and the
 items. 100.5 KB against the original's 98 KB.
 
 **The original is not lost.** Four historical blobs remain across four commits, and `v1-legacy` holds
-one. Nothing here is a substitute for #109's question about history — this only improves the copy a
+one. (Six older ones — the 2016 résumé in three revisions, and a render of each — sit further back
+at the same two paths and carry a street address and phone number; found 2026-09-11, and on the
+guard's denylist since. Until they are rewritten away, "the original" is a class, not a file.) Nothing here is a substitute for #109's question about history — this only improves the copy a
 reader would actually open.
 
 **`scripts/restore-snapshot.mjs` reads this file from the working tree rather than from the asset

@@ -2,7 +2,9 @@
 
 The runbook for [#109](https://github.com/ali-wallick/Portfolio/issues/109) item 3. **Ali runs this,
 not an agent** — it needs a full clone and force-push rights on every ref, and it lands a
-production deploy as a side effect. Prepared 2026-09-09, commands added 2026-09-10.
+production deploy as a side effect. Prepared 2026-09-09, commands added 2026-09-10, rehearsed
+end-to-end on a mirror 2026-09-11 (which found six more blobs and four broken steps — see
+"The list was declared complete at four" in [`docs/decisions/tooling.md`](decisions/tooling.md)).
 
 Same relationship to #109 that `LAUNCH.md` has to #34: **the issue holds the decision and the
 ordering, this holds the procedure.** Nothing here restates the checklist — read #109 first.
@@ -17,7 +19,7 @@ a clean run of everything below leaves the blobs retrievable by anyone who can r
 knows a SHA. While the repo is private with no forks, that is you.
 
 Every command below is meant to be pasted as-is. Where a number is quoted, it was measured on
-2026-09-10 against `main` at `fd3b9fe` — **re-measure rather than trusting it**, since each figure
+2026-09-11 against `main` at `e5058c6` — **re-measure rather than trusting it**, since each figure
 has a command beside it.
 
 ---
@@ -33,10 +35,10 @@ git filter-repo --version
 mkdir -p ~/portfolio-rewrite && cd ~/portfolio-rewrite
 ```
 
-Three preconditions, each checkable:
+Five preconditions, each checkable:
 
 ```bash
-# a. #360 and #45 are merged, so HEAD carries none of the four blobs.
+# a. #360 and #45 are merged, so HEAD carries none of the denylisted blobs.
 cd /path/to/your/Portfolio && npm run check:blobs
 #    Expect: ✓ ... none matches a known-bad preserved blob.
 
@@ -46,24 +48,53 @@ gh repo view ali-wallick/Portfolio --json isPrivate,forkCount
 #    Expect: {"forkCount":0,"isPrivate":true}
 
 # c. You are on a full clone, not a shallow one.
-git rev-list --count HEAD   # ~263
+git rev-list --count HEAD   # ~267
 test -f .git/shallow && echo "SHALLOW — run: git fetch --unshallow" || echo "full clone"
+
+# d. release is at main. The force-push in step 6 deploys whatever release's
+#    rewritten tree is, and the rewrite DELETES files from any tree still
+#    carrying a bad blob. On 2026-09-11 release was 8 commits behind main and
+#    still carried three — so the push would have shipped a tree no commit had
+#    ever had. Run the release skill first; then the deploy is a no-op.
+git fetch origin main release && git rev-list --count origin/release..origin/main
+#    Expect: 0
+
+# e. No open pull request has a head among the branches step 4 deletes.
+#    Deleting a PR's branch closes the PR. Merge or close them first.
+gh pr list --state open --json number,headRefName
+#    Expect: [] — or only PRs whose head is main.
 ```
 
 ---
 
-## 1. The four blobs
+## 1. The ten blobs
 
 Found by hashing **every** blob reachable from every ref (1,868 of them) and matching content against
 the denylist in `scripts/check-preserved-blobs.mjs` — content, not paths, for the reason #360
-settled. Exactly four matched, one per denylist entry.
+settled. Ten match, one per denylist entry.
 
-| Blob id                                    | What it is                       | Commits | Path it lived at                                |
-| ------------------------------------------ | -------------------------------- | ------- | ----------------------------------------------- |
-| `140fb71f1630a57e6a376e639a6c8f96596b4f1a` | the unredacted 2019 résumé PDF   | 2       | `resources/WallickAli-Resume.pdf`               |
-| `f485f41eae07a1e2f3f8319d267e3765a1898719` | a 1700×2200 render of it         | 6       | `snapshot/rendered/resources/images/resume.png` |
-| `f018f54e110239b01e6dd7da99c647ac123e0c08` | the desktop before/after capture | 3       | `docs/before-after/old/resume-desktop.webp`     |
-| `f680cb1cda500fbf17caacfe9c4469a58f048dae` | the mobile before/after capture  | 3       | `docs/before-after/old/resume-mobile.webp`      |
+**Until 2026-09-11 this section said four, and the rewrite would have made things worse.** The
+denylist was built from what had leaked into `HEAD`, which was all 2019 material, and nobody had
+looked at the same two paths _before_ 2019. The 2016 résumé sat there in three revisions, with a
+1700×2200 render of each, and it carries a **full street address and a phone number** — the worse
+exposure, not the PO Box. `--strip-blobs-with-ids` does not delete a path; it drops that commit's
+change to it, so the file reverts to whatever the parent had. Stripping only the 2019 PDF from
+`b541155` therefore reverts `v1-legacy`'s résumé to the 2016 one, promoting the street address into
+the very tag the rewrite was meant to clean. The rehearsal caught it in the post-rewrite tree
+listing.
+
+| Blob id                                    | What it is                          | Path it lived at                                                    |
+| ------------------------------------------ | ----------------------------------- | ------------------------------------------------------------------- |
+| `140fb71f1630a57e6a376e639a6c8f96596b4f1a` | the unredacted 2019 résumé PDF      | `resources/WallickAli-Resume.pdf`                                   |
+| `f485f41eae07a1e2f3f8319d267e3765a1898719` | a 1700×2200 render of it            | `snapshot/rendered/resources/images/resume.png` and two other paths |
+| `f018f54e110239b01e6dd7da99c647ac123e0c08` | the desktop before/after capture    | `docs/before-after/old/resume-desktop.webp`                         |
+| `f680cb1cda500fbf17caacfe9c4469a58f048dae` | the mobile before/after capture     | `docs/before-after/old/resume-mobile.webp`                          |
+| `06575397a096bb39d102794e5ff7608fecfb9adb` | the January 2016 résumé PDF         | `resources/WallickAli-Resume.pdf`                                   |
+| `d8b48c5fa0e2208e32f347ba64cd164db6352c1a` | the April 2016 "New job" revision   | `resources/WallickAli-Resume.pdf`                                   |
+| `83c7c180fce007cd03a49dba330e8f117be5316d` | the April 2016 "typo" revision      | `resources/WallickAli-Resume.pdf`                                   |
+| `7be7e40b3a93ed5c371a96b4601613deffc5262e` | a render of the January 2016 résumé | `images/resume.png`, then `resources/images/resume.png`             |
+| `a63c034852d90ea3337e0a97e3365a7a8bd2d9c5` | a render of the "New job" revision  | `resources/images/resume.png`                                       |
+| `2afc5aeb96c9e37ef7ff71f75b48cc54f55962e3` | a render of the "typo" revision     | `resources/images/resume.png`                                       |
 
 **One blob, several paths — the whole argument for keying on blob id.** `f485f41` is byte-identical
 wherever it appeared, so git stores it once and one entry kills every path those bytes ever landed
@@ -80,20 +111,32 @@ git rev-list --objects --all \
       grep -q "$h" scripts/check-preserved-blobs.mjs && echo "$oid"
     done | tee ~/portfolio-rewrite/strip-blobs.txt
 
-wc -l ~/portfolio-rewrite/strip-blobs.txt    # expect 4
+wc -l ~/portfolio-rewrite/strip-blobs.txt    # expect 10
 ```
 
-Takes about 10 seconds. If it returns anything other than 4, **stop** — either the denylist changed or a
-new copy exists, and both mean re-reading #360 before continuing.
+Takes about 10 seconds. If it returns anything other than 10, **stop** — either the denylist changed or
+a new copy exists, and both mean re-reading #360 before continuing.
+
+**One more check the list cannot do for you.** The denylist is exact hashes, and the reason it was
+short was a class of file nobody had enumerated. Before trusting the count, list every revision the
+two résumé paths ever had and confirm each is either on the list or the redacted one:
+
+```bash
+git rev-list --all | while read -r c; do
+  git ls-tree -r "$c" 2>/dev/null | grep -iE 'resume\.(pdf|png)$|WallickAli-Resume'
+done | awk '{print $3, $4}' | sort -u | grep -v '^[0-9a-f]* public/'
+#    Expect: the 10 above, plus 2464090d (the redacted PDF, at two paths) and
+#    a63895b4 (the redacted render). Anything else is a revision nobody checked.
+```
 
 ---
 
 ## 2. What still carries them
 
-Measured 2026-09-10. `main` is clean; everything below is not.
+Measured 2026-09-11. `main` is clean; everything below is not.
 
 ```bash
-# Every ref still carrying a bad blob.
+# Every ref whose TIP tree still carries a bad blob.
 for r in $(git for-each-ref --format='%(refname)' refs/remotes/origin refs/tags); do
   while read -r oid; do
     git ls-tree -r "$r" 2>/dev/null | grep -q "$oid" && { echo "$r"; break; }
@@ -102,7 +145,8 @@ done | sort -u
 ```
 
 Expect ~8 branches (including `release`) and 3 tags — `v1-legacy`, `assets-pre-cleanup`,
-`launch-2026-08-27`.
+`launch-2026-08-27`. The 2016 blobs add nothing here: they live only in 2016 commits, which every
+branch's ancestry reaches but no tip tree carries.
 
 **Do not hardcode the stale-branch list.** It drifted between 2026-09-09 and 2026-09-10 (a new
 Dependabot branch appeared), which is the same staleness lesson #45 taught. Compute it:
@@ -119,17 +163,21 @@ commit as `assets-pre-cleanup` instead of a SHA — after this it needs no follo
 
 ## 3. Consequence to accept before starting
 
-**`v1-legacy` stops being a byte-complete capture of the old site.** It carries two of the four
-blobs, so the rewrite removes `resources/WallickAli-Resume.pdf` and `resources/images/resume.png`
-from that tag's tree. The 31 `.php` files, the old `.htaccess` and the stylesheets are untouched —
-see `docs/PRESERVATION.md`. If that trade is not acceptable, stop and reopen #109; it is not
-reversible after the force-push.
+**`v1-legacy` stops being a byte-complete capture of the old site.** Every revision of
+`resources/WallickAli-Resume.pdf` and `resources/images/resume.png` is on the list, so the rewrite
+removes both paths from that tag's tree outright — 185 files become 183. The 31 `.php` files, the
+old `.htaccess` and the stylesheets are untouched — see `docs/PRESERVATION.md`. If that trade is not
+acceptable, stop and reopen #109; it is not reversible after the force-push.
 
 ```bash
 # See exactly what v1-legacy loses.
-git ls-tree -r v1-legacy --name-only | wc -l          # 185 before
-git ls-tree -r v1-legacy --name-only | grep -E 'resume\.(pdf|png)$'
+git ls-tree -r v1-legacy --name-only | wc -l                          # 185 before
+git ls-tree -r v1-legacy --name-only | grep -iE 'resume\.(pdf|png)$'  # both paths; -i, the PDF is capitalised
 ```
+
+`release` and `launch-2026-08-27` lose three files each — the two before/after captures and the
+snapshot render — which is why preflight (d) requires `release` to already be at `main`, where the
+redacted replacements are.
 
 ---
 
@@ -147,7 +195,7 @@ cp -a portfolio-backout.git portfolio-rewrite.git
 cd portfolio-rewrite.git
 ```
 
-Delete the stale branches **in the mirror** before rewriting. The `--mirror` push in step 6 then
+Delete the stale branches **in the mirror** before rewriting. The pruning push in step 6 then
 removes them remotely, rather than rewriting branches nobody wants:
 
 ```bash
@@ -159,6 +207,10 @@ git branch -D <branch>            # repeat, or:
 git for-each-ref --format='%(refname:short)' refs/heads \
   | grep -vE '^(main|release)$' | xargs -n1 git branch -D
 ```
+
+Neither the copy nor the deletions trip filter-repo's fresh-clone check — verified 2026-09-11. If it
+does refuse, read the reason it prints before reaching for `--force`; the one time it refused during
+rehearsal, the cause was a mirror made from a local path rather than from GitHub.
 
 Now the rewrite:
 
@@ -174,17 +226,19 @@ Sanity-check the rewrite's size against filter-repo's own report. (These are als
 [#367](https://github.com/ali-wallick/Portfolio/issues/367) needs, if it is ever filed.)
 
 ```bash
-# First changed commit: the first line where the old SHA maps to a different new one.
-awk 'NR>1 && $1 != $2 {print "first changed commit: "$1" -> "$2; exit}' \
-  filter-repo/commit-map
-
 # How many commits were rewritten at all.
 awk 'NR>1 && $1 != $2' filter-repo/commit-map | wc -l
+
+# The oldest changed commit. The map is in processing order, not date order, so
+# "first line that differs" is not it — look the initial checkin up by id.
+# (Old ids resolve in the backout, not here; filter-repo has repacked them away.)
+grep "^$(git -C ../portfolio-backout.git rev-parse 1cdcbfc)" filter-repo/commit-map
 ```
 
-Expected, measured beforehand: the first changed commit is **`b541155`** ("Accidentally forgot to
-commit changes from 2019", 2020-09-01) and **240 of 263** commits are rewritten. `b541155` predates
-every pull request in the repo.
+Expected, measured in rehearsal: **266 of 267** commits rewritten, and the oldest changed commit is
+**`1cdcbfc`** ("Initial Checkin", 2016-01-05) — the first 2016 résumé arrived with the repo. The only
+untouched commit is `0d0046a`, the `.gitattributes` root. That is why the affected-PR count in #367
+is all 202 rather than a subset.
 
 ---
 
@@ -192,13 +246,13 @@ every pull request in the repo.
 
 Each catches something the others miss. Still inside `portfolio-rewrite.git`.
 
-**First, write the four hashes out on their own**, from the guard, which is their one source of
+**First, write the hashes out on their own**, from the guard, which is their one source of
 truth. Do this before running (a) — it consumes the file:
 
 ```bash
 grep -oE "sha256: '[0-9a-f]{64}'" /path/to/your/Portfolio/scripts/check-preserved-blobs.mjs \
   | grep -oE '[0-9a-f]{64}' > ~/portfolio-rewrite/bad-hashes.txt
-wc -l < ~/portfolio-rewrite/bad-hashes.txt    # expect 4
+wc -l < ~/portfolio-rewrite/bad-hashes.txt    # expect 10
 ```
 
 ```bash
@@ -216,17 +270,9 @@ git rev-list --objects --all \
 it looks at is not a match, which is the normal case — a non-zero exit here means nothing.
 
 **This check is known to fire**, which is the only reason to trust a silent run. Executed against
-the un-rewritten repo on 2026-09-10 it printed all four:
-
-```
-STILL PRESENT: 140fb71f1630a57e6a376e639a6c8f96596b4f1a
-STILL PRESENT: f018f54e110239b01e6dd7da99c647ac123e0c08
-STILL PRESENT: f485f41eae07a1e2f3f8319d267e3765a1898719
-STILL PRESENT: f680cb1cda500fbf17caacfe9c4469a58f048dae
-```
-
-So silence after the rewrite is evidence, not a broken command. If you want to re-confirm that
-before trusting it, run (a) against `portfolio-backout.git` — it should print those four.
+the un-rewritten repo it prints all ten blob ids, one `STILL PRESENT:` line each. So silence after
+the rewrite is evidence, not a broken command. If you want to re-confirm that before trusting it,
+run (a) against `portfolio-backout.git` — it should print those ten.
 
 ```bash
 # b. Byte sweep for the address across all of history. Proves the TEXT copies
@@ -236,12 +282,17 @@ git rev-list --all | while read -r c; do
   git grep -I -l -e '<probe>' "$c" 2>/dev/null
 done
 #    Probe strings are deliberately not written down in this repo (#360). Read
-#    them off portfolio-backout.git's copy of the PDF, or from memory.
+#    them off portfolio-backout.git's copies of the PDFs — there are now two
+#    addresses, the 2016 street and the 2019 box — or from memory.
 
 # c. The rasters, by enumeration plus an eyeball. There is no text to grep.
 git log --all --oneline -- 'snapshot/rendered/resources/images/resume.png' \
                            'docs/before-after/old/resume-*.webp' \
-                           'resources/images/resume.png'
+                           'resources/images/resume.png' 'images/resume.png' \
+                           'resources/WallickAli-Resume.pdf'
+#    Expect exactly two commits: #196's and #360's, the ones that added the
+#    redacted replacements. Every commit that added an unredacted revision no
+#    longer touches these paths at all.
 #    Then extract one surviving copy of each and actually look at it:
 git show <commit>:snapshot/rendered/resources/images/resume.png > /tmp/check.png && open /tmp/check.png
 ```
@@ -254,16 +305,25 @@ git show <commit>:snapshot/rendered/resources/images/resume.png > /tmp/check.png
 # filter-repo removes 'origin' on purpose, to stop exactly this being accidental.
 git remote add origin https://github.com/ali-wallick/Portfolio.git
 
-# Dry run first. --mirror DELETES remote refs absent locally, which is how the
-# stale branches from step 4 get removed. Read the output before the real push.
-git push --mirror --dry-run origin
+# Dry run first. --prune DELETES remote branches and tags absent locally, which
+# is how the stale branches from step 4 get removed. Read the output before the
+# real push.
+git push --prune --force --dry-run origin 'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*'
 
-git push --mirror --force origin
+git push --prune --force origin 'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*'
 ```
 
+**Not `git push --mirror`.** A mirror clone from GitHub also fetches `refs/pull/*` — 206 of them
+here — and a mirror push tries to update every one. GitHub rejects each as a hidden ref, so the push
+that matters most ends in a wall of `[remote rejected]` lines and a non-zero exit, with the branch
+and tag updates buried in the middle. The dry run does not show this: the rejections come from the
+server, and a dry run never asks it. Explicit refspecs touch only branches and tags, and `--prune`
+only prunes within those two namespaces.
+
 **Expect a production deploy.** `release` is Workers Builds' production branch, so force-pushing it
-publishes. The content is identical, so this is fine — but it should not be a surprise at the moment
-you are also rewriting history. See `docs/CLOUDFLARE.md`.
+publishes. With preflight (d) done the tree is identical to what is already live, so this is fine —
+but it should not be a surprise at the moment you are also rewriting history. See
+`docs/CLOUDFLARE.md`.
 
 ```bash
 # Confirm the remote took it.
@@ -275,9 +335,13 @@ git ls-remote --heads --tags origin
 ## 7. After
 
 ```bash
-# The guard should still pass on the rewritten tree.
+# The guard should still pass on the rewritten tree. The tags moved, and a plain
+# fetch refuses to move a tag — so without --force the everyday checkout keeps
+# the OLD assets-pre-cleanup, and restore-snapshot.mjs silently reads
+# pre-rewrite history through it.
 cd /path/to/your/Portfolio
-git fetch origin && git reset --hard origin/main
+git fetch --force --tags --prune --prune-tags origin && git reset --hard origin/main
+git rev-parse assets-pre-cleanup   # must match: git ls-remote --tags origin assets-pre-cleanup
 npm ci && npm run verify
 ```
 
@@ -294,4 +358,5 @@ Two things are now open rather than done, and neither belongs in this runbook:
   before going public; the ordering constraint is that it must be filed _before_ the flip, never
   after, and it is worth filing only if #200 has succeeded.
 - **#109 item 4** — sanitize the issue tracker. #200's body is the exposure there, not
-  archive.org's answer.
+  archive.org's answer. Its survey also says the résumé with the home address and phone number "is
+  not in git anywhere"; the 2010 one may not be, but the 2016 one was, in six blobs, until this ran.

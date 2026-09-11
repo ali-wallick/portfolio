@@ -5554,3 +5554,41 @@ own text had to argue for itself. Everything else said what to type.
 Opus, inline, two web searches — one per question, both because the answers fed a document Ali
 executes and both about a third party's current behaviour rather than anything in the repo. No
 subagents; the work was reading two doc pages and one API response.
+
+## The rewrite rehearsal (2026-09-11)
+
+_"Want to make sure it all looks ok before I start it since it's irreversible."_ One sentence from
+Ali, and the right response to it was not to read the document more carefully. It was to run it.
+
+### What the run found
+
+A mirror in the scratch directory, the stale branches deleted, `filter-repo` for real, every
+verification step against the result. The commands all worked; the 2026-09-10 pass had made sure of
+that. What the pass had not done was look at the tree that came out, and the tree that came out
+still had a résumé in it — an older one, with a street address and phone number where the PO Box
+had been. Six blobs from 2016, at the same two paths the four known ones had lived at, never on the
+denylist because nothing from 2016 had ever leaked into `HEAD`.
+
+The mechanism is worth one sentence because it is counterintuitive: stripping a blob from a commit
+does not delete the path, it reverts the path to the parent's version. So the runbook as written
+would have made `v1-legacy` worse, and its own section 3 said the opposite.
+
+Then four commands that would have failed at the keyboard — the mirror push fighting GitHub's
+pull-request refs, a deploy of a tree no commit ever had, a fetch that would have left the tags
+stale, and a "first changed commit" that read the wrong line of the map. The decision record has
+them; the runbook has the fixes.
+
+### The generalizable bit
+
+**Reviewing a runbook means running it on a copy.** Not reading it, not running its commands against
+the live repo and recording the output — the previous pass did both, carefully, and shipped a
+document that would have promoted a worse exposure into the tag it was cleaning. The commands were
+right. The procedure was wrong. Only the output tells you which.
+
+### Model allocation and cost
+
+Opus, inline, no subagents, no web. The rehearsal itself is a few seconds of `filter-repo` on a
+267-commit repo; the expensive part was reading three 2016 renders to confirm what they showed,
+which is one image each and cannot be delegated to a grep. The session's own clone was shallow, and
+un-shallowing it plus fetching every tag was the first thing that had to happen — a reminder that a
+web session starts without the history a history rewrite is about.

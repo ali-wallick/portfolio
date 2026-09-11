@@ -619,7 +619,11 @@ Domain) precisely for this reason, and the residue is what these notes are for.
   not covered with a rectangle, and verified gone by extraction, byte grep and pixel diff. See
   `docs/PRESERVATION.md`. **History is untouched**: four blobs across four commits, plus
   `v1-legacy`, still carry it, which is what
-  [#109](https://github.com/ali-wallick/Portfolio/issues/109) is actually about.
+  [#109](https://github.com/ali-wallick/Portfolio/issues/109) is actually about. **And the 2016
+  résumé before it carries a street address and phone number** — six more blobs, at the same two
+  paths, found only when the rewrite was rehearsed (2026-09-11). The guard's denylist is ten
+  entries now, and `docs/HISTORY-REWRITE.md` enumerates every revision the paths ever held rather
+  than trusting the list.
 - **The address was in HEAD anyway until 2026-09-09, in three files nobody had looked at**
   ([#360](https://github.com/ali-wallick/Portfolio/issues/360)). Redacting the PDF closed one copy;
   a rendered PNG of the same résumé in `snapshot/rendered/`, and the two `docs/before-after/old/`
