@@ -5502,3 +5502,55 @@ contained a fresh instance of it. It computes the list now.
 Opus, inline. One web search to check GitHub's current process, since the answer feeds a step Ali
 executes and the training cutoff is months back. The rest was running the runbook's own commands —
 which is cheap, and was the whole value of the pass.
+
+## #367 — the step that was really a decision (2026-09-11)
+
+Two questions from Ali in sequence, each one cheap to ask and each one changing the shape of the
+work more than the previous day's building had.
+
+First: _"What would I get if I do this all except the part where I email GitHub support? Is there a
+point in that at all?"_ Then, after the answer: _"So basically a consequence of going public is that
+I'd lose all PR history?"_
+
+**The second question caught an error in my answer to the first.** I had framed the purge as a cost
+of going public. It is not. Going public costs nothing, the rewrite costs nothing, and the purge
+costs the diff view on all 202 pull requests. Three separate things I had collapsed into one chain,
+and it took someone reading it back to me to notice.
+
+### The measurement that reframed it
+
+Checking GitHub's docs rather than reasoning from memory turned up the sentence that settles it: the
+purge removes the diff-view references from **any PR built on history after the sensitive-data
+commit, even PRs that never touched the file.** Combined with a fact already measured for the
+runbook — first changed commit `b541155`, 2020-09-01, predating every PR here — that is all 202.
+
+And checking the repo rather than assuming turned up the other half: **private, 0 forks, 1 watcher.**
+Which means today nobody without repo access can reach those refs at all, and the urgency I had been
+writing into the runbook was imaginary. The deadline is the public flip, not a date.
+
+### What was actually wrong with the runbook
+
+Not the content — the shape. It was an unconditional procedure with one conditional step buried at
+position 7, and the condition was an entirely different issue's outcome (#200). A reader following
+it top to bottom would either run step 7 without knowing what it costs, or stall on the whole
+document because one step was blocked.
+
+Splitting it out made the runbook honest in a second way that was not the point but might be the
+better outcome: **it now states what it does not do.** After a clean run the blobs are still
+reachable through `refs/pull/N/head`. Without that sentence, finishing the document reads as
+finishing the job.
+
+### The generalizable bit
+
+**A step with a precondition that lives outside the procedure is not a step.** It is a decision
+wearing a step's clothes, and it belongs where decisions live — which in this repo is an issue, with
+"decided not to, here is why" as a legitimate close.
+
+The tell was available earlier than it was noticed: step 7 was the only item in the runbook whose
+own text had to argue for itself. Everything else said what to type.
+
+### Model allocation and cost
+
+Opus, inline, two web searches — one per question, both because the answers fed a document Ali
+executes and both about a third party's current behaviour rather than anything in the repo. No
+subagents; the work was reading two doc pages and one API response.

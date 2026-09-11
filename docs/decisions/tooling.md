@@ -862,7 +862,9 @@ down — **`v1-legacy` stops being a byte-complete capture of the old site**, si
 the four.
 
 **Ali runs it.** It needs a full clone, force-push on every ref, a GitHub support purge request, and
-it lands a production deploy because `release` is the production branch. None of that is an agent's
+it lands a production deploy because `release` is the production branch. (**The purge left the
+runbook on 2026-09-11** — see "The Support purge is a decision, not a step" at the end of this file.
+The rest of this sentence still holds.) None of that is an agent's
 to do unsupervised, and the runbook says so at the top rather than leaving it implied.
 
 ## The rewrite runbook became executable, and one claim was walked back (2026-09-10, #109)
@@ -923,3 +925,62 @@ The 2026-09-09 version hardcoded eight branch names. By the next day there were 
 Dependabot branch, plus the branch that shipped the runbook itself. **A hardcoded list in a document
 that runs once, months later, is the #45 staleness lesson with the serial numbers filed off**, so it
 is a `git ls-remote` one-liner now.
+
+## The Support purge is a decision, not a step (2026-09-11, #367, #109)
+
+`docs/HISTORY-REWRITE.md` carried the GitHub Support purge as step 7 of the rewrite. **It is not a
+step of the rewrite**, and Ali's call was to split it into
+[#367](https://github.com/ali-wallick/Portfolio/issues/367) and take it out of the runbook entirely.
+
+Two properties separate it from everything else in that document, and either one on its own would
+have been enough.
+
+### It costs something, and the rest of the rewrite costs nothing
+
+The rewrite renames commits; it does not delete them. Every diff survives in `git log -p`, the
+records and the log are files in the tree, the issues are untouched. Run it and you lose nothing.
+
+The purge is different. GitHub's docs are explicit that it removes "the internal references used for
+displaying the diff view", and that this hits **any PR built on history after the sensitive-data
+commit, even PRs that never touched the file.** The first changed commit is `b541155`, dated
+2020-09-01, which predates every pull request in this repo — so it is all **202** of them. What
+survives is the commits; what goes is the ability to click "Files changed" on any PR ever opened
+here.
+
+**And one row of that table is undocumented**: the docs say "dereference **or** delete", which are
+very different outcomes for the PR titles, bodies and review threads. Nobody can answer that from
+the docs, so #367's ticket copy _asks Support to confirm before acting_ rather than instructing them
+to proceed. A ticket that asks a question first is the right shape when the cost is irreversible and
+unquantified.
+
+### It is gated on #200, and nothing else in the runbook is
+
+The PO Box is public right now in roughly ten archive.org captures and Google's index. Spending 202
+PRs' diff views to close the GitHub copy while those stand closes one door in a building with no
+walls.
+
+**The trade only makes sense in one order:** if
+[#200](https://github.com/ali-wallick/Portfolio/issues/200) succeeds and archive.org removes the
+captures, GitHub becomes the last public copy and the cost is worth paying. If #200 is refused,
+the honest answer may be to never file #367 at all — and the issue says so, with "Ali decides not to
+file it and records why" as a legitimate close.
+
+There is also a tension worth naming, because #109's case for going public is _"the repo says here
+is how she runs an agentic project, with the failures left in."_ Some of that evidence is exactly
+what the purge spends.
+
+### What the split fixes about the runbook
+
+A procedure that contains one conditional step is a procedure people either half-run or
+over-run. The runbook is now unconditional end to end — every step is safe, cheap, and has no
+precondition beyond the previous one.
+
+**And it says what it does not do**, which matters more than it sounds: after a clean run the blobs
+are still reachable through `refs/pull/N/head`, and a reader who finished the document without that
+sentence would reasonably conclude the bytes were gone from GitHub. That note is now in the header,
+not buried at the end.
+
+The measured fact that makes the whole thing low-urgency, and that was not written down anywhere
+before: **the repo is private with 0 forks** (verified 2026-09-11). Nobody without repo access can
+reach those PR refs today, so there is no clock on any of this. The deadline is the public flip, not
+a date.

@@ -1,11 +1,20 @@
 # Rewriting history to purge the résumé address
 
 The runbook for [#109](https://github.com/ali-wallick/Portfolio/issues/109) item 3. **Ali runs this,
-not an agent** — it needs a full clone, force-push rights on every ref, and a GitHub Support request,
-and it lands a production deploy as a side effect. Prepared 2026-09-09, commands added 2026-09-10.
+not an agent** — it needs a full clone and force-push rights on every ref, and it lands a
+production deploy as a side effect. Prepared 2026-09-09, commands added 2026-09-10.
 
 Same relationship to #109 that `LAUNCH.md` has to #34: **the issue holds the decision and the
 ordering, this holds the procedure.** Nothing here restates the checklist — read #109 first.
+
+**What this does not do, on purpose.** After the force-push the old commits are still reachable
+through `refs/pull/N/head` — server-side refs a push does not touch and you cannot delete. Closing
+that is a GitHub Support request, and it is deliberately **not** a step here:
+[#367](https://github.com/ali-wallick/Portfolio/issues/367) carries it, because it costs the diff
+view on all 202 pull requests and is conditional on
+[#200](https://github.com/ali-wallick/Portfolio/issues/200) in a way nothing in this runbook is. So
+a clean run of everything below leaves the blobs retrievable by anyone who can read the repo and
+knows a SHA. While the repo is private with no forks, that is you.
 
 Every command below is meant to be pasted as-is. Where a number is quoted, it was measured on
 2026-09-10 against `main` at `fd3b9fe` — **re-measure rather than trusting it**, since each figure
@@ -161,7 +170,8 @@ git filter-repo --strip-blobs-with-ids ~/portfolio-rewrite/strip-blobs.txt
 carrying its redacted blob — #40 settled that the file is kept deliberately, and a path filter would
 delete it everywhere, including now.
 
-Grab the numbers the support ticket needs, straight from filter-repo's own report:
+Sanity-check the rewrite's size against filter-repo's own report. (These are also the two numbers
+[#367](https://github.com/ali-wallick/Portfolio/issues/367) needs, if it is ever filed.)
 
 ```bash
 # First changed commit: the first line where the old SHA maps to a different new one.
@@ -174,7 +184,7 @@ awk 'NR>1 && $1 != $2' filter-repo/commit-map | wc -l
 
 Expected, measured beforehand: the first changed commit is **`b541155`** ("Accidentally forgot to
 commit changes from 2019", 2020-09-01) and **240 of 263** commits are rewritten. `b541155` predates
-every pull request in the repo, which is why the affected-PR count in step 7 is _all_ of them.
+every pull request in the repo.
 
 ---
 
@@ -262,81 +272,7 @@ git ls-remote --heads --tags origin
 
 ---
 
-## 7. The GitHub Support request
-
-**This is the step that actually removes the bytes from GitHub, and the one most likely to be
-skipped** because everything already looks right by then. Force-pushed commits stay fetchable by SHA
-through `refs/pull/N/head` — server-side refs your push does not touch and you cannot delete
-yourself. Without this, the old blobs are _retrievable by anyone who knows the SHA_. That is not the
-same as still-published, but it is not gone either.
-
-It is GitHub's own documented step, at the end of
-[Removing sensitive data from a repository](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository).
-On the ticket they dereference or delete affected PRs, run a server-side `gc`, and drop cached views.
-
-File at **<https://support.github.com/contact>**, category _Account or Repository_ → _Sensitive
-Data Removal_.
-
-Numbers to fill in first:
-
-```bash
-# Affected pull requests. All of them, because the first changed commit
-# (2020-09-01) predates every PR in this repo.
-curl -sSI -H "Authorization: Bearer $(gh auth token)" \
-  "https://api.github.com/repos/ali-wallick/Portfolio/pulls?state=all&per_page=1" \
-  | grep -i '^link:'
-#    Read the rel="last" page number — that is the PR count. Was 202 on 2026-09-10.
-```
-
-### Paste-ready ticket
-
-> **Subject:** Sensitive data removal after history rewrite — ali-wallick/Portfolio
->
-> Hello,
->
-> I have rewritten the history of my private repository `ali-wallick/Portfolio` to remove four blobs
-> containing personal information (a home mailing address on an old résumé, in one PDF and three
-> images). The rewrite is done and force-pushed. I would like the cached views and the references in
-> pull requests removed so the blobs are no longer retrievable by SHA.
->
-> - **Repository:** ali-wallick/Portfolio (private, 0 forks)
-> - **Affected pull requests:** 202 — all pull requests in the repository. I understand every one of
->   them will be dereferenced or deleted.
-> - **First changed commit:** `<paste from filter-repo/commit-map>` (old) → `<new>`
-> - **Commits rewritten:** 240 of 263
-> - **Method:** `git filter-repo --strip-blobs-with-ids`, stripping these four blob ids:
->   - `140fb71f1630a57e6a376e639a6c8f96596b4f1a`
->   - `f485f41eae07a1e2f3f8319d267e3765a1898719`
->   - `f018f54e110239b01e6dd7da99c647ac123e0c08`
->   - `f680cb1cda500fbf17caacfe9c4469a58f048dae`
-> - **LFS objects orphaned:** none — this repository does not use Git LFS.
->
-> I have confirmed no remaining reference to these blobs on any branch or tag, and there are no
-> forks. Please dereference or delete the affected pull requests, run garbage collection, and remove
-> the cached views.
->
-> Thank you.
-
-**Do not paste the address itself into the ticket.** The blob ids identify the content precisely and
-support can act on them; writing the address into a support system makes another copy of the thing
-you are removing.
-
-**It does not always take on the first pass** — there is a standing
-[community thread](https://github.com/orgs/community/discussions/47294) from people whose PR
-references survived. Re-check afterwards:
-
-```bash
-# Pick a stripped commit SHA from portfolio-backout.git, then try to fetch it.
-# Before the purge this succeeds; after it, it should 404.
-git -C portfolio-backout.git rev-list --all | head -1
-curl -sS -o /dev/null -w '%{http_code}\n' \
-  -H "Authorization: Bearer $(gh auth token)" \
-  "https://api.github.com/repos/ali-wallick/Portfolio/commits/<old-sha>"
-```
-
----
-
-## 8. After
+## 7. After
 
 ```bash
 # The guard should still pass on the rewritten tree.
@@ -352,5 +288,10 @@ only name that works once history has moved:
 grep -n 'ASSET_SHA_FALLBACK\|TODO(#109)' scripts/restore-snapshot.mjs
 ```
 
-Continue at **#109 item 4** — sanitize the issue tracker. #200's body is the exposure there, not
-archive.org's answer.
+Two things are now open rather than done, and neither belongs in this runbook:
+
+- **[#367](https://github.com/ali-wallick/Portfolio/issues/367)** — the Support purge. Read it
+  before going public; the ordering constraint is that it must be filed _before_ the flip, never
+  after, and it is worth filing only if #200 has succeeded.
+- **#109 item 4** — sanitize the issue tracker. #200's body is the exposure there, not
+  archive.org's answer.
