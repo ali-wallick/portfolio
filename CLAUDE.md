@@ -44,22 +44,22 @@ echo of their milestone. **`Deferred` followed the same way on 2026-09-08**: onc
 non-deferred was done, every open issue left in it was, by definition, deferred, so the milestone
 had stopped discriminating too and was retired — the same call, not a new one. What it grouped is
 now the `blocked` label, carried on the issue itself rather than a milestone tag, so it shows up in
-a plain issue list instead of requiring a milestone filter. One milestone is still active because it
-marks something a plain issue list can't:
-[`DreamHost renewal deadline`](https://github.com/ali-wallick/Portfolio/milestone/4), a
-single-issue milestone tracking the one piece of this project that depends on someone else's
-timeline (#52). Each issue carries its source, why it's blocked, and what unblocks it, so a cold
-session can pick one up without reading scrollback.
+a plain issue list instead of requiring a milestone filter. The last milestone,
+[`DreamHost renewal deadline`](https://github.com/ali-wallick/Portfolio/milestone/4), earned its
+place by marking something a plain issue list can't — the one piece of this project that depended
+on someone else's timeline — and closed with its single issue (#52) on 2026-09-13. A new milestone
+needs that kind of distinction, not a status. Each issue carries its source, why it's blocked, and
+what unblocks it, so a cold session can pick one up without reading scrollback.
 
 Three labels do real work. **`decision`** marks the four things that block work rather than being
 work — they need a call from Ali, not a commit, and several issues are explicitly blocked on them.
 **`needs-ali`** marks everything an agent cannot do because Ali is the only source: the 2024–present
-Godot detail, the resume's tooling line, the Kaneva title, the DreamHost handoff. **`blocked`**
+Godot detail, the resume's tooling line, the Kaneva title. **`blocked`**
 (added 2026-09-08, replacing the `Deferred` milestone) marks an issue Ali can't move forward on
 right now because it's waiting on someone or something outside her control — a person's reply, an
 external system, a future date — as distinct from `needs-ali`, which she could sit down and act on
-today. The two aren't mutually exclusive: #52 carries both, since closing out DreamHost needs Ali as
-the decider _and_ is waiting on Robert's migration.
+today. The two aren't mutually exclusive: #52 carried both, since closing out DreamHost needed Ali as
+the decider _and_ waited on Robert's migration.
 
 **If you find a follow-up, open an issue.** Don't append it to a doc and don't leave it only
 in a `TODO(...)` comment — the comments mark _where in the code_ later work lands, the issues are
@@ -713,5 +713,5 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 | `.claude/settings.json`               | The permission allow-list (every npm script a routine job runs, except `update:resume-print`, which rewrites a guard and should prompt) and the two hooks. |
 | `.claude/hooks/`                      | `guard-preserved.sh` refuses writes to the Don't-touch paths; `format-on-write.sh` runs Prettier on every file a session writes.                           |
 | `.claude/launch.json`                 | Claude Code's dev-server launcher: `npm run dev` on 4321, Astro's default. Referenced by nothing in the repo; kept (#107).                                 |
-| GitHub issues                         | What's actually left. The DreamHost deadline is the only milestone; `decision`, `needs-ali` and `blocked` do the real work.                                |
+| GitHub issues                         | What's actually left. Labels, not milestones: `decision`, `needs-ali` and `blocked` do the real work.                                                      |
 | `snapshot/`                           | The old site as it stood. The reference for "what did the old page say?"                                                                                   |

@@ -5592,3 +5592,46 @@ Opus, inline, no subagents, no web. The rehearsal itself is a few seconds of `fi
 which is one image each and cannot be delegated to a grep. The session's own clone was shallow, and
 un-shallowing it plus fetching every tag was the first thing that had to happen — a reminder that a
 web session starts without the history a history rewrite is about.
+
+## Closing out DreamHost (2026-09-13)
+
+The last piece of the old stack, and the only one that depended on someone else's timeline
+([#52](https://github.com/ali-wallick/Portfolio/issues/52)). A web session wrote the plan as a
+handoff rather than doing it, because its sandbox had no outbound DNS and every step would have been
+unverified. A local session ran it with Ali at the dashboards: recon, a new zone in Robert's own
+Cloudflare account, the registrar transfer, a one-page placeholder, and the cancellation, in one
+afternoon against a deadline a month out. None of the domain's details are recorded here, on
+purpose — it isn't Ali's, and this repo may go public.
+
+### What the run found
+
+- **The deadline was softer than the plan assumed.** The date everyone was working to was the
+  hosting plan's renewal. The domain itself was already paid through the following May, so a slip
+  would have cost one renewal cycle, never the domain. WHOIS said so in the first command; the
+  issue had been written without running it.
+- **The zone capture missed records again.** `capture-dns-baseline.sh`, plus a hand probe of ~35
+  more names, found three records. Cloudflare's import found five — the extras were DreamHost's
+  auto-created `mysql` and `ssh` hosts. It is the same failure the script's header already records
+  for a DKIM selector: a probe list finds only what it names. A second scanner that guesses
+  differently is what caught it.
+- **The DNS intercept in `infra/README.md` struck again.** `dig` against Cloudflare's new
+  nameservers returned DreamHost's SOA, and `dig @192.0.2.1` — an address with no server behind it —
+  answered too. DoH settled it in one request, exactly as the README says.
+- **Both vendors' guidance erred toward alarm.** Cloudflare warned that a zone with no records
+  could not activate; it activated within the hour. DreamHost's help article describes an Approve
+  button its panel did not show; the release notice arrived about half an hour after the request,
+  and the registry flipped within a minute of approving it.
+
+### The generalizable bit
+
+**Cross-check an inventory with a second tool that guesses differently.** Neither the script nor
+Cloudflare's scan can enumerate a zone that refuses AXFR; both guess names. Their guesses overlap
+but aren't identical, so the union is the capture, and the difference is the finding. Once the old
+nameservers are gone, there is no third chance.
+
+### Model allocation and cost
+
+Opus, inline, no subagents. A handful of doc and web lookups, and one background `whois` poll that
+turned "tell me when the transfer lands" into a single notification instead of repeated check-ins.
+The session read Ali's Gmail to find the transfer and cancellation notices rather than asking her
+to go looking for them.
