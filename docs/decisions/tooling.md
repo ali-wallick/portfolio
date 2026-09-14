@@ -1062,3 +1062,43 @@ rehearsal on a throwaway copy is the test, and a runbook that has not had one ha
 (content, not paths, exact hashes, no OCR) and it is now ten entries; the reusable part is the
 enumeration step in the runbook, which asks "what else has ever lived at this path?" instead of
 "which files have bitten us?".
+
+## The rehearsal's counts came from a mirror without pull-request refs (2026-09-13, #109)
+
+Ali asked for one more read of `docs/HISTORY-REWRITE.md` before running it. The read was done the
+way the 2026-09-11 record says it has to be: a mirror cloned from GitHub into a scratch directory,
+the stale branches deleted, `filter-repo` run for real, every step-5 check run against the output.
+The rewrite itself came out exactly as the runbook says — no denylisted blob reachable from any ref,
+`main`'s tree byte-identical, `v1-legacy` at 183 files, `release` and the launch tag each losing the
+same three files, the tags re-pointed. Three of the runbook's expected numbers were wrong, and all
+three for one reason.
+
+**The 2026-09-11 figures match a copy with no `refs/pull/*`.** A mirror from GitHub has 209 of
+them, filter-repo rewrites every ref it can see, and pull requests here are squash-merged, so each
+PR's branch commits are reachable only through its pull ref. The commit-map therefore covers 854
+commits, not 267, and reports 853 rewritten. Step 5(c) prints four commits rather than two, because
+the two redaction PRs' original branch commits sit behind pull refs as well as their squash commits
+on `main`. Neither is a problem — step 6 never pushes pull refs — but a runbook that says "expect
+266 of 267" in front of an operator who sees 853 of 854 has just told her the rewrite went wrong,
+at the one moment she cannot afford to guess. The runbook now names the denominator's actual source
+(`git rev-list --count --all` in the backout) and says why it is what it is.
+
+**One commit is pruned, and the runbook did not say so.** `1065039` ("Fixed resume typo", 2016)
+changed only the two résumé files; with both blobs stripped it is empty, `--prune-empty auto` drops
+it, and `main` goes from 270 commits to 269. Expected and harmless, and now written down with a
+command that lists the pruned commits, so a shorter count is not read as a failure.
+
+Also refreshed: the blob count (2,791 in a GitHub mirror, about 2,000 in the everyday checkout),
+the enumeration loop's running time (a minute, not ten seconds), and a step-7 addition. The
+everyday checkout keeps thirteen local branches and three worktrees on pre-rewrite commits, and
+pushing any one of them would re-upload the stripped blobs; `cleanup-branches` before the next push.
+Also confirmed, since it is the one thing that could stop step 6 cold: branch protection and
+rulesets are a paid feature on a private repo, so nothing on GitHub's side refuses the force-push.
+
+### What generalises
+
+**A rehearsal is only as faithful as its copy.** The 2026-09-11 run tested the procedure on a
+mirror missing the one ref namespace GitHub adds, and every number it recorded was true of that copy
+and false of the real one. The mechanism was right, the expectations were not, and expectations are
+what an operator judges an irreversible step by. The counts a runbook quotes have to come from the
+same shape of input the operator will have.

@@ -5635,3 +5635,28 @@ Opus, inline, no subagents. A handful of doc and web lookups, and one background
 turned "tell me when the transfer lands" into a single notification instead of repeated check-ins.
 The session read Ali's Gmail to find the transfer and cancellation notices rather than asking her
 to go looking for them.
+
+## The rewrite rehearsal, again (2026-09-13)
+
+Ali asked for one more read of the runbook before starting. Same method as 2026-09-11 — a mirror,
+the rewrite for real, the checks against the output — with one difference: this mirror came from
+GitHub, so it carried the 209 pull-request refs the operator's will. The procedure held. Three of
+its numbers did not: the commit count was 854 not 267, step 5(c) showed four commits not two, and
+`main` came out one commit shorter. All three trace to the same missing namespace, and all three
+would have read as failure at the keyboard. The decision record has the reasoning; the runbook has
+the corrected numbers, their source, and a new step-7 note about the everyday checkout's stale
+branches.
+
+### The generalizable bit
+
+**Numbers in a runbook must come from the operator's input, not a stand-in for it.** The earlier
+rehearsal tested the procedure on a copy that lacked one ref namespace, and every figure it
+recorded was true of the copy and false of the real thing. Rehearsing on the wrong-shaped copy tests
+the commands and the mechanism; it does not test the expectations.
+
+### Model allocation and cost
+
+Fable, inline, no subagents, no web. The mirror clone is 44 MB and `filter-repo` took under a
+second; the slow parts were the runbook's own blob-enumeration loop, a minute per run, and
+installing `git-filter-repo` on the machine the runbook will actually run on, which is the
+runbook's step 0 done early.

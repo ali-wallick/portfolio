@@ -4,7 +4,9 @@ The runbook for [#109](https://github.com/ali-wallick/Portfolio/issues/109) item
 not an agent** — it needs a full clone and force-push rights on every ref, and it lands a
 production deploy as a side effect. Prepared 2026-09-09, commands added 2026-09-10, rehearsed
 end-to-end on a mirror 2026-09-11 (which found six more blobs and four broken steps — see
-"The list was declared complete at four" in [`docs/decisions/tooling.md`](decisions/tooling.md)).
+"The list was declared complete at four" in [`docs/decisions/tooling.md`](decisions/tooling.md)),
+and again on a mirror cloned from GitHub 2026-09-13, which corrected three expected counts (see
+"The rehearsal's counts came from a mirror without pull-request refs" in the same record).
 
 Same relationship to #109 that `LAUNCH.md` has to #34: **the issue holds the decision and the
 ordering, this holds the procedure.** Nothing here restates the checklist — read #109 first.
@@ -19,8 +21,8 @@ a clean run of everything below leaves the blobs retrievable by anyone who can r
 knows a SHA. While the repo is private with no forks, that is you.
 
 Every command below is meant to be pasted as-is. Where a number is quoted, it was measured on
-2026-09-11 against `main` at `e5058c6` — **re-measure rather than trusting it**, since each figure
-has a command beside it.
+2026-09-13 against `main` at `c41e1b0`, in a mirror cloned from GitHub — **re-measure rather than
+trusting it**, since each figure has a command beside it.
 
 ---
 
@@ -48,7 +50,7 @@ gh repo view ali-wallick/Portfolio --json isPrivate,forkCount
 #    Expect: {"forkCount":0,"isPrivate":true}
 
 # c. You are on a full clone, not a shallow one.
-git rev-list --count HEAD   # ~267
+git rev-list --count HEAD   # ~270
 test -f .git/shallow && echo "SHALLOW — run: git fetch --unshallow" || echo "full clone"
 
 # d. release is at main. The force-push in step 6 deploys whatever release's
@@ -69,9 +71,10 @@ gh pr list --state open --json number,headRefName
 
 ## 1. The ten blobs
 
-Found by hashing **every** blob reachable from every ref (1,868 of them) and matching content against
-the denylist in `scripts/check-preserved-blobs.mjs` — content, not paths, for the reason #360
-settled. Ten match, one per denylist entry.
+Found by hashing **every** blob reachable from every ref (2,791 of them in a mirror from GitHub,
+whose `refs/pull/*` carry every squash-merged branch; about 2,000 in the everyday checkout) and
+matching content against the denylist in `scripts/check-preserved-blobs.mjs` — content, not paths,
+for the reason #360 settled. Ten match, one per denylist entry.
 
 **Until 2026-09-11 this section said four, and the rewrite would have made things worse.** The
 denylist was built from what had leaked into `HEAD`, which was all 2019 material, and nobody had
@@ -114,8 +117,9 @@ git rev-list --objects --all \
 wc -l ~/portfolio-rewrite/strip-blobs.txt    # expect 10
 ```
 
-Takes about 10 seconds. If it returns anything other than 10, **stop** — either the denylist changed or
-a new copy exists, and both mean re-reading #360 before continuing.
+Takes about a minute in the everyday checkout (it hashes every blob in history, one `git cat-file`
+each). If it returns anything other than 10, **stop** — either the denylist changed or a new copy
+exists, and both mean re-reading #360 before continuing.
 
 **One more check the list cannot do for you.** The denylist is exact hashes, and the reason it was
 short was a class of file nobody had enumerated. Before trusting the count, list every revision the
@@ -235,10 +239,31 @@ awk 'NR>1 && $1 != $2' filter-repo/commit-map | wc -l
 grep "^$(git -C ../portfolio-backout.git rev-parse 1cdcbfc)" filter-repo/commit-map
 ```
 
-Expected, measured in rehearsal: **266 of 267** commits rewritten, and the oldest changed commit is
-**`1cdcbfc`** ("Initial Checkin", 2016-01-05) — the first 2016 résumé arrived with the repo. The only
-untouched commit is `0d0046a`, the `.gitattributes` root. That is why the affected-PR count in #367
-is all 202 rather than a subset.
+Expected, measured 2026-09-13 on a mirror cloned from GitHub: **853 of 854** commits rewritten, and
+the oldest changed commit is **`1cdcbfc`** ("Initial Checkin", 2016-01-05) — the first 2016 résumé
+arrived with the repo. The only untouched commit is `0d0046a`, the `.gitattributes` root. That is
+why the affected-PR count in #367 is all 202 rather than a subset.
+
+**The denominator is not `main`'s commit count.** A mirror from GitHub carries `refs/pull/*` (209
+of them), filter-repo rewrites every ref it can see, and pull requests here are squash-merged, so
+each PR's original branch commits are reachable only through its `refs/pull/N/head`. The map
+therefore covers every commit reachable from any ref — `git rev-list --count --all` in the backout,
+roughly three times `main`'s 270 — and not `git rev-list --count main`. The 2026-09-11 rehearsal
+reported 266 of 267, which is `main`'s count at the time; its figures match a copy with no
+pull-request refs. The rewrite is identical either way, and the rewritten pull refs stay local:
+step 6's refspecs never push them, and GitHub would refuse them if it did.
+
+**`main` comes out one commit shorter, and that is expected.** `1065039` ("Fixed resume typo",
+2016-04-09) changed nothing but the two résumé files, so stripping both blobs leaves it empty and
+filter-repo's default `--prune-empty auto` drops it; the commit-map records it as mapped to all
+zeros. 270 commits become 269. Any other pruned commit would be one whose only content was on the
+list, which the table above says cannot happen — stop and look.
+
+```bash
+# Which commits were pruned outright. Expect exactly one: 1065039.
+awk 'NR>1 && $2 ~ /^0+$/ {print $1}' filter-repo/commit-map \
+  | xargs -n1 git -C ../portfolio-backout.git log -1 --format='%h %ad %s' --date=short
+```
 
 ---
 
@@ -290,9 +315,12 @@ git log --all --oneline -- 'snapshot/rendered/resources/images/resume.png' \
                            'docs/before-after/old/resume-*.webp' \
                            'resources/images/resume.png' 'images/resume.png' \
                            'resources/WallickAli-Resume.pdf'
-#    Expect exactly two commits: #196's and #360's, the ones that added the
-#    redacted replacements. Every commit that added an unredacted revision no
-#    longer touches these paths at all.
+#    Expect #196's and #360's squash commits on main — the ones that added the
+#    redacted replacements — plus, in a mirror from GitHub, the same two changes
+#    as their original branch commits, reached through refs/pull/N/head. Four
+#    lines on 2026-09-13, all dated 2026-08-26 or later. Every commit that added
+#    an unredacted revision no longer touches these paths at all, so a 2016 or
+#    2020 date here means the rewrite did not take.
 #    Then extract one surviving copy of each and actually look at it:
 git show <commit>:snapshot/rendered/resources/images/resume.png > /tmp/check.png && open /tmp/check.png
 ```
@@ -340,10 +368,18 @@ git ls-remote --heads --tags origin
 # the OLD assets-pre-cleanup, and restore-snapshot.mjs silently reads
 # pre-rewrite history through it.
 cd /path/to/your/Portfolio
+git switch main                    # reset --hard acts on whichever branch is checked out
 git fetch --force --tags --prune --prune-tags origin && git reset --hard origin/main
 git rev-parse assets-pre-cleanup   # must match: git ls-remote --tags origin assets-pre-cleanup
 npm ci && npm run verify
 ```
+
+**The everyday checkout still holds the old history, and a later push can put it back.** Every
+local branch and worktree that predates the rewrite still points at pre-rewrite commits (thirteen
+branches and three `.claude/worktrees/` on 2026-09-13), and pushing any one of them — a stale branch
+pushed out of habit is enough — re-uploads the stripped blobs to GitHub, reachable again through
+that branch. Run the `cleanup-branches` skill, or delete them by hand, before the next push; a local
+branch that was not created from the rewritten `main` is not to be trusted until it is gone.
 
 Then delete the SHA fallback and its `TODO(#109)` in `scripts/restore-snapshot.mjs` — the tag is the
 only name that works once history has moved:
