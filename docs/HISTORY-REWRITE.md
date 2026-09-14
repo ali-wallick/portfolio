@@ -6,7 +6,9 @@ production deploy as a side effect. Prepared 2026-09-09, commands added 2026-09-
 end-to-end on a mirror 2026-09-11 (which found six more blobs and four broken steps — see
 "The list was declared complete at four" in [`docs/decisions/tooling.md`](decisions/tooling.md)),
 and again on a mirror cloned from GitHub 2026-09-13, which corrected three expected counts (see
-"The rehearsal's counts came from a mirror without pull-request refs" in the same record).
+"The rehearsal's counts came from a mirror without pull-request refs" in the same record). Read
+once more later that day against the live repo, which found the counts already two merges stale
+and #200 closed — see "Read again the same day" under that heading.
 
 Same relationship to #109 that `LAUNCH.md` has to #34: **the issue holds the decision and the
 ordering, this holds the procedure.** Nothing here restates the checklist — read #109 first.
@@ -15,13 +17,17 @@ ordering, this holds the procedure.** Nothing here restates the checklist — re
 through `refs/pull/N/head` — server-side refs a push does not touch and you cannot delete. Closing
 that is a GitHub Support request, and it is deliberately **not** a step here:
 [#367](https://github.com/ali-wallick/Portfolio/issues/367) carries it, because it costs the diff
-view on all 202 pull requests and is conditional on
-[#200](https://github.com/ali-wallick/Portfolio/issues/200) in a way nothing in this runbook is. So
-a clean run of everything below leaves the blobs retrievable by anyone who can read the repo and
-knows a SHA. While the repo is private with no forks, that is you.
+view on every pull request in the repo, and Support acts only after the refs are clean. It was
+also gated on [#200](https://github.com/ali-wallick/Portfolio/issues/200) — which closed on
+2026-09-11 with every archive.org capture gone, so that gate is open and #367 is the step after
+this one. A clean run of everything below still leaves the blobs retrievable by anyone who can
+read the repo and knows a SHA. While the repo is private with no forks, that is you.
 
-Every command below is meant to be pasted as-is. Where a number is quoted, it was measured on
-2026-09-13 against `main` at `c41e1b0`, in a mirror cloned from GitHub — **re-measure rather than
+Every command below is meant to be pasted as-is. **Expectations are written as invariants where
+they can be** — exactly one commit pruned, `main` exactly one shorter — because every merge to
+`main` moves the absolute counts, and an operator reading "270" beside a terminal saying "273" is
+in exactly the guessing moment the 2026-09-13 record describes. Where an absolute number is still
+quoted, it was measured on 2026-09-13 against `main` at `283d69c` — **re-measure rather than
 trusting it**, since each figure has a command beside it.
 
 ---
@@ -50,14 +56,15 @@ gh repo view ali-wallick/Portfolio --json isPrivate,forkCount
 #    Expect: {"forkCount":0,"isPrivate":true}
 
 # c. You are on a full clone, not a shallow one.
-git rev-list --count HEAD   # ~270
+git rev-list --count HEAD   # a few hundred (273 on 2026-09-13); a shallow clone says far fewer
 test -f .git/shallow && echo "SHALLOW — run: git fetch --unshallow" || echo "full clone"
 
 # d. release is at main. The force-push in step 6 deploys whatever release's
 #    rewritten tree is, and the rewrite DELETES files from any tree still
 #    carrying a bad blob. On 2026-09-11 release was 8 commits behind main and
 #    still carried three — so the push would have shipped a tree no commit had
-#    ever had. Run the release skill first; then the deploy is a no-op.
+#    ever had. It was 14 behind again on 2026-09-13. Run the release skill
+#    first; then the deploy is a no-op. Expect this to be the check that fails.
 git fetch origin main release && git rev-list --count origin/release..origin/main
 #    Expect: 0
 
@@ -137,10 +144,13 @@ done | awk '{print $3, $4}' | sort -u | grep -v '^[0-9a-f]* public/'
 
 ## 2. What still carries them
 
-Measured 2026-09-11. `main` is clean; everything below is not.
+Measured 2026-09-11, re-measured 2026-09-13. `main` is clean; everything below is not.
 
 ```bash
-# Every ref whose TIP tree still carries a bad blob.
+# Every ref whose TIP tree still carries a bad blob. The loop reads the
+# checkout's remote-tracking refs, so fetch first or it misses any branch
+# pushed since the last fetch.
+git fetch origin
 for r in $(git for-each-ref --format='%(refname)' refs/remotes/origin refs/tags); do
   while read -r oid; do
     git ls-tree -r "$r" 2>/dev/null | grep -q "$oid" && { echo "$r"; break; }
@@ -227,7 +237,7 @@ carrying its redacted blob — #40 settled that the file is kept deliberately, a
 delete it everywhere, including now.
 
 Sanity-check the rewrite's size against filter-repo's own report. (These are also the two numbers
-[#367](https://github.com/ali-wallick/Portfolio/issues/367) needs, if it is ever filed.)
+[#367](https://github.com/ali-wallick/Portfolio/issues/367)'s ticket needs — write them down.)
 
 ```bash
 # How many commits were rewritten at all.
@@ -239,25 +249,27 @@ awk 'NR>1 && $1 != $2' filter-repo/commit-map | wc -l
 grep "^$(git -C ../portfolio-backout.git rev-parse 1cdcbfc)" filter-repo/commit-map
 ```
 
-Expected, measured 2026-09-13 on a mirror cloned from GitHub: **853 of 854** commits rewritten, and
-the oldest changed commit is **`1cdcbfc`** ("Initial Checkin", 2016-01-05) — the first 2016 résumé
-arrived with the repo. The only untouched commit is `0d0046a`, the `.gitattributes` root. That is
-why the affected-PR count in #367 is all 202 rather than a subset.
+Expected: **every commit but one** is rewritten, and the oldest changed commit is **`1cdcbfc`**
+("Initial Checkin", 2016-01-05) — the first 2016 résumé arrived with the repo. The only untouched
+commit is `0d0046a`, the `.gitattributes` root, which is the one commit with no résumé anywhere in
+its history. That is why the affected-PR count in #367 is every pull request rather than a subset.
+The absolute figure was 853 of 854 on 2026-09-13; it is higher now, and the gap of exactly one is
+the invariant to judge by.
 
-**The denominator is not `main`'s commit count.** A mirror from GitHub carries `refs/pull/*` (209
-of them), filter-repo rewrites every ref it can see, and pull requests here are squash-merged, so
-each PR's original branch commits are reachable only through its `refs/pull/N/head`. The map
-therefore covers every commit reachable from any ref — `git rev-list --count --all` in the backout,
-roughly three times `main`'s 270 — and not `git rev-list --count main`. The 2026-09-11 rehearsal
-reported 266 of 267, which is `main`'s count at the time; its figures match a copy with no
-pull-request refs. The rewrite is identical either way, and the rewritten pull refs stay local:
-step 6's refspecs never push them, and GitHub would refuse them if it did.
+**The denominator is not `main`'s commit count.** A mirror from GitHub carries one `refs/pull/N/head`
+per pull request, filter-repo rewrites every ref it can see, and pull requests here are
+squash-merged, so each PR's original branch commits are reachable only through its pull ref. The
+map therefore covers every commit reachable from any ref — `git rev-list --count --all` in the
+backout, roughly three times `main`'s own count — and not `git rev-list --count main`. The
+2026-09-11 rehearsal reported 266 of 267, which was `main`'s count at the time; its figures match a
+copy with no pull-request refs. The rewrite is identical either way, and the rewritten pull refs
+stay local: step 6's refspecs never push them, and GitHub would refuse them if it did.
 
-**`main` comes out one commit shorter, and that is expected.** `1065039` ("Fixed resume typo",
-2016-04-09) changed nothing but the two résumé files, so stripping both blobs leaves it empty and
-filter-repo's default `--prune-empty auto` drops it; the commit-map records it as mapped to all
-zeros. 270 commits become 269. Any other pruned commit would be one whose only content was on the
-list, which the table above says cannot happen — stop and look.
+**`main` comes out exactly one commit shorter, and that is expected.** `1065039` ("Fixed resume
+typo", 2016-04-09) changed nothing but the two résumé files, so stripping both blobs leaves it empty
+and filter-repo's default `--prune-empty auto` drops it; the commit-map records it as mapped to all
+zeros. Any other pruned commit would be one whose only content was on the list, which the table
+above says cannot happen — stop and look.
 
 ```bash
 # Which commits were pruned outright. Expect exactly one: 1065039.
@@ -341,12 +353,17 @@ git push --prune --force --dry-run origin 'refs/heads/*:refs/heads/*' 'refs/tags
 git push --prune --force origin 'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*'
 ```
 
-**Not `git push --mirror`.** A mirror clone from GitHub also fetches `refs/pull/*` — 206 of them
-here — and a mirror push tries to update every one. GitHub rejects each as a hidden ref, so the push
+**Not `git push --mirror`.** A mirror clone from GitHub also fetches `refs/pull/*` — one per pull
+request, a couple of hundred here — and a mirror push tries to update every one. GitHub rejects each as a hidden ref, so the push
 that matters most ends in a wall of `[remote rejected]` lines and a non-zero exit, with the branch
 and tag updates buried in the middle. The dry run does not show this: the rejections come from the
 server, and a dry run never asks it. Explicit refspecs touch only branches and tags, and `--prune`
 only prunes within those two namespaces.
+
+**Nothing on GitHub's side can refuse this push.** Branch protection and rulesets are a paid
+feature on a private repository, so `main` and `release` have none (confirmed 2026-09-13: the API
+returns a 403 "upgrade to enable this feature" for both). That changes once the repo is public —
+another reason the rewrite happens before the flip, not after.
 
 **Expect a production deploy.** `release` is Workers Builds' production branch, so force-pushing it
 publishes. With preflight (d) done the tree is identical to what is already live, so this is fine —
@@ -375,11 +392,17 @@ npm ci && npm run verify
 ```
 
 **The everyday checkout still holds the old history, and a later push can put it back.** Every
-local branch and worktree that predates the rewrite still points at pre-rewrite commits (thirteen
-branches and three `.claude/worktrees/` on 2026-09-13), and pushing any one of them — a stale branch
-pushed out of habit is enough — re-uploads the stripped blobs to GitHub, reachable again through
-that branch. Run the `cleanup-branches` skill, or delete them by hand, before the next push; a local
-branch that was not created from the rewritten `main` is not to be trusted until it is gone.
+local branch and worktree that predates the rewrite still points at pre-rewrite commits, and pushing
+any one of them — a stale branch pushed out of habit is enough — re-uploads the stripped blobs to
+GitHub, reachable again through that branch. Run the `cleanup-branches` skill, or delete them by
+hand, before the next push; a local branch that was not created from the rewritten `main` is not to
+be trusted until it is gone. Count what is there rather than trusting a figure from a doc — it was
+thirteen branches on one machine and eighteen on another the same day:
+
+```bash
+git branch | grep -vcE '^\*? *(main|release)$'   # stale local branches
+git worktree list                                 # every one but the first is on old history
+```
 
 Then delete the SHA fallback and its `TODO(#109)` in `scripts/restore-snapshot.mjs` — the tag is the
 only name that works once history has moved:
@@ -390,9 +413,11 @@ grep -n 'ASSET_SHA_FALLBACK\|TODO(#109)' scripts/restore-snapshot.mjs
 
 Two things are now open rather than done, and neither belongs in this runbook:
 
-- **[#367](https://github.com/ali-wallick/Portfolio/issues/367)** — the Support purge. Read it
-  before going public; the ordering constraint is that it must be filed _before_ the flip, never
-  after, and it is worth filing only if #200 has succeeded.
+- **[#367](https://github.com/ali-wallick/Portfolio/issues/367)** — the Support purge, and it is
+  now the next step rather than a maybe. Its one condition was #200 succeeding, and #200 closed
+  on 2026-09-11 with zero captures left for any of the three files, so GitHub is now the last
+  copy outside this machine. The ordering constraint stands: file it _after_ this push and
+  _before_ the flip, never after. Its ticket text needs the two numbers from step 4 pasted in.
 - **#109 item 4** — sanitize the issue tracker. #200's body is the exposure there, not
   archive.org's answer. Its survey also says the résumé with the home address and phone number "is
   not in git anywhere"; the 2010 one may not be, but the 2016 one was, in six blobs, until this ran.

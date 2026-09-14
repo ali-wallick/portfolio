@@ -1102,3 +1102,31 @@ mirror missing the one ref namespace GitHub adds, and every number it recorded w
 and false of the real one. The mechanism was right, the expectations were not, and expectations are
 what an operator judges an irreversible step by. The counts a runbook quotes have to come from the
 same shape of input the operator will have.
+
+### Read again the same day, against the live repo
+
+Ali asked for one more pass before starting, hours after the one above. This one ran the runbook's
+own enumeration and tip-tree checks in the everyday checkout rather than a mirror, and checked the
+prose against GitHub. The mechanics held again: ten blobs, the same seven stale branches plus
+`release` and three tags, `1065039` the only empty commit, `0d0046a` the only root. Four sentences
+did not.
+
+**Two merges had already moved the counts.** The morning's figures were pinned to `c41e1b0`; by the
+afternoon `main` was at `283d69c`, 273 commits rather than 270, and "270 becomes 269" was false
+again. The pull-ref count appeared three times in the runbook as 202, 206 and 209, none of them the
+day's 210. A count re-measured that morning was stale by the time it was read, which is the
+2026-09-11 lesson at a shorter wavelength: it is not enough for a number to come from the right
+shape of input, it also has to stay true until the operator reads it, and a number that changes on
+every merge never will. **The runbook now states its expectations as invariants where it can** —
+exactly one commit pruned, exactly one untouched, `main` exactly one shorter, one pull ref per pull
+request — and gives a command instead of a figure where it cannot.
+
+**#200 had closed.** archive.org removed all three captures, verified 2026-09-11, and the runbook
+still called #367 "worth filing only if #200 has succeeded". It has, so #367 stopped being
+conditional and became the step after the push; the runbook and the issue both say so now, and the
+issue's paste-ready ticket was refreshed from the four-blob version it still carried.
+
+**And preflight (d) was failing.** `release` was 14 commits behind `main`, the same state the
+2026-09-11 rehearsal had found at 8. The check is written correctly and the runbook already said
+what to do; what it now also says is that this is the check to expect to fail, since it has on both
+occasions anyone looked.

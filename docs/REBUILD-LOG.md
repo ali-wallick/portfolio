@@ -5660,3 +5660,20 @@ Fable, inline, no subagents, no web. The mirror clone is 44 MB and `filter-repo`
 second; the slow parts were the runbook's own blob-enumeration loop, a minute per run, and
 installing `git-filter-repo` on the machine the runbook will actually run on, which is the
 runbook's step 0 done early.
+
+### The same afternoon: one more read, and the numbers had moved again
+
+Ali asked for a last pass before running it. This one skipped the mirror and ran the runbook's
+checks in the everyday checkout, then read every sentence against the live repo and the issue
+tracker. The commands all held. The prose had gone stale in the hours since the morning's pass:
+two merges had moved `main`'s count, the pull-ref figure appeared three ways in one document, and
+#200 had closed as done, which turned #367 from "maybe, later" into "next". The fix was to stop
+quoting counts that move on every merge and write the expectations as the invariants they actually
+are. Also caught: preflight (d) was failing, `release` 14 commits behind, which Ali fixed by
+running the release before starting — the runbook now says to expect that one to fail.
+
+**The generalizable bit:** a re-measured number has a half-life, and on a repo that merges daily
+it is hours. If an expectation can be written as a relationship instead of a figure, write the
+relationship.
+
+Fable, inline, no subagents, no web. One `gh` round-trip per claim checked.
