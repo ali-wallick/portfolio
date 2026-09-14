@@ -612,3 +612,23 @@ sample is meant to be loud.
 The one residual false positive is a proper noun — a game actually titled _Centre_, a quoted source
 outside backticks. No such title exists, so the exemption hook is deliberately not built; that is the
 call #338 made about its own candidates.
+
+### Firefall back to featured, aliwallick.com to the archive (2026-09-13, reverses #358)
+
+**Ali's call: it reads better.** #358 offered three ways to publish `/projects/aliwallick-com`
+without growing the featured tier past five. It took the first one, demoting Firefall. This takes
+the second one, which #358 had argued against: the website goes to the archive and Firefall goes
+back to its old `featureOrder: 5`. The five featured write-ups are the same five as before
+2026-09-09, in the same order.
+
+**#358's objection to this option was about the tier's register:** the archive is history rather
+than a portfolio pitch, and this page would be the longest thing in it. That objection is real, and
+it did not outweigh how the featured list reads. The body stays untouched for the same reason
+Firefall's did when it moved: _leave an entry as it is unless you actually want to adjust it_, and
+"Archive pages may carry a short body" above is not a ceiling on what a richer entry keeps.
+
+**What moves besides the two tier fields:** the website becomes the first archive tile (the archive
+sorts newest first), and its tile image is its hero, the old homepage, because it has no
+`thumbWide`. The homepage's featured list swaps its card for Firefall's. Prev/next on the detail
+pages follows the new `/projects` order. The résumé, OG cards, sitemap and URLs do not read `tier`
+and are unchanged.

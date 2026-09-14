@@ -1,11 +1,10 @@
 ---
 title: Firefall
-# Demoted from `featured` 2026-09-09 (#358), to keep that tier at the five
-# CLAUDE.md settled while /projects/aliwallick-com publishes into it. The body
-# is untouched, which is #97's rule rather than an exception to it: the archive
-# guideline is calibrated to early student and jam work, and is explicitly not
-# a ceiling on a richer entry demoted into the tier later.
-tier: archive
+# Back in `featured` at its old slot, 2026-09-13 (#358 reversed, Ali's call).
+# It spent four days in the archive to make room for /projects/aliwallick-com,
+# which went there instead. See docs/decisions/content.md.
+tier: featured
+featureOrder: 5
 startYear: 2015
 endYear: 2016
 status: shipped

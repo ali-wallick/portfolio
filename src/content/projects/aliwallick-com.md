@@ -1,7 +1,9 @@
 ---
 title: aliwallick.com
-tier: featured
-featureOrder: 7
+# Archive, not featured, 2026-09-13 (Ali's call, reversing #358): Firefall
+# reads better as a featured write-up. The body is untouched, the same rule
+# #358 applied to Firefall. See docs/decisions/content.md.
+tier: archive
 # The first non-game entry in the collection (#49), and the reason `kind`
 # exists: it has no engine, no platform in the game sense, no `job` and no
 # `event`, and a `status` only because “shipped” happens to be true. The meta

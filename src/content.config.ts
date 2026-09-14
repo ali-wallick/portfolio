@@ -208,9 +208,9 @@ const projects = defineCollection({
          * `gallery` where there is material worth having. This is a guideline
          * calibrated to what most archive entries are — early student and jam
          * work that doesn't need much — not a hard cap. A richer entry
-         * demoted into this tier later isn't meant to be trimmed to fit it,
-         * which stopped being hypothetical on 2026-09-09 when Firefall moved
-         * here with its body untouched (#358). The reasoning is in
+         * placed in this tier isn't meant to be trimmed to fit it — Firefall
+         * on 2026-09-09 (#358), then aliwallick.com in its place on
+         * 2026-09-13, both with their bodies untouched. The reasoning is in
          * docs/decisions/content.md, "Archive pages may carry a short body";
          * this comment said "see CLAUDE.md" until #335 moved it there.
          */
