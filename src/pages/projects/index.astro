@@ -20,52 +20,48 @@ const total = featured.length + archive.length;
   image="/og/projects.jpg"
 >
   <PageHead title="Projects">
-    <p class="eyebrow" slot="kicker">{total} entries</p>
+    <p class="eyebrow" slot="kicker">
+      {total} entries
+    </p>
   </PageHead>
 
   <h2 id="featured">Featured</h2>
   <ul class="card-grid">
-    {
-      featured.map((project, i) => (
-        <li>
-          <a class="card" href={`/projects/${project.id}`}>
-            <span class="card-index" aria-hidden="true">
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <ProjectVisual project={project} aspect="square" />
-            <div class="card-body">
-              <h3 class="card-title">{project.data.title}</h3>
-              <ProjectMeta project={project} />
-              {project.data.summary && <p>{project.data.summary}</p>}
-            </div>
-          </a>
-        </li>
-      ))
-    }
+    {featured.map((project, i) => (
+      <li>
+        <a class="card" href={`/projects/${project.id}`}>
+          <span class="card-index" aria-hidden="true">
+            {String(i + 1).padStart(2, '0')}
+          </span>
+          <ProjectVisual project={project} aspect="square" />
+          <div class="card-body">
+            <h3 class="card-title">{project.data.title}</h3>
+            <ProjectMeta project={project} />
+            {project.data.summary && <p>{project.data.summary}</p>}
+          </div>
+        </a>
+      </li>
+    ))}
   </ul>
 
-  {
-    /* The archive tier is framed as history, not as a portfolio pitch — the
+  {/* The archive tier is framed as history, not as a portfolio pitch — the
       `status` field on each entry keeps a 48-hour jam entry from reading like a
       shipped commercial title.
 
       Phase 5 renders that rather than only wording it: twelve compact tiles
       with a coloured status chip apiece, which reads as a collection screen and
       lets the tier be browsable at a glance without competing with the five
-      featured write-ups above it. */
-  }
+      featured write-ups above it. */}
   <h2 id="archive">Archive</h2>
   <ul class="tile-grid">
-    {
-      archive.map((project) => (
-        <li>
-          <a class="tile" href={`/projects/${project.id}`}>
-            <ProjectVisual project={project} size="tile" aspect="wide" />
-            <h3 class="tile-title">{project.data.title}</h3>
-            <ProjectMeta project={project} />
-          </a>
-        </li>
-      ))
-    }
+    {archive.map((project) => (
+      <li>
+        <a class="tile" href={`/projects/${project.id}`}>
+          <ProjectVisual project={project} size="tile" aspect="wide" />
+          <h3 class="tile-title">{project.data.title}</h3>
+          <ProjectMeta project={project} />
+        </a>
+      </li>
+    ))}
   </ul>
 </BaseLayout>

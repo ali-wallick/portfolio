@@ -114,29 +114,27 @@ const sizes = [
 ---
 
 <aside class="lab-panel" aria-label="Subject switcher">
-  {
-    /* Collapsible because it is fixed: on a phone an always-open panel covers
-      the thing it is there to compare. */
-  }
+  {/* Collapsible because it is fixed: on a phone an always-open panel covers
+      the thing it is there to compare. */}
   <details open>
     <summary>Compare</summary>
     <fieldset>
       <legend>Weight</legend>
       <div class="lab-panel-opts">
-        {
-          weights.map((w, i) => (
-            <label>
-              <input type="radio" name="lab-weight" value={w.key} checked={i === 0} />
-              <span>
-                <code>{w.key.toUpperCase()}</code> {w.label}
-              </span>
-            </label>
-          ))
-        }
+        {weights.map((w, i) => (
+          <label>
+            <input type="radio" name="lab-weight" value={w.key} checked={i === 0} />
+            <span>
+              <code>{w.key.toUpperCase()}</code> {w.label}
+            </span>
+          </label>
+        ))}
       </div>
     </fieldset>
     {/* …one fieldset per axis… */}
-    <p class="lab-panel-current">Showing <code>W1 + F1</code></p>
+    <p class="lab-panel-current">
+      Showing <code>W1 + F1</code>
+    </p>
   </details>
 </aside>
 ```

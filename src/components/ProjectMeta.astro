@@ -52,13 +52,13 @@ const fields = [
 
 <p class="meta-strip">
   {d.kind !== 'game' && <span class="chip">{KIND_LABEL[d.kind]}</span>}
-  {
-    d.status && (
-      <span class="chip" data-status={d.status}>
-        {STATUS_LABEL[d.status]}
-      </span>
-    )
-  }
-  {fields.map((field) => <span class="meta-field">{field}</span>)}
+  {d.status && (
+    <span class="chip" data-status={d.status}>
+      {STATUS_LABEL[d.status]}
+    </span>
+  )}
+  {fields.map((field) => (
+    <span class="meta-field">{field}</span>
+  ))}
   {d.draft && <span class="draft-flag">draft</span>}
 </p>

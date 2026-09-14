@@ -23,8 +23,7 @@ const shown = socials.filter(
 <BaseLayout title="Contact" description="Get in touch with Ali Wallick." image="/og/contact.jpg">
   <PageHead title="Contact" />
 
-  {
-    /* The page said *how* to reach Ali and never *why*, so a reader had to guess
+  {/* The page said *how* to reach Ali and never *why*, so a reader had to guess
       what was worth writing about (#119). /about carries a standing offer to talk
       about the work and had no call to action anywhere on the site; it links here
       now, which is the other half of this change.
@@ -44,42 +43,37 @@ const shown = socials.filter(
 
       The Godot work is not named as a reason. It is the one thing the standing
       brief fences off, and inviting questions about it in writing is different
-      from declining them in a reply. */
-  }
+      from declining them in a reply. */}
   <p>
     Email is the best way to reach me. Speaking to a class or a group, a question about something on
     this site, and roles are all welcome!
   </p>
 
-  {
-    /* Phase 5 makes these controls rather than a list of links, and the reason
+  {/* Phase 5 makes these controls rather than a list of links, and the reason
       is the same rule the rest of the direction follows: a contact page is a
       surface you *act on*, not one you read, so it is where the pressable
       treatment belongs. No content changes — the address and the accounts are
-      Phase 3's, unchanged. */
-  }
+      Phase 3's, unchanged. */}
   <a class="card contact-card" href={`mailto:${site.email}`}>
     <span class="eyebrow">Email</span>
     <span class="contact-address">{site.email}</span>
   </a>
 
-  {
-    shown.length > 0 && (
-      <ul class="button-row">
-        {shown.map((s) => (
-          <li>
-            <a class="button" href={s.url} {...externalLinkProps(s.url)}>
-              {socialIcons[s.label] && (
-                <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <path d={socialIcons[s.label]} />
-                </svg>
-              )}
-              {s.label}
-              {s.status === 'pending' && <span class="draft-flag">unverified</span>}
-            </a>
-          </li>
-        ))}
-      </ul>
-    )
-  }
+  {shown.length > 0 && (
+    <ul class="button-row">
+      {shown.map((s) => (
+        <li>
+          <a class="button" href={s.url} {...externalLinkProps(s.url)}>
+            {socialIcons[s.label] && (
+              <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d={socialIcons[s.label]} />
+              </svg>
+            )}
+            {s.label}
+            {s.status === 'pending' && <span class="draft-flag">unverified</span>}
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
 </BaseLayout>

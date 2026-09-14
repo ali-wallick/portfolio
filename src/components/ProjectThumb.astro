@@ -43,19 +43,15 @@ const src = projectThumb(project, aspect);
 const widths = size === 'card' ? [144, 288] : [240, 480];
 ---
 
-{
-  src && (
-    <div class="thumb" data-size={size}>
-      <Image
-        src={src}
-        alt=""
-        widths={widths}
-        sizes={
-          size === 'card' ? '(max-width: 40rem) 100vw, 9rem' : '(max-width: 40rem) 50vw, 12rem'
-        }
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
-  )
-}
+{src && (
+  <div class="thumb" data-size={size}>
+    <Image
+      src={src}
+      alt=""
+      widths={widths}
+      sizes={size === 'card' ? '(max-width: 40rem) 100vw, 9rem' : '(max-width: 40rem) 50vw, 12rem'}
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+)}

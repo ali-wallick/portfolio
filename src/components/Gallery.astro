@@ -64,54 +64,52 @@ interface Props {
 const { items } = Astro.props;
 ---
 
-{
-  items.length > 0 && (
-    <div class="gallery">
-      <div
-        class="gallery-viewport"
-        tabindex="0"
-        role="group"
-        aria-label="Project gallery, scrollable"
-        data-reticle-skip
-      >
-        <ul class="gallery-track">
-          {items.map((item) => (
-            <li class="gallery-slide">
-              <Media item={item} surface="gallery" />
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div class="gallery-nav" hidden>
-        <button
-          type="button"
-          class="button gallery-arrow"
-          data-dir="-1"
-          aria-label="Scroll gallery left"
-        >
-          <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M14.7 5.3a1 1 0 0 1 0 1.4L9.4 12l5.3 5.3a1 1 0 1 1-1.4 1.4l-6-6a1 1 0 0 1 0-1.4l6-6a1 1 0 0 1 1.4 0z" />
-          </svg>
-        </button>
-
-        <div class="gallery-rail" aria-hidden="true">
-          <div class="gallery-rail-track">
-            <div class="gallery-rail-thumb" />
-          </div>
-        </div>
-
-        <button
-          type="button"
-          class="button gallery-arrow"
-          data-dir="1"
-          aria-label="Scroll gallery right"
-        >
-          <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M9.3 5.3a1 1 0 0 0 0 1.4L14.6 12l-5.3 5.3a1 1 0 1 0 1.4 1.4l6-6a1 1 0 0 0 0-1.4l-6-6a1 1 0 0 0-1.4 0z" />
-          </svg>
-        </button>
-      </div>
+{items.length > 0 && (
+  <div class="gallery">
+    <div
+      class="gallery-viewport"
+      tabindex="0"
+      role="group"
+      aria-label="Project gallery, scrollable"
+      data-reticle-skip
+    >
+      <ul class="gallery-track">
+        {items.map((item) => (
+          <li class="gallery-slide">
+            <Media item={item} surface="gallery" />
+          </li>
+        ))}
+      </ul>
     </div>
-  )
-}
+
+    <div class="gallery-nav" hidden>
+      <button
+        type="button"
+        class="button gallery-arrow"
+        data-dir="-1"
+        aria-label="Scroll gallery left"
+      >
+        <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M14.7 5.3a1 1 0 0 1 0 1.4L9.4 12l5.3 5.3a1 1 0 1 1-1.4 1.4l-6-6a1 1 0 0 1 0-1.4l6-6a1 1 0 0 1 1.4 0z" />
+        </svg>
+      </button>
+
+      <div class="gallery-rail" aria-hidden="true">
+        <div class="gallery-rail-track">
+          <div class="gallery-rail-thumb" />
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="button gallery-arrow"
+        data-dir="1"
+        aria-label="Scroll gallery right"
+      >
+        <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M9.3 5.3a1 1 0 0 0 0 1.4L14.6 12l-5.3 5.3a1 1 0 1 0 1.4 1.4l6-6a1 1 0 0 0 0-1.4l-6-6a1 1 0 0 0-1.4 0z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+)}

@@ -41,31 +41,27 @@ const dead = links.filter((l) => l.dead);
 // label invented for the look.
 ---
 
-{
-  links.length > 0 && (
-    <>
-      <h2>See Also</h2>
-      {live.length > 0 && (
-        <ul class="link-stack">
-          {live.map((l) => (
-            <li>
-              {/* Not `aria-hidden`, unlike `.card-index`. That one is hidden
+{links.length > 0 && (
+  <>
+    <h2>See Also</h2>
+    {live.length > 0 && (
+      <ul class="link-stack">
+        {live.map((l) => (
+          <li>
+            {/* Not `aria-hidden`, unlike `.card-index`. That one is hidden
                   because DOM order already conveys the ranking, so reading
                   "zero one" before every title is noise. This is the
                   opposite: the kind is information available nowhere else on
                   the page, and "Press" before a credit and "Video" before an
                   interview is worth hearing. */}
-              <span class="link-stack-kind">{LINK_KIND_LABEL[l.kind]}</span>
-              <a href={l.url} {...externalLinkProps(l.url)}>
-                {l.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
-      {dead.length > 0 && (
-        <p class="meta">No longer online: {dead.map((l) => l.label).join(', ')}</p>
-      )}
-    </>
-  )
-}
+            <span class="link-stack-kind">{LINK_KIND_LABEL[l.kind]}</span>
+            <a href={l.url} {...externalLinkProps(l.url)}>
+              {l.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+    {dead.length > 0 && <p class="meta">No longer online: {dead.map((l) => l.label).join(', ')}</p>}
+  </>
+)}

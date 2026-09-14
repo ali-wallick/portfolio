@@ -238,43 +238,29 @@ const sizes =
     : '(max-width: 40em) 80vw, 36rem';
 ---
 
-{
-  /* The frame is deliberately a frame and not a plate. This direction's
+{/* The frame is deliberately a frame and not a plate. This direction's
     unblurred drop shadow means one thing only — "this can be pressed" — and a
-    hero image cannot, so it gets a border and a matching radius instead. */
-}
+    hero image cannot, so it gets a border and a matching radius instead. */}
 <div class="media" style={mediaVars}>
-  {
-    item.type === 'youtube' && !item.dead ? (
-      <YouTube id={item.id} title={item.title} start={item.start} />
-    ) : (
-      <figure>
-        {/* A real link to the full-size file, upgraded into a dialog by
+  {item.type === 'youtube' && !item.dead ? (
+    <YouTube id={item.id} title={item.title} start={item.start} />
+  ) : (
+    <figure>
+      {/* A real link to the full-size file, upgraded into a dialog by
             gallery-zoom.ts — the same progressive-enhancement shape as the
             resume's density switch. With no script it still opens the image,
             which is the whole point of the control. */}
-        <Fragment>
-          {zoomable ? (
-            <a
-              class="gallery-zoom"
-              href={zoomImage!.src}
-              data-caption={still.caption}
-              data-zoom-srcset={zoomImage!.srcSet.attribute || undefined}
-              data-zoom-sizes={ZOOM_SIZES}
-              data-zoom-w={zoomIntrinsic!.w}
-              data-zoom-h={zoomIntrinsic!.h}
-            >
-              <Image
-                src={still.src}
-                alt={still.alt}
-                widths={widths}
-                sizes={sizes}
-                loading="lazy"
-                decoding="async"
-              />
-              <span class="gallery-zoom-hint">, open larger</span>
-            </a>
-          ) : (
+      <Fragment>
+        {zoomable ? (
+          <a
+            class="gallery-zoom"
+            href={zoomImage!.src}
+            data-caption={still.caption}
+            data-zoom-srcset={zoomImage!.srcSet.attribute || undefined}
+            data-zoom-sizes={ZOOM_SIZES}
+            data-zoom-w={zoomIntrinsic!.w}
+            data-zoom-h={zoomIntrinsic!.h}
+          >
             <Image
               src={still.src}
               alt={still.alt}
@@ -283,10 +269,20 @@ const sizes =
               loading="lazy"
               decoding="async"
             />
-          )}
-        </Fragment>
-        {still.caption && <figcaption class="meta">{still.caption}</figcaption>}
-      </figure>
-    )
-  }
+            <span class="gallery-zoom-hint">, open larger</span>
+          </a>
+        ) : (
+          <Image
+            src={still.src}
+            alt={still.alt}
+            widths={widths}
+            sizes={sizes}
+            loading="lazy"
+            decoding="async"
+          />
+        )}
+      </Fragment>
+      {still.caption && <figcaption class="meta">{still.caption}</figcaption>}
+    </figure>
+  )}
 </div>

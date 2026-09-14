@@ -33,11 +33,9 @@ const src = projectThumb(project, aspect);
 ---
 
 <div class="visual" data-size={size} data-aspect={aspect}>
-  {
-    src ? (
-      <ProjectThumb project={project} size={size} aspect={aspect} />
-    ) : (
-      <ProjectCardArt project={project} size={size} />
-    )
-  }
+  {src ? (
+    <ProjectThumb project={project} size={size} aspect={aspect} />
+  ) : (
+    <ProjectCardArt project={project} size={size} />
+  )}
 </div>

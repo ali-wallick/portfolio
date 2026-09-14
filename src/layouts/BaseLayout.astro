@@ -123,61 +123,46 @@ function navCurrent(href: string): 'page' | 'true' | undefined {
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    {
-      /* Use {} comments, not <!-- -->, in this file: HTML comments are emitted
-         into every page, and internal notes are not something to ship. */
-    }
-    {
-      /* The old site had no viewport meta at all, which is why it rendered
-         zoomed-out on every phone ever made. */
-    }
+    {/* Use {} comments, not <!-- -->, in this file: HTML comments are emitted
+         into every page, and internal notes are not something to ship. */}
+    {/* The old site had no viewport meta at all, which is why it rendered
+         zoomed-out on every phone ever made. */}
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {
-      preloadFonts.map((href) => (
-        <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
-      ))
-    }
+    {preloadFonts.map((href) => (
+      <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
+    ))}
     <title>{fullTitle}</title>
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={canonical} />
     <meta name="author" content={site.name} />
-    {
-      /* `live` is the same flag robots.txt derives its Allow/Disallow from
+    {/* `live` is the same flag robots.txt derives its Allow/Disallow from
          (src/config/site.ts) — kept in one place so the meta tag and the
-         crawl directive can't disagree about whether the site is launched. */
-    }
+         crawl directive can't disagree about whether the site is launched. */}
     {(!live || noindex) && <meta name="robots" content="noindex" />}
 
-    {
-      /* JSON-LD (#106). `<` is escaped rather than trusted: the payload is
+    {/* JSON-LD (#106). `<` is escaped rather than trusted: the payload is
          ours today, but a `</script>` appearing in any string it reads would
-         otherwise close this tag early and spill the rest into the document. */
-    }
-    {
-      jsonLd && (
-        <script
-          type="application/ld+json"
-          set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')}
-        />
-      )
-    }
+         otherwise close this tag early and spill the rest into the document. */}
+    {jsonLd && (
+      <script
+        type="application/ld+json"
+        set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')}
+      ></script>
+    )}
 
-    {
-      /* Favicon (#26): the reticle, reduced to favicon scale — see the SVG's
+    {/* Favicon (#26): the reticle, reduced to favicon scale — see the SVG's
          own header comment. SVG is primary and carries prefers-color-scheme
          so it reads on a light or dark tab strip; the ICO is a static
          fallback for browsers/contexts that don't take an SVG favicon, fixed
          to the light-theme accent since that's this file's default. Provisional
          per #24 — a reticle mark was Ali's call for now, and every reference to
          it lives here, so replacing the three files in public/ is the whole job
-         if that changes later. */
-    }
+         if that changes later. */}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    {
-      /* OG/Twitter cards (#27). The old site's og:image and og:url were both
+    {/* OG/Twitter cards (#27). The old site's og:image and og:url were both
          http://, so link previews broke in every chat app — every URL here is
          absolute https:// for the same reason `canonical` already is.
 
@@ -186,8 +171,7 @@ function navCurrent(href: string): 'page' | 'true' | undefined {
          card for pages that aren't about one specific project, or a
          project's own hero/poster image framed the same way, for project
          pages. 1200x630 is the size every major surface (Slack, Discord,
-         iMessage, X) wants. */
-    }
+         iMessage, X) wants. */}
     <meta property="og:type" content="website" />
     <meta property="og:title" content={shareTitle} />
     <meta property="og:url" content={canonical} />
@@ -200,59 +184,53 @@ function navCurrent(href: string): 'page' | 'true' | undefined {
     <meta name="twitter:title" content={shareTitle} />
     {description && <meta name="twitter:description" content={description} />}
     <meta name="twitter:image" content={ogImage} />
-    {
-      /* Cloudflare Web Analytics (#30). Gated on `!showDrafts` rather than a
+    {/* Cloudflare Web Analytics (#30). Gated on `!showDrafts` rather than a
          separate flag — that's already the exact production/preview split
          `build-ci.mjs` establishes, so previews and `astro dev` never report
          pageviews and only `main` builds do. No cookie banner needed: this
-         beacon is cookieless by design. */
-    }
-    {
-      !showDrafts && (
-        <script
-          type="module"
-          src="https://static.cloudflareinsights.com/beacon.min.js"
-          data-cf-beacon={JSON.stringify({ token: site.analyticsToken })}
-        />
-      )
-    }
+         beacon is cookieless by design. */}
+    {!showDrafts && (
+      <script
+        type="module"
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={JSON.stringify({ token: site.analyticsToken })}
+      ></script>
+    )}
   </head>
 
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main">
+      Skip to content
+    </a>
 
     <div class="layout">
-      {
-        /* Sticky, and that is a design decision rather than a convenience: the
+      {/* Sticky, and that is a design decision rather than a convenience: the
            reticle's resting target is the current page's nav pill, so the nav
-           has to stay on screen or the brackets chase it off the top. */
-      }
+           has to stay on screen or the brackets chase it off the top. */}
       <header class="site-header">
-        <a class="brand" href="/">{site.name}</a>
+        <a class="brand" href="/">
+          {site.name}
+        </a>
         <nav aria-label="Main">
           <ul>
-            {
-              nav.map((item) => (
-                <li>
-                  <a class="nav-link" href={item.href} aria-current={navCurrent(item.href)}>
-                    {item.label}
-                  </a>
-                </li>
-              ))
-            }
+            {nav.map((item) => (
+              <li>
+                <a class="nav-link" href={item.href} aria-current={navCurrent(item.href)}>
+                  {item.label}
+                </a>
+              </li>
+            ))}
           </ul>
         </nav>
       </header>
 
-      {
-        /* `tabindex="-1"`: without it the skip link scrolls here but never
+      {/* `tabindex="-1"`: without it the skip link scrolls here but never
            actually moves keyboard focus, because `<main>` isn't natively
            focusable. Chromium papers over that by relocating the sequential
            focus navigation starting point on its own; that's not guaranteed
            behaviour, so a keyboard user on a browser that doesn't do the same
            trick lands back at the top of the header on their next Tab —
-           silently defeating the one thing a skip link exists to do. */
-      }
+           silently defeating the one thing a skip link exists to do. */}
       <main id="main" tabindex="-1">
         <slot />
       </main>
@@ -260,27 +238,23 @@ function navCurrent(href: string): 'page' | 'true' | undefined {
       <footer class="site-footer">
         <nav aria-label="Footer">
           <ul>
-            {
-              nav.map((item) => (
-                <li>
-                  <a class="nav-link" href={item.href}>
-                    {item.label}
-                  </a>
-                </li>
-              ))
-            }
+            {nav.map((item) => (
+              <li>
+                <a class="nav-link" href={item.href}>
+                  {item.label}
+                </a>
+              </li>
+            ))}
           </ul>
         </nav>
         <p>Site by {site.name}</p>
       </footer>
     </div>
 
-    {
-      /* Progressive enhancement, strictly. The reticle builds its own element,
+    {/* Progressive enhancement, strictly. The reticle builds its own element,
          so a page whose script never runs has no empty artifact in it — and the
          real focus outline in base.css is what makes the site navigable either
-         way. */
-    }
+         way. */}
     <script>
       import '~/scripts/reticle';
     </script>

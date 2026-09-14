@@ -57,15 +57,13 @@ const d = project.data;
   image={`/og/projects/${project.id}.jpg`}
   noindex={d.draft}
 >
-  {
-    /* The kicker sits INSIDE the title block (#247), in its reserved slot.
+  {/* The kicker sits INSIDE the title block (#247), in its reserved slot.
        Loose above it, it was an extra element in `main` that pushed this
        page's title 42px lower than every other page's.
 
        A breadcrumb rather than a `← Projects` link since #314 — see
        `.breadcrumb` in base.css for why the slot names the SET instead of
-       repeating a destination the header and footer both already carry. */
-  }
+       repeating a destination the header and footer both already carry. */}
   <PageHead title={d.title}>
     <p class="breadcrumb" slot="kicker">
       <a href="/projects">Projects</a>
@@ -75,136 +73,120 @@ const d = project.data;
     <ProjectMeta project={project} />
   </PageHead>
 
-  {
-    /* An `art` hero is the generated card at page width (#49): the honest lead
+  {/* An `art` hero is the generated card at page width (#49): the honest lead
        for a page whose subject cannot be pictured. Same `.media` box as a
        picture, so the mat, the margins and the column width are shared; see
-       `heroSchema` in src/content.config.ts for when this is the right call. */
-  }
-  {
-    d.hero &&
-      (d.hero.type === 'art' ? (
-        <div class="media">
-          <ProjectCardArt project={project} size="hero" />
-        </div>
-      ) : (
-        <Media item={d.hero} />
-      ))
-  }
+       `heroSchema` in src/content.config.ts for when this is the right call. */}
+  {d.hero &&
+    (d.hero.type === 'art' ? (
+      <div class="media">
+        <ProjectCardArt project={project} size="hero" />
+      </div>
+    ) : (
+      <Media item={d.hero} />
+    ))}
   {d.summary && <p class="lede">{d.summary}</p>}
 
   <Content />
 
   <Gallery items={d.gallery} />
 
-  {
-    d.collaborators.length > 0 && (
-      <>
-        <h2>Team</h2>
-        <p>
-          {d.collaborators
-            .map((c) => c.name)
-            .concat('Ali Wallick')
-            .join(', ')}
-        </p>
-      </>
-    )
-  }
+  {d.collaborators.length > 0 && (
+    <>
+      <h2>Team</h2>
+      <p>
+        {d.collaborators
+          .map((c) => c.name)
+          .concat('Ali Wallick')
+          .join(', ')}
+      </p>
+    </>
+  )}
 
   <LinkList links={d.links} />
 
-  {
-    /* Stepping to the adjacent project (#314). Rendered at all only when
+  {/* Stepping to the adjacent project (#314). Rendered at all only when
        there is somewhere to go — every page has at least one neighbour today,
        but a one-project collection should not print an empty rule.
 
        The empty `<span>` on a missing end is load-bearing: without it the
        surviving link slides to the middle on the first and last projects
-       instead of staying on its own side. */
-  }
-  {
-    (prev || next) && (
-      <nav class="project-nav" aria-label="Other projects">
-        {prev ? (
-          <a class="project-step" href={`/projects/${prev.id}`} rel="prev">
-            <span class="project-step-dir">← Previous</span>
-            <span class="project-step-title">{prev.data.title}</span>
-          </a>
-        ) : (
-          <span />
-        )}
-        {next ? (
-          <a class="project-step project-step-next" href={`/projects/${next.id}`} rel="next">
-            <span class="project-step-dir">Next →</span>
-            <span class="project-step-title">{next.data.title}</span>
-          </a>
-        ) : (
-          <span />
-        )}
-      </nav>
-    )
-  }
+       instead of staying on its own side. */}
+  {(prev || next) && (
+    <nav class="project-nav" aria-label="Other projects">
+      {prev ? (
+        <a class="project-step" href={`/projects/${prev.id}`} rel="prev">
+          <span class="project-step-dir">← Previous</span>
+          <span class="project-step-title">{prev.data.title}</span>
+        </a>
+      ) : (
+        <span />
+      )}
+      {next ? (
+        <a class="project-step project-step-next" href={`/projects/${next.id}`} rel="next">
+          <span class="project-step-dir">Next →</span>
+          <span class="project-step-title">{next.data.title}</span>
+        </a>
+      ) : (
+        <span />
+      )}
+    </nav>
+  )}
 
-  {
-    /* Progressive enhancement, strictly — the row is a plain `overflow-x: auto`
+  {/* Progressive enhancement, strictly — the row is a plain `overflow-x: auto`
        element and scrolls without this. Per-page rather than in BaseLayout,
-       because no other page has a gallery. */
-  }
-  {
-    /* One dialog for the whole page, filled on open. Rendered only where
+       because no other page has a gallery. */}
+  {/* One dialog for the whole page, filled on open. Rendered only where
        something can open it — `gallery-zoom.ts` no-ops without it, and every
-       zoomable image is a real link to its full-size file regardless. */
-  }
-  {
-    d.gallery.length > 0 && (
-      <dialog class="zoom-dialog" aria-label="Full-size image">
-        <button type="button" class="button zoom-close" aria-label="Close">
-          <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M18.3 5.7a1 1 0 0 0-1.4 0L12 10.6 7.1 5.7a1 1 0 1 0-1.4 1.4l4.9 4.9-4.9 4.9a1 1 0 1 0 1.4 1.4l4.9-4.9 4.9 4.9a1 1 0 0 0 1.4-1.4L13.4 12l4.9-4.9a1 1 0 0 0 0-1.4z" />
-          </svg>
-        </button>
-        <figure>
-          {/* The picture's own box, and it is load-bearing rather than a
+       zoomable image is a real link to its full-size file regardless. */}
+  {d.gallery.length > 0 && (
+    <dialog class="zoom-dialog" aria-label="Full-size image">
+      <button type="button" class="button zoom-close" aria-label="Close">
+        <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M18.3 5.7a1 1 0 0 0-1.4 0L12 10.6 7.1 5.7a1 1 0 1 0-1.4 1.4l4.9 4.9-4.9 4.9a1 1 0 1 0 1.4 1.4l4.9-4.9 4.9 4.9a1 1 0 0 0 1.4-1.4L13.4 12l4.9-4.9a1 1 0 0 0 0-1.4z" />
+        </svg>
+      </button>
+      <figure>
+        {/* The picture's own box, and it is load-bearing rather than a
               wrapper for styling (#249). The dialog is a fixed-height flex
               column at every width now, so `max-height: 100%` on the picture
               has to resolve against the space left AFTER the caption. Against
               the figure it resolves against the figure's whole height, and the
               caption overflows the box by its own height. */}
-          <div class="zoom-frame">
-            <img alt="" />
-          </div>
-          <figcaption class="meta" hidden />
-        </figure>
-        {/* Hidden until the script counts how many images this page can
+        <div class="zoom-frame">
+          <img alt="" />
+        </div>
+        <figcaption class="meta" hidden />
+      </figure>
+      {/* Hidden until the script counts how many images this page can
             actually step between — a gallery with one zoomable image has
             nowhere to go, and the same "no arrows where it makes no sense"
             rule the row itself follows. */}
-        <div class="zoom-nav" hidden>
-          <button
-            type="button"
-            class="button gallery-arrow"
-            data-zoom-step="-1"
-            aria-label="Previous image"
-          >
-            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M14.7 5.3a1 1 0 0 1 0 1.4L9.4 12l5.3 5.3a1 1 0 1 1-1.4 1.4l-6-6a1 1 0 0 1 0-1.4l6-6a1 1 0 0 1 1.4 0z" />
-            </svg>
-          </button>
-          <p class="meta zoom-count" aria-live="polite" />
-          <button
-            type="button"
-            class="button gallery-arrow"
-            data-zoom-step="1"
-            aria-label="Next image"
-          >
-            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M9.3 5.3a1 1 0 0 0 0 1.4L14.6 12l-5.3 5.3a1 1 0 1 0 1.4 1.4l6-6a1 1 0 0 0 0-1.4l-6-6a1 1 0 0 0-1.4 0z" />
-            </svg>
-          </button>
-        </div>
-      </dialog>
-    )
-  }
+      <div class="zoom-nav" hidden>
+        <button
+          type="button"
+          class="button gallery-arrow"
+          data-zoom-step="-1"
+          aria-label="Previous image"
+        >
+          <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M14.7 5.3a1 1 0 0 1 0 1.4L9.4 12l5.3 5.3a1 1 0 1 1-1.4 1.4l-6-6a1 1 0 0 1 0-1.4l6-6a1 1 0 0 1 1.4 0z" />
+          </svg>
+        </button>
+        <p class="meta zoom-count" aria-live="polite" />
+        <button
+          type="button"
+          class="button gallery-arrow"
+          data-zoom-step="1"
+          aria-label="Next image"
+        >
+          <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M9.3 5.3a1 1 0 0 0 0 1.4L14.6 12l-5.3 5.3a1 1 0 1 0 1.4 1.4l6-6a1 1 0 0 0 0-1.4l-6-6a1 1 0 0 0-1.4 0z" />
+          </svg>
+        </button>
+      </div>
+    </dialog>
+  )}
 
   <script>
     import '~/scripts/gallery-scroll';

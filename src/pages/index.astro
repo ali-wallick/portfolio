@@ -48,22 +48,18 @@ const jsonLd = await personJsonLd();
   socialTitle={`${site.name} — ${site.role}`}
   jsonLd={jsonLd}
 >
-  {
-    /* The face was already here, just not on the page: `buildBrandCard()` in
+  {/* The face was already here, just not on the page: `buildBrandCard()` in
       scripts/generate-og-images.mjs has composited `me.jpg` into /og/home.jpg
       since #70, so a share of the homepage led with Ali’s photo beside her
       name while the page itself ran text-only until the first project
       thumbnail. This is the page keeping the card’s promise (#181).
 
       Same source file as /about’s `.portrait`, deliberately — one headshot,
-      one crop value, two slots. */
-  }
-  {
-    /* Four flat children, no wrapper around the heading. Each is placed by
+      one crop value, two slots. */}
+  {/* Four flat children, no wrapper around the heading. Each is placed by
       grid area, which is what lets the narrow layout sit the photo beside the
       name while the eyebrow above and the lede below stay full width. A
-      wrapper would force those three to move as a unit. */
-  }
+      wrapper would force those three to move as a unit. */}
   <div class="hero">
     <figure class="hero-portrait">
       <Image
@@ -91,42 +87,38 @@ const jsonLd = await personJsonLd();
   </div>
 
   <h2>Featured Work</h2>
-  {
-    /* Full-width cards rather than a grid. Five entries, each a deep write-up —
+  {/* Full-width cards rather than a grid. Five entries, each a deep write-up —
       the archive's twelve get the compact treatment on /projects, so the two
-      tiers differ structurally and not only in what they are called. */
-  }
-  {
-    /* Bigger than /projects' 9rem default (base.css) — wide cards with no
+      tiers differ structurally and not only in what they are called. */}
+  {/* Bigger than /projects' 9rem default (base.css) — wide cards with no
        summary paragraph beside them read better a little larger here than
        the square ones on /projects do. Settled on a live slider comparing
-       both pages side by side (#64). */
-  }
+       both pages side by side (#64). */}
   <ul class="card-grid" style="--thumb-card-size: 12rem">
-    {
-      featured.map((project, i) => (
-        <li>
-          <a class="card" href={`/projects/${project.id}`}>
-            <span class="card-index" aria-hidden="true">
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <ProjectVisual project={project} aspect="wide" />
-            <div class="card-body">
-              <h3 class="card-title">{project.data.title}</h3>
-              <ProjectMeta project={project} />
-            </div>
-          </a>
-        </li>
-      ))
-    }
+    {featured.map((project, i) => (
+      <li>
+        <a class="card" href={`/projects/${project.id}`}>
+          <span class="card-index" aria-hidden="true">
+            {String(i + 1).padStart(2, '0')}
+          </span>
+          <ProjectVisual project={project} aspect="wide" />
+          <div class="card-body">
+            <h3 class="card-title">{project.data.title}</h3>
+            <ProjectMeta project={project} />
+          </div>
+        </a>
+      </li>
+    ))}
   </ul>
 
-  {
-    /* Not `button-accent`: that fill is `--color-accent-block`, the same
+  {/* Not `button-accent`: that fill is `--color-accent-block`, the same
        token the nav's current-page pill uses, and tokens.css reserves magenta
        for "where you are," never a link to somewhere else (#315). Plain
        `.button` is the same treatment the contact page's social links and
-       the gallery arrows use. */
-  }
-  <p><a class="button" href="/projects">All projects</a></p>
+       the gallery arrows use. */}
+  <p>
+    <a class="button" href="/projects">
+      All projects
+    </a>
+  </p>
 </BaseLayout>

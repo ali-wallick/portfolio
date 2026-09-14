@@ -39,8 +39,7 @@ const synagogueUrl = 'https://www.universitysynagogue.org/';
 >
   <PageHead title="About" />
 
-  {
-    /* The headshot that used to sit here moved to the homepage hero (#181),
+  {/* The headshot that used to sit here moved to the homepage hero (#181),
       where it keeps the promise /og/home.jpg was already making. What
       replaced it illustrates the paragraph beside it instead of merely
       sitting next to it: the opening line is about getting interested in
@@ -52,8 +51,7 @@ const synagogueUrl = 'https://www.universitysynagogue.org/';
       rather than inventing a third float width.
 
       Real alt text, unlike the project thumbnails: this is not duplicating
-      adjacent link text, so the model's guard applies normally. */
-  }
+      adjacent link text, so the model's guard applies normally. */}
   <figure class="aside-figure">
     <Image
       src={young}
@@ -82,7 +80,10 @@ const synagogueUrl = 'https://www.universitysynagogue.org/';
     <a href="/projects/vegas-blvd-slots">Vegas Blvd Slots</a>. In 2019 I joined Second Dinner as its
     11th employee. I spent five years on <a href="/projects/marvel-snap">Marvel Snap</a>, which
     shipped in October 2022. Since {since}, I’ve been on a new team at the studio,{' '}
-    <a href={w4GamesAnnouncement} {...externalLinkProps(w4GamesAnnouncement)}>{doing}</a>.
+    <a href={w4GamesAnnouncement} {...externalLinkProps(w4GamesAnnouncement)}>
+      {doing}
+    </a>
+    .
   </p>
 
   <p>
@@ -95,8 +96,7 @@ const synagogueUrl = 'https://www.universitysynagogue.org/';
 
   <h2>Off the Clock</h2>
 
-  {
-    /* Replaced the Kerbal Space Program shot (`me2.jpg`) that stood here from
+  {/* Replaced the Kerbal Space Program shot (`me2.jpg`) that stood here from
       #141. That one is the costume the paragraph's award sentence names, but
       it is a picture of two helmets and Ali is not visibly in it — which
       stopped mattering when the headshot was on this page and started
@@ -115,8 +115,7 @@ const synagogueUrl = 'https://www.universitysynagogue.org/';
       with two paragraphs in this section, a float placed between them only
       wraps the second one, leaving the first at full width and the two edges
       misaligned (#141, caught on the branch preview). Floating it first lets
-      both paragraphs wrap it consistently. */
-  }
+      both paragraphs wrap it consistently. */}
   <figure class="aside-figure aside-figure-crop">
     <Image
       src={cosplay}
@@ -125,7 +124,9 @@ const synagogueUrl = 'https://www.universitysynagogue.org/';
       sizes="14rem"
       loading="lazy"
     />
-    <figcaption class="meta"><em>Crypt of the NecroDancer</em> cosplay.</figcaption>
+    <figcaption class="meta">
+      <em>Crypt of the NecroDancer</em> cosplay.
+    </figcaption>
   </figure>
 
   <p>
@@ -133,18 +134,20 @@ const synagogueUrl = 'https://www.universitysynagogue.org/';
     in Southern California these days, and I love it here. The rest goes to strategy and indie video
     games, reading science fiction and fantasy, camping, and traveling when we can. I also cook and
     bake a lot, enough that I post the results on{' '}
-    <a href={instagramUrl} {...externalLinkProps(instagramUrl)}>Instagram</a>. I still make time for
-    game jams and personal projects on the side.
+    <a href={instagramUrl} {...externalLinkProps(instagramUrl)}>
+      Instagram
+    </a>
+    . I still make time for game jams and personal projects on the side.
   </p>
 
   <p>
     Costuming is one of the hands-on, creative things I gravitate toward away from the computer.
-    I’ve been going to Dragon Con for 20-plus years now, including a Best Group Costume win for a{
-      ' '
-    }
-    <em>Kerbal Space Program</em> cosplay. I’ve also spent the last five years on the board of my synagogue,{
-      ' '
-    }
-    <a href={synagogueUrl} {...externalLinkProps(synagogueUrl)}>University Synagogue</a> in Orange County.
+    I’ve been going to Dragon Con for 20-plus years now, including a Best Group Costume win for a{' '}
+    <em>Kerbal Space Program</em> cosplay. I’ve also spent the last five years on the board of my
+    synagogue,{' '}
+    <a href={synagogueUrl} {...externalLinkProps(synagogueUrl)}>
+      University Synagogue
+    </a>{' '}
+    in Orange County.
   </p>
 </BaseLayout>

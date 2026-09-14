@@ -37,11 +37,11 @@ const { title, class: className } = Astro.props;
 ---
 
 <div class:list={['page-head', className]}>
-  {
-    /* Always rendered, even with nothing in it: this is the reserved slot, and
-       reserving it only on the pages that fill it would reinstate the bug. */
-  }
-  <div class="page-kicker"><slot name="kicker" /></div>
+  {/* Always rendered, even with nothing in it: this is the reserved slot, and
+       reserving it only on the pages that fill it would reinstate the bug. */}
+  <div class="page-kicker">
+    <slot name="kicker" />
+  </div>
   <h1>{title}</h1>
   <slot />
 </div>

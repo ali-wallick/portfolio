@@ -93,32 +93,30 @@ const DOWNLOAD_ICON =
 
 <div class="resume-actions">
   <div class="resume-tabs" role="group" aria-label="Resume length">
-    {
-      versions.map((v) => (
-        <a
-          href={v.href}
-          aria-current={v.key === current ? 'page' : undefined}
-          data-density-link={v.key}
-        >
-          {v.label}
-        </a>
-      ))
-    }
+    {versions.map((v) => (
+      <a
+        href={v.href}
+        aria-current={v.key === current ? 'page' : undefined}
+        data-density-link={v.key}
+      >
+        {v.label}
+      </a>
+    ))}
   </div>
-  {
-    /* A real file, generated from this exact page at build time — not a
+  {/* A real file, generated from this exact page at build time — not a
        `window.print()` link that makes the reader produce their own.
 
        Expected: this 404s under `npm run dev`. The PDFs are written into
        `dist/` by scripts/build-pdf.mjs, which runs after `astro build`, so
        there is nothing behind this link until the site is built. Not a bug to
-       chase — `npm run links` checks the built output, which is what ships. */
-  }
+       chase — `npm run links` checks the built output, which is what ships. */}
   <a class="button button-accent" href={active.pdf} download={active.file} data-pdf-link>
     <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       <path d={DOWNLOAD_ICON}></path>
     </svg>
     Download PDF
-    <span class="resume-pages" data-pdf-pages>{active.pages}</span>
+    <span class="resume-pages" data-pdf-pages>
+      {active.pages}
+    </span>
   </a>
 </div>
