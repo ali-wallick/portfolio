@@ -8,7 +8,10 @@ end-to-end on a mirror 2026-09-11 (which found six more blobs and four broken st
 and again on a mirror cloned from GitHub 2026-09-13, which corrected three expected counts (see
 "The rehearsal's counts came from a mirror without pull-request refs" in the same record). Read
 once more later that day against the live repo, which found the counts already two merges stale
-and #200 closed — see "Read again the same day" under that heading.
+and #200 closed — see "Read again the same day" under that heading. Reviewed once more on
+2026-09-14 against the live repo, which corrected two expectations that would have stopped the run
+for no reason: the enumeration check in step 1 lists 8 of the 10 (the pattern cannot see the
+`.webp` captures), and the ref sweep in step 2 now prints the three tags and no branches.
 
 Same relationship to #109 that `LAUNCH.md` has to #34: **the issue holds the decision and the
 ordering, this holds the procedure.** Nothing here restates the checklist — read #109 first.
@@ -63,8 +66,10 @@ test -f .git/shallow && echo "SHALLOW — run: git fetch --unshallow" || echo "f
 #    rewritten tree is, and the rewrite DELETES files from any tree still
 #    carrying a bad blob. On 2026-09-11 release was 8 commits behind main and
 #    still carried three — so the push would have shipped a tree no commit had
-#    ever had. It was 14 behind again on 2026-09-13. Run the release skill
-#    first; then the deploy is a no-op. Expect this to be the check that fails.
+#    ever had. It was 14 behind again on 2026-09-13, and 1 behind on
+#    2026-09-14 — though by then its tip was past #360 and carried nothing.
+#    Run the release skill first; then the deploy is a no-op. Expect this to
+#    be the check that fails.
 git fetch origin main release && git rev-list --count origin/release..origin/main
 #    Expect: 0
 
@@ -136,7 +141,8 @@ two résumé paths ever had and confirm each is either on the list or the redact
 git rev-list --all | while read -r c; do
   git ls-tree -r "$c" 2>/dev/null | grep -iE 'resume\.(pdf|png)$|WallickAli-Resume'
 done | awk '{print $3, $4}' | sort -u | grep -v '^[0-9a-f]* public/'
-#    Expect: the 10 above, plus 2464090d (the redacted PDF, at two paths) and
+#    Expect: 8 of the 10 above — the two .webp captures are outside this
+#    pattern, by design — plus 2464090d (the redacted PDF, at two paths) and
 #    a63895b4 (the redacted render). Anything else is a revision nobody checked.
 ```
 
@@ -158,9 +164,10 @@ for r in $(git for-each-ref --format='%(refname)' refs/remotes/origin refs/tags)
 done | sort -u
 ```
 
-Expect ~8 branches (including `release`) and 3 tags — `v1-legacy`, `assets-pre-cleanup`,
-`launch-2026-08-27`. The 2016 blobs add nothing here: they live only in 2016 commits, which every
-branch's ancestry reaches but no tip tree carries.
+Expect 3 tags — `v1-legacy`, `assets-pre-cleanup`, `launch-2026-08-27` — plus any branch whose
+tip predates #360. On 2026-09-11 that was ~8 branches including `release`; on 2026-09-14 it was
+none, `release` having been fast-forwarded past #360 in between. The 2016 blobs add nothing here:
+they live only in 2016 commits, which every branch's ancestry reaches but no tip tree carries.
 
 **Do not hardcode the stale-branch list.** It drifted between 2026-09-09 and 2026-09-10 (a new
 Dependabot branch appeared), which is the same staleness lesson #45 taught. Compute it:
@@ -189,9 +196,9 @@ git ls-tree -r v1-legacy --name-only | wc -l                          # 185 befo
 git ls-tree -r v1-legacy --name-only | grep -iE 'resume\.(pdf|png)$'  # both paths; -i, the PDF is capitalised
 ```
 
-`release` and `launch-2026-08-27` lose three files each — the two before/after captures and the
-snapshot render — which is why preflight (d) requires `release` to already be at `main`, where the
-redacted replacements are.
+`launch-2026-08-27` loses three files — the two before/after captures and the snapshot render.
+`release` loses the same three if its tip is still behind #360, which is why preflight (d) requires
+it to already be at `main`, where the redacted replacements are; at `main` it loses nothing.
 
 ---
 
@@ -284,7 +291,7 @@ awk 'NR>1 && $2 ~ /^0+$/ {print $1}' filter-repo/commit-map \
 Each catches something the others miss. Still inside `portfolio-rewrite.git`.
 
 **First, write the hashes out on their own**, from the guard, which is their one source of
-truth. Do this before running (a) — it consumes the file:
+truth. Do this before running (a) — it reads the file:
 
 ```bash
 grep -oE "sha256: '[0-9a-f]{64}'" /path/to/your/Portfolio/scripts/check-preserved-blobs.mjs \
@@ -349,6 +356,10 @@ git remote add origin https://github.com/ali-wallick/Portfolio.git
 # is how the stale branches from step 4 get removed. Read the output before the
 # real push.
 git push --prune --force --dry-run origin 'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*'
+
+# Re-run preflight (e) here. A Dependabot branch that appeared since the mirror
+# was cloned is absent from it, so --prune would delete it and close its PR.
+gh pr list --state open --json number,headRefName
 
 git push --prune --force origin 'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*'
 ```
