@@ -5677,3 +5677,37 @@ it is hours. If an expectation can be written as a relationship instead of a fig
 relationship.
 
 Fable, inline, no subagents, no web. One `gh` round-trip per claim checked.
+
+## The rewrite, for real (2026-09-18)
+
+Ali asked to be walked through the runbook one step at a time. The shape that worked: Ali ran every
+command that wrote anything or talked to GitHub, pasting output back, and the session read each
+result against the runbook's expectation before handing over the next command. Checks that only
+read, like the blob scans, the ref comparisons and `npm run verify`, the session ran itself. Where a
+command ran in the terminal pane and its output was not captured, the session re-ran the read-only
+check rather than guess from a half-rendered pane.
+
+Two things happened that the rehearsals had not predicted. Preflight failed on a Dependabot PR opened
+that morning, so the run started with a merge and a release. The auto-mode classifier refused the
+release push as a production deploy, and Ali pushed it by hand. Then check 5(b), a zip-code probe Ali
+typed at the keyboard, came back with hundreds of hits in `docs/PRESERVATION.md`. Its old
+verification table had named the address it verified was gone. The session bounded it with a
+blob-level sweep (four versions, one line, nowhere else), built a filter-repo text rule from the blob
+so the address was never typed or echoed, and Ali redid step 4 from the backout. Everything after
+that matched: five forced updates, no deletions, GitHub's refs identical to the rewritten mirror.
+
+### The generalizable bit
+
+**Verification before the irreversible step is what made a real miss cheap.** The rewrite had
+already run once, cleanly by every count, when (b) found the text copy. Because nothing had been
+pushed, the fix was `rm -rf` and a second `filter-repo` rather than a second force-push and a
+larger support ticket. The rehearsals tested the mechanism three times. This one tested the question
+the mechanism was a proxy for: is the address anywhere?
+
+### Model allocation and cost
+
+Opus, inline, no subagents, no web. Nothing of the address went into the repo. The text rule was
+built by extracting the line from the blob, not by typing it. Keeping it out of the transcript
+worked only partly: the first look at the matching line masked the zip but not the city or box
+number, and those pieces are in the session's own history. Mask every field on the first look, not
+just the one that was searched for.

@@ -92,23 +92,15 @@ const OUT = path.join(SRC, 'rendered');
  * nobody remembers to do.
  *
  * A tag has no such problem: `git filter-repo` re-points tags automatically,
- * so after this the rewrite needs no code change here at all.
+ * so the rewrite needed no code change here at all.
  *
- * **The tag exists — Ali pushed it 2026-09-09**, so the tag is what resolves
- * here in a full clone. The fallback was written when it did not yet, on a
- * sequencing argument that is now spent; what keeps it is a different and
- * better reason. `git clone` fetches tags, but a *shallow* clone fetched
- * without them does not have it, and a shallow clone is exactly what a Claude
- * Code web session gets. So the fallback is now about clone shape, not about
- * the tag's existence. Neither name resolving is still a real state, and the
- * preflight below says what to fetch.
+ * **The rewrite ran on 2026-09-18, and the tag is now the only name.** Until
+ * then the script also fell back to the literal SHA, for a shallow clone
+ * fetched without tags. That SHA no longer exists anywhere, so the fallback
+ * went with the rewrite. A shallow clone that lacks the tag is still a real
+ * state, and the preflight below says what to fetch.
  */
-const ASSET_TAG = 'assets-pre-cleanup';
-/* TODO(#109): delete this fallback once the history rewrite has run — not
-   merely once the tag is pushed, which has already happened. The SHA is dead
-   the moment history is rewritten, and leaving it here afterwards means a
-   stale name silently shadows the working one. */
-const ASSET_SHA_FALLBACK = 'ce4533e~1';
+const ASSET_COMMIT = 'assets-pre-cleanup';
 
 /** True if that committish resolves to a commit in this clone. */
 function resolvesToCommit(rev) {
@@ -123,16 +115,6 @@ function resolvesToCommit(rev) {
   }
 }
 
-/*
- * Prefer the tag; fall back to the SHA. If neither resolves — a shallow clone,
- * which is what a Claude Code web session gets — hold the tag anyway so the
- * preflight's error names the thing a reader should be looking for.
- */
-const ASSET_COMMIT = resolvesToCommit(ASSET_TAG)
-  ? ASSET_TAG
-  : resolvesToCommit(ASSET_SHA_FALLBACK)
-    ? ASSET_SHA_FALLBACK
-    : ASSET_TAG;
 const LIVE_ORIGIN = 'https://www.aliwallick.com';
 const BLOG_DIR = 'resources/blog-uploads';
 const POSTER_DIR = 'resources/video-posters';
@@ -360,10 +342,9 @@ async function preflight(blogRefs) {
   if (!resolvesToCommit(ASSET_COMMIT)) {
     fatal.push(
       `${ASSET_COMMIT} does not resolve, so the 54 assets under resources/ cannot be
-    restored. Neither the \`${ASSET_TAG}\` tag nor the \`${ASSET_SHA_FALLBACK}\` fallback
-    is reachable here. Usually that is a shallow clone — run \`git fetch --unshallow\`,
-    and \`git fetch origin --tags\` if the tag is the one missing. After #109's history
-    rewrite the SHA is gone for good and the tag is the only name that works.`,
+    restored. Usually that is a shallow clone — run \`git fetch --unshallow\`, and
+    \`git fetch origin tag ${ASSET_COMMIT}\` if the tag is the one missing. It is the
+    only name that works: #109's history rewrite retired the SHA it used to fall back to.`,
     );
   }
 

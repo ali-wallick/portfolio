@@ -13,6 +13,28 @@ and #200 closed — see "Read again the same day" under that heading. Reviewed o
 for no reason: the enumeration check in step 1 lists 8 of the 10 (the pattern cannot see the
 `.webp` captures), and the ref sweep in step 2 now prints the three tags and no branches.
 
+**Executed 2026-09-18, and kept as the record** — the same status `LAUNCH.md` has. Ali ran every
+step. Check 5(b) found a copy of the 2019 address that no step before it could see: four old
+versions of `docs/PRESERVATION.md` quoted the redaction's probe strings as plain text, and a blob
+list cannot strip a Markdown file that merely mentions the address. The rewrite was redone from the
+backout with `--replace-text` as well, and that step is now part of the procedure below (step 1's
+"Text copies", step 4's rewrite). See "The rewrite ran, and check (b) found what the list could not"
+in [`docs/decisions/tooling.md`](decisions/tooling.md).
+
+| What                  | Before                      | After                                                               |
+| --------------------- | --------------------------- | ------------------------------------------------------------------- |
+| `main`, `release`     | `246d39d`                   | `184df44`                                                           |
+| `assets-pre-cleanup`  | `090f1ce`                   | `b07bc9b`                                                           |
+| `launch-2026-08-27`   | `f723a8c`                   | `d6ddae3`                                                           |
+| `v1-legacy`           | `277bc53`                   | `c788486` (185 files → 183)                                         |
+| Commits rewritten     | —                           | 867 of 868, every ref in a GitHub mirror including `refs/pull/*`    |
+| Oldest changed commit | `1cdcbfc` (Initial Checkin) | `f02d49f`                                                           |
+| Pruned                | —                           | `1065039` only                                                      |
+| Text rules applied    | —                           | 1, to four versions of `docs/PRESERVATION.md` (2026-08-26 to 09-09) |
+
+The backout mirror is `~/portfolio-rewrite/portfolio-backout.git` on Ali's machine. Keep it until
+the repo is public.
+
 Same relationship to #109 that `LAUNCH.md` has to #34: **the issue holds the decision and the
 ordering, this holds the procedure.** Nothing here restates the checklist — read #109 first.
 
@@ -69,12 +91,15 @@ test -f .git/shallow && echo "SHALLOW — run: git fetch --unshallow" || echo "f
 #    ever had. It was 14 behind again on 2026-09-13, and 1 behind on
 #    2026-09-14 — though by then its tip was past #360 and carried nothing.
 #    Run the release skill first; then the deploy is a no-op. Expect this to
-#    be the check that fails.
+#    be the check that fails. On 2026-09-18 it passed at first, then failed
+#    once (e) was fixed by merging, and a release put it right.
 git fetch origin main release && git rev-list --count origin/release..origin/main
 #    Expect: 0
 
 # e. No open pull request has a head among the branches step 4 deletes.
-#    Deleting a PR's branch closes the PR. Merge or close them first.
+#    Deleting a PR's branch closes the PR. Merge or close them first. On
+#    2026-09-18 this was the one that failed: Dependabot had opened #379 that
+#    day. Merging moves main, so re-run (d) afterwards.
 gh pr list --state open --json number,headRefName
 #    Expect: [] — or only PRs whose head is main.
 ```
@@ -146,6 +171,46 @@ done | awk '{print $3, $4}' | sort -u | grep -v '^[0-9a-f]* public/'
 #    a63895b4 (the redacted render). Anything else is a revision nobody checked.
 ```
 
+### Text copies: the list cannot see them
+
+**The ten blobs are the résumés. A document that merely quotes the address is a different blob**,
+and nothing keyed on blob id will ever match it. On 2026-09-18 that was `docs/PRESERVATION.md`,
+whose verification table listed the redaction's probe strings — the 2019 box's city, zip and number
+— from 2026-08-26 until #360 removed the line on 2026-09-09. Four versions carried it. Step 5(b)
+found it after the first rewrite had already run, which is why this check now comes before it.
+
+Sweep every blob once per identifying piece of each address — the city, the zip, the street name,
+the box number. **Not the words "PO Box"**: the docs discuss "the PO Box" as a topic in hundreds of
+blobs, and a hit list that long hides the real one. Fill the probe in at the keyboard; it is not
+written down in this repo for the reason #360 gives.
+
+```bash
+git rev-list --objects --all \
+  | git cat-file --batch-check='%(objecttype) %(objectname) %(rest)' \
+  | awk '$1=="blob"{print $2, $3}' | sort -u -k1,1 \
+  | while read -r oid path; do
+      git cat-file blob "$oid" | LC_ALL=C grep -qiw -e '<probe>' && echo "$oid $path"
+    done
+#    Prints blob ids and paths, never the matched text, so it is safe to paste.
+#    The résumé PDFs are compressed and will not match; they are the list's job.
+```
+
+For every hit, write one literal rule per distinct line into `~/portfolio-rewrite/replace-text.txt`,
+in filter-repo's `<exact text>==><replacement>` form. **Build the rule from the blob rather than
+typing the address**, and pad the replacement to the same length if the line is a Markdown table
+row, so the table stays aligned. The 2026-09-18 rule was built like this:
+
+```bash
+line=$(git cat-file blob 45f124cf | grep -o 'Probes for `PO Box`[^|]*')
+repl="Probes for the address strings"
+repl="$repl$(printf '%*s' $(( ${#line} - ${#repl} )) '')"
+printf '%s==>%s\n' "$line" "$repl" > ~/portfolio-rewrite/replace-text.txt
+```
+
+Confirm every hit carries the exact text of a rule (`git cat-file blob <oid> | grep -cF "$line"`,
+expect 1 or more each). **If the sweep finds nothing, there is no rules file** — drop
+`--replace-text` from step 4. After the 2026-09-18 run, that is what a re-run should find.
+
 ---
 
 ## 2. What still carries them
@@ -166,7 +231,8 @@ done | sort -u
 
 Expect 3 tags — `v1-legacy`, `assets-pre-cleanup`, `launch-2026-08-27` — plus any branch whose
 tip predates #360. On 2026-09-11 that was ~8 branches including `release`; on 2026-09-14 it was
-none, `release` having been fast-forwarded past #360 in between. The 2016 blobs add nothing here:
+none, `release` having been fast-forwarded past #360 in between, and none again on 2026-09-18,
+when `main` and `release` were the only branches on the remote. The 2016 blobs add nothing here:
 they live only in 2016 commits, which every branch's ancestry reaches but no tip tree carries.
 
 **Do not hardcode the stale-branch list.** It drifted between 2026-09-09 and 2026-09-10 (a new
@@ -236,8 +302,14 @@ rehearsal, the cause was a mirror made from a local path rather than from GitHub
 Now the rewrite:
 
 ```bash
-git filter-repo --strip-blobs-with-ids ~/portfolio-rewrite/strip-blobs.txt
+git filter-repo --strip-blobs-with-ids ~/portfolio-rewrite/strip-blobs.txt \
+                --replace-text ~/portfolio-rewrite/replace-text.txt
 ```
+
+Drop the second line if step 1's text sweep found nothing. **Both in one pass, from a fresh copy of
+the backout** — on 2026-09-18 the first run had only the first flag, check (b) found the text copy,
+and the fix was `rm -rf portfolio-rewrite.git`, a new `cp -a` from the backout, and this command.
+That is cheap before the push and impossible after it, which is the whole case for verifying first.
 
 **`--strip-blobs-with-ids`, never `--invert-paths`.** The PDF's _path_ must survive at `HEAD`
 carrying its redacted blob — #40 settled that the file is kept deliberately, and a path filter would
@@ -260,8 +332,9 @@ Expected: **every commit but one** is rewritten, and the oldest changed commit i
 ("Initial Checkin", 2016-01-05) — the first 2016 résumé arrived with the repo. The only untouched
 commit is `0d0046a`, the `.gitattributes` root, which is the one commit with no résumé anywhere in
 its history. That is why the affected-PR count in #367 is every pull request rather than a subset.
-The absolute figure was 853 of 854 on 2026-09-13; it is higher now, and the gap of exactly one is
-the invariant to judge by.
+The absolute figure was 853 of 854 on 2026-09-13 and **867 of 868 on the day it ran**; the gap of
+exactly one is the invariant to judge by. `--replace-text` does not change either number, since every
+commit it touches is already among the rewritten ones.
 
 **The denominator is not `main`'s commit count.** A mirror from GitHub carries one `refs/pull/N/head`
 per pull request, filter-repo rewrites every ref it can see, and pull requests here are
@@ -323,21 +396,28 @@ run (a) against `portfolio-backout.git` — it should print those ten.
 #    gone; says nothing about the rasters, which have no searchable string —
 #    the whole reason #360 existed.
 git rev-list --all | while read -r c; do
-  git grep -I -l -e '<probe>' "$c" 2>/dev/null
-done
+  git grep -I -l -w -e '<probe>' "$c" 2>/dev/null
+done | sort -u
+#    Expect: NO OUTPUT, for each identifying piece of each address.
 #    Probe strings are deliberately not written down in this repo (#360). Read
 #    them off portfolio-backout.git's copies of the PDFs — there are now two
-#    addresses, the 2016 street and the 2019 box — or from memory.
+#    addresses, the 2016 street and the 2019 box — or from memory. A zip code
+#    works well: it survives any formatting of the address line. -w keeps five
+#    digits from matching inside a lockfile hash.
+#    This is the check that found docs/PRESERVATION.md on 2026-09-18, hundreds
+#    of commit:path lines for one file. If it prints anything, go back to step
+#    1's "Text copies" sweep, which names the blob, and redo step 4.
 
 # c. The rasters, by enumeration plus an eyeball. There is no text to grep.
 git log --all --oneline -- 'snapshot/rendered/resources/images/resume.png' \
                            'docs/before-after/old/resume-*.webp' \
                            'resources/images/resume.png' 'images/resume.png' \
                            'resources/WallickAli-Resume.pdf'
-#    Expect #196's and #360's squash commits on main — the ones that added the
-#    redacted replacements — plus, in a mirror from GitHub, the same two changes
-#    as their original branch commits, reached through refs/pull/N/head. Four
-#    lines on 2026-09-13, all dated 2026-08-26 or later. Every commit that added
+#    Expect only the commits that added the redacted replacements. On
+#    2026-09-18: #360's and #196's squash commits on main, plus #360's branch
+#    commit and the 2026-08-26 "Redact the PO Box" branch commit, both reached
+#    only through refs/pull/N/head in a mirror from GitHub. Four lines, all
+#    dated 2026-08-26 or later. Every commit that added
 #    an unredacted revision no longer touches these paths at all, so a 2016 or
 #    2020 date here means the rewrite did not take.
 #    Then extract one surviving copy of each and actually look at it:
@@ -411,16 +491,17 @@ be trusted until it is gone. Count what is there rather than trusting a figure f
 thirteen branches on one machine and eighteen on another the same day:
 
 ```bash
-git branch | grep -vcE '^\*? *(main|release)$'   # stale local branches
-git worktree list                                 # every one but the first is on old history
+git branch | grep -vcE '^\* main$'   # every local branch but main, including a local release
+git worktree list                    # every one but the first is on old history
 ```
 
-Then delete the SHA fallback and its `TODO(#109)` in `scripts/restore-snapshot.mjs` — the tag is the
-only name that works once history has moved:
+**A local `release` counts.** The reset above moves only `main`; a local `release` branch stays on
+pre-rewrite commits. On 2026-09-18 it was the only other local branch, and stale besides. Delete
+it — the `release` skill pushes `origin/main:release` and never needs a local copy.
 
-```bash
-grep -n 'ASSET_SHA_FALLBACK\|TODO(#109)' scripts/restore-snapshot.mjs
-```
+The SHA fallback and its `TODO(#109)` in `scripts/restore-snapshot.mjs` were deleted in the change
+that recorded the run, so there is nothing left to do there; the tag is the only name that works
+once history has moved.
 
 Two things are now open rather than done, and neither belongs in this runbook:
 
@@ -428,7 +509,10 @@ Two things are now open rather than done, and neither belongs in this runbook:
   now the next step rather than a maybe. Its one condition was #200 succeeding, and #200 closed
   on 2026-09-11 with zero captures left for any of the three files, so GitHub is now the last
   copy outside this machine. The ordering constraint stands: file it _after_ this push and
-  _before_ the flip, never after. Its ticket text needs the two numbers from step 4 pasted in.
+  _before_ the flip, never after. Its ticket text needs the two numbers from step 4 pasted in:
+  867 of 868 commits rewritten, the oldest `1cdcbfc`.
 - **#109 item 4** — sanitize the issue tracker. #200's body is the exposure there, not
   archive.org's answer. Its survey also says the résumé with the home address and phone number "is
   not in git anywhere"; the 2010 one may not be, but the 2016 one was, in six blobs, until this ran.
+  The same probe strings step 1's text sweep uses are worth running against issue and PR bodies and
+  comments: if `PRESERVATION.md` quoted them, a PR discussing it may have too.
