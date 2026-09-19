@@ -74,18 +74,19 @@ written against.
 **"The asset commit" is named by a tag, not a SHA** (2026-09-09,
 [#360](https://github.com/ali-wallick/Portfolio/issues/360)). It is the commit before Phase 3
 deleted `resources/images/`, and `scripts/restore-snapshot.mjs` resolves it as
-**`assets-pre-cleanup`**, which Ali pushed the same day. It points at `090f1ce`, whose tree still
-carries all 144 files under `resources/images/` including `ASSET_INVENTORY.md`. This is the fix for
+**`assets-pre-cleanup`**, which Ali pushed the same day. It points at `b07bc9b` (`090f1ce` before
+the 2026-09-18 rewrite), whose tree still carries all 144 files under `resources/images/` including
+`ASSET_INVENTORY.md`. This is the fix for
 a trap [#109](https://github.com/ali-wallick/Portfolio/issues/109) names: a history rewrite
 invalidates every SHA, and the replacement SHA does not exist until the rewrite has already run — so
 a SHA in the source can only ever be fixed afterwards, which is the follow-up nobody remembers.
-`git filter-repo` re-points tags automatically, so the rewrite needs no code change here at all.
+`git filter-repo` re-points tags automatically, and when the rewrite ran on 2026-09-18 it did
+exactly that. No code change was needed to follow it.
 
-The script still falls back to the literal `ce4533e~1`, and the reason changed once the tag landed.
-It was written for sequencing — the tag did not exist yet. **What keeps it is clone shape:** `git
-clone` fetches tags, but a shallow clone fetched without them does not have it, and that is what a
-Claude Code web session gets. `git fetch origin tag assets-pre-cleanup` is the one-line fix there.
-The `TODO(#109)` on the fallback is keyed to the rewrite running, not to the tag existing.
+**The tag is the only name now.** Until the rewrite, the script also fell back to the literal
+`ce4533e~1`, for a shallow clone fetched without tags. That SHA no longer exists, so the fallback
+was deleted with the rewrite. A shallow clone can still lack the tag — that is what a Claude Code
+web session gets — and `git fetch origin tag assets-pre-cleanup` is the one-line fix there.
 
 **A rebuild now proves it can reach every source before it deletes anything.** Only 28 of those 102
 files are derived from `snapshot/`; the other 74 are the 54 blobs at the asset commit, the 14 blog images

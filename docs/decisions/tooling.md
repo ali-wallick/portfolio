@@ -1130,3 +1130,45 @@ issue's paste-ready ticket was refreshed from the four-blob version it still car
 2026-09-11 rehearsal had found at 8. The check is written correctly and the runbook already said
 what to do; what it now also says is that this is the check to expect to fail, since it has on both
 occasions anyone looked.
+
+## The rewrite ran, and check (b) found what the list could not (2026-09-18, #109)
+
+Ali ran `docs/HISTORY-REWRITE.md` end to end, one step at a time, with a session reading each
+output before the next command. Preflight failed once, on (e): Dependabot had opened #379 that
+morning. Merging it put `release` one commit behind, so (d) failed next, and a release put it right —
+the runbook had said to expect (d) to be the one. Steps 1 through 4 then matched every expectation:
+ten blobs, 8 of 10 in the enumeration plus the two redacted ones, three tags and no branches, 867 of
+868 commits rewritten, `1065039` the only one pruned.
+
+**Check 5(b) then found the 2019 address in plain text, in a file nobody had put on any list.**
+Ali's zip-code probe matched hundreds of `commit:docs/PRESERVATION.md` lines. From 2026-08-26 to
+2026-09-09 that file's verification table carried a row naming the redaction's probe strings — the
+city, the zip, and the box number — which is the whole mailing address in pieces. #360 took the line
+out of the working tree, and that is why the runbook says probe strings are "deliberately not
+written down". Nobody went back for the four versions still in history, and the rewrite could not
+see them either. `--strip-blobs-with-ids` matches exact content, and a Markdown file that mentions an
+address is not the address's PDF.
+
+A blob-level sweep of all 2,820 blobs in the rewritten mirror bounded it. The city and zip appeared
+in exactly those four versions, on that one line, and nowhere else. The fix was one filter-repo text
+rule, built from the old blob so nobody typed the address, padded to the same length so the table
+stayed aligned. The rewrite was redone from a fresh copy of the backout with both flags in one pass.
+Every count came out the same. `main` and `release` were byte-identical to the backout's, and each of
+the four new versions was verified as exactly the old one with that row swapped. The push went out
+after that, with the dry run showing five forced updates and no deletions.
+
+**The runbook now finds text copies before the rewrite rather than after it.** Step 1 has a "Text
+copies" sweep that names the blob, and step 4's command carries `--replace-text`. Check (b) stays
+where it was, as the proof. The runbook is marked executed, like `LAUNCH.md`, with the before-and-
+after refs in its header. The SHA fallback in `restore-snapshot.mjs` was deleted in the same change,
+as its `TODO(#109)` asked.
+
+### What generalises
+
+**The record of a redaction is itself a copy of what was redacted.** The table existed to prove the
+address was gone, and to prove that, it named the address. #360's lesson was "a path rule is
+necessary and never sufficient; the guard is what closes a class", and this is the class one level
+out. The blob denylist closes "this file's bytes", and nothing closes "text that describes this
+file". The only thing that caught it was a check phrased as the actual question: is the address
+anywhere? It was also cheap to catch only because verification came before the push. The runbook's
+insistence on that ordering is what made this a redo of step 4 and not a support ticket.

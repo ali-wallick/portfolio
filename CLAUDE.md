@@ -617,13 +617,12 @@ Domain) precisely for this reason, and the residue is what these notes are for.
   [#40](https://github.com/ali-wallick/Portfolio/issues/40)). **The working-tree copy no longer
   carries the PO Box** (2026-08-26) — the address's text block was removed from the content stream,
   not covered with a rectangle, and verified gone by extraction, byte grep and pixel diff. See
-  `docs/PRESERVATION.md`. **History is untouched**: four blobs across four commits, plus
-  `v1-legacy`, still carry it, which is what
-  [#109](https://github.com/ali-wallick/Portfolio/issues/109) is actually about. **And the 2016
-  résumé before it carries a street address and phone number** — six more blobs, at the same two
-  paths, found only when the rewrite was rehearsed (2026-09-11). The guard's denylist is ten
-  entries now, and `docs/HISTORY-REWRITE.md` enumerates every revision the paths ever held rather
-  than trusting the list.
+  `docs/PRESERVATION.md`. **History was rewritten on 2026-09-18**
+  ([#109](https://github.com/ali-wallick/Portfolio/issues/109)) to strip ten blobs from every
+  branch and tag: the 2019 PDF and its captures, and the 2016 résumé before it, which carried a
+  street address and phone number. `v1-legacy` lost the two résumé files as the accepted cost.
+  Every SHA from before that date is dead. The guard's denylist is ten entries, and
+  `docs/HISTORY-REWRITE.md` is the record.
 - **The address was in HEAD anyway until 2026-09-09, in three files nobody had looked at**
   ([#360](https://github.com/ali-wallick/Portfolio/issues/360)). Redacting the PDF closed one copy;
   a rendered PNG of the same résumé in `snapshot/rendered/`, and the two `docs/before-after/old/`
@@ -704,7 +703,7 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 | `docs/LINKEDIN.md`                    | Paste-ready LinkedIn copy. Generated — a handoff for Ali, never a sync.                                                                                    |
 | `scripts/fetch-posters.mjs`           | Manual: looks up a YouTube video's own poster frame — not a default source for a `poster`, see the #273 section.                                           |
 | `scripts/capture-comparison.mjs`      | Manual: before/after screenshots of the old and new site, into `docs/before-after/`. Referenced by nothing else, which is why it's listed.                 |
-| `docs/HISTORY-REWRITE.md`             | The #109 history-rewrite runbook: the four blob ids, what still carries them, and the three verifications. Ali runs it, not an agent.                      |
+| `docs/HISTORY-REWRITE.md`             | The #109 history-rewrite runbook, executed 2026-09-18 and kept as the record: the ten blob ids, the text-copy sweep, the three verifications.              |
 | `docs/LAUNCH.md`                      | The cutover runbook, executed 2026-08-27 and kept as the record. Routine deploys are the `release` skill.                                                  |
 | `docs/decisions/`                     | The reasoning behind every settled decision, in four files by domain. This file carries the rules; that carries the why (#335).                            |
 | `docs/before-after/`                  | 32 paired old/new screenshots, plus the README saying which two are redacted and why (#360).                                                               |
