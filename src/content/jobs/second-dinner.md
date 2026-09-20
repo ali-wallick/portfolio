@@ -130,10 +130,14 @@ highlights:
     # and she is one of the people writing them, which "authored the team’s"
     # implied she was not. Ali’s call (#32).
     #
-    # The second clause is deliberately broad. It stood for the in-progress
-    # GitHub Action that turns a Jira or Sentry issue into a reproduction case,
-    # and the CI work belongs here too; naming one of them undersold the other.
-    # The label already says "agentic", so the text does not repeat it.
+    # The second clause is deliberately broad. It stood for two things at once
+    # and naming either one undersold the other. It is also the safe level: one
+    # of them had not shipped when this was written, and CLAUDE.md puts unshipped
+    # work off limits regardless of era, so the breadth is doing disclosure work
+    # and not only editorial work. What it stood for is Ali's to say, not this
+    # file's -- #37 carried the specifics until 2026-09-19 and no longer does
+    # (#109 item 4). The label already says "agentic", so the text does not
+    # repeat it.
     #
     # One printed line with ten characters to spare.
     text: >-
