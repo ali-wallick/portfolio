@@ -1172,3 +1172,93 @@ out. The blob denylist closes "this file's bytes", and nothing closes "text that
 file". The only thing that caught it was a check phrased as the actual question: is the address
 anywhere? It was also cheap to catch only because verification came before the push. The runbook's
 insistence on that ordering is what made this a redo of step 4 and not a support ticket.
+
+## The license needed an inventory before it needed wording (2026-09-21, #109 item 7)
+
+The recommendation carried on #109 since 2026-09-08 was **code under MIT, content all rights
+reserved, stated in the README**. That is what shipped, with one addition that only appeared once
+somebody counted: **a blanket "all rights reserved" over content would have claimed rights Ali does
+not hold over most of the images.**
+
+`src/assets/images/` held 83 tracked files. Two provenance passes ran in parallel — one over the 69
+under `projects/`, one over the 14 portraits, icons and social marks — reading each image against
+its project page, its front matter, the old site in `snapshot/`, and the commit that introduced it.
+
+| Bucket                                | Project images | What it means for the README                                                               |
+| ------------------------------------- | -------------- | ------------------------------------------------------------------------------------------ |
+| Ali's own work                        | 16             | Covered by "all rights reserved"                                                           |
+| Employer or publisher IP              | 24             | Reproduced to illustrate a credit; no license granted                                      |
+| Co-authored team, jam or student work | 24             | The credited collaborators hold it                                                         |
+| Third-party                           | 1              | `prodigal/screenshot2.png`, a stock photograph the old page's own authorship claim excepts |
+| Undetermined                          | 4              | The I Fits I Sits jam captures — see below                                                 |
+
+**53 of 69 would have been misstated.** That is the finding; the README wording is just what follows
+from it.
+
+### Seven files were deleted rather than disclaimed
+
+All seven were unreferenced by any page, component, script or doc.
+
+Three were YouTube `maxresdefault` frames — `marvel-snap/`, `firefall/` and `vegas-blvd-slots/`'s
+`poster.jpg` — orphaned when #273 replaced the glob that used to pick them up by slug. The Marvel one
+carries **"© 2022 MARVEL" burned into the image**. This record already states the rule they break, in
+the #273 section: committing a trailer's thumbnail is the same act as committing the trailer, only
+smaller. The rule was right and three files simply outlived the mechanism that applied it.
+
+Four were `socials/*.png`, the survivors of the 90-icon pack the Phase 0 audit trimmed. Their
+original names carry a vendor and a pack index (`facebook-dreamstale25.png`), and **no license,
+README or attribution ever accompanied them** in the working tree or in history. Nothing referenced
+them: `src/pages/contact.astro` renders each social link's mark as an inline SVG path from
+`src/lib/social-icons.ts`, so the site has its own icons and never reached for the PNGs.
+
+**The first version of this paragraph said the site rendered social links as text with no icons at
+all, which is false** — it was inferred from `src/config/site.ts`, where a `SocialLink` is a label, a
+URL and a status and no icon appears, without opening the component that renders one. The deletion
+was right for the reason given; the reason given was not the true one. **Reading the data shape is
+not reading the render**, and a claim about what a page shows has to come from the page.
+
+**Deletion beat a disclaimer here, and the test is worth keeping: a carve-out is for something the
+site actually needs to show.** Every one of these rendered nowhere. No wording can make a blanket
+claim accurate while unattributed third-party artwork stays tracked, and there was nothing to weigh
+against removing it.
+
+### What the passes corrected in each other
+
+Two findings only exist because the work was split and the halves disagreed.
+
+**`dead-booty/DeadBooty.jpg` is not covered by the old page's "All art in the game was done by me".**
+The projects pass read that sentence and classified the directory as Ali's. The other pass looked at
+the file: an Atari 2600 box-art parody carrying the ATARI® mark, "CX2600" and "game program™", and
+credited "© 2009 Harrison, Liz, and Ali". The claim was about the game's art and does not reach the
+box art, which is three people's and carries a third party's marks.
+
+**`icons/programming_*.png` are not vendor logos**, which is what the brief assumed from their
+filenames. They are screenshots of Ali's own source — `ArtOfRescue.as`, `OverworldPlayerController.cs`,
+an Unreal Blueprint graph of her camera logic — in a vendor's editor. Her work with incidental
+chrome, and no carve-out needed.
+
+### Two carve-outs that are not about copyright
+
+**`marvel-snap/gallery-second-dinner-2019.jpg`.** Ali's 2026-08-27 clearance, recorded when the photo
+shipped, is permission to _use it on that page_. A public repo invites redistribution, which that
+permission never covered, and the photo shows about a dozen identifiable people. The README says so.
+
+**The four I Fits I Sits jam captures.** Ali took them and built the level editor one of them shows,
+but they were made at MobilityWare's Game Jam V on company time and depict a prototype the company
+went on to ship. Nothing in the repo establishes whether her employment agreement assigned that work.
+**Ali's call, 2026-09-21: treat them as publisher IP** — reproduced to illustrate a credit, no license
+granted. It costs nothing on the page and does not put #378 behind somebody else's reply.
+
+### What generalises
+
+**A license is a claim about provenance, and a repo that cannot answer "who made this?" cannot make
+one.** The wording was settled two weeks before the inventory ran and did not change; what changed is
+that it went from an assertion to something the repo can support file by file. The same shape as the
+denylist and the text sweep before it: the rule was fine, and the work was finding out what it
+applied to.
+
+**The photographs are where it stays unresolved, and one sentence covers them.** Five portraits,
+including the homepage hero and every OG card, have no photographer recorded anywhere in the repo. A
+photo of Ali is not automatically Ali's copyright. Chasing five photographers would have blocked the
+flip; "photographs of Ali were taken by others and are used with permission" is accurate without
+resolving any of them, and stops the README claiming what it cannot support.

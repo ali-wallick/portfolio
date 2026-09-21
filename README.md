@@ -49,7 +49,30 @@ The tag `v1-legacy` marks the last commit of the original PHP site.
 
 ## What's left
 
-Tracked as [GitHub issues](https://github.com/ali-wallick/Portfolio/issues), milestoned per phase —
-[Phase 6 — Launch](https://github.com/ali-wallick/Portfolio/milestone/1) and
-[Phase 7 — Keep it alive](https://github.com/ali-wallick/Portfolio/milestone/2). Not in any document:
-a doc that tracks status goes stale silently, and this repo has been bitten by that twice.
+Tracked as [GitHub issues](https://github.com/ali-wallick/Portfolio/issues), with labels rather than
+milestones — `decision`, `needs-ali` and `blocked` are the ones that do real work. Not in any
+document: a doc that tracks status goes stale silently, and this repo has been bitten by that twice.
+
+## License
+
+**The code is MIT** — see [`LICENSE`](LICENSE). That covers the Astro site, the build scripts, the
+checks, the skills, and the configuration, which is the part of this repo anyone would actually want
+to reuse.
+
+**The content is all rights reserved.** The project write-ups, the résumé, and the site's prose.
+
+**Some images are neither, and no license is granted over them.** They are reproduced here because a
+portfolio has to show the work it is describing:
+
+| What                                                                               | Who holds it                                                                                                                                                             |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Game screenshots, logos, key art and app icons under `src/assets/images/projects/` | Red 5 Studios, Kaneva, MobilityWare, Second Dinner and Marvel, respectively                                                                                              |
+| Images from team, jam and student projects                                         | The collaborators credited on each project page                                                                                                                          |
+| `projects/kinoclue/KinoClue.png`                                                   | A Georgia Tech Synaesthetic Media Lab / GVU Center research poster, credited to Russell Brooks, Ali Wallick, Susan Robinson and Ali Mazalek, carrying Georgia Tech marks |
+| `projects/dead-booty/DeadBooty.jpg`                                                | An Atari 2600 box-art parody, credited to three people and carrying Atari's marks                                                                                        |
+| `projects/marvel-snap/gallery-second-dinner-2019.jpg`                              | A publicly posted studio photo, used here with permission. That permission covers this site, not redistribution                                                          |
+| `projects/prodigal/screenshot2.png`                                                | A stock photograph inside an otherwise solo project’s title screen; its origin is unrecorded                                                                             |
+| Photographs of Ali                                                                 | The photographers who took them, used with permission                                                                                                                    |
+
+The reasoning, and the file-by-file inventory behind it, are in
+[`docs/decisions/tooling.md`](docs/decisions/tooling.md).
