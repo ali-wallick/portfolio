@@ -71,6 +71,7 @@ portfolio has to show the work it is describing:
 | `projects/kinoclue/KinoClue.png`                                                   | A Georgia Tech Synaesthetic Media Lab / GVU Center research poster, credited to Russell Brooks, Ali Wallick, Susan Robinson and Ali Mazalek, carrying Georgia Tech marks |
 | `projects/dead-booty/DeadBooty.jpg`                                                | An Atari 2600 box-art parody, credited to three people and carrying Atari's marks                                                                                        |
 | `projects/marvel-snap/gallery-second-dinner-2019.jpg`                              | A publicly posted studio photo, used here with permission. That permission covers this site, not redistribution                                                          |
+| `projects/prodigal/screenshot2.png`                                                | A stock photograph inside an otherwise solo project’s title screen; its origin is unrecorded                                                                             |
 | Photographs of Ali                                                                 | The photographers who took them, used with permission                                                                                                                    |
 
 The reasoning, and the file-by-file inventory behind it, are in
