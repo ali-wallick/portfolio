@@ -1380,3 +1380,60 @@ host is gone" argument for `rendered/` is true of the bytes and false of this re
 #45's were answerable by a command — one `git ls-tree`, one look at the tag list — and both had been
 carried as judgment calls needing Ali's time. The cost of checking was under a minute; the cost of
 deferring was three weeks of the issue staying open and a decision sounding weightier than it was.
+
+## The rebuild log stays, and stays open (2026-09-21, the public-repo cleanup)
+
+With the flip ([#378](https://github.com/ali-wallick/Portfolio/issues/378)) as the next event, Ali
+asked how important the log and the other development artifacts are to keep, with relitigating on
+the table. Three things were on it: `docs/REBUILD-LOG.md` at 5,720 lines, the executed runbooks
+(`docs/LAUNCH.md`, `docs/HISTORY-REWRITE.md`, `docs/PRESERVATION.md`), and the paired captures in
+`docs/before-after/`.
+
+**The log stays, because it is the reason the repo is going public.** #109's own case for the flip:
+the site says "she can ship a website"; the repo says "here is how she runs an agentic project, with
+the failures left in." The write-up at `/projects/aliwallick-com` is 800 words distilled from those
+5,720 lines, and every claim on it — the 32-word sentences against her 17, the 3,774-line brief, the
+gate that found five wrong facts — is a claim a reader can check only because the log is there.
+Delete it and the public repo becomes the "unremarkable Astro repo" #109 argued against publishing.
+
+**It also stays open, and that was the closer call.** The page it fed shipped on 2026-09-09, so the
+obvious tidy-up was to close the log at the flip: freeze it as a record, stop the append rule, and
+save every session the sixty lines of narrative it writes. Two things argued the other way. The page
+is a summary, and a summary of a record that keeps growing is not a reason to stop the record. And
+the log's "What generalises" sections are the debrief habit the page itself names as the thing Ali
+is taking with her; closing the log would retire that practice in the one repo where it was built.
+So the change is to the log's stated purpose, not its status: `CLAUDE.md` said notes "for the
+eventual build-in-public page" accumulate there, which had been false since 2026-09-09. It now says
+every pass gets a debrief, and why.
+
+**If that cost ever matters, the lever is the entry, not the log.** An entry that has nothing to
+generalise can be three lines. The log does not need every pass to be a story.
+
+**The runbooks stay as records.** `docs/LAUNCH.md` and `docs/HISTORY-REWRITE.md` are executed
+procedures that `CLAUDE.md` and the open issues cite by step number — #378 sends its reader to the
+rewrite runbook's step-5 checks. `docs/PRESERVATION.md` is the map of what survives of the old site
+and where. None is a plan that can go stale, which is the test the brief applies.
+
+**`docs/before-after/` stays.** 6.5 MB of the 6.9 under `docs/`, and the half of it under `old/` is
+the only photograph of a site that no longer exists. Six of its files are byte-identical to the
+write-up's own images under `src/assets/`, which is duplication of bytes and not of facts: the site
+needs its copies where Astro can process them, and the record needs the full 32.
+
+### What did go
+
+**`scripts/restore-snapshot.mjs`**, which #45 had kept that morning on the reasoning that "the
+derivation is the audit trail for a committed artifact." The artifact stopped being committed in the
+same change, so the reasoning no longer held: the script had no inputs and no output in the tree,
+and the tag carries both it and everything it derives. `docs/PRESERVATION.md` names the restore
+command. This is the one same-day reversal in the pass, and it reverses a sentence, not a decision.
+
+**The `.gitattributes` template.** Fourteen lines of GitHub's 2016 default — `*.cs diff=csharp` and
+a block of msysgit `astextplain` rules — in a repo that has never had a C# or Word file. One line
+does the work.
+
+### What generalises
+
+**"Is it important to keep?" splits into "is it evidence?" and "is it still being written?"**, and
+they have different answers. Evidence stays because a public reader can check a claim against it.
+Whether it stays open depends on whether something still consumes it, and here the consumer turned
+out to be the practice rather than the page.
