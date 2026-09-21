@@ -139,7 +139,7 @@ exists.
 ## Phase 5 execution outcome (2026-08-20)
 
 **Direction 03, playful / toy, in the arcade-dimmed palette.** Merged via
-[PR #19](https://github.com/ali-wallick/Portfolio/pull/19) at `255d582`. Directions 01 (palette
+[PR #19](https://github.com/ali-wallick/Portfolio/pull/19) at `2b60bf6`. Directions 01 (palette
 revival, [#12](https://github.com/ali-wallick/Portfolio/pull/12)), 02 (dense / craft,
 [#13](https://github.com/ali-wallick/Portfolio/pull/13)) and 04 (the hybrid,
 [#18](https://github.com/ali-wallick/Portfolio/pull/18)) are closed. Their branches are kept.
@@ -218,13 +218,13 @@ what the section below is the resolution of.
 Settled on a live switcher, closing [#33](https://github.com/ali-wallick/Portfolio/issues/33), which
 was rescoped to just this. The faces and the colour calibration are separate now, both closed below.
 
-| Token / value             | Was                        | Is                                   | Why                                                                                                                                   |
-| ------------------------- | -------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `--duration`              | `500ms` (recovered)        | **`320ms`**                          | 500ms read as sluggish rather than characterful once the reticle made it visible on every hover.                                      |
-| `--ease`                  | `cubic-bezier(0,0,0.25,1)` | **`cubic-bezier(0.34,1.28,0.64,1)`** | Same family — launches at full speed, decelerates hard — plus 2.6% overshoot. A descendant of the recovered curve, not a replacement. |
-| `--duration-fast`         | `250ms`                    | **unchanged**                        | It was never in the comparison. It used to be half of `--duration` and is now most of it; revisit deliberately, not as a side effect. |
-| Reticle idle behaviour    | return home immediately    | **hold 1.6s, then fade, and cut**    | The busyness was the _return trip_, not the acquisitions. See `src/scripts/reticle.ts`.                                               |
-| Reticle acquisition dwell | none                       | **25ms**                             | Stops a pointer travelling somewhere else from dragging the brackets through every control it crosses.                                |
+| Token / value             | Was                        | Is                                   | Why                                                                                                                                                                                                       |
+| ------------------------- | -------------------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--duration`              | `500ms` (recovered)        | **`320ms`**                          | 500ms read as sluggish rather than characterful once the reticle made it visible on every hover.                                                                                                          |
+| `--ease`                  | `cubic-bezier(0,0,0.25,1)` | **`cubic-bezier(0.34,1.28,0.64,1)`** | Same family — launches at full speed, decelerates hard — plus 2.6% overshoot. A descendant of the recovered curve, not a replacement.                                                                     |
+| `--duration-fast`         | `250ms`                    | **unchanged then, `160ms` now**      | It was never in this comparison, and the note here said to revisit it deliberately rather than as a side effect. That revisit happened in #67: it was restored to half of `--duration`. See `tokens.css`. |
+| Reticle idle behaviour    | return home immediately    | **hold 1.6s, then fade, and cut**    | The busyness was the _return trip_, not the acquisitions. See `src/scripts/reticle.ts`.                                                                                                                   |
+| Reticle acquisition dwell | none                       | **25ms**                             | Stops a pointer travelling somewhere else from dragging the brackets through every control it crosses.                                                                                                    |
 
 **`1.28` is a control-point ordinate, not a peak.** The actual overshoot is 2.6%, measured — which is
 what makes the curve safe on the clamped colour transitions in `base.css` (3–6 RGB units for a few
@@ -319,7 +319,7 @@ résumé actions bar (#239) — and was transmitted only by example: a new sessi
 the records of past passes rather than by having the method to hand. It is
 `.claude/skills/design-switcher/` now, with the constraints and the traps in `SKILL.md`, the working
 shapes of the four scaffolding files in `references/scaffolding.md`, and a contact-sheet renderer in
-`scripts/contact-sheet.mjs`.
+the skill's own `scripts/contact-sheet.mjs`.
 
 **The decision the issue asked for: the panel does not become reusable code.** It stays a template
 inside the skill, copied and adapted per pass, and three of the loop's own rules are why. Scaffolding
@@ -576,7 +576,8 @@ treatments on one page. One way of saying "outbound link" per page beats two. (I
 against 160px for five links, and 434px against 211px on a phone, but that is the smaller argument.)
 
 **`kind` is rendered now, and it was live-but-invisible data before.** `store`/`play`/`video`/
-`source`/`press`/`jam`/`site` sits on every link and was read only by `structured-data.ts` and
+`source`/`press`/`jam`/`site` sits on every link (`slides` joined in #49, and ties `source` at six
+characters, which is why the gutter below did not need re-measuring) and was read only by `structured-data.ts` and
 `build-linkedin.mjs`, both looking up the one `press` link. Surfacing it is the `card-index`
 argument for `featureOrder`: a fact the content model already holds. It is typed against the schema
 enum in `LinkList.astro`, so adding a `kind` fails the build rather than printing a raw value, and
@@ -1329,9 +1330,12 @@ so the title form is that shape minus a level — pre-building for a hierarchy t
 paying a redundant line on all 16 pages now.
 
 **The tier is a fact no other surface of a project page shows.** `.meta-strip` carries `status`,
-which is a different claim. Worth knowing that they nearly partition the same way — every `shipped`
-project is featured, every `coursework` and `prototype` is archive, and only the four jam entries
-have a tier you cannot guess from the chip.
+which is a different claim. Worth knowing that they nearly partition the same way — nearly every
+`shipped` project is featured, every `coursework` and `prototype` is archive, and only the jam
+entries have a tier you cannot guess from the chip. (Written when that was four entries and the
+`shipped` half had no exception. `aliwallick-com` published as `shipped` + `archive` on 2026-09-09,
+so the exception exists now and the count is five. The point — that the chip is nearly but not
+actually the tier — is what matters, and it got truer.)
 
 ### `Previous` / `Next`, and why not `Newer` / `Older`
 

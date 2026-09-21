@@ -14,7 +14,7 @@ DreamHost setup could not do at all. Everything below exists to make it work.
 | Thing                  | Value                                                                                         |
 | ---------------------- | --------------------------------------------------------------------------------------------- |
 | Worker                 | `portfolio`                                                                                   |
-| Account                | `9b9fc992bf9682650c7e99ae31dfe590`                                                            |
+| Account                | In the dashboard URL — deliberately not committed (#109 item 6)                               |
 | workers.dev subdomain  | `ali-wallick`                                                                                 |
 | Branch preview URL     | `https://<branch>-portfolio.ali-wallick.workers.dev`                                          |
 | Production workers.dev | **deliberately disabled** — nothing serves this site at a stable public address until Phase 6 |

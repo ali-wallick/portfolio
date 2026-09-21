@@ -9,16 +9,16 @@ possible in that window; where that matters, it says so.
 
 ## The pieces
 
-| Where                             | What                                                           | Faithful?                                                 |
-| --------------------------------- | -------------------------------------------------------------- | --------------------------------------------------------- |
-| `snapshot/`                       | 26 rendered HTML pages, crawled 2026-08-15                     | **Yes — do not edit.** A `PreToolUse` hook blocks writes. |
-| `snapshot/rendered/`              | The same pages, made browsable                                 | Derived — but only 28 of its 102 files can be rebuilt.    |
-| `content/archive/`                | 20 blog posts as Markdown + 14 images                          | **Yes — do not edit.** Same hook.                         |
-| `resources/css`, `resources/js`   | The old stylesheet and `nav.js`                                | The **only** copy. Mined in Phase 5.                      |
-| `resources/WallickAli-Resume.pdf` | The 2019 resume                                                | Carries a PO Box. See #109, #197.                         |
-| `v1-legacy` tag                   | The complete PHP source, 31 files, **and the old `.htaccess`** | Pushed to origin. Confirmed. 185 files in all.            |
-| `docs/before-after/`              | 32 paired screenshots, old vs new                              | Old side captured from the live server.                   |
-| Ali's cold storage                | Source video for the 6 hero YouTube embeds                     | Outside this repo. See `docs/VIDEO-ARCHIVE.md`.           |
+| Where                             | What                                                           | Faithful?                                                                                                   |
+| --------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `snapshot/`                       | 26 rendered HTML pages, crawled 2026-08-15                     | **Yes — do not edit.** A `PreToolUse` hook blocks writes.                                                   |
+| `snapshot/rendered/`              | The same pages, made browsable                                 | Derived — but only 28 of its 102 files can be rebuilt.                                                      |
+| `content/archive/`                | 20 blog posts as Markdown + 14 images                          | **Yes — do not edit.** Same hook.                                                                           |
+| `resources/css`, `resources/js`   | The old stylesheet and `nav.js`                                | The **only** copy. Mined in Phase 5.                                                                        |
+| `resources/WallickAli-Resume.pdf` | The 2019 resume                                                | Carries a PO Box. See #109, #197.                                                                           |
+| `v1-legacy` tag                   | The complete PHP source, 31 files, **and the old `.htaccess`** | Pushed to origin. Confirmed. 183 files in all — 185 until the 2026-09-18 rewrite took the two résumé files. |
+| `docs/before-after/`              | 32 paired screenshots, old vs new                              | Old side captured from the live server.                                                                     |
+| Ali's cold storage                | Source video for the 6 hero YouTube embeds                     | Outside this repo. See `docs/VIDEO-ARCHIVE.md`.                                                             |
 
 ## Looking at it
 
