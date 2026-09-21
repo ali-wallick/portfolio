@@ -28,9 +28,11 @@ git restore --source=snapshot-pre-retirement -- snapshot/
 open snapshot/rendered/index.html
 ```
 
-Or serve it, which is closer to how it was actually delivered:
+Or serve it, which is closer to how it was actually delivered. The script that does that left the
+tree with its inputs (2026-09-21, the public-repo cleanup) and is on the same tag:
 
 ```bash
+git restore --source=snapshot-pre-retirement -- snapshot/ scripts/restore-snapshot.mjs
 node scripts/restore-snapshot.mjs --serve
 ```
 
@@ -55,8 +57,10 @@ git worktree add /tmp/old-site v1-legacy
 ## Rebuilding `snapshot/rendered/`
 
 **Retired 2026-09-21 (#45), so this needs its inputs restored first** —
-`git restore --source=snapshot-pre-retirement -- snapshot/`. The rest of this section describes the
-tree as it stood while `snapshot/` was in it.
+`git restore --source=snapshot-pre-retirement -- snapshot/ scripts/restore-snapshot.mjs`. The script
+went with them the same day: it had no inputs and no output left in the tree, and the derivation it
+documents is only auditable beside the artifact, which is on the tag. The rest of this section
+describes the tree as it stood while `snapshot/` was in it.
 
 ```bash
 node scripts/restore-snapshot.mjs --check-selfcontained  # verify; writes nothing

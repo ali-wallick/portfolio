@@ -5,12 +5,13 @@
  *
  * ## Why this is time-boxed
  *
- * The "before" side is captured from the **live** old site, not from
- * `snapshot/`. That is deliberate: the DNS cutover (#34) is the moment
+ * The "before" side is captured from the **live** old site, not from the
+ * `snapshot/` crawl. That is deliberate: the DNS cutover (#34) is the moment
  * `aliwallick.com` stops serving the old PHP site, and after it there is no
- * way to photograph the thing as it actually renders. `snapshot/` preserves
- * the markup and `scripts/restore-snapshot.mjs` makes it browsable again, but
- * a reconstruction is not the same evidence as a capture of the running site.
+ * way to photograph the thing as it actually renders. The crawl preserves the
+ * markup (on the `snapshot-pre-retirement` tag since 2026-09-21, #45, with the
+ * `restore-snapshot.mjs` script that made it browsable), but a reconstruction
+ * is not the same evidence as a capture of the running site.
  *
  * So: **run this before the cutover.** Afterwards it can only regenerate the
  * `new/` half, and it says so rather than silently producing a broken pair.

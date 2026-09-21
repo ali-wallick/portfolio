@@ -1,6 +1,7 @@
-# Phase 0 preservation records. These are historical artifacts captured from the
-# live site — reformatting them destroys their value as a faithful snapshot.
-snapshot/
+# Phase 0 preservation record. A historical artifact captured from the live
+# site — reformatting it destroys its value as a faithful record. (`snapshot/`
+# was the other one until it was retired to the `snapshot-pre-retirement` tag
+# on 2026-09-21, #45.)
 content/archive/
 
 # The old site's stylesheet, scroll handler and 2019 résumé PDF. Kept as
@@ -20,7 +21,7 @@ package-lock.json
 
 # Agent worktrees (#144). Git already ignores these via .git/info/exclude, but
 # Prettier only reads .gitignore and .prettierignore — so without this line it
-# format-checks a whole second copy of the repo, including the snapshot/ and
-# content/archive/ preservation records the rules above exist to protect. Do
+# format-checks a whole second copy of the repo, including the content/archive/
+# preservation record the rules above exist to protect. Do
 # not delete this as redundant with .gitignore; it isn't in .gitignore.
 .claude/worktrees/

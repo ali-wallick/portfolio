@@ -5718,3 +5718,31 @@ built by extracting the line from the blob, not by typing it. Keeping it out of 
 worked only partly: the first look at the matching line masked the zip but not the city or box
 number, and those pieces are in the session's own history. Mask every field on the first look, not
 just the one that was searched for.
+
+## The public-repo cleanup, and a question about this file (2026-09-21)
+
+Ali asked for a full sweep with the flip in view: whether this log and the other development
+artifacts earn their place in a public repo, whether the README says what a stranger needs, and
+anything else. The answer on the log is in
+[`docs/decisions/tooling.md`](decisions/tooling.md): it stays, and stays open, because it is the
+evidence the write-up summarises and the debrief habit the write-up names.
+
+The sweep itself was small, which is what a repo looks like after the two read-throughs #109 item 6
+already ran. One script had outlived its inputs by a morning, one config file was still GitHub's
+2016 template, and `.prettierignore` still excluded a directory that no longer existed. The README
+was the real work: it had been written for an agent arriving in the repo and still said the CI
+branch was `master` and that the log was "Phase 7's material", both retired names.
+
+### The README is now for two readers, and says which is which
+
+A public README has a visitor who found the repo from the write-up and an agent who found it from
+the brief. The old one served the second and assumed the first. The new one leads with what the
+site is and what the repo is for, tells the visitor where the interesting parts are, and points the
+agent to `CLAUDE.md` in one line. The tags got a table, because four of them are cited as commands
+and nothing listed them.
+
+### Model allocation and cost
+
+Fable, inline, no subagents. The survey was a dozen tool calls over the tree, the open issues and
+the two issues that decided the flip; nothing in it fanned out. One same-day reversal, recorded in
+the tooling record with its reason.

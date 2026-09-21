@@ -21,9 +21,12 @@ replaced in 2026 for two reasons, and the second one matters as much as the firs
 2. Use the rebuild as a hands-on study of agentic workflows at small scale.
 
 Because of #2, this repo deliberately over-invests in tooling and process relative to a normal
-portfolio project. The tooling is half the point, not overhead around the real work. Notes for the
-eventual build-in-public page accumulate in [`docs/REBUILD-LOG.md`](docs/REBUILD-LOG.md) — add to it
-as you go rather than reconstructing at the end.
+portfolio project. The tooling is half the point, not overhead around the real work. Every pass
+gets a debrief in [`docs/REBUILD-LOG.md`](docs/REBUILD-LOG.md), written as the work happens rather
+than reconstructed at the end. The build-in-public page it fed
+([`/projects/aliwallick-com`](https://aliwallick.com/projects/aliwallick-com), #48) shipped on
+2026-09-09; the log stayed open because the page is its summary, not its replacement — see "The
+rebuild log stays, and stays open" in [`docs/decisions/tooling.md`](docs/decisions/tooling.md).
 
 How the project was actually run — the phase gates, the model allocation, what drove cost — and a
 per-phase record including what the plan got wrong, live in
@@ -129,8 +132,9 @@ its date and issue like every section already there. Only promote a rule up here
 `npm run verify` would catch someone breaking it.
 
 [`docs/REBUILD-LOG.md`](docs/REBUILD-LOG.md) is unchanged and is a different thing: it carries the
-_narrative_ of how a pass was run and what it cost, for [#48](https://github.com/ali-wallick/Portfolio/issues/48).
-The records carry what was decided.
+_narrative_ of how a pass was run and what it cost — the material
+[#48](https://github.com/ali-wallick/Portfolio/issues/48)'s page was written from, and the debrief
+record since. The records carry what was decided.
 
 ---
 
