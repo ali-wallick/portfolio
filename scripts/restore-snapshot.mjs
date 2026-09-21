@@ -3,6 +3,20 @@
  * Rebuilds `snapshot/` into a self-contained, browsable copy at
  * `snapshot/rendered/`.
  *
+ * ## This script has no inputs in the tree any more (2026-09-21, #45)
+ *
+ * `snapshot/` was retired to the annotated tag `snapshot-pre-retirement`. The
+ * section below called that moment in advance — "a regenerate-on-demand script
+ * has no inputs left" — and it has arrived. The script is kept because the
+ * derivation is the audit trail for a committed artifact, which is exactly the
+ * reason that section gives for committing it in the first place.
+ *
+ * To run it again, restore its inputs first:
+ *
+ *   git restore --source=snapshot-pre-retirement -- snapshot/
+ *
+ * Everything below describes the tree as it stood while `snapshot/` was in it.
+ *
  * ## The defect this repairs
  *
  * `snapshot/README.md` says the old site's images, CSS and JS "are already

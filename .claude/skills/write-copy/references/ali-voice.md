@@ -8,7 +8,7 @@ inferred from "what a game developer sounds like."
 | Corpus        | What                                                                                                                                                      | Size         | In the repo?       |
 | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------------------ |
 | **Blog**      | `content/archive/`, 20 posts, 2010–2019. Unedited, first person, young.                                                                                   | ~5,100 words | yes                |
-| **Old site**  | `snapshot/` — About, index, project pages. More considered, still hers.                                                                                   | ~1,800 words | yes                |
+| **Old site**  | `snapshot-pre-retirement` tag — About, index, project pages. More considered, still hers.                                                                 | ~1,800 words | yes                |
 | **Résumé**    | 2019 bullets, verbatim under "Source material" in `src/content/jobs/*.md`.                                                                                | ~400 words   | yes                |
 | **Documents** | Two cover letters (2016, 2019), a client email (2023), a warranty escalation letter (2023), a volunteer synthesis doc (2024). Supplied by Ali 2026-08-24. | ~4,200 words | **no — see below** |
 | **Chat**      | Ali's own messages in the session that built this skill, 2026-08-24. Casual, unedited, typed quickly.                                                     | ~260 words   | no                 |

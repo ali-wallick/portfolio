@@ -1333,3 +1333,50 @@ this.** Every finding here sat in a document that its authors had read many time
 supplies is not more care; it is the absence of the context that makes a stale sentence read as
 true. The cheapest version is to check the claim rather than the prose — a count, a path, a token
 value, a branch name — because the claims are what rot and the prose is what reads fine either way.
+
+## `snapshot/` retired, and `v1-legacy` could not have covered it (2026-09-21, #45, #109 item 6)
+
+The Phase 0 crawl left the working tree for the annotated tag `snapshot-pre-retirement`, pushed to
+origin before anything was deleted. 132 files, 8.0 MB. The record is in
+[`docs/PRESERVATION.md`](../PRESERVATION.md); what belongs here is the two questions that had been
+open since 2026-08-27 and the answers a command gave.
+
+**#45 asked whether `v1-legacy` already served, so no new tag would be needed.** It does not, and
+this took one command: `git ls-tree -r v1-legacy` returns **zero** files under `snapshot/`.
+`v1-legacy` is the old PHP _source_ — `index.php`, `includes/`, `about.php`. `snapshot/` was a crawl
+of the _rendered_ site captured 2026-08-15, created after that commit. Two artifacts, one of which
+never contained the other. The question had sat open for three weeks as a thing to think carefully
+about; it was a thing to check.
+
+**#45 also asked whether an archive pointer is a third use of tags** — alongside `v1-legacy` as an
+era marker and `launch-2026-08-27` as an event — and therefore needed a convention decided before one
+was created. **It is not: `assets-pre-cleanup` already is one.** That tag exists precisely so
+`git show assets-pre-cleanup:resources/images/ASSET_INVENTORY.md` resolves after a deletion, and
+`CLAUDE.md` cites that command. So there was no convention to invent, only a name to match — hence
+`<what>-pre-<action>`. The one change is that this tag is annotated where `assets-pre-cleanup` is
+lightweight, so the reason travels with the pointer instead of living only in a document beside it.
+
+### Keeping the derived copy was the tempting half, and the numbers said no
+
+`snapshot/rendered/` is the browsable version, and "retire the raw captures, keep the one a reader
+would actually click" sounds like the considered middle. It is 7.7 MB of the 8.0. The faithful
+captures are 272 KB. **That option keeps 96% of the weight and deletes the 4% that is the
+preservation value** — and `rendered/` is the deliberately _unfaithful_ copy, with html5shiv and the
+Unity Web Player stripped out, so it would have left the altered version easy to reach and the
+byte-faithful one tag-only. Exactly backwards from what this document exists to guarantee.
+
+It also carries six YouTube poster frames, which is the class of third-party artwork the license pass
+had removed from `src/assets/images/` three days earlier. Keeping them would have contradicted a
+decision still wet.
+
+**And nothing in it is uniquely preserved by keeping it.** 54 of its files are at
+`assets-pre-cleanup`; its 14 blog images are byte-identical to `content/archive/`'s, verified by
+hashing both sets; the other 28 derive from the captures on the new tag. The "irreplaceable, the old
+host is gone" argument for `rendered/` is true of the bytes and false of this repo.
+
+### What generalises
+
+**A question that has been open for weeks is worth testing before it is worth discussing.** Both of
+#45's were answerable by a command — one `git ls-tree`, one look at the tag list — and both had been
+carried as judgment calls needing Ali's time. The cost of checking was under a minute; the cost of
+deferring was three weeks of the issue staying open and a decision sounding weightier than it was.

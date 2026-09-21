@@ -61,9 +61,10 @@ The audit measures what's on the page. It can't tell you what isn't.
 
 - **Source material lives in more places than the page itself.** `write-project-page` §1 has the
   full table — the blog in `content/archive/`, the 2019 resume bullets preserved in
-  `src/content/jobs/`, `src/assets/images/`, the Wayback Machine, and Ali. `content/archive/` and
-  `snapshot/` — the old site's own pages, the reference for "what did the old page say?" — are both
-  read-only; `.claude/hooks/guard-preserved.sh` refuses a Write or Edit to either.
+  `src/content/jobs/`, `src/assets/images/`, the Wayback Machine, and Ali. `content/archive/` is
+  read-only — `.claude/hooks/guard-preserved.sh` refuses a Write or Edit to it. The old site's own
+  pages, the reference for "what did the old page say?", left the tree on 2026-09-21 (#45): read them
+  with `git show snapshot-pre-retirement:snapshot/about.html`.
 - **Interview Ali when the page's premise has aged out, not just one fact on it.** If the ask itself
   says "rethink this," don't spend the first round mining written sources for something that isn't
   in them. `/about` ([#141](https://github.com/ali-wallick/Portfolio/issues/141)) got its richest

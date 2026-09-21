@@ -27,17 +27,18 @@ For front matter only, with no body, use `add-project`.
 
 Almost everything needed already exists in this repo. Look, in this order:
 
-| Source                      | What's in it                                                                                                      |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `snapshot/`                 | The old live page for this project, as it stood. Often the only description that exists.                          |
-| `content/archive/`          | 20 blog posts, 2010–2019. **First-person detail the project pages never had.**                                    |
-| The Wayback Machine         | Not just a dead-link fix — archived pages carry credits and descriptions the site's own old page compressed away. |
-| `src/content/jobs/<job>.md` | The 2019 resume bullets, preserved verbatim under "Source material".                                              |
-| `src/assets/images/`        | Screenshots and banners.                                                                                          |
-| The user                    | Anything from after 2019, and anything the old site got wrong.                                                    |
+| Source                      | What's in it                                                                                                                     |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `snapshot-pre-retirement`   | The old live page, via `git show snapshot-pre-retirement:snapshot/projects/<Name>.html`. Often the only description that exists. |
+| `content/archive/`          | 20 blog posts, 2010–2019. **First-person detail the project pages never had.**                                                   |
+| The Wayback Machine         | Not just a dead-link fix — archived pages carry credits and descriptions the site's own old page compressed away.                |
+| `src/content/jobs/<job>.md` | The 2019 resume bullets, preserved verbatim under "Source material".                                                             |
+| `src/assets/images/`        | Screenshots and banners.                                                                                                         |
+| The user                    | Anything from after 2019, and anything the old site got wrong.                                                                   |
 
-`snapshot/` and `content/archive/` are both read-only — `.claude/hooks/guard-preserved.sh` refuses a
-Write or Edit to either — so read them and write the project page elsewhere.
+`content/archive/` is read-only — `.claude/hooks/guard-preserved.sh` refuses a Write or Edit to it —
+so read it and write the project page elsewhere. The old site's pages are not in the tree at all any
+more; they are on the `snapshot-pre-retirement` tag (#45).
 
 The blog archive is the highest-value and most-overlooked source. The GGJ 2013, GDC 2013, "My First
 2 Panels", MobilityWare, and It Fits I Sits posts contain material that can't be templated. Fold it
