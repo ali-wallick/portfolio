@@ -52,7 +52,7 @@ Every command below is meant to be pasted as-is. **Expectations are written as i
 they can be** — exactly one commit pruned, `main` exactly one shorter — because every merge to
 `main` moves the absolute counts, and an operator reading "270" beside a terminal saying "273" is
 in exactly the guessing moment the 2026-09-13 record describes. Where an absolute number is still
-quoted, it was measured on 2026-09-13 against `main` at `283d69c` — **re-measure rather than
+quoted, it was measured on 2026-09-13 against `main` at `291fcc1` — **re-measure rather than
 trusting it**, since each figure has a command beside it.
 
 ---
@@ -119,9 +119,11 @@ looked at the same two paths _before_ 2019. The 2016 résumé sat there in three
 1700×2200 render of each, and it carries a **full street address and a phone number** — the worse
 exposure, not the PO Box. `--strip-blobs-with-ids` does not delete a path; it drops that commit's
 change to it, so the file reverts to whatever the parent had. Stripping only the 2019 PDF from
-`b541155` therefore reverts `v1-legacy`'s résumé to the 2016 one, promoting the street address into
+`1882cf3` therefore reverts `v1-legacy`'s résumé to the 2016 one, promoting the street address into
 the very tag the rewrite was meant to clean. The rehearsal caught it in the post-rewrite tree
 listing.
+
+> **These ten ids are retrieval addresses, and they stay dangerous until [#367](https://github.com/ali-wallick/Portfolio/issues/367) lands.** A git blob id is not a digest of the content the way the SHA-256 entries in `scripts/check-preserved-blobs.mjs` are — that file's header explains why _those_ are safe to commit, and the reasoning does not transfer. GitHub serves an object by its id for as long as the object is in the store, and after a force-push these ten stay reachable through `refs/pull/N/head`, which is the whole reason #367 exists. **So this table is safe to publish only once the Support purge is confirmed complete.** [#378](https://github.com/ali-wallick/Portfolio/issues/378) carries that as a hard precondition rather than an ordering preference. Keeping the ids is deliberate: they are the record of what was stripped, and without them the step 4 command below cannot be checked against what actually ran.
 
 | Blob id                                    | What it is                          | Path it lived at                                                    |
 | ------------------------------------------ | ----------------------------------- | ------------------------------------------------------------------- |
@@ -328,7 +330,7 @@ awk 'NR>1 && $1 != $2' filter-repo/commit-map | wc -l
 grep "^$(git -C ../portfolio-backout.git rev-parse 1cdcbfc)" filter-repo/commit-map
 ```
 
-Expected: **every commit but one** is rewritten, and the oldest changed commit is **`1cdcbfc`**
+Expected: **every commit but one** is rewritten, and the oldest changed commit is **`f02d49f`**
 ("Initial Checkin", 2016-01-05) — the first 2016 résumé arrived with the repo. The only untouched
 commit is `0d0046a`, the `.gitattributes` root, which is the one commit with no résumé anywhere in
 its history. That is why the affected-PR count in #367 is every pull request rather than a subset.
@@ -510,7 +512,7 @@ Two things are now open rather than done, and neither belongs in this runbook:
   on 2026-09-11 with zero captures left for any of the three files, so GitHub is now the last
   copy outside this machine. The ordering constraint stands: file it _after_ this push and
   _before_ the flip, never after. Its ticket text needs the two numbers from step 4 pasted in:
-  867 of 868 commits rewritten, the oldest `1cdcbfc`.
+  867 of 868 commits rewritten, the oldest `f02d49f`.
 - **#109 item 4** — sanitize the issue tracker. #200's body is the exposure there, not
   archive.org's answer. Its survey also says the résumé with the home address and phone number "is
   not in git anywhere"; the 2010 one may not be, but the 2016 one was, in six blobs, until this ran.

@@ -100,7 +100,7 @@ actually gates this phase.
 | Firefall         | `2cxeAhxSoyo`                    | already set                                                                     |
 | Kaneva           | promote `kaneva/screenshot1.png` | a real shot of the events menu and object panel — the UI she led                |
 
-Every `banner.png` under `resources/images/projects/` is a **600×150 logo strip** from the old page
+Every `banner.png` under `src/assets/images/projects/<slug>/` is a **600×150 logo strip** from the old page
 headers, not a screenshot. Usable as a wordmark, useless as a hero. Don't reach for them.
 
 Archive tier: six entries already carry YouTube heroes; six more (Art of Rescue, Critter³, Dead
@@ -138,7 +138,7 @@ acceptable there and nowhere else on the site._
 ### Phase 3 execution outcome (2026-08-16, merged 2026-08-17)
 
 Executed on branch `phase-3-content`, merged via [PR #7](https://github.com/ali-wallick/Portfolio/pull/7)
-at `5a98f2c`. `npm run verify` and `pre-launch-check`'s sweeps pass clean, with zero
+at `5452fdc`. `npm run verify` and `pre-launch-check`'s sweeps pass clean, with zero
 `TODO(phase-3-revisit)` markers outstanding. **All five featured projects, all 12 archive entries,
 and the career narrative are written and `draft: false`.** Ali reviewed the branch preview and
 signed off on every provisional bit along the way — Marvel Snap's systems list, Vegas Blvd Slots'
@@ -359,7 +359,7 @@ and art` was, on its own, a slightly _broader_ claim than what she wrote herself
 
 **Correction, 2026-08-24 (#92): the load-bearing reasoning above no longer holds, and the caption it
 justified is gone.** `role` was trimmed sitewide to a title with no scope (see "The wording pass"
-below) — Prodigal's is `Solo developer` now, not `Solo — design, programming, and art` — so the
+above) — Prodigal's is `Solo developer` now, not `Solo — design, programming, and art` — so the
 overclaim the wolf-photo caption was correcting doesn't exist any more. Ali's call on #92 was to cut
 that sentence from the caption entirely rather than keep it as now-unnecessary color: **"it's so old
 it's more just for fun to show cool old projects."** That's a calibration worth carrying to the rest
@@ -427,8 +427,8 @@ second rule).
 
 Started as Ali reading #49 — a low-friction surface for Godot side projects — and saying it need not
 be Godot projects at all. Her list of what she actually wants to write up next: the current job,
-this website, possibly a grant-funded game with a child psychologist, other non-game projects, and
-talks. Two of those are the likeliest to exist soon, and she wanted them as **draft pages that never
+this website, other non-game projects, and talks — the specific unannounced ones are hers to name
+when they exist. Two are the likeliest to exist soon, and she wanted them as **draft pages that never
 show on the production site but can be added to until she is ready.**
 
 **The draft half already existed and needed nothing.** `draft: true` renders in `astro dev` and on
@@ -541,7 +541,7 @@ not a house style being imposed on her; it is her habit, and the site had drifte
 
 ### It was seeded once and compounded, and the curve says so
 
-Patient zero is `totalling`, in `docs/REBUILD-LOG.md`, in commit `3a16736` — **the commit that added
+Patient zero is `totalling`, in `docs/REBUILD-LOG.md`, in commit `0e2e465` — **the commit that added
 the agentic layer**: CLAUDE.md, the first three skills, the settings and the hooks. The vector and
 the payload shipped together.
 
@@ -613,7 +613,7 @@ The one residual false positive is a proper noun — a game actually titled _Cen
 outside backticks. No such title exists, so the exemption hook is deliberately not built; that is the
 call #338 made about its own candidates.
 
-### Firefall back to featured, aliwallick.com to the archive (2026-09-13, reverses #358)
+## Firefall back to featured, aliwallick.com to the archive (2026-09-13, reverses #358)
 
 **Ali's call: it reads better.** #358 offered three ways to publish `/projects/aliwallick-com`
 without growing the featured tier past five. It took the first one, demoting Firefall. This takes

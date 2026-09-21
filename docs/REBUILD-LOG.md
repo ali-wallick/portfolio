@@ -1,7 +1,8 @@
 # Rebuild log
 
 Running notes on rebuilding aliwallick.com with agentic workflows — what was tried, what worked,
-what didn't, and what it cost. **Phase 7 turns this into a build-in-public page.** Keeping notes as
+what didn't, and what it cost. **This is the source material for the build-in-public page at `/projects/aliwallick-com` (#48,
+shipped 2026-09-09).** Keeping notes as
 we go is much cheaper than reconstructing them at the end, and the details that make this
 interesting are exactly the ones that evaporate a week later.
 
@@ -63,13 +64,14 @@ Run `/usage` any time to see where a session went, and there's an `explain-usage
 
 _Nothing is reversible until the old content is out of the old system._ Runs first, blocks nothing once complete. Mostly mechanical — planned as Haiku work. **In practice it ran on Sonnet 5**, and the HTML-to-Markdown judgment calls (a malformed `<s>` tag, an undated post, mojibake in a quoted excerpt) were worth the difference over Haiku.
 
-Landed via [PR #1](https://github.com/ali-wallick/Portfolio/pull/1), merged to `master` at `d2de27f`.
+Landed via [PR #1](https://github.com/ali-wallick/Portfolio/pull/1), merged to `master` at `c3a743d`.
 
 - **Scrape the WordPress blog to Markdown.** Done — 20 posts (top of the ~15-20 estimate), 2010-2019, walked `?offset=0,5,10,15` until "Older" stopped appearing. One file per post in `content/archive/` with title/date/source front matter. One post ("Website Live!") had no published date on the live site — flagged in front matter with a `2010-xx-xx` filename rather than a guessed date.
   - **Follow-up fix:** the first pass only verified the posts' images currently resolved on DreamHost — it didn't commit the binaries, so they were still hotlinking to `aliwallick.com/blog/wp-content/uploads/`. Caught in review before merge. All 14 images across the 6 affected posts are now downloaded into `content/archive/images/` (2.8 MB) and referenced locally. Worth remembering for any future scrape-style task: "verify it resolves" is not the same as "preserved."
 - **Snapshot the live site** (full crawl) — done, in `snapshot/`. Every top-level page, all 15 project pages at their live (mixed-case) URLs, the blog's 4 pagination pages, and stray public files still live at time of capture (`todo.txt`, `palette.html`, `colors.css`, `wp-login.html`).
 - **Tag the current repo** (`v1-legacy`) — done, pushed to origin.
-- **Inventory assets.** Done — confirmed exactly as scoped: 86 of 90 social icons unused, 6 orphaned project logos, plus one more (`programming_actionscript.png`) tied to the known Art of Rescue icon bug. `resources/images/ASSET_INVENTORY.md` has the full keep/drop list. Nothing deleted — that's a Phase 3 cleanup action, not a Phase 0 one.
+- **Inventory assets.** Done — confirmed exactly as scoped: 86 of 90 social icons unused, 6 orphaned project logos, plus one more (`programming_actionscript.png`) tied to the known Art of Rescue icon bug. `resources/images/ASSET_INVENTORY.md` has the full keep/drop list — the directory was deleted in
+  Phase 3, so read it with `git show assets-pre-cleanup:resources/images/ASSET_INVENTORY.md`. Nothing deleted — that's a Phase 3 cleanup action, not a Phase 0 one.
 - **Pull source material** for the content rewrite (LinkedIn history, current resume PDF, Marvel Snap press/YouTube appearances) — **not done, and not agent-doable.** This is your material to gather, not DreamHost-only content at risk of disappearing, so it didn't block the Phase 0 merge. Still needed before the Phase 3 gate.
 
 **Exit:** every piece of content that exists only on DreamHost is in git. ✅ Met.
@@ -114,7 +116,9 @@ things a summary can't ship — `capture-dns-baseline.sh`, the captured pre-migr
 `verify-dns.sh`, which answers _"did we lose a record?"_ mechanically rather than by reading — and
 the DKIM trap that explains why the verify script asserts a magic substring.
 
-The step-by-step that actually ran is in git history (`git show 0eec28f:infra/PHASE-1-RUNBOOK.md`, the version that was actually used).
+The step-by-step that actually ran is in git history, at the commit that removed it — the 2026-09-18
+history rewrite re-pointed every commit id from before that date, so find it with `git log --diff-filter=D
+-- infra/PHASE-1-RUNBOOK.md` rather than by a literal SHA.
 It was retired on 2026-08-20: a registrar transfer happens once, and 143 lines of imperative
 instructions for a completed migration is a document that can only mislead — it still read _"target
 completion ~2026-09-20"_ five days after the work was done.
@@ -185,7 +189,7 @@ so the requirement would have been satisfied by inventing months. Changed to acc
 truth; a schema that forces false precision is worse than a loose one.
 
 **Reading the resume PNG instead of the PDF.** The PDF uses subset fonts with custom encodings, so
-text extraction returned glyph indices. `resources/images/resume.png` is the same document as an
+text extraction returned glyph indices. `resources/images/resume.png` (since deleted) is the same document as an
 image and reads perfectly. Two minutes of trying to be clever versus ten seconds of looking at the
 picture.
 
@@ -359,6 +363,12 @@ verification around them:
 - The settled phrase "an unannounced mobile title in Godot" was **more restrictive than reality and
   factually wrong** — Second Dinner went public on 7 August 2024 about building a Godot game, and
   never said mobile. A settled decision had quietly gone stale between phases.
+
+**Corrected 2026-08-26 (#32), and this entry is left standing as the record of the reasoning.** The
+"never said mobile" reading was an inference from one announcement. Ali's own statement — "we have
+been public that it's a mobile game" — is knowledge of what the studio has actually said, and it
+governs. "Mobile" is sayable; see CLAUDE.md's "What is safe to say about Second Dinner".
+
 - It Fits I Sits was overclaimed in its own seed metadata (`status: shipped`, a platform Ali never
   shipped on). She built the jam prototype only. The honest version is a better story.
 - KinoClue, dismissed in a Phase 2 TODO as "a single image and nothing else... or an honest decision
@@ -629,7 +639,7 @@ tool calls, and it replaced what would otherwise have been four or five blind bu
 
 ### Merged, with a mid-session model downshift
 
-Merged via [PR #9](https://github.com/ali-wallick/Portfolio/pull/9) at `c2f7811` (squash), same day
+Merged via [PR #9](https://github.com/ali-wallick/Portfolio/pull/9) at `63452ce` (squash), same day
 as the gate. The session that opened Phase 4 ran on Opus 5 through the gate, the resume build, and
 the Cloudflare PDF investigation; Ali switched the session to Sonnet 5 partway through, for the
 merge, the two follow-up content edits (GDScript, the Second Dinner role split), and this close-out —
@@ -1871,10 +1881,9 @@ words, so the combined figure is one em dash in 9,331 words of hers against 91 i
 
 **It corrected two things.**
 
-The reference file had claimed Ali never used "utilize" or "passionate about." She uses both — in the
-cover letters. The interesting part is _where_: the cover letters are, by a distance, the least
-her-sounding writing in either corpus. No specifics, no parentheticals, no stated motive, no evident
-interest in anything. So the guidance survived with a better reason attached. Those words aren't
+The reference file had claimed Ali never used "utilize" or "passionate about." She uses both, and
+only in the most formal documents in the set — the ones written to a form rather than about a thing.
+So the guidance survived with a better reason attached. Those words aren't
 banned because she dislikes them; they're a symptom of writing to a form instead of about a thing,
 and hitting one is a prompt to check whether the whole paragraph has gone generic. That's a more
 useful rule than a denylist entry, and it could only come from a corpus that contained her writing
@@ -1886,9 +1895,7 @@ carried a single sitewide contraction baseline, which would have pushed résumé
 register. Both metrics are now reported for context and explicitly marked as not-to-tune.
 
 **And it added three devices the blog didn't show.** The documents are structured in a way the blog
-isn't: she concedes the other side's point in full and then declines to drop hers (_"This is pretty
-clearly a problem caused by Dometic and not HC. […] However, I did several hours of free research."_),
-she presses with rhetorical questions in bursts, and she organises long arguments as a bolded label,
+isn't: she concedes the other side's point in full and then declines to drop hers, she presses with rhetorical questions in bursts, and she organises long arguments as a bolded label,
 a colon, and plain explanation. That last one is independent confirmation that the Marvel Snap page's
 bolded lead-ins — written months earlier, from instinct — are genuinely her shape.
 
@@ -2037,7 +2044,7 @@ confirmation that no colour or type token leaked to paper.
 - **The apostrophes**, which #32 listed. Not a resume problem: the resume is internally consistent
   and the mismatch is sitewide, and the original deferral note's reasoning (fixing only the resume
   creates a _third_ state) still holds. Opened as #188.
-- **Game Over Ever After** has no `projects` entry — removed at `906efc9` (#61) for lack of a `hero`.
+- **Game Over Ever After** has no `projects` entry — removed at `f812139` (#61) for lack of a `hero`.
   A resume line needs no image, so it appears in Personal Projects sourced from the 2019 resume and
   the snapshot, and `resume.ts` records why it can't be derived.
 
@@ -2292,7 +2299,7 @@ three rebuild-and-verify cycles, each finding a real class of bug.
 ## The agent review (2026-08-27, #128)
 
 #128 asks for a final review of the site, half agent and half human. The agent half ran 2026-08-27
-against `70ecd15` and delivered fifteen recommendations, prioritized and effort-tagged, as
+against `4bbf829` and delivered fifteen recommendations, prioritized and effort-tagged, as
 [a comment on the issue](https://github.com/ali-wallick/Portfolio/issues/128#issuecomment-5436019674).
 This entry records the method and what it says about the tooling, not the findings — those live on
 the issue, per the rule that issues track work.
@@ -2792,7 +2799,7 @@ delete-before-merge convention does not lose the artifact, it just moves it some
 
 ### The contact sheet is the half a switcher cannot do
 
-`scripts/contact-sheet.mjs` is the one piece that became code. A live switcher is sequential; "which
+`.claude/skills/design-switcher/scripts/contact-sheet.mjs` is the one piece that became code. A live switcher is sequential; "which
 of these four is loudest" is simultaneous, and so is anything about a state you cannot be in twice at
 once. It takes a spec of states — theme, `data-*` writes, an optional click, hover or focus, and an
 expression to measure — and renders each into a tile, then lays the tiles out **in the browser** as
@@ -3299,8 +3306,8 @@ just started firing.
 **The answer was sitting in the committed baseline, as a distribution.** Every width in it is a
 whole number. Whole-pixel glyph advances are FreeType rounding; #191's baseline, recorded on macOS,
 is a roughly even mix of integers and fractions. Counting integer widths per revision of the file
-took one script and dated the change precisely: mixed at `a0c7f73` (#191), all-integer from
-`65fe24f` (#238) onward. The baseline had been regenerated in a Linux environment three commits
+took one script and dated the change precisely: mixed at `ecb68f1` (#191), all-integer from
+`b9a801b` (#238) onward. The baseline had been regenerated in a Linux environment three commits
 running, and macOS had been the odd one out ever since with nothing in the repo saying so.
 
 That reframed the issue. It was not a guard that had grown brittle; it was a guard measuring one
@@ -4439,7 +4446,7 @@ corrected out from under them. A pin justified only by a rule is worth what the 
 ### Verification
 
 The session re-measured rather than trusting the spike, which was the right call twice over. The
-spike's baseline `783f51f` turned out to _be_ the paper-look commit, so #235 was already priced in
+spike's baseline `5fd2111` turned out to _be_ the paper-look commit, so #235 was already priced in
 and the numbers held — but two commits had landed since, and the live counts (54/70/16, not 56/72/16)
 had to be confirmed before anything could be deleted.
 
@@ -4976,8 +4983,8 @@ what made a 353-line restructure of a 530-line file safe to do without reading t
 
 The #335 split named a risk and left it open: `CLAUDE.md` is read in full at session start,
 `docs/decisions/*.md` is read when something says to read it, and the session that skips the skill
-gets neither. The issue listed four options and asked for a call. **It is still open** — the
-recommendation below is a recommendation, and the decision is Ali's. What shipped is the part that
+gets neither. The issue listed four options and asked for a call. **It was still open when this was written** — the
+recommendation below is a recommendation, and the decision was Ali's. #339 has since closed. What shipped is the part that
 is true either way.
 
 ### The issue was two days stale, and both stale facts pointed the same direction
@@ -5266,7 +5273,7 @@ The clone this ran in was shallow (50 commits), which produced a confident wrong
 British form appeared to enter on 2026-09-03, in one commit. That was the shallow boundary, not a
 finding. `git fetch --unshallow` gave the real history, 260 commits back to 2016.
 
-The first instance is `totalling`, in `docs/REBUILD-LOG.md` — **this file** — in commit `3a16736`,
+The first instance is `totalling`, in `docs/REBUILD-LOG.md` — **this file** — in commit `0e2e465`,
 _"Add the agentic layer: CLAUDE.md, three skills, settings, and hooks"_. The document that spreads
 the leak and the leak itself were added together.
 
@@ -5522,10 +5529,10 @@ and it took someone reading it back to me to notice.
 Checking GitHub's docs rather than reasoning from memory turned up the sentence that settles it: the
 purge removes the diff-view references from **any PR built on history after the sensitive-data
 commit, even PRs that never touched the file.** Combined with a fact already measured for the
-runbook — first changed commit `b541155`, 2020-09-01, predating every PR here — that is all 202.
+runbook — first changed commit `1882cf3`, 2020-09-01, predating every PR here — that is all 202.
 
-And checking the repo rather than assuming turned up the other half: **private, 0 forks, 1 watcher.**
-Which means today nobody without repo access can reach those refs at all, and the urgency I had been
+And checking the repo rather than assuming turned up the other half: **private, 0 forks, 1 watcher**, as of 2026-09-11.
+Which meant that nobody without repo access could reach those refs at all, and the urgency I had been
 writing into the runbook was imaginary. The deadline is the public flip, not a date.
 
 ### What was actually wrong with the runbook
@@ -5598,7 +5605,7 @@ web session starts without the history a history rewrite is about.
 The last piece of the old stack, and the only one that depended on someone else's timeline
 ([#52](https://github.com/ali-wallick/Portfolio/issues/52)). A web session wrote the plan as a
 handoff rather than doing it, because its sandbox had no outbound DNS and every step would have been
-unverified. A local session ran it with Ali at the dashboards: recon, a new zone in Robert's own
+unverified. A local session ran it with Ali at the dashboards: recon, a new zone in the other owner's own
 Cloudflare account, the registrar transfer, a one-page placeholder, and the cancellation, in one
 afternoon against a deadline a month out. None of the domain's details are recorded here, on
 purpose — it isn't Ali's, and this repo may go public.

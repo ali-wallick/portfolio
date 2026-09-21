@@ -223,8 +223,8 @@ her own 2019 resume, not her blog.
 `{ label, text }` in the schema and renders as **`Label:`** plus a clipped formal clause. Ali's 2019
 resume was built exactly this way ("Vegas Blvd Slots:", "UI Programming:", "Client Engineering:"),
 which makes it the same argument the Phase 5 palette revival ran on: a format Ali chose herself
-cannot be mistaken for a template. `resources/WallickAli-Resume.pdf` is the only copy of that document
-outside git history, and it has to be decoded to read — it is a subset-font PDF, so `grep` gets
+cannot be mistaken for a template. `resources/WallickAli-Resume.pdf` is the redacted PDF, and `resources/resume-redacted.png` beside it
+is a readable 200-DPI render (#360) — reach for the PNG first. The PDF has to be decoded to read — it is a subset-font PDF, so `grep` gets
 nothing and the machine has no `pdftotext`. (`pdfjs-dist` decodes it fine via its ToUnicode map;
 "undecodable" was only ever true of the shell tools to hand. See `docs/PRESERVATION.md`.) Ali picked this over a wording-only alternative that kept the
 current unlabelled shape.
@@ -258,7 +258,7 @@ and adding one to serve a single consumer is the `tech`-field mistake from #39 a
 
 **Game Over Ever After was a fourth entry and Ali cut it (2026-08-26).** Her 2019 resume listed it,
 which is why it was there. It was also the only entry with no page to link, having been removed from
-the collection at `906efc9` (#61) for lack of a `hero`. Cutting it means every _project_ in the
+the collection at `f812139` (#61) for lack of a `hero`. Cutting it means every _project_ in the
 section now links to its own page. **Don't restore it from the 2019 resume** on the theory that it
 only went for lack of media.
 

@@ -45,7 +45,10 @@ each stage relative to the one event that matters — **pre-launch, launch, post
 - **Post-launch** — everything after. What "Phase 7" tracked. GitHub milestone `Post-launch` (was
   `Phase 7 — Keep it alive`).
 
-**Stage is tracked by milestone alone, not a matching label.** Phase 6 originally paired each
+**Stage is tracked by milestone alone, not a matching label.** (**Superseded 2026-09-08**: the
+milestones themselves were retired once they stopped discriminating anything, and labels carry this
+now — see CLAUDE.md. The argument below, against duplicating one axis across two mechanisms, is what
+survived and is why there is no replacement stage label.) Phase 6 originally paired each
 milestone with an identically-named label (`pre-launch`, `launch`, `post-launch`), but by
 2026-08-23 every issue's label was a 1:1 echo of its milestone — pure duplication, and it had
 already drifted out of sync on two issues. The three labels were deleted; `decision` and
@@ -100,7 +103,7 @@ try to "fix" those placeholders.
 
 - **Faithful is not always the right default.** The first run restored the _unredacted_ resume PDF
   into the archive, manufacturing a second copy of the exposure #197 and #200 exist to reduce — and
-  it was committed before anyone noticed. `PREFER_WORKTREE` in the restore script now supersedes
+  it was committed before anyone noticed. `SUPERSEDE` (then named `PREFER_WORKTREE`) in the restore script now supersedes
   that one file. When preservation and privacy conflict, the conflict is the thing to notice.
 - **The verification worth copying is measurement, not inspection.** Everything asserted about this
   archive was checked against the live server while it still answered: 54/54 assets and 14/14 blog
@@ -234,7 +237,8 @@ built for has moved: it is now a rule in `base.css` outside `@media screen` reac
 "denylist" passages under Phase 4 ([`resume.md`](resume.md)) and Phase 5 ([`design.md`](design.md))
 describe the pre-#62 cascade and are left as the
 record of why the block exists; `tokens.css`'s header carries the corrected rule. What to do with
-the 53 inert pins was #327 — settled below.
+the 53 inert pins was #327 — settled in [`resume.md`](resume.md), under "Paper's token
+vocabulary is three pins".
 
 **Shared script logic lives in `scripts/lib/`, and the list is the rule.** Chromium launch,
 serving `dist/`, front matter, the directory walker, the 701×960 print geometry, and the
@@ -790,7 +794,7 @@ rewrite has run, so a SHA can only ever be fixed afterwards. That is the follow-
 Naming the commit `assets-pre-cleanup` removes the follow-up entirely: `git filter-repo` re-points
 tags automatically. The tag needs a full clone to push, so it could not be created in the session
 that wrote the code — hence a resolve-with-fallback rather than an assumption. **Ali pushed it the
-same day**, at `090f1ce`, verified as the pre-cleanup tree by its 144 files under
+same day**, at `b07bc9b`, verified as the pre-cleanup tree by its 144 files under
 `resources/images/`. `verify` never runs `restore-snapshot.mjs`, confirmed rather than assumed, so
 CI is unaffected either way.
 
@@ -863,7 +867,7 @@ the four.
 
 **Ali runs it.** It needs a full clone, force-push on every ref, a GitHub support purge request, and
 it lands a production deploy because `release` is the production branch. (**The purge left the
-runbook on 2026-09-11** — see "The Support purge is a decision, not a step" at the end of this file.
+runbook on 2026-09-11** — see "The Support purge is a decision, not a step" below.
 The rest of this sentence still holds.) None of that is an agent's
 to do unsupervised, and the runbook says so at the top rather than leaving it implied.
 
@@ -898,7 +902,7 @@ runbook had. All three are in it now, with the commands that produce them.
 **Calibration worth keeping**, because it is the part that generalizes: for a leaked _credential_ the
 purge is secondary, since rotation is the real remedy. **An address cannot be rotated**, so here the
 purge is the only lever on the GitHub copy. Cutting the other way, #109 already establishes this is
-the _least_-exposed copy — public in nine archive.org captures and Google's index. Worth doing
+the _least_-exposed copy — public, at the time, in nine archive.org captures and Google's index. Worth doing
 because it is cheap and the window is now, not because it is what protects anything.
 
 ### Every command is tested, and the numbers are measured
@@ -916,7 +920,7 @@ written _after_ the check that consumes its file, and the verification pipeline 
 normal run, which a careful operator would have read as failure.
 
 Measured rather than left as placeholders: **240 of 263 commits rewritten**, first changed commit
-`b541155` (2020-09-01) — which predates every pull request in the repo, and is therefore why the
+`1882cf3` (2020-09-01) — which predates every pull request in the repo, and is therefore why the
 affected-PR count is **all 202** rather than a subset.
 
 ### The stale-branch list is computed, not listed
@@ -942,7 +946,7 @@ records and the log are files in the tree, the issues are untouched. Run it and 
 
 The purge is different. GitHub's docs are explicit that it removes "the internal references used for
 displaying the diff view", and that this hits **any PR built on history after the sensitive-data
-commit, even PRs that never touched the file.** The first changed commit is `b541155`, dated
+commit, even PRs that never touched the file.** The first changed commit is `1882cf3`, dated
 2020-09-01, which predates every pull request in this repo — so it is all **202** of them. What
 survives is the commits; what goes is the ability to click "Files changed" on any PR ever opened
 here.
@@ -955,7 +959,8 @@ unquantified.
 
 ### It is gated on #200, and nothing else in the runbook is
 
-The PO Box is public right now in roughly ten archive.org captures and Google's index. Spending 202
+The PO Box was, when this was written, public in roughly ten archive.org captures and Google's
+index. **#200 closed them: re-verified 2026-09-19, every résumé file URL returns zero captures.** Spending 202
 PRs' diff views to close the GitHub copy while those stand closes one door in a building with no
 walls.
 
@@ -1015,7 +1020,7 @@ this on day one: enumerate every blob the two paths ever held, and account for e
 
 The second finding is the one that turned "incomplete" into "harmful". Stripping a blob drops that
 commit's change to the path, so the file falls back to whatever the parent commit had. With only the
-2019 PDF on the list, the `b541155` commit that `v1-legacy` points at reverts its résumé to the
+2019 PDF on the list, the `1882cf3` commit that `v1-legacy` points at reverts its résumé to the
 April 2016 revision. The rewrite as written would have removed the PO Box from the tag and put the
 street address in its place, in the one tree the runbook promised to leave clean apart from two
 deletions. The post-rewrite tree listing showed both résumé files still present; the runbook's own
@@ -1023,7 +1028,7 @@ section 3 said they would be gone.
 
 With all ten on the list, the paths have no revision left to fall back to and disappear from every
 tree, which is what section 3 claimed all along. **266 of 267 commits** are rewritten, not 240 of
-263, and the oldest changed commit is the initial checkin rather than 2020's `b541155`.
+263, and the oldest changed commit is the initial checkin rather than 2020's `1882cf3`.
 
 ### Four steps that would have failed at the keyboard
 
@@ -1111,8 +1116,8 @@ prose against GitHub. The mechanics held again: ten blobs, the same seven stale 
 `release` and three tags, `1065039` the only empty commit, `0d0046a` the only root. Four sentences
 did not.
 
-**Two merges had already moved the counts.** The morning's figures were pinned to `c41e1b0`; by the
-afternoon `main` was at `283d69c`, 273 commits rather than 270, and "270 becomes 269" was false
+**Two merges had already moved the counts.** The morning's figures were pinned to `ecc071b`; by the
+afternoon `main` was at `291fcc1`, 273 commits rather than 270, and "270 becomes 269" was false
 again. The pull-ref count appeared three times in the runbook as 202, 206 and 209, none of them the
 day's 210. A count re-measured that morning was stale by the time it was read, which is the
 2026-09-11 lesson at a shorter wavelength: it is not enough for a number to come from the right
@@ -1262,3 +1267,69 @@ including the homepage hero and every OG card, have no photographer recorded any
 photo of Ali is not automatically Ali's copyright. Chasing five photographers would have blocked the
 flip; "photographs of Ali were taken by others and are used with permission" is accurate without
 resolving any of them, and stops the README claiming what it cannot support.
+
+## Reading the repo as a stranger, and the third time a scope was a name (2026-09-21, #109 item 6)
+
+Item 6 was "one read-through of `CLAUDE.md`, `docs/decisions/` and `docs/REBUILD-LOG.md` as a whole"
+— about 10,800 lines, read as someone who has just opened the repo rather than as someone who
+already knows it. Four parallel reads, one per file group, plus two mechanical sweeps that no reader
+should spend attention on.
+
+**Almost nothing found was a disclosure. Almost everything was a sentence that was true when it was
+written.** That is the same failure this file's own rule names — status goes stale silently — arriving
+in the documents that carry the rule.
+
+### The scope was a label, and the risk was a class
+
+Item 4 said "skim every `needs-ali` issue for anything personal", and that is what was done. It
+missed [#130](https://github.com/ali-wallick/Portfolio/pull/130), a merged pull request with no such
+label, whose summary described the studio's issue trackers, the platform under a piece of CI
+automation, and that automation's outputs — the same material redacted from #37 and from
+`src/content/jobs/second-dinner.md` two days earlier. The sweep had closed three instances and left
+the fourth because the fourth did not carry the right label.
+
+Re-run as a class — every record mentioning the employer, not every record with a label — the tracker
+holds 88 such records. Seven carried a risk term. **Three were real and are redacted; four were
+false positives, and naming them matters as much:** the UI framework bullet is public, shipping on
+the résumé, and #180's "the studio's next team" is the phrasing quoted in order to correct it.
+
+**This is the third instance of one pattern, which makes it a pattern.** #360: the fix named a path
+when the risk was a class of content, so the guard was keyed on content. The rewrite: the blob
+denylist closed "these bytes" and nothing closed "text describing those bytes". Item 4: the sweep
+closed "issues carrying this label" when the risk was "records mentioning this employer". **Every
+time, the scope was borrowed from how the thing is filed rather than from what makes it dangerous.**
+Filing is a proxy, and a proxy is where the miss lives.
+
+### A digest and an address look identical
+
+`scripts/check-preserved-blobs.mjs` explains, correctly, why its SHA-256 entries are safe to commit:
+the digest of an image is not the image. `docs/HISTORY-REWRITE.md` publishes ten **git blob ids**,
+which look like the same kind of string and are not — GitHub serves an object by its id for as long
+as the object is in the store, and after a force-push these stay reachable through `refs/pull/N/head`.
+That is what [#367](https://github.com/ali-wallick/Portfolio/issues/367) exists to end.
+
+The ids stay, because they are the record of what was stripped and the only way to check the step 4
+command against what ran. What changed is that the runbook now says plainly that they are retrieval
+addresses, and #378 carries #367 as a hard precondition rather than an ordering preference.
+
+### The mechanical half, and a wrong answer on the way
+
+Of 67 hex ids cited across the documentation, **45 were unreachable** — the 2026-09-18 rewrite
+re-pointed 867 of 868 commits. `filter-repo`'s commit map survived, so 25 were remapped by script
+rather than by hand; `1065039` stays because it is the one pruned commit, and the two old tag objects
+in this runbook's before-and-after table stay because that column is the record.
+
+**The first version of that check reported three dead ids, confidently and wrongly.** It asked `git
+cat-file -e`, which answered yes, because this working clone still holds the pre-rewrite objects as
+unreferenced garbage. A fresh clone — which is what every reader gets — has none of them. **The
+question was never "does this object exist here"; it was "does it reach a ref".** The same shape as
+the rehearsal that counted commits in a mirror without pull-request refs: an answer that is right
+about the local copy and wrong about what anyone else will see.
+
+### What generalises
+
+**A public-reader pass is a different act from a correctness pass, and only the first one catches
+this.** Every finding here sat in a document that its authors had read many times. What a stranger
+supplies is not more care; it is the absence of the context that makes a stale sentence read as
+true. The cheapest version is to check the claim rather than the prose — a count, a path, a token
+value, a branch name — because the claims are what rot and the prose is what reads fine either way.
