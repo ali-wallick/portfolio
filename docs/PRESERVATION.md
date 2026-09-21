@@ -9,22 +9,22 @@ possible in that window; where that matters, it says so.
 
 ## The pieces
 
-| Where                             | What                                                           | Faithful?                                                                                                   |
-| --------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `snapshot/`                       | 26 rendered HTML pages, crawled 2026-08-15                     | **Yes — do not edit.** A `PreToolUse` hook blocks writes.                                                   |
-| `snapshot/rendered/`              | The same pages, made browsable                                 | Derived — but only 28 of its 102 files can be rebuilt.                                                      |
-| `content/archive/`                | 20 blog posts as Markdown + 14 images                          | **Yes — do not edit.** Same hook.                                                                           |
-| `resources/css`, `resources/js`   | The old stylesheet and `nav.js`                                | The **only** copy. Mined in Phase 5.                                                                        |
-| `resources/WallickAli-Resume.pdf` | The 2019 resume                                                | Carries a PO Box. See #109, #197.                                                                           |
-| `v1-legacy` tag                   | The complete PHP source, 31 files, **and the old `.htaccess`** | Pushed to origin. Confirmed. 183 files in all — 185 until the 2026-09-18 rewrite took the two résumé files. |
-| `docs/before-after/`              | 32 paired screenshots, old vs new                              | Old side captured from the live server.                                                                     |
-| Ali's cold storage                | Source video for the 6 hero YouTube embeds                     | Outside this repo. See `docs/VIDEO-ARCHIVE.md`.                                                             |
+| Where                             | What                                                                | Faithful?                                                                                                   |
+| --------------------------------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `snapshot-pre-retirement` (tag)   | 26 rendered HTML pages, crawled 2026-08-15, plus the browsable copy | **Retired from the tree 2026-09-21 (#45).** Read with `git show`; see the section at the end.               |
+| `content/archive/`                | 20 blog posts as Markdown + 14 images                               | **Yes — do not edit.** Same hook.                                                                           |
+| `resources/css`, `resources/js`   | The old stylesheet and `nav.js`                                     | The **only** copy. Mined in Phase 5.                                                                        |
+| `resources/WallickAli-Resume.pdf` | The 2019 resume                                                     | Carries a PO Box. See #109, #197.                                                                           |
+| `v1-legacy` tag                   | The complete PHP source, 31 files, **and the old `.htaccess`**      | Pushed to origin. Confirmed. 183 files in all — 185 until the 2026-09-18 rewrite took the two résumé files. |
+| `docs/before-after/`              | 32 paired screenshots, old vs new                                   | Old side captured from the live server.                                                                     |
+| Ali's cold storage                | Source video for the 6 hero YouTube embeds                          | Outside this repo. See `docs/VIDEO-ARCHIVE.md`.                                                             |
 
 ## Looking at it
 
-The archive is plain static HTML with relative paths, so this works:
+The archive is plain static HTML with relative paths, so it browses fine once restored from the tag:
 
 ```bash
+git restore --source=snapshot-pre-retirement -- snapshot/
 open snapshot/rendered/index.html
 ```
 
@@ -53,6 +53,10 @@ git worktree add /tmp/old-site v1-legacy
 ```
 
 ## Rebuilding `snapshot/rendered/`
+
+**Retired 2026-09-21 (#45), so this needs its inputs restored first** —
+`git restore --source=snapshot-pre-retirement -- snapshot/`. The rest of this section describes the
+tree as it stood while `snapshot/` was in it.
 
 ```bash
 node scripts/restore-snapshot.mjs --check-selfcontained  # verify; writes nothing
@@ -283,24 +287,47 @@ one capture of a 2010 `resume.pdf` at a different path, which carries a home str
 phone number rather than the PO Box. Removal there is a manual request rather than a re-crawl. See
 [#200](https://github.com/ali-wallick/Portfolio/issues/200).
 
-## Retiring `snapshot/` later
+## `snapshot/` was retired on 2026-09-21 (#45)
 
-The plan (#45) is to tag the archive and delete it from the working tree once it stops earning its
-place. That works — `v1-legacy` already proves the pattern — provided:
+Done, and this section is the record rather than a plan. The archive is on the annotated tag
+**`snapshot-pre-retirement`**, pushed to origin before anything was deleted, and the working tree no
+longer carries it.
 
-1. **The tag is pushed.** `git push origin <tag>`. A local-only tag dies with the laptop.
-2. **#109 is settled first.** It contemplates rewriting history to purge the PO Box PDF, and a
-   rewrite silently orphans tags. Deciding it afterwards means redoing this.
+```bash
+git show snapshot-pre-retirement:snapshot/index.html          # a faithful capture
+git show snapshot-pre-retirement:snapshot/rendered/index.html # the browsable copy
+git ls-tree -r --name-only snapshot-pre-retirement -- snapshot/
+```
 
-Everything under `snapshot/` is one directory on purpose, including the derived subtree, so the
-removal is a single `git rm -r`.
+Both preconditions were met. **The tag was pushed first** — a local-only tag dies with the laptop —
+and **#109's rewrite had already run**, which mattered because a rewrite silently orphans tags and
+doing this first would have meant doing it twice.
+
+**`v1-legacy` could not serve, and that was checkable in one command.** #45 wondered whether it might
+already cover the deletion. `git ls-tree -r v1-legacy` returns zero files under `snapshot/`:
+`v1-legacy` is the old PHP _source_, and `snapshot/` was a crawl of the _rendered_ site captured
+2026-08-15, after that commit. Different artifacts, and one never contained the other.
+
+**The whole directory went, including the derived `snapshot/rendered/`.** Keeping the rendered copy
+was considered and rejected: it is 7.7 MB of the 8.0, it is the deliberately _unfaithful_ copy
+(html5shiv and the Unity Web Player are stripped out of it), and it carries six YouTube poster frames
+— the class of third-party artwork #109 item 7 had just removed from `src/assets/images/`. Nothing in
+it is uniquely preserved by keeping it: 54 of its files are at `assets-pre-cleanup`, its 14 blog
+images are byte-identical to `content/archive/`'s, and the other 28 derive from the captures on the
+tag.
+
+**An archive tag is not a new convention here.** `assets-pre-cleanup` already is one — it exists so
+`git show assets-pre-cleanup:resources/images/ASSET_INVENTORY.md` resolves after a deletion. This tag
+follows its `<what>-pre-<action>` shape, and is annotated rather than lightweight so the reason
+travels with it.
 
 ## If this is ever published
 
 Only relevant if the archive goes up at a URL, which is a separate decision. Three things would need
 handling first:
 
-- **`snapshot/misc/wp-login.html` must not be served.** It is a captured WordPress login page;
+- **`snapshot/misc/wp-login.html` must not be served.** It is on the tag now, but it returns with any
+  restore. It is a captured WordPress login page;
   hosting something phishing-shaped on the real domain invites bot traffic and reputation flags for
   no benefit.
 - **`contact.html` carries the old form**, whose action target will not exist. Neuter it rather than

@@ -41,11 +41,12 @@ These directories are preserved records, not part of the site build. Don't edit 
 | Path               | What it is                                                           |
 | ------------------ | -------------------------------------------------------------------- |
 | `content/archive/` | 20 WordPress blog posts (2010–2019), scraped in Phase 0 with images. |
-| `snapshot/`        | Full crawl of the live PHP site as it stood in August 2026.          |
 | `infra/`           | The live DNS zone, its verify tooling, and Phase 1's record.         |
 | `resources/`       | The old site's stylesheet and scroll handler — the only copy.        |
 
-The tag `v1-legacy` marks the last commit of the original PHP site.
+The tag `v1-legacy` marks the last commit of the original PHP site. **`snapshot/`, a full crawl of
+that site as it rendered, was retired to the `snapshot-pre-retirement` tag on 2026-09-21** ([#45](https://github.com/ali-wallick/Portfolio/issues/45)) —
+read a page with `git show snapshot-pre-retirement:snapshot/index.html`.
 
 ## What's left
 

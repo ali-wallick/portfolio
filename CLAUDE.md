@@ -245,9 +245,9 @@ deciding the current one is fine_, because Phase 3 wrote every page by compressi
 pass that only read the current page inherited every compression silently — that is how #97's page
 came to be clean, in voice, and missing the reason the game has its name. Every page has now been
 compared once, across #31's 21 sub-issues; a new project has no old page to compare against; and
-[#45](https://github.com/ali-wallick/Portfolio/issues/45) will eventually delete `snapshot/`, which
-the audit script used to read. **`snapshot/` is still the reference for "what did the old page
-say?"** — it just isn't a step in every pass any more.
+[#45](https://github.com/ali-wallick/Portfolio/issues/45) retired `snapshot/` on 2026-09-21, which
+the audit script used to read. **It is still the reference for "what did the old page say?" — it now
+lives on the `snapshot-pre-retirement` tag** (`git show snapshot-pre-retirement:snapshot/about.html`) — it just isn't a step in every pass any more.
 
 Note: the skill list loads at session start, so a skill added mid-session isn't invocable until the
 next one. Read its `SKILL.md` and follow it directly in that case.
@@ -283,7 +283,7 @@ Settled now:
 **The voice is documented from primary sources, not described in the abstract** (2026-08-24). The
 `write-copy` skill carries quoted evidence and measurements in
 `.claude/skills/write-copy/references/ali-voice.md`, derived from four independent corpora:
-`content/archive/` plus `snapshot/` and the 2019 resume bullets; a 4,200-word set of adult documents
+`content/archive/` plus the retired `snapshot/` and the 2019 resume bullets; a 4,200-word set of adult documents
 Ali supplied (cover letters, a client email, a warranty escalation letter, a volunteer synthesis
 doc, 2016–2024); MobilityWare's 2017 "Meet Ali Wallick" Q&A; and her own chat messages from 2026.
 
@@ -606,15 +606,14 @@ Domain) precisely for this reason, and the residue is what these notes are for.
 ### Don't touch
 
 - **DNS, the registrar, email.** Phase 1 is closed. None of it is back in scope.
-- **`content/archive/`, `snapshot/`, `infra/`.** Preservation records from Phases 0–1. Their value is
+- **`content/archive/`, `infra/`.** Preservation records from Phases 0–1. Their value is
   being faithful, so reformatting or "improving" them destroys the point. **A `PreToolUse` hook
   (`.claude/hooks/guard-preserved.sh`) refuses a Write or Edit to every path in this list** —
-  these three and the three `resources/` entries below — with two exemptions: `snapshot/rendered/`,
-  which is derived, and `infra/README.md`, which is the DNS tooling's own live notes and is
+  these and the three `resources/` entries below — with one exemption: `infra/README.md`, which is the DNS tooling's own live notes and is
   formatted with everything else. Until 2026-09-07 the hook covered only the first two, on exactly
   the paths where an accidental write was least recoverable (#107).
 - **`resources/css/` and `resources/js/`** — the old site's stylesheet and scroll handler. Mined in
-  Phase 5 and **the only copy**; `snapshot/` has `colors.css` and nothing else. The findings are
+  Phase 5 and **the only copy**; the retired `snapshot/` had `colors.css` and nothing else. The findings are
   recorded under "What the gate corrected" in [`docs/decisions/design.md`](docs/decisions/design.md),
   and the recovered curve was re-examined and retuned in
   Phase 6 — but these are still the only primary sources if anyone reopens that.
@@ -630,7 +629,7 @@ Domain) precisely for this reason, and the residue is what these notes are for.
   `docs/HISTORY-REWRITE.md` is the record.
 - **The address was in HEAD anyway until 2026-09-09, in three files nobody had looked at**
   ([#360](https://github.com/ali-wallick/Portfolio/issues/360)). Redacting the PDF closed one copy;
-  a rendered PNG of the same résumé in `snapshot/rendered/`, and the two `docs/before-after/old/`
+  a rendered PNG of the same résumé in `snapshot/rendered/` (since retired), and the two `docs/before-after/old/`
   résumé captures that photographed the page embedding it, carried it in plain sight while every
   pass looked only at git history. All three are closed — the PNG replaced by a render of the
   redacted PDF, the captures given a labelled bar — and `npm run check:blobs` now fails the build
@@ -718,4 +717,4 @@ session dragging 80 turns of unrelated history reasons worse than one starting f
 | `.claude/hooks/`                      | `guard-preserved.sh` refuses writes to the Don't-touch paths; `format-on-write.sh` runs Prettier on every file a session writes.                                                              |
 | `.claude/launch.json`                 | Claude Code's dev-server launcher: `npm run dev` on 4321, Astro's default. Referenced by nothing in the repo; kept (#107).                                                                    |
 | GitHub issues                         | What's actually left. Labels, not milestones: `decision`, `needs-ali` and `blocked` do the real work.                                                                                         |
-| `snapshot/`                           | The old site as it stood. The reference for "what did the old page say?"                                                                                                                      |
+| `snapshot-pre-retirement` (tag)       | The old site as it stood, retired from the tree 2026-09-21 (#45). Still the reference for "what did the old page say?"                                                                        |

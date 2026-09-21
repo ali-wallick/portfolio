@@ -3,25 +3,22 @@
 # the Phase 0/1 preservation records, plus the old site's only-copy assets and
 # the redacted 2019 résumé PDF.
 #
-# `content/archive/` (the scraped WordPress blog) and `snapshot/` (a full crawl
-# of the live PHP site) exist to be *faithful*. Their whole value is that they
-# record what was actually there, so "improving", reformatting, or fixing typos
-# in them destroys the point. `content/archive/` in particular holds the only
-# copy of 20 blog posts that lived nowhere but a DreamHost database.
+# `content/archive/` (the scraped WordPress blog) exists to be *faithful*. Its
+# whole value is that it records what was actually there, so "improving",
+# reformatting, or fixing typos in it destroys the point. It holds the only copy
+# of 20 blog posts that lived nowhere but a DreamHost database.
+#
+# `snapshot/` was the other one until 2026-09-21, when it was retired to the
+# `snapshot-pre-retirement` tag (#45). Nothing to guard in the tree any more.
 # `infra/` (minus its own README) is the Phase 1 DNS record. `resources/css/`
 # and `resources/js/` are the only copy of the old site's stylesheet and scroll
 # handler. `resources/WallickAli-Resume.pdf` is the redacted 2019 résumé, kept
 # deliberately.
 #
-# Two exceptions. `snapshot/rendered/` is *derived*, not captured: it is written
-# by `scripts/restore-snapshot.mjs --rebuild` from the faithful pages beside it,
-# so hand-editing it is pointless rather than destructive — the next rebuild
-# overwrites it. Note that only 28 of its 102 files come from those pages; the
-# rest are recovered from a commit and two remote hosts, which is why a rebuild
-# preflights before it deletes (#344). It sits under snapshot/ deliberately, so the whole
-# archive stays one directory to tag and remove later (see #45). And
-# `infra/README.md` is a live document (the DNS tooling's own notes), not part
-# of the captured record.
+# One exception. `infra/README.md` is a live document (the DNS tooling's own
+# notes), not part of the captured record. There used to be a second —
+# `snapshot/rendered/`, derived rather than captured — which left with the rest
+# of `snapshot/`.
 #
 # Exit 2 blocks the tool call and shows stderr to the agent.
 
@@ -40,32 +37,25 @@ process.stdin.on("data", (c) => (d += c)).on("end", () => {
 [[ -z "$file_path" ]] && exit 0
 
 case "$file_path" in
-  # Derived output, not a preservation record — see the header. Must come
-  # first: the arm below would otherwise match it.
-  */snapshot/rendered/*)
-    exit 0
-    ;;
   # infra/README.md is a live document (the DNS tooling's own notes; see
   # .prettierignore, which formats it with everything else). The captured
   # zone, the baselines and the scripts beside it are the Phase 1 record.
   */infra/README.md)
     exit 0
     ;;
-  */content/archive/* | */snapshot/*)
+  */content/archive/*)
     cat >&2 <<EOF
 Blocked: $file_path is a preservation record from Phase 0.
 
-content/archive/ and snapshot/ capture the old site and blog exactly as they
-were. Their value is being faithful, so editing them is almost never right —
-content/archive/ holds the only surviving copy of 20 posts that existed nowhere
-but a DreamHost database.
+content/archive/ captures the old blog exactly as it was. Its value is being
+faithful, so editing it is almost never right — it holds the only surviving copy
+of 20 posts that existed nowhere but a DreamHost database.
 
 If you need the material, read it and write somewhere else. If you genuinely
 need to change it, ask the user first.
 
-Looking for a version that renders? That is snapshot/rendered/ — derived,
-writable, and rebuilt by \`node scripts/restore-snapshot.mjs --rebuild\`. Change
-the script, not its output.
+Looking for the old site as it rendered? It is on the snapshot-pre-retirement
+tag: \`git show snapshot-pre-retirement:snapshot/rendered/index.html\`.
 EOF
     exit 2
     ;;
@@ -87,7 +77,8 @@ Blocked: $file_path is the old site's only copy of its stylesheet or scroll
 handler.
 
 resources/css/ and resources/js/ are the ONLY surviving copy of
-templateStyles.css and nav.js — snapshot/ has colors.css and nothing else.
+templateStyles.css and nav.js — the retired snapshot/ had colors.css and nothing
+else.
 They are the primary source for the recovered motion curve (--ease,
 --duration) documented in CLAUDE.md, and editing them destroys that record.
 
