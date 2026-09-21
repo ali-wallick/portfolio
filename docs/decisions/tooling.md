@@ -1207,8 +1207,15 @@ smaller. The rule was right and three files simply outlived the mechanism that a
 
 Four were `socials/*.png`, the survivors of the 90-icon pack the Phase 0 audit trimmed. Their
 original names carry a vendor and a pack index (`facebook-dreamstale25.png`), and **no license,
-README or attribution ever accompanied them** in the working tree or in history. `src/config/site.ts`
-renders social links as text labels with no icons, so nothing referenced them.
+README or attribution ever accompanied them** in the working tree or in history. Nothing referenced
+them: `src/pages/contact.astro` renders each social link's mark as an inline SVG path from
+`src/lib/social-icons.ts`, so the site has its own icons and never reached for the PNGs.
+
+**The first version of this paragraph said the site rendered social links as text with no icons at
+all, which is false** — it was inferred from `src/config/site.ts`, where a `SocialLink` is a label, a
+URL and a status and no icon appears, without opening the component that renders one. The deletion
+was right for the reason given; the reason given was not the true one. **Reading the data shape is
+not reading the render**, and a claim about what a page shows has to come from the page.
 
 **Deletion beat a disclaimer here, and the test is worth keeping: a carve-out is for something the
 site actually needs to show.** Every one of these rendered nowhere. No wording can make a blanket
