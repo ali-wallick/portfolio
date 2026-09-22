@@ -2485,10 +2485,20 @@ hr {
 
   /* A 16rem thumbnail beside a stacked metadata block leaves the title about
      nine characters of room. The card becomes a column instead, which is the
-     same shape the tiles already use — picture, then title, then spec. */
+     same shape the tiles already use — picture, then title, then spec.
+
+     `baseline`, not the `flex-start` this was until #387, and not the
+     `center` the wide layout uses. Both of those are answers to a picture
+     sharing the row; once the card wraps, the picture has a flex line to
+     itself and the second line is a row of type again, which is the case
+     baseline alignment is for. `flex-start` aligned the two *boxes*, and
+     the boxes are different heights — 21px of mono against 26px of display
+     type — so the ranking number's baseline sat 4px above the title's on
+     every featured card. Aligning within a flex line never reaches the
+     picture's line, so the wrap itself is unaffected. */
   .card {
     flex-wrap: wrap;
-    align-items: flex-start;
+    align-items: baseline;
   }
 
   .visual[data-size='card'] {
