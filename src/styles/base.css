@@ -2485,10 +2485,20 @@ hr {
 
   /* A 16rem thumbnail beside a stacked metadata block leaves the title about
      nine characters of room. The card becomes a column instead, which is the
-     same shape the tiles already use — picture, then title, then spec. */
+     same shape the tiles already use — picture, then title, then spec.
+
+     `baseline`, not the `flex-start` this was until #387, and not the
+     `center` the wide layout uses. Both of those are answers to a picture
+     sharing the row; once the card wraps, the picture has a flex line to
+     itself and the second line is a row of type again, which is the case
+     baseline alignment is for. `flex-start` aligned the two *boxes*, and
+     the boxes are different heights — 21px of mono against 26px of display
+     type — so the ranking number's baseline sat 4px above the title's on
+     every featured card. Aligning within a flex line never reaches the
+     picture's line, so the wrap itself is unaffected. */
   .card {
     flex-wrap: wrap;
-    align-items: flex-start;
+    align-items: baseline;
   }
 
   .visual[data-size='card'] {
@@ -2509,9 +2519,29 @@ hr {
   }
 
   /* The ranking number keeps its row with the title rather than sitting alone
-     above a full-width picture, which would read as a caption for it. */
+     above a full-width picture, which would read as a caption for it.
+
+     The nudge is the other half of the baseline rule above, and it is an
+     optical correction rather than a second alignment. Sharing a baseline is
+     correct and still leaves the digits reading low, because they are shorter
+     than the title's capitals — 14.06px of digit ink against 17.19px of cap
+     ink at these sizes — so the whole 3.13px difference opens up above them
+     and none below. Half of it, 1.56px, re-centres the digits on the
+     capitals; Ali picked this over sitting on the baseline alone.
+
+     In `em` of the index's own size, not `px`, so it survives a reader whose
+     default font size is not 16px — a px nudge would stay put while the type
+     it is correcting grew. 0.075em sits between the two ways of deriving it:
+     0.078em from flat-sided glyphs (`HIEFLT` against `147`) and 0.069em from
+     every glyph's ink including the round letters' overshoot. It assumes
+     `--text-xl` stays 1.25x `--text-lg`; nothing enforces that, and a change
+     to the scale ratio is what would make this stale.
+
+     `transform`, not a margin: this moves ink, not layout. The flex line's
+     height and the baseline the metadata block hangs from both stay put. */
   .card-index {
     order: 0;
+    transform: translateY(-0.075em);
   }
 
   /* Floating a 14rem figure inside a ~20rem column leaves a gutter too narrow
