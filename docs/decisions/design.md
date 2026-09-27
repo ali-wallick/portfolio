@@ -1537,3 +1537,53 @@ written in terms of _where_ keeps finding new cases.** `dormant`, then `crossing
 then never placed — four conditions and one question, which is whether the viewer watched the
 brackets arrive at the place the travel starts from. The load-time case is the same question with a
 different answer: there, the honest move is not to have painted a starting place at all.
+
+## The ranking number shares the title's baseline, then steps off it (2026-09-27, closes #387)
+
+Ali, from a phone: the `01` / `02` on a featured card didn't line up with the project title. It
+didn't — by 4px — and fixing that turned out to be two decisions rather than one.
+
+**The bug was a scope error.** Below `40em` the card wraps into a column: the picture takes a flex
+line to itself, and the ranking number and the card body share the line under it. That breakpoint
+set `align-items: flex-start`, which aligns the two _boxes_ — 21px of `--text-lg` mono against
+26.26px of `--text-xl` display type. Top-align two unequal line boxes and the shorter one's
+baseline rides high.
+
+`flex-start` was there to override the wide layout's `align-items: center`, and that rule is
+right for what it answers: a picture _in_ the row, where "baseline alignment is right for a row of
+type and wrong the moment there is a picture in it." The override just inherited the wide layout's
+premise. Once the card wraps, the picture is on its own flex line and the second line is a row of
+type again — the case baseline alignment is for. `align-items` resolves within a flex line, so it
+never reaches the picture's line and the wrap is untouched either way.
+
+**Then baseline alignment turned out not to be the end of it.** Sharing a baseline is correct and
+still reads low, because the digits are shorter than the title's capitals: 14.06px of digit ink
+against 17.19px of cap ink. All 3.13px of that difference opens above the digits and none below, so
+a correct alignment still looks like a mistake. Ali picked re-centring the digits on the capitals
+over leaving them on the baseline, from a three-way render.
+
+So the shipped treatment is both: `align-items: baseline` for the alignment, and
+`translateY(-0.075em)` on `.card-index` for half the ink difference. **They are different kinds of
+rule and the comment in `base.css` says so** — one is where the boxes go, the other moves ink
+without moving layout.
+
+**Three things about that magic number are worth keeping.**
+
+It is in `em` of the index's own size rather than `px`, so it survives a reader whose default font
+size is not 16px; a px nudge would sit still while the type it corrects grew. It is only valid
+while `--text-xl` stays 1.25x `--text-lg` — nothing enforces that ratio, and changing the scale is
+what would silently make this stale. And 0.075em is a deliberate round number between two honest
+derivations: 0.078em measuring flat-sided glyphs (`HIEFLT` against `147`) and 0.069em measuring
+every glyph's ink including the round letters' overshoot. The residual against the flat-glyph
+target is 0.065px.
+
+**The third candidate is the one worth recording, because it is the obvious reading of "centre
+it".** `align-items: center` on the wrapped row centres the number against the whole card body —
+title, status chip and four metadata lines — which parks `02` beside `2019–2024`. Centring is only
+meaningful against the thing you mean to centre on, and in a flex row that thing is the entire
+item.
+
+**A measurement note, since it produced a confident wrong answer here too.** A zero-height
+inline-block probe is the reliable way to find a rendered baseline, but a probe placed _inside_ a
+transformed element already reports transformed coordinates — adding the element's own transform on
+top double-counts it. That read as a 1.435px error in a nudge that was actually 0.065px out.
