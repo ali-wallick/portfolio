@@ -116,7 +116,7 @@ and a 4.7-star rating. I did not work on either shipped release. The core mechan
 
 ## What I Learned
 
-The level editor turned out to be the most durable thing I built that week. It came from something
+The level editor turned out to be the most useful thing I built that week. It came from something
 I had already noticed at other jams: teams that got into trouble were usually the ones trying to
 build too much. Robert and I scoped down to the smallest MVP we could pitch, then I built the level
 editor before anything else. That let the level designers work in parallel with the rest of the
