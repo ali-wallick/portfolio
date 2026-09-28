@@ -52,8 +52,7 @@ draft: false
 ---
 
 Vegas Blvd Slots was a mobile slots game built in Unity. By the time I moved on, it carried over 50
-machines, plus daily and weekly rewards, social gifting, leagues, and multiplayer tournaments. I
-worked on it for most of my three years at MobilityWare. Before that, I ported the previous slots
+machines. I worked on it for most of my three years at MobilityWare. Before that, I ported the previous slots
 title, Hot Streak Slots, from native iOS to Unity. I also built blackjack, video poker, and keno for
 an early, unreleased casino app. That team later merged into Vegas Blvd Slots, which shipped as
 slots only.
@@ -61,8 +60,8 @@ slots only.
 ## What I Built
 
 Most of my time was client-side: engineering support for new machines, and the features and bonus
-games that went with each one. Much of it was less about any one machine than the systems
-underneath them. I architected the live-ops systems that let the game change without a client
+games that went with each one. I also worked on the meta systems around them, including daily and
+weekly rewards, social gifting, leagues, and multiplayer tournaments. I architected the live-ops systems that let the game change without a client
 update. That was a server-controllable store, plus a DeltaDNA integration driving in-app messaging,
 promo carousels, and eventing. All of it had customizable text, so marketing could run campaigns
 without engineering in the loop. I also led a few cross-cutting projects that don’t fit neatly into
