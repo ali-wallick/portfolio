@@ -111,9 +111,8 @@ stayed on Vegas Blvd Slots while other teams took it forward. It shipped first o
 Games as It Fits I Sits, renamed since our original name was already taken there. The Instant Games
 team kept me in the loop, and I saw it peak at 188K daily active users. It later moved to iOS and
 Android under another new name, [Puzzle Cats](https://www.mobilityware.com/puzzle-cats/), a better
-fit for marketing than a cat pun. It’s still live, with more than a million downloads and a 4.7-star
-rating. I did not work
-on either shipped release. The core mechanic in both stayed close to our week-one prototype.
+fit for marketing than a cat pun. As of 2026, it’s still live, with more than a million downloads
+and a 4.7-star rating. I did not work on either shipped release. The core mechanic in both stayed close to our week-one prototype.
 
 ## What I Learned
 
