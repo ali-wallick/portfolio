@@ -52,8 +52,8 @@ gallery:
   - type: image
     src: ../../assets/images/projects/aliwallick-com/new-about-desktop.webp
     alt: >-
-      The new About page, a headshot beside the opening paragraph and the Kerbal costume beside
-      “Off the Clock”
+      The new About page, a childhood photo of Ali holding up a PC game box beside the opening
+      paragraph, and her Crypt of the NecroDancer cosplay beside “Off the Clock”
     caption: About, after.
   - type: image
     src: ../../assets/images/projects/aliwallick-com/old-projects-desktop.webp
@@ -125,21 +125,19 @@ its credit stays. An agent cannot get those wrong, and neither can I.
 
 ## What I Learned
 
-Measuring narrows, looking decides. Nineteen faces were measured before any of them went on a
-preview, and the color candidates were computed rather than picked by eye. None of it settled until
-I saw it in context on a phone, which is the whole reason I built the loop.
+Nineteen typefaces were measured before any of them went on a preview, and the color candidates were
+computed rather than picked by eye. None of it settled until I saw it in context on a phone, which is
+the whole reason I built the loop.
 
 Write the side quest down and keep going. Every stray idea and bug became an issue with enough
 context to pick it up cold, so the main work never stopped for it. That is why the site was accurate
 before it was pretty, and launched before it was finished.
 
-A skill is worth what it currently describes. Each one here started as something I had already done
-by hand two or three times, and each has been edited since, as the way I work moved. One lost a step
-once it had been run on every page. A skill describing how I used to work is worse than none,
-because the next session will follow it.
+Each skill here started as something I had already done by hand two or three times, and each has
+been edited since, as the way I work moved. One lost a step once it had been run on every page. A
+skill describing how I used to work is worse than none, because the next session will follow it.
 
 At work the tooling already exists, so nobody sees the mistake each piece was made to prevent.
-Building it from nothing is what made that visible, and the habit is what I am taking with me. I
-want skills for writing skills, for checking a plan says what I meant before anything gets built,
-and for debriefing work after it ships. Every project should leave my own tooling better than it
-found it. That is the part I enjoyed most, and the part I want to keep getting better at.
+Building it from nothing made that visible. Next I want skills for writing skills, for checking a
+plan says what I meant before anything gets built, and for debriefing work after it ships. Building
+the tooling was the part of this project I enjoyed most.

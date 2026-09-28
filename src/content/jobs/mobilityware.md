@@ -24,7 +24,7 @@ highlights:
   - label: Slot Machines
     text: >-
       Engineered new machines, their features, and their bonus games, on a title carrying more
-      than 50 machines. Its meta systems included rewards, gifting, leagues, and tournaments.
+      than 50 machines. Developed its meta systems, including rewards, gifting, leagues, and tournaments.
   - label: I Fits I Sits
     text: >-
       Pitched the concept at the studio game jam and built the week-long prototype. Focused on a

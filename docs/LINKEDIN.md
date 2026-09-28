@@ -44,7 +44,7 @@ A lot of my favorite work has been tooling. The menu animation system I built at
 
 **2 positions under one company.** Software Engineer II (2019 – Dec 2021), then Senior Software Engineer I, Dec 2021 – Present. LinkedIn models this natively: add a further position under the same Second Dinner entry rather than editing the title in place, so the promotion shows on your profile. Put the bullets below on the current role.
 
-Joined as the eleventh employee, interviewing and helping shape the culture as the studio grew past 100.
+Joined as the 11th employee, interviewing candidates and helping shape the culture as the studio grew past 100.
 
 ```text
 Unreleased Mobile Game (2024 – Present)
@@ -74,7 +74,7 @@ Client then feature engineer, from prototype through production, the mobile and 
 
 ```text
 • Vegas Blvd Slots: Architected the live-ops systems, including a server-controllable store and a DeltaDNA integration driving in-app messaging and promo carousels. Customizable text let marketing run its own campaigns.
-• Slot Machines: Engineered new machines, their features, and their bonus games, on a title carrying more than 50 machines. Its meta systems included rewards, gifting, leagues, and tournaments.
+• Slot Machines: Engineered new machines, their features, and their bonus games, on a title carrying more than 50 machines. Developed its meta systems, including rewards, gifting, leagues, and tournaments.
 • I Fits I Sits: Pitched the concept at the studio game jam and built the week-long prototype. Focused on a level editor the team used to author 61 levels. It won People’s Choice, and other teams later released it as Puzzle Cats. The editor exported JSON, and the intro levels the designers built taught the mechanics with no separate tutorial. It shipped first on Facebook Instant Games as It Fits I Sits.
 • Compliance & Upgrades: Led GDPR support and several major Unity version upgrades across the title.
 • Hot Streak Slots: Ported the studio’s previous slots title from native iOS to Unity.

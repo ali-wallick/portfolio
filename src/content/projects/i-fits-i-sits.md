@@ -35,8 +35,8 @@ role: [Designer, Programmer]
 collaborators:
   - name: Robert Spessard
 summary: >-
-  Pitched and prototyped a puzzle game at a company game jam, winning People’s Choice, then
-  other teams developed it into a popular mobile game.
+  Pitched and prototyped a puzzle game at a company game jam, and won People’s Choice. Other
+  teams later developed it into a popular mobile game.
 # Card/tile thumbnail override — a square crop of the same Puzzle Cats key
 # art centered on its wordmark, rather than the wide banner `hero` uses.
 # See #64.
@@ -50,7 +50,7 @@ hero:
   src: ../../assets/images/projects/i-fits-i-sits/puzzle-cats-banner.webp
   alt: >-
     Key art for Puzzle Cats, the shipped mobile game that grew out of Ali’s
-    jam prototype — she pitched and prototyped the concept but did not work
+    jam prototype. She pitched and prototyped the concept but did not work
     on this release
 # Phone/monitor photos and a couple of screen-recording stills from the jam
 # itself — genuinely low quality, and that’s the point (#46): the gap between
@@ -94,7 +94,7 @@ links:
 draft: false
 ---
 
-MobilityWare runs a week-long game jam every year: pitch on Friday, then build with a team for a
+MobilityWare ran a week-long game jam every year: pitch on Friday, then build with a team for a
 week. I had jammed there before, but Game Jam V in March 2018 was the first time I pitched. Robert
 and I pitched a tangram-style puzzle game about cats fitting into boxes, inspired by watching our
 own cats do exactly that. We called it I Fits I Sits.
@@ -108,19 +108,18 @@ the game’s mechanics with no separate tutorial.
 
 The team won the studio’s People’s Choice Award, and the game was picked up for full development. I
 stayed on Vegas Blvd Slots while other teams took it forward. It shipped first on Facebook Instant
-Games as It Fits I Sits, renamed since our original name was already taken there. I stayed in the
-loop and saw it peak at 188K daily active users. It later moved to iOS and Android under another new
-name, [Puzzle Cats](https://www.mobilityware.com/puzzle-cats/), a better fit for marketing than a cat
-pun, and is still live, downloaded more than a million times with a 4.7-star rating. I did not work
-on either shipped release. The core mechanic in both stayed close to our week-one prototype.
+Games as It Fits I Sits, renamed since our original name was already taken there. The Instant Games
+team kept me in the loop, and I saw it peak at 188K daily active users. It later moved to iOS and
+Android under another new name, [Puzzle Cats](https://www.mobilityware.com/puzzle-cats/), a better
+fit for marketing than a cat pun. As of 2026, it’s still live, with more than a million downloads
+and a 4.7-star rating. I did not work on either shipped release. The core mechanic in both stayed close to our week-one prototype.
 
 ## What I Learned
 
-The level editor turned out to be the most durable thing I built that week. It came from something
+The level editor turned out to be the most useful thing I built that week. It came from something
 I had already noticed at other jams: teams that got into trouble were usually the ones trying to
 build too much. Robert and I scoped down to the smallest MVP we could pitch, then I built the level
 editor before anything else. That let the level designers work in parallel with the rest of the
 team, instead of waiting on engineering for every level. It also let us design a real difficulty
-curve into the levels, from a trivial first one up to genuinely hard ones, instead of a bolted-on
-tutorial. I think that finished, polished feel, more than the pitch itself, is what won us the
+curve into the levels, from a trivial first one up to genuinely hard ones. I think that finished, polished feel, more than the pitch itself, is what won us the
 studio vote that week.

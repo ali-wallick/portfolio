@@ -19,9 +19,9 @@ collaborators:
   - name: Leigh Ann Kinnison
 role: [Programmer]
 summary: >-
-  A cube-world puzzle game from Global Game Jam 2011. Cycle each tile’s
-  resource until it matches what its face’s animal population needs to
-  survive.
+  A cube-world puzzle game from Global Game Jam 2011. Players cycle each
+  tile’s resource until it matches what that face’s animal population needs
+  to survive.
 hero:
   type: image
   src: ../../assets/images/projects/critter-3/screenshot.png
@@ -51,7 +51,7 @@ SCAD art students for the weekend. We built a cube world where each face held an
 that needed the right resources to survive. It also shipped in two difficulty modes, easy with two
 resources per face and hard with three.
 
-I was one of the three programmers. I built much of the core mechanics (the camera controls for
+I was one of the three programmers. I built many of the core mechanics (the camera controls for
 looking around the cube, the resource-cycling clicks) plus a lot of the graphics. Design was a
 group effort. I helped shape the overall mechanic, and the whole team weighed in on the UI.
 

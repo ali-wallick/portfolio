@@ -57,7 +57,7 @@ links:
   - label: kaneva.com (via Wayback Machine)
     url: https://web.archive.org/web/20130604063555/http://www.kaneva.com/
     kind: site
-  - label: 'Kaneva — Virtual Worlds Museum'
+  - label: Kaneva at the Virtual Worlds Museum
     url: https://www.virtualworlds.museum/exhibits/kaneva
     kind: press
 draft: false
@@ -73,8 +73,8 @@ I began as a Technical Support Engineer, helping players with their scripting. I
 templates (Treasure Hunt and Adventure among them) that let players assemble small games of their
 own by dropping items and defining levels.
 
-I later moved into UI work full time, where I built many of the game’s menus end to end in the
-studio’s in-house Lua menu system, from design collaboration through layout and implementation. I
+I later moved into UI work full time, where I built many of the game’s menus in the studio’s
+in-house Lua menu system, from design collaboration through layout and implementation. I
 worked closely with the engine and web teams whenever a menu touched either.
 
 - **HUD:** Player and build/creator HUD menus.
@@ -88,12 +88,11 @@ worked closely with the engine and web teams whenever a menu touched either.
 
 In 2014, I led a full overhaul of the HUD, from the code design document through to release.
 
-I also built a menu animation system after growing frustrated with hand-coding each transition
-individually. It was later adopted by both the UI and game teams.
+I also built a menu animation system after growing frustrated with hand-coding every
+transition. It was later adopted by both the UI and game teams.
 
 ## What I Learned
 
 Kaneva is where I discovered a love for UI programming that I have carried forward ever since.
-Beyond that, much of what I took from the job concerned working in a professional environment more
-broadly. That included coordinating with a full team, working within established source control,
-supporting real customers, and using project-tracking tools such as Jira.
+It was also where I learned how a professional studio works: coordinating with a full team, working
+within established source control, supporting real customers, and tracking work in tools like Jira.

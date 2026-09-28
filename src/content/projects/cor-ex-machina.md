@@ -38,5 +38,5 @@ mechanic and scrapped the rest. We rebuilt around a steampunk look in the final 
 
 I coded the opening and closing sequences, wired up the music and sound effects, and built the
 lighting that shows how strongly the heart is beating. On the design side I worked on level design,
-animation, and the "cutscene" moments bookending the game. A team of Berklee School of Music
+animation, and the "cutscene" moments bookending the game. A team of Berklee College of Music
 students scored it for us.
