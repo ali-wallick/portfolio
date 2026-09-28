@@ -632,3 +632,35 @@ sorts newest first), and its tile image is its hero, the old homepage, because i
 `thumbWide`. The homepage's featured list swaps its card for Firefall's. Prev/next on the detail
 pages follows the new `/projects` order. The résumé, OG cards, sitemap and URLs do not read `tier`
 and are unchanged.
+
+## A second wording pass, read across the site (2026-09-27, #390)
+
+Ali asked whether a newer model would change anything. The measured numbers had held since #31
+(16.2 words per sentence, zero em dashes), so the answer was specific sentences rather than a
+rewrite. **The pass was worth running because it read every page in one sitting.** Its main finding
+was three sentence shapes that each appeared once per page on several pages, which no per-page pass
+could see. The `write-copy` skill now says to judge the site as well as the page.
+
+Five things it settled that a future session would otherwise re-derive:
+
+- **Archive entries describe gameplay in the third person, tier-wide.** Art of Rescue, Critter³ and
+  Secret Garden's summaries and Night Light's body were written as instructions to the reader
+  ("Cycle each tile’s resource…"). SKILL.md §4.13 already preferred third person, and four
+  instances made it a pattern rather than a choice. All four now say "Players…" or name the
+  character.
+- **A relative duration that will silently go false is anchored to a year.** "The last five years
+  on the board of my synagogue" is now "Since 2021", and the résumé summary's "Seven of those at
+  Second Dinner" is now "At Second Dinner since 2019". This is the site's founding bug (present
+  tense that stops being true) in a quieter form. **"Fifteen years" is the exception and stays**:
+  it is the homepage's settled number ("The wording pass" above), and it accepts an annual edit on
+  purpose.
+- **A figure about someone else's live product carries the year it was checked.** Puzzle Cats'
+  download count, rating and "still live" now read "As of 2026" (Ali's call: keep the figures, date
+  them). `links:external` notices a dead link but never a wrong number.
+- **The Vegas Blvd Slots meta systems are Ali's work.** Rewards, gifting, leagues and tournaments
+  had been written as features of the game on both the page and the résumé. She worked on all of
+  them, so both now say so. The general form is in `write-copy` §6: compression can under-claim.
+- **The aliwallick.com "About, after" image is current, and the cutover pair is not.** The gallery
+  image was recaptured from the branch build at `capture-comparison.mjs`'s desktop settings, since
+  it still showed the headshot and Kerbal photo #181 moved off /about. `docs/before-after/` was
+  left alone, because it is the record of the site at launch.

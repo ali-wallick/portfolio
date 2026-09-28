@@ -5746,3 +5746,33 @@ and nothing listed them.
 Fable, inline, no subagents. The survey was a dozen tool calls over the tree, the open issues and
 the two issues that decided the flip; nothing in it fanned out. One same-day reversal, recorded in
 the tooling record with its reason.
+
+## A second wording pass (2026-09-27)
+
+Ali asked for a wording pass after the model moved from Opus 5 to 5.5, curious whether it would
+change anything. It read every page, the résumé strings and the config copy in one sitting,
+measured them, and recommended rather than edited. The site was still on Ali's baseline, so the
+recommendations were about twenty specific sentences. Ali took all of them. The PR then grew by
+four follow-ups as she answered the questions the read had raised: a credit the site had
+under-claimed, one more résumé word (which fit), a date on third-party figures, and a stale
+screenshot.
+
+### The generalizable bit
+
+**Some tells only exist at site scale.** Three sentence shapes had each landed once on several
+pages, and one of them traceably came from a pass told to match a page to its siblings. Every check
+here is per page, whether a guard, `copy-stats`, `audit-page` or a reviewer reading one preview, so
+each instance passed. Reading everything together is what surfaced them. It is now a line in
+`write-copy`.
+
+**A wording pass surfaces fact questions, and the useful move is to ask rather than reword around
+them.** Most of what the read held back were questions only Ali could answer, and one of them
+found the site under-claiming her work, the direction no guard or skill had been watching.
+
+### Model allocation and cost
+
+Opus 5.5, inline, no subagents. The read was about thirty files and one `--all` audit; nothing in it
+fanned out. One `SHOW_DRAFTS` build for the audit, and a production build plus `verify` per commit
+that touched the résumé, because those regenerate both PDFs and `docs/LINKEDIN.md`. The screenshot
+was a scratchpad script reusing `serve-dist.mjs` and `launch-chromium.mjs`, rather than a run of
+`capture-comparison.mjs` that would have rewritten all sixteen `new/` captures.

@@ -162,6 +162,16 @@ once each and reads perfectly human.
 **The rule: one is a sentence, four is a signature.** Almost everything below is fine in isolation
 and damning in repetition. Judge the page, not the line.
 
+**And judge the site, not only the page** (2026-09-27, [#390](https://github.com/ali-wallick/Portfolio/pull/390)).
+A per-page pass cannot see a sentence shape that appears once on each of two pages, and those are
+exactly the ones a "match this page to its siblings" pass creates: #137 brought Vegas Blvd Slots in
+line with Firefall and copied Firefall's "less about any one screen than the layer underneath" into
+"less about any one machine than the systems underneath them." Two other shapes had spread the same
+way ("X was one, Y was another" on Marvel Snap and Vegas; gameplay written as instructions to the
+reader on four archive entries). Each passed every check on its own page. **When a pass touches
+more than one page, read the pages together before calling it done**, and grep a suspect
+construction across `src/content/` the way §2 already says to for a register outlier.
+
 Things that are only bad in bulk — use them when the sentence genuinely wants them:
 
 - **Triads.** "Notifications, localization, and deep linking" is just an accurate list. Three
@@ -400,6 +410,12 @@ in, because a punchier sentence often wants a detail the source doesn't have.
   work in a one-line, three-fact sentence gives it the same weight as everything else, independent
   of how much of the work it actually was. **Compression promotes whatever survives it.** Check with
   the source whether a technically-true detail deserves that promotion, not just whether it's true.
+- **Compression can under-claim too, and nothing checks for that direction.** Vegas Blvd Slots'
+  page and résumé bullet both listed rewards, gifting, leagues and tournaments as things _the game
+  had_, a feature list in a sentence about the product. Ali had worked on all of them
+  ([#390](https://github.com/ali-wallick/Portfolio/pull/390)). Every guard in this section is
+  pointed at overclaiming. When a bullet or opener describes the product rather than the work, ask
+  whether that is because she didn't build it or because nobody asked.
 - **The Second Dinner ceiling holds absolutely: craft, not product.** The 7 August 2024 W4 Games
   statement is the limit — Godot, next game, no title or genre; "mobile" is sayable on Ali's own
   statement (2026-08-26, #32; the correction is recorded under CLAUDE.md's "What is safe to say
