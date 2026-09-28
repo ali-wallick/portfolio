@@ -8,7 +8,7 @@ description: Write or rewrite the prose body of a featured project write-up on a
 Featured projects get a real write-up: the problem, what was built, what was learned.
 
 **Archive entries may carry a short body too, and a `gallery`, where there is material worth
-having** — settled 2026-08-24 on [#97](https://github.com/ali-wallick/Portfolio/issues/97), which
+having** — settled 2026-08-24 on [#97](https://github.com/ali-wallick/portfolio/issues/97), which
 overturned the summary-only rule this file used to state. Three things scope it:
 
 - **Permission, not a quota.** An entry with nothing more to say stays summary-only, and that is a
@@ -47,12 +47,12 @@ in as a pull-quote or a "what I wrote at the time" aside where it earns the spac
 publication-year match**, not only when the current copy already reads thin — Tilting at Windmills'
 flat first draft was missing the whole story (a locked-down network at the jam site, and they pulled
 it off anyway) that Ali's own post about that exact jam already told
-([#99](https://github.com/ali-wallick/Portfolio/issues/99)).
+([#99](https://github.com/ali-wallick/portfolio/issues/99)).
 
 **Fetch the archived page even when a project's `url` still resolves.** Checking Critter³'s broken
 Global Game Jam link surfaced the game's own credits page — full names for all seven team members,
 split by discipline — which confirmed `teamSize` and populated `collaborators` with real names
-neither the old page nor the blog had ([#91](https://github.com/ali-wallick/Portfolio/issues/91)).
+neither the old page nor the blog had ([#91](https://github.com/ali-wallick/portfolio/issues/91)).
 
 **Read a source for the limit it puts on her own contribution, not just what she did.** A `role` or a
 summary compressed from a longer sentence can end up a broader claim than the source actually
@@ -64,7 +64,7 @@ team size was, the answer is to ask or to leave it out — not to produce a plau
 **And sometimes the interview comes first, not last.** When the ask itself says "rethink this," the
 page's whole premise has aged out of its sources, and mining old pages for a round is spending time
 on something that isn't there. `/about` was rewritten from a direct interview
-([#141](https://github.com/ali-wallick/Portfolio/issues/141)) and its richest material — speaking to
+([#141](https://github.com/ali-wallick/portfolio/issues/141)) and its richest material — speaking to
 a college class and a Girl Scout troop, a synagogue board seat — had no trace anywhere in the repo.
 
 ## 2. Voice
@@ -85,7 +85,7 @@ behind it. The short version:
   Ali's. Collaborators go in the `collaborators` front matter field, not in a paragraph — a team's
   name or composition sitting in prose duplicates what the rendered "Team" section already says, and
   no other entry on the site does it. Flag one proactively rather than waiting for Ali to cut it
-  ([#89](https://github.com/ali-wallick/Portfolio/issues/89)).
+  ([#89](https://github.com/ali-wallick/portfolio/issues/89)).
 - **Modern, a bit irreverent.** It should be obvious a game developer wrote this.
 
 ## 3. Shape

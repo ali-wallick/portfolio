@@ -11,11 +11,11 @@ breaking Ali's email.
 > [`REBUILD-LOG.md`](REBUILD-LOG.md).
 
 This is the procedure. **What's still open is tracked in the
-[`Launch` milestone](https://github.com/ali-wallick/Portfolio/milestone/3)**, not here — the same
+[`Launch` milestone](https://github.com/ali-wallick/portfolio/milestone/3)**, not here — the same
 split CLAUDE.md draws everywhere else: this file says _how_, the issues say _what's left_. Issue
 numbers below are pointers, not a second copy of their contents.
 
-Before this existed, the order lived in [#34](https://github.com/ali-wallick/Portfolio/issues/34)'s
+Before this existed, the order lived in [#34](https://github.com/ali-wallick/portfolio/issues/34)'s
 body plus an appended amendment section that corrected steps out of sequence, and the one step it
 delegated to `docs/CLOUDFLARE.md` landed on a section titled _"Do NOT add a custom domain yet."_
 Fixed here.
@@ -28,14 +28,14 @@ Fixed here.
 step in the project with a blast radius outside the repo — Ali's mail runs on this domain.
 
 Three things should be true before step 1. None of them is "every other issue is closed" — per
-[#21](https://github.com/ali-wallick/Portfolio/issues/21) the cutover is its own moment and is not
+[#21](https://github.com/ali-wallick/portfolio/issues/21) the cutover is its own moment and is not
 gated on the `Pre-launch` milestone emptying.
 
 | Precondition                                                                                                        | Why                                                                                                                                                                                                                                                                                                                                                  |
 | ------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [#55](https://github.com/ali-wallick/Portfolio/issues/55) closed — `verify-dns.sh` exits 0                          | It's the tool you reach for in steps 1 and 9. Re-baselined 2026-08-27, and every assertion in it is now written to hold both before _and_ after the cutover — so a non-zero exit at step 9 is a real signal rather than the expected noise it used to be. **Run it anyway at step 1 and confirm it exits 0**; that is the point of the precondition. |
-| [#132](https://github.com/ali-wallick/Portfolio/issues/132) answered — what `/resources/WallickAli-Resume.pdf` does | It's indexed by Google with a PO Box in the result title, and right now it 404s at cutover by omission rather than by choice.                                                                                                                                                                                                                        |
-| [#128](https://github.com/ali-wallick/Portfolio/issues/128) done — final review                                     | Last look at the site while it's still cheap to fix.                                                                                                                                                                                                                                                                                                 |
+| [#55](https://github.com/ali-wallick/portfolio/issues/55) closed — `verify-dns.sh` exits 0                          | It's the tool you reach for in steps 1 and 9. Re-baselined 2026-08-27, and every assertion in it is now written to hold both before _and_ after the cutover — so a non-zero exit at step 9 is a real signal rather than the expected noise it used to be. **Run it anyway at step 1 and confirm it exits 0**; that is the point of the precondition. |
+| [#132](https://github.com/ali-wallick/portfolio/issues/132) answered — what `/resources/WallickAli-Resume.pdf` does | It's indexed by Google with a PO Box in the result title, and right now it 404s at cutover by omission rather than by choice.                                                                                                                                                                                                                        |
+| [#128](https://github.com/ali-wallick/portfolio/issues/128) done — final review                                     | Last look at the site while it's still cheap to fix.                                                                                                                                                                                                                                                                                                 |
 
 ### Facts you'll need in front of you
 
@@ -98,7 +98,7 @@ attached to records that no longer exist by the time you get there.
 
 Two commits, one merge, in this order:
 
-1. **Flip the flag** ([#74](https://github.com/ali-wallick/Portfolio/issues/74)):
+1. **Flip the flag** ([#74](https://github.com/ali-wallick/portfolio/issues/74)):
    `export const live = true` in `src/config/site.ts`. That single constant un-noindexes every page
    (`BaseLayout.astro:98`) _and_ opens `robots.txt`'s crawl directives _and_ adds its `Sitemap:` line
    (`robots.txt.ts:15`). Don't also hand-edit `robots.txt` — it's downstream. Merge to `main` the
@@ -109,7 +109,7 @@ Two commits, one merge, in this order:
 > **The flag commit must carry regenerated resume PDFs.** `src/config/site.ts` is in
 > `build-pdf.mjs`'s input-hash list, so flipping `live` invalidates the committed PDFs even though
 > the resume renders identically — and `check:pdf` is what Cloudflare runs, so the deploy goes red.
-> [PR #213](https://github.com/ali-wallick/Portfolio/pull/213) already includes them; if you ever
+> [PR #213](https://github.com/ali-wallick/portfolio/pull/213) already includes them; if you ever
 > flip the flag in a fresh branch instead, run `npm run build:pdf` **on macOS** and commit
 > `public/*.pdf` with `scripts/resume-pdf.lock.json`.
 
@@ -159,7 +159,7 @@ it, because it's the part that feels dangerous and isn't.
 
 ### 6. Handle `www`
 
-**Settled on [#193](https://github.com/ali-wallick/Portfolio/issues/193): the apex is the real
+**Settled on [#193](https://github.com/ali-wallick/portfolio/issues/193): the apex is the real
 address, and `www` 301s to it.** Both hostnames work after this step — typing `www` lands on the
 right page rather than failing. It just doesn't stay there.
 
@@ -197,7 +197,7 @@ still resolves, and the redirect is verified here at the HTTP level where it is 
 
 ### 8. Re-run the redirect map against the real domain
 
-[#25](https://github.com/ali-wallick/Portfolio/issues/25) is closed, but it was only ever verified
+[#25](https://github.com/ali-wallick/portfolio/issues/25) is closed, but it was only ever verified
 against a preview URL. Every rule in `public/_redirects` is about old DreamHost URLs, and this is the
 first time those URLs have resolved against the new site.
 
@@ -207,7 +207,7 @@ curl -sI https://aliwallick.com/blog | head -2
 curl -sI https://aliwallick.com/resources/WallickAli-Resume.pdf | head -2
 ```
 
-The third one is [#132](https://github.com/ali-wallick/Portfolio/issues/132) — confirm it does what
+The third one is [#132](https://github.com/ali-wallick/portfolio/issues/132) — confirm it does what
 you decided it should do, rather than whatever it happens to do.
 
 ### 9. Re-verify mail, both directions
@@ -227,23 +227,23 @@ It should still exit 0 — with the apex now legitimately different from step 1'
 - ~~Raise the TTLs from step 3 back to normal.~~ **No-op** — steps 5 and 6 already replaced both
   records with proxied ones, which Cloudflare pins to Auto/300s. See step 3.
 - **Submit `https://aliwallick.com/sitemap.xml`** in Search Console.
-  [#44](https://github.com/ali-wallick/Portfolio/issues/44) verified the domain as a property under
+  [#44](https://github.com/ali-wallick/portfolio/issues/44) verified the domain as a property under
   Ali's own Google account specifically so data starts flowing from launch.
 - **Confirm the Cloudflare Web Analytics beacon reports a pageview.** The token's in
   `src/config/site.ts` and `release` builds without drafts, so it should — but "should" and a number
   in the dashboard are different claims.
 - Commit the Custom Domain into `wrangler.jsonc` (see step 5's note).
 - Replace `docs/CLOUDFLARE.md`'s "Do NOT add a custom domain yet" section with a pointer here.
-- Close [#34](https://github.com/ali-wallick/Portfolio/issues/34),
-  [#74](https://github.com/ali-wallick/Portfolio/issues/74), and the rest of the milestone.
+- Close [#34](https://github.com/ali-wallick/portfolio/issues/34),
+  [#74](https://github.com/ali-wallick/portfolio/issues/74), and the rest of the milestone.
 
 ---
 
 ## Rollback
 
 **The old site is still up, and that's deliberate.**
-[#51](https://github.com/ali-wallick/Portfolio/issues/51) (retire WordPress) and
-[#52](https://github.com/ali-wallick/Portfolio/issues/52) (close out DreamHost) are in `Post-launch`
+[#51](https://github.com/ali-wallick/portfolio/issues/51) (retire WordPress) and
+[#52](https://github.com/ali-wallick/portfolio/issues/52) (close out DreamHost) are in `Post-launch`
 for this reason: **do not tear down DreamHost until this runbook has been completed and the new site
 confirmed good.**
 

@@ -38,12 +38,12 @@ Strongly wanted, and **required before the entry can be published** (`draft: fal
 
 - `summary` — one line, under 220 characters, used verbatim on cards and in the archive list.
   **A featured summary is a single sentence, sitewide** — Ali's call on
-  [#101](https://github.com/ali-wallick/Portfolio/issues/101): "I like these descriptions being a
+  [#101](https://github.com/ali-wallick/portfolio/issues/101): "I like these descriptions being a
   single sentence." When it's carrying more facts than fit in one, move the overflow into the body
   rather than letting the summary run to two. **And where the concept sentence lives is negotiable
   when the entry has a body**: most summaries pair a context sentence with a concept hook, but Night
   Light moved its hook into the body and left a context-only summary
-  ([#96](https://github.com/ali-wallick/Portfolio/issues/96)). Ask if it isn't obvious which reads
+  ([#96](https://github.com/ali-wallick/portfolio/issues/96)). Ask if it isn't obvious which reads
   better.
 - `role` — an array, in Ali's words. `[Lead UI Programmer]`, not `[Contributor]`. For an entry with
   more than one hat and no single job title, use a short tag list rather than a sentence —
@@ -51,16 +51,16 @@ Strongly wanted, and **required before the entry can be published** (`draft: fal
   (Designer, Artist, Programmer), not activity nouns (Design, Art, Programming) — that matches how
   every job-derived role already reads elsewhere on the site (`Software Engineer`, `UI Programmer`).
   Precedent: Dead Booty, It Will Kill You, Mini Mages
-  ([#93](https://github.com/ali-wallick/Portfolio/issues/93)). It renders comma-joined, which is
+  ([#93](https://github.com/ali-wallick/portfolio/issues/93)). It renders comma-joined, which is
   what a single-item array gives you for free — one hat needs no special case
-  ([#152](https://github.com/ali-wallick/Portfolio/issues/152)).
+  ([#152](https://github.com/ali-wallick/portfolio/issues/152)).
 - `hero` — an image or a YouTube video, or `{ type: art }` for the one case where no picture can
   ever exist. See §3a.
 
 Optional but valuable: `engine`, `tech`, `platforms`, `collaborators`, `event`, `job`, `links`,
 `gallery`, `shortTitle`.
 
-## 3a. Entries that are not games ([#49](https://github.com/ali-wallick/Portfolio/issues/49), 2026-09-05)
+## 3a. Entries that are not games ([#49](https://github.com/ali-wallick/portfolio/issues/49), 2026-09-05)
 
 The collection was built as if every entry were a game with a picture of it. It isn't only that any
 more, and the two draft entries that opened it up are the reference for each case:
@@ -109,20 +109,20 @@ more, and the two draft entries that opened it up are the reference for each cas
   snapshot _shows_ the thing existed instead of asserting it. This was originally scoped to
   citations, with a project's own dead homepage listed as the case that didn't need it — wrong: once
   kaneva.com actually rendered "No longer online: kaneva.com," Ali asked for a Wayback link
-  ([#140](https://github.com/ali-wallick/Portfolio/issues/140)), and firefall.com got the same fix
-  ([#139](https://github.com/ali-wallick/Portfolio/issues/139)). Both point at snapshots from Ali's
+  ([#140](https://github.com/ali-wallick/portfolio/issues/140)), and firefall.com got the same fix
+  ([#139](https://github.com/ali-wallick/portfolio/issues/139)). Both point at snapshots from Ali's
   time there. See `content.config.ts`'s `link` schema comment.
   **Prefer dropping the link outright over `dead: true` for a broken _action_.** A dead homepage is
   proof the thing existed; a dead "Play online" link (Cor Ex Machina's Unity Web Player build) is a
   broken button offering nothing once it fails, and Ali cut it on sight
-  ([#90](https://github.com/ali-wallick/Portfolio/issues/90)). Ask whether the reader loses
+  ([#90](https://github.com/ali-wallick/portfolio/issues/90)). Ask whether the reader loses
   information or just a broken button.
   **Load a Wayback swap in a browser before shipping it — `curl` cannot tell you it works.** An
   archived App Store listing returned a full 200 with complete HTML and shipped on that evidence;
   opened for real it hung forever on Apple's client-side "Connecting to Apple Music..."
   interstitial, which archived replay can never resolve. The same page tripped the reverse: a Wix
   product page `curl`'d back as almost no text because it's entirely client-rendered, and was the
-  fuller working page in a browser ([#137](https://github.com/ali-wallick/Portfolio/issues/137)).
+  fuller working page in a browser ([#137](https://github.com/ali-wallick/portfolio/issues/137)).
   `curl` and the availability API only prove a URL _responds_. Use the Browser pane tools and read
   what a visitor would actually see.
 - **`featured` requires `featureOrder`** (a positive integer) to place it on the projects page.
@@ -152,12 +152,12 @@ fails the build rather than shipping a broken image.
 lower-key framing (Dead Booty, Prodigal). It is a default to reach for, not a rule to defend against
 a direct request: Night Light's ceiling-fan caption is first person because Ali asked for it, to
 credit a specific contribution the caption sits next to
-([#96](https://github.com/ali-wallick/Portfolio/issues/96)).
+([#96](https://github.com/ali-wallick/portfolio/issues/96)).
 
 **For a live commercial title with no personal captures of your own** (a shipped, currently-running
 game rather than a jam or student project), official screenshots are the right source — the game's
 own Steam/App Store/press-kit assets, not a fan site. Marvel Snap's gallery
-([#136](https://github.com/ali-wallick/Portfolio/issues/136), 2026-08-26) came from the Steam store
+([#136](https://github.com/ali-wallick/portfolio/issues/136), 2026-08-26) came from the Steam store
 page's own screenshot carousel and a press image already cited in `links`. **Watch for fan sites
 rendering their own database UI, not the actual game** — marvelsnapzone.com's card pages looked like
 in-game screenshots at a glance but are that site's own layout displaying card data, not a capture of
@@ -182,7 +182,7 @@ project page.
 deliberately does not fetch external links (for CI speed; see its header comment), and neither does
 the content-pass audit script, so a dead outbound link only gets caught when a human clicks it —
 which is how Tilting at Windmills shipped a 403'ing Global Game Jam link through an earlier pass
-([#99](https://github.com/ali-wallick/Portfolio/issues/99)). Run `npm run links:external` — it
+([#99](https://github.com/ali-wallick/portfolio/issues/99)). Run `npm run links:external` — it
 buckets results as ok / unverifiable (a host like LinkedIn that answers 403, 999, or 406 to a
 script) / dead, and only fails on dead. **It cannot run from a Claude Code web session**, where the
 egress proxy answers 403 for every YouTube URL — a web session should say so rather than reporting

@@ -116,7 +116,7 @@ is three quick checks worth repeating after a production release.
   (see CLAUDE.md), so nothing runs it for you. It buckets results three ways: a host that answers 403
   or 999 to a script is **unverifiable**, not dead, and only genuinely-gone links fail the run.
   **Open the unverifiable ones in a browser** — the list that matters is short and named in
-  [#204](https://github.com/ali-wallick/Portfolio/issues/204). Two of them cannot be checked by
+  [#204](https://github.com/ali-wallick/portfolio/issues/204). Two of them cannot be checked by
   status code at all: a deleted YouTube video still returns 200 on `/embed/` (the script resolves
   those through oEmbed instead), and a Wayback snapshot URL keeps resolving while its _replay_ can
   fail, which is how the Vegas Blvd App Store capture was caught hanging on an interstitial.
@@ -130,7 +130,7 @@ is three quick checks worth repeating after a production release.
 
 - **Favicon, `robots.txt`, sitemap** all present. Note that the _served_ `robots.txt` is not the
   generated one — Cloudflare injects a Managed block ahead of it
-  ([#215](https://github.com/ali-wallick/Portfolio/issues/215)). Check that `Allow: /` and the
+  ([#215](https://github.com/ali-wallick/portfolio/issues/215)). Check that `Allow: /` and the
   `Sitemap:` line survive; don't be alarmed by the crawler `Disallow`s above them.
 
 ## Report

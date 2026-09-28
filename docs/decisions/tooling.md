@@ -18,17 +18,17 @@ table no longer counts past 5.
 
 ### The DNS cutover is its own moment, not the end of a phase
 
-Closes [#21](https://github.com/ali-wallick/Portfolio/issues/21). **Ali's call.** The domain cutover
+Closes [#21](https://github.com/ali-wallick/portfolio/issues/21). **Ali's call.** The domain cutover
 is a separate, short, deliberate session — favicon, OG, a11y, redirects, the wording pass, and
 everything else that used to be "Phase 6" land as they finish, and the cutover happens afterward,
 with mail verified on both `ali@` and `contact@aliwallick.com` before and after, per the plan's
-standing instruction on [#34](https://github.com/ali-wallick/Portfolio/issues/34).
+standing instruction on [#34](https://github.com/ali-wallick/portfolio/issues/34).
 
 The reasoning that won: Ali intends to slow down and keep improving the site before actually
 launching it. A phase that doesn't close until the domain moves is a phase that never closes under
 that plan — better to let the launch basics merge as they finish and treat the cutover as its own
-event whenever she's ready for it. [#55](https://github.com/ali-wallick/Portfolio/issues/55)
-(re-baseline `verify-dns.sh`) and [#34](https://github.com/ali-wallick/Portfolio/issues/34) can run
+event whenever she's ready for it. [#55](https://github.com/ali-wallick/portfolio/issues/55)
+(re-baseline `verify-dns.sh`) and [#34](https://github.com/ali-wallick/portfolio/issues/34) can run
 whenever Ali decides to launch, independent of whether everything else still open is closed first.
 
 ### "Phase 6" and "Phase 7" are retired as names for current work
@@ -40,7 +40,7 @@ each stage relative to the one event that matters — **pre-launch, launch, post
 
 - **Pre-launch** — everything that must be true before the domain moves. What "Phase 6" tracked,
   minus the cutover itself. GitHub milestone `Pre-launch` (was `Phase 6 — Launch`).
-- **Launch** — the cutover session itself: #34, #55, and [#74](https://github.com/ali-wallick/Portfolio/issues/74)
+- **Launch** — the cutover session itself: #34, #55, and [#74](https://github.com/ali-wallick/portfolio/issues/74)
   (flip `live` to `true` in the same PR as the cutover). New GitHub milestone `Launch`.
 - **Post-launch** — everything after. What "Phase 7" tracked. GitHub milestone `Post-launch` (was
   `Phase 7 — Keep it alive`).
@@ -109,7 +109,7 @@ try to "fix" those placeholders.
   archive was checked against the live server while it still answered: 54/54 assets and 14/14 blog
   images byte-identical by sha256. That closes Phase 0's own lesson — _"verify it resolves" is not
   the same as "preserved"_ — by measurement, and it doubles as the spot-check
-  [#51](https://github.com/ali-wallick/Portfolio/issues/51) wants before retiring WordPress.
+  [#51](https://github.com/ali-wallick/portfolio/issues/51) wants before retiring WordPress.
 
 **Not done, and it turned out not to be needed: fresh Wayback captures of the site's final form.**
 Ali's call 2026-08-27, and the reason is stronger than the one first given. **archive.org already
@@ -133,7 +133,7 @@ handling first, and they are in `docs/PRESERVATION.md`: don't serve `wp-login.ht
 
 ### Project pages are held to a lower best-practices bar, and the reason is one audit (2026-08-27)
 
-Settled with [#103](https://github.com/ali-wallick/Portfolio/issues/103), which added
+Settled with [#103](https://github.com/ali-wallick/portfolio/issues/103), which added
 `/projects/marvel-snap`, `/projects/prodigal`, `/resume/full` and `/404` to `lighthouserc.json` —
 before it, the most complex template on the site was the one Lighthouse never measured.
 
@@ -155,7 +155,7 @@ port — `cloudflareinsights.com` always echoes back a portless `http://localhos
 `Access-Control-Allow-Origin`, confirmed by probing the endpoint directly with several origins —
 so it cost a flat 0.04 on every page against the 0.95 bar, and the audit was guarding nothing: it
 was already failing, so a real console error wouldn't have moved the score. **Fixed
-([#221](https://github.com/ali-wallick/Portfolio/issues/221)), not by loosening the threshold or
+([#221](https://github.com/ali-wallick/portfolio/issues/221)), not by loosening the threshold or
 skipping the audit** — `scripts/strip-lighthouse-beacon.mjs` strips the beacon `<script>` tag from
 the CI job's own downloaded copy of `dist/` before lhci runs, so the audit measures the site again
 instead of a third party. The `build` job's uploaded artifact, and everything Cloudflare actually
@@ -163,7 +163,7 @@ deploys, still carry the beacon — only the disposable copy Lighthouse reads is
 
 ### `public/_headers` carries the safe set, and two headers are deliberately not in it (2026-08-27)
 
-Settled with [#105](https://github.com/ali-wallick/Portfolio/issues/105), which was a gap rather
+Settled with [#105](https://github.com/ali-wallick/portfolio/issues/105), which was a gap rather
 than a position — nothing had ever decided either way. `nosniff`,
 `Referrer-Policy: strict-origin-when-cross-origin` and `X-Frame-Options: DENY` ship; **`CSP` and
 `HSTS` do not, and the file says why so the absence reads as a choice.** CSP needs
@@ -173,7 +173,7 @@ Cloudflare setting, and it belongs in exactly one of the two places — Ali's ca
 
 ### The homepage's JSON-LD is derived, and that is the whole design (2026-08-27)
 
-[#106](https://github.com/ali-wallick/Portfolio/issues/106). `src/lib/structured-data.ts` builds a
+[#106](https://github.com/ali-wallick/portfolio/issues/106). `src/lib/structured-data.ts` builds a
 schema.org `Person` from `site.ts`, the `active` socials, and the current job's own
 `roles`/`company` — the same sources `/resume` and the About timeline read. **A literal JSON-LD
 block would be a second place every fact on it could go stale**, which is the failure the content
@@ -219,8 +219,8 @@ deleting the Routine, which is what closed out the two live loops on the day thi
 `src/` and `scripts/` were read as a whole once, which #108 defined as done. Three survey agents
 read, the planning session re-grepped every claim that would drive a deletion, eleven fixes shipped
 on one PR, and the two questions that were decisions rather than cleanups became
-[#327](https://github.com/ali-wallick/Portfolio/issues/327) and
-[#328](https://github.com/ali-wallick/Portfolio/issues/328). What belongs here is what a future
+[#327](https://github.com/ali-wallick/portfolio/issues/327) and
+[#328](https://github.com/ali-wallick/portfolio/issues/328). What belongs here is what a future
 session would otherwise re-derive.
 
 **The test for a refactor on this site is a diff of the built output, not a reading of the diff.**
@@ -508,7 +508,7 @@ building anything: the rule may already have a home.
 
 ## The split's scars, and the log/record seam measured (2026-09-07, closes #340)
 
-[#337](https://github.com/ali-wallick/Portfolio/pull/337) moved 3,100 lines verbatim so that a
+[#337](https://github.com/ali-wallick/portfolio/pull/337) moved 3,100 lines verbatim so that a
 token count could prove nothing was lost. That check is what made the move safe, and it is also
 what left the residue this pass cleaned up: text that read correctly inside one document and reads
 oddly split across five. **Held to the same check — a token multiset against the pre-thinning tree
@@ -611,7 +611,7 @@ behind them" are judgment that applies to work a session might do next; this one
 script, now enforced by that script, in a mode structure that makes the old shape unwritable. A
 fourth entry would cost every future session a read to prevent nothing.
 
-[#201]: https://github.com/ali-wallick/Portfolio/issues/201
+[#201]: https://github.com/ali-wallick/portfolio/issues/201
 
 ## Canonicals are checked in the build, because Google found them first (2026-09-08, #345)
 
@@ -659,7 +659,7 @@ rename leaves behind.
 
 **Rule 11 is the addition direction, and it is the likelier failure.** A new page in `src/pages/`
 that nobody adds to `STATIC_ROUTES` ships unlisted, is invisible to Google, and nothing says so —
-[#48](https://github.com/ali-wallick/Portfolio/issues/48)'s build-in-public page is exactly that
+[#48](https://github.com/ali-wallick/portfolio/issues/48)'s build-in-public page is exactly that
 shape. **It was not in the first cut of this guard**, which checked only that every entry had a
 page. Ali asking whether the PR was worth keeping at all is what surfaced the gap, which is an
 argument for the question being asked rather than against it.
@@ -711,7 +711,7 @@ triage and the re-check criteria.
 ## The address was in HEAD the whole time, and the first fix is why (2026-09-09, #360)
 
 The 2019 résumé's PO Box was redacted out of `resources/WallickAli-Resume.pdf` on 2026-08-26, and
-[#109](https://github.com/ali-wallick/Portfolio/issues/109) has been tracking the harder half —
+[#109](https://github.com/ali-wallick/portfolio/issues/109) has been tracking the harder half —
 purging it from git history. Both of those looked at the same place. **Nobody looked at HEAD**,
 where three files rendered the address in plain sight:
 `snapshot/rendered/resources/images/resume.png` (a 1700×2200 render of the unredacted résumé,
@@ -822,7 +822,7 @@ for the render, and roughly a dozen `sharp` measurement passes over three images
 
 ## The pre-rewrite cleanup, and one premise that was wrong (2026-09-09, #45, #109)
 
-#109's checklist put [#360](https://github.com/ali-wallick/Portfolio/issues/360) first and #45's
+#109's checklist put [#360](https://github.com/ali-wallick/portfolio/issues/360) first and #45's
 pre-rewrite half second. That half named four things. **Two of them turned out not to be work.**
 
 **`.DS_Store` was already done.** #45 says it is "currently tracked at the repo root despite
@@ -934,7 +934,7 @@ is a `git ls-remote` one-liner now.
 
 `docs/HISTORY-REWRITE.md` carried the GitHub Support purge as step 7 of the rewrite. **It is not a
 step of the rewrite**, and Ali's call was to split it into
-[#367](https://github.com/ali-wallick/Portfolio/issues/367) and take it out of the runbook entirely.
+[#367](https://github.com/ali-wallick/portfolio/issues/367) and take it out of the runbook entirely.
 
 Two properties separate it from everything else in that document, and either one on its own would
 have been enough.
@@ -965,7 +965,7 @@ PRs' diff views to close the GitHub copy while those stand closes one door in a 
 walls.
 
 **The trade only makes sense in one order:** if
-[#200](https://github.com/ali-wallick/Portfolio/issues/200) succeeds and archive.org removes the
+[#200](https://github.com/ali-wallick/portfolio/issues/200) succeeds and archive.org removes the
 captures, GitHub becomes the last public copy and the cost is worth paying. If #200 is refused,
 the honest answer may be to never file #367 at all — and the issue says so, with "Ali decides not to
 file it and records why" as a legitimate close.
@@ -1282,7 +1282,7 @@ in the documents that carry the rule.
 ### The scope was a label, and the risk was a class
 
 Item 4 said "skim every `needs-ali` issue for anything personal", and that is what was done. It
-missed [#130](https://github.com/ali-wallick/Portfolio/pull/130), a merged pull request with no such
+missed [#130](https://github.com/ali-wallick/portfolio/pull/130), a merged pull request with no such
 label, whose summary described the studio's issue trackers, the platform under a piece of CI
 automation, and that automation's outputs — the same material redacted from #37 and from
 `src/content/jobs/second-dinner.md` two days earlier. The sweep had closed three instances and left
@@ -1306,7 +1306,7 @@ Filing is a proxy, and a proxy is where the miss lives.
 the digest of an image is not the image. `docs/HISTORY-REWRITE.md` publishes ten **git blob ids**,
 which look like the same kind of string and are not — GitHub serves an object by its id for as long
 as the object is in the store, and after a force-push these stay reachable through `refs/pull/N/head`.
-That is what [#367](https://github.com/ali-wallick/Portfolio/issues/367) exists to end.
+That is what [#367](https://github.com/ali-wallick/portfolio/issues/367) exists to end.
 
 The ids stay, because they are the record of what was stripped and the only way to check the step 4
 command against what ran. What changed is that the runbook now says plainly that they are retrieval
@@ -1383,7 +1383,7 @@ deferring was three weeks of the issue staying open and a decision sounding weig
 
 ## The rebuild log stays, and stays open (2026-09-21, the public-repo cleanup)
 
-With the flip ([#378](https://github.com/ali-wallick/Portfolio/issues/378)) as the next event, Ali
+With the flip ([#378](https://github.com/ali-wallick/portfolio/issues/378)) as the next event, Ali
 asked how important the log and the other development artifacts are to keep, with relitigating on
 the table. Three things were on it: `docs/REBUILD-LOG.md` at 5,720 lines, the executed runbooks
 (`docs/LAUNCH.md`, `docs/HISTORY-REWRITE.md`, `docs/PRESERVATION.md`), and the paired captures in
@@ -1437,3 +1437,27 @@ does the work.
 they have different answers. Evidence stays because a public reader can check a claim against it.
 Whether it stays open depends on whether something still consumes it, and here the consumer turned
 out to be the practice rather than the page.
+
+## The repo is `portfolio`, lowercase (2026-09-27)
+
+Ali's call: `ali-wallick/Portfolio` became `ali-wallick/portfolio`, and the local checkout
+`~/repos/Portfolio` became `~/repos/portfolio`, because every other name a terminal touches is
+lowercase and `cd repos/portfolio` is what gets typed. The in-repo references — 249 lines of issue
+links and one absolute path, across the skills, `CLAUDE.md`, the records and the generated LinkedIn
+doc — were swept in the same change so the repo spells its own name one way.
+
+**Nothing was broken before the sweep, and that is worth knowing before the next rename.** GitHub
+resolves owner and repo case-insensitively, so every `…/Portfolio/issues/n` link resolved before
+the rename and still does. The sweep is consistency, not repair. `content/archive/` and the
+preserved `infra/` files had no references to change; had they, they would have kept them.
+
+**What the rename does not touch:** the Worker is `portfolio` in `wrangler.jsonc` and the package is
+`aliwallick-portfolio`, both already lowercase and neither derived from the repo name, so branch
+preview URLs are unchanged. Workers Builds tracks the repository through the GitHub app by ID, not
+by name.
+
+**The local folder is the half with a cost.** Claude Code keys its per-project memory and session
+history on the checkout's absolute path (`~/.claude/projects/-Users-awallick-repos-Portfolio`).
+The Mac's APFS volume is case-insensitive, so the lowercase path resolves to the same directory and
+the memory follows — but a case-only rename still needs a two-step `mv` through a temporary name,
+and a session has to be restarted from the new path.

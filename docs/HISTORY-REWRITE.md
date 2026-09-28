@@ -1,6 +1,6 @@
 # Rewriting history to purge the résumé address
 
-The runbook for [#109](https://github.com/ali-wallick/Portfolio/issues/109) item 3. **Ali runs this,
+The runbook for [#109](https://github.com/ali-wallick/portfolio/issues/109) item 3. **Ali runs this,
 not an agent** — it needs a full clone and force-push rights on every ref, and it lands a
 production deploy as a side effect. Prepared 2026-09-09, commands added 2026-09-10, rehearsed
 end-to-end on a mirror 2026-09-11 (which found six more blobs and four broken steps — see
@@ -41,9 +41,9 @@ ordering, this holds the procedure.** Nothing here restates the checklist — re
 **What this does not do, on purpose.** After the force-push the old commits are still reachable
 through `refs/pull/N/head` — server-side refs a push does not touch and you cannot delete. Closing
 that is a GitHub Support request, and it is deliberately **not** a step here:
-[#367](https://github.com/ali-wallick/Portfolio/issues/367) carries it, because it costs the diff
+[#367](https://github.com/ali-wallick/portfolio/issues/367) carries it, because it costs the diff
 view on every pull request in the repo, and Support acts only after the refs are clean. It was
-also gated on [#200](https://github.com/ali-wallick/Portfolio/issues/200) — which closed on
+also gated on [#200](https://github.com/ali-wallick/portfolio/issues/200) — which closed on
 2026-09-11 with every archive.org capture gone, so that gate is open and #367 is the step after
 this one. A clean run of everything below still leaves the blobs retrievable by anyone who can
 read the repo and knows a SHA. While the repo is private with no forks, that is you.
@@ -77,7 +77,7 @@ cd /path/to/your/Portfolio && npm run check:blobs
 
 # b. The repo is still private and has no forks. Once public, any clone keeps
 #    the rewritten-away history forever. This is the only clean window.
-gh repo view ali-wallick/Portfolio --json isPrivate,forkCount
+gh repo view ali-wallick/portfolio --json isPrivate,forkCount
 #    Expect: {"forkCount":0,"isPrivate":true}
 
 # c. You are on a full clone, not a shallow one.
@@ -123,7 +123,7 @@ change to it, so the file reverts to whatever the parent had. Stripping only the
 the very tag the rewrite was meant to clean. The rehearsal caught it in the post-rewrite tree
 listing.
 
-> **These ten ids are retrieval addresses, and they stay dangerous until [#367](https://github.com/ali-wallick/Portfolio/issues/367) lands.** A git blob id is not a digest of the content the way the SHA-256 entries in `scripts/check-preserved-blobs.mjs` are — that file's header explains why _those_ are safe to commit, and the reasoning does not transfer. GitHub serves an object by its id for as long as the object is in the store, and after a force-push these ten stay reachable through `refs/pull/N/head`, which is the whole reason #367 exists. **So this table is safe to publish only once the Support purge is confirmed complete.** [#378](https://github.com/ali-wallick/Portfolio/issues/378) carries that as a hard precondition rather than an ordering preference. Keeping the ids is deliberate: they are the record of what was stripped, and without them the step 4 command below cannot be checked against what actually ran.
+> **These ten ids are retrieval addresses, and they stay dangerous until [#367](https://github.com/ali-wallick/portfolio/issues/367) lands.** A git blob id is not a digest of the content the way the SHA-256 entries in `scripts/check-preserved-blobs.mjs` are — that file's header explains why _those_ are safe to commit, and the reasoning does not transfer. GitHub serves an object by its id for as long as the object is in the store, and after a force-push these ten stay reachable through `refs/pull/N/head`, which is the whole reason #367 exists. **So this table is safe to publish only once the Support purge is confirmed complete.** [#378](https://github.com/ali-wallick/portfolio/issues/378) carries that as a hard precondition rather than an ordering preference. Keeping the ids is deliberate: they are the record of what was stripped, and without them the step 4 command below cannot be checked against what actually ran.
 
 | Blob id                                    | What it is                          | Path it lived at                                                    |
 | ------------------------------------------ | ----------------------------------- | ------------------------------------------------------------------- |
@@ -277,7 +277,7 @@ cd ~/portfolio-rewrite
 
 # A mirror is the backout. Keep it until the rewrite is verified AND the repo is
 # public — it is the only way back.
-git clone --mirror https://github.com/ali-wallick/Portfolio.git portfolio-backout.git
+git clone --mirror https://github.com/ali-wallick/portfolio.git portfolio-backout.git
 
 # Work on a copy of it, so the backout is never the thing you rewrite.
 cp -a portfolio-backout.git portfolio-rewrite.git
@@ -318,7 +318,7 @@ carrying its redacted blob — #40 settled that the file is kept deliberately, a
 delete it everywhere, including now.
 
 Sanity-check the rewrite's size against filter-repo's own report. (These are also the two numbers
-[#367](https://github.com/ali-wallick/Portfolio/issues/367)'s ticket needs — write them down.)
+[#367](https://github.com/ali-wallick/portfolio/issues/367)'s ticket needs — write them down.)
 
 ```bash
 # How many commits were rewritten at all.
@@ -432,7 +432,7 @@ git show <commit>:snapshot/rendered/resources/images/resume.png > /tmp/check.png
 
 ```bash
 # filter-repo removes 'origin' on purpose, to stop exactly this being accidental.
-git remote add origin https://github.com/ali-wallick/Portfolio.git
+git remote add origin https://github.com/ali-wallick/portfolio.git
 
 # Dry run first. --prune DELETES remote branches and tags absent locally, which
 # is how the stale branches from step 4 get removed. Read the output before the
@@ -507,7 +507,7 @@ once history has moved.
 
 Two things are now open rather than done, and neither belongs in this runbook:
 
-- **[#367](https://github.com/ali-wallick/Portfolio/issues/367)** — the Support purge, and it is
+- **[#367](https://github.com/ali-wallick/portfolio/issues/367)** — the Support purge, and it is
   now the next step rather than a maybe. Its one condition was #200 succeeding, and #200 closed
   on 2026-09-11 with zero captures left for any of the three files, so GitHub is now the last
   copy outside this machine. The ordering constraint stands: file it _after_ this push and

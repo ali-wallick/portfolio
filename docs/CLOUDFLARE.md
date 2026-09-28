@@ -150,7 +150,7 @@ npx wrangler deploy --dry-run                   # validates wrangler.jsonc, uplo
 
 ## Dashboard settings
 
-Workers & Pages → **Create** → **Import a repository** → `ali-wallick/Portfolio`.
+Workers & Pages → **Create** → **Import a repository** → `ali-wallick/portfolio`.
 
 | Setting                              | Value                                                |
 | ------------------------------------ | ---------------------------------------------------- |
@@ -223,7 +223,7 @@ deploy. If you are adding another hostname, add it there rather than only in the
 
 **`www` is not a Custom Domain and must not become one.** A Custom Domain matches its hostname
 exactly and serves the site at it — which is the duplicate-content bug
-[#193](https://github.com/ali-wallick/Portfolio/issues/193) was filed about. `www` is instead a
+[#193](https://github.com/ali-wallick/portfolio/issues/193) was filed about. `www` is instead a
 proxied placeholder `A` record (`192.0.2.0`) plus a zone-level Single Redirect rule 301ing to the
 apex with path and query preserved. `public/_redirects` cannot express it, because it matches paths
 and not hosts.

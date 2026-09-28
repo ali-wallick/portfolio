@@ -48,7 +48,7 @@ non-deferred was done, every open issue left in it was, by definition, deferred,
 had stopped discriminating too and was retired — the same call, not a new one. What it grouped is
 now the `blocked` label, carried on the issue itself rather than a milestone tag, so it shows up in
 a plain issue list instead of requiring a milestone filter. The last milestone,
-[`DreamHost renewal deadline`](https://github.com/ali-wallick/Portfolio/milestone/4), earned its
+[`DreamHost renewal deadline`](https://github.com/ali-wallick/portfolio/milestone/4), earned its
 place by marking something a plain issue list can't — the one piece of this project that depended
 on someone else's timeline — and closed with its single issue (#52) on 2026-09-13. A new milestone
 needs that kind of distinction, not a status. Each issue carries its source, why it's blocked, and
@@ -97,16 +97,16 @@ It had five such sections on 2026-08-20, describing work that was already tracke
 | Current work            | **"A new team at Second Dinner, building the studio's first game in Godot."** The studio went public in Aug 2024, so the old "an unannounced mobile title" hedge was vaguer than reality. Corrected twice since — see "What is safe to say about Second Dinner" below for #129 (not "the studio's next team") and #32 (the platform _is_ public; "mobile" is sayable).                                                                                                                               |
 | Contact form            | None. A `mailto:` and vetted social links. The old PHP form had no CSRF token, no rate limiting, and silently discarded the sender's name.                                                                                                                                                                                                                                                                                                                                                           |
 | Visual design           | Deferred to Phase 5, deliberately last.                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| Canonical hostname      | **The apex is the real address; `www` 301s to it.** Both work — typing `www` lands on the right page, path and query preserved. This is what `site.url`, every `canonical`, every `og:url` and every sitemap entry already says, so nothing on the site changes. Settled 2026-08-26 ([#193](https://github.com/ali-wallick/Portfolio/issues/193)); it needs a zone-level Single Redirect rule, since `_redirects` matches paths and not hosts. Procedure: [`docs/LAUNCH.md`](docs/LAUNCH.md) step 6. |
+| Canonical hostname      | **The apex is the real address; `www` 301s to it.** Both work — typing `www` lands on the right page, path and query preserved. This is what `site.url`, every `canonical`, every `og:url` and every sitemap entry already says, so nothing on the site changes. Settled 2026-08-26 ([#193](https://github.com/ali-wallick/portfolio/issues/193)); it needs a zone-level Single Redirect rule, since `_redirects` matches paths and not hosts. Procedure: [`docs/LAUNCH.md`](docs/LAUNCH.md) step 6. |
 | URLs                    | Extensionless (`/about`, `/projects/firefall`), matching the old `.htaccess` rewrites, so the pre-launch redirect map stays small.                                                                                                                                                                                                                                                                                                                                                                   |
-| License                 | **Code MIT, content all rights reserved, and neither covers the images this repo reproduces but does not own** — employer IP, team work, and photographs of Ali. `LICENSE` and README's License section are the statement; the file-by-file inventory is in `docs/decisions/tooling.md`. Settled 2026-09-21 ([#109](https://github.com/ali-wallick/Portfolio/issues/109) item 7). **Adding an image means knowing who made it** — a blanket claim was wrong for 53 of 69.                            |
+| License                 | **Code MIT, content all rights reserved, and neither covers the images this repo reproduces but does not own** — employer IP, team work, and photographs of Ali. `LICENSE` and README's License section are the statement; the file-by-file inventory is in `docs/decisions/tooling.md`. Settled 2026-09-21 ([#109](https://github.com/ali-wallick/portfolio/issues/109) item 7). **Adding an image means knowing who made it** — a blanket claim was wrong for 53 of 69.                            |
 
 ---
 
 ## The decision record
 
 **This file is the brief. The reasoning behind the settled decisions lives in `docs/decisions/`.**
-Split out on 2026-09-07 ([#335](https://github.com/ali-wallick/Portfolio/issues/335)): CLAUDE.md had
+Split out on 2026-09-07 ([#335](https://github.com/ali-wallick/portfolio/issues/335)): CLAUDE.md had
 reached 3,774 lines — read in full at the start of every session, before the first tool call — and a
 session adding one résumé bullet was reading the Phase 5 gate outcome and thirteen switcher-pass
 records to do it. The brief is a fraction of that.
@@ -133,7 +133,7 @@ its date and issue like every section already there. Only promote a rule up here
 
 [`docs/REBUILD-LOG.md`](docs/REBUILD-LOG.md) is unchanged and is a different thing: it carries the
 _narrative_ of how a pass was run and what it cost — the material
-[#48](https://github.com/ali-wallick/Portfolio/issues/48)'s page was written from, and the debrief
+[#48](https://github.com/ali-wallick/portfolio/issues/48)'s page was written from, and the debrief
 record since. The records carry what was decided.
 
 ---
@@ -243,13 +243,13 @@ reads; there is no second directory to sort them into (#107).
 Adding something new starts one step earlier — `add-project` for front matter, `write-project-page`
 for the prose — and comes back to `content-pass` to revisit what shipped.
 
-**The old-page comparison came out of `content-pass` on 2026-08-27 ([#147](https://github.com/ali-wallick/Portfolio/issues/147)), and that is a closure, not a
+**The old-page comparison came out of `content-pass` on 2026-08-27 ([#147](https://github.com/ali-wallick/portfolio/issues/147)), and that is a closure, not a
 loosening.** Through #31 the skill's central rule was _read the old page in `snapshot/` before
 deciding the current one is fine_, because Phase 3 wrote every page by compressing an old one and a
 pass that only read the current page inherited every compression silently — that is how #97's page
 came to be clean, in voice, and missing the reason the game has its name. Every page has now been
 compared once, across #31's 21 sub-issues; a new project has no old page to compare against; and
-[#45](https://github.com/ali-wallick/Portfolio/issues/45) retired `snapshot/` on 2026-09-21, which
+[#45](https://github.com/ali-wallick/portfolio/issues/45) retired `snapshot/` on 2026-09-21, which
 the audit script used to read. **It is still the reference for "what did the old page say?" — it now
 lives on the `snapshot-pre-retirement` tag** (`git show snapshot-pre-retirement:snapshot/about.html`) — it just isn't a step in every pass any more.
 
@@ -274,7 +274,7 @@ Settled now:
 - **Tone target:** modern, a bit irreverent. It should be obvious a game developer made this and not
   obvious which template they used.
 - **The apostrophe is `’`, and it is typed, not generated** (2026-08-26,
-  [#188](https://github.com/ali-wallick/Portfolio/issues/188)). Ali's call. Front matter, Markdown
+  [#188](https://github.com/ali-wallick/portfolio/issues/188)). Ali's call. Front matter, Markdown
   bodies, `.astro` prose, `src/config/*.ts` strings, and `scripts/build-linkedin.mjs`'s hand-authored
   blocks all carry it directly. **Markdown bodies do not need to — Astro's smartypants curls them
   anyway — and they carry it regardless**, because a rule with an exception in it is a rule someone
@@ -293,10 +293,10 @@ doc, 2016–2024); MobilityWare's 2017 "Meet Ali Wallick" Q&A; and her own chat 
 
 **Only the first is committed.** The documents carry phone numbers, third-party names, and personal
 matters unrelated to the portfolio, and this repo may go public
-([#48](https://github.com/ali-wallick/Portfolio/issues/48)). Their measurements are recorded in the
+([#48](https://github.com/ali-wallick/portfolio/issues/48)). Their measurements are recorded in the
 reference rather than being re-derivable. That is a real cost and the right trade; Ali has the files.
 
-Two measured gaps govern the wording pass ([#31](https://github.com/ali-wallick/Portfolio/issues/31))
+Two measured gaps govern the wording pass ([#31](https://github.com/ali-wallick/portfolio/issues/31))
 and are worth knowing before writing anything.
 
 **Her mean sentence is 17 words against the site's 32.** Every corpus lands between 14.6 and 17.5 —
@@ -415,7 +415,7 @@ line, on Ali's authority, and is not a general loosening of the 2024–present r
 **A publicly-posted studio photo is not "how the studio operates" (2026-08-27, Ali's ruling).** "No
 studio internals" reads naturally as covering an office interior with a dozen identifiable
 colleagues in it, and
-[#59](https://github.com/ali-wallick/Portfolio/issues/59) was written under exactly that caution.
+[#59](https://github.com/ali-wallick/portfolio/issues/59) was written under exactly that caution.
 Ali supplied a 2019 Second Dinner team photo, confirmed it was **posted publicly**, and cleared it
 for use. It ships on the Marvel Snap page. **The two facts that make it clearable are worth keeping
 attached to it**: it is public already, and 2019 is inside the window the shipped game made
@@ -503,7 +503,7 @@ scripts import `src/lib/content-rules.ts` (#328). Don't relax it as a cleanup.
 a `postinstall` line in `package.json` (~95 MB, headless shell only). `npm run dev` doesn't touch it.
 
 **In a Claude Code web session, that install fails and is meant to** (2026-08-31, closes
-[#245](https://github.com/ali-wallick/Portfolio/issues/245)). The session's egress proxy blocks
+[#245](https://github.com/ali-wallick/portfolio/issues/245)). The session's egress proxy blocks
 `cdn.playwright.dev`, so `playwright install` 403s — `node_modules` still ends up fully populated,
 only the browser download fails. `scripts/postinstall-playwright.mjs` runs the real install first,
 unchanged, in every environment; only on failure does it check for the session image's own
@@ -523,14 +523,14 @@ every input and fails the deploy otherwise, so a stale resume can't ship, but it
 itself.
 
 **"Resume content or layout" is wider than it sounds: `src/styles/base.css` is a hashed input**
-(2026-09-04, from [#249](https://github.com/ali-wallick/Portfolio/issues/249)). A change with
+(2026-09-04, from [#249](https://github.com/ali-wallick/portfolio/issues/249)). A change with
 nothing to do with the resume — a gallery rule, a lightbox rule — regenerates both PDFs, so read
 `byteHashedFiles()` in `scripts/build-pdf.mjs` rather than guessing from the filename. What proves
 the resume did not actually move is `check:resume-print`, which compares the rendered geometry
 against a committed baseline; the regenerated bytes differing is expected and says nothing.
 
 **A Claude Code web session can regenerate them, and the subset difference is not a defect**
-(2026-09-05, closes [#306](https://github.com/ali-wallick/Portfolio/issues/306)). This used to say a
+(2026-09-05, closes [#306](https://github.com/ali-wallick/portfolio/issues/306)). This used to say a
 web session "cannot regenerate them correctly", on the evidence that the fallback Chromium #245
 falls back to subsets fonts differently — 3 embedded subsets against 9, roughly half the file size,
 identical geometry. **That evidence was real and the conclusion was wrong twice over.** Two engines
@@ -598,7 +598,7 @@ a checkout implies, suspect dashboard or zone state before suspecting the build.
   set explicitly — undoing a dashboard disable from minutes earlier. Fixed by pinning it in
   `wrangler.jsonc`.
 - The served `robots.txt` is not the generated one: Cloudflare injects a Managed block ahead of it
-  ([#215](https://github.com/ali-wallick/Portfolio/issues/215)).
+  ([#215](https://github.com/ali-wallick/portfolio/issues/215)).
 - Production deploys from `release`, a Workers Builds setting with no representation in the repo at
   all — which is exactly why it was possible to read `wrangler.jsonc` closely and still be wrong
   about what deploys.
@@ -622,17 +622,17 @@ Domain) precisely for this reason, and the residue is what these notes are for.
   and the recovered curve was re-examined and retuned in
   Phase 6 — but these are still the only primary sources if anyone reopens that.
 - **`resources/WallickAli-Resume.pdf`** — kept deliberately (settled
-  [#40](https://github.com/ali-wallick/Portfolio/issues/40)). **The working-tree copy no longer
+  [#40](https://github.com/ali-wallick/portfolio/issues/40)). **The working-tree copy no longer
   carries the PO Box** (2026-08-26) — the address's text block was removed from the content stream,
   not covered with a rectangle, and verified gone by extraction, byte grep and pixel diff. See
   `docs/PRESERVATION.md`. **History was rewritten on 2026-09-18**
-  ([#109](https://github.com/ali-wallick/Portfolio/issues/109)) to strip ten blobs from every
+  ([#109](https://github.com/ali-wallick/portfolio/issues/109)) to strip ten blobs from every
   branch and tag: the 2019 PDF and its captures, and the 2016 résumé before it, which carried a
   street address and phone number. `v1-legacy` lost the two résumé files as the accepted cost.
   Every SHA from before that date is dead. The guard's denylist is ten entries, and
   `docs/HISTORY-REWRITE.md` is the record.
 - **The address was in HEAD anyway until 2026-09-09, in three files nobody had looked at**
-  ([#360](https://github.com/ali-wallick/Portfolio/issues/360)). Redacting the PDF closed one copy;
+  ([#360](https://github.com/ali-wallick/portfolio/issues/360)). Redacting the PDF closed one copy;
   a rendered PNG of the same résumé in `snapshot/rendered/` (since retired), and the two `docs/before-after/old/`
   résumé captures that photographed the page embedding it, carried it in plain sight while every
   pass looked only at git history. All three are closed — the PNG replaced by a render of the
@@ -645,7 +645,7 @@ Domain) precisely for this reason, and the residue is what these notes are for.
 _The Phase 0 asset keep/drop list was **acted on in Phase 3**: the 50 keep-listed files moved to
 `src/assets/images/`, and the drop list — 86 unused social icons, 6 orphaned logos, and the 6.3 MB
 unplayable `nightLight.unity3d` — was deleted at the Phase 3 cleanup commit. **Nothing under `resources/images/`
-should ever exist again.** The audit's conclusions are preserved in [#45](https://github.com/ali-wallick/Portfolio/issues/45); the full text is
+should ever exist again.** The audit's conclusions are preserved in [#45](https://github.com/ali-wallick/portfolio/issues/45); the full text is
 `git show assets-pre-cleanup:resources/images/ASSET_INVENTORY.md`._
 
 ## Rules with no guard behind them
@@ -655,7 +655,7 @@ it wrong. **These are not.** They are here because breaking one is silent — th
 criterion — and each links to the section that explains it.
 
 **This list was five entries until 2026-09-07, and shrinking it is the point of adding a guard**
-([#338](https://github.com/ali-wallick/Portfolio/issues/338)). Two left because they now have one:
+([#338](https://github.com/ali-wallick/portfolio/issues/338)). Two left because they now have one:
 the `{' '}` whitespace rule and the line-length rule. **It should not reach zero.** The three below
 are judgment about how to reason or how to express a change, not properties of any output, and each
 would need a heuristic that fires on correct code — #338 measured that and declined to build them,

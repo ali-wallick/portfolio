@@ -37,10 +37,10 @@ node scripts/restore-snapshot.mjs --serve
 ```
 
 Both of those read the archive and neither writes to it. That has been true since
-[#344](https://github.com/ali-wallick/Portfolio/issues/344) and was not true before it — see
+[#344](https://github.com/ali-wallick/portfolio/issues/344) and was not true before it — see
 "Rebuilding" below.
 
-**The old server config went the same way on 2026-09-09** ([#45](https://github.com/ali-wallick/Portfolio/issues/45)).
+**The old server config went the same way on 2026-09-09** ([#45](https://github.com/ali-wallick/portfolio/issues/45)).
 The root `.htaccess` — mod_rewrite rules for extensionless URLs and the `/blog/` passthrough — was
 #25's source material, and #25 closed on 2026-08-23. It is cited in five places as a description of
 how the old site behaved (`CLAUDE.md`, `astro.config.mjs`, `public/_redirects`, `wrangler.jsonc`,
@@ -70,7 +70,7 @@ node scripts/restore-snapshot.mjs --rebuild --check-selfcontained
 ```
 
 **The rebuild is the only destructive mode, and as of
-[#344](https://github.com/ali-wallick/Portfolio/issues/344) the flag says so.** It used to be what
+[#344](https://github.com/ali-wallick/portfolio/issues/344) the flag says so.** It used to be what
 every invocation did, `--check-selfcontained` and `--serve` included, because the build ran at
 module top level and the flag check sat 245 lines below it. So the command this page gave for
 verifying the archive rebuilt it instead — and in a shallow clone, which is what a Claude Code web
@@ -80,12 +80,12 @@ cleanly, which is the committed-artifact argument holding up under exactly the f
 written against.
 
 **"The asset commit" is named by a tag, not a SHA** (2026-09-09,
-[#360](https://github.com/ali-wallick/Portfolio/issues/360)). It is the commit before Phase 3
+[#360](https://github.com/ali-wallick/portfolio/issues/360)). It is the commit before Phase 3
 deleted `resources/images/`, and `scripts/restore-snapshot.mjs` resolves it as
 **`assets-pre-cleanup`**, which Ali pushed the same day. It points at `b07bc9b` (`090f1ce` before
 the 2026-09-18 rewrite), whose tree still carries all 144 files under `resources/images/` including
 `ASSET_INVENTORY.md`. This is the fix for
-a trap [#109](https://github.com/ali-wallick/Portfolio/issues/109) names: a history rewrite
+a trap [#109](https://github.com/ali-wallick/portfolio/issues/109) names: a history rewrite
 invalidates every SHA, and the replacement SHA does not exist until the rewrite has already run — so
 a SHA in the source can only ever be fixed afterwards, which is the follow-up nobody remembers.
 `git filter-repo` re-points tags automatically, and when the rewrite ran on 2026-09-18 it did
@@ -142,7 +142,7 @@ discontinued in 2017. It is in git history if it is ever wanted; the Unity Web P
 
 ## The hero videos are archived, outside this repo
 
-The three dead embeds above are the argument for [#272](https://github.com/ali-wallick/Portfolio/issues/272):
+The three dead embeds above are the argument for [#272](https://github.com/ali-wallick/portfolio/issues/272):
 `yt-dlp` cannot fetch a video after it has been made private, so the six YouTube videos the _current_
 site uses as project heroes were captured while they are all still up. 291 MB, with the uploader,
 channel and upload date recorded alongside each file.
@@ -172,11 +172,11 @@ deleted from the page's content stream, so the glyphs are not in the file at all
 | Pixel diff against the original | 0.126% of pixels, all inside the address bounding box         |
 
 **The probe strings are not written down here, and that is deliberate**
-(2026-09-09, [#360](https://github.com/ali-wallick/Portfolio/issues/360)). This table used to name
+(2026-09-09, [#360](https://github.com/ali-wallick/portfolio/issues/360)). This table used to name
 all four, which meant a public reader could reassemble the address from the very document
 explaining that it had been removed. The probes are the address's own words: read them off the
 original blob in history — which is what #109 is about — or ask Ali. A repo that may go public
-([#48](https://github.com/ali-wallick/Portfolio/issues/48)) is the wrong place to keep a
+([#48](https://github.com/ali-wallick/portfolio/issues/48)) is the wrong place to keep a
 reassemblable copy of the thing it is redacting.
 
 Everything else is untouched and still selectable: name, email, website, and the other 101 text
@@ -194,7 +194,7 @@ _unredacted_ PDF into `snapshot/rendered/`, manufacturing a second copy of the v
 repo is trying to reduce, and it was committed before anyone noticed.
 
 **This paragraph used to end "A rebuild can no longer do that", and that was false as written**
-(corrected 2026-09-09, [#360](https://github.com/ali-wallick/Portfolio/issues/360)). The fix it was
+(corrected 2026-09-09, [#360](https://github.com/ali-wallick/portfolio/issues/360)). The fix it was
 describing was `PREFER_WORKTREE`, a `Set` with one path in it — so the very next rebuild did the
 identical thing one file over, restoring `resources/images/resume.png`, a full-page render of the
 same résumé. **The fix guarded a path when the risk was a class.** What can now honestly be said:
@@ -211,7 +211,7 @@ repo**, deliberately — three dependencies is a poor trade for something that r
 
 Redacting the PDF in 2026-08-26 closed one copy of the address. **Three others were legible in HEAD
 the whole time**, because every prior pass looked at git history and none looked at the working
-tree ([#360](https://github.com/ali-wallick/Portfolio/issues/360)):
+tree ([#360](https://github.com/ali-wallick/portfolio/issues/360)):
 
 | File                                            | How it got there                                                                     |
 | ----------------------------------------------- | ------------------------------------------------------------------------------------ |
@@ -258,7 +258,7 @@ occurrence a path rule already covers (`SUPERSEDE`), so it is now covered twice,
 number for the copy that started all of this.
 
 None of this touches history. Stripping the blobs from history is
-[#109](https://github.com/ali-wallick/Portfolio/issues/109), and it was blocked on this: purging
+[#109](https://github.com/ali-wallick/portfolio/issues/109), and it was blocked on this: purging
 history while HEAD ships the same image is theatre.
 
 ## What archive.org has
@@ -289,7 +289,7 @@ recorded. As of 2026-08-27 it has **seven** captures of `resources/WallickAli-Re
 same resume, where the address is simply legible and no content-stream redaction is possible — and
 one capture of a 2010 `resume.pdf` at a different path, which carries a home street address and a
 phone number rather than the PO Box. Removal there is a manual request rather than a re-crawl. See
-[#200](https://github.com/ali-wallick/Portfolio/issues/200).
+[#200](https://github.com/ali-wallick/portfolio/issues/200).
 
 ## `snapshot/` was retired on 2026-09-21 (#45)
 

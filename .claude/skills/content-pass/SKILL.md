@@ -67,7 +67,7 @@ The audit measures what's on the page. It can't tell you what isn't.
   with `git show snapshot-pre-retirement:snapshot/about.html`.
 - **Interview Ali when the page's premise has aged out, not just one fact on it.** If the ask itself
   says "rethink this," don't spend the first round mining written sources for something that isn't
-  in them. `/about` ([#141](https://github.com/ali-wallick/Portfolio/issues/141)) got its richest
+  in them. `/about` ([#141](https://github.com/ali-wallick/portfolio/issues/141)) got its richest
   material — speaking to a college class and a Girl Scout troop, a synagogue board seat — from a
   direct interview, and none of it had any trace in the repo to find by reading harder.
 - **"The sources are exhausted" is not "the facts are exhausted."** If a page still reads generic
@@ -102,23 +102,23 @@ Four things no script catches, all of them found by a human looking at the built
 
 - **A caption restating the body paragraph beside it.** The audit measures each field in isolation,
   so it can't see "Touching one is instant death" sitting under a sentence ending "...and touching a
-  zombie means instant death" ([#92](https://github.com/ali-wallick/Portfolio/issues/92)).
+  zombie means instant death" ([#92](https://github.com/ali-wallick/portfolio/issues/92)).
 - **A `summary` read by someone who never clicks through.** Archive cards on `/projects` don't render
   `summary` at all, but featured cards do, and that card may be the only prose a reader ever sees
-  ([#101](https://github.com/ali-wallick/Portfolio/issues/101)).
+  ([#101](https://github.com/ali-wallick/portfolio/issues/101)).
 - **A floated image only wraps the paragraphs that follow it in the DOM.** Adding a second paragraph
   next to an existing single-paragraph-plus-float layout leaves the first one full width and the
   edge visibly ragged. Move the figure above both, don't change the float
-  ([#141](https://github.com/ali-wallick/Portfolio/issues/141)).
+  ([#141](https://github.com/ali-wallick/portfolio/issues/141)).
 - **Ragged gallery bottoms are cosmetic now.** `.gallery` uses `align-items: start`, which pins every
   image's top — the one alignment a mixed-aspect-ratio row can guarantee. Matching caption line
   counts only tidies the bottom edge; it isn't a correctness fix
-  ([#93](https://github.com/ali-wallick/Portfolio/issues/93)).
+  ([#93](https://github.com/ali-wallick/portfolio/issues/93)).
 
 **A shared field holds facts; the page owns the sentence.** `jobs[].current` is `{ since, doing }`,
 and the homepage and About each compose their own sentence around it — the homepage names the
 studio and takes the exclamation, About says "the studio" and links the whole predicate to the W4
-announcement ([#207](https://github.com/ali-wallick/Portfolio/issues/207)). Edit the field to
+announcement ([#207](https://github.com/ali-wallick/portfolio/issues/207)). Edit the field to
 change the fact; edit the page to change its framing. Don't put a finished sentence back in the
 field: it used to be one, and About ended up splitting it on the word "Godot" to get a link in.
 
@@ -133,7 +133,7 @@ page's own content file.** Read `byteHashedFiles()` in `scripts/build-pdf.mjs` f
 — it includes `base.css`, `tokens.css`, `site.ts`, `content.ts`, `content-rules.ts`, and the resume
 components. Adding icon markup to `.button` in `base.css` — a change with nothing to do
 with the resume — still changed `scripts/resume-pdf.lock.json`
-([#184](https://github.com/ali-wallick/Portfolio/pull/184)). `npm run build` regenerates them; commit
+([#184](https://github.com/ali-wallick/portfolio/pull/184)). `npm run build` regenerates them; commit
 `public/*.pdf` and the lock with your change, even when the PDFs render pixel-identical, or
 `npm run check:pdf` fails the deploy. **If a branch touches sitewide CSS or `site.ts` for any reason,
 check `git status` for regenerated PDFs before opening the PR.**

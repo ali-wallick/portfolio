@@ -3,19 +3,19 @@
 Every project hero on this site is a YouTube embed. This records the archived source of each one:
 what was captured, from whom, and how to prove the copy is intact.
 
-Captured 2026-08-31, closing [#272](https://github.com/ali-wallick/Portfolio/issues/272).
+Captured 2026-08-31, closing [#272](https://github.com/ali-wallick/portfolio/issues/272).
 
 ## The files are not in this repo, and the location is not written down here
 
 Cold storage on Ali's own machine. Nothing is committed and nothing is served, so this publishes
 no video and raises no licensing question today — see
-[#159](https://github.com/ali-wallick/Portfolio/issues/159) on why re-hosting Marvel's trailer and
+[#159](https://github.com/ali-wallick/portfolio/issues/159) on why re-hosting Marvel's trailer and
 re-hosting a 2011 capstone demo are different acts. This only preserves the _option_ to act after a
 video disappears.
 
 **Where the files live is deliberately absent.** A repo that may go public
-([#109](https://github.com/ali-wallick/Portfolio/issues/109),
-[#48](https://github.com/ali-wallick/Portfolio/issues/48)) is the wrong place to record the location
+([#109](https://github.com/ali-wallick/portfolio/issues/109),
+[#48](https://github.com/ali-wallick/portfolio/issues/48)) is the wrong place to record the location
 of someone's personal storage. Ask Ali. What is here is everything you need to _verify_ an archive
 you have been pointed at, which is the part a checkout can usefully hold.
 

@@ -1,6 +1,6 @@
 // Fidelity check for /design/resume-print against /resume under print emulation,
 // plus a height sweep of every candidate. Run against the dev server.
-import { launchChromium } from '/Users/awallick/repos/Portfolio/scripts/lib/launch-chromium.mjs';
+import { launchChromium } from '/Users/awallick/repos/portfolio/scripts/lib/launch-chromium.mjs';
 
 const ORIGIN = process.env.ORIGIN ?? 'http://localhost:4321';
 const SHOT_DIR = process.env.SHOT_DIR ?? '';

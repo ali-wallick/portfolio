@@ -139,10 +139,10 @@ exists.
 ## Phase 5 execution outcome (2026-08-20)
 
 **Direction 03, playful / toy, in the arcade-dimmed palette.** Merged via
-[PR #19](https://github.com/ali-wallick/Portfolio/pull/19) at `2b60bf6`. Directions 01 (palette
-revival, [#12](https://github.com/ali-wallick/Portfolio/pull/12)), 02 (dense / craft,
-[#13](https://github.com/ali-wallick/Portfolio/pull/13)) and 04 (the hybrid,
-[#18](https://github.com/ali-wallick/Portfolio/pull/18)) are closed. Their branches are kept.
+[PR #19](https://github.com/ali-wallick/portfolio/pull/19) at `2b60bf6`. Directions 01 (palette
+revival, [#12](https://github.com/ali-wallick/portfolio/pull/12)), 02 (dense / craft,
+[#13](https://github.com/ali-wallick/portfolio/pull/13)) and 04 (the hybrid,
+[#18](https://github.com/ali-wallick/portfolio/pull/18)) are closed. Their branches are kept.
 
 The direction's thesis: **the play is in the interaction layer, not the paint.** A still reads as a
 confident, information-dense portfolio; using it makes it obvious a game developer built it. That
@@ -189,7 +189,7 @@ So: pinning a token is not sufficient. Any selector that outranks a bare `:root`
 block regardless of the media query. The fix used was `@media screen` around the offending rules,
 which is a statement about where they may apply at all — scoping the screen half of `resume.css`
 inside `@media screen` so screen rules cannot reach paper. **That is the fix to reach for**, and it
-is one half of [#35](https://github.com/ali-wallick/Portfolio/issues/35); the other half is a differ that names the offending element rather
+is one half of [#35](https://github.com/ali-wallick/portfolio/issues/35); the other half is a differ that names the offending element rather
 than reporting that a number moved.
 
 ### Three soft decisions, deliberately left soft
@@ -204,9 +204,9 @@ out to be a state-machine change driven by a usability complaint, the faces are 
 CLS hazard attached, and the calibration is three hand-fitted contrast values. Nothing about doing
 one informs doing another. Split on 2026-08-21 — **the tweening, the faces, and the colour
 calibration are all settled and closed** — the next three sections. They are the design-scoped
-siblings of the wording pass ([#31](https://github.com/ali-wallick/Portfolio/issues/31)) and the
-resume tone pass ([#32](https://github.com/ali-wallick/Portfolio/issues/32)); sequencing them is
-[#23](https://github.com/ali-wallick/Portfolio/issues/23).
+siblings of the wording pass ([#31](https://github.com/ali-wallick/portfolio/issues/31)) and the
+resume tone pass ([#32](https://github.com/ali-wallick/portfolio/issues/32)); sequencing them is
+[#23](https://github.com/ali-wallick/portfolio/issues/23).
 
 **What generalises, and belongs here rather than in the issue:** `--ease` and `--duration` were the
 _old site's_ recovered curve and duration, adopted as a shared baseline across all four directions
@@ -215,7 +215,7 @@ what the section below is the resolution of.
 
 ## The motion values are tuned now, not recovered (2026-08-21)
 
-Settled on a live switcher, closing [#33](https://github.com/ali-wallick/Portfolio/issues/33), which
+Settled on a live switcher, closing [#33](https://github.com/ali-wallick/portfolio/issues/33), which
 was rescoped to just this. The faces and the colour calibration are separate now, both closed below.
 
 | Token / value             | Was                        | Is                                   | Why                                                                                                                                                                                                       |
@@ -232,7 +232,7 @@ milliseconds). It was _not_ safe on opacity, which is why the reticle's fade has
 
 ## The faces are confirmed, not changed (2026-08-22)
 
-Closes [#66](https://github.com/ali-wallick/Portfolio/issues/66). Unlike the motion values above,
+Closes [#66](https://github.com/ali-wallick/portfolio/issues/66). Unlike the motion values above,
 this is a **no-change decision** — Gabarito, Figtree and DM Mono all held against eleven alternatives
 on a live switcher, the same review-loop pattern as the motion and colour switchers before it.
 
@@ -258,7 +258,7 @@ critique means.
 rendered column is unaffected — the value was signed off visually, not derived from that claim — but
 the claim itself is wrong in a comment the file's own header calls load-bearing. Fixing it would have
 meant touching `--measure`, which is a layout decision outside what #66 was for, so it is
-[#68](https://github.com/ali-wallick/Portfolio/issues/68) instead of a silent edit here.
+[#68](https://github.com/ali-wallick/portfolio/issues/68) instead of a silent edit here.
 
 The switcher — `scripts/preview-fonts.mjs`, the panel in `BaseLayout.astro`, twelve candidate
 `@fontsource` packages — was scaffolding for the comparison and is gone; `BaseLayout.astro` is
@@ -267,7 +267,7 @@ caught while building it.
 
 ## The colour calibration is settled (2026-08-22)
 
-Closes [#67](https://github.com/ali-wallick/Portfolio/issues/67). Same review-loop pattern as the
+Closes [#67](https://github.com/ali-wallick/portfolio/issues/67). Same review-loop pattern as the
 motion values and the faces — a live switcher on one preview, candidates chosen by computing the
 axis that actually differs rather than by eye.
 
@@ -313,7 +313,7 @@ has no block body of its own.
 
 ## The switcher loop is a skill now, and the panel deliberately is not (2026-08-30)
 
-Closes [#246](https://github.com/ali-wallick/Portfolio/issues/246). The live-switcher review loop
+Closes [#246](https://github.com/ali-wallick/portfolio/issues/246). The live-switcher review loop
 had run four times — the motion values (#33), the faces (#66), the colour calibration (#67) and the
 résumé actions bar (#239) — and was transmitted only by example: a new session learned it by reading
 the records of past passes rather than by having the method to hand. It is
@@ -719,7 +719,7 @@ by exactly the padding. The negative margin is what keeps the pictures on the pa
 
 **What the padding is for is the FOCUS RING, and the reason it shipped with is already dead.** It was
 justified partly by #163’s frame line being cut off at rest — true when it was written, and retired
-five days later by [#283](https://github.com/ali-wallick/Portfolio/issues/283), which pulled the line
+five days later by [#283](https://github.com/ali-wallick/portfolio/issues/283), which pulled the line
 inside its own border box. Pixel-sampled at 4x on both shapes: pre-#283 the strip at the clip edge
 carries no frame colour at all, post-#283 it reads ground / frame 1px / mat 2px / picture. **The
 surviving reason is stronger anyway**: a focused link inside a scroll container is clipped BY that
@@ -769,9 +769,9 @@ and becomes an `<input type="range">` — do not bolt a drag handler onto the ba
   the entire row. `gallery-zoom.ts` now focuses the link explicitly on close. The container’s own ring
   is right for someone who tabbed to the row deliberately, so the fix is to stop the zoom path landing
   on it, not to remove it; what that ring should look like is
-  [#278](https://github.com/ali-wallick/Portfolio/issues/278).
+  [#278](https://github.com/ali-wallick/portfolio/issues/278).
 - **`base.css` carried the same 61-line block twice**, verbatim since 618ef66 (#241) --
-  [#277](https://github.com/ali-wallick/Portfolio/issues/277), closed here. Checked before deleting
+  [#277](https://github.com/ali-wallick/portfolio/issues/277), closed here. Checked before deleting
   that the removed copy was not the one carrying `.gallery-nav[hidden]`.
 
 **One measurement fix in `gallery-scroll.ts` follows from the padding**: `page()` computed its step
@@ -974,8 +974,8 @@ require**, so this was a readability call rather than a compliance fix — but i
 for the life of the project because nobody measured the rendered text.
 
 **So: never reason about line length in `ch` on this site. Measure the output.** This is the third
-time a measurement in this project's history has overturned a plausible number ([#68](https://github.com/ali-wallick/Portfolio/issues/68)
-corrected the `ch` arithmetic, [#191](https://github.com/ali-wallick/Portfolio/issues/191) caught a
+time a measurement in this project's history has overturned a plausible number ([#68](https://github.com/ali-wallick/portfolio/issues/68)
+corrected the `ch` arithmetic, [#191](https://github.com/ali-wallick/portfolio/issues/191) caught a
 page-count check passing a document 64px over budget, and now this).
 
 ### The subtraction between the two width tokens is load-bearing
@@ -998,7 +998,7 @@ loop, not for a linter.
 
 | What                    | Was                                                    | Now                                                                                                                |
 | ----------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| Résumé prose            | `--measure`, so it moved with unrelated site decisions | `--resume-measure` (701px), the print column, pinned ([#244](https://github.com/ali-wallick/Portfolio/issues/244)) |
+| Résumé prose            | `--measure`, so it moved with unrelated site decisions | `--resume-measure` (701px), the print column, pinned ([#244](https://github.com/ali-wallick/portfolio/issues/244)) |
 | Project hero (`.media`) | a raw `44rem`, the only width not a token              | fills the page column                                                                                              |
 | `.contact-card`         | `--measure`                                            | `--measure-wide`, like every other bordered note                                                                   |
 
@@ -1027,7 +1027,7 @@ no build check catches.
 - **Narrowing further than 56rem.** 52rem was Ali's first preference and reads well at 1280, but it
   is a fixed cap: 46% of a 1728 screen and 42% of 1920. What she liked about it was the alignment,
   which is separable from the width.
-- **A résumé exception** to match print more closely. Unnecessary — [#244](https://github.com/ali-wallick/Portfolio/issues/244)
+- **A résumé exception** to match print more closely. Unnecessary — [#244](https://github.com/ali-wallick/portfolio/issues/244)
   already pins the résumé's text column to 701px, the print content width, in its own token immune
   to `--measure`. Narrowing the panel itself to sheet proportions was built and rejected: it makes
   the panel a bordered box aligning with nothing (the rule above), and detaches the download button,
@@ -1275,7 +1275,7 @@ the token is still doing real work and is not now dead. **Pill is still the righ
 it stopped being the right shape for something with height.**
 
 **One rule, not a copy per component.** The icon-only radius is a single `.gallery-arrow,
-.zoom-close` selector. [#163](https://github.com/ali-wallick/Portfolio/issues/163) learned that the
+.zoom-close` selector. [#163](https://github.com/ali-wallick/portfolio/issues/163) learned that the
 failure mode here is a surface list rather than a rule — three surfaces were missed there because
 each carried its own copy of the same border. A new icon-only button joins that selector; it does
 not get its own radius.
@@ -1380,7 +1380,7 @@ inconsistency on one page beats a dead end on the strongest page in the archive 
 
 ### Two things found on the way
 
-- **[#318](https://github.com/ali-wallick/Portfolio/issues/318): every project page with a gallery
+- **[#318](https://github.com/ali-wallick/portfolio/issues/318): every project page with a gallery
   scrolls sideways**, on `main`, at every viewport. `.gallery-zoom-hint` is `position: absolute`
   while `.gallery-viewport` is `position: static`, so the hints take `.gallery` as their containing
   block and escape the scroller's clip — the last hint's right edge is 1384px, exactly

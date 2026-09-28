@@ -77,7 +77,7 @@ The history was rewritten on 2026-09-18 to remove old résumé files carrying a 
 
 ## What's left
 
-Tracked as [issues](https://github.com/ali-wallick/Portfolio/issues), with labels rather than
+Tracked as [issues](https://github.com/ali-wallick/portfolio/issues), with labels rather than
 milestones: `decision`, `needs-ali` and `blocked` are the ones that do real work. Nothing is tracked
 in a document, because a document that tracks status goes stale silently, and this repo was bitten
 by that twice.
