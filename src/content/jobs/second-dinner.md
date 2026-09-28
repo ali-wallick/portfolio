@@ -65,7 +65,7 @@ roles:
 # this repo.** Written as a floor ("past 100") rather than a snapshot, so it
 # cannot go stale as the studio keeps growing.
 intro: >-
-  Joined as the eleventh employee, interviewing and helping shape the culture as the studio grew
+  Joined as the 11th employee, interviewing and helping shape the culture as the studio grew
   past 100.
 bulletGroups:
   godot:

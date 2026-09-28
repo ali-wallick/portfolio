@@ -78,7 +78,7 @@ gallery:
   - type: image
     src: ../../assets/images/projects/marvel-snap/gallery-second-dinner-2019.jpg
     alt: >-
-      The Second Dinner team in 2019 — about a dozen people crowded into an
+      The Second Dinner team in 2019, about a dozen people crowded into an
       office, mugging at a wide-angle camera held at arm’s length
     caption: Second Dinner in 2019, not long after I joined.
   - type: image
@@ -91,7 +91,7 @@ links:
   - label: Credited on the official Marvel Snap site
     url: https://marvelsnap.com/credits/
     kind: press
-  - label: '"Welcome Ali!" — Second Dinner'
+  - label: '"Welcome Ali!" from Second Dinner'
     url: https://www.youtube.com/watch?v=ntORfECH56s
     kind: video
   - label: Hellfire Gala Developer Update, December 2023
@@ -114,8 +114,11 @@ draft: false
 ---
 
 I joined Second Dinner in 2019 as its 11th employee, before the studio had shipped anything. Marvel
-Snap took about three years to reach launch. I spent that time, and the years after, helping build
-both the game and the studio around it.
+Snap took about three years to reach launch in October 2022. I spent that time, and the years after,
+helping build both the game and the studio around it. That December, Snap
+[won Best Mobile Game at The Game Awards](https://www.marvel.com/articles/games/marvel-snap-mobile-game-of-the-year-2022).
+It went on to [win Mobile Game of the Year at the DICE Awards](https://www.pocketgamer.biz/marvel-snap-wins-mobile-game-of-the-year-at-the-dice-awards/)
+the following February.
 
 ## What I Built
 
@@ -125,10 +128,12 @@ so design could set up a notification once and have it work on both platforms. I
 so a link could open the app straight to any screen, like the shop. The game’s UI wasn’t localized
 at all when I got there. I organized the effort to get every menu translated, and did the first
 integration of Unity’s Localization package to run it. I also built the client-side integration for
-live-ops tooling like Braze. Later I moved into feature engineering: meta gameplay systems spanning
-client and server code plus the UI for them, card and deck cosmetics, and the deckbuilding UI. I built a lot of
-tooling for the team too, both in the Unity Editor and in the game itself. The card art tool was
-one, which our artists authored card art through. The in-game developer console was another. Four things from that span stand out.
+live-ops tooling like Braze.
+
+Later I moved into feature engineering: meta gameplay systems spanning client and server code plus
+the UI for them, card and deck cosmetics, and the deckbuilding UI. I built a lot of tooling for the
+team too, both in the Unity Editor and in the game itself. That included the tool our artists
+authored card art in, and the in-game developer console. Four things from that span stand out.
 
 **Building the tooling for an MVVM migration.** Alongside the push to launch the PC client, I built
 the tooling that made an MVVM architecture practical to adopt on a live product, and encouraged
@@ -136,12 +141,8 @@ teammates to migrate their working patterns onto it.
 
 **The PC launch, in two stages.** Snap’s Steam Early Access launched globally on October 18, 2022 as
 a direct port of the mobile client, the fastest path to PC and a reasonable one for a first release.
-That December, Snap
-[won Best Mobile Game at The Game Awards](https://www.marvel.com/articles/games/marvel-snap-mobile-game-of-the-year-2022).
-It went on to [win Mobile Game of the Year at the DICE Awards](https://www.pocketgamer.biz/marvel-snap-wins-mobile-game-of-the-year-at-the-dice-awards/)
-the following February. Then we exited Early Access on August 22, 2023, announced at Gamescom. That
-meant going back through a large chunk of the UI. We rebuilt it for a landscape screen and
-mouse-and-keyboard input, instead of a phone layout stretched onto a monitor.
+Then we exited Early Access on August 22, 2023, announced at Gamescom. That meant going
+back through a large chunk of the UI. We rebuilt it for a landscape screen and mouse-and-keyboard input, instead of a phone layout stretched onto a monitor.
 
 **The card and collection systems.** I built and owned the screen players use to inspect
 an individual card:

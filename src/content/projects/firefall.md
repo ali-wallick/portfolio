@@ -42,7 +42,7 @@ links:
 draft: false
 ---
 
-Firefall was Red 5 Studios’ massively multiplayer shooter, part shooter and part RPG. It ran on the
+Firefall was Red 5 Studios’ massively multiplayer shooter, with RPG-style character progression. It ran on the
 studio’s own C++ engine, with a Lua/XML scripting layer on top for UI. I joined as a UI programmer
 for its Chinese launch and the worldwide relaunch overhaul that followed. It was my first time on a
 team and a codebase far larger than Kaneva’s.
@@ -50,10 +50,9 @@ team and a codebase far larger than Kaneva’s.
 ## What I Built
 
 I worked across most of the game’s HUD and menus: the radar, PvP elements, character progression and
-elite-level screens, and reward screens. Much of that work was less about any one screen than the
-layer underneath. I built libraries for common menu and HUD elements so new UI didn’t start from
-scratch. I also optimized the UI system itself, which mattered on a game that was already demanding
-on the client.
+elite-level screens, and reward screens. I also built libraries for common menu and HUD elements, so
+new UI didn’t start from scratch. And I optimized the UI system itself, which mattered on a game that
+was already demanding on the client.
 
 ## What I Learned
 

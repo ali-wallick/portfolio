@@ -13,8 +13,8 @@ collaborators:
   - name: Katie Stokes
 role: [Programmer]
 summary: >-
-  A Flash prototype that teaches art history through platforming. Free the
-  trapped artists through levels made from their own famous motifs.
+  A Flash prototype that teaches art history through platforming. The heroine
+  rescues trapped artists from levels built from their own famous motifs.
 hero:
   type: image
   src: ../../assets/images/projects/art-of-rescue/screenshot.png

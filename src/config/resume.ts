@@ -79,7 +79,7 @@ export const resumeTools: Record<ResumeToolCategory, string[]> = {
  */
 export const resumeSummary =
   'Senior software engineer with fifteen years building game clients, UI systems, and the ' +
-  'tooling behind them. Seven of those at Second Dinner, through Marvel Snap’s launch, its ' +
+  'tooling behind them. At Second Dinner since 2019, through Marvel Snap’s launch, its ' +
   'PC release, and now a new project in Godot.';
 
 /**
@@ -149,11 +149,11 @@ export const resumePersonalProjects: ResumePersonalProject[] = [
     // this section serves. Every project entry here links again, which is the
     // property #32 bought back.
     slug: 'aliwallick-com',
-    text: 'Rebuilt this portfolio in 2026 to practice agentic workflows at small scale. Wrote the brief, skills and build guards it runs on.',
+    text: 'Rebuilt this portfolio in 2026 to practice agentic workflows at small scale. Wrote the brief, skills, and build guards it runs on.',
   },
   {
     label: 'Speaking',
-    text: 'Spoke on panels at the Museum of Design Atlanta and SIEGE in 2013. Gave talks for a Girl Scout troop in 2020 and a college class on the work itself in 2023.',
+    text: 'Spoke on panels at the Museum of Design Atlanta and SIEGE in 2013. Presented to a Girl Scout troop in 2020 and a college class in 2023 on what the job is actually like.',
   },
 ];
 

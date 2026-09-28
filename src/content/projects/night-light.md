@@ -36,7 +36,8 @@ links: []
 draft: false
 ---
 
-Comfort a boy afraid of the dark, told entirely through a dimming vignette and a dying flashlight.
+The player comforts a boy afraid of the dark, a story told entirely through a dimming vignette and a
+dying flashlight.
 
 I programmed the whole scene: the flashlight’s collision, the story’s progression, and the curtain
 animation. I also modeled some of the room’s props, including the bed and the ceiling fan. The

@@ -13,8 +13,8 @@ collaborators:
 role: [Programmer]
 summary: >-
   A handheld augmented-reality maze game for Qualcomm’s AR Game Studio at
-  Georgia Tech. Place markers on a printed maze to redirect a girl past traps
-  and enemies.
+  Georgia Tech. Players place markers on a printed maze to redirect a girl
+  past traps and enemies.
 # Card/tile thumbnail override, and the one place dropping the `poster.jpg`
 # glob would otherwise have changed a rendered page (#273). The hero `poster`
 # below is the gallery screenshot, which is 221px and reads soft in a tile,

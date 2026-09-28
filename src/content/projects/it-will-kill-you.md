@@ -57,5 +57,5 @@ draft: false
 
 The level is shaped like the human body, with nodes mapped to the arms, legs, and eyes for the virus
 to attack. I designed it. The trick was keeping the human from getting cornered in a narrow limb
-while the virus closed in from every side. I also modeled the virus character after a bacteriophage,
-and most of the virus-side level geometry.
+while the virus closed in from every side. I also modeled the virus character, based on a
+bacteriophage, and most of the virus-side level geometry.
