@@ -1453,8 +1453,8 @@ preserved `infra/` files had no references to change; had they, they would have 
 
 **What the rename does not touch:** the Worker is `portfolio` in `wrangler.jsonc` and the package is
 `aliwallick-portfolio`, both already lowercase and neither derived from the repo name, so branch
-preview URLs are unchanged. Workers Builds tracks the repository through the GitHub app by ID, not
-by name.
+preview URLs are unchanged. Workers Builds followed the rename with no dashboard change: #391's
+first push, made after the rename, built and posted its branch preview as usual.
 
 **The local folder is the half with a cost.** Claude Code keys its per-project memory and session
 history on the checkout's absolute path (`~/.claude/projects/-Users-awallick-repos-Portfolio`).
