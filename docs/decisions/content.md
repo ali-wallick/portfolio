@@ -132,12 +132,12 @@ Both are permanent, and both are the kind of thing that gets re-derived wrongly:
 
 _Everything else this gate left open was closed during Phase 3 execution — the provisional `role`
 fields, the `TODO(phase-3-revisit)` sweep, and the I Fits I Sits hero. The one remainder, prototype
-shots for the gallery, is [#46](https://github.com/ali-wallick/Portfolio/issues/46), which carries the framing that makes rough captures
+shots for the gallery, is [#46](https://github.com/ali-wallick/portfolio/issues/46), which carries the framing that makes rough captures
 acceptable there and nowhere else on the site._
 
 ### Phase 3 execution outcome (2026-08-16, merged 2026-08-17)
 
-Executed on branch `phase-3-content`, merged via [PR #7](https://github.com/ali-wallick/Portfolio/pull/7)
+Executed on branch `phase-3-content`, merged via [PR #7](https://github.com/ali-wallick/portfolio/pull/7)
 at `5452fdc`. `npm run verify` and `pre-launch-check`'s sweeps pass clean, with zero
 `TODO(phase-3-revisit)` markers outstanding. **All five featured projects, all 12 archive entries,
 and the career narrative are written and `draft: false`.** Ali reviewed the branch preview and
@@ -160,8 +160,8 @@ pass still happens once, later, with fresh eyes and real styling.
 
 ## The wording pass (2026-08-24)
 
-The sitewide tone and voice pass ([#31](https://github.com/ali-wallick/Portfolio/issues/31),
-[#32](https://github.com/ali-wallick/Portfolio/issues/32)), run against the measured voice reference
+The sitewide tone and voice pass ([#31](https://github.com/ali-wallick/portfolio/issues/31),
+[#32](https://github.com/ali-wallick/portfolio/issues/32)), run against the measured voice reference
 in the `write-copy` skill. **The pass itself is an edit pass and left every fact alone**, so most of
 it needs no record here. Four things do, because a future session would otherwise re-derive them
 wrongly or reinstate them.
@@ -177,8 +177,8 @@ deliberate rather than incidental.
 **superseded by Ali on 2026-08-24**: it is now just `Software Engineer II`. The scope was doing the
 prose's job in a metadata slot. This supersedes the Phase 3 execution note above.
 
-**And `role` is an array as of 2026-08-27** ([#152](https://github.com/ali-wallick/Portfolio/issues/152),
-decided in the [PR #151](https://github.com/ali-wallick/Portfolio/pull/151) review thread). It was
+**And `role` is an array as of 2026-08-27** ([#152](https://github.com/ali-wallick/portfolio/issues/152),
+decided in the [PR #151](https://github.com/ali-wallick/portfolio/pull/151) review thread). It was
 the one multi-value field on a project modelled as free text, so `Designer, Artist` was a
 hand-joined string that only looked structured. Rendered output is unchanged — `ProjectMeta.astro`
 joins with `, `, and a one-hat role is simply a one-item array. **The join is deliberately not the
@@ -343,7 +343,7 @@ not a judgment that the writing was too long. Nothing about the page changed exc
 sorts into, and `featureOrder` came off because that field means nothing outside the featured tier.
 
 **One repair went with it.** `src/content.config.ts`'s tier comment pointed at CLAUDE.md for this
-rule, and [#335](https://github.com/ali-wallick/Portfolio/issues/335) had moved it here — so the
+rule, and [#335](https://github.com/ali-wallick/portfolio/issues/335) had moved it here — so the
 contract every session reads cited a document that no longer said it. That is why a session in this
 pass read CLAUDE.md, concluded a demotion required rewriting the body to archive register, and told
 Ali so. **A cross-reference that survives the move but stops being true is the failure the split was

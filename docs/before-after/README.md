@@ -15,7 +15,7 @@ stopped serving at the 2026-08-27 DNS cutover. Run the script today and it can o
 `old/resume-desktop.webp` and `old/resume-mobile.webp` both photographed the old résumé page,
 which embedded a full-page render of the 2019 résumé — PO Box and all. The address was legible in
 the committed captures until 2026-09-09
-([#360](https://github.com/ali-wallick/Portfolio/issues/360)).
+([#360](https://github.com/ali-wallick/portfolio/issues/360)).
 
 Both now carry an **opaque, labelled redaction bar** reading `[address redacted]` over that one
 line. Everything else in each capture is untouched.
@@ -42,7 +42,7 @@ Three decisions worth not relitigating:
 
 **A modified capture that does not say so is worse than either alternative**, which is why this
 file exists and why `docs/PRESERVATION.md` records the same change. The originals remain in git
-history; removing them there is [#109](https://github.com/ali-wallick/Portfolio/issues/109).
+history; removing them there is [#109](https://github.com/ali-wallick/portfolio/issues/109).
 
 `scripts/check-preserved-blobs.mjs` fails the build if either pre-redaction capture reappears
 anywhere in the tree, under any name.

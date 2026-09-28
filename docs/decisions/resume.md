@@ -70,7 +70,7 @@ material would have produced a resume weighted backwards.
   (`resumeLocation` in `src/config/resume.ts`), which is a metro region and not an address. **The PO
   Box decision is untouched and nothing here reopens it.** (The PO Box was never on the _new_ site. It is
   in `resources/WallickAli-Resume.pdf`, which the old live site still serves and Google has indexed —
-  see "The PO Box files" below and [#132](https://github.com/ali-wallick/Portfolio/issues/132).)
+  see "The PO Box files" below and [#132](https://github.com/ali-wallick/portfolio/issues/132).)
 
 ### Weighting revisited — recency-weighted, per-job minimums (2026-08-23, closes #37)
 
@@ -95,7 +95,7 @@ still above its floor is where the next trim comes from, not whichever job happe
 **No agent logs into the account.** The deliverable is `docs/LINKEDIN.md` — paste-ready blocks for
 Ali. Its role descriptions are the `highlights` + `highlightsExtended` bullets verbatim, i.e. exactly
 `/resume/full`, so LinkedIn stays the same single source rather than becoming a fourth place a fact
-can go stale. **Generated, not hand-maintained, since [#54](https://github.com/ali-wallick/Portfolio/issues/54).**
+can go stale. **Generated, not hand-maintained, since [#54](https://github.com/ali-wallick/portfolio/issues/54).**
 
 ### Promotion years — settled 2026-08-17, do not reopen
 
@@ -112,8 +112,8 @@ can go stale. **Generated, not hand-maintained, since [#54](https://github.com/a
 
 Two things came out of that conversation and are tracked rather than recorded here: the Kaneva
 project page says `Lead UI Programmer` while the resume and About say `Software Engineer`
-([#38](https://github.com/ali-wallick/Portfolio/issues/38)), and the resume's Tools line is still derived strictly from `tech` fields
-([#39](https://github.com/ali-wallick/Portfolio/issues/39)).
+([#38](https://github.com/ali-wallick/portfolio/issues/38)), and the resume's Tools line is still derived strictly from `tech` fields
+([#39](https://github.com/ali-wallick/portfolio/issues/39)).
 
 **The principle from the Tools line is worth keeping loose from its issue:** the plan mentions
 Perforce and CI directionally, and **a planning note is not a source.** Nothing has been added on
@@ -124,12 +124,12 @@ its authority. Ask rather than infer.
 Ali's call. Two things were deferred as improvements to something already true, not corrections to
 something wrong, and both are tracked rather than described here:
 
-- **[#32](https://github.com/ali-wallick/Portfolio/issues/32)** — a tone and layout pass. Phase 4 optimised for _true_ and _fits_, never for how
+- **[#32](https://github.com/ali-wallick/portfolio/issues/32)** — a tone and layout pass. Phase 4 optimised for _true_ and _fits_, never for how
   it reads on paper.
-- **[#35](https://github.com/ali-wallick/Portfolio/issues/35)** — commit the print-geometry differ as a build guard, agreed 2026-08-18 to happen
+- **[#35](https://github.com/ali-wallick/portfolio/issues/35)** — commit the print-geometry differ as a build guard, agreed 2026-08-18 to happen
   as part of that pass.
 
-(A third deferred item, detailing the 2024–present Godot work, was [#37](https://github.com/ali-wallick/Portfolio/issues/37) — closed 2026-08-23. See the
+(A third deferred item, detailing the 2024–present Godot work, was [#37](https://github.com/ali-wallick/portfolio/issues/37) — closed 2026-08-23. See the
 weighting revision above for what shipped.)
 
 **The hazard behind #35 is not a task and belongs here.** `src/styles/resume.css`'s `@media print`
@@ -145,7 +145,7 @@ in [`CLAUDE.md`](../../CLAUDE.md).
 Two legacy files carried a PO Box and predated every fact on the current resume, which deliberately
 carries no address at all: `resources/WallickAli-Resume.pdf` and `src/assets/images/resume.png`.
 Neither was served, and the repo is private — the exposure only existed if this repo goes public,
-which the build-in-public page ([#48](https://github.com/ali-wallick/Portfolio/issues/48)) is the
+which the build-in-public page ([#48](https://github.com/ali-wallick/portfolio/issues/48)) is the
 most likely reason to do.
 
 **Ali's call: keep the PDF, delete the PNG.** The PDF is a historical artifact worth keeping around;
@@ -157,7 +157,7 @@ call after the archive work below turned up a second copy of it. The address is 
 working-tree file; the original stays in history. This narrows the exposure to the history question
 and does not reopen #40.
 
-**Correction, 2026-08-24 ([#132](https://github.com/ali-wallick/Portfolio/issues/132)): "neither was
+**Correction, 2026-08-24 ([#132](https://github.com/ali-wallick/portfolio/issues/132)): "neither was
 served" was true of the Astro build and false of the old live site.** `aliwallick.com` serves that
 PDF today and Google has indexed it, returning it under a title generated from its own first line —
 name, email, and PO Box. The address is public right now, not conditionally public if this repo ever
@@ -167,11 +167,11 @@ question (#132) rather than a re-check deferred to #48.
 **Superseded 2026-08-26: the "strip the PO Box from a copy" option is the one that was taken.** This
 paragraph used to say the tree copy was "still carrying a PO Box" and list three remedies. The
 working-tree PDF is redacted now (above), so what remains for #48 and
-[#109](https://github.com/ali-wallick/Portfolio/issues/109) is only the history question — `git rm`
+[#109](https://github.com/ali-wallick/portfolio/issues/109) is only the history question — `git rm`
 never removed history, and four blobs plus `v1-legacy` still carry it.
 
 **And the public copies are the larger exposure, not the repo.** See
-[#200](https://github.com/ali-wallick/Portfolio/issues/200): archive.org holds **seven** captures of
+[#200](https://github.com/ali-wallick/portfolio/issues/200): archive.org holds **seven** captures of
 the PDF, **two of `resources/images/resume.png`** — a rendered image of the same resume, where the
 address is simply legible and no redaction is possible — and a 2010 `resume.pdf` carrying a home
 street address and phone number. Making the repo public adds little to that until those are dealt
@@ -191,7 +191,7 @@ carries scope. Corollary, which did equal work: **the section holds nameable thi
 capabilities.** A skills section that mixes "Godot" with "Localization" is the mush every resume
 has — capabilities live in bullets, where they come with evidence. This one rule resolved seven
 items identically when the list was cut; see the full record on the
-[#39 decision comment](https://github.com/ali-wallick/Portfolio/issues/39#issuecomment-5387852763),
+[#39 decision comment](https://github.com/ali-wallick/portfolio/issues/39#issuecomment-5387852763),
 including why C++, DeltaDNA, XML, Perforce, and several tool/store names came off.
 
 Final, settled, do not reopen or re-derive:
@@ -237,7 +237,7 @@ sentence-case version could not avoid: proper-noun labels (`Vegas Blvd Slots`, `
 are title case whether you like it or not, and `Unreleased casino` sitting beside them read as a
 sentence fragment rather than the name of a thing.
 
-**This is a separate rule from [#182](https://github.com/ali-wallick/Portfolio/issues/182)**, which
+**This is a separate rule from [#182](https://github.com/ali-wallick/portfolio/issues/182)**, which
 title-cased multi-word _headers_ and is scoped to headings. A run-in `<b>` label inside an `<li>` is
 not a header, so #182 did not reach these and does not govern them; the 2019 resume does. Same
 AP/Chicago rules apply (`Live-Ops Content`, `Cross-Cutting Work`). Costs nothing -- measured at
@@ -356,7 +356,7 @@ generalisable part. `scripts/check-resume-print.mjs` set **no viewport**, so it 
 default 1280px while emulating print media — _print CSS at a screen width_, a rendering that exists
 on no page and no sheet of paper.
 
-It still caught everything [#35](https://github.com/ali-wallick/Portfolio/issues/35) built it for,
+It still caught everything [#35](https://github.com/ali-wallick/portfolio/issues/35) built it for,
 because colour, font, weight and tracking leaks are width-independent. **Reflow is not.** Cutting the
 I Fits I Sits bullet from three printed lines to two moved **zero** elements in the differ, because
 at 1280px both versions occupied the same two lines. Fixed to 701px, the same edit moves **92**.
@@ -373,7 +373,7 @@ skill's guidance got it wrong, and the guard itself got it wrong.
   apostrophes while Markdown project bodies render curly ones. The resume is internally consistent;
   the mismatch is sitewide. `docs/REBUILD-LOG.md`'s original note already warned that fixing only
   the resume creates a _third_ state, and that is still true, so this is
-  [#188](https://github.com/ali-wallick/Portfolio/issues/188) rather than a silent edit here.
+  [#188](https://github.com/ali-wallick/portfolio/issues/188) rather than a silent edit here.
   **Settled there on 2026-08-26 — curly everywhere. See the convention under "Voice and content
   conventions" above.**
 - **Raising the density**, above. Measured, costed, and left with Ali.
@@ -401,7 +401,7 @@ it isn't part of -- it is hand-authored, so no generator will catch the drift fo
 
 The `/resume/full`-only content brought to the register the formality pass (#32) established for the
 one-pager: the Summary, Personal Projects, every `highlightsExtended` bullet, and every `extended`
-continuation. Shipped on [PR #192](https://github.com/ali-wallick/Portfolio/pull/192). **The
+continuation. Shipped on [PR #192](https://github.com/ali-wallick/portfolio/pull/192). **The
 one-pager was not touched** -- its half of `scripts/resume-print-baseline.json` came out
 byte-identical, which is the check worth repeating on any pass that claims to be long-version-only.
 
@@ -581,7 +581,7 @@ resume-density.ts`, which is in `build-pdf.mjs`'s `byteHashedFiles` for exactly 
 - **The print-geometry baseline now renumbers on every resume edit.** `nth-of-type` counts hidden
   siblings, so both routes' paths shift when a bullet is added anywhere. (It also used to capture
   those hidden subtrees' children as zero-rect rows; since
-  [#330](https://github.com/ali-wallick/Portfolio/issues/330) a hidden subtree is one row asserting
+  [#330](https://github.com/ali-wallick/portfolio/issues/330) a hidden subtree is one row asserting
   it is still hidden.) The `update-resume` skill carries the how-to-read-it note; the check that
   matters is that visible rows' _values_ (y/height especially) didn't move.
 
@@ -771,7 +771,7 @@ cost a page and nothing smaller, which is how Phase 5 shipped 19pt of silent ref
 a token is not sufficient either** — any selector outranking a bare `:root` beats the print block
 regardless of the media query. Both failure modes, and the fix, are under Phase 5 in
 [`design.md`](design.md) and in
-[#35](https://github.com/ali-wallick/Portfolio/issues/35).
+[#35](https://github.com/ali-wallick/portfolio/issues/35).
 
 ## The résumé's paper look (2026-09-06, closes #235)
 
@@ -779,7 +779,7 @@ Settled with Ali across twelve rounds on a live switcher — the thirteenth run 
 first on paper. The instrument rendered the printed page on screen, at letter geometry, with the
 print cascade transcribed and the real page breaks simulated; it is kept as a template in the
 `design-switcher` skill (`references/resume-paper-sheet/`) for the next pass, for the same reason
-#246 kept the panel out of `src/`. PR [#326](https://github.com/ali-wallick/Portfolio/pull/326)
+#246 kept the panel out of `src/`. PR [#326](https://github.com/ali-wallick/portfolio/pull/326)
 carries every round's measurements. What belongs here is what settled and the four rules that
 generalise.
 
@@ -912,7 +912,7 @@ of the hazard.
 `.site-header`, `.site-footer`, `.page-head` and `.resume-actions`, which the print block hides —
 so a change that moved nothing on paper still showed up as 42 diff rows. That was a property of the
 guard, not of this change, and it was
-[#330](https://github.com/ali-wallick/Portfolio/issues/330), fixed the same day — see
+[#330](https://github.com/ali-wallick/portfolio/issues/330), fixed the same day — see
 "A hidden subtree is one row asserting it is hidden".
 
 ## A hidden subtree is one row asserting it is hidden (2026-09-06, closes #330)
@@ -1056,7 +1056,7 @@ that was posted to #197 as evidence before Search Console contradicted it. Third
 carry their own pre-cutover snapshots. **For "what does Google hold?", Search Console is the source
 and a search tool is not.**
 
-[#200](https://github.com/ali-wallick/Portfolio/issues/200) is untouched by any of this and stands on
+[#200](https://github.com/ali-wallick/portfolio/issues/200) is untouched by any of this and stands on
 its own facts — archive.org preserves by design, and its 2010 capture carries a home street address
 and a mobile number rather than the PO Box.
 

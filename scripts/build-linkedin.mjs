@@ -376,9 +376,9 @@ async function buildDocument() {
       '',
       "- **The résumé's Tools line has no workflow tooling** — version control, CI, profiling. " +
         'It’s derived strictly from each job’s `tech` field, same as the skills implied above. ' +
-        'Tracked as [#39](https://github.com/ali-wallick/Portfolio/issues/39), not fixed here.',
+        'Tracked as [#39](https://github.com/ali-wallick/portfolio/issues/39), not fixed here.',
       '- **The 2024–present Godot work is a single clause** in the Second Dinner bullets above, ' +
-        'same as the resume. Tracked as [#37](https://github.com/ali-wallick/Portfolio/issues/37); ' +
+        'same as the resume. Tracked as [#37](https://github.com/ali-wallick/portfolio/issues/37); ' +
         'the Phase 3 ceiling in `WHAT_NOT_TO_DO` governs whatever gets added.',
       '',
       '---',

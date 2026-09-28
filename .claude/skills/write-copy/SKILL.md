@@ -58,7 +58,7 @@ will fail `npm run check:pdf` at deploy time.
 
 ### 2.1 Résumé register is labeled, and it is deliberately not the site's prose voice
 
-Settled with Ali 2026-08-26 ([#32](https://github.com/ali-wallick/Portfolio/issues/32)). A bullet is
+Settled with Ali 2026-08-26 ([#32](https://github.com/ali-wallick/portfolio/issues/32)). A bullet is
 `{ label, text }` in the schema, and renders as **`Label:`** followed by a clipped formal clause:
 
 > **Localization:** Owned the feature end to end, including Unity's Localization package, the import
@@ -116,7 +116,7 @@ of documents. The site sits at 16.9 contractions per 1k and is fine. Don't tune 
 sitewide number — tune them against the row above.
 
 **The table is the default, not a ceiling — a single page can deviate on explicit request.** Kaneva
-([#140](https://github.com/ali-wallick/Portfolio/issues/140)), 2026-08-25: Ali asked for the whole
+([#140](https://github.com/ali-wallick/portfolio/issues/140)), 2026-08-25: Ali asked for the whole
 page to read more formal and less conversational than the "warm but composed" project-write-up row
 above. What worked was drafting two genuinely different directions — a light dial-down (cut
 contractions and soft connectives like "I enjoyed," keep the story shape) and a dry technical-report
@@ -127,7 +127,7 @@ override where it happened** (the page's own PR, or a comment on its issue), not
 table above.
 
 **Correction, 2026-08-26: that override stopped being a one-page exception and is now the site's
-default.** Kaneva's dial-down propagated by citation — [#137](https://github.com/ali-wallick/Portfolio/issues/137)
+default.** Kaneva's dial-down propagated by citation — [#137](https://github.com/ali-wallick/portfolio/issues/137)
 reworded Vegas Blvd Slots specifically to match "I Fits I Sits, Firefall, and Kaneva," at which point
 four of the five featured pages were formal by explicit request and the "warm but composed" row was
 describing a register no page still had. Ali's own read on the finished pass: **"some warmth is good
@@ -138,7 +138,7 @@ than guessing at one rewrite.**
 
 **Asked to bring one page's register closer to named sibling pages, `grep` the site for the
 flagged phrase before rewriting it.** Vegas Blvd Slots
-([#137](https://github.com/ali-wallick/Portfolio/issues/137)): "cut my teeth," "entirely myself," and
+([#137](https://github.com/ali-wallick/portfolio/issues/137)): "cut my teeth," "entirely myself," and
 an "I went in... I came out..." bookend all sound perfectly normal read once. `grep -rn "<phrase>"
 src/content/projects/ src/content/jobs/` confirmed all three were unique to that one page — **that
 uniqueness is the actual signal a phrase is a register outlier**, rather than an ordinary casual word
@@ -162,7 +162,7 @@ once each and reads perfectly human.
 **The rule: one is a sentence, four is a signature.** Almost everything below is fine in isolation
 and damning in repetition. Judge the page, not the line.
 
-**And judge the site, not only the page** (2026-09-27, [#390](https://github.com/ali-wallick/Portfolio/pull/390)).
+**And judge the site, not only the page** (2026-09-27, [#390](https://github.com/ali-wallick/portfolio/pull/390)).
 A per-page pass cannot see a sentence shape that appears once on each of two pages, and those are
 exactly the ones a "match this page to its siblings" pass creates: #137 brought Vegas Blvd Slots in
 line with Firefall and copied Firefall's "less about any one screen than the layer underneath" into
@@ -185,7 +185,7 @@ Things that are only bad in bulk — use them when the sentence genuinely wants 
   **The site's bold convention is structural — list labels and paragraph lead-ins.** A single word
   bolded mid-sentence in ordinary prose ("a menu **animation** system") is worth asking about rather
   than assuming it's deliberate emphasis; kaneva's survived four revisits as an unexplained leftover
-  ([#140](https://github.com/ali-wallick/Portfolio/issues/140)). It isn't wrong markdown, so nothing
+  ([#140](https://github.com/ali-wallick/portfolio/issues/140)). It isn't wrong markdown, so nothing
   will flag it.
 - **Starting sentences with "And" or "But".** She does this. Keep it.
 
@@ -194,7 +194,7 @@ Things to cut on sight, because they aren't hers at any dosage:
 - **The "part X, part Y" genre-blend hedge.** _"Part Rubik's Cube and part Sudoku"_ is the same
   device as "part heist thriller, part coming-of-age story" — a neat balanced construction a model
   reaches for to describe something by comparison instead of stating it. Even when the comparison
-  itself is sourced (critter-3, [#91](https://github.com/ali-wallick/Portfolio/issues/91): the
+  itself is sourced (critter-3, [#91](https://github.com/ali-wallick/portfolio/issues/91): the
   archived source page really does say "a cross between Rubik's Cube and Sudoku"), the "part X and
   part Y" phrasing is the more polished-sounding version of that same idea. Flagged on sight by
   Ali. State the mechanic instead of the comparison.
@@ -216,14 +216,14 @@ Things to cut on sight, because they aren't hers at any dosage:
   or restates it — _"The constraint was the whole project: say as much as possible with as few
   pixels and colors as the system allowed."_ It's the mic-drop shape a model reaches for, and it's
   dangerous precisely because it passes every other check here: no em dash, normal sentence length,
-  no banned words — and it still read as generated the moment Ali saw it ([#92](https://github.com/ali-wallick/Portfolio/issues/92)). State the idea
+  no banned words — and it still read as generated the moment Ali saw it ([#92](https://github.com/ali-wallick/portfolio/issues/92)). State the idea
   plainly instead: _"Working within its pixel and color limits ended up being most of the game
   design."_ **Distinct from the positive move in §4.11** — that's a short noun label
   ("Localization:") followed by ordinary explanation; this is a full sentence performing a reveal.
 - **The "taught me a lesson" closer.** A specific accomplishment followed by a sentence that
   generalizes it into a moral — _"That taught me something that's stuck. The most valuable thing I
   build is sometimes not the feature, but the tool that makes the next ten features cheaper."_ Ali's
-  reaction on kaneva ([#140](https://github.com/ali-wallick/Portfolio/issues/140)) wasn't "this
+  reaction on kaneva ([#140](https://github.com/ali-wallick/portfolio/issues/140)) wasn't "this
   sounds AI" — it was "this is sappy." **Distinct from both neighbors above**: it isn't a colon
   construction (so the thesis-colon check doesn't catch it), and it's a single antithesis on the
   whole page, not a repeated one (so the dosage rule for antithesis above doesn't catch it either).
@@ -231,7 +231,7 @@ Things to cut on sight, because they aren't hers at any dosage:
   regardless of the sentence's shape. Cut the reflection and let the fact carry it: _"It ended up
   being adopted by both the UI and game teams"_ already says everything the moral was reaching for.
 - **The two above stack, and the stack is worse than either alone.** firefall
-  ([#139](https://github.com/ali-wallick/Portfolio/issues/139)) shipped a "What I learned" closer
+  ([#139](https://github.com/ali-wallick/portfolio/issues/139)) shipped a "What I learned" closer
   with a thesis-colon-shaped sentence immediately followed by a taught-me-a-lesson-shaped one —
   _"That's a different kind of ownership than end to end at Kaneva. I learned to work at the
   boundary between my own scripting layer and the core engine, alongside the engineers who owned
@@ -248,7 +248,7 @@ Things to cut on sight, because they aren't hers at any dosage:
 - **"X, Y among them," over a closed set.** The phrasing implies a longer list you're sampling from.
   Art of Rescue's summary read "levels made from their own famous motifs, Monet's lily pads among
   them" — the team built exactly two levels, Monet and Dalí. Ali's fix
-  ([#89](https://github.com/ali-wallick/Portfolio/issues/89)) was to name both in the body instead.
+  ([#89](https://github.com/ali-wallick/portfolio/issues/89)) was to name both in the body instead.
   Reach for "among them" / "such as" only when the source actually supports more items than you're
   naming; when the full list is short, just state it.
 - **Autopilot vocabulary**: leverage, robust, seamless, delve, myriad, plethora, testament,
@@ -319,16 +319,16 @@ Copied from her own sentences, not from a style guide:
     `- **Label:** clause.` — colon rather than period, since a list item is usually one clause, and
     the word after the colon is capitalized. Settled on mini-mages, where three named mini-games ran
     together as three sentences that each opened with a proper noun and a linking verb
-    ([#95](https://github.com/ali-wallick/Portfolio/issues/95)); extended to a featured body on
+    ([#95](https://github.com/ali-wallick/portfolio/issues/95)); extended to a featured body on
     kaneva, whose eight menu categories were buried in two comma-heavy sentences
-    ([#140](https://github.com/ali-wallick/Portfolio/issues/140)). Reach for it when the alternative
+    ([#140](https://github.com/ali-wallick/portfolio/issues/140)). Reach for it when the alternative
     is a prose list of parallel items — not as a general license for lists.
 12. **Earn a success claim with the obstacle first — don't reach for "the first X that actually
     worked."** That construction passes every other check here (no em dash, in-range length, no
     banned vocabulary) and still reads as a flex, and the mechanism is specific: "first X that
     actually worked" implies a string of earlier X's that didn't, an unflattering claim about her
     own past work that nothing sources. It isn't a comparison to anyone else — Ali's own read
-    ([#99](https://github.com/ali-wallick/Portfolio/issues/99)) was "like in the past I made things
+    ([#99](https://github.com/ali-wallick/portfolio/issues/99)) was "like in the past I made things
     that didn't work?" Her own move, from the 2014 GGJ blog post behind tilting-at-windmills: state
     the concrete difficulty ("a very locked-down network at the jam site"), then let a short, earned
     exclamation carry the payoff — "we pulled through with a great little prototype." The obstacle
@@ -338,16 +338,16 @@ Copied from her own sentences, not from a style guide:
     like an instruction manual; "A pirate hunts..." reads like a synopsis, and Prodigal's body
     already does it ("A wolf leaves its pack to find food..."). Not a hard rule, but worth a second
     look whenever "you" turns up describing a mechanic — it's an easy default to reach for without
-    noticing ([#92](https://github.com/ali-wallick/Portfolio/issues/92)).
+    noticing ([#92](https://github.com/ali-wallick/portfolio/issues/92)).
 14. **Use the real game-dev name for a mechanic, not an everyday metaphor.** Mini Mages' draft
     described two iPhones becoming "steering wheels" — accurate, and a car metaphor for what a game
     developer would call tilt controls. Ali's fix: "tilt controllers"
-    ([#95](https://github.com/ali-wallick/Portfolio/issues/95)). Same accelerometer either way; only
+    ([#95](https://github.com/ali-wallick/portfolio/issues/95)). Same accelerometer either way; only
     one phrasing sounds like it was written by someone who builds games, which is the whole brief.
 15. **Call the thing what it actually is.** Not every project is comfortable being called "a game."
     Night Light's draft defaulted to "the whole game"; Ali's reaction was "game is a stretch for what
     this is," and its own old page had already hedged it as a "scene" with game elements
-    ([#96](https://github.com/ali-wallick/Portfolio/issues/96)). Check what noun the source reaches
+    ([#96](https://github.com/ali-wallick/portfolio/issues/96)). Check what noun the source reaches
     for — scene, piece, demo, sketch — before defaulting to "game," especially for coursework and
     non-interactive pieces.
 
@@ -394,7 +394,7 @@ in, because a punchier sentence often wants a detail the source doesn't have.
 - **A verb narrating _how_ something was accomplished is its own claim.** Marvel Snap's "championing
   a migration to MVVM... arguing for it and getting a team to come along" was signed off at the
   Phase 3 gate and repeated across five surfaces, and it was wrong: the work was tooling-led, not an
-  advocacy campaign ([#136](https://github.com/ali-wallick/Portfolio/issues/136)). The migration and
+  advocacy campaign ([#136](https://github.com/ali-wallick/portfolio/issues/136)). The migration and
   her leading it were both true the whole time; only the mechanism was misdescribed. _Argued for_,
   _championed_, _pushed_, _convinced_, _drove_ narrate an interpersonal story that's easy to get
   subtly wrong even when the underlying fact is solid and long-settled. Read one back to Ali the way
@@ -403,7 +403,7 @@ in, because a punchier sentence often wants a detail the source doesn't have.
   same MVVM verb landed again as "driving its MVVM migration" when the fact was compressed into the
   `/projects` index summary, in a location the earlier fix never touched; Ali's read: "it was a team
   effort and I feel like driving is an overclaim"
-  ([#101](https://github.com/ali-wallick/Portfolio/issues/101)). Check the verb independently on
+  ([#101](https://github.com/ali-wallick/portfolio/issues/101)). Check the verb independently on
   every new surface — a summary, LinkedIn, the resume. A fix in one place does not propagate.
 - **A summary can overclaim through inclusion alone, even when every word is true.** The same
   summary named "client and server systems," which the body genuinely supports — but naming server
@@ -413,7 +413,7 @@ in, because a punchier sentence often wants a detail the source doesn't have.
 - **Compression can under-claim too, and nothing checks for that direction.** Vegas Blvd Slots'
   page and résumé bullet both listed rewards, gifting, leagues and tournaments as things _the game
   had_, a feature list in a sentence about the product. Ali had worked on all of them
-  ([#390](https://github.com/ali-wallick/Portfolio/pull/390)). Every guard in this section is
+  ([#390](https://github.com/ali-wallick/portfolio/pull/390)). Every guard in this section is
   pointed at overclaiming. When a bullet or opener describes the product rather than the work, ask
   whether that is because she didn't build it or because nobody asked.
 - **The Second Dinner ceiling holds absolutely: craft, not product.** The 7 August 2024 W4 Games
@@ -426,7 +426,7 @@ in, because a punchier sentence often wants a detail the source doesn't have.
   `summary` automatically**, and on `/projects` the card renders only the summary: the body said
   outright "I did not work on either shipped release" while the card said the prototype "grew into
   Puzzle Cats, downloaded more than a million times," with nothing attributing the shipping to other
-  teams ([#101](https://github.com/ali-wallick/Portfolio/issues/101)). Whenever a body carries a
+  teams ([#101](https://github.com/ali-wallick/portfolio/issues/101)). Whenever a body carries a
   "didn't work on X" caveat, **read the summary in isolation, as a reader who never clicks
   through.**
 - **Past tense for past work.** The site's founding bug was present tense that stopped being true.
@@ -460,7 +460,7 @@ script is for.
 rather than merely merging two sentences.** `**Driving an MVVM migration for the PC launch.**
 Alongside the push...` puts `.**` — a period followed by asterisks, not whitespace — between the
 label and the sentence, so the two fuse and the label's words are counted as part of it. On
-marvel-snap ([#136](https://github.com/ali-wallick/Portfolio/issues/136), 2026-08-26) that reported
+marvel-snap ([#136](https://github.com/ali-wallick/portfolio/issues/136), 2026-08-26) that reported
 one sentence "over 35 words" at 39w for a sentence that is actually 31w. **Any page using the §4.11
 bolded-label move will do this on every label**, so check the rendered figure before trimming:
 `audit-page.mjs` reads `dist/` with the markdown already stripped, and reported 31w for the same
@@ -496,7 +496,7 @@ Copy is Ali's, and a tone pass is the one kind of change where "it builds" prove
   personal reaction to — draft two or three genuine alternatives and let her pick. It's cheaper for
   her to react to three short options than to describe in prose what's off about one line, and it's
   how the dead-booty pass landed its best sentences
-  ([#92](https://github.com/ali-wallick/Portfolio/issues/92)). Captions, plumbing and anything
+  ([#92](https://github.com/ali-wallick/portfolio/issues/92)). Captions, plumbing and anything
   low-stakes are fine as a single pass.
 - **Flag anything you were tempted to reword but couldn't without a fact you don't have.** That's a
   question for her, not a gap to paper over.

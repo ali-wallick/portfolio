@@ -15,7 +15,7 @@ inferred from "what a game developer sounds like."
 
 **The documents are deliberately not committed.** They contain phone numbers, third-party names, and
 personal matters that have nothing to do with the portfolio, and this repo may go public
-([#48](https://github.com/ali-wallick/Portfolio/issues/48)). Their measurements are recorded here
+([#48](https://github.com/ali-wallick/portfolio/issues/48)). Their measurements are recorded here
 rather than being re-derivable — which is a real cost, and the right trade. `--baseline` on the
 checker re-derives the blog numbers only.
 
@@ -57,7 +57,7 @@ number rather than a flagged one.** #188 curled the apostrophes sitewide that da
 counted only the straight form, so the tool returned **0 contractions per 1k for every file on the
 site** and flagged each one as far under the blog's 17 — an invitation to add contractions to prose
 that already had them, on a metric this reference says twice not to tune toward. Fixed 2026-09-03
-([#295](https://github.com/ali-wallick/Portfolio/issues/295)); re-measured the same day, the site
+([#295](https://github.com/ali-wallick/portfolio/issues/295)); re-measured the same day, the site
 reads **16.7 per 1k** across 3,177 words, so the 16.9 recorded above holds and nothing about the pass
 needs revisiting.
 
@@ -114,13 +114,13 @@ She reaches for something else every single time:
   I'm definitely wanting to veer more professional than the old site." The evidence agrees, and the
   mechanism is the thing to carry forward: **every exclamation in the site's visible prose is there
   because Ali asked for it directly.** "But we pulled it off!" (tilting-at-windmills) came from
-  [#99](https://github.com/ali-wallick/Portfolio/issues/99), and "the studio's first game in Godot!"
+  [#99](https://github.com/ali-wallick/portfolio/issues/99), and "the studio's first game in Godot!"
   (the homepage's Currently line; About carried the same sentence until #207) came from her review of the recalibration pass
   itself — she rejected a proposed warmth clause in the homepage lede and asked for the exclamation
   instead, on the ground that the current work is the thing worth being glad about. A third arrived
   the same way on 2026-09-03: `/contact`'s invitation sentence closes on "are all welcome!", asked
   for by Ali after reading the drafted line without one
-  ([#119](https://github.com/ali-wallick/Portfolio/issues/119)). **When she wants one, she says
+  ([#119](https://github.com/ali-wallick/portfolio/issues/119)). **When she wants one, she says
   so.** One earned exclamation where something genuinely great happened is in-voice; a
   pass that adds them to hit a rate is not.
 - **Question marks go the other way.** She uses them _more_ in adult writing than in the blog —
@@ -207,7 +207,7 @@ than the body: Kaneva ("discovered a love for UI programming"), Marvel Snap ("I'
 watching Second Dinner grow"), Vegas Blvd Slots ("real respect for how much depth", "some of the most
 satisfying work I did there"), and About ("I still enjoy talking about the work", "my love for
 programming"). Firefall and I Fits I Sits close on a plain concrete fact instead, and **Firefall's is
-a deliberate choice** — [#139](https://github.com/ali-wallick/Portfolio/issues/139) cut a
+a deliberate choice** — [#139](https://github.com/ali-wallick/portfolio/issues/139) cut a
 reflective closer from that page and Ali picked the flat ending. The 11 archive entries carry none,
 which is also deliberate: "it's so old it's more just for fun to show cool old projects" (#92).
 

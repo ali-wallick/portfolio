@@ -10,7 +10,7 @@ produced this site. It has run repeatedly since the motion values ([#33]), and
 `docs/decisions/design.md`'s dated pass sections are the record of each — every one rebuilt the scaffolding from scratch, so this file
 is the method rather than the code.
 
-[#33]: https://github.com/ali-wallick/Portfolio/issues/33
+[#33]: https://github.com/ali-wallick/portfolio/issues/33
 
 **Read `docs/decisions/design.md` before choosing what to compare.** It is every look, motion,
 spacing, colour and control decision already settled, each with the measurement behind it.
@@ -105,7 +105,7 @@ writing a file. The constraints, in short, because every one of them has bitten:
    stayed in effect — an instrument quietly reporting the wrong behaviour. Reconcile on load; a
    group whose stored value matches no option snaps to its first and writes that through.
 
-[#62]: https://github.com/ali-wallick/Portfolio/issues/62
+[#62]: https://github.com/ali-wallick/portfolio/issues/62
 
 **The panel must never cover what it compares.** Fixed, corner-anchored, collapsible, and **capped**
 in both dimensions with its own scroll. #239's grew to 26 radios and, anchored only at the bottom,
@@ -224,7 +224,7 @@ The teardown is part of the pass, not cleanup after it.
    `--measure`'s comment wrong by two independent methods and filed [#68] rather than touching a
    layout value it was not scoped to move.
 
-[#68]: https://github.com/ali-wallick/Portfolio/issues/68
+[#68]: https://github.com/ali-wallick/portfolio/issues/68
 
 ## Why there is no shared panel component
 
@@ -241,4 +241,4 @@ deleted route cannot leak at all.
 What generalises is the shape and the traps, which is what `references/scaffolding.md` carries. What
 does not generalise is the axis, and that is most of any real panel.
 
-[#246]: https://github.com/ali-wallick/Portfolio/issues/246
+[#246]: https://github.com/ali-wallick/portfolio/issues/246

@@ -64,7 +64,7 @@ Run `/usage` any time to see where a session went, and there's an `explain-usage
 
 _Nothing is reversible until the old content is out of the old system._ Runs first, blocks nothing once complete. Mostly mechanical — planned as Haiku work. **In practice it ran on Sonnet 5**, and the HTML-to-Markdown judgment calls (a malformed `<s>` tag, an undated post, mojibake in a quoted excerpt) were worth the difference over Haiku.
 
-Landed via [PR #1](https://github.com/ali-wallick/Portfolio/pull/1), merged to `master` at `c3a743d`.
+Landed via [PR #1](https://github.com/ali-wallick/portfolio/pull/1), merged to `master` at `c3a743d`.
 
 - **Scrape the WordPress blog to Markdown.** Done — 20 posts (top of the ~15-20 estimate), 2010-2019, walked `?offset=0,5,10,15` until "Older" stopped appearing. One file per post in `content/archive/` with title/date/source front matter. One post ("Website Live!") had no published date on the live site — flagged in front matter with a `2010-xx-xx` filename rather than a guessed date.
   - **Follow-up fix:** the first pass only verified the posts' images currently resolved on DreamHost — it didn't commit the binaries, so they were still hotlinking to `aliwallick.com/blog/wp-content/uploads/`. Caught in review before merge. All 14 images across the 6 affected posts are now downloaded into `content/archive/images/` (2.8 MB) and referenced locally. Worth remembering for any future scrape-style task: "verify it resolves" is not the same as "preserved."
@@ -85,7 +85,7 @@ Landed via [PR #1](https://github.com/ali-wallick/Portfolio/pull/1), merged to `
 _The only phase in this project with a deadline._ Domain, DNS, and registrar all landed on
 Cloudflare and email went live on iCloud+ — verified send **and** receive in both directions on both
 `ali@` and `contact@aliwallick.com` — **the same day it started**, roughly six weeks ahead of the
-October 1 GoDaddy renewal. Merged via [PR #2](https://github.com/ali-wallick/Portfolio/pull/2).
+October 1 GoDaddy renewal. Merged via [PR #2](https://github.com/ali-wallick/portfolio/pull/2).
 
 **What the deadline actually was, since the reasoning outlived it.** A registrar transfer _adds_ a
 year to the existing expiry rather than resetting it, so transferring before the renewal date lost
@@ -107,7 +107,7 @@ a completed transfer makes it moot.
 
 **DreamHost retires when both are migrated off**, and temporary double-paying was accepted up front.
 That is what removed the coupling as a blocker — it became a sequencing note rather than a
-negotiation, and it is now [#52](https://github.com/ali-wallick/Portfolio/issues/52).
+negotiation, and it is now [#52](https://github.com/ali-wallick/portfolio/issues/52).
 
 ### The zone, the tooling, and the rest of Phase 1 are in `infra/README.md`
 
@@ -124,9 +124,9 @@ instructions for a completed migration is a document that can only mislead — i
 completion ~2026-09-20"_ five days after the work was done.
 
 **The Phase 1 follow-ups are GitHub issues**, not a list in either file —
-[#41](https://github.com/ali-wallick/Portfolio/issues/41) DMARC, [#42](https://github.com/ali-wallick/Portfolio/issues/42) SPF hardfail, [#43](https://github.com/ali-wallick/Portfolio/issues/43) stale SPF includes,
-[#44](https://github.com/ali-wallick/Portfolio/issues/44) `google-site-verification`, [#45](https://github.com/ali-wallick/Portfolio/issues/45) repo cleanup, [#52](https://github.com/ali-wallick/Portfolio/issues/52) the DreamHost
-handoff, and [#55](https://github.com/ali-wallick/Portfolio/issues/55), which came out of actually running the verify script during that cleanup.
+[#41](https://github.com/ali-wallick/portfolio/issues/41) DMARC, [#42](https://github.com/ali-wallick/portfolio/issues/42) SPF hardfail, [#43](https://github.com/ali-wallick/portfolio/issues/43) stale SPF includes,
+[#44](https://github.com/ali-wallick/portfolio/issues/44) `google-site-verification`, [#45](https://github.com/ali-wallick/portfolio/issues/45) repo cleanup, [#52](https://github.com/ali-wallick/portfolio/issues/52) the DreamHost
+handoff, and [#55](https://github.com/ali-wallick/portfolio/issues/55), which came out of actually running the verify script during that cleanup.
 
 **One of them resolved during the phase and is worth keeping in the record**, because it is the kind
 of thing that would otherwise be quietly rediscovered: the first test send landed at Gmail with
@@ -639,7 +639,7 @@ tool calls, and it replaced what would otherwise have been four or five blind bu
 
 ### Merged, with a mid-session model downshift
 
-Merged via [PR #9](https://github.com/ali-wallick/Portfolio/pull/9) at `63452ce` (squash), same day
+Merged via [PR #9](https://github.com/ali-wallick/portfolio/pull/9) at `63452ce` (squash), same day
 as the gate. The session that opened Phase 4 ran on Opus 5 through the gate, the resume build, and
 the Cloudflare PDF investigation; Ali switched the session to Sonnet 5 partway through, for the
 merge, the two follow-up content edits (GDScript, the Second Dinner role split), and this close-out —
@@ -725,8 +725,8 @@ into a measurement that pointed the opposite way.
 
 _Two fixes and a methodology note, all found while building direction 02 (dense / craft). Recorded
 here rather than on that branch because they are direction-agnostic and only one of the three directions gets merged — the same reasoning
-that put the fixes themselves on `master` in [#14](https://github.com/ali-wallick/Portfolio/pull/14),
-following the precedent [#11](https://github.com/ali-wallick/Portfolio/pull/11) set._
+that put the fixes themselves on `master` in [#14](https://github.com/ali-wallick/portfolio/pull/14),
+following the precedent [#11](https://github.com/ali-wallick/portfolio/pull/11) set._
 
 The generalizable thing about the two fixes: **a defect that only exists in the gap between two
 subsystems is invisible to everything that tests either one.** Neither is a bug in the design, and
@@ -1144,14 +1144,14 @@ rather than deleted.
 
 ## Phase 6 — building an instrument instead of an answer, 2026-08-21
 
-Ali asked for a plan for [#36](https://github.com/ali-wallick/Portfolio/issues/36) (thumbnails on
+Ali asked for a plan for [#36](https://github.com/ali-wallick/portfolio/issues/36) (thumbnails on
 featured work) and added the thing that actually mattered: _"I think at the core I worry that the
 site, especially the main pages, are too text heavy."_
 
-#36 was blocked on [#22](https://github.com/ali-wallick/Portfolio/issues/22), a `decision` issue.
+#36 was blocked on [#22](https://github.com/ali-wallick/portfolio/issues/22), a `decision` issue.
 The useful move was not to pick a route but to **build the thing that lets the route be picked** —
 so the deliverable is a preview with a live switcher
-([PR #63](https://github.com/ali-wallick/Portfolio/pull/63)), not a merged treatment.
+([PR #63](https://github.com/ali-wallick/portfolio/pull/63)), not a merged treatment.
 
 ### Measuring the complaint changed its scope
 
@@ -1194,7 +1194,7 @@ turned out to be a nine-line script rather than a research task.
 Both were found by doing something adjacent, not by looking for them.
 
 **Three archive projects embed a YouTube video that no longer exists**
-([#61](https://github.com/ali-wallick/Portfolio/issues/61)). Found because the poster-frame script
+([#61](https://github.com/ali-wallick/portfolio/issues/61)). Found because the poster-frame script
 got 404s. oEmbed returns 403 for all three; a live ID returns 200 from the same check. Those pages
 serve a dead player today.
 
@@ -1205,7 +1205,7 @@ no equivalent.** Storing YouTube as a bare ID removed the protocol bug and creat
 the media problem was solved. A video ID is still a promise about a remote resource.
 
 **The resume print block wins the cascade by load order, and the bundler decides load order**
-([#62](https://github.com/ali-wallick/Portfolio/issues/62)). Adding a single component import to
+([#62](https://github.com/ali-wallick/portfolio/issues/62)). Adding a single component import to
 `BaseLayout.astro` — a preview-only component with no styles — took `resume.pdf` from 1 page to 2
 and `resume-full.pdf` from 2 to 3, with no CSS edited and no token added.
 
@@ -1236,7 +1236,7 @@ contributor would guess**, which is the argument for fixing it properly rather t
 ### The guard that worked
 
 `npm run check:resume-print` — the print-geometry differ committed for
-[#35](https://github.com/ali-wallick/Portfolio/issues/35) — diagnosed this in one run and named the
+[#35](https://github.com/ali-wallick/portfolio/issues/35) — diagnosed this in one run and named the
 offending elements and values. It was the difference between "the PDF grew a page" and "the print
 stylesheet is not applying at all."
 
@@ -1260,8 +1260,8 @@ until now the site had no images on those surfaces at all.
 
 Ali picked the hybrid on the preview — a photograph where one exists, generated
 typographic art where none does. Recorded on
-[#22](https://github.com/ali-wallick/Portfolio/issues/22), which unblocked
-[#36](https://github.com/ali-wallick/Portfolio/issues/36).
+[#22](https://github.com/ali-wallick/portfolio/issues/22), which unblocked
+[#36](https://github.com/ali-wallick/portfolio/issues/36).
 
 **The comparison changed the answer rather than confirming it.** #22 had framed
 the choice as _"a consistent set of five beats two real screenshots and three
@@ -1554,7 +1554,7 @@ frames; synthetic `dispatchEvent` does not.
 
 ## Phase 6 — the faces, and what measuring them first changed, 2026-08-22
 
-[#66](https://github.com/ali-wallick/Portfolio/issues/66), the first of #33's two survivors. This
+[#66](https://github.com/ali-wallick/portfolio/issues/66), the first of #33's two survivors. This
 entry covers building the instrument; the decision it exists to support has not been made yet.
 
 ### Choosing the option set by measurement ruled out a third of the catalogue picks
@@ -1603,7 +1603,7 @@ to prevent, so it is written down rather than left to be re-derived.
 ### The panel is inline for a new reason as well as the old one
 
 Two constraints carried straight over from #33's switcher and needed no rethinking: no new imports in
-`BaseLayout.astro` ([#62](https://github.com/ali-wallick/Portfolio/issues/62)), and the bootstrap
+`BaseLayout.astro` ([#62](https://github.com/ali-wallick/portfolio/issues/62)), and the bootstrap
 inline in `<head>` so the first paint is not the previous selection reflowing into the new one.
 
 A third is new. #33 put its panel's stylesheet in `base.css`, which meant every commit in that
@@ -1709,7 +1709,7 @@ of Figtree "measures" 40.4rem, and it measures 43.58rem by two independent metho
 measurement and a live `68ch` probe on `/about`). The rendered column is unaffected — 40.4rem was
 signed off visually in Phase 5, not derived from that claim — so correcting it would mean touching
 `--measure`, a layout decision this issue was never scoped to make. Filed as
-[#68](https://github.com/ali-wallick/Portfolio/issues/68) rather than fixed quietly, per the standing
+[#68](https://github.com/ali-wallick/portfolio/issues/68) rather than fixed quietly, per the standing
 rule: a follow-up found mid-task is an issue, not a comment or a doc edit.
 
 Closes #66.
@@ -2300,7 +2300,7 @@ three rebuild-and-verify cycles, each finding a real class of bug.
 
 #128 asks for a final review of the site, half agent and half human. The agent half ran 2026-08-27
 against `4bbf829` and delivered fifteen recommendations, prioritized and effort-tagged, as
-[a comment on the issue](https://github.com/ali-wallick/Portfolio/issues/128#issuecomment-5436019674).
+[a comment on the issue](https://github.com/ali-wallick/portfolio/issues/128#issuecomment-5436019674).
 This entry records the method and what it says about the tooling, not the findings — those live on
 the issue, per the rule that issues track work.
 
@@ -2348,7 +2348,7 @@ failures: the changes Phase 1 existed to make.
 
 A re-baseline that only swapped in today's values would have re-created the same bug on a delay,
 because three of the records it asserts are _scheduled to change_: the SPF loses two dead includes
-when [#43](https://github.com/ali-wallick/Portfolio/issues/43) lands, Apple can rotate the DKIM key
+when [#43](https://github.com/ali-wallick/portfolio/issues/43) lands, Apple can rotate the DKIM key
 whenever it likes, and the apex and `www` addresses change at the cutover itself — which is the whole
 point of the exercise.
 
@@ -2486,7 +2486,7 @@ had three known-bad results, a fourth would have been noise.
 disallowing nine AI crawlers ahead of it. Search indexing is unaffected (`Allow: /` and the sitemap
 line are intact, which is what step 7 asserts), so it was not launch-blocking and was deliberately
 not touched during the cutover. It is a content-licensing posture applied by a platform default
-rather than chosen, and it is [#215](https://github.com/ali-wallick/Portfolio/issues/215).
+rather than chosen, and it is [#215](https://github.com/ali-wallick/portfolio/issues/215).
 
 ### Cost notes
 
@@ -2553,7 +2553,7 @@ The finding nobody was looking for is that **`errors-in-console` fails on every 
 included, and always has.** The Cloudflare Insights beacon POSTs to a host whose CORS preflight
 cannot match lhci's random localhost port, so every page scores 0.96 against a 0.95 bar. The
 sitewide gate has been running on one hundredth of headroom, spent on an artifact of serving
-`dist/` locally. Filed as [#221](https://github.com/ali-wallick/Portfolio/issues/221) rather than
+`dist/` locally. Filed as [#221](https://github.com/ali-wallick/portfolio/issues/221) rather than
 fixed, since the good fix is a separate change.
 
 **Measuring a new page taught more about the five old ones than about the new one.**
@@ -2767,7 +2767,7 @@ producing contradictions rather than changes, the file is telling you to rewrite
 
 ## The switcher loop becomes a skill (2026-08-30)
 
-[#246](https://github.com/ali-wallick/Portfolio/issues/246). Four passes had run the live-switcher
+[#246](https://github.com/ali-wallick/portfolio/issues/246). Four passes had run the live-switcher
 loop — the motion values (#33), the faces (#66), the colour calibration (#67) and the résumé actions
 bar (#239) — and every one of them built the scaffolding from scratch and deleted it. The method was
 transmitted only by example, which meant a new session learned it by reading this log and CLAUDE.md's
@@ -2841,7 +2841,7 @@ but whatever followed it is not. Flagged on the pull request rather than guessed
 
 ## The gallery scroller (2026-08-30)
 
-[#166](https://github.com/ali-wallick/Portfolio/issues/166), one line long: _"Might be nice to have
+[#166](https://github.com/ali-wallick/portfolio/issues/166), one line long: _"Might be nice to have
 horizontal scrollable dynamic library instead of the static wrapping one we have in place now."_ Ali
 added the shape she wanted in session — larger images, one row, scroll left and right past the page
 width. The settled decisions are in `CLAUDE.md`; what belongs here is how the session ran.
@@ -2901,14 +2901,14 @@ page-scoped rather than sitewide: it lived in the project-page template, so `Bas
 never touched at all and #62's CSS-bundle hazard was never engaged rather than worked around. It
 carried three axes, lost one per round as Ali settled them, and was deleted whole at the end.
 
-This pass and [#246](https://github.com/ali-wallick/Portfolio/issues/246) ran the same day and did
+This pass and [#246](https://github.com/ali-wallick/portfolio/issues/246) ran the same day and did
 not know about each other, so the loop was rebuilt from the records here rather than from the
 `design-switcher` skill that now holds it — which is exactly the cost that issue was opened to stop
 paying. The page-scoped variant above is the one finding from this pass worth folding back into it:
 where nothing outside one route can use the axis, the skill's "no new imports in `BaseLayout`" rule
 is satisfied by never touching the file at all.
 
-[#239](https://github.com/ali-wallick/Portfolio/pull/239) merged to `main` mid-session and conflicted
+[#239](https://github.com/ali-wallick/portfolio/pull/239) merged to `main` mid-session and conflicted
 on exactly three files — both resume PDFs and `resume-pdf.lock.json` — while no source file
 conflicted at all. Both branches touch `base.css`, which is a byte-hashed PDF input, so both
 regenerate the same artifacts. **Resolved by taking main's and then rebuilding from the merged tree**,
@@ -2942,7 +2942,7 @@ exception. Each answer was measured before it was given, and three of the five o
 previous answer had implied. That is the shape to notice — not that the first answer was wrong, but
 that a question asked one level up kept being available.
 
-The résumé fix ([#244](https://github.com/ali-wallick/Portfolio/issues/244)) shipped twice as a
+The résumé fix ([#244](https://github.com/ali-wallick/portfolio/issues/244)) shipped twice as a
 result. The first version removed the cap entirely and matched paper, which is defensible and was
 wrong: it put bullets at 103–128 characters per line. The second pinned them to 701px, the print
 column, after Ali asked whether a standard existed. **The trigger was her question, not a check** —
@@ -2951,7 +2951,7 @@ nothing in CI measures line length, and nothing could have.
 ### `ch` had been hiding the real number for the life of the project
 
 The single finding worth the whole pass. `--measure` had been discussed in `ch` since Phase 5, and
-[#68](https://github.com/ali-wallick/Portfolio/issues/68) had already corrected the arithmetic once.
+[#68](https://github.com/ali-wallick/portfolio/issues/68) had already corrected the arithmetic once.
 The arithmetic was never the problem: `1ch` is the `0` glyph and real prose is mostly narrower
 characters and spaces, so characters per line run ~1.38× the `ch` count. "63ch" was ~87 characters,
 and 86% of the site's prose lines were over the 80 that WCAG 1.4.8 names.
@@ -3010,7 +3010,7 @@ outcome five times: the résumé width, the `ch` finding, the P3 narrowness, the
 and the full-bleed overflow. Chromium needed the same shim as the last three sessions.
 
 The rebase at the end conflicted on exactly the three generated artifacts — both PDFs and the lock —
-on both commits that touch `base.css`, and for the same reason [#239](https://github.com/ali-wallick/Portfolio/pull/239)
+on both commits that touch `base.css`, and for the same reason [#239](https://github.com/ali-wallick/portfolio/pull/239)
 did. Resolved the same way: take main's, rebuild from the merged tree, because the correct hash is
 the merged input set's and belongs to neither side.
 
@@ -3247,7 +3247,7 @@ source material.
 
 A Claude Code web session cannot reach YouTube at all — the egress proxy answers
 `CONNECT tunnel failed, response 403` — and most of this project's work happens in one. A local
-session can. That is the same shape as [#245](https://github.com/ali-wallick/Portfolio/issues/245),
+session can. That is the same shape as [#245](https://github.com/ali-wallick/portfolio/issues/245),
 where the web session's proxy blocked `cdn.playwright.dev` and broke `npm ci`. **Twice now the
 binding constraint on a piece of work has been which session type it runs in**, which is not a
 distinction the repo represents anywhere.
@@ -3268,7 +3268,7 @@ merged file with `ffprobe` for duration and stream presence turned up two missin
 confirmed the other four matched their source durations exactly. A run that says `ERROR` about the
 thing you did not care about, while silently skipping the thing you did, is the failure mode to
 design checks against — the same lesson as the page-count assertion passing a resume that was 64px
-over budget ([#191](https://github.com/ali-wallick/Portfolio/issues/191)).
+over budget ([#191](https://github.com/ali-wallick/portfolio/issues/191)).
 
 ### The location is the one fact deliberately not committed
 
@@ -4368,13 +4368,13 @@ its initial value. Of the 56 tokens the print block pins, three do anything: `--
 `--leading-tight` and `--measure`. Deleting the other 53 moved zero of 108 rendered elements on the
 one-pager and zero of 155 on the two-pager. `tokens.css`'s header is corrected on this branch.
 Whether to delete the 53 inert pins is deferred to Ali as
-[#327](https://github.com/ali-wallick/Portfolio/issues/327), with the measurement attached rather
+[#327](https://github.com/ali-wallick/portfolio/issues/327), with the measurement attached rather
 than argued in prose. `resume.css` is otherwise untouched; its only change is losing the two pins
 that went with the deleted tokens.
 
 ### Two more questions, and one survey miss
 
-[#328](https://github.com/ali-wallick/Portfolio/issues/328) tracks the `src/` to `scripts/`
+[#328](https://github.com/ali-wallick/portfolio/issues/328) tracks the `src/` to `scripts/`
 boundary: five pieces of content logic (a job sort, an education sort, the current-title derivation,
 the résumé bullet grouping, and the thumbnail fallback order) are written twice because
 `content.ts` imports `astro:content` and no script can. The fix is a mechanism question, not a
@@ -5603,7 +5603,7 @@ web session starts without the history a history rewrite is about.
 ## Closing out DreamHost (2026-09-13)
 
 The last piece of the old stack, and the only one that depended on someone else's timeline
-([#52](https://github.com/ali-wallick/Portfolio/issues/52)). A web session wrote the plan as a
+([#52](https://github.com/ali-wallick/portfolio/issues/52)). A web session wrote the plan as a
 handoff rather than doing it, because its sandbox had no outbound DNS and every step would have been
 unverified. A local session ran it with Ali at the dashboards: recon, a new zone in the other owner's own
 Cloudflare account, the registrar transfer, a one-page placeholder, and the cancellation, in one
