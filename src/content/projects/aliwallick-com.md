@@ -52,8 +52,8 @@ gallery:
   - type: image
     src: ../../assets/images/projects/aliwallick-com/new-about-desktop.webp
     alt: >-
-      The new About page, a headshot beside the opening paragraph and the Kerbal costume beside
-      “Off the Clock”
+      The new About page, a childhood photo of Ali holding up a PC game box beside the opening
+      paragraph, and her Crypt of the NecroDancer cosplay beside “Off the Clock”
     caption: About, after.
   - type: image
     src: ../../assets/images/projects/aliwallick-com/old-projects-desktop.webp
