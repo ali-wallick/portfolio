@@ -44,7 +44,7 @@ A lot of my favorite work has been tooling. The menu animation system I built at
 
 **2 positions under one company.** Software Engineer II (2019 – Dec 2021), then Senior Software Engineer I, Dec 2021 – Present. LinkedIn models this natively: add a further position under the same Second Dinner entry rather than editing the title in place, so the promotion shows on your profile. Put the bullets below on the current role.
 
-Joined as the 11th employee, interviewing and helping shape the culture as the studio grew past 100.
+Joined as the 11th employee, interviewing candidates and helping shape the culture as the studio grew past 100.
 
 ```text
 Unreleased Mobile Game (2024 – Present)
