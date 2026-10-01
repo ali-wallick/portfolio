@@ -48,6 +48,11 @@ also gated on [#200](https://github.com/ali-wallick/portfolio/issues/200) — wh
 this one. A clean run of everything below still leaves the blobs retrievable by anyone who can
 read the repo and knows a SHA. While the repo is private with no forks, that is you.
 
+**That gap closed on 2026-09-30.** GitHub Support removed the pull request refs, ran garbage
+collection and cleared the cache (ticket 4779807), and #367 closed with it. The old commits and all
+ten blobs now return not-found. The record is "The Support purge landed" in
+[`docs/decisions/tooling.md`](decisions/tooling.md).
+
 Every command below is meant to be pasted as-is. **Expectations are written as invariants where
 they can be** — exactly one commit pruned, `main` exactly one shorter — because every merge to
 `main` moves the absolute counts, and an operator reading "270" beside a terminal saying "273" is
@@ -124,6 +129,8 @@ the very tag the rewrite was meant to clean. The rehearsal caught it in the post
 listing.
 
 > **These ten ids are retrieval addresses, and they stay dangerous until [#367](https://github.com/ali-wallick/portfolio/issues/367) lands.** A git blob id is not a digest of the content the way the SHA-256 entries in `scripts/check-preserved-blobs.mjs` are — that file's header explains why _those_ are safe to commit, and the reasoning does not transfer. GitHub serves an object by its id for as long as the object is in the store, and after a force-push these ten stay reachable through `refs/pull/N/head`, which is the whole reason #367 exists. **So this table is safe to publish only once the Support purge is confirmed complete.** [#378](https://github.com/ali-wallick/portfolio/issues/378) carries that as a hard precondition rather than an ordering preference. Keeping the ids is deliberate: they are the record of what was stripped, and without them the step 4 command below cannot be checked against what actually ran.
+>
+> **Confirmed complete on 2026-09-30.** All ten ids return 404 from `GET /repos/ali-wallick/portfolio/git/blobs/<id>`, and a fetch by id from an empty repository is refused. They are no longer addresses for anything GitHub holds.
 
 | Blob id                                    | What it is                          | Path it lived at                                                    |
 | ------------------------------------------ | ----------------------------------- | ------------------------------------------------------------------- |
@@ -507,8 +514,9 @@ once history has moved.
 
 Two things are now open rather than done, and neither belongs in this runbook:
 
-- **[#367](https://github.com/ali-wallick/portfolio/issues/367)** — the Support purge, and it is
-  now the next step rather than a maybe. Its one condition was #200 succeeding, and #200 closed
+- **[#367](https://github.com/ali-wallick/portfolio/issues/367)** — the Support purge. **Done
+  2026-09-30**, and what follows is the note as it stood on the day of the run. It was
+  then the next step rather than a maybe. Its one condition was #200 succeeding, and #200 closed
   on 2026-09-11 with zero captures left for any of the three files, so GitHub is now the last
   copy outside this machine. The ordering constraint stands: file it _after_ this push and
   _before_ the flip, never after. Its ticket text needs the two numbers from step 4 pasted in:

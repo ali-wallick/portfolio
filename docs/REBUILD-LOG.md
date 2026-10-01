@@ -5776,3 +5776,36 @@ fanned out. One `SHOW_DRAFTS` build for the audit, and a production build plus `
 that touched the résumé, because those regenerate both PDFs and `docs/LINKEDIN.md`. The screenshot
 was a scratchpad script reusing `serve-dist.mjs` and `launch-chromium.mjs`, rather than a run of
 `capture-comparison.mjs` that would have rewritten all sixteen `new/` captures.
+
+## The purge, confirmed (2026-09-30)
+
+#367 closed. GitHub Support removed the pull request refs and ran garbage collection nine days
+after the ticket was filed, and the old history is gone from GitHub. What was decided and how it
+was checked is "The Support purge landed" in [`docs/decisions/tooling.md`](decisions/tooling.md).
+
+### How the pass ran
+
+It started as "check my email". The session read Support's first reply through the Gmail connector,
+and the reply asked Ali to clean up three branches and four tags that were already clean. The
+session checked before drafting an answer: the old root was on no branch or tag, the new root was on
+all of them, and none of the ten blobs was reachable from any ref. Support's tool had searched for
+both halves of the "old -> new" pair the ticket gave it.
+
+Ali sent the reply herself. The connector could read mail and could not create a draft, so the
+text went into the chat to paste. Support escalated two days later and finished the day after.
+
+### What the plan got wrong
+
+**The first "is it gone?" check gave a wrong answer.** A
+fetch of the old commit from the working checkout succeeded, because the checkout still had the
+object and git never asked the remote. It was caught only because the API said the opposite. The
+second run used an empty repository and a control fetch of the new root.
+
+**The ticket's wording cost a round trip with Support.** #367's paste-ready text asked for the first changed commit
+as old and new, and the new one is the clean one.
+
+### Model allocation and cost
+
+Opus 5.5, inline, no subagents. A handful of `gh api` calls, two fetches into a scratch repository,
+and a `cleanup-branches` sweep that found one squash-merged branch. One `verify` run, for this
+record.

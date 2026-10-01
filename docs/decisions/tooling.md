@@ -1461,3 +1461,49 @@ history on the checkout's absolute path (`~/.claude/projects/-Users-awallick-rep
 The Mac's APFS volume is case-insensitive, so the lowercase path resolves to the same directory and
 the memory follows — but a case-only rename still needs a two-step `mv` through a temporary name,
 and a session has to be restarted from the new path.
+
+## The Support purge landed (2026-09-30, #367, #109)
+
+GitHub Support removed the pre-rewrite pull request refs, ran garbage collection and cleared the
+cache on 2026-09-30 (ticket 4779807, filed 2026-09-21). #367's "done when" was "filed and
+confirmed", and both hold. [#378](https://github.com/ali-wallick/portfolio/issues/378) carried #367
+as a hard precondition, and that precondition is now met. The repo was private with 0 forks
+throughout, so the ordering constraint held.
+
+**The question the docs could not answer has an answer.** GitHub's documentation says Support will
+"dereference or delete" affected pull requests, and #367 flagged that as the row that mattered most.
+Support offered both and Ali chose the first: delete the internal references, keep the comment
+history. A purged pull request keeps its title, state, body and comments. It reports 0 changed
+files, and asking for its diff returns 422, "the repository may be missing relevant data". The
+"Files changed" view is the whole cost, which is what #367 predicted.
+
+**What was checked, and it is the check to repeat if this is ever done again:**
+
+- The old root `1cdcbfc` and four commits sampled across the backout mirror, including the
+  pre-rewrite tip: no commit found, through the API.
+- All ten stripped blob ids: 404 from `GET /repos/ali-wallick/portfolio/git/blobs/<id>`.
+- A fetch of the old root, and of one blob, into an empty repository: refused, "not our ref". The
+  new root `f02d49f` fetched normally as the control.
+- 13 `refs/pull/*` refs remain, for pull requests 380 to 386 and 388 to 392. Every one descends from
+  the new root. They are the pull requests opened after the rewrite.
+
+**Two things went wrong on the way, and both are about how the request was worded.**
+
+**Giving Support "old → new" got the clean commit flagged.** The ticket named the first changed
+commit as `1cdcbfc -> f02d49f`, the pair `filter-repo`'s commit map prints. Support's tooling
+scanned for both, found `f02d49f` in three branches and four tags, and replied that those refs
+needed cleaning with `git filter-repo`. They did not: `f02d49f` is the root of the rewritten
+history, so every branch contains it by construction. One reply settled it, at the cost of a round trip.
+**A ticket names only the commit that is sensitive.** The replacement is context for a human and a
+second search term for a tool.
+
+**A fetch by SHA proves nothing from a checkout that already has the object.** The first
+verification ran `git fetch origin 1cdcbfc` in the working checkout and it succeeded, which read as
+"GitHub still serves it". It did not ask GitHub: git found the object locally and stopped. The same
+command from an empty `git init` was refused. Verify a purge from a repository that has never held
+the history.
+
+**Local copies are a separate job.** The working checkout still held the old commit and blobs
+afterwards, unreferenced, kept by the reflog. `git reflog expire --expire=now --all` then
+`git gc --prune=now` removed them, verified per object. The backout mirror outside the repo holds
+the full old history on purpose and is Ali's to delete.
