@@ -140,7 +140,7 @@ The 2011 GPA and Dean’s List entries are recorded in `src/content/education/ge
 LinkedIn is the one surface in this project that an agent can’t verify after the fact, so the rules are stricter, not looser:
 
 - **Don’t name or characterise Second Dinner’s current game.** Two facts are public and sayable. The
-  studio said on 7 August 2024, via the [W4 Games investment](https://www.w4games.com/blog/w4-games-news-1/second-dinner-studios-becomes-a-strategic-investor-in-w4-games-and-plans-to-build-the-largest-game-in-godot-yet-37),
+  studio said on 7 August 2024, via the [W4 Games investment](https://www.w4games.com/blog/w4-games-news-2/second-dinner-studios-becomes-a-strategic-investor-in-w4-games-and-plans-to-build-the-largest-game-in-godot-yet-33),
   that it is building an ambitious game in Godot; and Ali confirmed 2026-08-26 that the studio has
   been public about it being mobile. That is the ceiling. **No title, no genre, no features, no
   monetization** — and don’t call it the studio’s "next" game, which implies a succession that did

@@ -384,7 +384,7 @@ internals, anything about how the studio operates, and mapping specific dates to
 
 **The genuinely sensitive period is 2024–present, and even that is partly public.** On **7 August
 2024** Second Dinner became a strategic investor in W4 Games and stated publicly that it plans to
-build ["the most ambitious Godot game yet"](https://www.w4games.com/blog/w4-games-news-1/second-dinner-studios-becomes-a-strategic-investor-in-w4-games-and-plans-to-build-the-largest-game-in-godot-yet-37) —
+build ["the most ambitious Godot game yet"](https://www.w4games.com/blog/w4-games-news-2/second-dinner-studios-becomes-a-strategic-investor-in-w4-games-and-plans-to-build-the-largest-game-in-godot-yet-33) —
 Ben Brode and Matt Wyble both on the record. No title, platform, or genre named. So the site can say
 Ali moved to the studio's next team in 2024 and that it is a Godot project, and **cite the
 announcement**, which is stronger and more honest than the old hedge. It must not name or

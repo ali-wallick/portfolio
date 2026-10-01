@@ -35,7 +35,7 @@ links:
   # The one public source for the project’s existence, engine and ambition.
   # Same URL About’s “Currently” sentence links (src/pages/about.astro).
   - label: Second Dinner becomes a strategic investor in W4 Games
-    url: https://www.w4games.com/blog/w4-games-news-1/second-dinner-studios-becomes-a-strategic-investor-in-w4-games-and-plans-to-build-the-largest-game-in-godot-yet-37
+    url: https://www.w4games.com/blog/w4-games-news-2/second-dinner-studios-becomes-a-strategic-investor-in-w4-games-and-plans-to-build-the-largest-game-in-godot-yet-33
     kind: press
 # A draft on purpose, and it may stay one for a long time (#60). Drafts render
 # in `astro dev` and on branch previews and are excluded from production, so
