@@ -1507,3 +1507,24 @@ the history.
 afterwards, unreferenced, kept by the reflog. `git reflog expire --expire=now --all` then
 `git gc --prune=now` removed them, verified per object. The backout mirror outside the repo holds
 the full old history on purpose and is Ali's to delete.
+
+## A `SECURITY.md`, added before the flip (2026-10-01, #378)
+
+GitHub's repo overview shows "Set up a security policy" as soon as the repo is public, and without
+one a person who finds a problem has no stated place to send it. The likeliest alternative is a
+public issue, which is the thing to avoid. So `SECURITY.md` exists, and it is short on purpose.
+
+**It says what the surface actually is.** A static site with no backend, no forms and no user data
+has three realistic reports: a dependency Dependabot missed, a secret or personal detail in the repo
+or its history, and a problem with the deployed headers. Anything bigger would imply a surface that
+isn't there.
+
+**The channel is `contact@aliwallick.com` plus GitHub's private vulnerability reporting.** The
+address is already the settled public one. Private reporting is a repo setting rather than a file,
+so it is a step in #378 and not something a commit can do.
+
+**No response-time promise, and one supported version.** One maintainer, not a job. Only what is
+live on `release` is supported.
+
+**Code scanning stays off.** The setting is greyed out because Advanced Security is
+organisation-only, and a static site gives it little to scan. Dependabot alerts are the coverage.
