@@ -1,0 +1,49 @@
+name: CodeQL
+
+# Code scanning, as a file rather than GitHub's "default setup" toggle, so a
+# checkout shows it is on. See "CodeQL, as a workflow file" in
+# docs/decisions/tooling.md.
+#
+# Two languages. `actions` is the part that earns its keep: it reads these
+# workflow files for untrusted input reaching a `run:` step and for broad token
+# permissions. `javascript-typescript` covers src/ and scripts/; there is no
+# Astro extractor, so `.astro` files are not analysed. Neither needs a build.
+#
+# Not a required check. A finding shows on the Security tab and the PR, and
+# merging stays a human call.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  # Weekly, so a new query catches old code. Off the :00 mark.
+  schedule:
+    - cron: '41 8 * * 1'
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [actions, javascript-typescript]
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: none
+
+      - uses: github/codeql-action/analyze@v4
+        with:
+          category: /language:${{ matrix.language }}

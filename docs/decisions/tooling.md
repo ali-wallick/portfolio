@@ -1576,3 +1576,28 @@ first-time ones. GitHub's default approves a contributor permanently after one m
 checks out, caches and moves artifacts, so it needs nothing more. `link-check.yml` declares its own
 `issues: write`. **A new workflow that writes anything declares `permissions:` itself**; it will
 fail loudly without it, which is the point.
+
+## CodeQL, as a workflow file (2026-10-03, #378)
+
+**This reverses "Code scanning stays off" from the `SECURITY.md` entry above.** That entry said the
+setting was greyed out because Advanced Security is organisation-only. That was true of a private
+repo. On a public one, code scanning is free.
+
+**It is `.github/workflows/codeql.yml`, not the "default setup" toggle.** Default setup lives in
+repo settings, where a checkout can't see it. That is the drift this repo has been bitten by three
+times (see "Deployed state drifts from the repo" in `CLAUDE.md`). A workflow file is visible and
+reviewed like everything else. Its cost is one more action for Dependabot to keep current.
+
+**Two languages, and only one of them is why it is here.** `actions` reads the workflow files for
+untrusted input reaching a `run:` step and for over-broad token permissions. That is the real
+attack surface of a public repo with a static site. `javascript-typescript` covers `src/` and
+`scripts/`, which handle no outside input, so expect little from it. `.astro` files are not
+analysed at all, since CodeQL has no extractor for them.
+
+**It is not a required check.** No ruleset requires it, so a finding never blocks a merge.
+**When a fix and a dismissal cost about the same, fix it** (Ali's call, 2026-10-03). Dismiss only
+when the finding is wrong or no fix exists, and put the reason on the alert.
+
+**Secret scanning and push protection were turned on the same day**, along with turning off the
+empty wiki and setting the repo's homepage. Those are settings with no file to hold them, so this
+is their record.

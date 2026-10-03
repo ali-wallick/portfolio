@@ -5878,3 +5878,39 @@ failure until you know why.
 
 Opus 5.5 throughout, inline, with no subagents. Every step was a few commands whose output decided
 the next, which is the case `CLAUDE.md` says not to fan out.
+
+## After the flip (2026-10-03, #378)
+
+A sweep in a fresh session, asked one open question: is anything left to square away now that the
+repo is public? Everything #378 listed was done. The leftovers were all things the checklist could
+not have named in advance.
+
+### What it found
+
+**Five docs still gave "this repo may go public" as the reason for a rule** (#401). The rules held,
+and only the tense was wrong. One had gone further out of date: `docs/PRESERVATION.md` sent readers
+to "the original blob in history" for the address probes, and #109 had stripped that blob.
+
+**`docs/CLOUDFLARE.md` counted on a private repo.** It named two protections for preview URLs:
+branch names hidden in a private repo, and Cloudflare Access. The flip removed the first. A `curl`
+of every branch alias, plus one that never existed, showed Access still covers them all.
+
+**A high Dependabot alert surfaced on the first push after the flip.** It was in
+`http-cache-semantics`, which Astro uses only at build time, and no patched version exists yet. The
+bug needs a shared cache serving many users, and a static site has none. Dismissed as tolerable
+risk, with that reason on the alert.
+
+**Four settings only make sense on a public repo:** secret scanning and push protection were off,
+the empty wiki was on, and the repo had no homepage link. All four were changed, and CodeQL went in
+as a workflow file. The record is "CodeQL, as a workflow file" in `docs/decisions/tooling.md`.
+
+### What the plan got wrong
+
+**#378 recorded code scanning as unavailable, and that was only half true.** It was unavailable on a
+private repo. Making the repo public was the change that made it available, so this check belonged
+after the flip all along.
+
+### Model allocation and cost
+
+Opus 5.5, inline, no subagents. A sweep like this is a dozen `gh api` reads whose answers decide the
+next read.
