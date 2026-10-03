@@ -9,6 +9,10 @@ name: CodeQL
 # permissions. `javascript-typescript` covers src/ and scripts/; there is no
 # Astro extractor, so `.astro` files are not analysed. Neither needs a build.
 #
+# On a pull request, CodeQL reports only on the lines the PR changed, so a
+# clean PR scan says nothing about the rest of the repo. The push to main is
+# the full scan.
+#
 # Not a required check. A finding shows on the Security tab and the PR, and
 # merging stays a human call.
 on:
@@ -43,6 +47,13 @@ jobs:
         with:
           languages: ${{ matrix.language }}
           build-mode: none
+          # Preserved records, not shipped code, and a hook refuses edits to
+          # them, so a finding there can be neither fixed nor acted on.
+          # resources/js/nav.js is the old site's script and is not served.
+          config: |
+            paths-ignore:
+              - resources
+              - content/archive
 
       - uses: github/codeql-action/analyze@v4
         with:

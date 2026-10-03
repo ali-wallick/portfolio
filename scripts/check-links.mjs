@@ -121,12 +121,15 @@ const attr = (tag, name) => {
   return m ? (m[2] ?? m[3]) : undefined;
 };
 
-/** The handful of entities that survive into headings. */
+/**
+ * The handful of entities that survive into headings. `&amp;` goes last, or
+ * `&amp;nbsp;` (a heading that literally says "&nbsp;") decodes twice.
+ */
 const decode = (s) =>
   s
     .replace(/&#8217;|&rsquo;/g, '’')
-    .replace(/&amp;/g, '&')
-    .replace(/&nbsp;/g, ' ');
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&');
 
 /*
  * The function words AP and Chicago both set lowercase inside a title:
@@ -371,7 +374,11 @@ for (const file of htmlFiles) {
   // source, not writing prose, and curling it would make it wrong.
   const prose = html
     .replace(/<(script|style|pre|code)\b[^>]*>[\s\S]*?<\/\1>/gi, '')
-    .replace(/<[^>]+>/g, ' ');
+    .replace(/<[^>]+>/g, ' ')
+    // Rendered text never holds a raw `<` (it is `&lt;`), so this changes
+    // nothing on valid output. It closes the case CodeQL flags, where the tag
+    // strip above leaves a `<` behind that reads as a new tag.
+    .replace(/</g, ' ');
   const straight = /&#0*39;|&apos;|&#x0*27;|'/i;
   if (straight.test(prose)) {
     const at = prose.search(straight);
@@ -499,7 +506,8 @@ for (const file of htmlFiles) {
   // an observed regularity about this site's headings got cited back as a rule
   // twice before Ali named it an accident.
   for (const h of html.matchAll(/<h2\b[^>]*>([\s\S]*?)<\/h2>/gi)) {
-    const text = decode(h[1].replace(/<[^>]+>/g, ''))
+    // The trailing `<` strip is the same guard as check 6.
+    const text = decode(h[1].replace(/<[^>]+>/g, '').replace(/</g, ''))
       .replace(/\s+/g, ' ')
       .trim();
     const bad = miscased(text);

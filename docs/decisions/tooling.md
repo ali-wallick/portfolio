@@ -1598,6 +1598,33 @@ analysed at all, since CodeQL has no extractor for them.
 **When a fix and a dismissal cost about the same, fix it** (Ali's call, 2026-10-03). Dismiss only
 when the finding is wrong or no fix exists, and put the reason on the alert.
 
+**A clean pull request scan proves nothing about the rest of the repo.** On a PR, CodeQL reports
+only on the lines the PR changed. #402 changed no code, so it came back clean three times. The first
+push to `main` then found seven alerts. The full scan is the one on `main`.
+
+**`resources/` and `content/archive/` are outside its scope**, set in the workflow's `config`. They
+are preserved records, not shipped code, and the hook refuses edits to them. So a finding there
+could be neither fixed nor acted on. The first scan found one: the old site's `nav.js` writes URL
+segments into `innerHTML`, which is a real cross-site scripting pattern in a file nothing serves.
+Leaving the folder out of scope was better than dismissing the alert. A dismissal covers one alert,
+and the scope covers the whole folder.
+
+**The first full scan, and what became of each finding.** Of seven: five were fixed, one was scoped
+out as above, and one was dismissed.
+
+- **Fixed: `ci.yml` declares `permissions: contents: read`** (two alerts). The repo default already
+  made it read-only. The rule above says a workflow declares its own permissions, and this one
+  didn't.
+- **Fixed: `decode()` in `check-links.mjs` decoded `&amp;` first**, so `&amp;nbsp;` decoded twice. A
+  real bug, and harmless, since it only fed an error message.
+- **Fixed: two tag-strips in `check-links.mjs` now also drop any leftover `<`.** CodeQL warned they
+  could leave a `<script` behind. Nothing they produce reaches a browser, but the fix was one
+  `replace` that changes nothing on valid output. Valid text never holds a raw `<`. That made fixing
+  it the same cost as dismissing it.
+- **Dismissed as a false positive: `strip-lighthouse-beacon.mjs`.** It removes one known analytics
+  tag (#221). It is not a sanitizer, and the other `<script>` tags are meant to stay. Changing the
+  code would have only been to quiet the scanner.
+
 **Secret scanning and push protection were turned on the same day**, along with turning off the
 empty wiki and setting the repo's homepage. Those are settings with no file to hold them, so this
 is their record.

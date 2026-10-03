@@ -12,6 +12,12 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# Read-only, declared here rather than inherited from the repo setting, so the
+# workflow says what it needs. Neither job uses the token beyond checkout;
+# artifacts move on the runner's own token. CodeQL flagged its absence (#378).
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build & check
