@@ -1617,10 +1617,12 @@ out as above, and one was dismissed.
   didn't.
 - **Fixed: `decode()` in `check-links.mjs` decoded `&amp;` first**, so `&amp;nbsp;` decoded twice. A
   real bug, and harmless, since it only fed an error message.
-- **Fixed: two tag-strips in `check-links.mjs` now also drop any leftover `<`.** CodeQL warned they
-  could leave a `<script` behind. Nothing they produce reaches a browser, but the fix was one
-  `replace` that changes nothing on valid output. Valid text never holds a raw `<`. That made fixing
-  it the same cost as dismissing it.
+- **Fixed: the tag-strips in `check-links.mjs` repeat until nothing changes.** CodeQL warned a
+  single pass could leave a `<script` behind. Nothing they produce reaches a browser, but the fix
+  is two small helpers, `stripBlocks` and `stripTags`, and on valid output the second pass finds
+  nothing. That made fixing it the same cost as dismissing it. The first attempt, dropping any
+  leftover `<` afterwards, did not satisfy CodeQL. The repeat is the fix its own documentation
+  gives.
 - **Dismissed as a false positive: `strip-lighthouse-beacon.mjs`.** It removes one known analytics
   tag (#221). It is not a sanitizer, and the other `<script>` tags are meant to stay. Changing the
   code would have only been to quiet the scanner.

@@ -121,6 +121,29 @@ const attr = (tag, name) => {
   return m ? (m[2] ?? m[3]) : undefined;
 };
 
+/*
+ * Tag stripping for the prose checks, repeated until nothing changes. One pass
+ * can leave behind a `<` that reads as a new tag (`<scr<b>ipt>`), which is
+ * what CodeQL flags (#378). On valid output the second pass finds nothing, so
+ * the checks see the same text. Nothing these produce reaches a browser.
+ */
+const stripBlocks = (s, sub) => {
+  let prev;
+  do {
+    prev = s;
+    s = s.replace(/<(script|style|pre|code)\b[^>]*>[\s\S]*?<\/\1>/gi, sub);
+  } while (s !== prev);
+  return s;
+};
+const stripTags = (s, sub) => {
+  let prev;
+  do {
+    prev = s;
+    s = s.replace(/<[^>]+>/g, sub);
+  } while (s !== prev);
+  return s;
+};
+
 /**
  * The handful of entities that survive into headings. `&amp;` goes last, or
  * `&amp;nbsp;` (a heading that literally says "&nbsp;") decodes twice.
@@ -372,13 +395,7 @@ for (const file of htmlFiles) {
   //
   // Code is exempt — `{' '}` in a write-up about .astro whitespace is quoting
   // source, not writing prose, and curling it would make it wrong.
-  const prose = html
-    .replace(/<(script|style|pre|code)\b[^>]*>[\s\S]*?<\/\1>/gi, '')
-    .replace(/<[^>]+>/g, ' ')
-    // Rendered text never holds a raw `<` (it is `&lt;`), so this changes
-    // nothing on valid output. It closes the case CodeQL flags, where the tag
-    // strip above leaves a `<` behind that reads as a new tag.
-    .replace(/</g, ' ');
+  const prose = stripTags(stripBlocks(html, ''), ' ');
   const straight = /&#0*39;|&apos;|&#x0*27;|'/i;
   if (straight.test(prose)) {
     const at = prose.search(straight);
@@ -476,7 +493,7 @@ for (const file of htmlFiles) {
   const INLINE = 'a|em|strong|b|i|code|abbr|span|small|cite|q';
   const welded = new RegExp(`([A-Za-z0-9])<(?:${INLINE})\\b[^>]*>(?=[A-Za-z0-9])`, 'gi');
   for (const block of html.matchAll(/<(p|li)\b[^>]*>([\s\S]*?)<\/\1>/gi)) {
-    const inner = block[2].replace(/<(script|style|pre|code)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ');
+    const inner = stripBlocks(block[2], ' ');
     for (const m of inner.matchAll(welded)) {
       const context = inner
         .slice(Math.max(0, m.index - 40), m.index + 40)
@@ -506,10 +523,7 @@ for (const file of htmlFiles) {
   // an observed regularity about this site's headings got cited back as a rule
   // twice before Ali named it an accident.
   for (const h of html.matchAll(/<h2\b[^>]*>([\s\S]*?)<\/h2>/gi)) {
-    // The trailing `<` strip is the same guard as check 6.
-    const text = decode(h[1].replace(/<[^>]+>/g, '').replace(/</g, ''))
-      .replace(/\s+/g, ' ')
-      .trim();
+    const text = decode(stripTags(h[1], '')).replace(/\s+/g, ' ').trim();
     const bad = miscased(text);
     if (bad) report(rel, `heading is not title case (#182): "${text}" — ${bad}`);
   }
