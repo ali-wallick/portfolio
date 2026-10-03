@@ -291,9 +291,10 @@ Settled now:
 Ali supplied (five, 2016–2024, written to persuade or explain); MobilityWare's 2017 "Meet Ali Wallick" Q&A; and her own chat messages from 2026.
 
 **Only the first is committed.** The documents carry personal detail and third parties unrelated to
-the portfolio, and this repo may go public
-([#48](https://github.com/ali-wallick/portfolio/issues/48)). Their measurements are recorded in the
-reference rather than being re-derivable. That is a real cost and the right trade; Ali has the files.
+the portfolio, and this repo is public
+([#378](https://github.com/ali-wallick/portfolio/issues/378)). Their measurements are recorded in
+the reference rather than being re-derivable. That is a real cost and the right trade; Ali has the
+files.
 
 Two measured gaps govern the wording pass ([#31](https://github.com/ali-wallick/portfolio/issues/31))
 and are worth knowing before writing anything.

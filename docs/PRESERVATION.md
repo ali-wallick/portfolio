@@ -148,9 +148,9 @@ site uses as project heroes were captured while they are all still up. 291 MB, w
 channel and upload date recorded alongside each file.
 
 **The files are in Ali's own cold storage and the location is deliberately not recorded anywhere in
-this repo** — a repo that may go public is the wrong place for the path to someone's personal
-storage. What is committed is `docs/VIDEO-ARCHIVE.md`: what was captured, the sha256 of every file,
-how to verify a copy, and the two `yt-dlp` traps that made the first run silently drop two videos.
+this repo** — a public repo is the wrong place for the path to someone's personal storage. What is
+committed is `docs/VIDEO-ARCHIVE.md`: what was captured, the sha256 of every file, how to verify a
+copy, and the two `yt-dlp` traps that made the first run silently drop two videos.
 
 The four Marvel Snap `press` videos are **not** archived. That was a scoping call, not an oversight,
 and `docs/VIDEO-ARCHIVE.md` says which one has the strongest case for revisiting.
@@ -171,12 +171,12 @@ deleted from the page's content stream, so the glyphs are not in the file at all
 | Raw byte grep                   | not found                                                     |
 | Pixel diff against the original | 0.126% of pixels, all inside the address bounding box         |
 
-**The probe strings are not written down here, and that is deliberate**
-(2026-09-09, [#360](https://github.com/ali-wallick/portfolio/issues/360)). This table used to name
-all four, which meant a public reader could reassemble the address from the very document
-explaining that it had been removed. The probes are the address's own words: read them off the
-original blob in history — which is what #109 is about — or ask Ali. A repo that may go public
-([#48](https://github.com/ali-wallick/portfolio/issues/48)) is the wrong place to keep a
+**The probe strings are not written down here, and that is deliberate** (2026-09-09,
+[#360](https://github.com/ali-wallick/portfolio/issues/360)). This table used to name all four,
+which meant a public reader could reassemble the address from the very document explaining that it
+had been removed. The probes are the address's own words, and the blob that held them was stripped
+from history (#109), so ask Ali. A public repo
+([#378](https://github.com/ali-wallick/portfolio/issues/378)) is the wrong place to keep a
 reassemblable copy of the thing it is redacting.
 
 Everything else is untouched and still selectable: name, email, website, and the other 101 text
