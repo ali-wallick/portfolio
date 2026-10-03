@@ -46,7 +46,7 @@ gated on the `Pre-launch` milestone emptying.
 | Apex `A` record today  | `173.236.243.216` (DreamHost) — **re-read it live, don't trust this number**               |
 | `www` `A` record today | `173.236.243.216` (DreamHost)                                                              |
 | Mail                   | iCloud+, `MX 10 mx01/mx02.mail.icloud.com` — **untouched by this procedure**               |
-| Addresses to verify    | `ali@aliwallick.com` and `contact@aliwallick.com`                                          |
+| Addresses to verify    | Every address on the zone, `contact@aliwallick.com` included                               |
 | The noindex flag       | `export const live = false` at `src/config/site.ts:48`                                     |
 | Apex / `www` TTL today | **300s** (Cloudflare "Auto"), measured 2026-08-27 — so step 3's wait is minutes, not hours |
 

@@ -214,7 +214,7 @@ const WHAT_NOT_TO_DO = `LinkedIn is the one surface in this project that an agen
   that it is building an ambitious game in Godot; and Ali confirmed 2026-08-26 that the studio has
   been public about it being mobile. That is the ceiling. **No title, no genre, no features, no
   monetization** — and don’t call it the studio’s "next" game, which implies a succession that did
-  not happen (see CLAUDE.md, #129). It is one of several new projects, and hers is the studio’s
+  not happen (see CLAUDE.md, #129). It is a new team, and hers is the studio’s
   first game in Godot.
 - **Don’t restore "unannounced mobile Marvel game."** It was accurate in 2019 and has been wrong
   since October 2022.

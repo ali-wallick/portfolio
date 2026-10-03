@@ -32,8 +32,7 @@ in [`docs/decisions/tooling.md`](decisions/tooling.md).
 | Pruned                | —                           | `1065039` only                                                      |
 | Text rules applied    | —                           | 1, to four versions of `docs/PRESERVATION.md` (2026-08-26 to 09-09) |
 
-The backout mirror is `~/portfolio-rewrite/portfolio-backout.git` on Ali's machine. Keep it until
-the repo is public.
+A backout mirror exists outside the repo. Keep it until the repo is public.
 
 Same relationship to #109 that `LAUNCH.md` has to #34: **the issue holds the decision and the
 ordering, this holds the procedure.** Nothing here restates the checklist — read #109 first.
@@ -49,7 +48,7 @@ this one. A clean run of everything below still leaves the blobs retrievable by 
 read the repo and knows a SHA. While the repo is private with no forks, that is you.
 
 **That gap closed on 2026-09-30.** GitHub Support removed the pull request refs, ran garbage
-collection and cleared the cache (ticket 4779807), and #367 closed with it. The old commits and all
+collection and cleared the cache, and #367 closed with it. The old commits and all
 ten blobs now return not-found. The record is "The Support purge landed" in
 [`docs/decisions/tooling.md`](decisions/tooling.md).
 

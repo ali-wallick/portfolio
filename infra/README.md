@@ -172,5 +172,5 @@ is why #42 is a restoration rather than a hardening.
 - **The site cutover** — [#34](https://github.com/ali-wallick/portfolio/issues/34). Deploy setup is
   in [`docs/CLOUDFLARE.md`](../docs/CLOUDFLARE.md).
 - **Retiring DreamHost** — [#52](https://github.com/ali-wallick/portfolio/issues/52), which also
-  covers putting a second household domain on the same iCloud+ plan and carries what to know about
+  covers putting a second domain on the same iCloud+ plan and carries what to know about
   iCloud+ before doing it.

@@ -205,7 +205,7 @@ listed the right path.
 The redaction was produced with `pdfjs-dist`, `pdf-lib` and `@napi-rs/canvas` installed **outside the
 repo**, deliberately — three dependencies is a poor trade for something that runs once.
 `package.json` is untouched. To redo it, locate the text block by its computed device position
-(x 208.7, y 690.5 on a 612x792 page) rather than by byte offset.
+rather than by byte offset.
 
 ## The résumé's _pictures_ were redacted too — 2026-09-09, #360
 
@@ -283,13 +283,10 @@ An earlier version of this file claimed the newest capture was 2019-07-19 on exa
 reading first-seen dates as last-seen ones. Sort or filter explicitly when the question is "when was
 this last archived?"
 
-**archive.org's holdings of the old address are wider than the PDF**, and wider than #200 first
-recorded. As of 2026-08-27 it has **seven** captures of `resources/WallickAli-Resume.pdf`
-(2016-01-17 through 2025-04-21), **two of `resources/images/resume.png`** — a rendered image of the
-same resume, where the address is simply legible and no content-stream redaction is possible — and
-one capture of a 2010 `resume.pdf` at a different path, which carries a home street address and a
-phone number rather than the PO Box. Removal there is a manual request rather than a re-crawl. See
-[#200](https://github.com/ali-wallick/portfolio/issues/200).
+**archive.org's holdings of the old résumés were wider than the PDF**, including rendered images
+where no content-stream redaction is possible. Removal there was a manual request rather than a
+re-crawl, and [#200](https://github.com/ali-wallick/portfolio/issues/200) closed on 2026-09-11 with
+none left.
 
 ## `snapshot/` was retired on 2026-09-21 (#45)
 

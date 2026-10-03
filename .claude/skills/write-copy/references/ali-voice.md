@@ -5,16 +5,16 @@ inferred from "what a game developer sounds like."
 
 ## The corpora
 
-| Corpus        | What                                                                                                                                                      | Size         | In the repo?       |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------------------ |
-| **Blog**      | `content/archive/`, 20 posts, 2010–2019. Unedited, first person, young.                                                                                   | ~5,100 words | yes                |
-| **Old site**  | `snapshot-pre-retirement` tag — About, index, project pages. More considered, still hers.                                                                 | ~1,800 words | yes                |
-| **Résumé**    | 2019 bullets, verbatim under "Source material" in `src/content/jobs/*.md`.                                                                                | ~400 words   | yes                |
-| **Documents** | Two cover letters (2016, 2019), a client email (2023), a warranty escalation letter (2023), a volunteer synthesis doc (2024). Supplied by Ali 2026-08-24. | ~4,200 words | **no — see below** |
-| **Chat**      | Ali's own messages in the session that built this skill, 2026-08-24. Casual, unedited, typed quickly.                                                     | ~260 words   | no                 |
+| Corpus        | What                                                                                                            | Size         | In the repo?       |
+| ------------- | --------------------------------------------------------------------------------------------------------------- | ------------ | ------------------ |
+| **Blog**      | `content/archive/`, 20 posts, 2010–2019. Unedited, first person, young.                                         | ~5,100 words | yes                |
+| **Old site**  | `snapshot-pre-retirement` tag — About, index, project pages. More considered, still hers.                       | ~1,800 words | yes                |
+| **Résumé**    | 2019 bullets, verbatim under "Source material" in `src/content/jobs/*.md`.                                      | ~400 words   | yes                |
+| **Documents** | Five adult documents, 2016–2024, written to persuade or explain — none about games. Supplied by Ali 2026-08-24. | ~4,200 words | **no — see below** |
+| **Chat**      | Ali's own messages in the session that built this skill, 2026-08-24. Casual, unedited, typed quickly.           | ~260 words   | no                 |
 
-**The documents are deliberately not committed.** They contain phone numbers, third-party names, and
-personal matters that have nothing to do with the portfolio, and this repo may go public
+**The documents are deliberately not committed.** They carry personal detail and third parties that
+have nothing to do with the portfolio, and this repo may go public
 ([#48](https://github.com/ali-wallick/portfolio/issues/48)). Their measurements are recorded here
 rather than being re-derivable — which is a real cost, and the right trade. `--baseline` on the
 checker re-derives the blog numbers only.
@@ -234,7 +234,7 @@ work to a general audience. Casual, concrete, not a single abstraction.
 
 "Passionate" is genuinely her word — she picks it as one of three to describe herself here. What
 doesn't survive is the construction _"I am a programmer passionate about making games"_ as an opening
-line, which is what the cover letters do. **The word is hers; the opener is a form.** Don't ban the
+line, which is what her most formulaic documents do. **The word is hers; the opener is a form.** Don't ban the
 word, ban the throat-clearing.
 
 ## Adult Ali: how she argues
@@ -245,13 +245,8 @@ Four devices recur, none of which the site currently uses.
 ### Concede, then press
 
 Her signature move. She gives the other side its due in full, sincerely, and then does not drop the
-point. It reads as fair rather than soft, and it is why her escalation letter is persuasive.
-
-> This is pretty clearly a problem caused by Dometic and not HC. […] I don't blame HC for this one.
-> However, I did several hours of free research.
-
-> We really really appreciate the proactive work in this area. […] But this does bring up the QC
-> concerns again.
+point. It reads as fair rather than soft, and it is what makes the documents persuasive: a full,
+plain sentence clearing the other party, then "however" and the specifics, in the next breath.
 
 The portfolio use is obvious once seen: it's how you write about a decision that was reasonable at
 the time and still had to be revisited. The Snap PC-launch section is exactly that shape — a direct
@@ -259,19 +254,17 @@ port was "a reasonable one for a first release," and then Early Access exit mean
 
 ### Pressing with questions
 
-Sixteen question marks in 4,200 words, and in the escalation letter they arrive in bursts:
-
-> Was drainage never tested originally? How did our camper get released to us without testing city
-> water at all? Was the fresh water tank capacity in the original layout never tested?
+Sixteen question marks in 4,200 words, and they arrive in bursts of three or four, each one a short,
+pointed "was this never checked?" about a specific thing.
 
 Rhetorical questions are a real device of hers and the site uses none. Sparingly — one, to open the
 problem a piece of work solved, is very much in voice.
 
 ### Labeled lead-ins
 
-Both the escalation letter and the synthesis doc are organized as a bolded label, a colon, then plain
-explanation — `Plumbing Issues:`, `Window Issues:`, `Missing Stabilizer:`. The synthesis doc does the
-same with bolded opening sentences under each heading.
+The longer documents are organized as a bolded label, a colon, then plain explanation — two or three
+words naming the problem, never a sentence. One does the same with bolded opening sentences under
+each heading.
 
 **This validates the Marvel Snap page's structure**, which was written before this corpus existed. The
 bolded-lead-in pattern is genuinely hers. It stops being hers when _every_ paragraph has one — see
@@ -279,11 +272,8 @@ SKILL.md §3 on dosage.
 
 ### Saying the feeling plainly
 
-She states her reaction in short, unhedged sentences, then moves straight back to specifics:
-
-> I am feeling very upset about all of this.
-
-> Honestly this is probably the most upsetting issue we've run into.
+She states her reaction in short, unhedged sentences, then moves straight back to specifics. Six to
+nine words, first person, the feeling named outright.
 
 No throat-clearing, no "I must admit," no softening. The portfolio equivalent is "It's definitely
 been one of my proudest moments as a game dev" (blog) — a flat statement of how she felt about the
@@ -292,17 +282,12 @@ work, adjacent to the facts rather than dressed over them.
 ## The correction: she does use the banned words — when she's on autopilot
 
 An earlier draft of this reference claimed Ali had never used "utilize" or "passionate about." Both
-appear in the documents corpus:
+appear in the documents corpus — "passionate about" as an opening line, "utilizing" in front of a
+list of methodologies.
 
-> I am a programmer **passionate about** making games, and local to the Irvine area.
-
-> I have worked multiple times in agile environments, **utilizing** methodologies/technologies such
-> as Scrum, Jira, and Confluence.
-
-Both are from the cover letters, and **the cover letters are by a distance the least her-sounding
-things in the corpus.** They are the only documents with no specifics, no parentheticals, no motive
-stated, and no evident interest in anything. The 2016 letter is 160 words that could have been sent
-by any engineer in Orange County.
+Both are from the two most formulaic documents in it, **which are by a distance the least
+her-sounding.** They are the only documents with no specifics, no parentheticals, no motive stated,
+and no evident interest in anything.
 
 **So the guidance survives, with a better reason attached.** These words are not forbidden because
 Ali dislikes them. They are a _symptom_: they show up precisely when she is writing to a form instead
@@ -350,7 +335,7 @@ recompute when new material turns up.
 1. Ali writing about technical work for someone else to read — a design doc, a postmortem, a
    long code-review comment, a conference proposal. **This is the gap.** Nothing in any corpus is
    her explaining a system she designed, which is exactly what the featured project pages are.
-2. Anything adult, written to persuade or explain. The 2023 documents were the most useful addition
+2. Anything adult, written to persuade or explain. The documents corpus was the most useful addition
    by a distance.
 3. Anything recent, even informal. Chat messages confirmed the central number in 260 words.
 
@@ -358,8 +343,8 @@ recompute when new material turns up.
 corpus, ever — same ceiling as the site itself (`CLAUDE.md`, "craft, not product"). That rules out
 most of what Ali has written since 2019, which sounds fatal for a voice reference and isn't. Her
 sentence length is stable to within half a word across four genres and sixteen years, and the em dash
-is absent from all of them. **Voice measurements transfer across subject matter.** A camper warranty
-letter and a design doc are written by the same person at the same sentence length. Non-work writing
+is absent from all of them. **Voice measurements transfer across subject matter.** A personal letter
+and a design doc are written by the same person at the same sentence length. Non-work writing
 is not a compromise sample; it's a perfectly good instrument for everything except vocabulary.
 
 **How to fold in a new sample:**
