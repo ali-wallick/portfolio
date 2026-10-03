@@ -21,9 +21,8 @@ roles:
   # including the Kaneva project page’s `role` field, which used to say
   # `Lead UI Programmer` and disagreed with this entry.
   #
-  # Additional context from Ali (2026-08-25, #140): she believes Kaneva
-  # inflated that title as a retention play and doesn’t consider it a real
-  # SSE-equivalent role. Don’t reintroduce "Lead UI Programmer" as a title
+  # Additional context from Ali (2026-08-25, #140): she doesn’t consider the
+  # title an accurate description of the role. Don’t reintroduce "Lead UI Programmer" as a title
   # claim anywhere on the site on the theory that the flattening above was
   # just tidiness — it wasn’t. The project page’s prose no longer names it
   # either, for the same reason.
