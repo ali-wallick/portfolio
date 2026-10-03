@@ -271,7 +271,7 @@ three times and left as-is each time, so it is a decision rather than an oversig
 
 **Two candidates were declined and should not be rediscovered.** A **family photo** for Off the
 Clock: it is the one candidate that is purely personal rather than also evidence for something the
-page argues, and it would have put a minor on a public site — a call for Ali, not a design question.
+page argues — a call for Ali, not a design question.
 A **Zion Narrows hiking shot**, which lost to the cosplay because a costume is something she _made_
 and a hike is a place she went; that slot is the only image on the site of her making something with
 her hands outside work, which is the non-work register of the "logic of programming and creativity

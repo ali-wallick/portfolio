@@ -66,7 +66,7 @@ Settled with Ali 2026-08-26 ([#32](https://github.com/ali-wallick/portfolio/issu
 
 **This is recovered, not invented.** Ali's own 2019 resume built every bullet this way — "Vegas Blvd
 Slots:", "UI Programming:", "Client Engineering:" — and it is the same move §4.11 already documents
-from her escalation letter and her volunteer synthesis doc. Decode
+from her longer adult documents. Decode
 `resources/WallickAli-Resume.pdf` before proposing a change to the format; it is the primary source,
 and it is the only place the original document survives.
 
@@ -255,9 +255,9 @@ Things to cut on sight, because they aren't hers at any dosage:
   landscape, elevate, unlock, cutting-edge, "deep dive", "at the end of the day", "it's worth
   noting", "in today's ... world", ensure, utilize, facilitate. Write make sure, use, help.
 
-  Ali does use two of these. "Passionate about" and "utilizing" both appear in her cover letters, and
-  **the cover letters are the least her-sounding writing in the corpus** — no specifics, no
-  parentheticals, no motive stated, no evident interest in anything. So these aren't banned because
+  Ali does use two of these. "Passionate about" and "utilizing" both appear in her two most
+  formulaic documents, and **those are the least her-sounding writing in the corpus** — no
+  specifics, no parentheticals, no motive stated, no evident interest in anything. So these aren't banned because
   she dislikes them. They're a _symptom_ of writing to a form instead of about a thing. Hitting one
   is a prompt to check whether the whole paragraph has gone generic.
 
@@ -286,8 +286,7 @@ Copied from her own sentences, not from a style guide:
    levels."
 6. **Let one sentence be short.** Then a longer one. That alternation is her rhythm.
 7. **Concede, then press.** Her signature move in adult writing — give the other side its full due,
-   sincerely, then don't drop the point. _"This is pretty clearly a problem caused by Dometic and not
-   HC. […] However, I did several hours of free research."_ On a portfolio page this is how you write
+   sincerely, then "however" and the specifics, in the next breath. On a portfolio page this is how you write
    about a decision that was reasonable at the time and still had to be redone.
 8. **Open with a question when a piece of work solved a real problem.** She uses question marks more
    in adult writing than in the blog; the site uses none. One, to state the problem, is in voice.
@@ -312,8 +311,8 @@ Copied from her own sentences, not from a style guide:
 10. **Name the specific thing.** Blendoku, Carcassone, Castles of the Mad King Ludwig — not "board
     games". The same instinct as the undramatized numbers, applied to nouns, and the most reliable
     single marker of her writing.
-11. **Label a section, then explain it plainly.** Bolded label, colon, ordinary prose. Both her
-    escalation letter and her volunteer synthesis doc are built this way — independent confirmation
+11. **Label a section, then explain it plainly.** Bolded label, colon, ordinary prose. Her longer
+    adult documents are built this way — independent confirmation
     that the Marvel Snap page's structure is hers.
     **At list scale, this is the fix for 3+ parallel items dumped into prose**, any tier:
     `- **Label:** clause.` — colon rather than period, since a list item is usually one clause, and

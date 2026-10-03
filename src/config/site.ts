@@ -30,8 +30,8 @@ export const site = {
   url: 'https://aliwallick.com',
 
   /**
-   * Locked in during Phase 1. `ali@` also works and is on the same iCloud+ plan,
-   * but `contact@` is the address that goes on the public site.
+   * Locked in during Phase 1. `contact@` is the address that goes on the public
+   * site.
    */
   email: 'contact@aliwallick.com',
 

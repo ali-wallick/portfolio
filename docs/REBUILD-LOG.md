@@ -83,8 +83,8 @@ Landed via [PR #1](https://github.com/ali-wallick/portfolio/pull/1), merged to `
 ## Phase 1 — Infrastructure ✅ Complete (2026-08-16)
 
 _The only phase in this project with a deadline._ Domain, DNS, and registrar all landed on
-Cloudflare and email went live on iCloud+ — verified send **and** receive in both directions on both
-`ali@` and `contact@aliwallick.com` — **the same day it started**, roughly six weeks ahead of the
+Cloudflare and email went live on iCloud+ — verified send **and** receive in both directions on every
+address, `contact@aliwallick.com` included — **the same day it started**, roughly six weeks ahead of the
 October 1 GoDaddy renewal. Merged via [PR #2](https://github.com/ali-wallick/portfolio/pull/2).
 
 **What the deadline actually was, since the reasoning outlived it.** A registrar transfer _adds_ a
@@ -101,8 +101,8 @@ a completed transfer makes it moot.
 ### What it replaced
 
 - **Domain** `aliwallick.com` at **GoDaddy** — registration only, nothing else on the account.
-- **Site and email** on **DreamHost** — `ali@aliwallick.com` lived there.
-- **A second household domain** registered **free as part of the DreamHost annual subscription**,
+- **Site and email** on **DreamHost**.
+- **A second domain** registered **free as part of the DreamHost annual subscription**,
   with a site hosted there too.
 
 **DreamHost retires when both are migrated off**, and temporary double-paying was accepted up front.
@@ -1869,9 +1869,9 @@ baseline considerably, and the checker's numbers are cheap to re-derive when it 
 ### The second corpus confirmed the finding and corrected the reasoning (2026-08-24)
 
 The section above was written from the blog alone, and flagged its own weakness: mostly 2010–2015
-Ali, two posts after 2015, nothing about senior engineering work. Ali then supplied five documents —
-two cover letters (2016, 2019), a client email, a warranty escalation letter, and a volunteer
-synthesis doc, 2016 to 2024. About 4,200 words of adult writing, most of it persuasive.
+Ali, two posts after 2015, nothing about senior engineering work. Ali then supplied five writing
+samples from 2016 to 2024, none of them committed. About 4,200 words of adult writing, most of it
+persuasive.
 
 **It confirmed the sentence-length finding in the strongest possible way.** Blog: 17.0 words. Documents:
 17.2. Fifteen years apart, different genres, different decades of her life, and they agree to within
@@ -1899,8 +1899,8 @@ isn't: she concedes the other side's point in full and then declines to drop her
 a colon, and plain explanation. That last one is independent confirmation that the Marvel Snap page's
 bolded lead-ins — written months earlier, from instinct — are genuinely her shape.
 
-**The documents are not in the repo, and that was a real trade.** They carry phone numbers,
-third-party names, and personal matters with nothing to do with the portfolio, and #48 may make this
+**The documents are not in the repo, and that was a real trade.** They carry personal detail and
+third parties with nothing to do with the portfolio, and #48 may make this
 repo public. So their measurements are recorded in the reference rather than being re-derivable, and
 `--baseline` on the checker still only re-derives the blog numbers. Recording a number you can't
 recompute is exactly the kind of thing this repo's content model exists to prevent, so it's worth
@@ -3453,7 +3453,7 @@ Playwright probes rather than anything that fans out. Two rounds, three pushes.
 Verification that earned its keep: comparing the regenerated PDFs byte-for-byte against the
 committed ones rather than trusting `check:pdf`. They differ only in `/CreationDate`, `/ModDate` —
 and, in the two-pager, an ephemeral localhost port inside two link annotations, which turned out to
-be a pre-existing defect in a file Ali attaches to job applications. Filed rather than fixed here.
+be a pre-existing defect in the published résumé. Filed rather than fixed here.
 
 ## #273 — a poster and a dead flag on the youtube media variant (2026-09-01)
 
@@ -5213,8 +5213,7 @@ Learned" as the alternative.
 ### The second round cut it by a third, on one sentence of direction
 
 Ali's read of the first draft: "a bit more concise, especially What Went Wrong," and keep the
-focus on learning agentic workflows from scratch against her work setup, where the agents and
-skills are established and team-driven. The from-scratch framing was the thing the first draft had
+focus on learning agentic workflows from scratch. The from-scratch framing was the thing the first draft had
 not said out loud, and it is what the page is for. Each failure bullet went from four or five
 sentences to two; the preservation paragraph became one sentence; the probe paragraph went. 1,318
 rendered words became 960, mean sentence 16.8, longest 32 in source. The two TODOs and the empty
@@ -5640,8 +5639,8 @@ nameservers are gone, there is no third chance.
 
 Opus, inline, no subagents. A handful of doc and web lookups, and one background `whois` poll that
 turned "tell me when the transfer lands" into a single notification instead of repeated check-ins.
-The session read Ali's Gmail to find the transfer and cancellation notices rather than asking her
-to go looking for them.
+The session found the transfer and cancellation notices itself rather than asking Ali to go
+looking for them.
 
 ## The rewrite rehearsal, again (2026-09-13)
 
@@ -5785,14 +5784,12 @@ was checked is "The Support purge landed" in [`docs/decisions/tooling.md`](decis
 
 ### How the pass ran
 
-It started as "check my email". The session read Support's first reply through the Gmail connector,
-and the reply asked Ali to clean up three branches and four tags that were already clean. The
+It started with Support's first reply, which asked Ali to clean up three branches and four tags that were already clean. The
 session checked before drafting an answer: the old root was on no branch or tag, the new root was on
 all of them, and none of the ten blobs was reachable from any ref. Support's tool had searched for
 both halves of the "old -> new" pair the ticket gave it.
 
-Ali sent the reply herself. The connector could read mail and could not create a draft, so the
-text went into the chat to paste. Support escalated two days later and finished the day after.
+Ali sent the reply herself, pasted from the chat. Support escalated two days later and finished the day after.
 
 ### What the plan got wrong
 
@@ -5809,3 +5806,38 @@ as old and new, and the new one is the clean one.
 Opus 5.5, inline, no subagents. A handful of `gh api` calls, two fetches into a scratch repository,
 and a `cleanup-branches` sweep that found one squash-merged branch. One `verify` run, for this
 record.
+
+## Trimming before the flip (2026-10-03, #378)
+
+A review of #378's steps turned up a gap: steps 2–4 sweep for secrets and personal details, and
+nothing swept for what is safe but unnecessary. That became step 3b. What was decided is "Trimmed
+what did not need to be public" in [`docs/decisions/tooling.md`](decisions/tooling.md).
+
+### How the pass ran
+
+The review itself found two settings that only exist on a public repo, so private vulnerability
+reporting moved to after the flip. Those findings went to #378 as a comment, and that comment was
+kept generic about what the private material was, since it goes public too.
+
+The trims went into a shortlist in the session scratchpad, not the tracker. Ali approved all of it
+and ruled history out of scope in one reply.
+
+### What the plan got wrong
+
+**The step it was missing was the obvious one.** Every sweep so far had a target class, and each
+found its class cleanly. None asked "would Ali want a stranger to read this?", which is a different
+question with no regex behind it. The largest single find was a file breaking a rule written at the
+top of that same file.
+
+**One subagent's top finding was a history leak, rated rewrite-worthy.** It was checked against git
+before it reached Ali. It was real, and it still didn't clear the bar for a rewrite. A subagent's
+severity is an input, not a verdict.
+
+### Model allocation and cost
+
+Opus 5.5 for the review, the verification and the edits. **Four Sonnet subagents in parallel for
+the read**, about 33,000 lines across the voice reference and handoff docs, the rebuild log, the
+decision records and runbooks, and a JSON export of all 398 issues and pull requests. This is the
+case `CLAUDE.md` names as worth fanning out: independent reads with no shared output. The tracker
+read was by far the largest. Each subagent's top findings were spot-checked against the source
+before they went on the shortlist.

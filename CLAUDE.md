@@ -288,11 +288,10 @@ Settled now:
 `write-copy` skill carries quoted evidence and measurements in
 `.claude/skills/write-copy/references/ali-voice.md`, derived from four independent corpora:
 `content/archive/` plus the retired `snapshot/` and the 2019 resume bullets; a 4,200-word set of adult documents
-Ali supplied (cover letters, a client email, a warranty escalation letter, a volunteer synthesis
-doc, 2016–2024); MobilityWare's 2017 "Meet Ali Wallick" Q&A; and her own chat messages from 2026.
+Ali supplied (five, 2016–2024, written to persuade or explain); MobilityWare's 2017 "Meet Ali Wallick" Q&A; and her own chat messages from 2026.
 
-**Only the first is committed.** The documents carry phone numbers, third-party names, and personal
-matters unrelated to the portfolio, and this repo may go public
+**Only the first is committed.** The documents carry personal detail and third parties unrelated to
+the portfolio, and this repo may go public
 ([#48](https://github.com/ali-wallick/portfolio/issues/48)). Their measurements are recorded in the
 reference rather than being re-derivable. That is a real cost and the right trade; Ali has the files.
 
@@ -392,12 +391,11 @@ characterize the game.
 
 **Corrected 2026-08-26 (#129): "the studio's next team" is itself the wrong framing, not just a
 hedge.** It implies succession — that the Marvel Snap team wound down and this replaced it. Neither
-is true: Marvel Snap's team is still active, and Second Dinner has several new projects underway;
-Ali is on one of them, not "the" next one. Every surface using this phrasing — `currentNote`, the
+is true: Marvel Snap's team is still active, and Ali is on a new team, not "the" next one. Every surface using this phrasing — `currentNote`, the
 About page (which reads the same field), the Second Dinner job's `highlights` and `summary`, and the
 generated LinkedIn doc — was corrected to "a new team at Second Dinner." One thing checked directly
 with Ali and confirmed still true: hers is specifically **the studio's first game in Godot**, a
-narrower and still-accurate claim distinct from "one of several new projects."
+narrower and still-accurate claim than "a new team."
 
 **Corrected again 2026-08-26 (#32): the platform is public, and this file had it backwards.** The
 row in the Settled table above, and the paragraph above that, both said the W4 announcement named no

@@ -170,12 +170,10 @@ working-tree PDF is redacted now (above), so what remains for #48 and
 [#109](https://github.com/ali-wallick/portfolio/issues/109) is only the history question — `git rm`
 never removed history, and four blobs plus `v1-legacy` still carry it.
 
-**And the public copies are the larger exposure, not the repo.** See
-[#200](https://github.com/ali-wallick/portfolio/issues/200): archive.org holds **seven** captures of
-the PDF, **two of `resources/images/resume.png`** — a rendered image of the same resume, where the
-address is simply legible and no redaction is possible — and a 2010 `resume.pdf` carrying a home
-street address and phone number. Making the repo public adds little to that until those are dealt
-with.
+**And the public copies were the larger exposure, not the repo.** archive.org held several
+captures of the old résumés, including rendered images where no redaction is possible. Making the
+repo public added little to that until they were dealt with, which
+[#200](https://github.com/ali-wallick/portfolio/issues/200) did by 2026-09-11.
 
 ### The Skills section — settled 2026-08-23, closes #39
 
@@ -1057,8 +1055,7 @@ carry their own pre-cutover snapshots. **For "what does Google hold?", Search Co
 and a search tool is not.**
 
 [#200](https://github.com/ali-wallick/portfolio/issues/200) is untouched by any of this and stands on
-its own facts — archive.org preserves by design, and its 2010 capture carries a home street address
-and a mobile number rather than the PO Box.
+its own facts — archive.org preserves by design.
 
 ### The guard question, and why the answer is weaker than it looks
 

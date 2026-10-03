@@ -1249,8 +1249,7 @@ shipped, is permission to _use it on that page_. A public repo invites redistrib
 permission never covered, and the photo shows about a dozen identifiable people. The README says so.
 
 **The four I Fits I Sits jam captures.** Ali took them and built the level editor one of them shows,
-but they were made at MobilityWare's Game Jam V on company time and depict a prototype the company
-went on to ship. Nothing in the repo establishes whether her employment agreement assigned that work.
+but they were made at MobilityWare's Game Jam V and depict a prototype the company went on to ship.
 **Ali's call, 2026-09-21: treat them as publisher IP** — reproduced to illustrate a credit, no license
 granted. It costs nothing on the page and does not put #378 behind somebody else's reply.
 
@@ -1283,9 +1282,8 @@ in the documents that carry the rule.
 
 Item 4 said "skim every `needs-ali` issue for anything personal", and that is what was done. It
 missed [#130](https://github.com/ali-wallick/portfolio/pull/130), a merged pull request with no such
-label, whose summary described the studio's issue trackers, the platform under a piece of CI
-automation, and that automation's outputs — the same material redacted from #37 and from
-`src/content/jobs/second-dinner.md` two days earlier. The sweep had closed three instances and left
+label, whose summary carried employer-specific tooling detail — the same material redacted from
+#37 and from a source comment two days earlier. The sweep had closed three instances and left
 the fourth because the fourth did not carry the right label.
 
 Re-run as a class — every record mentioning the employer, not every record with a label — the tracker
@@ -1465,7 +1463,7 @@ and a session has to be restarted from the new path.
 ## The Support purge landed (2026-09-30, #367, #109)
 
 GitHub Support removed the pre-rewrite pull request refs, ran garbage collection and cleared the
-cache on 2026-09-30 (ticket 4779807, filed 2026-09-21). #367's "done when" was "filed and
+cache on 2026-09-30 (filed 2026-09-21). #367's "done when" was "filed and
 confirmed", and both hold. [#378](https://github.com/ali-wallick/portfolio/issues/378) carried #367
 as a hard precondition, and that precondition is now met. The repo was private with 0 forks
 throughout, so the ordering constraint held.
@@ -1505,8 +1503,7 @@ the history.
 
 **Local copies are a separate job.** The working checkout still held the old commit and blobs
 afterwards, unreferenced, kept by the reflog. `git reflog expire --expire=now --all` then
-`git gc --prune=now` removed them, verified per object. The backout mirror outside the repo holds
-the full old history on purpose and is Ali's to delete.
+`git gc --prune=now` removed them, verified per object.
 
 ## A `SECURITY.md`, added before the flip (2026-10-01, #378)
 
@@ -1528,3 +1525,28 @@ live on `release` is supported.
 
 **Code scanning stays off.** The setting is greyed out because Advanced Security is
 organisation-only, and a static site gives it little to scan. Dependabot alerts are the coverage.
+
+## Trimmed what did not need to be public, and left history alone (2026-10-03, #378 step 3b)
+
+The sweeps under #109 looked for classes that are dangerous: secrets, addresses, phone numbers,
+unshipped work. Step 3b looked for the class they did not: things that are safe but that nobody
+needs to read. Four parallel reads covered the voice reference, the rebuild log, these records and
+the runbooks, and every issue and pull request. Ali approved every trim on the shortlist.
+
+**The voice reference had broken its own rule.** It said the uncommitted documents were recorded as
+measurements only, then quoted them. The quotes are gone and the devices they illustrated are
+described instead. Its "how to fold in a new sample" step 4 already said not to do this, so the rule
+was right and only the file had drifted.
+
+**History was left as it is, on purpose.** Everything trimmed here is still in old commits,
+including a source comment #381 redacted three days after the 2026-09-18 rewrite. Ali's call: none of
+it justifies another rewrite and Support purge. That bar is the address class, and nothing found
+here is close to it. A future find that _is_ close to it reopens the question; a find like these
+does not.
+
+**The shortlist itself was kept off the tracker.** A list of what to hide, posted to a tracker that
+goes public, is the same failure as a redaction note that restates what it redacted (#360). It lived
+in a session scratchpad, and this section names categories rather than contents for the same reason.
+
+**The blob table in `docs/HISTORY-REWRITE.md` stays.** It reads like a map, but every id in it
+returns 404, and #378 step 3 checks a fresh clone against it.
