@@ -40,6 +40,9 @@ git merge-base --is-ancestor origin/release origin/main && echo "clean fast-forw
 - **If the ancestor check fails**, `release` carries a commit `main` doesn't (someone pushed to it
   directly, which shouldn't happen). Don't force anything — surface the divergent commit and ask
   before proceeding. A force-push to `release` is a production rollback and needs a human call.
+  Since 2026-10-03 a ruleset refuses one anyway (non-fast-forward and deletion, on `main` and
+  `release`), so a rollback means Ali turns the ruleset off first. A revert commit on `main`,
+  released normally, needs neither.
 - **Confirm CI is green on `main`'s current tip** before shipping it. `ci.yml` runs on push to
   `main` too, not just on the PR — check the workflow run for `origin/main`'s HEAD sha
   (`mcp__github__actions_list`, `method: list_workflow_runs`, `branch: main`, or

@@ -5841,3 +5841,40 @@ decision records and runbooks, and a JSON export of all 398 issues and pull requ
 case `CLAUDE.md` names as worth fanning out: independent reads with no shared output. The tracker
 read was by far the largest. Each subagent's top findings were spot-checked against the source
 before they went on the shortlist.
+
+## The flip (2026-10-03, #378)
+
+The repo went public in one session that ran #378 from step 1. Steps 1–4 were checks, step 5 was
+one command, and 5a onward was settings and this page's link.
+
+### How the pass ran
+
+**Steps 2 and 3 shared one fresh `--mirror` clone of `origin`.** gitleaks covered secrets across
+every ref, and the history-rewrite runbook's step-5 checks covered the blobs. Each check had a
+control: the blob check run against the backout mirror flags all ten, and every address probe was
+first matched against the PDF it came from. A silent run only means something next to one that
+fires.
+
+**The 2016 address stopped being Ali-only.** The 2026-10-01 run left it to her, but its pieces read
+straight off the backout mirror's résumé PDFs, the way the 2019 PO Box probes already did. Seven
+probes were derived and never printed, and history and the tracker both came back zero. Only the
+2010 address, which no file holds, still needed Ali at the keyboard.
+
+**The record went up before the flip, then was swept itself.** Step 4 has to run last, but its own
+results comment is a new tracker record. The draft was scanned before posting, then re-scanned as
+posted.
+
+### What the plan got wrong
+
+**A ruleset already existed.** The step said "add a ruleset on `main` and `release`". One had sat on
+the default branch since 2026-08-22, inert on a private free repo, and it went live the moment the
+repo flipped. Extending it beat adding a second.
+
+**The purge took more than the blobs.** `origin` now carries `refs/pull/*` only from #380 on, so the
+runbook's raster enumeration lists two fewer commits than it did on 2026-09-18. That reads as a
+failure until you know why.
+
+### Model allocation and cost
+
+Opus 5.5 throughout, inline, with no subagents. Every step was a few commands whose output decided
+the next, which is the case `CLAUDE.md` says not to fan out.

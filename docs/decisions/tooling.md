@@ -1550,3 +1550,29 @@ in a session scratchpad, and this section names categories rather than contents 
 
 **The blob table in `docs/HISTORY-REWRITE.md` stays.** It reads like a map, but every id in it
 returns 404, and #378 step 3 checks a fresh clone against it.
+
+## The repo went public (2026-10-03, #378)
+
+Flipped on 2026-10-03, after steps 1–4 of #378 came back clean that afternoon. The run is recorded
+on #378 and debriefed in the rebuild log. What is decided, and not visible from a checkout, is the
+repo settings that only exist on a public repo.
+
+**One ruleset, on `main` and `release`: no force-push, no deletion.** A ruleset on the default
+branch already existed, created 2026-08-22 and inert while the repo was private and free. It was
+extended to `release` rather than joined by a second one, and renamed to say what it does. It has no
+bypass actors. **A force-push rollback of `release` now means turning the ruleset off first**, which
+is deliberate: `release` is production. A revert commit on `main`, released normally, needs neither.
+The ruleset does not stop someone pushing a _new_ branch built on pre-rewrite history, so
+`docs/HISTORY-REWRITE.md` step 7 still applies to any old clone.
+
+**Private vulnerability reporting is on**, which is what makes `SECURITY.md`'s
+`/security/advisories/new` link work. Reporting needs a GitHub account; the email address in the
+policy covers anyone without one.
+
+**Fork pull requests need approval to run workflows, for every outside contributor**, not only
+first-time ones. GitHub's default approves a contributor permanently after one merged pull request.
+
+**The default Actions token is read-only, and it cannot approve pull requests.** `ci.yml` only
+checks out, caches and moves artifacts, so it needs nothing more. `link-check.yml` declares its own
+`issues: write`. **A new workflow that writes anything declares `permissions:` itself**; it will
+fail loudly without it, which is the point.
