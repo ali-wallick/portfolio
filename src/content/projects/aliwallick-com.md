@@ -72,6 +72,12 @@ gallery:
 # material keeps growing, so it shipped when Ali said it was the page she wanted
 # rather than when the scaffold was filled. The one marker left in the body is
 # hers to fill in later, and #48 stays open for it.
+# The repo link landed with the flip to public (2026-10-03, #378 step 7). Before
+# that it would have 404’d, so the page and the repo went live pointing at each other.
+links:
+  - label: The repo on GitHub
+    url: https://github.com/ali-wallick/portfolio
+    kind: source
 draft: false
 ---
 
