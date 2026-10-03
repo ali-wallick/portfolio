@@ -13,11 +13,10 @@ no video and raises no licensing question today — see
 re-hosting a 2011 capstone demo are different acts. This only preserves the _option_ to act after a
 video disappears.
 
-**Where the files live is deliberately absent.** A repo that may go public
-([#109](https://github.com/ali-wallick/portfolio/issues/109),
-[#48](https://github.com/ali-wallick/portfolio/issues/48)) is the wrong place to record the location
-of someone's personal storage. Ask Ali. What is here is everything you need to _verify_ an archive
-you have been pointed at, which is the part a checkout can usefully hold.
+**Where the files live is deliberately absent.** A public repo
+([#378](https://github.com/ali-wallick/portfolio/issues/378)) is the wrong place to record the
+location of someone's personal storage. Ask Ali. What is here is everything you need to _verify_ an
+archive you have been pointed at, which is the part a checkout can usefully hold.
 
 ## Why this exists at all
 

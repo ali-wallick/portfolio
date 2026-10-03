@@ -51,6 +51,13 @@ one-person account that's Ali and no one else. Verified with a bare `curl` again
 URL: an unauthenticated request now gets a `302` to `<team>.cloudflareaccess.com` before it ever
 reaches the Worker, instead of the `200` it returned before.
 
+**Access is the only protection now, not one of two.** The repo went public on 2026-10-03
+([#378](https://github.com/ali-wallick/portfolio/issues/378)), so the obscurity above is gone:
+branch names, and the preview URL every PR description computes from one, are visible to anyone.
+Re-checked the same day with a bare `curl`: every branch alias, including one that has never
+existed, still `302`s to Access. The one exception is `main-portfolio`, opened on purpose (next
+section).
+
 One thing worth knowing if this ever needs revisiting: the policy is **account-wide, not
 per-Worker** — Cloudflare's "reusable Access policies" change (Dec 2025) made all preview URLs on
 the account share a single "Cloudflare Workers Preview URLs" policy. Editing it here affects every

@@ -14,8 +14,8 @@ inferred from "what a game developer sounds like."
 | **Chat**      | Ali's own messages in the session that built this skill, 2026-08-24. Casual, unedited, typed quickly.           | ~260 words   | no                 |
 
 **The documents are deliberately not committed.** They carry personal detail and third parties that
-have nothing to do with the portfolio, and this repo may go public
-([#48](https://github.com/ali-wallick/portfolio/issues/48)). Their measurements are recorded here
+have nothing to do with the portfolio, and this repo is public
+([#378](https://github.com/ali-wallick/portfolio/issues/378)). Their measurements are recorded here
 rather than being re-derivable — which is a real cost, and the right trade. `--baseline` on the
 checker re-derives the blog numbers only.
 
