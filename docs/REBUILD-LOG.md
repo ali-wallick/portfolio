@@ -5906,6 +5906,18 @@ as a workflow file. The record is "CodeQL, as a workflow file" in `docs/decision
 
 ### What the plan got wrong
 
+**A clean PR scan was reported as proof, and it wasn't.** #402 came back with zero findings three
+times. The session checked the run log, confirmed every file had been read, and told Ali the zero
+was real. But on a pull request CodeQL reports only on the lines that changed, and #402 changed no
+code. The first push to `main` found seven. Confirming the files were read was the wrong control. A
+real control is one that would have fired.
+
+**Then the same mistake again, an hour later, in the PR that fixed it.** The first fix for the
+tag-strip alerts appended a `<` removal to each strip. The PR scan flagged one of the two and was
+silent on the other. The silent one was silent only because the flagged line, the strip itself, was
+not among the lines that changed. Neither fix had worked. The second fix rewrites the strip lines
+themselves, so the PR scan has to look at them.
+
 **#378 recorded code scanning as unavailable, and that was only half true.** It was unavailable on a
 private repo. Making the repo public was the change that made it available, so this check belonged
 after the flip all along.
