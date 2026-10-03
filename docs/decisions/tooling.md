@@ -1594,9 +1594,9 @@ attack surface of a public repo with a static site. `javascript-typescript` cove
 `scripts/`, which handle no outside input, so expect little from it. `.astro` files are not
 analysed at all, since CodeQL has no extractor for them.
 
-**It is not a required check.** No ruleset requires it, so a finding never blocks a merge. Read a
-finding before dismissing it, and dismiss false positives once rather than reshaping a script to
-quiet them.
+**It is not a required check.** No ruleset requires it, so a finding never blocks a merge.
+**When a fix and a dismissal cost about the same, fix it** (Ali's call, 2026-10-03). Dismiss only
+when the finding is wrong or no fix exists, and put the reason on the alert.
 
 **Secret scanning and push protection were turned on the same day**, along with turning off the
 empty wiki and setting the repo's homepage. Those are settings with no file to hold them, so this
