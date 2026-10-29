@@ -1,0 +1,27 @@
+name: Dependabot auto-merge
+
+# Queues auto-merge on Dependabot PRs. GitHub only merges once the checks the
+# `main` ruleset requires have passed, so this does nothing on its own: without
+# required checks, `--auto` merges immediately. See docs/decisions/tooling.md.
+on: pull_request
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  automerge:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: dependabot/fetch-metadata@v2
+        id: meta
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Majors wait for a human. Minor and patch bumps queue.
+      - if: steps.meta.outputs.update-type != 'version-update:semver-major'
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
