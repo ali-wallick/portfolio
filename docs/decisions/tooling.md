@@ -1630,3 +1630,18 @@ out as above, and one was dismissed.
 **Secret scanning and push protection were turned on the same day**, along with turning off the
 empty wiki and setting the repo's homepage. Those are settings with no file to hold them, so this
 is their record.
+
+## Dependabot PRs queue their own merge (2026-10-29)
+
+`.github/workflows/dependabot-automerge.yml` runs `gh pr merge --auto --squash` on Dependabot PRs
+that are not major bumps. **It is inert until `main` has a ruleset requiring `Build & check` and
+`Lighthouse`**, because `--auto` on a branch with no required checks merges at once. The workflow
+and the ruleset are two halves; neither is safe alone, and the ruleset is a setting with no file to
+hold it, so this is its record.
+
+Merging to `main` still does not deploy (see "Merging to `main` does not deploy" in CLAUDE.md), so
+this only puts bumps on `main`. Pushing `release` stays a separate decision.
+
+What prompted it: #410 failed once because `.nvmrc` says `22` and the runner resolved an older patch
+than Astro's new floor; a re-run passed. A required check that flakes that way leaves the PR waiting
+rather than merging bad code, which is the intended failure mode.
