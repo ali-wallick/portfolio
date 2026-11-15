@@ -32,23 +32,23 @@
     "verify": "npm run format:check && npm run check && npm run check:source && npm run check:blobs && npm run build && npm run check:pdf && npm run check:resume-print && npm run check:linkedin && npm run links && npm run check:lines"
   },
   "dependencies": {
-    "@astrojs/markdown-remark": "^7.3.5",
+    "@astrojs/markdown-remark": "^7.3.8",
     "@fontsource-variable/figtree": "^5.3.0",
     "@fontsource-variable/gabarito": "^5.3.0",
     "@fontsource/dm-mono": "^5.3.0",
     "@fontsource/gabarito": "^5.3.0",
     "@fontsource/public-sans": "^5.3.0",
-    "astro": "^7.4.7",
+    "astro": "^7.4.11",
     "sharp": "^0.35.5",
     "yaml": "^2.9.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
     "@types/node": "^26.6.6",
-    "playwright": "^1.64.1",
-    "prettier": "^3.9.10",
+    "playwright": "^1.65.0",
+    "prettier": "^3.10.1",
     "prettier-plugin-astro": "^1.1.2",
     "typescript": "^6.0.3",
-    "wrangler": "^4.158.0"
+    "wrangler": "^4.161.0"
   }
 }
